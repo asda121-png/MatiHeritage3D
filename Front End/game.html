@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Mati Heritage Games</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #020512;
+        overflow-x: hidden;
+      }
+
+      .pixel-font {
+        font-family: "Press Start 2P", cursive;
+      }
+
+      .genre-font {
+        font-family: "Rajdhani", sans-serif;
+      }
+
+      .hero-bg {
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(168, 85, 247, 0.25),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 85% 85%,
+            rgba(34, 211, 238, 0.2),
+            transparent 45%
+          ),
+          #020512;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Background Animation Pattern */
+      .hero-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(rgba(34, 211, 238, 0.15) 1px, transparent 1px),
+          radial-gradient(rgba(168, 85, 247, 0.1) 1.5px, transparent 1.5px);
+        background-size:
+          40px 40px,
+          120px 120px;
+        animation: grid-scroll 20s linear infinite;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(34, 211, 238, 0.05) 50%,
+          transparent 100%
+        );
+        background-size: 100% 200%;
+        animation: scanline 12s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      @keyframes grid-scroll {
+        from {
+          background-position:
+            0 0,
+            0 0;
+        }
+        to {
+          background-position:
+            40px 40px,
+            120px 120px;
+        }
+      }
+
+      @keyframes scanline {
+        0% {
+          background-position: 0 -100%;
+        }
+        100% {
+          background-position: 0 100%;
+        }
+      }
+
+      @keyframes card-3d-tilt {
+        0%,
+        100% {
+          transform: perspective(2000px) rotateX(2deg) rotateY(-1deg) scale(1);
+        }
+        50% {
+          transform: perspective(2000px) rotateX(-2deg) rotateY(1deg)
+            scale(1.01);
+        }
+      }
+
+      .side-card {
+        width: 250px;
+        height: 350px;
+        border-radius: 20px;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.3;
+        filter: blur(2px) grayscale(50%);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .side-card-left {
+        transform: perspective(1000px) rotateY(25deg) scale(0.8);
+      }
+      .side-card-right {
+        transform: perspective(1000px) rotateY(-25deg) scale(0.8);
+      }
+
+      .game-card {
+        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85));
+        background-size: cover;
+        background-position: center;
+        animation: card-3d-tilt 8s ease-in-out infinite;
+        transition: background-image 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10;
+      }
+
+      .cone-platform {
+        position: absolute;
+        bottom: -5%;
+        left: 50%;
+        transform: translateX(-50%) perspective(1000px) rotateX(65deg);
+        transform: translateX(-50%) perspective(1200px) rotateX(65deg);
+        width: 140%;
+        height: 450px;
+        background: radial-gradient(
+          circle at center,
+          rgba(34, 211, 238, 0.3) 0%,
+          rgba(168, 85, 247, 0.1) 50%,
+          transparent 80%
+        );
+        border-top: 2px solid rgba(34, 211, 238, 0.5);
+        box-shadow: 0 -15px 50px rgba(34, 211, 238, 0.3);
+        mask-image: radial-gradient(
+          ellipse at center,
+          black 30%,
+          transparent 80%
+        );
+        pointer-events: none;
+        z-index: 1;
+        animation: platform-glow 4s ease-in-out infinite alternate;
+      }
+
+      .cone-platform::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(34, 211, 238, 0.1) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(34, 211, 238, 0.1) 1px,
+            transparent 1px
+          );
+        background-size: 50px 50px;
+      }
+
+      @keyframes platform-glow {
+        from {
+          opacity: 0.6;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .play-btn {
+        background: linear-gradient(90deg, #a020f0, #00d4ff);
+        box-shadow: 0 0 20px rgba(160, 32, 240, 0.4);
+      }
+
+      .play-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+      }
+
+      .leaderboard-btn {
+        background: linear-gradient(
+          90deg,
+          rgba(43, 33, 23, 0.95),
+          rgba(51, 35, 63, 0.95)
+        );
+        box-shadow: 0 0 30px rgba(255, 191, 0, 0.12);
+      }
+
+      .leaderboard-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(251, 191, 36, 0.3);
+      }
+
+      .rank-card {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.03) 0%,
+          rgba(255, 255, 255, 0.07) 100%
+        );
+      }
+
+      .glass-card-dark {
+        background: rgba(13, 20, 37, 0.7);
+        backdrop-filter: blur(10px);
+      }
+
+      .rank-1-highlight {
+        background: linear-gradient(
+          90deg,
+          rgba(251, 191, 36, 0.12) 0%,
+          rgba(251, 191, 36, 0.05) 100%
+        );
+        box-shadow:
+          0 0 20px rgba(251, 191, 36, 0.1),
+          inset 0 0 15px rgba(251, 191, 36, 0.05);
+        animation: gold-pulse 3s infinite alternate;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .rank-2-highlight {
+        background: linear-gradient(
+          90deg,
+          rgba(203, 213, 225, 0.12) 0%,
+          rgba(203, 213, 225, 0.05) 100%
+        );
+        box-shadow:
+          0 0 20px rgba(203, 213, 225, 0.1),
+          inset 0 0 15px rgba(203, 213, 225, 0.05);
+        animation: silver-pulse 3s infinite alternate;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .rank-3-highlight {
+        background: linear-gradient(
+          90deg,
+          rgba(251, 146, 60, 0.12) 0%,
+          rgba(251, 146, 60, 0.05) 100%
+        );
+        box-shadow:
+          0 0 20px rgba(251, 146, 60, 0.1),
+          inset 0 0 15px rgba(251, 146, 60, 0.05);
+        animation: bronze-pulse 3s infinite alternate;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Shimmer sweep effect for top 3 players */
+      .rank-1-highlight::after,
+      .rank-2-highlight::after,
+      .rank-3-highlight::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.08),
+          transparent
+        );
+        transform: skewX(-20deg);
+        animation: shine-sweep 4s infinite;
+        pointer-events: none;
+      }
+
+      @keyframes gold-pulse {
+        from {
+          border-color: rgba(251, 191, 36, 0.3);
+          box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
+        }
+        to {
+          border-color: rgba(251, 191, 36, 0.8);
+          box-shadow:
+            0 0 35px rgba(251, 191, 36, 0.3),
+            inset 0 0 20px rgba(251, 191, 36, 0.1);
+        }
+      }
+
+      @keyframes silver-pulse {
+        from {
+          border-color: rgba(203, 213, 225, 0.3);
+          box-shadow: 0 0 15px rgba(203, 213, 225, 0.1);
+        }
+        to {
+          border-color: rgba(203, 213, 225, 0.8);
+          box-shadow:
+            0 0 30px rgba(203, 213, 225, 0.2),
+            inset 0 0 15px rgba(203, 213, 225, 0.05);
+        }
+      }
+
+      @keyframes bronze-pulse {
+        from {
+          border-color: rgba(251, 146, 60, 0.3);
+          box-shadow: 0 0 15px rgba(251, 146, 60, 0.1);
+        }
+        to {
+          border-color: rgba(251, 146, 60, 0.8);
+          box-shadow:
+            0 0 30px rgba(251, 146, 60, 0.2),
+            inset 0 0 15px rgba(251, 146, 60, 0.05);
+        }
+      }
+
+      @keyframes shine-sweep {
+        0% {
+          left: -150%;
+        }
+        25%,
+        100% {
+          left: 150%;
+        }
+      }
+
+      @keyframes crown-bounce {
+        0%,
+        100% {
+          transform: rotate(-12deg) scale(1);
+        }
+        50% {
+          transform: rotate(-18deg) scale(1.2);
+          filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+        }
+      }
+
+      .crown-animate {
+        display: inline-block;
+        animation: crown-bounce 2s ease-in-out infinite;
+      }
+
+      /* Tactical HUD Header Effect */
+      .hud-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 2.5rem;
+      }
+
+      .hud-bracket {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 2px solid #22d3ee;
+        filter: drop-shadow(0 0 5px #22d3ee);
+        animation: bracket-blink 2s infinite;
+      }
+
+      .tl {
+        top: 0;
+        left: 0;
+        border-right: 0;
+        border-bottom: 0;
+      }
+      .tr {
+        top: 0;
+        right: 0;
+        border-left: 0;
+        border-bottom: 0;
+      }
+      .bl {
+        bottom: 0;
+        left: 0;
+        border-right: 0;
+        border-top: 0;
+      }
+      .br {
+        bottom: 0;
+        right: 0;
+        border-left: 0;
+        border-top: 0;
+      }
+
+      .hud-title {
+        color: #fff;
+        letter-spacing: 0.35em;
+        margin-right: -0.35em;
+        text-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+        position: relative;
+        z-index: 2;
+        animation: title-breathe 4s ease-in-out infinite;
+      }
+
+      .hud-title::before {
+        content: "";
+        position: absolute;
+        inset: -5px -20px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(34, 211, 238, 0.05),
+          rgba(34, 211, 238, 0.1),
+          rgba(34, 211, 238, 0.05),
+          transparent
+        );
+        transform: skewX(-20deg);
+        z-index: -1;
+      }
+
+      @keyframes bracket-blink {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(1.1);
+        }
+      }
+
+      @keyframes title-breathe {
+        0%,
+        100% {
+          letter-spacing: 0.35em;
+          opacity: 0.9;
+          transform: scale(1);
+        }
+        50% {
+          letter-spacing: 0.45em;
+          opacity: 1;
+          filter: brightness(1.2);
+          transform: scale(1.02);
+        }
+      }
+
+      .card-animate {
+        animation: card-entry 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        opacity: 0;
+      }
+
+      @keyframes card-entry {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Tetris & Explosion Animations */
+      .tetris-letter {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(-200px);
+      }
+      .tetris-letter.fall {
+        animation: tetris-fall 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+          forwards;
+      }
+      @keyframes tetris-fall {
+        0% {
+          transform: translateY(-300px);
+          opacity: 0;
+          filter: brightness(2);
+        }
+        80% {
+          transform: translateY(0);
+          opacity: 1;
+          filter: brightness(1.5);
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+          filter: brightness(1);
+        }
+      }
+      .exploded-letter {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        animation: letter-boom 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      }
+      @keyframes letter-boom {
+        0% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(0);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="header-placeholder"></div>
+
+    <section
+      class="hero-bg min-h-screen flex items-center justify-center relative px-6"
+    >
+      <!-- CONE PLATFORM EFFECT -->
+      <div class="cone-platform"></div>
+
+      <!-- SECTION TITLE -->
+      <div
+        class="absolute top-24 left-1/2 -translate-x-1/2 z-30 flex flex-col md:flex-row items-center gap-3 md:gap-6 select-none"
+      >
+        <div
+          id="title-word-select"
+          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+        ></div>
+        <div
+          id="title-word-game"
+          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+        ></div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="absolute top-8 right-8 lg:right-12 z-30">
+        <button
+          id="leaderboard-btn"
+          class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
+            />
+          </svg>
+
+          <span class="text-sm font-bold uppercase tracking-wider">
+            Leaderboard
+          </span>
+        </button>
+      </div>
+
+      <!-- LEFT ARROW -->
+      <button
+        id="prev-btn"
+        class="absolute left-10 lg:left-20 top-1/2 -translate-y-1/2 z-40 h-14 w-14 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white text-2xl hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:scale-110 transition-all flex items-center justify-center"
+      >
+        ❮
+      </button>
+
+      <!-- RIGHT ARROW -->
+      <button
+        id="next-btn"
+        class="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 z-40 h-14 w-14 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white text-2xl hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:scale-110 transition-all flex items-center justify-center"
+      >
+        ❯
+      </button>
+
+      <!-- CAROUSEL CONTAINER -->
+      <div
+        class="relative flex items-center justify-center gap-4 lg:gap-12 z-10 w-full px-4"
+      >
+        <!-- PREVIOUS GAME PREVIEW -->
+        <div
+          id="prev-card-preview"
+          class="side-card side-card-left hidden lg:block shadow-2xl overflow-hidden"
+        ></div>
+
+        <!-- FEATURED CARD (ACTIVE) -->
+        <div
+          id="game-card"
+          class="game-card relative w-full max-w-3xl min-h-[420px] md:min-h-[520px] rounded-[24px] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8),0_0_20px_rgba(34,211,238,0.1)]"
+        >
+          <div
+            id="card-content"
+            class="p-6 md:pt-12 md:pb-20 md:px-10 transition-all duration-500"
+          >
+            <!-- CONTENT -->
+            <div class="flex justify-between items-start gap-6">
+              <div class="flex-1">
+                <h1
+                  class="text-3xl md:text-5xl font-extrabold leading-tight uppercase"
+                >
+                  <span
+                    id="game-title-2"
+                    class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+                  >
+                    Trivia Challenge
+                  </span>
+                </h1>
+
+                <p
+                  id="game-desc"
+                  class="mt-6 text-gray-300 text-sm md:text-lg leading-relaxed max-w-2xl min-h-[4.5em]"
+                >
+                  Discover Mati City's heritage through fun and interactive
+                  trivia.
+                </p>
+
+                <!-- ACTIONS -->
+                <div class="flex flex-wrap items-center gap-5 mt-10">
+                  <div
+                    id="player-count"
+                    class="flex items-center gap-2 text-gray-300 text-sm font-medium"
+                  >
+                    👥 12.4K PLAYING
+                  </div>
+
+                  <div
+                    id="points-reward"
+                    class="flex items-center gap-2 text-gray-300 text-sm font-medium"
+                  >
+                    🏆 500 PTS
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="hidden md:flex items-center justify-center text-center"
+              >
+                <span
+                  id="game-genre"
+                  class="text-white text-lg md:text-xl uppercase tracking-widest leading-tight genre-font opacity-90 font-bold bg-black/40 backdrop-blur-md px-6 py-2"
+                >
+                  QUIZ GAME
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTERED PLAY BUTTON -->
+          <button
+            id="play-now-btn"
+            class="play-btn absolute bottom-10 left-1/2 -translate-x-1/2 px-12 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:scale-105 transition flex items-center gap-3 z-10"
+          >
+            ▶ PLAY NOW
+          </button>
+        </div>
+
+        <!-- NEXT GAME PREVIEW -->
+        <div
+          id="next-card-preview"
+          class="side-card side-card-right hidden lg:block shadow-2xl overflow-hidden"
+        ></div>
+      </div>
+
+      <!-- PAGINATION -->
+      <div
+        id="pagination-dots"
+        class="absolute bottom-32 left-1/2 -translate-x-1/2 flex gap-3 z-30"
+      >
+        <!-- Dots will be generated or styled by JS -->
+      </div>
+    </section>
+
+    <!-- LEADERBOARD OVERLAY & DRAWER -->
+    <div
+      id="drawer-overlay"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-500"
+    ></div>
+
+    <div
+      id="leaderboard-drawer"
+      class="fixed top-0 right-0 h-full w-full max-w-md bg-[#050b18]/95 border-l border-cyan-500/20 z-[101] translate-x-full transition-transform duration-500 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
+    >
+      <div
+        class="p-8 pb-4 flex justify-center items-center relative overflow-hidden"
+      >
+        <div class="hud-container">
+          <div class="hud-bracket tl"></div>
+          <div class="hud-bracket tr"></div>
+          <div class="hud-bracket bl"></div>
+          <div class="hud-bracket br"></div>
+          <h2 class="orbitron text-lg font-black uppercase hud-title">
+            Top Players
+          </h2>
+        </div>
+      </div>
+
+      <div
+        id="leaderboard-list"
+        class="flex-1 overflow-y-auto px-6 space-y-4 py-4 scrollbar-hide"
+      >
+        <!-- Rankings injected here -->
+      </div>
+
+      <!-- Your Ranking Section & Footer -->
+      <div class="bg-[#0a1224] border-t border-cyan-500/30 p-8 pt-6 pb-8">
+        <div class="flex justify-between items-center mb-6">
+          <h3
+            class="text-gray-500 text-[10px] font-bold tracking-[0.3em] uppercase"
+          >
+            Your Ranking
+          </h3>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-5">
+            <span
+              id="user-rank-val"
+              class="orbitron text-4xl font-black text-cyan-400"
+              >--</span
+            >
+            <div class="h-10 w-px bg-white/10"></div>
+            <div class="flex items-center gap-2">
+              <!-- 'M' Profile Icon -->
+              <div
+                class="h-12 w-12 rounded-full border-2 p-0.5 border-cyan-400 flex items-center justify-center bg-cyan-400/20"
+              >
+                <span class="orbitron text-white text-xl font-bold">M</span>
+              </div>
+              <p class="genre-font text-white text-lg tracking-wider">You</p>
+            </div>
+          </div>
+          <div
+            id="user-points-val"
+            class="orbitron text-2xl font-black text-white"
+          >
+            0 <span class="text-[10px] opacity-60 uppercase">Pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- BACKGROUND AMBIANCE -->
+    <audio
+      id="bg-music"
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+      loop
+      preload="auto"
+    ></audio>
+
+    <!-- ANNOUNCER VOICE -->
+    <audio
+      id="announcer-voice"
+      src="https://cdn.pixabay.com/audio/2021/08/04/audio_06d649495b.mp3"
+      data-type="select-game"
+      preload="auto"
+    ></audio>
+
+    <!-- AUDIO ASSETS -->
+    <audio
+      id="click-sound"
+      src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="tetris-fall-sound"
+      src="https://assets.mixkit.co/active_storage/sfx/2050/2050-preview.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="tetris-boom-sound"
+      src="https://assets.mixkit.co/active_storage/sfx/2772/2772-preview.mp3"
+      preload="auto"
+    ></audio>
+
+    <script>
+      fetch("header.html")
+        .then((response) => response.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+
+          // Inject the styles from header.html to ensure the Settings design is applied
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) {
+            document.head.appendChild(headerStyle.cloneNode(true));
+          }
+
+          // Correctly extract the settings logic script (the one without a src attribute)
+          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
+          if (headerScript) {
+            const script = document.createElement("script");
+            script.textContent = headerScript.textContent;
+            document.body.appendChild(script);
+          }
+
+          // Update total points in header
+          const totalPoints =
+            localStorage.getItem("totalHeritagePoints") || "0";
+          document.getElementById("header-total-points").textContent =
+            totalPoints;
+        });
+
+      // Load Footer
+      fetch("footer.html")
+        .then((response) => response.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+
+          if (footer && placeholder) {
+            placeholder.replaceWith(footer);
+
+            // Inject styles from footer.html
+            const footerStyle = doc.querySelector("style");
+            if (footerStyle) {
+              document.head.appendChild(footerStyle.cloneNode(true));
+            }
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+
+      // Game Data
+      const games = [
+        {
+          title2: "Mati Heritage Trivia Challenge",
+          url: "trivia.html",
+          desc: "Discover Mati City's heritage through fun and interactive trivia.",
+          genre: "QUIZ GAME",
+          players: "12.4K PLAYING",
+          points: "5 PTS",
+          image:
+            "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1600",
+        },
+        {
+          title2: "Memory Matching Pairs",
+          desc: "Test your memory by matching iconic landmarks and symbols of Mati City.",
+          genre: "MEMORY GAME",
+          players: "8.2K PLAYING",
+          points: "350 PTS",
+          image:
+            "https://images.unsplash.com/photo-1605462863863-10d9e47e15ee?w=1600",
+        },
+        {
+          title2: "Spot the Difference",
+          desc: "Sharpen your eyes and find the subtle differences between images of Mati's scenic spots.",
+          genre: "OBSERVATION GAME",
+          players: "5.1K PLAYING",
+          points: "400 PTS",
+          image:
+            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600",
+        },
+        {
+          title2: "Slide Puzzle",
+          desc: "Reassemble scrambled images of historical artifacts and landmarks from Mati City.",
+          genre: "PUZZLE GAME",
+          players: "3.4K PLAYING",
+          points: "600 PTS",
+          image:
+            "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=1600",
+        },
+        {
+          title2: "True or False Sprint",
+          desc: "Think fast and decide if the facts about Mati's culture and history are true or false!",
+          genre: "FAST-PACED EDUCATIONAL GAME",
+          players: "15.2K PLAYING",
+          points: "450 PTS",
+          image:
+            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600",
+        },
+      ];
+
+      let currentIndex = 0;
+
+      // DOM Elements
+      const card = document.getElementById("game-card");
+      const prevPreview = document.getElementById("prev-card-preview");
+      const nextPreview = document.getElementById("next-card-preview");
+      const title2 = document.getElementById("game-title-2");
+      const desc = document.getElementById("game-desc");
+      const genre = document.getElementById("game-genre");
+      const players = document.getElementById("player-count");
+      const points = document.getElementById("points-reward");
+      const paginationContainer = document.getElementById("pagination-dots");
+
+      function updateDisplay() {
+        const game = games[currentIndex];
+        const prevIdx = (currentIndex - 1 + games.length) % games.length;
+        const nextIdx = (currentIndex + 1) % games.length;
+
+        // Smooth content transition
+        const content = document.getElementById("card-content");
+        content.style.opacity = "0";
+        content.style.transform = "translateY(15px)";
+
+        setTimeout(() => {
+          // Update Images
+          card.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('${game.image}')`;
+          prevPreview.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('${games[prevIdx].image}')`;
+          nextPreview.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('${games[nextIdx].image}')`;
+
+          // Update Text content
+          title2.textContent = game.title2;
+          desc.textContent = game.desc;
+          genre.textContent = game.genre;
+          players.innerHTML = `👥 ${game.players}`;
+          points.innerHTML = `🏆 ${game.points}`;
+
+          // Fade back in
+          content.style.opacity = "1";
+          content.style.transform = "translateY(0)";
+        }, 300);
+
+        // Update Pagination Dots
+        paginationContainer.innerHTML = "";
+        games.forEach((_, i) => {
+          const dot = document.createElement("div");
+          if (i === currentIndex) {
+            dot.className =
+              "w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan]";
+          } else {
+            dot.className = "w-2 h-2 rounded-full bg-white/30";
+          }
+          paginationContainer.appendChild(dot);
+        });
+      }
+
+      // Initial Load
+      updateDisplay();
+
+      // Controls
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const playBtn = document.getElementById("play-now-btn");
+      const leaderboardBtn = document.getElementById("leaderboard-btn");
+      const clickSound = document.getElementById("click-sound");
+
+      nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % games.length;
+        updateDisplay();
+      });
+
+      prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + games.length) % games.length;
+        updateDisplay();
+      });
+
+      playBtn.addEventListener("click", () => {
+        const currentGame = games[currentIndex];
+        if (currentGame.url) {
+          window.location.href = currentGame.url;
+        } else {
+          console.log(`${currentGame.title2} is not yet implemented.`);
+        }
+      });
+
+      // Leaderboard Modal Logic
+      const drawer = document.getElementById("leaderboard-drawer");
+      const overlay = document.getElementById("drawer-overlay");
+      const closeLeaderboard = document.getElementById("close-leaderboard");
+      const leaderboardList = document.getElementById("leaderboard-list");
+
+      const dummyLeaderboard = [
+        { name: "ProGamer99", points: 1950 },
+        { name: "MatiExplorer", points: 1820 },
+        { name: "HistoryBuff", points: 1710 },
+        { name: "EcoWarrior_Mati", points: 1540 },
+        { name: "HeritageHunter", points: 1280 },
+        { name: "DahicanSurfer", points: 1020 },
+        { name: "MuseumExplorer", points: 890 },
+        { name: "MatiLocal99", points: 760 },
+        { name: "NatureLover", points: 540 },
+        { name: "HistoryStudent", points: 320 },
+      ];
+
+      function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          const val = Math.floor(progress * (end - start) + start);
+          obj.innerHTML = `${val.toLocaleString()} <span class="text-[10px] opacity-60 uppercase">Pts</span>`;
+          if (progress < 1) window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+      }
+
+      function showLeaderboard() {
+        overlay.classList.remove("hidden");
+        setTimeout(() => (overlay.style.opacity = "1"), 10);
+        drawer.classList.remove("translate-x-full");
+
+        leaderboardList.innerHTML = "";
+        dummyLeaderboard.forEach((entry, index) => {
+          const item = document.createElement("div");
+          const rank = index + 1;
+
+          let rankStyle = "bg-white/5 border-white/5";
+          let glowColor = "rgba(34, 211, 238, 0.4)";
+          let borderCol = "border-white/5";
+          let crown = "";
+          let rankNumberColor = "text-white/40";
+
+          // Sizing logic for ranks 4+ to highlight Top 3
+          const isRunnerUp = rank > 3;
+          const paddingClass = isRunnerUp ? "p-4" : "p-5";
+          const avatarSizeClass = isRunnerUp ? "h-12 w-12" : "h-16 w-16";
+          const nameSizeClass = "text-lg";
+          const pointsSizeClass = isRunnerUp ? "text-lg" : "text-2xl";
+          const badgeSizeClass = isRunnerUp
+            ? "w-5 h-5 text-[8px]"
+            : "w-6 h-6 text-[10px]";
+
+          if (rank === 1) {
+            rankStyle = "rank-1-highlight";
+            borderCol = "border-amber-400/30";
+            glowColor = "#fbbf24";
+            rankNumberColor = "text-amber-400";
+            crown = `<span class="absolute -top-3 -left-3 text-2xl crown-animate z-10">👑</span>`;
+          } else if (rank === 2) {
+            rankStyle = "rank-2-highlight";
+            borderCol = "border-slate-300/30";
+            glowColor = "#cbd5e1";
+            rankNumberColor = "text-slate-300";
+          } else if (rank === 3) {
+            rankStyle = "rank-3-highlight";
+            borderCol = "border-orange-400/30";
+            glowColor = "#fb923c";
+            rankNumberColor = "text-orange-400";
+          }
+
+          item.className = `card-animate relative flex items-center justify-between ${paddingClass} ${
+            isRunnerUp ? "opacity-70" : ""
+          } rounded-2xl border ${rankStyle} ${borderCol} transition-all duration-300 hover:scale-[1.02] hover:opacity-100`;
+          item.style.animationDelay = `${index * 0.1}s`;
+
+          item.innerHTML = `
+            <div class="flex items-center gap-2 flex-1">
+              <span class="orbitron text-2xl font-bold ${rankNumberColor} w-10">${rank}</span>
+              <div class="relative">
+                ${crown}
+                <div class="${avatarSizeClass} rounded-full border-2 p-0.5" style="border-color: ${glowColor}">
+                   <img src="https://i.pravatar.cc/150?u=${entry.name}" class="rounded-full h-full w-full object-cover" />
+                </div>
+              </div>
+              <p class="genre-font text-white ${nameSizeClass} tracking-wider truncate">${entry.name}</p>
+            </div>
+            <div class="text-right">
+               <span class="points-val ${pointsSizeClass} font-black orbitron text-white" data-target="${entry.points}">0 <span class="text-[10px] opacity-60 uppercase">Pts</span></span>
+            </div>
+          `;
+          leaderboardList.appendChild(item);
+
+          setTimeout(
+            () => {
+              animateValue(
+                item.querySelector(".points-val"),
+                0,
+                entry.points,
+                1000,
+              );
+            },
+            500 + index * 100,
+          );
+        });
+
+        // Update Your Ranking section
+        const userPts = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+        );
+        document.getElementById("user-rank-val").innerText =
+          userPts > 0 ? "42" : "--";
+        animateValue(
+          document.getElementById("user-points-val"),
+          0,
+          userPts,
+          1000,
+        );
+      }
+
+      const hideLeaderboard = () => {
+        drawer.classList.add("translate-x-full");
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.classList.add("hidden"), 500);
+      };
+
+      if (leaderboardBtn) leaderboardBtn.onclick = showLeaderboard;
+      if (closeLeaderboard) closeLeaderboard.onclick = hideLeaderboard;
+      if (overlay) overlay.onclick = hideLeaderboard;
+
+      // Sound FX integration
+      const allButtons = [prevBtn, nextBtn, playBtn, leaderboardBtn];
+
+      allButtons.forEach((btn) => {
+        if (btn) {
+          btn.addEventListener("click", () => {
+            clickSound.currentTime = 0; // Reset sound to beginning for rapid clicks
+            clickSound
+              .play()
+              .catch((e) =>
+                console.log(
+                  "Audio playback prevented by browser until user interaction.",
+                ),
+              );
+          });
+        }
+      });
+
+      // Background Music Logic
+      const bgMusic = document.getElementById("bg-music");
+      const announcerVoice = document.getElementById("announcer-voice");
+
+      const initialMusicVol = parseFloat(
+        localStorage.getItem("bgMusicVol") || "0.2",
+      );
+      const initialSfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+
+      bgMusic.volume = initialMusicVol;
+      announcerVoice.volume = initialSfxVol;
+      clickSound.volume = initialSfxVol;
+      document.getElementById("tetris-fall-sound").volume = initialSfxVol;
+      document.getElementById("tetris-boom-sound").volume = initialSfxVol;
+
+      let hasAnnounced = false;
+
+      /**
+       * Helper to play announcer lines using Web Speech API for reliability
+       * and custom messaging.
+       */
+      const playAnnouncer = (text) => {
+        const currentSfxVol = parseFloat(
+          localStorage.getItem("sfxVol") || "0.8",
+        );
+
+        if (currentSfxVol > 0 && "speechSynthesis" in window && !hasAnnounced) {
+          const synth = window.speechSynthesis;
+
+          const speak = () => {
+            if (hasAnnounced) return;
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+
+            // Broadened search to find high-energy female voices across different OS
+            const femaleVoice =
+              voices.find((v) => v.name.includes("Google US English")) ||
+              voices.find((v) => v.name.includes("Samantha")) ||
+              voices.find((v) => v.name.includes("Zira")) || // Standard Windows Female
+              voices.find((v) => v.name.toLowerCase().includes("female")) ||
+              voices.find(
+                (v) =>
+                  v.lang.startsWith("en") &&
+                  !v.name.toLowerCase().includes("male"),
+              );
+
+            if (femaleVoice) utterance.voice = femaleVoice;
+            utterance.volume = currentSfxVol;
+            utterance.rate = 1.0; // Restored to normal speed for better responsiveness
+            utterance.pitch = 1.1; // Balanced pitch for a clear, high-energy female voice
+            hasAnnounced = true;
+            synth.speak(utterance);
+          };
+
+          if (synth.getVoices().length === 0) {
+            synth.onvoiceschanged = speak;
+          } else {
+            speak();
+          }
+        }
+      };
+
+      const playIntroSequence = () => {
+        if (bgMusic.volume > 0 && bgMusic.paused) {
+          bgMusic
+            .play()
+            .catch((e) => console.log("BG Music playback blocked."));
+        }
+
+        // Dramatic delay for "SELECT GAME"
+        setTimeout(() => {
+          playAnnouncer("Welcome Player! Select a game.");
+        }, 500);
+      };
+
+      // Try autoplay immediately
+      playIntroSequence();
+
+      // Fallback for autoplay restrictions (runs on first click/keypress)
+      const handleFirstInteraction = () => {
+        playIntroSequence();
+        document.removeEventListener("click", handleFirstInteraction);
+        document.removeEventListener("keydown", handleFirstInteraction);
+      };
+      document.addEventListener("click", handleFirstInteraction);
+      document.addEventListener("keydown", handleFirstInteraction);
+
+      // Tetris Title Animation Logic
+      const initTetrisWord = (id, word) => {
+        const container = document.getElementById(id);
+        if (!container) return;
+
+        let isAnimating = false;
+        const fallSound = document.getElementById("tetris-fall-sound");
+        const boomSound = document.getElementById("tetris-boom-sound");
+
+        const createLetters = (playSound = true) => {
+          container.innerHTML = "";
+          word.split("").forEach((l, i) => {
+            const span = document.createElement("span");
+            span.textContent = l;
+            span.className = "tetris-letter fall";
+            span.style.animationDelay = `${i * 0.08}s`;
+            container.appendChild(span);
+
+            // Play a tick sound as each letter "drops"
+            if (playSound) {
+              setTimeout(() => {
+                if (fallSound && fallSound.volume > 0) {
+                  const s = fallSound.cloneNode();
+                  s.volume = fallSound.volume;
+                  s.play().catch(() => {});
+                }
+              }, i * 80);
+            }
+          });
+          setTimeout(
+            () => {
+              isAnimating = false;
+            },
+            word.length * 80 + 400,
+          );
+        };
+
+        const explode = () => {
+          if (isAnimating) return;
+          isAnimating = true;
+
+          if (boomSound) {
+            boomSound.currentTime = 0;
+            boomSound.play().catch(() => {});
+          }
+
+          const letters = container.querySelectorAll(".tetris-letter");
+
+          letters.forEach((letter) => {
+            const rect = letter.getBoundingClientRect();
+            const clone = letter.cloneNode(true);
+
+            // Random explosion trajectory
+            const tx = (Math.random() - 0.5) * 600;
+            const ty = (Math.random() - 0.5) * 600;
+            const tr = (Math.random() - 0.5) * 1080;
+
+            clone.className =
+              "exploded-letter pixel-font text-white text-2xl md:text-4xl font-bold uppercase";
+            clone.style.left = `${rect.left}px`;
+            clone.style.top = `${rect.top}px`;
+            clone.style.setProperty("--tx", `${tx}px`);
+            clone.style.setProperty("--ty", `${ty}px`);
+            clone.style.setProperty("--tr", `${tr}deg`);
+
+            document.body.appendChild(clone);
+            setTimeout(() => clone.remove(), 700);
+
+            letter.style.opacity = "0";
+            letter.classList.remove("fall");
+          });
+
+          // Rebuild after the "boom"
+          setTimeout(() => createLetters(true), 1000);
+        };
+
+        container.addEventListener("click", explode);
+        createLetters(false);
+      };
+
+      // Initialize the animations
+      initTetrisWord("title-word-select", "SELECT");
+      initTetrisWord("title-word-game", "GAME");
+    </script>
+  </body>
+</html>

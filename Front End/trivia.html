@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trivia Challenge - Mati Heritage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background: #020512;
+        color: white;
+        overflow-x: hidden;
+      }
+      .orbitron {
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .hero-bg {
+        background:
+          linear-gradient(rgba(2, 5, 18, 0.8), rgba(2, 5, 18, 0.9)),
+          url("https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1600"),
+          #020512;
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      .hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1) 0px,
+          rgba(0, 0, 0, 0.1) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      /* TV Show Spotlight Effect */
+      .spotlight {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100vw;
+        height: 100vh;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(34, 211, 238, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .glass-card {
+        background: rgba(6, 11, 25, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 0 40px rgba(0, 0, 0, 0.8),
+          inset 0 0 20px rgba(34, 211, 238, 0.05);
+      }
+
+      .option-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .option-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .option-btn:hover::before {
+        left: 100%;
+      }
+
+      .option-btn:hover {
+        background: rgba(34, 211, 238, 0.1);
+        border-color: rgba(34, 211, 238, 0.5);
+        transform: translateX(10px);
+      }
+
+      .option-btn.correct {
+        background: rgba(34, 197, 94, 0.2);
+        border-color: #22c55e;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+      }
+
+      .progress-bar {
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .start-btn {
+        background: linear-gradient(90deg, #00d4ff, #a020f0);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+      }
+
+      .start-btn:hover {
+        box-shadow: 0 0 30px rgba(160, 32, 240, 0.6);
+        transform: scale(1.05);
+      }
+
+      .timer-glow {
+        text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+      }
+
+      .timer-low {
+        color: #ef4444;
+      }
+
+      .diff-btn {
+        transition: all 0.3s ease;
+      }
+
+      /* TV Monitor Aesthetic */
+      .monitor-bezel {
+        background: #1e293b;
+        border: 4px solid #334155;
+        border-bottom: 12px solid #0f172a;
+        border-radius: 2rem;
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.7),
+          inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        padding: 12px;
+      }
+
+      .monitor-screen {
+        background: #020617;
+        border-radius: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 1);
+      }
+
+      .monitor-screen::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+          linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.03),
+            rgba(0, 255, 0, 0.01),
+            rgba(0, 0, 255, 0.03)
+          );
+        background-size:
+          100% 3px,
+          3px 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .monitor-screen::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 100%
+        );
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER LOADS HERE -->
+    <div id="header-placeholder" class="min-h-[90px]"></div>
+
+    <div class="spotlight"></div>
+
+    <main
+      class="hero-bg flex flex-col items-center justify-center pt-24 pb-12 px-4"
+    >
+      <!-- INTRO SCREEN -->
+      <div
+        id="intro-screen"
+        class="w-full max-w-3xl glass-card rounded-3xl p-12 text-center relative z-20"
+      >
+        <div class="mb-8">
+          <h1 class="text-4xl md:text-5xl font-black orbitron leading-tight">
+            <span class="text-gray-400 text-lg tracking-[0.4em] block mb-2"
+              >NOW PLAYING</span
+            >
+            <span
+              class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+              >MATI HERITAGE TRIVIA CHALLENGE</span
+            >
+          </h1>
+        </div>
+
+        <p class="text-gray-300 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+          Test your knowledge of Mati City's rich history, iconic landmarks, and
+          vibrant culture. Do you have what it takes to be a Heritage Expert?
+        </p>
+
+        <div class="flex flex-col items-center gap-6">
+          <!-- Difficulty Selector -->
+          <div class="flex flex-wrap justify-center gap-4 mb-2">
+            <button
+              onclick="setDifficulty('easy')"
+              id="btn-easy"
+              class="diff-btn px-6 py-2 rounded-full border border-white/10 orbitron text-xs tracking-widest hover:border-cyan-400"
+            >
+              EASY
+            </button>
+            <button
+              onclick="setDifficulty('medium')"
+              id="btn-medium"
+              class="diff-btn px-6 py-2 rounded-full border border-cyan-400 bg-cyan-400/20 orbitron text-xs tracking-widest"
+            >
+              MEDIUM
+            </button>
+            <button
+              onclick="setDifficulty('hard')"
+              id="btn-hard"
+              class="diff-btn px-6 py-2 rounded-full border border-white/10 orbitron text-xs tracking-widest hover:border-purple-500"
+            >
+              HARD
+            </button>
+          </div>
+
+          <button
+            id="start-game-btn"
+            class="start-btn px-16 py-5 rounded-full text-white font-black orbitron text-xl tracking-widest transition-all duration-300 flex items-center gap-4"
+          >
+            ▶ START CHALLENGE
+          </button>
+
+          <div
+            class="flex items-center gap-8 text-xs orbitron tracking-widest text-gray-400 uppercase"
+          ></div>
+        </div>
+      </div>
+
+      <!-- MAIN QUIZ INTERFACE (Wrapper for Card + Sidebar) -->
+      <div
+        id="main-quiz-interface"
+        class="w-full max-w-6xl flex flex-col lg:flex-row gap-8 items-start justify-center hidden relative z-20 transition-all duration-500"
+      >
+        <!-- QUIZ CONTAINER (LEFT/CENTER) -->
+        <div
+          id="quiz-container"
+          class="w-full lg:max-w-3xl glass-card rounded-3xl p-8 md:p-12 relative z-10"
+        >
+          <!-- PROGRESS & QUESTION NUMBER -->
+          <div class="mb-10">
+            <div class="flex justify-between items-center mb-4">
+              <span
+                class="text-cyan-400 font-bold tracking-[0.3em] uppercase text-xs"
+              >
+                ROUND <span id="current-q-num">1</span> OF 5
+              </span>
+              <span
+                class="text-gray-500 text-[10px] orbitron uppercase tracking-widest"
+                >Mati Heritage Trivia</span
+              >
+            </div>
+            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div
+                id="progress-fill"
+                class="progress-bar h-full bg-gradient-to-r from-cyan-400 to-purple-600 w-0 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+              ></div>
+            </div>
+          </div>
+
+          <!-- QUESTION AREA -->
+          <div id="question-screen">
+            <div class="monitor-bezel mb-12">
+              <div
+                class="monitor-screen p-8 md:p-12 min-h-[160px] flex items-center justify-center"
+              >
+                <h2
+                  id="question-text"
+                  class="text-xl md:text-2xl font-bold leading-tight orbitron tracking-tight text-center text-cyan-50 relative z-20"
+                  style="text-shadow: 0 0 15px rgba(34, 211, 238, 0.5)"
+                >
+                  Loading question...
+                </h2>
+              </div>
+            </div>
+
+            <div
+              id="options-grid"
+              class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 md:grid-flow-col md:auto-rows-fr gap-x-8 gap-y-4"
+            >
+              <!-- Options will be injected here -->
+            </div>
+          </div>
+
+          <!-- RESULTS SCREEN (Hidden inside container initially) -->
+          <div id="results-screen" class="hidden text-center py-8">
+            <div class="mb-6">
+              <span
+                class="text-cyan-400 orbitron text-lg tracking-widest uppercase"
+                >Challenge Complete</span
+              >
+              <h2 class="text-5xl font-black mt-2 orbitron">GAME OVER</h2>
+            </div>
+
+            <div
+              class="text-6xl font-bold text-white mb-8 orbitron"
+              id="final-score"
+            >
+              0
+            </div>
+
+            <p id="result-message" class="text-gray-400 mb-10 text-lg"></p>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+              <button
+                onclick="location.reload()"
+                class="px-10 py-4 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition duration-300 uppercase tracking-widest"
+              >
+                Try Again
+              </button>
+              <a
+                href="game.html"
+                class="px-10 py-4 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition duration-300 uppercase tracking-widest"
+              >
+                Back to Games
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS SIDEBAR (RIGHT) -->
+        <div id="stats-sidebar" class="w-full lg:w-64 flex flex-col gap-4">
+          <!-- TIME CARD -->
+          <div
+            class="glass-card rounded-2xl p-6 flex flex-col items-center border-t-2 border-t-cyan-500"
+          >
+            <span
+              class="text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em] mb-2"
+              >Remaining Time</span
+            >
+            <span
+              id="timer-display"
+              class="text-4xl font-black orbitron timer-glow text-cyan-400"
+              >15s</span
+            >
+          </div>
+
+          <!-- SCORE CARD -->
+          <div
+            class="glass-card rounded-2xl p-6 flex flex-col items-center border-t-2 border-t-purple-500"
+          >
+            <span
+              class="text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em] mb-2"
+              >Total Score</span
+            >
+            <span
+              id="score-display"
+              class="text-4xl font-black orbitron text-white"
+              >0</span
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- AUDIO -->
+    <audio
+      id="bg-music"
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+      loop
+    ></audio>
+    <audio
+      id="correct-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+    ></audio>
+    <audio
+      id="wrong-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
+    ></audio>
+
+    <script>
+      // CONSISTENT HEADER LOADING LOGIC
+      fetch("header.html")
+        .then((response) => response.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+
+          // Inject the styles from header.html to ensure the Settings design is applied
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) {
+            document.head.appendChild(headerStyle.cloneNode(true));
+          }
+
+          // Correctly extract the settings logic script (the one without a src attribute)
+          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
+          if (headerScript) {
+            const script = document.createElement("script");
+            script.textContent = headerScript.textContent;
+            document.body.appendChild(script);
+          }
+
+          const totalPoints =
+            localStorage.getItem("totalHeritagePoints") || "0";
+          document.getElementById("header-total-points").textContent =
+            totalPoints;
+        });
+
+      // Quiz Data
+      const quizData = [
+        {
+          q: "Which Mati landmark is known for its shape resembling a prehistoric creature?",
+          options: [
+            "Mount Hamiguitan",
+            "Sleeping Dinosaur",
+            "Dahican Beach",
+            "Waniban Island",
+          ],
+          correct: 1,
+        },
+        {
+          q: "What famous white sand beach in Mati is popular for surfing and skimboarding?",
+          options: ["Mayo Bay", "Dahican Beach", "Blue Lagoon", "Masao Beach"],
+          correct: 1,
+        },
+        {
+          q: "In which museum can you find 'Davao', the 50-foot sperm whale skeleton?",
+          options: [
+            "Subangan Museum",
+            "Mati Cultural Center",
+            "Heritage House",
+            "People's Park",
+          ],
+          correct: 0,
+        },
+        {
+          q: "What is the capital city of Davao Oriental?",
+          options: ["Lupon", "Banaybanay", "Mati", "Cateel"],
+          correct: 2,
+        },
+        {
+          q: "Which festival in Mati celebrates the city's founding anniversary and bountiful harvest?",
+          options: [
+            "Kadawayan Festival",
+            "Sambuokan Festival",
+            "Pujada Festival",
+            "Dahican Fest",
+          ],
+          correct: 1,
+        },
+      ];
+
+      let currentQuestion = 0;
+      let score = 0;
+      let canAnswer = true;
+
+      // Audio Setup
+      const bgMusic = document.getElementById("bg-music");
+      const correctSfx = document.getElementById("correct-sfx");
+      const wrongSfx = document.getElementById("wrong-sfx");
+
+      let musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+      let sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+
+      bgMusic.volume = musicVol;
+      correctSfx.volume = sfxVol;
+      wrongSfx.volume = sfxVol;
+
+      // Difficulty Logic
+      let difficulty = "medium";
+      const diffSettings = {
+        easy: { time: 20, points: 10 },
+        medium: { time: 15, points: 20 },
+        hard: { time: 10, points: 50 },
+      };
+
+      window.setDifficulty = (level) => {
+        difficulty = level;
+        document.querySelectorAll(".diff-btn").forEach((btn) => {
+          btn.classList.remove(
+            "bg-cyan-400/20",
+            "border-cyan-400",
+            "bg-purple-500/20",
+            "border-purple-500",
+          );
+          btn.classList.add("border-white/20");
+        });
+
+        const activeBtn = document.getElementById(`btn-${level}`);
+        activeBtn.classList.remove("border-white/20");
+        if (level === "hard") {
+          activeBtn.classList.add("bg-purple-500/20", "border-purple-500");
+        } else {
+          activeBtn.classList.add("bg-cyan-400/20", "border-cyan-400");
+        }
+      };
+
+      // Announcer logic refined for Trivia
+      let hasWelcomed = false;
+      const playAnnouncer = (text) => {
+        if (sfxVol > 0 && "speechSynthesis" in window) {
+          const synth = window.speechSynthesis;
+
+          const speak = () => {
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+
+            const femaleVoice =
+              voices.find((v) => v.name.includes("Google US English")) ||
+              voices.find((v) => v.name.includes("Samantha")) ||
+              voices.find((v) => v.name.includes("Zira")) ||
+              voices.find(
+                (v) =>
+                  v.lang.startsWith("en") &&
+                  !v.name.toLowerCase().includes("male"),
+              );
+
+            if (femaleVoice) utterance.voice = femaleVoice;
+            utterance.volume = sfxVol;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.1;
+            synth.speak(utterance);
+          };
+
+          if (synth.getVoices().length === 0) {
+            synth.onvoiceschanged = speak;
+          } else {
+            speak();
+          }
+        }
+      };
+
+      // Utility to shuffle arrays (Fisher-Yates)
+      function shuffle(array) {
+        let currentIndex = array.length,
+          randomIndex;
+        while (currentIndex != 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+          ];
+        }
+        return array;
+      }
+
+      // Welcome the player on first interaction with the page
+      const handleWelcome = () => {
+        if (!hasWelcomed) {
+          playAnnouncer(
+            "Greetings, Player! Welcome to the Mati Heritage Trivia Challenge. Show us what you know!",
+          );
+          hasWelcomed = true;
+        }
+      };
+      document.addEventListener("click", handleWelcome, { once: true });
+      document.addEventListener("keydown", handleWelcome, { once: true });
+
+      // Handle Start Game
+      document
+        .getElementById("start-game-btn")
+        .addEventListener("click", () => {
+          // Music
+          if (bgMusic.paused && musicVol > 0) bgMusic.play();
+
+          // Randomized Content: Shuffle questions per session
+          shuffle(quizData);
+
+          // Announcer
+          playAnnouncer(`Let the ${difficulty} challenge begin! Good luck!`);
+
+          // Transition UI
+          const intro = document.getElementById("intro-screen");
+          const interface = document.getElementById("main-quiz-interface");
+
+          intro.style.transition = "all 0.5s ease";
+          intro.style.opacity = "0";
+          intro.style.transform = "scale(0.9)";
+
+          setTimeout(() => {
+            intro.classList.add("hidden");
+
+            interface.classList.remove("hidden");
+            interface.style.opacity = "0";
+            interface.style.transform = "translateY(20px)";
+
+            setTimeout(() => {
+              interface.style.opacity = "1";
+              interface.style.transform = "translateY(0)";
+              loadQuestion();
+            }, 50);
+          }, 500);
+        });
+
+      let timerInterval;
+      let timeLeft = 15;
+
+      function startTimer() {
+        timeLeft = diffSettings[difficulty].time;
+        const display = document.getElementById("timer-display");
+        display.textContent = `${timeLeft}s`;
+        display.classList.remove("timer-low");
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          display.textContent = `${timeLeft}s`;
+
+          if (timeLeft <= 5) {
+            display.classList.add("timer-low");
+          }
+
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleAnswer(-1, null); // Time's up is an automatic wrong answer
+          }
+        }, 1000);
+      }
+
+      function loadQuestion() {
+        canAnswer = true;
+        const questionObj = quizData[currentQuestion];
+
+        // Randomize Options per question
+        const originalOptions = [...questionObj.options];
+        const correctText = originalOptions[questionObj.correct];
+        const shuffledOptions = shuffle([...originalOptions]);
+        const newCorrectIndex = shuffledOptions.indexOf(correctText);
+
+        // Update current question object with shuffled state
+        questionObj.currentOptions = shuffledOptions;
+        questionObj.currentCorrect = newCorrectIndex;
+
+        // Update Progress
+        document.getElementById("current-q-num").textContent =
+          currentQuestion + 1;
+        document.getElementById("progress-fill").style.width =
+          `${(currentQuestion / quizData.length) * 100}%`;
+
+        // Update Text
+        document.getElementById("question-text").textContent = questionObj.q;
+
+        // Update Options
+        const optionsGrid = document.getElementById("options-grid");
+        optionsGrid.innerHTML = "";
+
+        shuffledOptions.forEach((opt, index) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "option-btn w-full h-full text-left p-5 rounded-xl text-lg font-semibold flex items-center gap-4";
+          btn.innerHTML = `
+                    <span class="w-8 h-8 shrink-0 rounded-lg bg-white/10 flex items-center justify-center text-sm orbitron">${String.fromCharCode(65 + index)}</span>
+                    <span class="leading-tight">${opt}</span>
+                `;
+          btn.onclick = () => handleAnswer(index, btn);
+          optionsGrid.appendChild(btn);
+        });
+
+        startTimer();
+      }
+
+      function handleAnswer(index, btn) {
+        if (!canAnswer) return;
+        canAnswer = false;
+        clearInterval(timerInterval);
+
+        const correct = quizData[currentQuestion].currentCorrect;
+        const allBtns = document.querySelectorAll(".option-btn");
+
+        if (index === correct) {
+          score += diffSettings[difficulty].points;
+
+          if (btn) btn.classList.add("correct");
+          document.getElementById("score-display").textContent = score;
+          if (sfxVol > 0) correctSfx.play();
+        } else {
+          if (sfxVol > 0) wrongSfx.play();
+        }
+
+        setTimeout(() => {
+          currentQuestion++;
+          if (currentQuestion < quizData.length) {
+            loadQuestion();
+          } else {
+            showResults();
+          }
+        }, 1500);
+      }
+
+      function showResults() {
+        document.getElementById("progress-fill").style.width = "100%";
+        document.getElementById("question-screen").classList.add("hidden");
+        document.getElementById("stats-sidebar").classList.add("hidden");
+        document.getElementById("results-screen").classList.remove("hidden");
+        document.getElementById("final-score").textContent = score;
+
+        // ACCUMULATE GLOBAL POINTS
+        let totalHeritagePoints = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+        );
+        totalHeritagePoints += score;
+        localStorage.setItem("totalHeritagePoints", totalHeritagePoints);
+        document.getElementById("header-total-points").textContent =
+          totalHeritagePoints;
+
+        const maxScore = quizData.length * diffSettings[difficulty].points;
+        let msg = "";
+        if (score === maxScore)
+          msg = "Incredible! You are a true Mati Heritage Expert!";
+        else if (score >= maxScore * 0.6)
+          msg = "Great job! You know your Mati history well.";
+        else
+          msg =
+            "Good effort! Explore more to learn about Mati's rich heritage.";
+
+        document.getElementById("result-message").textContent = msg;
+      }
+
+      loadQuestion();
+    </script>
+  </body>
+</html>

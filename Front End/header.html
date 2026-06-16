@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Mati Heritage Explorer</title>
+
+    <style>
+      /* Header-specific styles - removed global body/html overrides to prevent theme conflicts */
+      body {
+        font-family: "Rajdhani", sans-serif;
+      }
+
+      .header-bg {
+        background: linear-gradient(
+          180deg,
+          rgba(18, 21, 36, 0.96),
+          rgba(9, 11, 20, 0.98)
+        );
+      }
+
+      /* SETTINGS STYLES */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: 0.4s;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #00d4ff;
+        border-color: #00d4ff;
+      }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+      .settings-save-btn {
+        background: linear-gradient(90deg, #a020f0, #00d4ff);
+        box-shadow: 0 0 20px rgba(160, 32, 240, 0.4);
+        transition: all 0.3s ease;
+      }
+      .settings-save-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+      }
+      .orbitron {
+        font-family: "Orbitron", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="header-bg h-[90px] px-8 lg:px-12 text-white">
+      <div class="flex h-full items-center justify-between">
+        <!-- LOGO (LEFT SIDE) -->
+        <a href="#" class="flex items-center gap-4">
+          <div
+            class="flex h-14 w-14 items-center justify-center rounded-xl border border-cyan-300/80 bg-[#08121e] shadow-[0_0_0_1px_rgba(0,0,0,0.35),0_0_18px_rgba(34,211,238,0.18)]"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="h-7 w-7 text-white"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M6 7h12a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3Z"
+              />
+              <path d="M8 10h0" />
+              <path d="M8 14h0" />
+              <path d="M16 11h0" />
+              <path d="M16 13h0" />
+            </svg>
+          </div>
+
+          <div class="leading-none">
+            <div
+              class="text-xl font-bold tracking-[0.2em] uppercase lg:text-2xl"
+            >
+              GAMES HUB
+            </div>
+
+            <div
+              class="mt-2 text-[11px] tracking-[0.5em] text-cyan-300 uppercase"
+            >
+              MATI HERITAGE EXPLORER
+            </div>
+          </div>
+        </a>
+
+        <!-- NAVIGATION (RIGHT SIDE) -->
+        <nav
+          class="hidden items-center gap-12 text-base uppercase tracking-[0.1em] text-white lg:flex"
+        >
+          <a
+            href="#"
+            class="font-medium transition duration-300 hover:text-cyan-300"
+          >
+            Home
+          </a>
+
+          <a
+            href="#"
+            class="font-medium transition duration-300 hover:text-cyan-300"
+          >
+            About Us
+          </a>
+
+          <a
+            href="game.html"
+            class="font-medium transition duration-300 hover:text-cyan-300"
+          >
+            Games
+          </a>
+
+          <a
+            href="#"
+            class="font-medium transition duration-300 hover:text-cyan-300"
+          >
+            Explore
+          </a>
+
+          <a
+            href="#"
+            class="font-medium transition duration-300 hover:text-cyan-300"
+          >
+            Gallery
+          </a>
+
+          <!-- TOTAL POINTS BADGE -->
+          <div
+            class="flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 shadow-[0_0_15px_rgba(34,211,238,0.1)]"
+          >
+            <div class="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></div>
+            <span class="text-xs font-bold tracking-widest text-cyan-400"
+              >TOTAL PTS:</span
+            >
+            <span id="header-total-points" class="text-sm font-bold text-white"
+              >0</span
+            >
+          </div>
+
+          <!-- USER PROFILE -->
+          <div class="relative group ml-4">
+            <div class="flex cursor-pointer items-center gap-3">
+              <img
+                src="https://i.pravatar.cc/120?img=12"
+                alt="User avatar"
+                class="h-12 w-12 rounded-full border-2 border-white/20 object-cover transition duration-300 hover:scale-105"
+              />
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-white transition-transform duration-300 group-hover:rotate-180"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+
+            <!-- DROPDOWN MENU -->
+            <div
+              class="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-xl border border-white/10 bg-[#0d1425]/95 backdrop-blur-xl p-2 shadow-2xl transition-all duration-300 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50"
+            >
+              <a
+                href="#"
+                class="block px-4 py-2.5 text-sm font-semibold tracking-wider hover:bg-cyan-500/10 hover:text-cyan-300 rounded-lg transition duration-200"
+                >ACCOUNT</a
+              >
+              <a
+                href="javascript:void(0)"
+                id="settings-link"
+                class="block px-4 py-2.5 text-sm font-semibold tracking-wider hover:bg-cyan-500/10 hover:text-cyan-300 rounded-lg transition duration-200"
+                >SETTINGS</a
+              >
+              <div class="my-1 h-px bg-white/5"></div>
+              <a
+                href="#"
+                class="block px-4 py-2.5 text-sm font-semibold tracking-wider text-red-400 hover:bg-red-500/10 rounded-lg transition duration-200"
+                >LOGOUT</a
+              >
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- SETTINGS MODAL -->
+      <div
+        id="settings-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal"
+      >
+        <div
+          class="bg-[#0d1425] border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl mx-4 max-h-[90vh] overflow-y-auto"
+        >
+          <div class="flex justify-between items-center mb-8">
+            <h3
+              class="text-white text-2xl font-bold tracking-widest uppercase orbitron"
+            >
+              Settings
+            </h3>
+            <button id="close-settings" class="text-gray-400 hover:text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-6">
+            <!-- BG Music Volume -->
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-gray-200 text-base font-semibold tracking-wide"
+                  >Background Music</span
+                >
+                <span
+                  id="music-vol-text"
+                  class="text-cyan-400 text-sm font-bold"
+                  >20%</span
+                >
+              </div>
+              <input
+                type="range"
+                id="music-volume"
+                min="0"
+                max="1"
+                step="0.01"
+                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+              />
+            </div>
+
+            <!-- Language Selection -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-200 text-base font-semibold tracking-wide"
+                >Language</span
+              >
+              <select
+                id="language-select"
+                class="bg-white/5 border border-white/20 text-white text-base rounded-lg p-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+              >
+                <option value="en" class="bg-[#0d1425]">English</option>
+                <option value="ceb" class="bg-[#0d1425]">Cebuano</option>
+                <option value="fil" class="bg-[#0d1425]">Filipino</option>
+              </select>
+            </div>
+
+            <!-- SFX Volume -->
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-gray-200 text-base font-semibold tracking-wide"
+                  >Sound Effects</span
+                >
+                <span id="sfx-vol-text" class="text-cyan-400 text-sm font-bold"
+                  >80%</span
+                >
+              </div>
+              <input
+                type="range"
+                id="sfx-volume"
+                min="0"
+                max="1"
+                step="0.01"
+                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+              />
+            </div>
+          </div>
+
+          <button
+            id="save-settings"
+            class="w-full mt-10 py-4 settings-save-btn rounded-xl text-white font-bold tracking-widest uppercase text-base"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <script>
+      /**
+       * Centralized Settings Logic
+       * Handles Audio volumes, Language, and Reduced Motion across all pages.
+       */
+      window.initGlobalSettings = function () {
+        const modal = document.getElementById("settings-modal");
+        const musicSlider = document.getElementById("music-volume");
+        const sfxSlider = document.getElementById("sfx-volume");
+        const musicVolText = document.getElementById("music-vol-text");
+        const sfxVolText = document.getElementById("sfx-vol-text");
+        const langSelect = document.getElementById("language-select");
+        const settingsLink = document.getElementById("settings-link");
+        const saveBtn = document.getElementById("save-settings");
+
+        // List of all SFX IDs used across the application
+        const sfxIds = [
+          "click-sound",
+          "announcer-voice",
+          "correct-sfx",
+          "wrong-sfx",
+          "tetris-fall-sound",
+          "tetris-boom-sound",
+        ];
+
+        const loadPrefs = () => {
+          const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+          const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+          const lang = localStorage.getItem("appLanguage") || "en";
+
+          if (musicSlider) musicSlider.value = mVol;
+          if (sfxSlider) sfxSlider.value = sVol;
+          if (musicVolText)
+            musicVolText.textContent = Math.round(mVol * 100) + "%";
+          if (sfxVolText) sfxVolText.textContent = Math.round(sVol * 100) + "%";
+          if (langSelect) langSelect.value = lang;
+
+          const applyVolumes = () => {
+            const bg = document.getElementById("bg-music");
+            if (bg) bg.volume = mVol;
+            sfxIds.forEach((id) => {
+              const sfx = document.getElementById(id);
+              if (sfx) sfx.volume = sVol;
+            });
+          };
+
+          // Wait for DOM to ensure audio tags are found before applying saved volume
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", applyVolumes);
+          } else {
+            applyVolumes();
+          }
+        };
+
+        // Event Listeners
+        if (settingsLink) {
+          settingsLink.onclick = (e) => {
+            e.preventDefault();
+            if (modal) modal.classList.replace("hidden", "flex");
+          };
+        }
+
+        const closeModal = () => modal.classList.replace("flex", "hidden");
+
+        const closeBtn = document.getElementById("close-settings");
+        if (closeBtn) closeBtn.onclick = closeModal;
+        if (modal) modal.onclick = (e) => e.target === modal && closeModal();
+
+        if (musicSlider) {
+          musicSlider.oninput = (e) => {
+            const val = e.target.value;
+            musicVolText.textContent = Math.round(val * 100) + "%";
+            const bg = document.getElementById("bg-music");
+            if (bg) bg.volume = val;
+          };
+        }
+
+        if (sfxSlider) {
+          sfxSlider.oninput = (e) => {
+            const val = e.target.value;
+            sfxVolText.textContent = Math.round(val * 100) + "%";
+            sfxIds.forEach((id) => {
+              const sfx = document.getElementById(id);
+              if (sfx) sfx.volume = val;
+            });
+
+            // Play a short preview sound so the user can hear the volume level immediately
+            const preview = document.getElementById("click-sound");
+            if (preview && val > 0) {
+              preview.currentTime = 0;
+              preview.play().catch(() => {});
+            }
+          };
+        }
+
+        if (saveBtn) {
+          saveBtn.onclick = () => {
+            if (musicSlider)
+              localStorage.setItem("bgMusicVol", musicSlider.value);
+            if (sfxSlider) localStorage.setItem("sfxVol", sfxSlider.value);
+            if (langSelect)
+              localStorage.setItem("appLanguage", langSelect.value);
+
+            closeModal();
+          };
+        }
+
+        loadPrefs();
+      };
+
+      // Automatically initialize settings when the script is loaded
+      initGlobalSettings();
+    </script>
+  </body>
+</html>

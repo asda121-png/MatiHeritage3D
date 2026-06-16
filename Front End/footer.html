@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .footer-bg {
+        background: linear-gradient(
+          0deg,
+          rgba(18, 21, 36, 0.98),
+          rgba(9, 11, 20, 1)
+        );
+      }
+      .orbitron {
+        font-family: "Orbitron", sans-serif;
+      }
+      .rajdhani {
+        font-family: "Rajdhani", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <footer
+      class="footer-bg text-white py-16 px-8 lg:px-12 border-t border-cyan-500/20 rajdhani relative overflow-hidden"
+    >
+      <!-- Decorative background glow -->
+      <div
+        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"
+      ></div>
+
+      <div class="relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+          <!-- Left Side: Brand & Description -->
+          <div class="md:col-span-5">
+            <h2
+              class="text-2xl font-bold tracking-[0.2em] uppercase orbitron mb-2"
+            >
+              MATI HERITAGE 3D
+            </h2>
+            <p
+              class="text-cyan-400 text-sm font-semibold orbitron tracking-wider mb-6"
+            >
+              "Preserving the Past, Inspiring the Future."
+            </p>
+            <p class="text-gray-400 text-base leading-relaxed max-w-md">
+              Dedicated to the preservation, accessibility, and promotion of
+              Mati City's cultural heritage for present and future generations.
+            </p>
+
+            <div class="space-y-2 pt-4 border-t border-white/5">
+              <p
+                class="text-xs tracking-[0.2em] text-gray-500 uppercase font-bold"
+              >
+                Cultural Heritage Data Provided Through an Official Data Sharing
+                Agreement With
+              </p>
+              <p class="text-sm text-gray-400">
+                Local Government Unit of Mati City
+              </p>
+              <p class="text-sm text-gray-400">City Tourism Office</p>
+            </div>
+          </div>
+
+          <!-- Center: Explore -->
+          <div class="md:col-span-3">
+            <h3
+              class="orbitron text-sm font-bold tracking-widest uppercase mb-8 text-cyan-400"
+            >
+              Explore
+            </h3>
+            <ul
+              class="space-y-4 text-sm font-semibold uppercase tracking-wider text-gray-300"
+            >
+              <li>
+                <a href="#" class="hover:text-white transition-all duration-300"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all duration-300"
+                  >About</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all duration-300"
+                  >Games</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all duration-300"
+                  >Explore</a
+                >
+              </li>
+              <li>
+                <a
+                  href="game.html"
+                  class="hover:text-white transition-all duration-300"
+                  >Gallery</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-all duration-300"
+                  >Leaderboard</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right Side: Heritage Resources & Contact -->
+          <div class="md:col-span-4">
+            <div class="mb-12">
+              <h3
+                class="orbitron text-sm font-bold tracking-widest uppercase mb-8 text-cyan-400"
+              >
+                Heritage Resources
+              </h3>
+              <ul
+                class="space-y-4 text-sm font-semibold uppercase tracking-wider text-gray-300"
+              >
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-white transition-all duration-300"
+                    >Built Heritage</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-white transition-all duration-300"
+                    >Intangible Heritage</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-white transition-all duration-300"
+                    >Natural Heritage</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3
+                class="orbitron text-sm font-bold tracking-widest uppercase mb-6 text-white"
+              >
+                Contact
+              </h3>
+              <p class="text-sm text-gray-400 tracking-wide">
+                City Tourism Office, Mati City
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div
+          class="pt-8 border-t border-white/5 flex flex-col items-center justify-center text-center"
+        >
+          <p class="text-sm tracking-[0.3em] uppercase font-bold text-gray-500">
+            <span class="text-lg align-middle">&copy;</span> 2026 Mati Heritage
+            3D.All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
