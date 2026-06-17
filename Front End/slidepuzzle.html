@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Mosaic Vault - Mati Heritage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --copper: #c4722a;
+        --copper-light: #e8a838;
+        --burgundy: #2a1215;
+        --vault-dark: #0d0506;
+        --parchment: #f5e6d3;
+      }
+
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background: var(--vault-dark);
+        color: var(--parchment);
+        overflow-x: hidden;
+      }
+
+      .cinzel {
+        font-family: "Cinzel", serif;
+      }
+
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .vault-bg {
+        background:
+          radial-gradient(
+            ellipse at 50% 0%,
+            rgba(196, 114, 42, 0.18) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(139, 40, 40, 0.25) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(196, 114, 42, 0.12) 0%,
+            transparent 40%
+          ),
+          linear-gradient(180deg, #1a0a0c 0%, var(--vault-dark) 100%);
+        min-height: 100vh;
+        position: relative;
+      }
+
+      .vault-bg::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 28px,
+            rgba(196, 114, 42, 0.04) 28px,
+            rgba(196, 114, 42, 0.04) 29px
+          ),
+          repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 28px,
+            rgba(196, 114, 42, 0.03) 28px,
+            rgba(196, 114, 42, 0.03) 29px
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .ember {
+        position: fixed;
+        width: 3px;
+        height: 3px;
+        background: var(--copper-light);
+        border-radius: 50%;
+        opacity: 0;
+        animation: float-ember 8s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 1;
+        box-shadow: 0 0 6px var(--copper-light);
+      }
+
+      @keyframes float-ember {
+        0% {
+          opacity: 0;
+          transform: translateY(0) scale(0.5);
+        }
+        15% {
+          opacity: 0.7;
+        }
+        85% {
+          opacity: 0.4;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-120px) scale(1.2);
+        }
+      }
+
+      .vault-card {
+        background: rgba(42, 18, 21, 0.88);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(196, 114, 42, 0.35);
+        box-shadow:
+          0 0 40px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(232, 168, 56, 0.12);
+      }
+
+      .copper-accent {
+        color: var(--copper-light);
+      }
+
+      .copper-border {
+        border-color: var(--copper);
+      }
+
+      .copper-bg {
+        background: linear-gradient(
+          135deg,
+          var(--copper) 0%,
+          var(--copper-light) 100%
+        );
+      }
+
+      .diff-btn {
+        transition: all 0.3s ease;
+      }
+
+      .diff-btn.active {
+        border-color: var(--copper-light) !important;
+        background: rgba(196, 114, 42, 0.2) !important;
+        color: var(--copper-light) !important;
+        box-shadow: 0 0 20px rgba(196, 114, 42, 0.3);
+      }
+
+      /* Intro — full page, no card container */
+      .intro-stage {
+        width: 100%;
+        min-height: calc(100vh - 6rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem 1rem 3rem;
+        position: relative;
+        z-index: 20;
+      }
+
+      .demo-puzzle-hero {
+        position: relative;
+        margin: 0 auto 2rem;
+      }
+
+      .demo-puzzle-board {
+        position: relative;
+        width: 248px;
+        height: 248px;
+        margin: 0 auto;
+      }
+
+      .demo-tile {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 4px;
+        border: 1px solid rgba(196, 114, 42, 0.45);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 4px 16px rgba(0, 0, 0, 0.35);
+        transition:
+          left 0.38s cubic-bezier(0.34, 1.2, 0.64, 1),
+          top 0.38s cubic-bezier(0.34, 1.2, 0.64, 1),
+          box-shadow 0.4s ease,
+          filter 0.4s ease;
+        background-repeat: no-repeat;
+      }
+
+      .intro-stage.intro-screen-complete .demo-tile:not(.empty) {
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.15),
+          0 0 18px rgba(232, 168, 56, 0.35);
+        filter: brightness(1.05);
+      }
+
+      .demo-tile.empty {
+        background: transparent !important;
+        border-color: rgba(196, 114, 42, 0.08);
+        box-shadow: none;
+      }
+
+      .intro-pieces {
+        width: 100%;
+        max-width: 36rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+      }
+
+      .intro-slide-piece {
+        width: 100%;
+        transition:
+          transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1),
+          opacity 0.42s ease,
+          filter 0.42s ease;
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+        filter: blur(0);
+      }
+
+      .intro-stage.intro-screen-scrambled .intro-slide-piece {
+        transform: translate(var(--sx, 0px), var(--sy, 0px))
+          rotate(var(--sr, 0deg));
+        opacity: 0.35;
+        filter: blur(1px);
+      }
+
+      .intro-stage.intro-screen-complete .intro-slide-piece {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+        filter: blur(0);
+      }
+
+      .intro-title {
+        font-family: "Cinzel", serif;
+        font-weight: 900;
+        letter-spacing: 0.22em;
+        line-height: 1.1;
+        color: var(--copper-light);
+        white-space: nowrap;
+      }
+
+      .intro-title-line {
+        display: block;
+      }
+
+      .intro-stage.intro-screen-complete .intro-title {
+        text-shadow: 0 0 28px rgba(232, 168, 56, 0.55);
+      }
+
+      .start-btn {
+        background: linear-gradient(
+          135deg,
+          var(--copper) 0%,
+          var(--copper-light) 100%
+        );
+        color: var(--vault-dark);
+        box-shadow: 0 4px 24px rgba(196, 114, 42, 0.45);
+        transition: all 0.3s ease;
+      }
+
+      .start-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(232, 168, 56, 0.55);
+      }
+
+      .stat-card {
+        background: rgba(13, 5, 6, 0.7);
+        border: 1px solid rgba(196, 114, 42, 0.25);
+        border-left: 3px solid var(--copper);
+      }
+
+      .timer-bar-track {
+        height: 6px;
+        background: rgba(13, 5, 6, 0.8);
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid rgba(196, 114, 42, 0.2);
+      }
+
+      .timer-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--copper), var(--copper-light));
+        border-radius: 999px;
+        transition: width 1s linear;
+      }
+
+      .timer-bar-fill.critical {
+        background: linear-gradient(90deg, #991b1b, #ef4444);
+        animation: pulse-bar 0.8s ease-in-out infinite;
+      }
+
+      @keyframes pulse-bar {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.65;
+        }
+      }
+
+      .timer-critical {
+        color: #ef4444 !important;
+        text-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+        animation: pulse-text 0.8s ease-in-out infinite;
+      }
+
+      @keyframes pulse-text {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .mosaic-frame {
+        padding: 12px;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(196, 114, 42, 0.4),
+            rgba(139, 69, 19, 0.2)
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(196, 114, 42, 0.15) 0px,
+            rgba(196, 114, 42, 0.15) 4px,
+            transparent 4px,
+            transparent 12px
+          );
+        border: 3px solid var(--copper);
+        border-radius: 12px;
+        box-shadow:
+          0 0 0 2px rgba(13, 5, 6, 0.8),
+          0 0 0 5px rgba(196, 114, 42, 0.3),
+          0 24px 60px rgba(0, 0, 0, 0.7),
+          inset 0 0 30px rgba(0, 0, 0, 0.4);
+      }
+
+      #puzzle-board {
+        display: grid;
+        gap: 3px;
+        background: rgba(13, 5, 6, 0.9);
+        padding: 3px;
+        border-radius: 6px;
+        width: 100%;
+        max-width: 500px;
+        aspect-ratio: 1/1;
+        margin: 0 auto;
+      }
+
+      .puzzle-tile {
+        width: 100%;
+        height: 100%;
+        background-size: 0;
+        border-radius: 3px;
+        cursor: pointer;
+        transition:
+          transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+          box-shadow 0.18s,
+          filter 0.18s;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        border: 1px solid rgba(196, 114, 42, 0.25);
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .puzzle-tile::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 3px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        pointer-events: none;
+      }
+
+      .puzzle-tile:hover {
+        filter: brightness(1.12);
+        box-shadow:
+          inset 0 0 12px rgba(232, 168, 56, 0.25),
+          0 0 8px rgba(196, 114, 42, 0.3);
+        z-index: 2;
+      }
+
+      .tile-number {
+        background: rgba(13, 5, 6, 0.75);
+        color: var(--copper-light);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-family: "JetBrains Mono", monospace;
+        opacity: 0;
+        transition: opacity 0.3s;
+        border: 1px solid rgba(196, 114, 42, 0.4);
+      }
+
+      .show-numbers .tile-number {
+        opacity: 1;
+      }
+
+      .empty-tile {
+        background: rgba(13, 5, 6, 0.95) !important;
+        cursor: default;
+        border-color: rgba(196, 114, 42, 0.15) !important;
+        box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.6);
+      }
+
+      .empty-tile:hover {
+        filter: none;
+        box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.6);
+      }
+
+      .combo-badge {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.25s ease;
+      }
+
+      .combo-badge.active {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      #reference-preview {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid rgba(196, 114, 42, 0.5);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      }
+
+      .difficulty-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        border: 1px solid rgba(196, 114, 42, 0.4);
+        background: rgba(196, 114, 42, 0.15);
+        color: var(--copper-light);
+      }
+
+      .score-breakdown-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(196, 114, 42, 0.15);
+        font-size: 0.95rem;
+      }
+
+      .score-breakdown-row:last-child {
+        border-bottom: none;
+        font-weight: 700;
+        color: var(--copper-light);
+        padding-top: 12px;
+        margin-top: 4px;
+        border-top: 1px solid rgba(196, 114, 42, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="ember"
+      style="left: 10%; bottom: 20%; animation-delay: 0s"
+    ></div>
+    <div
+      class="ember"
+      style="left: 25%; bottom: 10%; animation-delay: 2s"
+    ></div>
+    <div
+      class="ember"
+      style="left: 60%; bottom: 15%; animation-delay: 4s"
+    ></div>
+    <div
+      class="ember"
+      style="left: 80%; bottom: 25%; animation-delay: 1s"
+    ></div>
+    <div class="ember" style="left: 45%; bottom: 5%; animation-delay: 6s"></div>
+
+    <div id="header-placeholder" class="min-h-[90px]"></div>
+
+    <main
+      class="vault-bg flex flex-col items-center justify-center pt-24 pb-12 px-4 relative z-10"
+    >
+      <div id="intro-screen" class="intro-stage intro-screen-complete">
+        <div class="demo-puzzle-hero">
+          <div id="demo-puzzle-board" class="demo-puzzle-board"></div>
+        </div>
+
+        <div id="intro-pieces" class="intro-pieces">
+          <div
+            class="intro-slide-piece mb-3"
+            data-scatter-x="-90"
+            data-scatter-y="-55"
+            data-scatter-r="-6"
+          >
+            <h1 id="intro-title" class="intro-title text-3xl md:text-4xl">
+              <span class="intro-title-line">SLIDE</span>
+              <span class="intro-title-line">PUZZLE</span>
+            </h1>
+          </div>
+
+          <div
+            class="intro-slide-piece mb-2"
+            data-scatter-x="70"
+            data-scatter-y="-35"
+            data-scatter-r="4"
+          >
+            <p
+              class="text-amber-700/70 text-xs tracking-[0.35em] uppercase cinzel"
+            >
+              The Mosaic Vault
+            </p>
+          </div>
+
+          <div
+            class="intro-slide-piece mb-6"
+            data-scatter-x="-65"
+            data-scatter-y="40"
+            data-scatter-r="-3"
+          >
+            <p
+              class="text-amber-100/65 text-base leading-relaxed max-w-md mx-auto px-2"
+            >
+              Watch the tiles shift, then take your turn. Reassemble the
+              heritage mosaic before the vault seals shut.
+            </p>
+          </div>
+
+          <div
+            class="intro-slide-piece mb-8"
+            data-scatter-x="55"
+            data-scatter-y="65"
+            data-scatter-r="5"
+          >
+            <div class="flex flex-wrap justify-center gap-3">
+              <button
+                onclick="setDifficulty('easy')"
+                id="btn-easy"
+                class="diff-btn px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest hover:border-amber-600/50"
+              >
+                EASY · 3×3
+              </button>
+              <button
+                onclick="setDifficulty('medium')"
+                id="btn-medium"
+                class="diff-btn active px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest"
+              >
+                MEDIUM · 4×4
+              </button>
+              <button
+                onclick="setDifficulty('hard')"
+                id="btn-hard"
+                class="diff-btn px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest hover:border-amber-600/50"
+              >
+                HARD · 5×5
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="intro-slide-piece"
+            data-scatter-x="-20"
+            data-scatter-y="95"
+            data-scatter-r="-2"
+          >
+            <button
+              id="start-btn"
+              class="cinzel start-btn px-14 py-4 rounded-lg font-bold tracking-widest text-sm"
+            >
+              Enter the Vault
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="game-screen" class="hidden w-full max-w-6xl z-20">
+        <div class="flex flex-col lg:flex-row gap-6 items-start justify-center">
+          <div class="w-full lg:w-72 flex flex-col gap-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="difficulty-badge mono" id="difficulty-badge"
+                >MEDIUM</span
+              >
+              <span
+                id="combo-badge"
+                class="combo-badge mono text-xs copper-accent tracking-wider"
+              >
+                ⚡ COMBO ×<span id="combo-count">0</span>
+              </span>
+            </div>
+
+            <div class="stat-card p-5 rounded-xl">
+              <span
+                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-1 mono"
+                >Live Score</span
+              >
+              <span
+                id="score-display"
+                class="text-3xl font-black mono copper-accent"
+                >0</span
+              >
+            </div>
+
+            <div class="stat-card p-5 rounded-xl">
+              <div class="flex justify-between items-end mb-2">
+                <span
+                  class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest mono"
+                  >Time Remaining</span
+                >
+                <span
+                  id="elapsed-display"
+                  class="text-[10px] text-amber-700/50 mono"
+                  >00:00 elapsed</span
+                >
+              </div>
+              <span
+                id="timer-display"
+                class="text-3xl font-black mono block mb-3"
+                >08:00</span
+              >
+              <div class="timer-bar-track">
+                <div
+                  id="timer-bar"
+                  class="timer-bar-fill"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="stat-card p-5 rounded-xl">
+              <span
+                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-1 mono"
+                >Moves</span
+              >
+              <span id="moves-display" class="text-3xl font-black mono">0</span>
+            </div>
+
+            <div class="vault-card p-4 rounded-xl text-center">
+              <span
+                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-3 mono"
+                >Target Mosaic</span
+              >
+              <img id="reference-preview" src="" alt="Target mosaic" />
+              <button
+                id="toggle-numbers"
+                class="mt-4 w-full py-2 rounded-lg border border-amber-900/50 text-[10px] cinzel tracking-widest hover:bg-amber-900/20 transition-all"
+              >
+                Toggle Tile Numbers
+              </button>
+            </div>
+          </div>
+
+          <div class="flex-1 w-full max-w-[530px]">
+            <div class="mosaic-frame">
+              <div id="puzzle-board"></div>
+            </div>
+            <div class="mt-5 text-center text-amber-700/60 text-sm italic">
+              Tap adjacent tiles to slide them into the empty slot.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="results-screen"
+        class="hidden w-full max-w-2xl vault-card rounded-2xl p-10 text-center z-20"
+      >
+        <div
+          class="text-[10px] tracking-[0.4em] uppercase text-amber-700/60 mono mb-2"
+        >
+          Vault Report
+        </div>
+        <h2 class="cinzel text-3xl font-bold mb-2 uppercase" id="victory-title">
+          Mosaic Restored
+        </h2>
+        <div
+          class="text-6xl font-black mono mb-6 copper-accent"
+          id="final-score"
+        >
+          0
+        </div>
+        <p class="text-amber-100/60 mb-8 text-lg" id="result-msg">
+          The heritage mosaic gleams once more.
+        </p>
+
+        <div
+          id="score-breakdown"
+          class="vault-card rounded-xl p-6 mb-8 text-left max-w-sm mx-auto mono text-sm"
+        ></div>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+          <button
+            onclick="location.reload()"
+            class="copper-bg text-vault-dark px-10 py-4 rounded-lg cinzel font-bold tracking-widest hover:opacity-90 transition-all"
+          >
+            New Mosaic
+          </button>
+          <a
+            href="game.html"
+            class="border border-amber-900/50 px-10 py-4 rounded-lg cinzel font-bold tracking-widest hover:bg-amber-900/20 transition-all"
+          >
+            Back to Hub
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <audio
+      id="bg-music"
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3"
+      loop
+    ></audio>
+    <audio
+      id="slide-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+    ></audio>
+    <audio
+      id="victory-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+    ></audio>
+
+    <script>
+      fetch("header.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          document
+            .getElementById("header-placeholder")
+            .replaceWith(doc.querySelector("header"));
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+          const ptsEl = document.getElementById("header-total-points");
+          if (ptsEl) {
+            ptsEl.textContent =
+              localStorage.getItem("totalHeritagePoints") || "0";
+          }
+        });
+
+      const heritageImages = [
+        "https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=800",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
+        "https://images.unsplash.com/photo-1518998053502-51dd0c61cd2e?w=800",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
+        "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800",
+      ];
+
+      // Standardizing layout configuration to Medium difficulty
+      const config = {
+        easy: {
+          size: 3,
+          time: 300,
+          basePoints: 500,
+          movePenalty: 3,
+          timeBonusRate: 8,
+          comboBonus: 8,
+          multiplier: 1,
+          label: "EASY",
+        },
+        medium: {
+          size: 4,
+          time: 480,
+          basePoints: 1000,
+          movePenalty: 5,
+          timeBonusRate: 12,
+          comboBonus: 12,
+          multiplier: 1.5,
+          label: "MEDIUM",
+        },
+        hard: {
+          size: 5,
+          time: 600,
+          basePoints: 2000,
+          movePenalty: 8,
+          timeBonusRate: 18,
+          comboBonus: 18,
+          multiplier: 2,
+          label: "HARD",
+        },
+      };
+
+      let difficulty = "medium";
+      let board = [];
+      let moves = 0;
+      let timeLeft = 0;
+      let totalTime = 0;
+      let elapsedSeconds = 0;
+      let timerInterval;
+      let gameActive = false;
+      let currentImage = "";
+      let emptyPos = 0;
+      let liveScore = 0;
+      let comboStreak = 0;
+      let comboBonusTotal = 0;
+      let lastMoveTime = 0;
+      const COMBO_WINDOW_MS = 1800;
+
+      const boardEl = document.getElementById("puzzle-board");
+      const slideSfx = document.getElementById("slide-sfx");
+      const victorySfx = document.getElementById("victory-sfx");
+      const bgMusic = document.getElementById("bg-music");
+
+      function setDifficulty(level) {
+        difficulty = level;
+        document.querySelectorAll(".diff-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        document.getElementById(`btn-${level}`).classList.add("active");
+      }
+
+      /* ---- Intro demo puzzle (looping auto-slide animation) ---- */
+      const demoPuzzle = (() => {
+        const DEMO_SIZE = 3;
+        const TILE_PX = 80;
+        const GAP_PX = 4;
+        const STEP = TILE_PX + GAP_PX;
+        const demoImage = heritageImages[0];
+        const introScreen = document.getElementById("intro-screen");
+        const boardContainer = document.getElementById("demo-puzzle-board");
+
+        let board = [];
+        let emptyPos = DEMO_SIZE * DEMO_SIZE - 1;
+        let tileEls = [];
+        let running = false;
+        let loopActive = false;
+
+        function initScatterVars() {
+          document.querySelectorAll(".intro-slide-piece").forEach((el) => {
+            el.style.setProperty("--sx", `${el.dataset.scatterX || 0}px`);
+            el.style.setProperty("--sy", `${el.dataset.scatterY || 0}px`);
+            el.style.setProperty("--sr", `${el.dataset.scatterR || 0}deg`);
+          });
+        }
+
+        function setPageState(state) {
+          introScreen.classList.remove(
+            "intro-screen-complete",
+            "intro-screen-scrambled",
+          );
+          if (state) introScreen.classList.add(`intro-screen-${state}`);
+        }
+
+        function slotXY(slot) {
+          const row = Math.floor(slot / DEMO_SIZE);
+          const col = slot % DEMO_SIZE;
+          return { left: col * STEP, top: row * STEP };
+        }
+
+        function buildTiles() {
+          boardContainer.innerHTML = "";
+          tileEls = [];
+          const total = DEMO_SIZE * DEMO_SIZE;
+
+          for (let value = 0; value < total; value++) {
+            const tile = document.createElement("div");
+            tile.className = "demo-tile";
+            tile.dataset.value = value;
+
+            if (value === total - 1) {
+              tile.classList.add("empty");
+            } else {
+              const row = Math.floor(value / DEMO_SIZE);
+              const col = value % DEMO_SIZE;
+              const posX = (col / (DEMO_SIZE - 1)) * 100;
+              const posY = (row / (DEMO_SIZE - 1)) * 100;
+              tile.style.backgroundImage = `url(${demoImage})`;
+              tile.style.backgroundSize = `${DEMO_SIZE * 100}%`;
+              tile.style.backgroundPosition = `${posX}% ${posY}%`;
+            }
+
+            boardContainer.appendChild(tile);
+            tileEls[value] = tile;
+          }
+        }
+
+        function layoutTiles() {
+          board.forEach((value, slot) => {
+            const { left, top } = slotXY(slot);
+            const el = tileEls[value];
+            el.style.left = `${left}px`;
+            el.style.top = `${top}px`;
+            el.style.zIndex = value === DEMO_SIZE * DEMO_SIZE - 1 ? 0 : 1;
+          });
+        }
+
+        function resetSolved() {
+          board = Array.from(
+            { length: DEMO_SIZE * DEMO_SIZE },
+            (_, i) => i,
+          );
+          emptyPos = DEMO_SIZE * DEMO_SIZE - 1;
+          layoutTiles();
+        }
+
+        function generateScrambleMoves(count) {
+          const moves = [];
+          let empty = DEMO_SIZE * DEMO_SIZE - 1;
+          const tempBoard = Array.from(
+            { length: DEMO_SIZE * DEMO_SIZE },
+            (_, i) => i,
+          );
+
+          for (let i = 0; i < count; i++) {
+            const neighbors = getNeighbors(empty, DEMO_SIZE);
+            const pick =
+              neighbors[Math.floor(Math.random() * neighbors.length)];
+            moves.push(pick);
+            const tmp = tempBoard[empty];
+            tempBoard[empty] = tempBoard[pick];
+            tempBoard[pick] = tmp;
+            empty = pick;
+          }
+
+          return moves;
+        }
+
+        function applyMove(tileIndex) {
+          const tmp = board[emptyPos];
+          board[emptyPos] = board[tileIndex];
+          board[tileIndex] = tmp;
+          emptyPos = tileIndex;
+          layoutTiles();
+        }
+
+        function sleep(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        async function playMove(tileIndex, delayMs = 420) {
+          applyMove(tileIndex);
+          await sleep(delayMs);
+        }
+
+        async function runLoop() {
+          if (loopActive) return;
+          loopActive = true;
+          running = true;
+
+          while (running) {
+            resetSolved();
+            setPageState("complete");
+            await sleep(1400);
+
+            const scramble = generateScrambleMoves(16);
+            for (let i = 0; i < scramble.length; i++) {
+              if (!running) return;
+              if (i === 0) setPageState("scrambled");
+              await playMove(scramble[i], 380);
+            }
+
+            await sleep(300);
+            setPageState("complete");
+
+            for (let i = scramble.length - 1; i >= 0; i--) {
+              if (!running) return;
+              await playMove(scramble[i], 380);
+            }
+
+            await sleep(2000);
+          }
+        }
+
+        function init() {
+          initScatterVars();
+          buildTiles();
+          resetSolved();
+          setPageState("complete");
+          runLoop();
+        }
+
+        function stop() {
+          running = false;
+          loopActive = false;
+        }
+
+        return { init, stop };
+      })();
+
+      demoPuzzle.init();
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      }
+
+      function updateLiveScore() {
+        const cfg = config[difficulty];
+        const timeBonus = timeLeft * cfg.timeBonusRate;
+        const movePenalty = moves * cfg.movePenalty;
+        liveScore = Math.max(
+          0,
+          Math.floor(
+            (cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) *
+              cfg.multiplier,
+          ),
+        );
+        document.getElementById("score-display").textContent =
+          liveScore.toLocaleString();
+      }
+
+      function updateComboUI() {
+        const badge = document.getElementById("combo-badge");
+        document.getElementById("combo-count").textContent = comboStreak;
+        badge.classList.toggle("active", comboStreak >= 2);
+      }
+
+      function initBoard() {
+        const { size } = config[difficulty];
+        const totalTiles = size * size;
+        board = Array.from({ length: totalTiles }, (_, i) => i);
+        emptyPos = totalTiles - 1;
+
+        currentImage =
+          heritageImages[Math.floor(Math.random() * heritageImages.length)];
+        document.getElementById("reference-preview").src = currentImage;
+        document.getElementById("difficulty-badge").textContent =
+          config[difficulty].label;
+
+        boardEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+        boardEl.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+
+        moves = 0;
+        comboStreak = 0;
+        comboBonusTotal = 0;
+        lastMoveTime = 0;
+        document.getElementById("moves-display").textContent = moves;
+        updateComboUI();
+
+        shuffleBoard();
+        renderBoard();
+        updateLiveScore();
+      }
+
+      function shuffleBoard() {
+        const { size } = config[difficulty];
+        const shuffleMoves = size * size * 25;
+
+        for (let i = 0; i < shuffleMoves; i++) {
+          const neighbors = getNeighbors(emptyPos, size);
+          const randomNeighbor =
+            neighbors[Math.floor(Math.random() * neighbors.length)];
+          swap(emptyPos, randomNeighbor);
+          emptyPos = randomNeighbor;
+        }
+      }
+
+      function getNeighbors(index, size) {
+        const neighbors = [];
+        const row = Math.floor(index / size);
+        const col = index % size;
+
+        if (row > 0) neighbors.push(index - size);
+        if (row < size - 1) neighbors.push(index + size);
+        if (col > 0) neighbors.push(index - 1);
+        if (col < size - 1) neighbors.push(index + 1);
+
+        return neighbors;
+      }
+
+      function swap(idx1, idx2) {
+        const temp = board[idx1];
+        board[idx1] = board[idx2];
+        board[idx2] = temp;
+      }
+
+      function renderBoard() {
+        const { size } = config[difficulty];
+        boardEl.innerHTML = "";
+
+        board.forEach((tileValue, index) => {
+          const tile = document.createElement("div");
+          tile.className = "puzzle-tile";
+
+          if (tileValue === size * size - 1) {
+            tile.classList.add("empty-tile");
+          } else {
+            const correctRow = Math.floor(tileValue / size);
+            const correctCol = tileValue % size;
+            const posX = (correctCol / (size - 1)) * 100;
+            const posY = (correctRow / (size - 1)) * 100;
+
+            tile.style.backgroundImage = `url(${currentImage})`;
+            tile.style.backgroundSize = `${size * 100}%`;
+            tile.style.backgroundPosition = `${posX}% ${posY}%`;
+            tile.innerHTML = `<span class="tile-number">${tileValue + 1}</span>`;
+            tile.onclick = () => handleTileClick(index);
+          }
+
+          boardEl.appendChild(tile);
+        });
+      }
+
+      function handleTileClick(index) {
+        if (!gameActive) return;
+
+        const { size, comboBonus } = config[difficulty];
+        const neighbors = getNeighbors(index, size);
+
+        if (neighbors.includes(emptyPos)) {
+          const now = Date.now();
+          if (lastMoveTime && now - lastMoveTime <= COMBO_WINDOW_MS) {
+            comboStreak++;
+            if (comboStreak >= 2) {
+              comboBonusTotal += comboBonus;
+            }
+          } else {
+            comboStreak = 1;
+          }
+          lastMoveTime = now;
+
+          swap(index, emptyPos);
+          emptyPos = index;
+          moves++;
+          document.getElementById("moves-display").textContent = moves;
+
+          updateComboUI();
+          updateLiveScore();
+
+          slideSfx.currentTime = 0;
+          slideSfx.play().catch(() => {});
+
+          renderBoard();
+          checkWin();
+        }
+      }
+
+      function checkWin() {
+        const isWin = board.every((val, i) => val === i);
+        if (isWin) endGame(true);
+      }
+
+      function startTimer() {
+        totalTime = config[difficulty].time;
+        timeLeft = totalTime;
+        elapsedSeconds = 0;
+        updateTimerUI();
+
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          elapsedSeconds++;
+          updateTimerUI();
+          updateLiveScore();
+          if (timeLeft <= 0) endGame(false);
+        }, 1000);
+      }
+
+      function updateTimerUI() {
+        const timerEl = document.getElementById("timer-display");
+        const barEl = document.getElementById("timer-bar");
+
+        timerEl.textContent = formatTime(timeLeft);
+        document.getElementById("elapsed-display").textContent =
+          `${formatTime(elapsedSeconds)} elapsed`;
+
+        const pct = (timeLeft / totalTime) * 100;
+        barEl.style.width = `${pct}%`;
+
+        const critical = timeLeft <= 30;
+        timerEl.classList.toggle("timer-critical", critical);
+        barEl.classList.toggle("critical", critical);
+      }
+
+      function renderScoreBreakdown(data) {
+        const container = document.getElementById("score-breakdown");
+        container.innerHTML = data
+          .map(
+            (row) =>
+              `<div class="score-breakdown-row"><span>${row.label}</span><span>${row.value}</span></div>`,
+          )
+          .join("");
+      }
+
+      function endGame(win) {
+        gameActive = false;
+        clearInterval(timerInterval);
+
+        document.getElementById("game-screen").classList.add("hidden");
+        document.getElementById("results-screen").classList.remove("hidden");
+
+        const cfg = config[difficulty];
+
+        if (win) {
+          const timeBonus = timeLeft * cfg.timeBonusRate;
+          const movePenalty = moves * cfg.movePenalty;
+          const rawScore =
+            cfg.basePoints + timeBonus - movePenalty + comboBonusTotal;
+          const totalEarned = Math.max(
+            100,
+            Math.floor(rawScore * cfg.multiplier),
+          );
+
+          document.getElementById("victory-title").textContent =
+            "Mosaic Restored";
+          document.getElementById("final-score").textContent =
+            totalEarned.toLocaleString();
+          document.getElementById("result-msg").textContent =
+            `Vault sealed in ${formatTime(elapsedSeconds)} with ${moves} moves on ${cfg.label} difficulty.`;
+
+          renderScoreBreakdown([
+            {
+              label: "Base Score",
+              value: `+${cfg.basePoints.toLocaleString()}`,
+            },
+            {
+              label: `Time Bonus (${formatTime(timeLeft)} left)`,
+              value: `+${timeBonus.toLocaleString()}`,
+            },
+            {
+              label: `Move Penalty (${moves} moves)`,
+              value: `−${movePenalty.toLocaleString()}`,
+            },
+            {
+              label: "Combo Bonus",
+              value: `+${comboBonusTotal.toLocaleString()}`,
+            },
+            {
+              label: `${cfg.label} Multiplier (×${cfg.multiplier})`,
+              value: `Applied`,
+            },
+            { label: "Total Earned", value: totalEarned.toLocaleString() },
+          ]);
+
+          let currentTotal = parseInt(
+            localStorage.getItem("totalHeritagePoints") || "0",
+          );
+          localStorage.setItem(
+            "totalHeritagePoints",
+            currentTotal + totalEarned,
+          );
+          const ptsEl = document.getElementById("header-total-points");
+          if (ptsEl) ptsEl.textContent = currentTotal + totalEarned;
+
+          victorySfx.play().catch(() => {});
+          playAnnouncer(
+            `Mosaic restored! You earned ${totalEarned.toLocaleString()} heritage points.`,
+          );
+        } else {
+          document.getElementById("victory-title").textContent = "Vault Sealed";
+          document.getElementById("final-score").textContent = "0";
+          document.getElementById("result-msg").textContent =
+            "Time ran out before the mosaic could be rebuilt. The vault has sealed shut.";
+          renderScoreBreakdown([
+            { label: "Difficulty", value: cfg.label },
+            { label: "Moves Made", value: moves.toString() },
+            { label: "Time Elapsed", value: formatTime(elapsedSeconds) },
+            { label: "Points Earned", value: "0" },
+          ]);
+          playAnnouncer("Time is up. The vault has sealed.");
+        }
+      }
+
+      function playAnnouncer(text) {
+        const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+        if (sVol > 0 && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.volume = sVol;
+          window.speechSynthesis.speak(u);
+        }
+      }
+
+      document.getElementById("start-btn").onclick = () => {
+        demoPuzzle.stop();
+
+        const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+        const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+        bgMusic.volume = mVol;
+        slideSfx.volume = sVol;
+        victorySfx.volume = sVol;
+
+        if (mVol > 0) bgMusic.play().catch(() => {});
+
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("game-screen").classList.remove("hidden");
+
+        initBoard();
+        gameActive = true;
+        startTimer();
+        playAnnouncer(
+          `Enter the vault on ${config[difficulty].label} difficulty. Restore the mosaic!`,
+        );
+      };
+
+      document.getElementById("toggle-numbers").onclick = () => {
+        boardEl.classList.toggle("show-numbers");
+      };
+    </script>
+  </body>
+</html>

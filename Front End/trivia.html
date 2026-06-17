@@ -24,8 +24,8 @@
 
       .hero-bg {
         background:
-          linear-gradient(rgba(2, 5, 18, 0.8), rgba(2, 5, 18, 0.9)),
-          url("https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1600"),
+          linear-gradient(rgba(2, 5, 18, 0.4), rgba(2, 5, 18, 0.7)),
+          url("https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1600"),
           #020512;
         background-size: cover;
         background-position: center;
@@ -208,9 +208,6 @@
       >
         <div class="mb-8">
           <h1 class="text-4xl md:text-5xl font-black orbitron leading-tight">
-            <span class="text-gray-400 text-lg tracking-[0.4em] block mb-2"
-              >NOW PLAYING</span
-            >
             <span
               class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
               >MATI HERITAGE TRIVIA CHALLENGE</span
@@ -227,18 +224,18 @@
           <!-- Difficulty Selector -->
           <div class="flex flex-wrap justify-center gap-4 mb-2">
             <button
-              onclick="setDifficulty('easy')"
-              id="btn-easy"
-              class="diff-btn px-6 py-2 rounded-full border border-white/10 orbitron text-xs tracking-widest hover:border-cyan-400"
-            >
-              EASY
-            </button>
-            <button
               onclick="setDifficulty('medium')"
               id="btn-medium"
               class="diff-btn px-6 py-2 rounded-full border border-cyan-400 bg-cyan-400/20 orbitron text-xs tracking-widest"
             >
               MEDIUM
+            </button>
+            <button
+              onclick="setDifficulty('easy')"
+              id="btn-easy"
+              class="diff-btn px-6 py-2 rounded-full border border-white/10 orbitron text-xs tracking-widest hover:border-cyan-400"
+            >
+              EASY
             </button>
             <button
               onclick="setDifficulty('hard')"
@@ -280,10 +277,6 @@
               >
                 ROUND <span id="current-q-num">1</span> OF 5
               </span>
-              <span
-                class="text-gray-500 text-[10px] orbitron uppercase tracking-widest"
-                >Mati Heritage Trivia</span
-              >
             </div>
             <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div
@@ -393,6 +386,11 @@
       id="bg-music"
       src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
       loop
+    ></audio>
+    <audio
+      id="click-sound"
+      src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+      preload="auto"
     ></audio>
     <audio
       id="correct-sfx"
