@@ -1,0 +1,15 @@
+# GitHub blocks files over 100 MB — never commit these
+*.mov
+*.MOV
+
+# macOS / Windows junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.swp
+
+# Optional: uncomment to keep ALL videos out of GitHub (host elsewhere)
+# Front End/data/**/Videos/

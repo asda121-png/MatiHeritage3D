@@ -253,17 +253,23 @@
         .then((data) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
-          document
-            .getElementById("header-placeholder")
-            .replaceWith(doc.querySelector("header"));
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+
+          // Inject header styles to ensure Settings modal looks correct
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) {
+            document.head.appendChild(headerStyle.cloneNode(true));
+          }
+
+          // Extract and run the settings logic script
+          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
+          if (headerScript) {
             const s = document.createElement("script");
-            s.textContent = scriptText;
+            s.textContent = headerScript.textContent;
             document.body.appendChild(s);
           }
+
           document.getElementById("header-total-points").textContent =
             localStorage.getItem("totalHeritagePoints") || "0";
         });

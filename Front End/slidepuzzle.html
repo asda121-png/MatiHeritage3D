@@ -3,212 +3,111 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Mosaic Vault - Mati Heritage</title>
+    <title>Slide Puzzle - Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&family=Rajdhani:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --copper: #c4722a;
-        --copper-light: #e8a838;
-        --burgundy: #2a1215;
-        --vault-dark: #0d0506;
-        --parchment: #f5e6d3;
+        --heritage-navy: #0a0f1a;
+        --heritage-deep: #020512;
+        --heritage-gold: #d4af37;
+        --heritage-gold-light: #e8c547;
+        --heritage-cyan: #00d4ff;
+        --heritage-coastal: #0891b2;
+        --heritage-parchment: #f5e6d3;
+        --heritage-muted: #94a3b8;
       }
 
       body {
         font-family: "Rajdhani", sans-serif;
-        background: var(--vault-dark);
-        color: var(--parchment);
+        background-color: var(--heritage-deep);
+        color: var(--heritage-parchment);
         overflow-x: hidden;
       }
 
-      .cinzel {
+      .heritage-font {
         font-family: "Cinzel", serif;
       }
 
-      .mono {
-        font-family: "JetBrains Mono", monospace;
-      }
-
-      .vault-bg {
+      .page-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
         background:
           radial-gradient(
-            ellipse at 50% 0%,
-            rgba(196, 114, 42, 0.18) 0%,
-            transparent 55%
-          ),
-          radial-gradient(
-            circle at 20% 80%,
-            rgba(139, 40, 40, 0.25) 0%,
+            circle at 15% 20%,
+            rgba(0, 212, 255, 0.08),
             transparent 45%
           ),
           radial-gradient(
-            circle at 80% 70%,
-            rgba(196, 114, 42, 0.12) 0%,
+            circle at 85% 80%,
+            rgba(212, 175, 55, 0.1),
             transparent 40%
           ),
-          linear-gradient(180deg, #1a0a0c 0%, var(--vault-dark) 100%);
-        min-height: 100vh;
-        position: relative;
+          linear-gradient(180deg, var(--heritage-deep) 0%, var(--heritage-navy) 100%);
       }
 
-      .vault-bg::before {
+      .page-bg::before {
         content: "";
         position: fixed;
         inset: 0;
-        background-image:
-          repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 28px,
-            rgba(196, 114, 42, 0.04) 28px,
-            rgba(196, 114, 42, 0.04) 29px
-          ),
-          repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 28px,
-            rgba(196, 114, 42, 0.03) 28px,
-            rgba(196, 114, 42, 0.03) 29px
-          );
-        pointer-events: none;
-        z-index: 0;
-      }
-
-      .ember {
-        position: fixed;
-        width: 3px;
-        height: 3px;
-        background: var(--copper-light);
-        border-radius: 50%;
-        opacity: 0;
-        animation: float-ember 8s ease-in-out infinite;
-        pointer-events: none;
-        z-index: 1;
-        box-shadow: 0 0 6px var(--copper-light);
-      }
-
-      @keyframes float-ember {
-        0% {
-          opacity: 0;
-          transform: translateY(0) scale(0.5);
-        }
-        15% {
-          opacity: 0.7;
-        }
-        85% {
-          opacity: 0.4;
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(-120px) scale(1.2);
-        }
-      }
-
-      .vault-card {
-        background: rgba(42, 18, 21, 0.88);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(196, 114, 42, 0.35);
-        box-shadow:
-          0 0 40px rgba(0, 0, 0, 0.6),
-          inset 0 1px 0 rgba(232, 168, 56, 0.12);
-      }
-
-      .copper-accent {
-        color: var(--copper-light);
-      }
-
-      .copper-border {
-        border-color: var(--copper);
-      }
-
-      .copper-bg {
-        background: linear-gradient(
-          135deg,
-          var(--copper) 0%,
-          var(--copper-light) 100%
+        background-image: radial-gradient(
+          rgba(0, 212, 255, 0.12) 1px,
+          transparent 1px
         );
+        background-size: 36px 36px;
+        opacity: 0.35;
+        pointer-events: none;
+        z-index: -1;
       }
 
-      .diff-btn {
-        transition: all 0.3s ease;
+      .bg-overlay {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          transparent 0%,
+          rgba(2, 5, 18, 0.75) 100%
+        );
+        z-index: -1;
+        pointer-events: none;
       }
 
-      .diff-btn.active {
-        border-color: var(--copper-light) !important;
-        background: rgba(196, 114, 42, 0.2) !important;
-        color: var(--copper-light) !important;
-        box-shadow: 0 0 20px rgba(196, 114, 42, 0.3);
-      }
-
-      /* Intro — full page, no card container */
-      .intro-stage {
-        width: 100%;
-        min-height: calc(100vh - 6rem);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 1rem 1rem 3rem;
-        position: relative;
-        z-index: 20;
-      }
-
-      .demo-puzzle-hero {
-        position: relative;
-        margin: 0 auto 2rem;
-      }
-
-      .demo-puzzle-board {
-        position: relative;
-        width: 248px;
-        height: 248px;
-        margin: 0 auto;
-      }
-
-      .demo-tile {
+      .hero-tile-demo {
         position: absolute;
-        width: 80px;
-        height: 80px;
-        border-radius: 4px;
-        border: 1px solid rgba(196, 114, 42, 0.45);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.1),
-          0 4px 16px rgba(0, 0, 0, 0.35);
-        transition:
-          left 0.38s cubic-bezier(0.34, 1.2, 0.64, 1),
-          top 0.38s cubic-bezier(0.34, 1.2, 0.64, 1),
-          box-shadow 0.4s ease,
-          filter 0.4s ease;
-        background-repeat: no-repeat;
+        width: calc(100vw / 4);
+        height: calc(100vh / 4);
+        background-size: 100vw 100vh;
+        border: 1px solid rgba(0, 212, 255, 0.06);
+        transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        filter: brightness(0.28) saturate(0.65);
+        z-index: -1;
+        will-change: transform;
       }
 
-      .intro-stage.intro-screen-complete .demo-tile:not(.empty) {
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.15),
-          0 0 18px rgba(232, 168, 56, 0.35);
-        filter: brightness(1.05);
+      .heritage-title-glow {
+        background: linear-gradient(
+          to bottom,
+          var(--heritage-gold-light) 0%,
+          var(--heritage-gold) 55%,
+          #b8922a 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.35));
+        letter-spacing: 0.22em;
+        transition: opacity 1s ease, transform 1s ease;
+        pointer-events: none;
       }
 
-      .demo-tile.empty {
-        background: transparent !important;
-        border-color: rgba(196, 114, 42, 0.08);
-        box-shadow: none;
-      }
-
-      .intro-pieces {
-        width: 100%;
-        max-width: 36rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
+      .heritage-subtitle {
+        color: rgba(0, 212, 255, 0.65);
+        letter-spacing: 0.35em;
       }
 
       .intro-slide-piece {
@@ -217,9 +116,6 @@
           transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1),
           opacity 0.42s ease,
           filter 0.42s ease;
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 1;
-        filter: blur(0);
       }
 
       .intro-stage.intro-screen-scrambled .intro-slide-piece {
@@ -235,58 +131,89 @@
         filter: blur(0);
       }
 
-      .intro-title {
-        font-family: "Cinzel", serif;
-        font-weight: 900;
-        letter-spacing: 0.22em;
-        line-height: 1.1;
-        color: var(--copper-light);
-        white-space: nowrap;
+      .diff-btn {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        color: var(--heritage-muted);
       }
 
-      .intro-title-line {
-        display: block;
+      .diff-btn:hover {
+        border-color: rgba(0, 212, 255, 0.45);
+        color: var(--heritage-cyan);
       }
 
-      .intro-stage.intro-screen-complete .intro-title {
-        text-shadow: 0 0 28px rgba(232, 168, 56, 0.55);
+      .diff-btn.active {
+        border-color: var(--heritage-gold) !important;
+        background: rgba(212, 175, 55, 0.12) !important;
+        color: var(--heritage-gold) !important;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
       }
 
       .start-btn {
         background: linear-gradient(
           135deg,
-          var(--copper) 0%,
-          var(--copper-light) 100%
+          var(--heritage-gold) 0%,
+          var(--heritage-gold-light) 100%
         );
-        color: var(--vault-dark);
-        box-shadow: 0 4px 24px rgba(196, 114, 42, 0.45);
+        color: var(--heritage-deep);
+        box-shadow: 0 4px 28px rgba(212, 175, 55, 0.35);
         transition: all 0.3s ease;
       }
 
       .start-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(232, 168, 56, 0.55);
+        box-shadow: 0 8px 36px rgba(212, 175, 55, 0.45);
       }
 
       .stat-card {
-        background: rgba(13, 5, 6, 0.7);
-        border: 1px solid rgba(196, 114, 42, 0.25);
-        border-left: 3px solid var(--copper);
+        background: rgba(10, 15, 26, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(0, 212, 255, 0.12);
+        border-left: 3px solid var(--heritage-gold);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .difficulty-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--heritage-gold);
+      }
+
+      .combo-badge {
+        opacity: 0;
+        transform: scale(0.85);
+        transition: all 0.25s ease;
+        color: var(--heritage-cyan);
+      }
+
+      .combo-badge.active {
+        opacity: 1;
+        transform: scale(1);
       }
 
       .timer-bar-track {
-        height: 6px;
-        background: rgba(13, 5, 6, 0.8);
+        height: 5px;
+        background: rgba(255, 255, 255, 0.06);
         border-radius: 999px;
         overflow: hidden;
-        border: 1px solid rgba(196, 114, 42, 0.2);
+        border: 1px solid rgba(0, 212, 255, 0.1);
       }
 
       .timer-bar-fill {
         height: 100%;
-        background: linear-gradient(90deg, var(--copper), var(--copper-light));
+        background: linear-gradient(
+          90deg,
+          var(--heritage-coastal),
+          var(--heritage-cyan)
+        );
         border-radius: 999px;
         transition: width 1s linear;
+        box-shadow: 0 0 12px rgba(0, 212, 255, 0.35);
       }
 
       .timer-bar-fill.critical {
@@ -320,47 +247,60 @@
         }
       }
 
-      .mosaic-frame {
-        padding: 12px;
-        background:
-          linear-gradient(
-            135deg,
-            rgba(196, 114, 42, 0.4),
-            rgba(139, 69, 19, 0.2)
-          ),
-          repeating-linear-gradient(
-            90deg,
-            rgba(196, 114, 42, 0.15) 0px,
-            rgba(196, 114, 42, 0.15) 4px,
-            transparent 4px,
-            transparent 12px
-          );
-        border: 3px solid var(--copper);
-        border-radius: 12px;
+      .archive-frame {
+        padding: 14px;
+        background: rgba(10, 15, 26, 0.9);
+        border: 2px solid rgba(212, 175, 55, 0.45);
+        border-radius: 8px;
         box-shadow:
-          0 0 0 2px rgba(13, 5, 6, 0.8),
-          0 0 0 5px rgba(196, 114, 42, 0.3),
-          0 24px 60px rgba(0, 0, 0, 0.7),
-          inset 0 0 30px rgba(0, 0, 0, 0.4);
+          0 0 0 1px rgba(0, 212, 255, 0.08),
+          0 24px 50px rgba(0, 0, 0, 0.55),
+          inset 0 0 30px rgba(0, 0, 0, 0.35);
+        position: relative;
+      }
+
+      .archive-frame::before {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        border-radius: 4px;
+        pointer-events: none;
+      }
+
+      .archive-label {
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: var(--heritage-navy);
+        padding: 2px 12px;
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        color: var(--heritage-gold);
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        border-radius: 4px;
+        z-index: 3;
       }
 
       #puzzle-board {
         display: grid;
         gap: 3px;
-        background: rgba(13, 5, 6, 0.9);
+        background: rgba(2, 5, 18, 0.95);
         padding: 3px;
-        border-radius: 6px;
+        border-radius: 4px;
         width: 100%;
         max-width: 500px;
         aspect-ratio: 1/1;
         margin: 0 auto;
+        position: relative;
+        z-index: 1;
       }
 
       .puzzle-tile {
         width: 100%;
         height: 100%;
         background-size: 0;
-        border-radius: 3px;
+        border-radius: 2px;
         cursor: pointer;
         transition:
           transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
@@ -371,37 +311,45 @@
         align-items: center;
         justify-content: center;
         user-select: none;
-        border: 1px solid rgba(196, 114, 42, 0.25);
-        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.35);
       }
 
-      .puzzle-tile::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 3px;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        pointer-events: none;
+      .puzzle-tile:active {
+        transform: scale(0.97);
+      }
+
+      .tile-move-flash {
+        animation: tile-move-flash 260ms ease-out;
+      }
+
+      @keyframes tile-move-flash {
+        45% {
+          box-shadow: 0 0 22px rgba(0, 212, 255, 0.4);
+          filter: brightness(1.12);
+        }
       }
 
       .puzzle-tile:hover {
-        filter: brightness(1.12);
-        box-shadow:
-          inset 0 0 12px rgba(232, 168, 56, 0.25),
-          0 0 8px rgba(196, 114, 42, 0.3);
+        filter: brightness(1.1);
+        border-color: rgba(0, 212, 255, 0.45);
         z-index: 2;
       }
 
       .tile-number {
-        background: rgba(13, 5, 6, 0.75);
-        color: var(--copper-light);
+        background: rgba(2, 5, 18, 0.85);
+        color: var(--heritage-gold);
         padding: 2px 6px;
-        border-radius: 3px;
+        border-radius: 0 0 4px 0;
+        position: absolute;
+        top: 0;
+        left: 0;
         font-size: 11px;
-        font-family: "JetBrains Mono", monospace;
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 700;
         opacity: 0;
         transition: opacity 0.3s;
-        border: 1px solid rgba(196, 114, 42, 0.4);
+        border: 1px solid rgba(212, 175, 55, 0.25);
       }
 
       .show-numbers .tile-number {
@@ -409,177 +357,114 @@
       }
 
       .empty-tile {
-        background: rgba(13, 5, 6, 0.95) !important;
+        background: rgba(2, 5, 18, 0.8) !important;
         cursor: default;
-        border-color: rgba(196, 114, 42, 0.15) !important;
-        box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.6);
+        border-color: rgba(0, 212, 255, 0.08) !important;
       }
 
       .empty-tile:hover {
         filter: none;
-        box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.6);
       }
 
-      .combo-badge {
-        opacity: 0;
-        transform: scale(0.8);
-        transition: all 0.25s ease;
-      }
-
-      .combo-badge.active {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      #reference-preview {
-        width: 140px;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 2px solid rgba(196, 114, 42, 0.5);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-      }
-
-      .difficulty-badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 999px;
-        font-size: 10px;
-        letter-spacing: 0.15em;
-        border: 1px solid rgba(196, 114, 42, 0.4);
-        background: rgba(196, 114, 42, 0.15);
-        color: var(--copper-light);
-      }
-
-      .score-breakdown-row {
+      .score-row {
         display: flex;
         justify-content: space-between;
         padding: 8px 0;
-        border-bottom: 1px solid rgba(196, 114, 42, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         font-size: 0.95rem;
       }
 
-      .score-breakdown-row:last-child {
-        border-bottom: none;
-        font-weight: 700;
-        color: var(--copper-light);
-        padding-top: 12px;
-        margin-top: 4px;
-        border-top: 1px solid rgba(196, 114, 42, 0.3);
+      .archive-stamp {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 72px;
+        height: 72px;
+        opacity: 0.55;
+        pointer-events: none;
+        z-index: 2;
+        transform: rotate(12deg);
+      }
+
+      .results-card {
+        background: rgba(10, 15, 26, 0.95);
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
       }
     </style>
   </head>
   <body>
-    <div
-      class="ember"
-      style="left: 10%; bottom: 20%; animation-delay: 0s"
-    ></div>
-    <div
-      class="ember"
-      style="left: 25%; bottom: 10%; animation-delay: 2s"
-    ></div>
-    <div
-      class="ember"
-      style="left: 60%; bottom: 15%; animation-delay: 4s"
-    ></div>
-    <div
-      class="ember"
-      style="left: 80%; bottom: 25%; animation-delay: 1s"
-    ></div>
-    <div class="ember" style="left: 45%; bottom: 5%; animation-delay: 6s"></div>
-
     <div id="header-placeholder" class="min-h-[90px]"></div>
 
+    <div class="page-bg">
+      <div id="bg-tiles-container" class="absolute inset-0"></div>
+    </div>
+    <div class="bg-overlay"></div>
+
     <main
-      class="vault-bg flex flex-col items-center justify-center pt-24 pb-12 px-4 relative z-10"
+      class="min-h-screen relative flex flex-col items-center justify-start pt-24 pb-12 px-4 z-10"
     >
-      <div id="intro-screen" class="intro-stage intro-screen-complete">
-        <div class="demo-puzzle-hero">
-          <div id="demo-puzzle-board" class="demo-puzzle-board"></div>
-        </div>
+      <p
+        class="heritage-font text-[10px] uppercase heritage-subtitle mb-3 text-center"
+      >
+        Mati Heritage 3D · Photo Archive
+      </p>
+      <h1
+        id="hero-title"
+        class="heritage-font text-4xl md:text-6xl font-black mb-2 heritage-title-glow text-center"
+      >
+        SLIDE PUZZLE
+      </h1>
+      <p class="text-sm text-slate-400 mb-8 text-center max-w-md">
+        Reassemble scrambled heritage photographs from Mati City
+      </p>
 
-        <div id="intro-pieces" class="intro-pieces">
+      <div
+        id="intro-screen"
+        class="intro-stage intro-screen-complete w-full flex flex-col items-center justify-center relative z-20"
+      >
+        <div id="intro-pieces" class="flex flex-col items-center gap-6">
           <div
-            class="intro-slide-piece mb-3"
-            data-scatter-x="-90"
-            data-scatter-y="-55"
-            data-scatter-r="-6"
-          >
-            <h1 id="intro-title" class="intro-title text-3xl md:text-4xl">
-              <span class="intro-title-line">SLIDE</span>
-              <span class="intro-title-line">PUZZLE</span>
-            </h1>
-          </div>
-
-          <div
-            class="intro-slide-piece mb-2"
-            data-scatter-x="70"
-            data-scatter-y="-35"
-            data-scatter-r="4"
-          >
-            <p
-              class="text-amber-700/70 text-xs tracking-[0.35em] uppercase cinzel"
-            >
-              The Mosaic Vault
-            </p>
-          </div>
-
-          <div
-            class="intro-slide-piece mb-6"
-            data-scatter-x="-65"
-            data-scatter-y="40"
-            data-scatter-r="-3"
-          >
-            <p
-              class="text-amber-100/65 text-base leading-relaxed max-w-md mx-auto px-2"
-            >
-              Watch the tiles shift, then take your turn. Reassemble the
-              heritage mosaic before the vault seals shut.
-            </p>
-          </div>
-
-          <div
-            class="intro-slide-piece mb-8"
-            data-scatter-x="55"
-            data-scatter-y="65"
-            data-scatter-r="5"
+            class="intro-slide-piece"
+            data-scatter-x="-60"
+            data-scatter-y="-40"
+            data-scatter-r="-4"
           >
             <div class="flex flex-wrap justify-center gap-3">
               <button
                 onclick="setDifficulty('easy')"
                 id="btn-easy"
-                class="diff-btn px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest hover:border-amber-600/50"
+                class="diff-btn heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
               >
                 EASY · 3×3
               </button>
               <button
                 onclick="setDifficulty('medium')"
                 id="btn-medium"
-                class="diff-btn active px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest"
+                class="diff-btn active heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
               >
                 MEDIUM · 4×4
               </button>
               <button
                 onclick="setDifficulty('hard')"
                 id="btn-hard"
-                class="diff-btn px-5 py-2.5 rounded-lg border border-amber-900/50 cinzel text-xs tracking-widest hover:border-amber-600/50"
+                class="diff-btn heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
               >
                 HARD · 5×5
               </button>
             </div>
           </div>
-
           <div
             class="intro-slide-piece"
-            data-scatter-x="-20"
-            data-scatter-y="95"
-            data-scatter-r="-2"
+            data-scatter-x="0"
+            data-scatter-y="70"
+            data-scatter-r="0"
           >
             <button
               id="start-btn"
-              class="cinzel start-btn px-14 py-4 rounded-lg font-bold tracking-widest text-sm"
+              class="heritage-font start-btn px-14 py-4 rounded-lg font-bold tracking-widest text-sm uppercase"
             >
-              Enter the Vault
+              Start Puzzle
             </button>
           </div>
         </div>
@@ -589,12 +474,12 @@
         <div class="flex flex-col lg:flex-row gap-6 items-start justify-center">
           <div class="w-full lg:w-72 flex flex-col gap-3">
             <div class="flex items-center justify-between mb-1">
-              <span class="difficulty-badge mono" id="difficulty-badge"
+              <span class="difficulty-badge heritage-font" id="difficulty-badge"
                 >MEDIUM</span
               >
               <span
                 id="combo-badge"
-                class="combo-badge mono text-xs copper-accent tracking-wider"
+                class="combo-badge heritage-font text-xs font-bold tracking-wider"
               >
                 ⚡ COMBO ×<span id="combo-count">0</span>
               </span>
@@ -602,12 +487,12 @@
 
             <div class="stat-card p-5 rounded-xl">
               <span
-                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-1 mono"
-                >Live Score</span
+                class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest block mb-1 heritage-font"
+                >Heritage Points</span
               >
               <span
                 id="score-display"
-                class="text-3xl font-black mono copper-accent"
+                class="text-3xl font-black heritage-font text-amber-400"
                 >0</span
               >
             </div>
@@ -615,18 +500,18 @@
             <div class="stat-card p-5 rounded-xl">
               <div class="flex justify-between items-end mb-2">
                 <span
-                  class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest mono"
+                  class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest heritage-font"
                   >Time Remaining</span
                 >
                 <span
                   id="elapsed-display"
-                  class="text-[10px] text-amber-700/50 mono"
+                  class="text-[10px] text-slate-500 heritage-font"
                   >00:00 elapsed</span
                 >
               </div>
               <span
                 id="timer-display"
-                class="text-3xl font-black mono block mb-3"
+                class="text-3xl font-black heritage-font block mb-3 text-cyan-300"
                 >08:00</span
               >
               <div class="timer-bar-track">
@@ -640,21 +525,40 @@
 
             <div class="stat-card p-5 rounded-xl">
               <span
-                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-1 mono"
+                class="text-[10px] text-slate-500 uppercase font-bold tracking-widest block mb-1 heritage-font"
                 >Moves</span
               >
-              <span id="moves-display" class="text-3xl font-black mono">0</span>
+              <span id="moves-display" class="text-3xl font-black heritage-font"
+                >0</span
+              >
             </div>
 
-            <div class="vault-card p-4 rounded-xl text-center">
+            <div class="stat-card p-4 rounded-xl text-center">
               <span
-                class="text-[10px] text-amber-700/70 uppercase font-bold tracking-widest block mb-3 mono"
-                >Target Mosaic</span
+                class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest block mb-1 heritage-font"
+                >Heritage Site</span
               >
-              <img id="reference-preview" src="" alt="Target mosaic" />
+              <p
+                id="site-name-display"
+                class="text-sm font-bold text-amber-400 mb-1 heritage-font leading-snug"
+              >
+                —
+              </p>
+              <p
+                id="site-category-display"
+                class="text-[10px] text-slate-500 uppercase tracking-wider mb-3"
+              >
+                —
+              </p>
+              <img
+                id="reference-preview"
+                src=""
+                alt="Heritage photo preview"
+                class="w-[140px] h-[140px] mx-auto object-cover rounded-md border border-amber-500/25"
+              />
               <button
                 id="toggle-numbers"
-                class="mt-4 w-full py-2 rounded-lg border border-amber-900/50 text-[10px] cinzel tracking-widest hover:bg-amber-900/20 transition-all"
+                class="mt-4 w-full py-2 rounded-lg border border-cyan-500/20 text-[10px] heritage-font tracking-widest hover:bg-cyan-500/10 transition-all text-cyan-300/80"
               >
                 Toggle Tile Numbers
               </button>
@@ -662,11 +566,50 @@
           </div>
 
           <div class="flex-1 w-full max-w-[530px]">
-            <div class="mosaic-frame">
+            <div class="archive-frame p-4">
+              <span class="archive-label heritage-font">ARCHIVE PHOTO</span>
+              <div class="archive-stamp" aria-hidden="true">
+                <svg
+                  viewBox="0 0 100 100"
+                  class="fill-none stroke-current text-amber-500/40"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    stroke-width="2"
+                    stroke-dasharray="3 2"
+                  />
+                  <text
+                    x="50"
+                    y="44"
+                    text-anchor="middle"
+                    class="text-[7px] font-bold uppercase heritage-font fill-amber-500/50"
+                  >
+                    MATI
+                  </text>
+                  <text
+                    x="50"
+                    y="58"
+                    text-anchor="middle"
+                    class="text-[6px] font-bold uppercase heritage-font fill-amber-500/40"
+                  >
+                    HERITAGE
+                  </text>
+                  <text
+                    x="50"
+                    y="70"
+                    text-anchor="middle"
+                    class="text-[5px] uppercase heritage-font fill-cyan-400/40"
+                  >
+                    3D ARCHIVE
+                  </text>
+                </svg>
+              </div>
               <div id="puzzle-board"></div>
             </div>
-            <div class="mt-5 text-center text-amber-700/60 text-sm italic">
-              Tap adjacent tiles to slide them into the empty slot.
+            <div class="mt-5 text-center text-slate-500 text-sm italic">
+              Slide adjacent tiles to restore the heritage photograph.
             </div>
           </div>
         </div>
@@ -674,47 +617,52 @@
 
       <div
         id="results-screen"
-        class="hidden w-full max-w-2xl vault-card rounded-2xl p-10 text-center z-20"
+        class="hidden w-full max-w-2xl p-10 md:p-12 text-center z-20 results-card rounded-2xl"
       >
         <div
-          class="text-[10px] tracking-[0.4em] uppercase text-amber-700/60 mono mb-2"
+          class="text-[10px] tracking-[0.4em] uppercase text-cyan-400/50 heritage-font mb-2"
         >
-          Vault Report
+          Heritage Restored
         </div>
-        <h2 class="cinzel text-3xl font-bold mb-2 uppercase" id="victory-title">
-          Mosaic Restored
+        <h2
+          class="heritage-font text-3xl font-bold mb-2 uppercase text-white"
+          id="victory-title"
+        >
+          Puzzle Solved
         </h2>
         <div
-          class="text-6xl font-black mono mb-6 copper-accent"
+          class="text-6xl font-black heritage-font mb-4 text-amber-400"
           id="final-score"
         >
           0
         </div>
-        <p class="text-amber-100/60 mb-8 text-lg" id="result-msg">
-          The heritage mosaic gleams once more.
+        <p class="text-slate-400 mb-8 text-lg" id="result-msg">
+          You have successfully restored a Mati heritage photograph.
         </p>
 
         <div
           id="score-breakdown"
-          class="vault-card rounded-xl p-6 mb-8 text-left max-w-sm mx-auto mono text-sm"
+          class="p-6 mb-8 text-left max-w-sm mx-auto heritage-font text-sm bg-black/30 border border-amber-500/15 rounded-xl"
         ></div>
 
         <div class="flex flex-col md:flex-row gap-4 justify-center">
           <button
             onclick="location.reload()"
-            class="copper-bg text-vault-dark px-10 py-4 rounded-lg cinzel font-bold tracking-widest hover:opacity-90 transition-all"
+            class="start-btn px-10 py-4 rounded-lg heritage-font font-bold tracking-widest uppercase text-sm"
           >
-            New Mosaic
+            New Photograph
           </button>
           <a
             href="game.html"
-            class="border border-amber-900/50 px-10 py-4 rounded-lg cinzel font-bold tracking-widest hover:bg-amber-900/20 transition-all"
+            class="border border-cyan-500/30 px-10 py-4 rounded-lg heritage-font font-bold tracking-widest text-cyan-300/80 hover:bg-cyan-500/10 transition-all"
           >
-            Back to Hub
+            Return to Hub
           </a>
         </div>
       </div>
     </main>
+
+    <div id="footer-placeholder"></div>
 
     <audio
       id="bg-music"
@@ -736,15 +684,16 @@
         .then((data) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
-          document
-            .getElementById("header-placeholder")
-            .replaceWith(doc.querySelector("header"));
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) {
+            document.head.appendChild(headerStyle.cloneNode(true));
+          }
+          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
+          if (headerScript) {
             const s = document.createElement("script");
-            s.textContent = scriptText;
+            s.textContent = headerScript.textContent;
             document.body.appendChild(s);
           }
           const ptsEl = document.getElementById("header-total-points");
@@ -754,15 +703,90 @@
           }
         });
 
-      const heritageImages = [
-        "https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=800",
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-        "https://images.unsplash.com/photo-1518998053502-51dd0c61cd2e?w=800",
-        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
-        "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800",
+      fetch("footer.html")
+        .then((response) => response.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) {
+            placeholder.replaceWith(footer);
+            const footerStyle = doc.querySelector("style");
+            if (footerStyle) {
+              document.head.appendChild(footerStyle.cloneNode(true));
+            }
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+
+      const heritageSites = [
+        {
+          name: "Pylon Monument",
+          category: "Built Heritage",
+          src: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+        },
+        {
+          name: "Centennial Clock & Pathway of Leaders",
+          category: "Built Heritage",
+          src: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+        },
+        {
+          name: "Gabaldon Structure of RRMCES-1",
+          category: "Built Heritage",
+          src: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
+        },
+        {
+          name: "Menzi Visitors Information Center",
+          category: "Built Heritage",
+          src: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+        },
+        {
+          name: "Provincial Capitol of Davao Oriental",
+          category: "Built Heritage",
+          src: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+        },
+        {
+          name: "Taytay Daga (Sleeping Dinosaur)",
+          category: "Natural Heritage",
+          src: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+        },
+        {
+          name: "Pujada Island",
+          category: "Natural Heritage",
+          src: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+        },
+        {
+          name: "Oak Island",
+          category: "Natural Heritage",
+          src: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+        },
+        {
+          name: "Mamacao Tree",
+          category: "Natural Heritage",
+          src: "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+        },
+        {
+          name: "Sambuokan Festival",
+          category: "Intangible Cultural Heritage",
+          src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
+        },
+        {
+          name: "Sambuokan Festival Dance",
+          category: "Intangible Cultural Heritage",
+          src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2696.jpg",
+        },
+        {
+          name: "OMPO sa Tampat sa Baguidan",
+          category: "Built Heritage",
+          src: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
+        },
       ];
 
-      // Standardizing layout configuration to Medium difficulty
+      function imgUrl(path) {
+        return encodeURI(path).replace(/#/g, "%23");
+      }
+
       const config = {
         easy: {
           size: 3,
@@ -804,7 +828,7 @@
       let elapsedSeconds = 0;
       let timerInterval;
       let gameActive = false;
-      let currentImage = "";
+      let currentSite = null;
       let emptyPos = 0;
       let liveScore = 0;
       let comboStreak = 0;
@@ -825,175 +849,125 @@
         document.getElementById(`btn-${level}`).classList.add("active");
       }
 
-      /* ---- Intro demo puzzle (looping auto-slide animation) ---- */
+      function pickRandomSite() {
+        currentSite =
+          heritageSites[Math.floor(Math.random() * heritageSites.length)];
+        return imgUrl(currentSite.src);
+      }
+
+      function initScatterVars() {
+        document.querySelectorAll(".intro-slide-piece").forEach((el) => {
+          el.style.setProperty("--sx", `${el.dataset.scatterX || 0}px`);
+          el.style.setProperty("--sy", `${el.dataset.scatterY || 0}px`);
+          el.style.setProperty("--sr", `${el.dataset.scatterR || 0}deg`);
+        });
+      }
+
+      function setIntroState(state) {
+        const intro = document.getElementById("intro-screen");
+        intro.classList.remove("intro-screen-complete", "intro-screen-scrambled");
+        if (state) intro.classList.add(`intro-screen-${state}`);
+      }
+
       const demoPuzzle = (() => {
-        const DEMO_SIZE = 3;
-        const TILE_PX = 80;
-        const GAP_PX = 4;
-        const STEP = TILE_PX + GAP_PX;
-        const demoImage = heritageImages[0];
-        const introScreen = document.getElementById("intro-screen");
-        const boardContainer = document.getElementById("demo-puzzle-board");
+        const SIZE = 4;
+        const SCRAMBLE_STEPS = 18;
+        const SOLVE_DURATION = 10000;
+        const container = document.getElementById("bg-tiles-container");
+        const image = imgUrl(heritageSites[0].src);
 
-        let board = [];
-        let emptyPos = DEMO_SIZE * DEMO_SIZE - 1;
-        let tileEls = [];
-        let running = false;
-        let loopActive = false;
-
-        function initScatterVars() {
-          document.querySelectorAll(".intro-slide-piece").forEach((el) => {
-            el.style.setProperty("--sx", `${el.dataset.scatterX || 0}px`);
-            el.style.setProperty("--sy", `${el.dataset.scatterY || 0}px`);
-            el.style.setProperty("--sr", `${el.dataset.scatterR || 0}deg`);
-          });
-        }
-
-        function setPageState(state) {
-          introScreen.classList.remove(
-            "intro-screen-complete",
-            "intro-screen-scrambled",
-          );
-          if (state) introScreen.classList.add(`intro-screen-${state}`);
-        }
-
-        function slotXY(slot) {
-          const row = Math.floor(slot / DEMO_SIZE);
-          const col = slot % DEMO_SIZE;
-          return { left: col * STEP, top: row * STEP };
-        }
-
-        function buildTiles() {
-          boardContainer.innerHTML = "";
-          tileEls = [];
-          const total = DEMO_SIZE * DEMO_SIZE;
-
-          for (let value = 0; value < total; value++) {
-            const tile = document.createElement("div");
-            tile.className = "demo-tile";
-            tile.dataset.value = value;
-
-            if (value === total - 1) {
-              tile.classList.add("empty");
-            } else {
-              const row = Math.floor(value / DEMO_SIZE);
-              const col = value % DEMO_SIZE;
-              const posX = (col / (DEMO_SIZE - 1)) * 100;
-              const posY = (row / (DEMO_SIZE - 1)) * 100;
-              tile.style.backgroundImage = `url(${demoImage})`;
-              tile.style.backgroundSize = `${DEMO_SIZE * 100}%`;
-              tile.style.backgroundPosition = `${posX}% ${posY}%`;
-            }
-
-            boardContainer.appendChild(tile);
-            tileEls[value] = tile;
-          }
-        }
-
-        function layoutTiles() {
-          board.forEach((value, slot) => {
-            const { left, top } = slotXY(slot);
-            const el = tileEls[value];
-            el.style.left = `${left}px`;
-            el.style.top = `${top}px`;
-            el.style.zIndex = value === DEMO_SIZE * DEMO_SIZE - 1 ? 0 : 1;
-          });
-        }
-
-        function resetSolved() {
-          board = Array.from(
-            { length: DEMO_SIZE * DEMO_SIZE },
-            (_, i) => i,
-          );
-          emptyPos = DEMO_SIZE * DEMO_SIZE - 1;
-          layoutTiles();
-        }
-
-        function generateScrambleMoves(count) {
-          const moves = [];
-          let empty = DEMO_SIZE * DEMO_SIZE - 1;
-          const tempBoard = Array.from(
-            { length: DEMO_SIZE * DEMO_SIZE },
-            (_, i) => i,
-          );
-
-          for (let i = 0; i < count; i++) {
-            const neighbors = getNeighbors(empty, DEMO_SIZE);
-            const pick =
-              neighbors[Math.floor(Math.random() * neighbors.length)];
-            moves.push(pick);
-            const tmp = tempBoard[empty];
-            tempBoard[empty] = tempBoard[pick];
-            tempBoard[pick] = tmp;
-            empty = pick;
-          }
-
-          return moves;
-        }
-
-        function applyMove(tileIndex) {
-          const tmp = board[emptyPos];
-          board[emptyPos] = board[tileIndex];
-          board[tileIndex] = tmp;
-          emptyPos = tileIndex;
-          layoutTiles();
-        }
-
-        function sleep(ms) {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        }
-
-        async function playMove(tileIndex, delayMs = 420) {
-          applyMove(tileIndex);
-          await sleep(delayMs);
-        }
-
-        async function runLoop() {
-          if (loopActive) return;
-          loopActive = true;
-          running = true;
-
-          while (running) {
-            resetSolved();
-            setPageState("complete");
-            await sleep(1400);
-
-            const scramble = generateScrambleMoves(16);
-            for (let i = 0; i < scramble.length; i++) {
-              if (!running) return;
-              if (i === 0) setPageState("scrambled");
-              await playMove(scramble[i], 380);
-            }
-
-            await sleep(300);
-            setPageState("complete");
-
-            for (let i = scramble.length - 1; i >= 0; i--) {
-              if (!running) return;
-              await playMove(scramble[i], 380);
-            }
-
-            await sleep(2000);
-          }
-        }
+        let tiles = [];
+        let currentBoard = [];
+        let emptyPos = SIZE * SIZE - 1;
+        let running = true;
+        let moveHistory = [];
+        let tWidth, tHeight;
 
         function init() {
-          initScatterVars();
-          buildTiles();
-          resetSolved();
-          setPageState("complete");
-          runLoop();
+          if (!running) return;
+          container.innerHTML = "";
+          tiles = [];
+          currentBoard = Array.from({ length: SIZE * SIZE }, (_, i) => i);
+          tWidth = window.innerWidth / SIZE;
+          tHeight = window.innerHeight / SIZE;
+
+          for (let i = 0; i < SIZE * SIZE; i++) {
+            const tile = document.createElement("div");
+            tile.className = "hero-tile-demo";
+            if (i === SIZE * SIZE - 1) tile.style.opacity = "0";
+            const row = Math.floor(i / SIZE);
+            const col = i % SIZE;
+            tile.style.backgroundImage = `url("${image}")`;
+            tile.style.backgroundSize = `${SIZE * 100}%`;
+            tile.style.backgroundPosition = `${(col / (SIZE - 1)) * 100}% ${(row / (SIZE - 1)) * 100}%`;
+            container.appendChild(tile);
+            tiles.push(tile);
+          }
+          updateLayout();
+          startSequence();
         }
 
-        function stop() {
-          running = false;
-          loopActive = false;
+        function updateLayout() {
+          tWidth = window.innerWidth / SIZE;
+          tHeight = window.innerHeight / SIZE;
+          currentBoard.forEach((val, pos) => {
+            const r = Math.floor(pos / SIZE);
+            const c = pos % SIZE;
+            tiles[val].style.transform =
+              `translate(${c * tWidth}px, ${r * tHeight}px)`;
+          });
         }
 
-        return { init, stop };
+        async function startSequence() {
+          while (running) {
+            moveHistory = [];
+            setIntroState("complete");
+
+            for (let i = 0; i < SCRAMBLE_STEPS; i++) {
+              if (!running) return;
+              if (i === 0) setIntroState("scrambled");
+              const neighbors = getNeighbors(emptyPos, SIZE);
+              const next =
+                neighbors[Math.floor(Math.random() * neighbors.length)];
+              moveHistory.push(emptyPos);
+              const temp = currentBoard[emptyPos];
+              currentBoard[emptyPos] = currentBoard[next];
+              currentBoard[next] = temp;
+              emptyPos = next;
+              updateLayout();
+              await new Promise((r) => setTimeout(r, 420));
+            }
+
+            await new Promise((r) => setTimeout(r, 600));
+            setIntroState("complete");
+
+            const delay = SOLVE_DURATION / moveHistory.length;
+            while (moveHistory.length > 0) {
+              if (!running) return;
+              const prevEmpty = moveHistory.pop();
+              const temp = currentBoard[emptyPos];
+              currentBoard[emptyPos] = currentBoard[prevEmpty];
+              currentBoard[prevEmpty] = temp;
+              emptyPos = prevEmpty;
+              updateLayout();
+              await new Promise((r) => setTimeout(r, delay));
+            }
+
+            await new Promise((r) => setTimeout(r, 2200));
+          }
+        }
+
+        return {
+          init,
+          stop: () => {
+            running = false;
+          },
+        };
       })();
 
+      initScatterVars();
       demoPuzzle.init();
+      window.addEventListener("resize", () => demoPuzzle.init());
 
       function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
@@ -1022,15 +996,26 @@
         badge.classList.toggle("active", comboStreak >= 2);
       }
 
+      function updateSiteUI() {
+        document.getElementById("site-name-display").textContent =
+          currentSite?.name || "—";
+        document.getElementById("site-category-display").textContent =
+          currentSite?.category || "—";
+        document.getElementById("reference-preview").src = imgUrl(
+          currentSite?.src || "",
+        );
+        document.getElementById("reference-preview").alt =
+          currentSite?.name || "Heritage photo";
+      }
+
       function initBoard() {
         const { size } = config[difficulty];
         const totalTiles = size * size;
         board = Array.from({ length: totalTiles }, (_, i) => i);
         emptyPos = totalTiles - 1;
 
-        currentImage =
-          heritageImages[Math.floor(Math.random() * heritageImages.length)];
-        document.getElementById("reference-preview").src = currentImage;
+        pickRandomSite();
+        updateSiteUI();
         document.getElementById("difficulty-badge").textContent =
           config[difficulty].label;
 
@@ -1066,12 +1051,10 @@
         const neighbors = [];
         const row = Math.floor(index / size);
         const col = index % size;
-
         if (row > 0) neighbors.push(index - size);
         if (row < size - 1) neighbors.push(index + size);
         if (col > 0) neighbors.push(index - 1);
         if (col < size - 1) neighbors.push(index + 1);
-
         return neighbors;
       }
 
@@ -1083,6 +1066,7 @@
 
       function renderBoard() {
         const { size } = config[difficulty];
+        const image = imgUrl(currentSite.src);
         boardEl.innerHTML = "";
 
         board.forEach((tileValue, index) => {
@@ -1097,11 +1081,15 @@
             const posX = (correctCol / (size - 1)) * 100;
             const posY = (correctRow / (size - 1)) * 100;
 
-            tile.style.backgroundImage = `url(${currentImage})`;
+            tile.style.backgroundImage = `url("${image}")`;
             tile.style.backgroundSize = `${size * 100}%`;
             tile.style.backgroundPosition = `${posX}% ${posY}%`;
             tile.innerHTML = `<span class="tile-number">${tileValue + 1}</span>`;
-            tile.onclick = () => handleTileClick(index);
+            tile.onclick = () => {
+              handleTileClick(index);
+              tile.classList.add("tile-move-flash");
+              setTimeout(() => tile.classList.remove("tile-move-flash"), 320);
+            };
           }
 
           boardEl.appendChild(tile);
@@ -1118,9 +1106,7 @@
           const now = Date.now();
           if (lastMoveTime && now - lastMoveTime <= COMBO_WINDOW_MS) {
             comboStreak++;
-            if (comboStreak >= 2) {
-              comboBonusTotal += comboBonus;
-            }
+            if (comboStreak >= 2) comboBonusTotal += comboBonus;
           } else {
             comboStreak = 1;
           }
@@ -1143,8 +1129,7 @@
       }
 
       function checkWin() {
-        const isWin = board.every((val, i) => val === i);
-        if (isWin) endGame(true);
+        if (board.every((val, i) => val === i)) endGame(true);
       }
 
       function startTimer() {
@@ -1170,8 +1155,7 @@
         document.getElementById("elapsed-display").textContent =
           `${formatTime(elapsedSeconds)} elapsed`;
 
-        const pct = (timeLeft / totalTime) * 100;
-        barEl.style.width = `${pct}%`;
+        barEl.style.width = `${(timeLeft / totalTime) * 100}%`;
 
         const critical = timeLeft <= 30;
         timerEl.classList.toggle("timer-critical", critical);
@@ -1179,12 +1163,14 @@
       }
 
       function renderScoreBreakdown(data) {
-        const container = document.getElementById("score-breakdown");
-        container.innerHTML = data
-          .map(
-            (row) =>
-              `<div class="score-breakdown-row"><span>${row.label}</span><span>${row.value}</span></div>`,
-          )
+        document.getElementById("score-breakdown").innerHTML = data
+          .map((row, i) => {
+            const isLast = i === data.length - 1;
+            const extra = isLast
+              ? "font-bold border-t border-amber-500/20 pt-3 mt-2 text-amber-400"
+              : "";
+            return `<div class="score-row ${extra}"><span>${row.label}</span><span>${row.value}</span></div>`;
+          })
           .join("");
       }
 
@@ -1196,6 +1182,7 @@
         document.getElementById("results-screen").classList.remove("hidden");
 
         const cfg = config[difficulty];
+        const siteName = currentSite?.name || "heritage site";
 
         if (win) {
           const timeBonus = timeLeft * cfg.timeBonusRate;
@@ -1208,17 +1195,15 @@
           );
 
           document.getElementById("victory-title").textContent =
-            "Mosaic Restored";
+            "Heritage Restored";
           document.getElementById("final-score").textContent =
             totalEarned.toLocaleString();
           document.getElementById("result-msg").textContent =
-            `Vault sealed in ${formatTime(elapsedSeconds)} with ${moves} moves on ${cfg.label} difficulty.`;
+            `You restored the ${siteName} photograph in ${formatTime(elapsedSeconds)} with ${moves} moves.`;
 
           renderScoreBreakdown([
-            {
-              label: "Base Score",
-              value: `+${cfg.basePoints.toLocaleString()}`,
-            },
+            { label: "Heritage Site", value: siteName },
+            { label: "Base Score", value: `+${cfg.basePoints.toLocaleString()}` },
             {
               label: `Time Bonus (${formatTime(timeLeft)} left)`,
               value: `+${timeBonus.toLocaleString()}`,
@@ -1233,7 +1218,7 @@
             },
             {
               label: `${cfg.label} Multiplier (×${cfg.multiplier})`,
-              value: `Applied`,
+              value: "Applied",
             },
             { label: "Total Earned", value: totalEarned.toLocaleString() },
           ]);
@@ -1250,20 +1235,21 @@
 
           victorySfx.play().catch(() => {});
           playAnnouncer(
-            `Mosaic restored! You earned ${totalEarned.toLocaleString()} heritage points.`,
+            `Heritage restored! You earned ${totalEarned.toLocaleString()} points for completing ${siteName}.`,
           );
         } else {
-          document.getElementById("victory-title").textContent = "Vault Sealed";
+          document.getElementById("victory-title").textContent = "Time Expired";
           document.getElementById("final-score").textContent = "0";
           document.getElementById("result-msg").textContent =
-            "Time ran out before the mosaic could be rebuilt. The vault has sealed shut.";
+            `Time ran out before the ${siteName} photograph could be restored.`;
           renderScoreBreakdown([
+            { label: "Heritage Site", value: siteName },
             { label: "Difficulty", value: cfg.label },
             { label: "Moves Made", value: moves.toString() },
             { label: "Time Elapsed", value: formatTime(elapsedSeconds) },
             { label: "Points Earned", value: "0" },
           ]);
-          playAnnouncer("Time is up. The vault has sealed.");
+          playAnnouncer("Time expired. Try again to restore this heritage photo.");
         }
       }
 
@@ -1288,6 +1274,7 @@
 
         if (mVol > 0) bgMusic.play().catch(() => {});
 
+        document.getElementById("hero-title").classList.add("opacity-0");
         document.getElementById("intro-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
 
@@ -1295,7 +1282,7 @@
         gameActive = true;
         startTimer();
         playAnnouncer(
-          `Enter the vault on ${config[difficulty].label} difficulty. Restore the mosaic!`,
+          `${config[difficulty].label} difficulty. Restore the ${currentSite.name} heritage photograph.`,
         );
       };
 
