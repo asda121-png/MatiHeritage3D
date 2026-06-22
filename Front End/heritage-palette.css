@@ -1,0 +1,38 @@
+/* Mati Heritage 3D — shared color palette */
+:root {
+  --forest: #047857;
+  --forest-dark: #065f46;
+  --forest-light: #10b981;
+  --sky: #0284c7;
+  --sky-light: #38bdf8;
+  --amber: #f59e0b;
+  --amber-light: #fbbf24;
+  --amber-dark: #d97706;
+  --mint: #ecfdf5;
+  --mint-deep: #d1fae5;
+  --ice: #eff6ff;
+  --warm: #fffbeb;
+  --slate: #334155;
+  --ink: #0f172a;
+  --paper: #ecfdf5;
+  --bg-site: #ecfdf5;
+  --line: rgba(15, 23, 42, 0.06);
+  --glow-emerald: rgba(16, 185, 129, 0.45);
+  --glow-sky: rgba(56, 189, 248, 0.4);
+  --glow-amber: rgba(245, 158, 11, 0.45);
+  --surface-dark: #0a1628;
+  --surface-dark-elevated: #0f172a;
+  --surface-dark-card: #111827;
+  --gradient-heritage: linear-gradient(
+    135deg,
+    var(--forest) 0%,
+    var(--sky) 52%,
+    var(--amber-dark) 100%
+  );
+  --gradient-heritage-text: linear-gradient(
+    90deg,
+    var(--sky-light) 0%,
+    var(--forest-light) 55%,
+    var(--amber-light) 100%
+  );
+}

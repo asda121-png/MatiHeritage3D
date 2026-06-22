@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us — Mati Heritage 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="heritage-palette.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Source Sans 3"', "system-ui", "sans-serif"],
+              display: ['"Cormorant Garamond"', "Georgia", "serif"],
+            },
+            colors: {
+              forest: { DEFAULT: "#047857", dark: "#065f46", light: "#10b981" },
+              heritage: {
+                sky: "#0284c7",
+                gold: "#c4a035",
+                "gold-dark": "#8f7120",
+                mint: "#ecfdf5",
+              },
+            },
+            boxShadow: {
+              card: "0 20px 50px -12px rgba(4, 120, 87, 0.12)",
+              "card-hover": "0 28px 60px -12px rgba(4, 120, 87, 0.18)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      .display-font {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .about-hero-title {
+        font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+        line-height: 1.1;
+        letter-spacing: 0.01em;
+      }
+      .about-section-title {
+        font-size: clamp(1.875rem, 3.5vw, 2.375rem);
+        line-height: 1.15;
+        letter-spacing: 0.015em;
+      }
+      :root {
+        --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      ::selection {
+        background: rgba(4, 120, 87, 0.18);
+        color: var(--forest-dark);
+      }
+      body.visitor-module {
+        font-family: "Source Sans 3", sans-serif !important;
+        color: var(--slate);
+        background: var(--bg-site);
+      }
+      .page-canvas {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.32;
+        animation: orb-float 18s ease-in-out infinite;
+      }
+      .orb-1 {
+        width: 520px; height: 520px;
+        background: radial-gradient(circle, #34d399 0%, transparent 70%);
+        top: -120px; right: -80px;
+      }
+      .orb-2 {
+        width: 480px; height: 480px;
+        background: radial-gradient(circle, #7dd3fc 0%, transparent 70%);
+        bottom: 8%; left: -120px;
+        animation-delay: -6s;
+      }
+      .orb-3 {
+        width: 360px; height: 360px;
+        background: radial-gradient(circle, #fde68a 0%, transparent 70%);
+        top: 42%; right: 12%;
+        animation-delay: -12s;
+      }
+      @keyframes orb-float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(12px, -18px) scale(1.04); }
+      }
+      .noise-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      .hero-grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(4, 120, 87, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(2, 132, 199, 0.04) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, var(--forest) 0%, var(--amber) 40%, var(--sky) 75%, #38bdf8 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer-text 6s linear infinite;
+      }
+      @keyframes shimmer-text {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+      }
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--forest) 0%, #10b981 50%, var(--amber-dark) 100%);
+        color: white;
+        box-shadow: 0 8px 32px rgba(4, 120, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transition: all 0.35s var(--ease-spring);
+      }
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
+        transform: translateX(-120%);
+        transition: transform 0.6s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 16px 48px rgba(4, 120, 87, 0.4), 0 0 32px rgba(196, 160, 53, 0.25);
+      }
+      .btn-primary:hover::after { transform: translateX(120%); }
+      .btn-outline {
+        border: 2px solid rgba(2, 132, 199, 0.45);
+        color: var(--sky);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        transition: all 0.35s ease;
+      }
+      .btn-outline:hover {
+        background: white;
+        border-color: var(--sky);
+        box-shadow: 0 8px 32px rgba(2, 132, 199, 0.18);
+        transform: translateY(-2px);
+      }
+      .section-label {
+        display: inline-block;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--sky);
+        margin-bottom: 0.75rem;
+        position: relative;
+        padding-left: 2.25rem;
+      }
+      .section-label::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 50%;
+        width: 1.5rem; height: 2px;
+        background: linear-gradient(90deg, var(--forest), var(--amber), var(--sky));
+        transform: translateY(-50%);
+      }
+      .section-label-center { padding-left: 0; padding-top: 0.85rem; }
+      .section-label-center::before {
+        left: 50%; top: 0;
+        transform: translateX(-50%);
+        width: 2.5rem;
+      }
+      .stat-pill {
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.98);
+        box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-pill::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        opacity: 0.9;
+      }
+      .stat-pill:nth-child(1)::before { background: linear-gradient(90deg, var(--forest), #34d399); }
+      .stat-pill:nth-child(2)::before { background: linear-gradient(90deg, var(--sky), #38bdf8); }
+      .stat-pill:nth-child(3)::before { background: linear-gradient(90deg, var(--amber-dark), #fbbf24); }
+      .stat-pill:nth-child(4)::before { background: linear-gradient(90deg, var(--forest-dark), var(--forest)); }
+      .stat-pill:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(4, 120, 87, 0.12);
+      }
+      .stat-icon {
+        width: 2.25rem; height: 2.25rem;
+        border-radius: 0.65rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+      }
+      .about-card {
+        position: relative;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.98);
+        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        transition: transform 0.45s var(--ease-spring), box-shadow 0.45s ease, border-color 0.35s ease;
+      }
+      .about-card-glow {
+        position: absolute;
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        filter: blur(48px);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+      }
+      .about-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(4, 120, 87, 0.12); }
+      .about-card:hover .about-card-glow { opacity: 1; }
+      .about-card-accent {
+        position: absolute;
+        top: 0; left: 1.5rem; right: 1.5rem;
+        height: 3px;
+        border-radius: 0 0 6px 6px;
+        opacity: 0.9;
+      }
+      .photo-frame {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+      }
+      .photo-frame img {
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .photo-frame:hover img { transform: scale(1.06); }
+      .photo-frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(6, 95, 70, 0.35) 0%, transparent 45%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+      .photo-frame:hover::after { opacity: 1; }
+      .pillar-card {
+        position: relative;
+        padding: 1.75rem;
+        border-radius: 1.35rem;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(255, 255, 255, 0.98);
+        box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+        transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .pillar-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 48px rgba(4, 120, 87, 0.14);
+      }
+      .pillar-card-icon {
+        width: 2.75rem; height: 2.75rem;
+        border-radius: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+      .timeline-step {
+        position: absolute;
+        left: 0.125rem;
+        top: 0.75rem;
+        width: 1.75rem; height: 1.75rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.625rem;
+        font-weight: 700;
+        z-index: 10;
+        border: 2px solid;
+      }
+      @media (min-width: 768px) {
+        .timeline-step {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+        }
+      }
+      .timeline-section .section-label { color: rgba(110, 231, 183, 0.85); }
+      .timeline-section .section-label::before {
+        background: linear-gradient(90deg, #34d399, #fbbf24, #38bdf8);
+      }
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.75rem;
+        box-shadow: 0 24px 64px rgba(4, 120, 87, 0.25);
+      }
+      .cta-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+        background-size: 32px 32px;
+        pointer-events: none;
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      @keyframes fade-up {
+        from { opacity: 0; transform: translateY(28px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-up { animation: fade-up 0.8s ease both; }
+      .delay-1 { animation-delay: 0.1s; }
+      .delay-2 { animation-delay: 0.2s; }
+      .delay-3 { animation-delay: 0.3s; }
+      .delay-4 { animation-delay: 0.4s; }
+      .hero-visual {
+        transition: transform 0.12s ease-out;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .orb, .gradient-text, .reveal { animation: none !important; }
+        .reveal { opacity: 1; transform: none; transition: none; }
+        .photo-frame img, .about-card, .pillar-card, .stat-pill { transition: none; }
+      }
+      .capstone-band {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(236,253,245,0.9) 100%);
+        border: 1px solid rgba(4, 120, 87, 0.12);
+        border-radius: 1.75rem;
+        box-shadow: 0 12px 40px rgba(4, 120, 87, 0.08);
+      }
+      .tech-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: white;
+        border: 1px solid rgba(4, 120, 87, 0.12);
+        color: var(--slate);
+      }
+      .section-wave {
+        height: 48px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%2306463b' d='M0 32L60 28C120 24 240 16 360 14.7C480 13 600 19 720 21.3C840 24 960 24 1080 21.3C1200 19 1320 13 1380 10.7L1440 8V48H0Z'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat;
+      }
+
+      body.visitor-module {
+        --header-h: 5.625rem;
+        --header-h-scrolled: 4.875rem;
+      }
+
+      body.visitor-module .visitor-auth-actions {
+        gap: 0.5rem;
+        margin-left: 0.75rem;
+        padding-left: 0.85rem;
+        border-left: 1px solid rgba(12, 26, 20, 0.08);
+      }
+
+      body.visitor-module .visitor-auth-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.58rem 1.15rem;
+        font-family: "Source Sans 3", sans-serif !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: none !important;
+        border-radius: 9999px;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        transition:
+          background 0.28s ease,
+          border-color 0.28s ease,
+          color 0.28s ease,
+          box-shadow 0.28s ease,
+          transform 0.32s var(--header-ease, cubic-bezier(0.22, 1, 0.36, 1));
+      }
+
+      body.visitor-module .visitor-auth-btn svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        flex-shrink: 0;
+      }
+
+      body.visitor-module .visitor-auth-login {
+        color: #334155 !important;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(12, 26, 20, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      }
+
+      body.visitor-module .visitor-auth-login:hover {
+        background: #ffffff !important;
+        color: #0c1a14 !important;
+        border-color: rgba(4, 120, 87, 0.2);
+        box-shadow: 0 4px 16px rgba(4, 120, 87, 0.1);
+        transform: translateY(-1px);
+      }
+
+      body.visitor-module .visitor-auth-register {
+        color: #ffffff !important;
+        border: 1px solid transparent;
+        background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest) 50%, var(--sky) 100%) !important;
+        box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+
+      body.visitor-module .visitor-auth-register:hover {
+        box-shadow: 0 8px 28px rgba(4, 120, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body class="visitor-module text-slate-600 antialiased overflow-x-hidden">
+    <div class="page-canvas" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
+
+    <main class="relative z-10">
+      <!-- Hero -->
+      <section class="relative pt-28 pb-8 sm:pt-32 sm:pb-12 lg:pb-16 overflow-hidden">
+        <div class="hero-grid-bg pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-emerald-200/80 to-transparent"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+          <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div class="animate-fade-up">
+              <h1 class="display-font about-hero-title text-slate-900 mb-6 animate-fade-up">
+                We digitize Mati&rsquo;s story so
+                <span class="gradient-text">every generation</span>
+                can explore it.
+              </h1>
+              <p class="text-base sm:text-[1.0625rem] text-slate-500 leading-[1.7] max-w-xl mb-8 font-normal animate-fade-up delay-2">
+                Mati Heritage 3D combines field research, 3D modeling, and playful learning
+                into one visitor portal — built to preserve culture and inspire discovery.
+              </p>
+              <div class="flex flex-wrap gap-3 animate-fade-up delay-3">
+                <a href="3dexplore.html" class="btn-primary inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold">
+                  Explore in 3D
+                  <svg class="w-4 h-4 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+                <a href="index.html" class="btn-outline inline-flex items-center px-7 py-3.5 rounded-full text-sm font-semibold">
+                  Back to portal
+                </a>
+              </div>
+            </div>
+
+            <div class="relative animate-fade-up delay-4 hero-visual">
+              <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-emerald-400/25 via-sky-400/15 to-amber-300/20 blur-md"></div>
+              <div class="absolute -top-3 -right-3 z-20 hidden sm:flex items-center gap-2 px-3 py-2 rounded-full bg-white/95 backdrop-blur border border-emerald-100 shadow-lg text-xs font-medium text-forest-dark">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Live heritage archive
+              </div>
+              <div class="relative grid grid-cols-12 gap-3 sm:gap-4 p-1 rounded-[1.75rem] bg-white/40 backdrop-blur-sm border border-white/60 shadow-card">
+                <div class="col-span-7 row-span-2 photo-frame shadow-card border border-white/80 aspect-[4/5]">
+                  <img src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg" alt="Pylon Monument" class="w-full h-full object-cover" loading="eager" />
+                  <span class="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-md bg-black/45 backdrop-blur text-[0.6875rem] font-medium text-white">Pylon Monument</span>
+                </div>
+                <div class="col-span-5 photo-frame shadow-card border border-white/80 aspect-square">
+                  <img src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg" alt="Pujada Island" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+                <div class="col-span-5 photo-frame shadow-card border border-white/80 aspect-square">
+                  <img src="data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg" alt="Gabaldon Structure" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+                <div class="col-span-12 flex items-center justify-between gap-4 rounded-xl bg-gradient-to-r from-white/95 to-emerald-50/80 backdrop-blur border border-emerald-100/80 px-5 py-4">
+                  <div>
+                    <p class="text-[0.6875rem] font-medium uppercase tracking-wide text-slate-400">Heritage focus</p>
+                    <p class="text-sm font-semibold text-forest-dark">Built · Natural · Cultural</p>
+                  </div>
+                  <div class="flex -space-x-2">
+                    <span class="w-9 h-9 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-forest shadow-sm" title="Built">B</span>
+                    <span class="w-9 h-9 rounded-full bg-sky-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-sky-700 shadow-sm" title="Natural">N</span>
+                    <span class="w-9 h-9 rounded-full bg-amber-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-heritage-gold-dark shadow-sm" title="Cultural">C</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="relative z-20 px-5 sm:px-8 lg:px-12 pb-16 sm:pb-20 -mt-6 sm:-mt-10">
+        <div class="max-w-5xl mx-auto reveal">
+          <div class="rounded-[1.5rem] p-3 sm:p-4 bg-white/50 backdrop-blur-md border border-white/70 shadow-[0_20px_60px_rgba(4,120,87,0.1)]">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div class="stat-pill rounded-2xl px-5 py-6 text-center">
+                <span class="stat-icon bg-emerald-50 text-forest mx-auto">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </span>
+                <p class="text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-forest-dark"><span data-count="22" data-suffix="+">0</span></p>
+                <p class="mt-1 text-sm font-normal text-slate-500">Heritage sites</p>
+              </div>
+              <div class="stat-pill rounded-2xl px-5 py-6 text-center">
+                <span class="stat-icon bg-sky-50 text-sky-600 mx-auto">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </span>
+                <p class="text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-sky-600"><span data-count="3">0</span></p>
+                <p class="mt-1 text-sm font-normal text-slate-500">Heritage categories</p>
+              </div>
+              <div class="stat-pill rounded-2xl px-5 py-6 text-center">
+                <span class="stat-icon bg-amber-50 text-heritage-gold-dark mx-auto">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+                <p class="text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-heritage-gold-dark"><span data-count="5" data-suffix="+">0</span></p>
+                <p class="mt-1 text-sm font-normal text-slate-500">Learning games</p>
+              </div>
+              <div class="stat-pill rounded-2xl px-5 py-6 text-center">
+                <span class="stat-icon bg-emerald-50 text-forest mx-auto">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                </span>
+                <p class="text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-forest"><span data-count="1">0</span></p>
+                <p class="mt-1 text-sm font-normal text-slate-500">Unified portal</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mission -->
+      <section class="px-5 sm:px-8 lg:px-12 pb-16 sm:pb-20">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-14 reveal">
+            <span class="section-label section-label-center text-heritage-gold-dark">Why we built this</span>
+            <h2 class="display-font about-section-title text-slate-900">Purpose behind the platform</h2>
+            <p class="mt-4 text-[0.9375rem] text-slate-500 leading-[1.65] font-normal max-w-lg mx-auto">Three guiding principles that shaped every feature — from the heritage map to the Games Hub.</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-5 lg:gap-6">
+            <article class="about-card group rounded-[1.35rem] p-7 reveal">
+              <div class="about-card-accent bg-gradient-to-r from-forest to-emerald-300"></div>
+              <div class="about-card-glow bg-emerald-400/25 top-0 right-0"></div>
+              <span class="inline-flex w-11 h-11 items-center justify-center rounded-xl bg-emerald-50 text-forest mb-5 relative z-10">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </span>
+              <p class="text-xs font-medium uppercase tracking-wide text-slate-400 mb-1 relative z-10">01 — Mission</p>
+              <h3 class="display-font text-lg text-slate-900 mb-3 relative z-10">Preserve &amp; share</h3>
+              <p class="text-[0.9375rem] text-slate-500 leading-[1.65] font-normal relative z-10">Digitize Mati&rsquo;s landmarks and traditions so communities and visitors can explore them anytime, anywhere.</p>
+            </article>
+            <article class="about-card group rounded-[1.35rem] p-7 reveal">
+              <div class="about-card-accent bg-gradient-to-r from-sky-500 to-sky-300"></div>
+              <div class="about-card-glow bg-sky-400/25 top-0 left-0"></div>
+              <span class="inline-flex w-11 h-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600 mb-5 relative z-10">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              </span>
+              <p class="text-xs font-medium uppercase tracking-wide text-slate-400 mb-1 relative z-10">02 — Vision</p>
+              <h3 class="display-font text-lg text-slate-900 mb-3 relative z-10">Inspire discovery</h3>
+              <p class="text-[0.9375rem] text-slate-500 leading-[1.65] font-normal relative z-10">Connect youth, educators, and tourists to Davao Oriental&rsquo;s identity through immersive, accessible experiences.</p>
+            </article>
+            <article class="about-card group rounded-[1.35rem] p-7 reveal">
+              <div class="about-card-accent bg-gradient-to-r from-heritage-gold to-amber-300"></div>
+              <div class="about-card-glow bg-amber-400/25 bottom-0 right-0"></div>
+              <span class="inline-flex w-11 h-11 items-center justify-center rounded-xl bg-amber-50 text-heritage-gold-dark mb-5 relative z-10">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              </span>
+              <p class="text-xs font-medium uppercase tracking-wide text-slate-400 mb-1 relative z-10">03 — Approach</p>
+              <h3 class="display-font text-lg text-slate-900 mb-3 relative z-10">Learn by playing</h3>
+              <p class="text-[0.9375rem] text-slate-500 leading-[1.65] font-normal relative z-10">Blend field documentation, 3D models, and game-based learning into one cohesive heritage portal.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Platform pillars -->
+      <section class="px-5 sm:px-8 lg:px-12 pb-20 sm:pb-24">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 sm:mb-12 reveal">
+            <div>
+              <span class="section-label">Explore the portal</span>
+              <h2 class="display-font about-section-title text-slate-900">Everything in one place</h2>
+            </div>
+            <p class="max-w-md text-[0.9375rem] text-slate-500 leading-[1.65] font-normal lg:text-right">Jump straight into the experiences we built — each one designed to make Mati&rsquo;s heritage tangible.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            <a href="index.html#mati-map-section" class="pillar-card reveal">
+              <div class="absolute top-0 left-5 right-5 h-0.5 bg-gradient-to-r from-sky-500 to-sky-300 rounded-full"></div>
+              <span class="pillar-card-icon bg-sky-50 text-sky-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              </span>
+              <h3 class="display-font text-base text-slate-900 mb-2">Heritage Map</h3>
+              <p class="text-sm text-slate-500 leading-relaxed font-normal">Pin sites across Mati City and browse by built, natural, or cultural heritage.</p>
+              <span class="inline-flex items-center gap-1 mt-4 text-xs font-semibold text-sky-600">Open map →</span>
+            </a>
+            <a href="3dexplore.html" class="pillar-card reveal">
+              <div class="absolute top-0 left-5 right-5 h-0.5 bg-gradient-to-r from-heritage-gold to-amber-300 rounded-full"></div>
+              <span class="pillar-card-icon bg-amber-50 text-heritage-gold-dark">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              </span>
+              <h3 class="display-font text-base text-slate-900 mb-2">3D Explore</h3>
+              <p class="text-sm text-slate-500 leading-relaxed font-normal">Rotate and inspect digitized landmarks in interactive 3D — starting with the Pylon Monument.</p>
+              <span class="inline-flex items-center gap-1 mt-4 text-xs font-semibold text-heritage-gold-dark">View models →</span>
+            </a>
+            <a href="gallery.html" class="pillar-card reveal">
+              <div class="absolute top-0 left-5 right-5 h-0.5 bg-gradient-to-r from-forest to-emerald-300 rounded-full"></div>
+              <span class="pillar-card-icon bg-emerald-50 text-forest">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </span>
+              <h3 class="display-font text-base text-slate-900 mb-2">Photo Gallery</h3>
+              <p class="text-sm text-slate-500 leading-relaxed font-normal">Browse field photography and archival images from each documented heritage site.</p>
+              <span class="inline-flex items-center gap-1 mt-4 text-xs font-semibold text-forest">Browse gallery →</span>
+            </a>
+            <a href="game.html" class="pillar-card reveal">
+              <div class="absolute top-0 left-5 right-5 h-0.5 bg-gradient-to-r from-violet-500 to-purple-300 rounded-full"></div>
+              <span class="pillar-card-icon bg-violet-50 text-violet-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </span>
+              <h3 class="display-font text-base text-slate-900 mb-2">Games Hub</h3>
+              <p class="text-sm text-slate-500 leading-relaxed font-normal">Trivia, puzzles, and memory games that turn heritage facts into something you can play.</p>
+              <span class="inline-flex items-center gap-1 mt-4 text-xs font-semibold text-violet-600">Play now →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-wave reveal" aria-hidden="true"></div>
+
+      <!-- Mati City timeline -->
+      <section class="timeline-section relative px-5 sm:px-8 lg:px-12 py-20 sm:py-28 bg-gradient-to-b from-emerald-950 via-[#0a1628] to-emerald-950 overflow-hidden" aria-labelledby="timeline-heading">
+        <div class="absolute inset-0 opacity-[0.07] pointer-events-none" style="background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px); background-size: 48px 48px;"></div>
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent"></div>
+
+        <div class="relative max-w-7xl mx-auto">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14 sm:mb-16 reveal">
+            <div class="max-w-xl">
+              <span class="section-label text-emerald-300/90">Mati City history</span>
+              <h2 id="timeline-heading" class="display-font about-section-title text-white">
+                Timeline of Mati City
+              </h2>
+            </div>
+            <p class="max-w-md text-emerald-100/60 leading-[1.65] text-[0.9375rem] font-normal lg:text-right">
+              From a Mandaya settlement on the east coast to the capital of Davao Oriental — key milestones that shaped the city we document today.
+            </p>
+          </div>
+
+          <div class="relative max-w-4xl mx-auto">
+            <div class="absolute left-[1.125rem] md:left-1/2 top-2 bottom-2 w-px bg-gradient-to-b from-emerald-400 via-sky-400 to-amber-400 md:-translate-x-1/2" aria-hidden="true"></div>
+
+            <!-- T1 -->
+            <article class="relative pb-10 md:pb-12 md:w-[calc(50%-1.5rem)] md:pr-0 pl-12 md:pl-0 md:text-right md:mr-auto reveal">
+              <span class="timeline-step bg-emerald-950 text-emerald-300 border-emerald-400/40">01</span>
+              <span class="absolute left-3 md:left-auto md:right-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-emerald-400/30 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/10 p-6 hover:bg-white/[0.09] hover:border-emerald-400/25 hover:shadow-[0_8px_32px_rgba(16,185,129,0.12)] transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3 md:justify-end">
+                  <span class="text-sm font-semibold tabular-nums text-emerald-300">1861</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-emerald-200 bg-emerald-500/15 border border-emerald-400/20">Origins</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">Settlement founded</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">Captain Prudencio Garcia and Juan Nazareno established Mati on the east coast. The name comes from the Mandaya word <em class="text-emerald-200/80 not-italic">Maa-ti</em> — a creek said to dry quickly even after heavy rain.</p>
+              </div>
+            </article>
+
+            <!-- T2 -->
+            <article class="relative pb-10 md:pb-12 md:w-[calc(50%-1.5rem)] md:pl-0 pl-12 md:ml-auto reveal">
+              <span class="timeline-step bg-emerald-950 text-sky-300 border-sky-400/40">02</span>
+              <span class="absolute left-3 md:left-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-sky-400/30 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/10 p-6 hover:bg-white/[0.09] hover:border-sky-400/25 hover:shadow-[0_8px_32px_rgba(56,189,248,0.1)] transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-sm font-semibold tabular-nums text-sky-300">1903</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-sky-200 bg-sky-500/15 border border-sky-400/20">Municipality</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">Municipality established</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">On October 29, Mati became a regular municipality under Act No. 21, joining other east-coast towns in a formal local government system.</p>
+              </div>
+            </article>
+
+            <!-- T3 -->
+            <article class="relative pb-10 md:pb-12 md:w-[calc(50%-1.5rem)] md:pr-0 pl-12 md:pl-0 md:text-right md:mr-auto reveal">
+              <span class="timeline-step bg-emerald-950 text-amber-300 border-amber-400/40">03</span>
+              <span class="absolute left-3 md:left-auto md:right-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-amber-400/30 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/10 p-6 hover:bg-white/[0.09] hover:border-amber-400/25 hover:shadow-[0_8px_32px_rgba(251,191,36,0.1)] transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3 md:justify-end">
+                  <span class="text-sm font-semibold tabular-nums text-amber-300">1967</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-amber-100 bg-amber-500/15 border border-amber-400/20">Capital</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">Provincial capital</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">Mati was designated capital of Davao Oriental, cementing its role as the province&rsquo;s political and economic center on the Philippine Sea coast.</p>
+              </div>
+            </article>
+
+            <!-- T4 -->
+            <article class="relative pb-10 md:pb-12 md:w-[calc(50%-1.5rem)] md:pl-0 pl-12 md:ml-auto reveal">
+              <span class="timeline-step bg-emerald-950 text-emerald-300 border-emerald-400/40">04</span>
+              <span class="absolute left-3 md:left-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-emerald-400/30 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/10 p-6 hover:bg-white/[0.09] hover:border-emerald-400/25 hover:shadow-[0_8px_32px_rgba(16,185,129,0.12)] transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-sm font-semibold tabular-nums text-emerald-300">2003</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-emerald-200 bg-emerald-500/15 border border-emerald-400/20">Centennial</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">100 years as a municipality</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">Mati marked its centennial — a century since Act No. 21 — celebrating its growth from a coastal settlement into a thriving provincial hub.</p>
+              </div>
+            </article>
+
+            <!-- T5 -->
+            <article class="relative pb-10 md:pb-12 md:w-[calc(50%-1.5rem)] md:pr-0 pl-12 md:pl-0 md:text-right md:mr-auto reveal">
+              <span class="timeline-step bg-emerald-950 text-sky-300 border-sky-400/40">05</span>
+              <span class="absolute left-3 md:left-auto md:right-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-sky-400/30 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/10 p-6 hover:bg-white/[0.09] hover:border-sky-400/25 hover:shadow-[0_8px_32px_rgba(56,189,248,0.1)] transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3 md:justify-end">
+                  <span class="text-sm font-semibold tabular-nums text-sky-300">2007</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-sky-200 bg-sky-500/15 border border-sky-400/20">Cityhood</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">Republic Act No. 9408</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">The municipality was converted into a component city. Voters ratified the law in June, beginning Mati&rsquo;s path toward full city status.</p>
+              </div>
+            </article>
+
+            <!-- T6 -->
+            <article class="relative md:w-[calc(50%-1.5rem)] md:pl-0 pl-12 md:ml-auto reveal">
+              <span class="timeline-step bg-gradient-to-br from-emerald-500/30 to-amber-500/30 text-amber-200 border-amber-400/50">06</span>
+              <span class="absolute left-3 md:left-[-0.4rem] top-3 w-3 h-3 rounded-full bg-emerald-950 ring-4 ring-amber-400/40 z-10 hidden md:block"></span>
+              <div class="rounded-2xl bg-gradient-to-br from-emerald-500/12 to-sky-500/12 backdrop-blur-md border border-emerald-400/35 p-6 shadow-[0_0_48px_rgba(16,185,129,0.12)] hover:border-emerald-400/50 transition-all duration-300">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-sm font-semibold tabular-nums text-amber-300">2011</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide text-amber-100 bg-amber-500/20 border border-amber-400/30">Today</span>
+                </div>
+                <h3 class="display-font text-base text-white mb-2">Cityhood affirmed</h3>
+                <p class="text-[0.9375rem] text-emerald-100/55 leading-[1.65] font-normal">The Supreme Court upheld Mati&rsquo;s cityhood on February 15. Mati City — the only city in Davao Oriental — celebrates its foundation day every June 19.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capstone -->
+      <section class="px-5 sm:px-8 lg:px-12 pb-16 sm:pb-20">
+        <div class="max-w-5xl mx-auto capstone-band p-8 sm:p-10 lg:p-12 reveal">
+          <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div>
+              <span class="section-label">Capstone project</span>
+              <h2 class="display-font about-section-title text-slate-900 mb-4">Built for Mati City</h2>
+              <p class="text-[0.9375rem] text-slate-500 leading-[1.65] font-normal mb-4">Mati Heritage 3D is a student-led capstone initiative documenting local cultural properties through photography, 3D scanning, and interactive web experiences — making heritage accessible to schools, tourists, and the community.</p>
+              <p class="text-sm text-slate-400 font-normal">Davao Oriental · Academic year 2025–2026</p>
+            </div>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wide text-slate-400 mb-3">Technologies used</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="tech-pill">3D GLB Models</span>
+                <span class="tech-pill">Leaflet Maps</span>
+                <span class="tech-pill">Web Games</span>
+                <span class="tech-pill">Field Photography</span>
+                <span class="tech-pill">Responsive UI</span>
+                <span class="tech-pill">Heritage Archives</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="px-5 sm:px-8 lg:px-12 py-16 sm:py-20">
+        <div class="max-w-5xl mx-auto cta-panel reveal">
+          <div class="absolute inset-0 bg-gradient-to-br from-forest-dark via-emerald-800 to-sky-800"></div>
+          <div class="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_85%_15%,white,transparent_45%)]"></div>
+          <div class="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-emerald-400/20 blur-3xl pointer-events-none"></div>
+          <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-amber-400/15 blur-3xl pointer-events-none"></div>
+          <div class="relative px-8 py-12 sm:px-12 sm:py-14 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+            <div class="max-w-lg">
+              <span class="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-full text-[0.6875rem] font-medium uppercase tracking-wide text-emerald-200/90 bg-white/10 border border-white/15">Start exploring</span>
+              <h2 class="display-font text-2xl sm:text-[1.75rem] text-white mb-3">Ready to explore Mati?</h2>
+              <p class="text-[0.9375rem] text-emerald-100/75 leading-[1.65] font-normal">Start with the interactive map, spin a 3D model, or jump into the Games Hub.</p>
+            </div>
+            <div class="flex flex-col sm:items-end gap-3 shrink-0">
+              <div class="flex flex-wrap gap-3">
+                <a href="index.html#mati-map-section" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-semibold bg-white text-forest-dark hover:bg-emerald-50 hover:-translate-y-0.5 transition-all shadow-lg">Open map</a>
+                <a href="game.html" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-semibold border border-white/35 text-white hover:bg-white/10 hover:-translate-y-0.5 transition-all">Games Hub</a>
+              </div>
+              <a href="3dexplore.html" class="text-xs font-medium text-emerald-200/70 hover:text-white transition-colors">Or view 3D models →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+      const revealEls = document.querySelectorAll(".reveal");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (revealEls.length && !reducedMotion) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+        );
+        revealEls.forEach((el) => observer.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add("is-visible"));
+      }
+
+      function animateCounter(el) {
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || "";
+        const duration = 1400;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      if (!reducedMotion) {
+        const statObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                statObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+        document.querySelectorAll("[data-count]").forEach((el) => statObserver.observe(el));
+      } else {
+        document.querySelectorAll("[data-count]").forEach((el) => {
+          el.textContent = el.dataset.count + (el.dataset.suffix || "");
+        });
+      }
+
+      const heroVisual = document.querySelector(".hero-visual");
+      if (heroVisual && !reducedMotion && window.matchMedia("(min-width: 1024px)").matches) {
+        document.addEventListener("mousemove", (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 12;
+          const y = (e.clientY / window.innerHeight - 0.5) * 8;
+          heroVisual.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      }
+
+      fetch("header.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          const brandTagline = document.querySelector(".site-brand__tagline");
+          if (brandTagline) brandTagline.textContent = "Visitor Portal";
+
+          const navRoutes = {
+            home: "index.html",
+            about: "about_us.html",
+            games: "game.html",
+            "3d": "3dexplore.html",
+            gallery: "gallery.html",
+          };
+
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            const key = link.getAttribute("data-nav");
+            if (key && navRoutes[key]) link.href = navRoutes[key];
+          });
+
+          document.getElementById("site-header-utilities")?.remove();
+
+          const authActions = document.createElement("div");
+          authActions.className =
+            "visitor-auth-actions hidden lg:flex items-center";
+          authActions.innerHTML = `
+            <a href="login.html" class="visitor-auth-btn visitor-auth-login">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+              </svg>
+              <span>Login</span>
+            </a>
+            <a href="userregistration.html" class="visitor-auth-btn visitor-auth-register">
+              <span>Register</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>`;
+          document.querySelector(".site-header__end")?.appendChild(authActions);
+
+          const mobileAuth = document.getElementById("site-mobile-auth");
+          if (mobileAuth) {
+            mobileAuth.innerHTML = `
+              <a href="login.html" class="site-mobile-nav__link">Login</a>
+              <a href="userregistration.html" class="site-mobile-nav__link">Register</a>`;
+          }
+
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            if (link.getAttribute("data-nav") === "about") {
+              link.classList.add("is-active");
+            }
+          });
+
+          document.getElementById("settings-modal")?.remove();
+
+          if (typeof window.initSiteHeader === "function") {
+            window.initSiteHeader();
+          }
+        })
+        .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          if (typeof window.initSiteFooter === "function") {
+            window.initSiteFooter("about");
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+    </script>
+  </body>
+</html>

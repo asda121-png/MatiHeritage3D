@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create account — Mati Heritage 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body class="auth-body">
+    <div class="auth-page">
+      <aside class="auth-brand" id="auth-brand" aria-label="Mati Heritage showcase"></aside>
+
+      <section class="auth-panel">
+        <header class="auth-panel-top">
+          <a href="index.html" class="auth-panel-back">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Visitor portal
+          </a>
+          <nav class="auth-switch" aria-label="Account navigation">
+            <a href="login.html">Sign in</a>
+            <a href="userregistration.html" class="is-active" aria-current="page">Register</a>
+          </nav>
+        </header>
+
+        <main class="auth-panel-main">
+          <div class="auth-form-wrap auth-form-wrap--wide">
+            <header class="auth-form-header">
+              <p class="auth-form-kicker"><span class="auth-form-kicker-dot" aria-hidden="true"></span> Free to join</p>
+              <h1 class="auth-form-title">Create your account</h1>
+              <p class="auth-form-sub">One profile unlocks every heritage game in the hub.</p>
+            </header>
+
+            <form id="register-form" class="auth-form">
+              <div class="auth-form-section">
+                <p class="auth-form-section-label">Profile</p>
+                <div class="auth-field auth-field--icon">
+                  <input id="register-display-name" type="text" autocomplete="name" placeholder=" " />
+                  <label for="register-display-name">Display name</label>
+                  <svg class="auth-field-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <div class="auth-field-grid auth-field-grid--2">
+                  <div class="auth-field">
+                    <input id="register-username" type="text" autocomplete="username" placeholder=" " />
+                    <label for="register-username">Username</label>
+                  </div>
+                  <div class="auth-field">
+                    <input id="register-email" type="email" autocomplete="email" placeholder=" " />
+                    <label for="register-email">Email address</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="auth-form-section">
+                <p class="auth-form-section-label">Security</p>
+                <div class="auth-field-grid auth-field-grid--2">
+                  <div class="auth-field">
+                    <input id="register-password" type="password" autocomplete="new-password" placeholder=" " />
+                    <label for="register-password">Password</label>
+                    <div class="auth-strength" id="password-strength" data-level="0" aria-hidden="true">
+                      <span data-bar></span><span data-bar></span><span data-bar></span><span data-bar></span>
+                    </div>
+                  </div>
+                  <div class="auth-field auth-field--toggle">
+                    <input id="register-confirm" type="password" autocomplete="new-password" placeholder=" " />
+                    <label for="register-confirm">Confirm password</label>
+                    <button type="button" id="toggle-confirm" class="auth-field-toggle" aria-label="Show password">
+                      <svg id="confirm-eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                      <svg id="confirm-eye-closed" class="hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <label class="auth-check">
+                <input type="checkbox" id="register-terms" />
+                <span>I agree to the platform terms and community guidelines.</span>
+              </label>
+
+              <button type="button" class="auth-submit"><span>Create account</span></button>
+            </form>
+
+            <p class="auth-form-footer">
+              Already registered? <a href="login.html">Sign in instead</a>
+            </p>
+          </div>
+        </main>
+
+        <footer class="auth-panel-foot">Mati Heritage 3D · Capstone Project</footer>
+      </section>
+    </div>
+
+    <script src="auth-brand.js"></script>
+    <script src="auth-ui.js"></script>
+    <script>
+      MatiAuthUI.bindPasswordToggle("register-confirm", "toggle-confirm", "confirm-eye-open", "confirm-eye-closed");
+      MatiAuthUI.bindStrengthMeter("register-password", "password-strength");
+    </script>
+  </body>
+</html>

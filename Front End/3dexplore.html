@@ -1,0 +1,2297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Explore — Mati Heritage 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="heritage-palette.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+    ></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Source Sans 3"', "system-ui", "sans-serif"],
+              display: ['"Cormorant Garamond"', "Georgia", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        color: var(--slate);
+        background: var(--bg-site);
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      ::selection {
+        background: rgba(4, 120, 87, 0.18);
+        color: var(--forest-dark);
+      }
+
+      body.visitor-module {
+        font-family: "Source Sans 3", sans-serif !important;
+        --header-h: 5.625rem;
+        --header-h-scrolled: 4.875rem;
+      }
+
+      body.visitor-module header nav > a,
+      body.visitor-module header .site-brand__tagline,
+      body.visitor-module .visitor-auth-btn,
+      body.visitor-module .site-footer,
+      body.visitor-module .site-footer a {
+        font-family: "Source Sans 3", sans-serif !important;
+      }
+
+      body.visitor-module .display-font,
+      body.visitor-module header .site-brand__title {
+        font-family: "Cormorant Garamond", Georgia, serif !important;
+      }
+
+      body.visitor-module .visitor-auth-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: 0.75rem;
+        padding-left: 0.85rem;
+        border-left: 1px solid rgba(12, 26, 20, 0.08);
+      }
+
+      body.visitor-module .visitor-auth-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.58rem 1.15rem;
+        font-family: "Source Sans 3", sans-serif !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: none !important;
+        border-radius: 9999px;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        transition:
+          background 0.28s ease,
+          border-color 0.28s ease,
+          color 0.28s ease,
+          box-shadow 0.28s ease,
+          transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      body.visitor-module .visitor-auth-btn svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        flex-shrink: 0;
+      }
+
+      body.visitor-module .visitor-auth-login {
+        color: #334155 !important;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(12, 26, 20, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      }
+
+      body.visitor-module .visitor-auth-login:hover {
+        background: #ffffff !important;
+        color: #0c1a14 !important;
+        border-color: rgba(4, 120, 87, 0.2);
+        box-shadow: 0 4px 16px rgba(4, 120, 87, 0.1);
+        transform: translateY(-1px);
+      }
+
+      body.visitor-module .visitor-auth-register {
+        color: #ffffff !important;
+        border: 1px solid transparent;
+        background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest) 50%, var(--sky) 100%) !important;
+        box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+
+      body.visitor-module .visitor-auth-register:hover {
+        box-shadow: 0 8px 28px rgba(4, 120, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        transform: translateY(-1px);
+      }
+
+      .display-font {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .explore3d-page {
+        position: relative;
+        z-index: 1;
+        background: var(--bg-site);
+      }
+
+      .map-hero-bridge {
+        position: relative;
+        padding: clamp(2.75rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem)
+          clamp(3rem, 7vw, 5rem);
+        background: linear-gradient(
+          180deg,
+          var(--bg-site) 0%,
+          var(--mint-deep) 42%,
+          rgba(209, 250, 229, 0.65) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.85rem;
+        overflow: hidden;
+      }
+
+      .map-hero-bridge::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 70% 80% at 50% 0%,
+            rgba(4, 120, 87, 0.07) 0%,
+            transparent 62%
+          ),
+          radial-gradient(
+            ellipse 45% 50% at 15% 100%,
+            rgba(2, 132, 199, 0.06) 0%,
+            transparent 55%
+          );
+        pointer-events: none;
+      }
+
+      .map-hero-bridge__line {
+        position: relative;
+        z-index: 1;
+        width: min(12rem, 42vw);
+        height: 3px;
+        border-radius: 9999px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--forest) 18%,
+          var(--amber) 50%,
+          var(--sky) 82%,
+          transparent 100%
+        );
+        opacity: 0.85;
+      }
+
+      .map-hero-bridge__label {
+        position: relative;
+        z-index: 1;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        opacity: 0.72;
+      }
+
+      .explore3d-workspace {
+        position: relative;
+        max-width: 92rem;
+        margin: 0 auto;
+        padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem)
+          clamp(3.5rem, 7vw, 5rem);
+        overflow: hidden;
+      }
+
+      .explore3d-workspace__bg {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse 80% 55% at 50% -10%,
+            rgba(4, 120, 87, 0.07) 0%,
+            transparent 58%
+          ),
+          radial-gradient(
+            ellipse 45% 40% at 100% 40%,
+            rgba(2, 132, 199, 0.05) 0%,
+            transparent 50%
+          );
+      }
+
+      .explore3d-idle {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 3vw, 2rem);
+      }
+
+      .explore3d-idle[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-idle__card {
+        width: min(100%, 34rem);
+        padding: clamp(2rem, 4vw, 2.75rem);
+        text-align: center;
+        border-radius: 1.35rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px dashed rgba(4, 120, 87, 0.22);
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.04);
+      }
+
+      .explore3d-idle__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.25rem;
+        height: 3.25rem;
+        margin-bottom: 1.15rem;
+        border-radius: 1rem;
+        color: var(--forest-dark);
+        background: linear-gradient(145deg, #ecfdf5, #fff);
+        border: 1px solid rgba(4, 120, 87, 0.14);
+        box-shadow: 0 8px 24px rgba(4, 120, 87, 0.1);
+      }
+
+      .explore3d-idle__icon svg {
+        width: 1.45rem;
+        height: 1.45rem;
+      }
+
+      .explore3d-idle__eyebrow {
+        display: block;
+        margin-bottom: 0.55rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+      }
+
+      .explore3d-idle__title {
+        margin: 0 0 0.75rem;
+        font-size: clamp(1.65rem, 3vw, 2.1rem);
+        line-height: 1.05;
+        color: var(--ink);
+      }
+
+      .explore3d-idle__desc {
+        margin: 0;
+        font-size: 0.9375rem;
+        line-height: 1.7;
+        color: #64748b;
+      }
+
+      .explore3d-stage-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: clamp(1.25rem, 2.5vw, 1.75rem);
+      }
+
+      .explore3d-stage-head {
+        display: grid;
+        gap: 0.65rem;
+        padding: 0 0.15rem;
+      }
+
+      .explore3d-stage-head__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .explore3d-stage-head__title {
+        margin: 0;
+        font-size: clamp(1.85rem, 3.5vw, 2.65rem);
+        line-height: 1.05;
+        color: var(--ink);
+      }
+
+      .explore3d-stage-grid {
+        position: relative;
+        display: grid;
+        gap: clamp(1.25rem, 3vw, 1.75rem);
+        align-items: stretch;
+      }
+
+      @media (min-width: 1024px) {
+        .explore3d-stage-grid {
+          grid-template-columns: minmax(0, 1.15fr) minmax(300px, 400px);
+        }
+      }
+
+      .explore3d-stage-layout.is-loading .explore3d-stage-grid .explore3d-panel {
+        opacity: 0.35;
+        filter: blur(1px);
+        pointer-events: none;
+      }
+
+      .explore3d-stage-layout.is-revealed .explore3d-stage-grid .explore3d-panel {
+        animation: explore3d-panel-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .explore3d-stage-layout.is-revealed .explore3d-details {
+        animation-delay: 0.12s;
+      }
+
+      @keyframes explore3d-panel-rise {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .explore3d-reveal-loader {
+        position: absolute;
+        inset: 0;
+        top: 4.5rem;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1.35rem;
+        background: rgba(236, 253, 245, 0.88);
+        backdrop-filter: blur(6px);
+      }
+
+      .explore3d-reveal-loader[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-reveal-loader-inner {
+        display: grid;
+        gap: 0.85rem;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .explore3d-reveal-spinner {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        border: 3px solid rgba(4, 120, 87, 0.15);
+        border-top-color: var(--forest);
+        animation: explore3d-spin 0.75s linear infinite;
+      }
+
+      .explore3d-reveal-loader-inner p {
+        margin: 0;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--forest-dark);
+      }
+
+      @keyframes explore3d-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes heritage-marker-pulse {
+        0% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(1.22);
+        }
+        100% {
+          transform: scale(1.08);
+        }
+      }
+
+      .heritage-photo-marker.is-pulsing {
+        animation: heritage-marker-pulse 0.65s ease;
+      }
+
+      .explore3d-details-foot {
+        display: grid;
+        gap: 0.85rem;
+        padding: 1.15rem 1.5rem 1.5rem;
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+        background: linear-gradient(180deg, rgba(248, 250, 252, 0.4), rgba(255, 255, 255, 0.95));
+      }
+
+      .explore3d-viewer {
+        position: relative;
+        min-height: clamp(340px, 48vh, 560px);
+        overflow: hidden;
+        background:
+          radial-gradient(
+            ellipse at 50% 0%,
+            rgba(16, 185, 129, 0.12) 0%,
+            transparent 52%
+          ),
+          linear-gradient(165deg, #101820 0%, #0a0f14 48%, #121a22 100%);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .explore3d-viewer.is-photo {
+        background:
+          radial-gradient(
+            ellipse at 50% 30%,
+            rgba(4, 120, 87, 0.08) 0%,
+            transparent 55%
+          ),
+          linear-gradient(165deg, #faf7f2 0%, #f0ebe3 48%, #ebe4d9 100%);
+        border-color: rgba(4, 120, 87, 0.1);
+      }
+
+      .explore3d-viewer-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        z-index: 4;
+        padding: 0.38rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+        background: rgba(10, 15, 20, 0.72);
+        border: 1px solid rgba(110, 231, 183, 0.22);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .explore3d-viewer.is-photo .explore3d-viewer-badge {
+        color: var(--forest-dark);
+        background: rgba(255, 255, 255, 0.92);
+        border-color: rgba(4, 120, 87, 0.14);
+      }
+
+      .explore3d-viewer-lines {
+        opacity: 0.12;
+      }
+
+      .explore3d-viewer.is-photo .explore3d-viewer-lines {
+        opacity: 0.35;
+      }
+
+      .explore3d-model {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        --poster-color: #0a0f14;
+        background: transparent;
+      }
+
+      .explore3d-viewer.is-photo .explore3d-model {
+        --poster-color: #f0ebe3;
+      }
+
+      .explore3d-model::part(default-progress-bar) {
+        background-color: var(--forest-light);
+      }
+
+      .explore3d-preview-img {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        object-fit: cover;
+        display: block;
+      }
+
+      .explore3d-viewer-lines {
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+          -18deg,
+          transparent 0,
+          transparent 48px,
+          rgba(120, 90, 60, 0.04) 48px,
+          rgba(120, 90, 60, 0.04) 49px
+        );
+        pointer-events: none;
+      }
+
+      .explore3d-preview-img[hidden],
+      .explore3d-model[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-viewer-hint {
+        position: absolute;
+        left: 50%;
+        bottom: 1rem;
+        transform: translateX(-50%);
+        z-index: 3;
+        padding: 0.45rem 0.9rem;
+        border-radius: 9999px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #cbd5e1;
+        background: rgba(10, 15, 20, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+      }
+
+      .explore3d-viewer.is-photo .explore3d-viewer-hint {
+        color: #64748b;
+        background: rgba(255, 255, 255, 0.88);
+        border-color: rgba(4, 120, 87, 0.1);
+      }
+
+      .explore3d-viewer-hint[hidden] {
+        display: none !important;
+      }
+
+      .heritage-fullscreen {
+        position: fixed;
+        top: var(--header-h, 5.625rem);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        background: #0a0f14;
+      }
+
+      .heritage-fullscreen[hidden] {
+        display: none !important;
+      }
+
+      .heritage-fullscreen__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.85rem clamp(1rem, 3vw, 1.75rem);
+        background: rgba(10, 15, 20, 0.92);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .heritage-fullscreen__eyebrow {
+        margin: 0 0 0.2rem;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+      }
+
+      .heritage-fullscreen__title {
+        margin: 0;
+        font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+        color: #fff;
+      }
+
+      .heritage-fullscreen__close {
+        flex-shrink: 0;
+        padding: 0.55rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .heritage-fullscreen__close:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .heritage-fullscreen__model {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        --poster-color: #0a0f14;
+        background: transparent;
+      }
+
+      .heritage-fullscreen__model::part(default-progress-bar) {
+        background-color: var(--forest-light);
+      }
+
+      .heritage-fullscreen__photo {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        object-fit: contain;
+        padding: 1rem;
+        background: #0a0f14;
+      }
+
+      .heritage-fullscreen__photo[hidden] {
+        display: none !important;
+      }
+
+      .heritage-fullscreen__hint {
+        margin: 0;
+        padding: 0.65rem 1rem 1rem;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        background: rgba(10, 15, 20, 0.92);
+      }
+
+      body.heritage-fullscreen-open {
+        overflow: hidden;
+      }
+
+      body.heritage-fullscreen-open .explore3d-page,
+      body.heritage-fullscreen-open #footer-placeholder {
+        visibility: hidden;
+      }
+
+      .heritage-fullscreen__stage {
+        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .heritage-fullscreen__loading {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.85rem;
+        background: #0a0f14;
+        color: #cbd5e1;
+        font-size: 0.9375rem;
+        font-weight: 600;
+      }
+
+      .heritage-fullscreen__loading[hidden] {
+        display: none !important;
+      }
+
+      .heritage-fullscreen__loading-spinner {
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 3px solid rgba(110, 231, 183, 0.18);
+        border-top-color: #6ee7b7;
+        border-radius: 50%;
+        animation: explore3d-spin 0.85s linear infinite;
+      }
+
+      .heritage-fullscreen__model[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-panel {
+        border-radius: 1.35rem;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(4, 120, 87, 0.1);
+        box-shadow: 0 24px 56px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+      }
+
+      .explore3d-viewer.explore3d-panel {
+        background: transparent;
+        box-shadow: 0 28px 60px rgba(10, 15, 20, 0.18);
+      }
+
+      .explore3d-details {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .explore3d-details::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 1.25rem;
+        bottom: 1.25rem;
+        width: 3px;
+        border-radius: 0 2px 2px 0;
+        background: linear-gradient(
+          180deg,
+          var(--forest),
+          var(--amber-dark) 55%,
+          var(--sky)
+        );
+        pointer-events: none;
+      }
+
+      /* ── Mati City Map (built heritage) ── */
+      .map-section {
+        padding: 0;
+        margin: 0;
+        background: var(--bg-site);
+      }
+
+      .map-section-first {
+        padding-top: 0;
+        min-height: calc(100vh - var(--header-h, 5.625rem));
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+
+      #mati-map {
+        flex: 1;
+        width: 100%;
+        min-height: clamp(420px, calc(100vh - var(--header-h, 5.625rem) - 5rem), 760px);
+        height: 100%;
+        z-index: 1;
+        font-family: "Source Sans 3", sans-serif;
+        background: var(--bg-site);
+      }
+
+      .map-section__inner {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        max-width: 92rem;
+        width: 100%;
+        margin: 0 auto;
+        min-height: calc(100vh - var(--header-h, 5.625rem));
+        padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1rem, 3vw, 2rem);
+        box-sizing: border-box;
+      }
+
+      .map-section__frame {
+        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        border-radius: 1.35rem;
+        overflow: hidden;
+        border: 1px solid rgba(4, 120, 87, 0.1);
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+      }
+
+      .map-intro-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 450;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        padding: clamp(1.25rem, 3vw, 2rem);
+        pointer-events: none;
+        background: linear-gradient(
+          0deg,
+          rgba(12, 26, 20, 0.28) 0%,
+          rgba(12, 26, 20, 0.08) 28%,
+          transparent 55%
+        );
+        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .map-intro-overlay.is-dismissed {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .map-intro-overlay.is-dismissed .map-intro-overlay__content {
+        transform: translateY(1rem);
+        opacity: 0;
+      }
+
+      .map-intro-overlay__content {
+        position: relative;
+        text-align: left;
+        padding: 1.1rem 1.25rem;
+        max-width: min(18rem, calc(100% - 1rem));
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 0.85rem;
+        border: 1px solid rgba(255, 255, 255, 0.65);
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.5s ease;
+      }
+
+      .map-intro-overlay__content::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.85rem;
+        bottom: 0.85rem;
+        width: 3px;
+        border-radius: 0 2px 2px 0;
+        background: linear-gradient(180deg, var(--forest), var(--amber-dark));
+      }
+
+      .map-intro-overlay__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        margin-bottom: 0.55rem;
+        padding-left: 0.15rem;
+      }
+
+      .map-intro-overlay__eyebrow-line {
+        width: 1.5rem;
+        height: 2px;
+        background: linear-gradient(90deg, var(--forest), var(--amber));
+        flex-shrink: 0;
+      }
+
+      .map-intro-overlay__title {
+        margin: 0 0 0.35rem;
+        padding-left: 0.15rem;
+        line-height: 1;
+      }
+
+      .map-intro-overlay__title-main {
+        display: block;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #0f172a;
+      }
+
+      .map-intro-overlay__title-sub {
+        display: block;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        margin-top: 0.3rem;
+      }
+
+      .map-intro-overlay__desc {
+        font-size: 0.8125rem;
+        line-height: 1.55;
+        color: #64748b;
+        margin: 0.55rem 0 0;
+        padding-left: 0.15rem;
+        max-width: 16rem;
+      }
+
+      .map-intro-overlay__hint {
+        display: none;
+      }
+
+      .heritage-marker-wrap {
+        background: transparent;
+        border: none;
+      }
+
+      .heritage-photo-marker {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--forest);
+        box-shadow:
+          0 6px 20px rgba(15, 23, 42, 0.35),
+          0 0 0 1px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+        background: #ffffff;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .heritage-photo-marker.is-active {
+        box-shadow:
+          0 10px 28px rgba(15, 23, 42, 0.4),
+          0 0 0 3px rgba(245, 158, 11, 0.45);
+        transform: scale(1.08);
+      }
+
+      .heritage-photo-marker img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .heritage-marker-wrap:hover .heritage-photo-marker {
+        transform: scale(1.12);
+      }
+
+      .map-popup-photo {
+        width: 100%;
+        height: 96px;
+        object-fit: cover;
+        border-radius: 0.625rem;
+        margin-bottom: 0.65rem;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .leaflet-popup-content-wrapper {
+        border-radius: 0.875rem !important;
+        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15) !important;
+        border: 1px solid rgba(4, 120, 87, 0.12);
+      }
+
+      .leaflet-popup-content {
+        margin: 0.75rem 1rem !important;
+        font-family: "Source Sans 3", sans-serif !important;
+        line-height: 1.45 !important;
+      }
+
+      .map-popup-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #0f172a;
+        margin-bottom: 0.25rem;
+      }
+
+      .map-popup-cat {
+        display: inline-block;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
+        margin-bottom: 0.35rem;
+        background: rgba(4, 120, 87, 0.12);
+        color: var(--forest-dark);
+      }
+
+      .map-popup-desc {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      .map-popup-action {
+        display: inline-flex;
+        margin-top: 0.55rem;
+        padding: 0.38rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #fff;
+        background: var(--gradient-heritage);
+      }
+
+      .leaflet-control-zoom {
+        border: none !important;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+        border-radius: 0.75rem !important;
+        overflow: hidden;
+      }
+
+      .leaflet-control-zoom a {
+        color: var(--forest-dark) !important;
+        font-weight: 700 !important;
+      }
+
+      .explore3d-view-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.85rem 1.35rem;
+        border: none;
+        border-radius: 9999px;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #fff;
+        background: var(--gradient-heritage);
+        box-shadow: 0 10px 28px rgba(4, 120, 87, 0.24);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .explore3d-view-btn svg {
+        width: 0.95rem;
+        height: 0.95rem;
+        flex-shrink: 0;
+      }
+
+      .explore3d-view-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 34px rgba(2, 132, 199, 0.28);
+      }
+
+      .explore3d-stage-action {
+        display: none;
+      }
+
+      .explore3d-details-actions {
+        display: none;
+      }
+
+      .explore3d-details-body {
+        flex: 1;
+        padding: clamp(1.35rem, 2.5vw, 1.85rem) clamp(1.25rem, 2.5vw, 1.75rem)
+          clamp(1.25rem, 2.5vw, 1.5rem);
+        padding-left: clamp(1.5rem, 2.5vw, 2rem);
+        overflow-y: auto;
+      }
+
+      .explore3d-details-label {
+        margin: 0 0 0.85rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .explore3d-details-type {
+        display: inline-block;
+        padding: 0.28rem 0.65rem;
+        border-radius: 9999px;
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        background: rgba(4, 120, 87, 0.08);
+        border: 1px solid rgba(4, 120, 87, 0.12);
+      }
+
+      .explore3d-details-type.built {
+        color: var(--forest-dark);
+      }
+
+      .explore3d-details-title {
+        display: none;
+      }
+
+      .explore3d-details-desc {
+        font-size: 0.9375rem;
+        line-height: 1.8;
+        color: #475569;
+        margin: 0 0 1.5rem;
+      }
+
+      .explore3d-specs-heading {
+        margin: 0 0 0.75rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+      }
+
+      .explore3d-specs {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      @media (min-width: 480px) {
+        .explore3d-specs {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .explore3d-specs li:first-child,
+        .explore3d-specs li:nth-child(2) {
+          grid-column: span 1;
+        }
+      }
+
+      .explore3d-specs li {
+        display: grid;
+        gap: 0.25rem;
+        padding: 0.7rem 0.8rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(145deg, #f8fafc, #fff);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      .explore3d-spec-key {
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.62rem;
+      }
+
+      .explore3d-spec-val {
+        font-weight: 600;
+        color: var(--ink);
+        font-size: 0.875rem;
+        line-height: 1.4;
+      }
+
+      .explore3d-facts {
+        list-style: none;
+        padding: 1rem 0 0;
+        margin: 0;
+        display: grid;
+        gap: 0.65rem;
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      .explore3d-facts[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-facts li {
+        position: relative;
+        padding-left: 1rem;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--slate);
+      }
+
+      .explore3d-facts li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--forest-light);
+      }
+
+      .explore3d-map-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        color: var(--forest-dark);
+        transition: color 0.2s ease;
+      }
+
+      .explore3d-map-link:hover {
+        color: var(--sky);
+      }
+
+      @media (max-width: 1023px) {
+        .explore3d-stage-head__title {
+          font-size: clamp(1.55rem, 5vw, 2rem);
+        }
+
+        .explore3d-details {
+          min-height: auto;
+        }
+
+        .explore3d-viewer {
+          min-height: clamp(300px, 42vh, 420px);
+        }
+      }
+    </style>
+  </head>
+  <body class="visitor-module">
+    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
+
+    <main class="explore3d-page">
+      <section id="mati-map-section" class="map-section map-section-first">
+        <div class="map-section__inner">
+          <div class="map-section__frame">
+            <div
+              id="mati-map"
+              role="region"
+              aria-label="Map of Mati City built heritage sites"
+            ></div>
+            <div class="map-intro-overlay" id="map-intro-overlay" aria-hidden="false">
+              <div class="map-intro-overlay__content">
+                <p class="map-intro-overlay__eyebrow">
+                  <span class="map-intro-overlay__eyebrow-line" aria-hidden="true"></span>
+                  Built Heritage
+                </p>
+                <h2 class="map-intro-overlay__title">
+                  <span class="map-intro-overlay__title-main">Mati City Map</span>
+                  <span class="map-intro-overlay__title-sub">Tap a marker to begin</span>
+                </h2>
+                <p class="map-intro-overlay__desc">
+                  Tap a marker to load its heritage details and 3D model.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="map-hero-bridge" aria-hidden="true">
+        <span class="map-hero-bridge__line"></span>
+        <span class="map-hero-bridge__label">Scroll to explore built heritage</span>
+      </div>
+
+      <div id="explore3d-viewer" class="explore3d-workspace">
+        <div class="explore3d-workspace__bg" aria-hidden="true"></div>
+
+        <div class="explore3d-idle" id="explore-idle-panel">
+          <div class="explore3d-idle__card">
+            <span class="explore3d-idle__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"/>
+                <circle cx="12" cy="11" r="2.5"/>
+              </svg>
+            </span>
+            <span class="explore3d-idle__eyebrow">Built Heritage Archive</span>
+            <h2 class="explore3d-idle__title display-font">Select a site on the map</h2>
+            <p class="explore3d-idle__desc">
+              Tap any built heritage marker above to load its description, specifications, and 3D model below.
+            </p>
+          </div>
+        </div>
+
+        <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
+          <header class="explore3d-stage-head">
+            <div class="explore3d-stage-head__meta">
+              <span class="explore3d-details-type built" id="detail-type">Built Heritage</span>
+            </div>
+            <h2 class="explore3d-stage-head__title display-font" id="stage-title"></h2>
+          </header>
+
+          <div class="explore3d-reveal-loader" id="explore-reveal-loader" hidden>
+            <div class="explore3d-reveal-loader-inner">
+              <span class="explore3d-reveal-spinner" aria-hidden="true"></span>
+              <p id="explore-reveal-label">Loading heritage site…</p>
+            </div>
+          </div>
+
+          <div class="explore3d-stage-grid">
+            <section class="explore3d-panel explore3d-viewer" id="heritage-viewer-panel" aria-label="3D model viewer">
+              <div class="explore3d-viewer-lines" aria-hidden="true"></div>
+              <model-viewer
+                id="heritage-model"
+                class="explore3d-model"
+                src=""
+                alt="Built heritage 3D model"
+                auto-rotate
+                rotation-per-second="14deg"
+                camera-controls
+                touch-action="pan-y"
+                camera-orbit="0deg 82deg 52%"
+                min-camera-orbit="-180deg 30deg 42%"
+                max-camera-orbit="180deg 105deg 100%"
+                shadow-intensity="1.15"
+                exposure="1.06"
+                environment-image="neutral"
+                loading="eager"
+                reveal="auto"
+                interaction-prompt="auto"
+                hidden
+              ></model-viewer>
+              <img id="preview-image" class="explore3d-preview-img" src="" alt="" hidden />
+              <p class="explore3d-viewer-hint" id="viewer-hint" hidden>
+                Drag to rotate · Scroll to zoom
+              </p>
+            </section>
+
+            <aside class="explore3d-panel explore3d-details" aria-label="Site information">
+              <div class="explore3d-details-body">
+                <p class="explore3d-details-label">About this site</p>
+                <h3 class="explore3d-details-title display-font" id="detail-title"></h3>
+                <p class="explore3d-details-desc" id="detail-desc"></p>
+                <p class="explore3d-specs-heading">Site details</p>
+                <ul class="explore3d-specs" id="detail-specs"></ul>
+                <ul class="explore3d-facts" id="detail-facts"></ul>
+              </div>
+              <div class="explore3d-details-foot">
+                <button type="button" class="explore3d-view-btn" id="view-heritage-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true">
+                    <path d="M12 3 2 8l10 5 10-5-10-5Z"/>
+                    <path d="M2 8v8l10 5 10-5V8"/>
+                    <path d="M12 13v8"/>
+                  </svg>
+                  View Heritage
+                </button>
+                <a href="#mati-map-section" class="explore3d-map-link">
+                  Back to map →
+                </a>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="heritage-fullscreen"
+      class="heritage-fullscreen"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="fullscreen-title"
+      hidden
+    >
+      <div class="heritage-fullscreen__top">
+        <div>
+          <p class="heritage-fullscreen__eyebrow">Built Heritage</p>
+          <h2 class="heritage-fullscreen__title display-font" id="fullscreen-title"></h2>
+        </div>
+        <button type="button" class="heritage-fullscreen__close" id="fullscreen-close">
+          Close
+        </button>
+      </div>
+      <div class="heritage-fullscreen__stage">
+        <div class="heritage-fullscreen__loading" id="fullscreen-loading" hidden>
+          <span class="heritage-fullscreen__loading-spinner" aria-hidden="true"></span>
+          <p id="fullscreen-loading-label">Loading 3D model…</p>
+        </div>
+        <model-viewer
+          id="fullscreen-model"
+          class="heritage-fullscreen__model"
+          alt="Built heritage 3D model"
+          auto-rotate
+          rotation-per-second="14deg"
+          camera-controls
+          touch-action="pan-y"
+          camera-orbit="auto 72deg 88%"
+          min-camera-orbit="auto 18deg 52%"
+          max-camera-orbit="auto 105deg 160%"
+          shadow-intensity="1.25"
+          exposure="1.1"
+          environment-image="neutral"
+          loading="eager"
+          reveal="auto"
+          interaction-prompt="auto"
+          hidden
+        ></model-viewer>
+        <img id="fullscreen-photo" class="heritage-fullscreen__photo" src="" alt="" hidden />
+      </div>
+      <p class="heritage-fullscreen__hint" id="fullscreen-hint">Drag to rotate · Scroll to zoom</p>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="data/mati-city-boundary.js"></script>
+    <script>
+      const HERITAGE_3D_SITES = [
+        {
+          id: "pylon",
+          name: "Pylon Monument",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.952258,
+          lng: 126.216889,
+          official: true,
+          modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
+          image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          available: true,
+          desc: "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \u201cPoint Zero\u201d geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere\u2014crafted from recycled San Miguel Beer bottles\u2014and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city\u2019s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
+          specs: [
+            { key: "Model", val: "Pylon Monument" },
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Monument" },
+            { key: "Longitude", val: "126\u00b0 13\u2032 0.8004\u2033 E" },
+            { key: "Latitude", val: "6\u00b0 57\u2032 8.1288\u2033 N" },
+          ],
+          facts: [],
+        },
+        {
+          id: "centennial",
+          name: "Centennial Clock & Pathway of Leaders",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.94429,
+          lng: 126.23609,
+          official: true,
+          image:
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+          available: false,
+          desc: "Centennial Park and Pathway of Leaders in the poblacion — a civic space honoring Mati\u2019s leaders and history.",
+          specs: [
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Official LGU cultural property", "Poblacion landmark"],
+        },
+        {
+          id: "mfgr",
+          name: "MFGR Park & Baywalk",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.949853,
+          lng: 126.216161,
+          official: true,
+          image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+          available: false,
+          desc: "Mayor Francisco G. Rabat Park and Baywalk overlooking Pujada Bay — a waterfront promenade and gathering place.",
+          specs: [
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Baywalk along Pujada Bay", "Named for Mayor Francisco G. Rabat"],
+        },
+        {
+          id: "subangan",
+          name: "Subangan Museum",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.944219,
+          lng: 126.248353,
+          official: true,
+          image:
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+          available: false,
+          desc: "Provincial museum featuring Davor the whale and Mandaya heritage collections.",
+          specs: [
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Museum" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Home to Davor the whale exhibit", "Mandaya cultural displays"],
+        },
+        {
+          id: "capitol",
+          name: "Provincial Capitol of Davao Oriental",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.9435,
+          lng: 126.2478,
+          official: false,
+          image:
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+          available: false,
+          desc: "Provincial government center within Mati City.",
+          specs: [
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Seat of provincial governance", "Central Mati landmark"],
+        },
+        {
+          id: "old-mansion",
+          name: "Provincial Capitol Old Mansion",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.9448,
+          lng: 126.2465,
+          official: false,
+          image:
+            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+          available: false,
+          desc: "Historic mansion linked to Davao Oriental governance.",
+          specs: [
+            { key: "Barangay", val: "Central" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Historic provincial residence", "Architectural heritage"],
+        },
+        {
+          id: "gabaldon",
+          name: "Gabaldon Structure (RRMCES-1)",
+          barangay: "Sainz",
+          barangayKey: "sainz",
+          lat: 6.955,
+          lng: 126.219444,
+          official: true,
+          image:
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+          available: false,
+          desc: "Heritage Gabaldon school building of Roxas Memorial Colleges — an architectural landmark from the American era.",
+          specs: [
+            { key: "Barangay", val: "Sainz" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Classic Gabaldon school design", "Roxas Memorial Colleges campus"],
+        },
+        {
+          id: "noventa",
+          name: "Noventa Ancestral House",
+          barangay: "Bobon",
+          barangayKey: "bobon",
+          lat: 6.866667,
+          lng: 126.325,
+          official: true,
+          image:
+            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
+          available: false,
+          desc: "Preserved ancestral house in Barangay Bobon.",
+          specs: [
+            { key: "Barangay", val: "Bobon" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Preserved ancestral architecture", "Official LGU cultural property"],
+        },
+        {
+          id: "ompo",
+          name: "OMPO sa Tampat sa Baguidan",
+          barangay: "Bobon",
+          barangayKey: "bobon",
+          lat: 6.84,
+          lng: 126.33,
+          official: true,
+          image:
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+          available: false,
+          desc: "Indigenous graveyard and cultural landmark in Barangay Bobon.",
+          specs: [
+            { key: "Barangay", val: "Bobon" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Indigenous cultural landmark", "Sacred burial ground"],
+        },
+        {
+          id: "menzi",
+          name: "Menzi Visitors Information Center",
+          barangay: "Dahican",
+          barangayKey: "dahican",
+          lat: 6.927318,
+          lng: 126.281047,
+          official: true,
+          image:
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+          available: false,
+          desc: "Visitor center and campsite along the Dahican shoreline — gateway to Mati\u2019s surf and eco-tourism corridor.",
+          specs: [
+            { key: "Barangay", val: "Dahican" },
+            { key: "Category", val: "Built Heritage" },
+            { key: "Status", val: "3D scan planned" },
+          ],
+          facts: ["Dahican beach access point", "Eco-tourism hub"],
+        },
+      ];
+
+      let activeSiteId = null;
+      let revealInProgress = false;
+      const mapMarkers = new Map();
+
+      const exploreStageLayout = document.getElementById("explore-stage-layout");
+      const exploreIdlePanel = document.getElementById("explore-idle-panel");
+      const exploreWorkspace = document.getElementById("explore3d-viewer");
+      const exploreRevealLoader = document.getElementById("explore-reveal-loader");
+      const exploreRevealLabel = document.getElementById("explore-reveal-label");
+      const stageTitle = document.getElementById("stage-title");
+      const heritageViewerPanel = document.getElementById("heritage-viewer-panel");
+      const viewerBadge = document.getElementById("viewer-badge");
+      const previewImage = document.getElementById("preview-image");
+      const heritageModel = document.getElementById("heritage-model");
+      const viewerHint = document.getElementById("viewer-hint");
+      const detailType = document.getElementById("detail-type");
+      const detailTitle = document.getElementById("detail-title");
+      const detailDesc = document.getElementById("detail-desc");
+      const detailSpecs = document.getElementById("detail-specs");
+      const detailFacts = document.getElementById("detail-facts");
+      const viewHeritageBtn = document.getElementById("view-heritage-btn");
+      const heritageFullscreen = document.getElementById("heritage-fullscreen");
+      const fullscreenModel = document.getElementById("fullscreen-model");
+      const fullscreenPhoto = document.getElementById("fullscreen-photo");
+      const fullscreenTitle = document.getElementById("fullscreen-title");
+      const fullscreenHint = document.getElementById("fullscreen-hint");
+      const fullscreenClose = document.getElementById("fullscreen-close");
+      const fullscreenLoading = document.getElementById("fullscreen-loading");
+      const fullscreenLoadingLabel = document.getElementById("fullscreen-loading-label");
+
+      function hideFullscreenLoading() {
+        fullscreenLoading?.setAttribute("hidden", "");
+      }
+
+      function showFullscreenLoading(label = "Loading 3D model…") {
+        if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
+        fullscreenLoading?.removeAttribute("hidden");
+      }
+
+      function waitForFullscreenModel(site) {
+        if (!fullscreenModel || !site?.modelSrc) {
+          hideFullscreenLoading();
+          return Promise.resolve();
+        }
+
+        const sameSrc = fullscreenModel.getAttribute("src") === site.modelSrc;
+        if (sameSrc && fullscreenModel.loaded) {
+          hideFullscreenLoading();
+          return Promise.resolve();
+        }
+
+        showFullscreenLoading(`Loading ${site.name}…`);
+
+        return new Promise((resolve) => {
+          let settled = false;
+          const finish = () => {
+            if (settled) return;
+            settled = true;
+            fullscreenModel.removeEventListener("load", onLoad);
+            fullscreenModel.removeEventListener("error", onError);
+            hideFullscreenLoading();
+            resolve();
+          };
+          const onLoad = () => finish();
+          const onError = () => finish();
+
+          fullscreenModel.addEventListener("load", onLoad, { once: true });
+          fullscreenModel.addEventListener("error", onError, { once: true });
+
+          if (!sameSrc) {
+            fullscreenModel.setAttribute("src", site.modelSrc);
+          } else if (fullscreenModel.loaded) {
+            finish();
+          }
+        });
+      }
+
+      function getActiveSite() {
+        return HERITAGE_3D_SITES.find((s) => s.id === activeSiteId) || null;
+      }
+
+      function pulseMapMarker(siteId) {
+        const marker = mapMarkers.get(siteId);
+        const el = marker?.getElement()?.querySelector(".heritage-photo-marker");
+        if (!el) return;
+        el.classList.remove("is-pulsing");
+        void el.offsetWidth;
+        el.classList.add("is-pulsing");
+        window.setTimeout(() => el.classList.remove("is-pulsing"), 700);
+      }
+
+      function showIdleState() {
+        exploreIdlePanel?.removeAttribute("hidden");
+        exploreStageLayout?.setAttribute("hidden", "");
+        exploreStageLayout?.classList.remove("is-loading", "is-revealed");
+        exploreRevealLoader?.setAttribute("hidden", "");
+      }
+
+      async function revealSiteFromMap(site, options = {}) {
+        if (!site || revealInProgress) return;
+        revealInProgress = true;
+
+        activeSiteId = site.id;
+        highlightMapMarker(site.id);
+        pulseMapMarker(site.id);
+
+        exploreIdlePanel?.setAttribute("hidden", "");
+        exploreStageLayout?.removeAttribute("hidden");
+        exploreStageLayout?.classList.remove("is-revealed");
+        exploreStageLayout?.classList.add("is-loading");
+        exploreRevealLoader?.removeAttribute("hidden");
+        if (exploreRevealLabel) {
+          exploreRevealLabel.textContent = `Loading ${site.name}…`;
+        }
+
+        if (!options.skipFly && window.matiMapInstance) {
+          window.matiMapInstance.flyTo([site.lat, site.lng], 16, { duration: 0.85 });
+        }
+
+        await new Promise((resolve) => {
+          window.setTimeout(resolve, options.skipDelay ? 0 : 720);
+        });
+
+        updateDetails(site);
+        updateViewer(site);
+
+        exploreRevealLoader?.setAttribute("hidden", "");
+        exploreStageLayout?.classList.remove("is-loading");
+        exploreStageLayout?.classList.remove("is-revealed");
+        void exploreStageLayout?.offsetWidth;
+        exploreStageLayout?.classList.add("is-revealed");
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("site", site.id);
+        history.replaceState(null, "", url);
+
+        if (!options.skipScroll) {
+          (exploreWorkspace || exploreStageLayout)?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+
+        revealInProgress = false;
+      }
+
+      function openFullscreenHeritage(site = getActiveSite()) {
+        if (!site || !heritageFullscreen) return;
+
+        fullscreenTitle.textContent = site.name;
+        heritageFullscreen.hidden = false;
+        heritageFullscreen.setAttribute("aria-hidden", "false");
+        document.body.classList.add("heritage-fullscreen-open");
+
+        if (site.available && site.modelSrc && fullscreenModel) {
+          fullscreenPhoto.hidden = true;
+          fullscreenModel.hidden = false;
+          fullscreenModel.setAttribute("alt", `${site.name} 3D model`);
+          fullscreenModel.autoRotate = true;
+          if (fullscreenHint) {
+            fullscreenHint.textContent = "Drag to rotate · Scroll to zoom";
+          }
+          waitForFullscreenModel(site);
+        } else if (fullscreenModel) {
+          hideFullscreenLoading();
+          fullscreenModel.hidden = true;
+          fullscreenModel.autoRotate = false;
+          fullscreenPhoto.src = site.image;
+          fullscreenPhoto.alt = site.name;
+          fullscreenPhoto.hidden = false;
+          if (fullscreenHint) {
+            fullscreenHint.textContent = "Full-size heritage photograph";
+          }
+        }
+      }
+
+      function closeFullscreenHeritage() {
+        if (!heritageFullscreen) return;
+        heritageFullscreen.hidden = true;
+        heritageFullscreen.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("heritage-fullscreen-open");
+        hideFullscreenLoading();
+        if (fullscreenModel) fullscreenModel.autoRotate = false;
+      }
+
+      function highlightMapMarker(siteId) {
+        mapMarkers.forEach((marker, id) => {
+          const el = marker.getElement()?.querySelector(".heritage-photo-marker");
+          if (el) el.classList.toggle("is-active", id === siteId);
+        });
+      }
+
+      function updateViewer(site) {
+        const hasModel = site.available && site.modelSrc && heritageModel;
+
+        heritageViewerPanel?.classList.toggle("is-photo", !hasModel);
+
+        if (viewerBadge) {
+          viewerBadge.textContent = hasModel ? "3D Preview" : "Archive Photo";
+        }
+
+        if (hasModel) {
+          previewImage.hidden = true;
+          heritageModel.hidden = false;
+          if (heritageModel.getAttribute("src") !== site.modelSrc) {
+            heritageModel.setAttribute("src", site.modelSrc);
+          }
+          heritageModel.setAttribute("alt", `${site.name} 3D model`);
+          heritageModel.autoRotate = true;
+          if (viewerHint) {
+            viewerHint.hidden = false;
+            viewerHint.textContent = "Drag to rotate · Scroll to zoom";
+          }
+        } else {
+          if (heritageModel) {
+            heritageModel.hidden = true;
+            heritageModel.autoRotate = false;
+          }
+          previewImage.hidden = false;
+          previewImage.src = site.image;
+          previewImage.alt = site.name;
+          if (viewerHint) viewerHint.hidden = true;
+        }
+      }
+
+      function initFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        const requested = params.get("site");
+        if (requested && HERITAGE_3D_SITES.some((s) => s.id === requested)) {
+          activeSiteId = requested;
+          return true;
+        }
+        return false;
+      }
+
+      const hasSiteFromQuery = initFromQuery();
+
+      if (viewHeritageBtn) {
+        viewHeritageBtn.addEventListener("click", () => {
+          const site = getActiveSite();
+          if (site) openFullscreenHeritage(site);
+        });
+      }
+
+      fullscreenClose?.addEventListener("click", closeFullscreenHeritage);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeFullscreenHeritage();
+      });
+
+      if (heritageModel) {
+        const modelObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (heritageModel.hidden) return;
+              heritageModel.autoRotate = entry.isIntersecting;
+            });
+          },
+          { threshold: 0.08 },
+        );
+        modelObserver.observe(heritageModel);
+      }
+
+      function updateDetails(site) {
+        detailType.textContent = "Built Heritage";
+        detailType.className = "explore3d-details-type built";
+        if (stageTitle) stageTitle.textContent = site.name;
+        if (detailTitle) detailTitle.textContent = site.name;
+        detailDesc.textContent = site.desc;
+
+        detailSpecs.innerHTML = site.specs
+          .filter((s) => s.key !== "Status")
+          .map(
+            (s) => `
+          <li>
+            <span class="explore3d-spec-key">${s.key}</span>
+            <span class="explore3d-spec-val">${s.val}</span>
+          </li>
+        `,
+          )
+          .join("");
+
+        const facts = site.facts || [];
+        if (detailFacts) {
+          detailFacts.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
+          detailFacts.hidden = facts.length === 0;
+        }
+      }
+
+      function createHeritagePhotoIcon(site, size = 40) {
+        const imgSrc = encodeURI(site.image);
+        const half = size / 2;
+        const isActive = site.id === activeSiteId;
+        return L.divIcon({
+          className: "heritage-marker-wrap",
+          html: `<div class="heritage-photo-marker ${isActive ? "is-active" : ""}" style="width:${size}px;height:${size}px" title="${site.name}">
+            <img src="${imgSrc}" alt="${site.name}" loading="lazy" />
+          </div>`,
+          iconSize: [size, size],
+          iconAnchor: [half, half],
+          popupAnchor: [0, -Math.round(size * 0.55)],
+        });
+      }
+
+      const MATI_CITY_BOUNDARY_FALLBACK = [
+        [6.99547, 126.09071],
+        [6.72291, 126.19004],
+        [6.63428, 126.15502],
+        [6.32186, 126.19861],
+        [6.13412, 126.19226],
+        [6.13576, 126.21427],
+        [6.16922, 126.28439],
+        [6.24148, 126.33157],
+        [6.62428, 126.36241],
+        [6.74499, 126.47326],
+        [6.86135, 126.48227],
+        [6.9278, 126.37202],
+        [7.01857, 126.37133],
+        [7.03119, 126.29238],
+        [7.08391, 126.29581],
+        [7.0484, 126.11576],
+      ];
+
+      const WORLD_MASK_RING = [
+        [-90, -180],
+        [-90, 180],
+        [90, 180],
+        [90, -180],
+      ];
+
+      function ringsFromGeojson(geojson) {
+        if (!geojson) return [];
+        if (geojson.type === "Polygon") {
+          return [geojson.coordinates[0].map(([lng, lat]) => [lat, lng])];
+        }
+        if (geojson.type === "MultiPolygon") {
+          return geojson.coordinates.map((poly) =>
+            poly[0].map(([lng, lat]) => [lat, lng]),
+          );
+        }
+        return [];
+      }
+
+      async function loadMatiCityRings() {
+        if (window.MATI_CITY_GEOJSON) {
+          const rings = ringsFromGeojson(window.MATI_CITY_GEOJSON);
+          if (rings.length) return rings;
+        }
+        try {
+          const res = await fetch("data/mati-city-boundary.json");
+          if (!res.ok) throw new Error("boundary fetch failed");
+          const data = await res.json();
+          const rings = ringsFromGeojson(data[0]?.geojson);
+          if (rings.length) return rings;
+        } catch (err) {
+          console.warn("Using fallback Mati City boundary:", err);
+        }
+        return [MATI_CITY_BOUNDARY_FALLBACK];
+      }
+
+      function getMainRing(rings) {
+        return rings.reduce((longest, ring) =>
+          ring.length > longest.length ? ring : longest,
+        );
+      }
+
+      function getBuiltHeritageViewBounds() {
+        if (!HERITAGE_3D_SITES.length) return null;
+        return L.latLngBounds(
+          HERITAGE_3D_SITES.map((site) => [site.lat, site.lng]),
+        ).pad(0.14);
+      }
+
+      function applyCityClip(map, mainRing) {
+        const pane = map.getPane("mapPane");
+        if (!pane || !mainRing.length) return;
+
+        function updateClip() {
+          const points = mainRing
+            .map(([lat, lng]) => map.latLngToLayerPoint([lat, lng]))
+            .map((point) => `${point.x}px ${point.y}px`)
+            .join(", ");
+          pane.style.clipPath = `polygon(${points})`;
+          pane.style.webkitClipPath = pane.style.clipPath;
+        }
+
+        map.on("move zoom zoomend moveend viewreset resize", updateClip);
+        map.whenReady(() => {
+          updateClip();
+          requestAnimationFrame(updateClip);
+        });
+      }
+
+      function addOutsideMask(map, mainRing, fillColor = "#ecfdf5") {
+        const hole = [...mainRing].reverse();
+        if (!map.getPane("maskPane")) {
+          map.createPane("maskPane");
+          map.getPane("maskPane").style.zIndex = 450;
+          map.getPane("maskPane").style.pointerEvents = "none";
+        }
+        L.polygon([WORLD_MASK_RING, hole], {
+          pane: "maskPane",
+          stroke: false,
+          fillColor,
+          fillOpacity: 1,
+          interactive: false,
+        }).addTo(map);
+      }
+
+      function bindMapScrollWheel(map) {
+        const container = map?.getContainer();
+        if (!container) return;
+
+        container.addEventListener("mouseenter", () => {
+          map.scrollWheelZoom.enable();
+        });
+        container.addEventListener("mouseleave", () => {
+          map.scrollWheelZoom.disable();
+        });
+        container.addEventListener("focusin", () => {
+          map.scrollWheelZoom.enable();
+        });
+        container.addEventListener("focusout", () => {
+          map.scrollWheelZoom.disable();
+        });
+      }
+
+      function bindMapIntroDismiss(map, idleMs = 4000) {
+        const overlay = document.getElementById("map-intro-overlay");
+        if (!overlay || !map) return;
+
+        let idleTimer = null;
+
+        const showOverlay = () => {
+          overlay.classList.remove("is-dismissed");
+          overlay.setAttribute("aria-hidden", "false");
+        };
+
+        const hideOverlay = () => {
+          overlay.classList.add("is-dismissed");
+          overlay.setAttribute("aria-hidden", "true");
+        };
+
+        const scheduleReshow = () => {
+          clearTimeout(idleTimer);
+          idleTimer = window.setTimeout(showOverlay, idleMs);
+        };
+
+        const onMapActivity = () => {
+          if (!overlay.classList.contains("is-dismissed")) {
+            hideOverlay();
+          }
+          scheduleReshow();
+        };
+
+        const container = map.getContainer();
+        const activityEvents = [
+          "dragstart",
+          "zoomstart",
+          "zoom",
+          "movestart",
+          "move",
+          "click",
+        ];
+
+        activityEvents.forEach((eventName) => {
+          map.on(eventName, onMapActivity);
+        });
+
+        if (container) {
+          container.addEventListener("mousedown", onMapActivity);
+          container.addEventListener("touchstart", onMapActivity, {
+            passive: true,
+          });
+          container.addEventListener("wheel", onMapActivity, { passive: true });
+        }
+      }
+
+      function bindMapVisibilityPause(map, sectionEl) {
+        if (!map || !sectionEl) return;
+        let isVisible = true;
+        const visibilityObserver = new IntersectionObserver(
+          ([entry]) => {
+            const nowVisible = entry.isIntersecting;
+            if (nowVisible === isVisible) return;
+            isVisible = nowVisible;
+            const container = map.getContainer();
+            if (!container) return;
+            if (nowVisible) {
+              container.style.display = "";
+              requestAnimationFrame(() => map.invalidateSize());
+            } else {
+              container.style.display = "none";
+            }
+          },
+          { rootMargin: "80px 0px", threshold: 0 },
+        );
+        visibilityObserver.observe(sectionEl);
+      }
+
+      async function initBuiltHeritageMap() {
+        if (window.matiMapInstance) return;
+
+        const rings = await loadMatiCityRings();
+        const mainRing = getMainRing(rings);
+        const cityBounds = L.latLngBounds(mainRing);
+        const viewBounds = getBuiltHeritageViewBounds() || cityBounds;
+
+        const map = L.map("mati-map", {
+          maxBounds: cityBounds,
+          maxBoundsViscosity: 1.0,
+          maxZoom: 17,
+          zoomControl: true,
+          attributionControl: true,
+          scrollWheelZoom: false,
+        });
+
+        L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+          {
+            maxZoom: 20,
+            subdomains: "abcd",
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          },
+        ).addTo(map);
+
+        addOutsideMask(map, mainRing);
+        applyCityClip(map, mainRing);
+        map.fitBounds(viewBounds, { padding: [24, 24] });
+        map.setMinZoom(map.getZoom());
+
+        HERITAGE_3D_SITES.forEach((site) => {
+          const marker = L.marker([site.lat, site.lng], {
+            icon: createHeritagePhotoIcon(site),
+          }).addTo(map);
+
+          marker.on("click", () => {
+            revealSiteFromMap(site);
+          });
+
+          mapMarkers.set(site.id, marker);
+        });
+
+        map.on("drag", () =>
+          map.panInsideBounds(cityBounds, { animate: false }),
+        );
+
+        window.matiMapInstance = map;
+        if (activeSiteId) highlightMapMarker(activeSiteId);
+        setTimeout(() => map.invalidateSize(), 150);
+        bindMapScrollWheel(map);
+        bindMapVisibilityPause(map, document.getElementById("mati-map-section"));
+        bindMapIntroDismiss(map);
+
+        if (hasSiteFromQuery) {
+          const siteFromQuery = getActiveSite();
+          if (siteFromQuery) {
+            revealSiteFromMap(siteFromQuery, { skipScroll: true });
+          }
+        } else {
+          showIdleState();
+        }
+      }
+
+      initBuiltHeritageMap();
+
+      fetch("header.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)
+            ?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          const brandTitle = document.querySelector(".site-brand__title");
+          if (brandTitle) brandTitle.textContent = "Mati Heritage 3D";
+
+          const brandTagline = document.querySelector(".site-brand__tagline");
+          if (brandTagline) brandTagline.textContent = "Visitor Portal";
+
+          const brandLink = document.querySelector(".site-brand");
+          if (brandLink) brandLink.href = "index.html";
+
+          const navRoutes = {
+            home: "index.html",
+            about: "about_us.html",
+            games: "game.html",
+            "3d": "3dexplore.html",
+            gallery: "gallery.html",
+          };
+
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            const key = link.getAttribute("data-nav");
+            if (key && navRoutes[key]) link.href = navRoutes[key];
+          });
+
+          const utilities = document.getElementById("site-header-utilities");
+          if (utilities) utilities.remove();
+
+          const authActions = document.createElement("div");
+          authActions.className =
+            "visitor-auth-actions hidden lg:flex items-center";
+          authActions.innerHTML = `
+            <a href="login.html" class="visitor-auth-btn visitor-auth-login">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+              </svg>
+              <span>Login</span>
+            </a>
+            <a href="userregistration.html" class="visitor-auth-btn visitor-auth-register">
+              <span>Register</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+          `;
+
+          const headerActions = document.querySelector(".site-header__end");
+          if (headerActions) headerActions.appendChild(authActions);
+
+          const mobileAuth = document.getElementById("site-mobile-auth");
+          if (mobileAuth) {
+            mobileAuth.innerHTML = `
+              <a href="login.html" class="site-mobile-nav__link">Login</a>
+              <a href="userregistration.html" class="site-mobile-nav__link">Register</a>
+            `;
+          }
+
+          const pageKey = "3d";
+          document
+            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
+            .forEach((link) => {
+              if (link.getAttribute("data-nav") === pageKey) {
+                link.classList.add("is-active");
+              }
+            });
+
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) settingsModal.remove();
+
+          if (typeof window.initSiteHeader === "function") {
+            window.initSiteHeader();
+          }
+
+          setTimeout(() => {
+            if (window.matiMapInstance) window.matiMapInstance.invalidateSize();
+          }, 200);
+        })
+        .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholderEl = document.getElementById("footer-placeholder");
+          if (footer && placeholderEl) placeholderEl.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          document.querySelectorAll('.site-footer__link[data-nav="3d"]').forEach((link) => {
+            link.href = "3dexplore.html";
+          });
+
+          if (typeof window.initSiteFooter === "function") {
+            window.initSiteFooter("3d");
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+    </script>
+  </body>
+</html>

@@ -10,33 +10,1044 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="heritage-palette.css" />
 
     <title>Mati Heritage Explorer</title>
 
     <style>
-      /* Header-specific styles - removed global body/html overrides to prevent theme conflicts */
-      body {
-        font-family: "Rajdhani", sans-serif;
+      :root {
+        --header-h: 5.625rem;
+        --header-h-scrolled: 4.875rem;
+        --header-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --hdr-ink: #0c1a14;
+        --hdr-muted: #5c6b63;
+        --hdr-line: rgba(12, 26, 20, 0.09);
+        --hdr-dock: rgba(255, 255, 255, 0.58);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: var(--header-h);
+        transition: height 0.45s var(--header-ease);
+      }
+
+      .site-header.is-scrolled {
+        height: var(--header-h-scrolled);
+      }
+
+      /* Scroll progress */
+      .header-scroll-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        z-index: 20;
+        background: linear-gradient(90deg, var(--forest), var(--sky), var(--amber));
+        box-shadow: 0 0 12px rgba(4, 120, 87, 0.45);
+        transition: width 0.08s linear;
+        border-radius: 0 2px 2px 0;
       }
 
       .header-bg {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
         background: linear-gradient(
           180deg,
-          rgba(18, 21, 36, 0.96),
-          rgba(9, 11, 20, 0.98)
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(236, 253, 245, 0.9) 100%
+        );
+        border-bottom: 1px solid var(--hdr-line);
+        backdrop-filter: blur(28px) saturate(1.4);
+        -webkit-backdrop-filter: blur(28px) saturate(1.4);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.98) inset,
+          0 16px 48px rgba(4, 120, 87, 0.05);
+        transition: box-shadow 0.45s ease, background 0.45s ease;
+      }
+
+      .site-header.is-scrolled .header-bg {
+        background: rgba(255, 255, 255, 0.97);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 1) inset,
+          0 12px 40px rgba(12, 26, 20, 0.08);
+      }
+
+      /* ── Heritage scene ── */
+      .header-scene {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+        mask-image: linear-gradient(to top, black 0%, black 55%, transparent 94%);
+        -webkit-mask-image: linear-gradient(to top, black 0%, black 55%, transparent 94%);
+      }
+
+      .header-scene__mesh {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 60% 85% at 90% 115%, rgba(2, 132, 199, 0.22) 0%, transparent 55%),
+          radial-gradient(ellipse 50% 75% at 8% 108%, rgba(4, 120, 87, 0.24) 0%, transparent 52%),
+          radial-gradient(ellipse 35% 45% at 70% 6%, rgba(251, 191, 36, 0.16) 0%, transparent 68%),
+          radial-gradient(ellipse 25% 30% at 25% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+        animation: hdr-mesh-shift 16s ease-in-out infinite alternate;
+      }
+
+      @keyframes hdr-mesh-shift {
+        0% { opacity: 0.88; transform: scale(1) translateX(0); }
+        100% { opacity: 1; transform: scale(1.04) translateX(-1.5%); }
+      }
+
+      .header-scene__rays {
+        position: absolute;
+        top: 8%;
+        right: 10%;
+        width: 6rem;
+        height: 6rem;
+        background: conic-gradient(
+          from 200deg,
+          transparent 0deg,
+          rgba(251, 191, 36, 0.07) 30deg,
+          transparent 60deg,
+          rgba(251, 191, 36, 0.05) 90deg,
+          transparent 120deg,
+          rgba(251, 191, 36, 0.06) 150deg,
+          transparent 180deg
+        );
+        animation: hdr-rays-spin 40s linear infinite;
+        opacity: 0.8;
+      }
+
+      @keyframes hdr-rays-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .header-scene__sun {
+        position: absolute;
+        top: 16%;
+        right: 12%;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(251, 191, 36, 0.42) 0%, rgba(251, 191, 36, 0) 68%);
+        animation: hdr-sun-pulse 5s ease-in-out infinite;
+      }
+
+      @keyframes hdr-sun-pulse {
+        0%, 100% { transform: scale(1); opacity: 0.75; }
+        50% { transform: scale(1.15); opacity: 1; }
+      }
+
+      .header-scene__cloud {
+        position: absolute;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.62);
+        filter: blur(1.5px);
+        animation: hdr-cloud-drift linear infinite;
+      }
+
+      .header-scene__cloud::before,
+      .header-scene__cloud::after {
+        content: "";
+        position: absolute;
+        border-radius: 9999px;
+        background: inherit;
+      }
+
+      .header-scene__cloud--1 {
+        top: 20%;
+        left: -10%;
+        width: 5.5rem;
+        height: 1.2rem;
+        animation-duration: 42s;
+      }
+
+      .header-scene__cloud--1::before {
+        width: 2rem; height: 1.4rem; top: -0.5rem; left: 1rem;
+      }
+
+      .header-scene__cloud--2 {
+        top: 30%;
+        left: -14%;
+        width: 4rem;
+        height: 1rem;
+        animation-duration: 56s;
+        animation-delay: -22s;
+        opacity: 0.75;
+      }
+
+      .header-scene__cloud--3 {
+        top: 14%;
+        left: -8%;
+        width: 3rem;
+        height: 0.75rem;
+        animation-duration: 68s;
+        animation-delay: -40s;
+        opacity: 0.55;
+      }
+
+      @keyframes hdr-cloud-drift {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(100vw + 16rem)); }
+      }
+
+      .header-scene__particles span {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(251, 191, 36, 0.55);
+        animation: hdr-particle 6s ease-in-out infinite;
+      }
+
+      .header-scene__particles span:nth-child(1) { top: 35%; left: 18%; animation-delay: 0s; }
+      .header-scene__particles span:nth-child(2) { top: 28%; left: 42%; animation-delay: -2s; width: 2px; height: 2px; }
+      .header-scene__particles span:nth-child(3) { top: 40%; left: 65%; animation-delay: -4s; }
+      .header-scene__particles span:nth-child(4) { top: 22%; left: 78%; animation-delay: -1s; width: 2px; height: 2px; }
+
+      @keyframes hdr-particle {
+        0%, 100% { opacity: 0; transform: translateY(0); }
+        50% { opacity: 0.8; transform: translateY(-6px); }
+      }
+
+      .header-scene__svg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 82%;
+        opacity: 0.78;
+        will-change: transform;
+        transition: opacity 0.45s ease;
+      }
+
+      .site-header.is-scrolled .header-scene__svg {
+        opacity: 0.32;
+      }
+
+      .header-scene__fade {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.94) 0%,
+          rgba(255, 255, 255, 0.8) 45%,
+          rgba(236, 253, 245, 0.28) 100%
         );
       }
 
-      /* SETTINGS STYLES */
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
+      .header-scene__mist {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 50%;
+        background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.42));
+        animation: hdr-mist 11s ease-in-out infinite alternate;
       }
+
+      @keyframes hdr-mist {
+        0% { opacity: 0.35; transform: translateX(0); }
+        100% { opacity: 0.7; transform: translateX(-1%); }
+      }
+
+      .hdr-palm { transform-origin: bottom center; animation: hdr-palm-sway 4.5s ease-in-out infinite; }
+      .hdr-palm--2 { animation-delay: -2.2s; }
+      .hdr-palm--3 { animation-delay: -1s; opacity: 0.45; }
+      @keyframes hdr-palm-sway {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(1.5deg); }
+      }
+
+      .hdr-wave-1 { animation: hdr-wave-a 3.5s ease-in-out infinite; }
+      .hdr-wave-2 { animation: hdr-wave-b 4.2s ease-in-out infinite; animation-delay: -1.5s; }
+
+      @keyframes hdr-wave-a {
+        0%, 100% { transform: translateX(0); opacity: 0.5; }
+        50% { transform: translateX(-8px); opacity: 0.75; }
+      }
+
+      @keyframes hdr-wave-b {
+        0%, 100% { transform: translateX(0); opacity: 0.3; }
+        50% { transform: translateX(6px); opacity: 0.5; }
+      }
+
+      .hdr-bird { animation: hdr-bird-fly 24s linear infinite; }
+      .hdr-bird--2 { animation-delay: -12s; animation-duration: 28s; }
+
+      @keyframes hdr-bird-fly {
+        0% { transform: translate(0, 0); opacity: 0; }
+        4% { opacity: 0.65; }
+        96% { opacity: 0.65; }
+        100% { transform: translate(200px, -14px); opacity: 0; }
+      }
+
+      body:not(.visitor-module) .header-scene {
+        display: none;
+      }
+
+      .header-accent-line {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 2px;
+        z-index: 1;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--forest-dark) 8%,
+          var(--forest) 25%,
+          var(--amber) 50%,
+          var(--sky) 75%,
+          #0369a1 92%,
+          transparent 100%
+        );
+        background-size: 200% 100%;
+        animation: hdr-accent-flow 7s linear infinite;
+      }
+
+      @keyframes hdr-accent-flow {
+        0% { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
+      }
+
+      .header-shimmer {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.4) 50%, transparent 62%);
+        transform: translateX(-130%);
+        animation: hdr-shimmer 10s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes hdr-shimmer {
+        0%, 65%, 100% { transform: translateX(-130%); }
+        82% { transform: translateX(130%); }
+      }
+
+      /* ── Bar ── */
+      .site-header__bar {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: minmax(0, auto) 1fr minmax(0, auto);
+        align-items: center;
+        gap: clamp(0.75rem, 2vw, 2rem);
+        height: 100%;
+        max-width: 94rem;
+        margin: 0 auto;
+        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
+      }
+
+      @media (max-width: 1023px) {
+        .site-header__bar { grid-template-columns: 1fr auto; }
+      }
+
+      /* ── Brand ── */
+      .site-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        min-width: 0;
+        text-decoration: none;
+        color: inherit;
+        flex-shrink: 0;
+      }
+
+      .site-brand__mark {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 0.9rem;
+        background: linear-gradient(145deg, #fff 0%, #ecfdf5 100%);
+        border: 1px solid rgba(4, 120, 87, 0.24);
+        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.98);
+        transition: transform 0.4s var(--header-ease), box-shadow 0.4s ease;
+      }
+
+      .site-brand__mark::before {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, var(--forest), var(--sky), var(--amber));
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .site-brand__mark::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 1.1rem;
+        border: 1px solid rgba(4, 120, 87, 0.15);
+        opacity: 0;
+        animation: hdr-mark-ring 3s ease-in-out infinite;
+      }
+
+      @keyframes hdr-mark-ring {
+        0%, 100% { opacity: 0; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.04); }
+      }
+
+      .site-brand:hover .site-brand__mark {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 12px 32px rgba(4, 120, 87, 0.2);
+      }
+
+      .site-brand:hover .site-brand__mark::before { opacity: 0.65; }
+
+      .site-brand__mark svg {
+        width: 1.55rem;
+        height: 1.55rem;
+        color: var(--forest-dark);
+        transition: transform 0.4s var(--header-ease);
+      }
+
+      .site-brand:hover .site-brand__mark svg { transform: scale(1.06); }
+
+      .site-brand__text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.28rem;
+        min-width: 0;
+      }
+
+      .site-brand__title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+        font-weight: 700;
+        letter-spacing: 0.015em;
+        line-height: 1;
+        color: var(--hdr-ink);
+        white-space: nowrap;
+        transition: background 0.4s ease, color 0.3s ease;
+      }
+
+      .site-brand:hover .site-brand__title {
+        background: linear-gradient(90deg, var(--forest-dark), var(--sky), var(--forest));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .site-brand__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .site-brand__tagline {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--hdr-muted);
+        white-space: nowrap;
+      }
+
+      .site-brand__locale {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.5625rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        background: rgba(4, 120, 87, 0.08);
+        border: 1px solid rgba(4, 120, 87, 0.14);
+        white-space: nowrap;
+      }
+
+      .site-brand__locale-dot {
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        background: var(--forest);
+        box-shadow: 0 0 6px var(--glow-emerald);
+      }
+
+      @media (max-width: 640px) {
+        .site-brand__locale { display: none; }
+      }
+
+      /* ── Nav dock ── */
+      .site-nav {
+        display: none;
+        position: relative;
+        align-items: center;
+        justify-self: center;
+        padding: 0.32rem;
+        border-radius: 9999px;
+        background: var(--hdr-dock);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow:
+          0 6px 32px rgba(12, 26, 20, 0.07),
+          0 0 0 1px rgba(4, 120, 87, 0.04),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+
+      .site-nav::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, rgba(4, 120, 87, 0.12), rgba(2, 132, 199, 0.08), rgba(245, 158, 11, 0.06));
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      .site-nav:hover::before { opacity: 1; }
+
+      @media (min-width: 1024px) {
+        .site-nav { display: flex; }
+      }
+
+      .site-nav__indicator {
+        position: absolute;
+        top: 0.32rem;
+        left: 0;
+        height: calc(100% - 0.64rem);
+        border-radius: 9999px;
+        background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+        border: 1px solid rgba(4, 120, 87, 0.14);
+        box-shadow:
+          0 6px 20px rgba(4, 120, 87, 0.12),
+          0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+          0 0 24px rgba(4, 120, 87, 0.08);
+        pointer-events: none;
+        opacity: 0;
+        transform: translateX(0);
+        transition: transform 0.45s var(--header-ease), width 0.45s var(--header-ease), opacity 0.25s ease;
+        z-index: 0;
+      }
+
+      .site-nav.has-indicator .site-nav__indicator { opacity: 1; }
+
+      .site-nav__link {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 1.15rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.025rem;
+        font-weight: 500;
+        letter-spacing: 0.015em;
+        text-decoration: none;
+        color: var(--hdr-muted);
+        white-space: nowrap;
+        border-radius: 9999px;
+        transition: color 0.25s ease, transform 0.3s var(--header-ease);
+      }
+
+      .site-nav__link:hover { color: var(--hdr-ink); transform: translateY(-1px); }
+
+      .site-nav__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.1rem;
+        height: 1.1rem;
+        opacity: 0.72;
+        transition: opacity 0.25s ease, transform 0.35s var(--header-ease), color 0.25s ease;
+      }
+
+      .site-nav__icon svg { width: 100%; height: 100%; }
+
+      .site-nav__link:hover .site-nav__icon {
+        opacity: 1;
+        transform: scale(1.1) rotate(-3deg);
+      }
+
+      .site-nav__link.is-active {
+        color: var(--hdr-ink);
+        font-weight: 600;
+      }
+
+      .site-nav__link.is-active .site-nav__icon {
+        opacity: 1;
+        color: var(--forest);
+      }
+
+      .site-nav__chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.1rem 0.4rem;
+        margin-left: 0.15rem;
+        border-radius: 9999px;
+        font-size: 0.5625rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--sky);
+        background: rgba(2, 132, 199, 0.1);
+        border: 1px solid rgba(2, 132, 199, 0.18);
+        transition: all 0.3s ease;
+      }
+
+      .site-nav__link--featured.is-active {
+        color: var(--forest-dark);
+        background: linear-gradient(135deg, rgba(4, 120, 87, 0.14), rgba(2, 132, 199, 0.12));
+        border: 1px solid rgba(4, 120, 87, 0.2);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 0 20px rgba(4, 120, 87, 0.1);
+      }
+
+      .site-nav__link--featured.is-active .site-nav__chip {
+        color: #fff;
+        background: linear-gradient(135deg, var(--forest), var(--sky));
+        border-color: transparent;
+        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);
+      }
+
+      .site-nav__link--featured.is-active .site-nav__icon { color: var(--sky); }
+
+      /* ── End ── */
+      .site-header__end {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        justify-self: end;
+      }
+
+      .site-header__utilities {
+        display: none;
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      @media (min-width: 1024px) {
+        .site-header__utilities { display: flex; }
+      }
+
+      .header-points-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.48rem 0.9rem;
+        border-radius: 9999px;
+        border: 1px solid var(--hdr-line);
+        background: rgba(255, 255, 255, 0.88);
+        font-family: "Source Sans 3", sans-serif;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+      }
+
+      .header-points-badge:hover {
+        box-shadow: 0 4px 16px rgba(4, 120, 87, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .header-points-dot {
+        width: 0.42rem;
+        height: 0.42rem;
+        border-radius: 50%;
+        background: var(--forest);
+        box-shadow: 0 0 10px var(--glow-emerald);
+        animation: hdr-dot-pulse 2.2s ease-in-out infinite;
+      }
+
+      @keyframes hdr-dot-pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(0.85); }
+      }
+
+      .header-points-label {
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--hdr-muted);
+      }
+
+      #header-total-points {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--hdr-ink);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .site-profile { position: relative; }
+
+      .site-profile__trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.2rem 0.42rem 0.2rem 0.2rem;
+        border-radius: 9999px;
+        border: 1px solid var(--hdr-line);
+        background: rgba(255, 255, 255, 0.92);
+        cursor: pointer;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
+      }
+
+      .site-profile__trigger:hover {
+        border-color: rgba(4, 120, 87, 0.3);
+        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.12);
+        transform: translateY(-1px);
+      }
+
+      .site-profile__avatar {
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        border: 2px solid rgba(4, 120, 87, 0.18);
+        object-fit: cover;
+      }
+
+      .site-profile__chevron {
+        width: 0.85rem;
+        height: 0.85rem;
+        margin-right: 0.15rem;
+        color: var(--hdr-muted);
+        transition: transform 0.28s var(--header-ease);
+      }
+
+      .site-profile:hover .site-profile__chevron,
+      .site-profile.is-open .site-profile__chevron {
+        transform: rotate(180deg);
+      }
+
+      .header-dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 0.55rem);
+        min-width: 13.5rem;
+        padding: 0.45rem;
+        border-radius: 0.85rem;
+        border: 1px solid var(--hdr-line);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 24px 56px rgba(12, 26, 20, 0.14);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(0.5rem) scale(0.97);
+        transition: all 0.3s var(--header-ease);
+        z-index: 60;
+      }
+
+      .site-profile:hover .header-dropdown,
+      .site-profile.is-open .header-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .header-dropdown a {
+        display: block;
+        padding: 0.7rem 0.9rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #475569;
+        border-radius: 0.55rem;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .header-dropdown a:hover {
+        background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+        color: var(--forest-dark);
+        transform: translateX(2px);
+      }
+
+      .header-dropdown a.is-danger { color: #dc2626; }
+      .header-dropdown a.is-danger:hover { background: #fef2f2; }
+
+      .header-dropdown__divider {
+        height: 1px;
+        margin: 0.35rem 0;
+        background: var(--hdr-line);
+      }
+
+      .site-nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.85rem;
+        height: 2.85rem;
+        border-radius: 0.7rem;
+        border: 1px solid var(--hdr-line);
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--hdr-ink);
+        cursor: pointer;
+        transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
+      }
+
+      .site-nav-toggle:hover {
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(12, 26, 20, 0.1);
+        transform: scale(1.03);
+      }
+
+      @media (min-width: 1024px) {
+        .site-nav-toggle { display: none; }
+      }
+
+      .site-nav-toggle__bars {
+        position: relative;
+        width: 1.2rem;
+        height: 0.85rem;
+      }
+
+      .site-nav-toggle__bars span {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        border-radius: 1px;
+        background: currentColor;
+        transition: transform 0.32s var(--header-ease), opacity 0.2s ease, top 0.32s ease;
+      }
+
+      .site-nav-toggle__bars span:nth-child(1) { top: 0; }
+      .site-nav-toggle__bars span:nth-child(2) { top: 0.375rem; }
+      .site-nav-toggle__bars span:nth-child(3) { top: 0.75rem; }
+
+      .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(1) {
+        top: 0.375rem;
+        transform: rotate(45deg);
+      }
+
+      .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(2) { opacity: 0; }
+
+      .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(3) {
+        top: 0.375rem;
+        transform: rotate(-45deg);
+      }
+
+      /* ── Mobile nav ── */
+      .site-mobile-nav {
+        position: fixed;
+        inset: var(--header-h) 0 0 0;
+        z-index: 90;
+        padding: 2rem clamp(1.25rem, 4vw, 2.5rem) 2.5rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(236, 253, 245, 0.96) 100%);
+        backdrop-filter: blur(24px);
+        border-top: 1px solid var(--hdr-line);
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.75rem);
+        transition: opacity 0.35s ease, transform 0.35s var(--header-ease), visibility 0.35s;
+      }
+
+      .site-header.is-menu-open .site-mobile-nav {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      @media (min-width: 1024px) {
+        .site-mobile-nav { display: none; }
+      }
+
+      .site-mobile-nav__label {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--hdr-muted);
+        margin-bottom: 1.1rem;
+      }
+
+      .site-mobile-nav__links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .site-mobile-nav__link {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 1.05rem 1.15rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--hdr-muted);
+        border-radius: 0.85rem;
+        border: 1px solid transparent;
+        opacity: 0;
+        transform: translateX(-12px);
+        transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, transform 0.35s var(--header-ease), opacity 0.35s ease;
+      }
+
+      .site-header.is-menu-open .site-mobile-nav__link {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(1) { transition-delay: 0.05s; }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(2) { transition-delay: 0.1s; }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(3) { transition-delay: 0.15s; }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(4) { transition-delay: 0.2s; }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(5) { transition-delay: 0.25s; }
+
+      .site-mobile-nav__link:hover {
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--hdr-ink);
+      }
+
+      .site-mobile-nav__link.is-active {
+        font-weight: 600;
+        color: var(--forest-dark);
+        background: rgba(255, 255, 255, 0.97);
+        border-color: rgba(4, 120, 87, 0.18);
+        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.1);
+      }
+
+      .site-mobile-nav__auth {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        margin-top: 1.75rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--hdr-line);
+      }
+
+      /* ── Dark theme ── */
+      body:not(.visitor-module) {
+        --hdr-ink: #f1f5f9;
+        --hdr-muted: #94a3b8;
+        --hdr-line: rgba(255, 255, 255, 0.1);
+        --hdr-dock: rgba(255, 255, 255, 0.06);
+      }
+
+      body:not(.visitor-module) .header-bg {
+        background: rgba(10, 16, 28, 0.97);
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
+      }
+
+      body:not(.visitor-module) .header-scroll-progress {
+        box-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
+      }
+
+      body:not(.visitor-module) .header-shimmer,
+      body:not(.visitor-module) .header-accent-line { opacity: 0.55; }
+
+      body:not(.visitor-module) .site-brand__mark {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: none;
+      }
+
+      body:not(.visitor-module) .site-brand__mark svg { color: #6ee7b7; }
+
+      body:not(.visitor-module) .site-brand:hover .site-brand__title {
+        background: linear-gradient(90deg, #6ee7b7, #38bdf8, #fbbf24);
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      body:not(.visitor-module) .site-brand__title {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(1.05rem, 1.9vw, 1.2rem);
+        letter-spacing: 0.04em;
+      }
+
+      body:not(.visitor-module) .site-brand__locale {
+        color: #6ee7b7;
+        background: rgba(110, 231, 183, 0.08);
+        border-color: rgba(110, 231, 183, 0.15);
+      }
+
+      body:not(.visitor-module) .site-nav {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 0 40px rgba(212, 175, 55, 0.04);
+      }
+
+      body:not(.visitor-module) .site-nav__indicator {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(212, 175, 55, 0.08);
+      }
+
+      body:not(.visitor-module) .site-nav__link:hover,
+      body:not(.visitor-module) .site-nav__link.is-active { color: #fff; }
+
+      body:not(.visitor-module) .site-nav__link.is-active .site-nav__icon { color: #d4af37; }
+
+      body:not(.visitor-module) .site-nav__link--featured.is-active {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(4, 120, 87, 0.14));
+        border-color: rgba(212, 175, 55, 0.28);
+      }
+
+      body:not(.visitor-module) .header-points-badge,
+      body:not(.visitor-module) .site-profile__trigger,
+      body:not(.visitor-module) .site-nav-toggle {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+        box-shadow: none;
+      }
+
+      body:not(.visitor-module) .header-dropdown {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      body:not(.visitor-module) .header-dropdown a { color: #cbd5e1; }
+
+      body:not(.visitor-module) .header-dropdown a:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+      }
+
+      body:not(.visitor-module) .site-mobile-nav {
+        background: rgba(10, 16, 28, 0.99);
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+
+      body:not(.visitor-module) .site-mobile-nav__link { color: #94a3b8; }
+
+      body:not(.visitor-module) .site-mobile-nav__link.is-active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .header-panel { background: var(--surface-dark-elevated) !important; }
+      .header-panel option { background: var(--surface-dark-elevated); }
+      .header-accent-text { color: var(--amber-light) !important; }
+
+      input[type="range"] { accent-color: var(--forest); }
+
+      select:focus {
+        border-color: var(--sky) !important;
+        --tw-ring-color: var(--sky) !important;
+      }
+
+      .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+
       .switch input {
         opacity: 0;
         width: 100%;
@@ -45,18 +1056,17 @@
         cursor: pointer;
         z-index: 2;
       }
+
       .slider {
         position: absolute;
         cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
         background-color: rgba(255, 255, 255, 0.1);
         transition: 0.4s;
         border-radius: 24px;
         border: 1px solid rgba(255, 255, 255, 0.2);
       }
+
       .slider:before {
         position: absolute;
         content: "";
@@ -68,284 +1078,266 @@
         transition: 0.4s;
         border-radius: 50%;
       }
+
       input:checked + .slider {
-        background-color: #00d4ff;
-        border-color: #00d4ff;
+        background-color: var(--forest);
+        border-color: var(--forest);
       }
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
+
+      input:checked + .slider:before { transform: translateX(26px); }
+
       .settings-save-btn {
-        background: linear-gradient(90deg, #a020f0, #00d4ff);
-        box-shadow: 0 0 20px rgba(160, 32, 240, 0.4);
+        background: var(--gradient-heritage);
+        box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28);
         transition: all 0.3s ease;
       }
+
       .settings-save-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+        box-shadow: 0 8px 28px rgba(2, 132, 199, 0.35);
       }
-      .orbitron {
-        font-family: "Orbitron", sans-serif;
+
+      @media (prefers-reduced-motion: reduce) {
+        .site-header, .header-bg, .site-nav__link, .site-nav__indicator,
+        .site-mobile-nav, .site-mobile-nav__link, .site-nav-toggle__bars span,
+        .site-brand__mark, .header-scene__mesh, .header-scene__sun,
+        .header-scene__rays, .header-scene__cloud, .header-scene__mist,
+        .header-scene__particles span, .header-accent-line, .header-shimmer,
+        .hdr-palm, .hdr-wave-1, .hdr-wave-2, .hdr-bird, .header-points-dot,
+        .site-brand__mark::after {
+          transition: none !important;
+          animation: none !important;
+        }
+
+        .site-mobile-nav__link { opacity: 1; transform: none; }
       }
     </style>
   </head>
 
   <body>
-    <!-- HEADER -->
-    <header
-      class="header-bg h-[90px] px-8 lg:px-12 text-white relative z-50 backdrop-blur-md"
-    >
-      <div class="flex h-full items-center justify-between">
-        <!-- LOGO (LEFT SIDE) -->
-        <a href="#" class="flex items-center gap-4">
-          <div
-            class="flex h-14 w-14 items-center justify-center rounded-xl border border-cyan-300/80 bg-[#08121e] shadow-[0_0_0_1px_rgba(0,0,0,0.35),0_0_18px_rgba(34,211,238,0.18)]"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              class="h-7 w-7 text-white"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M6 7h12a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3Z"
-              />
-              <path d="M8 10h0" />
-              <path d="M8 14h0" />
-              <path d="M16 11h0" />
-              <path d="M16 13h0" />
-            </svg>
+    <header class="site-header" id="site-header">
+      <div class="header-bg">
+        <div class="header-scroll-progress" id="header-scroll-progress" aria-hidden="true"></div>
+
+        <div class="header-scene" aria-hidden="true">
+          <div class="header-scene__mesh"></div>
+          <div class="header-scene__rays"></div>
+          <div class="header-scene__sun"></div>
+          <div class="header-scene__cloud header-scene__cloud--1"></div>
+          <div class="header-scene__cloud header-scene__cloud--2"></div>
+          <div class="header-scene__cloud header-scene__cloud--3"></div>
+          <div class="header-scene__particles">
+            <span></span><span></span><span></span><span></span>
           </div>
-
-          <div class="leading-none">
-            <div
-              class="text-xl font-bold tracking-[0.2em] uppercase lg:text-2xl"
-            >
-              GAMES HUB
-            </div>
-
-            <div
-              class="mt-2 text-[11px] tracking-[0.5em] text-cyan-300 uppercase"
-            >
-              MATI HERITAGE EXPLORER
-            </div>
-          </div>
-        </a>
-
-        <!-- NAVIGATION (RIGHT SIDE) -->
-        <nav
-          class="hidden items-center gap-12 text-base uppercase tracking-[0.1em] text-white lg:flex"
-        >
-          <a
-            href="#"
-            class="font-medium transition duration-300 hover:text-cyan-300"
+          <svg
+            class="header-scene__svg"
+            id="header-scene-svg"
+            viewBox="0 0 1440 130"
+            preserveAspectRatio="xMidYMax slice"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Home
-          </a>
+            <defs>
+              <linearGradient id="hdr-hills" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#047857" stop-opacity="0.2"/>
+              </linearGradient>
+              <linearGradient id="hdr-forest" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#065f46" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#064e3b" stop-opacity="0.28"/>
+              </linearGradient>
+              <linearGradient id="hdr-ocean" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 92 C180 55 400 70 620 58 C840 46 1080 65 1440 50 L1440 130 L0 130 Z" fill="url(#hdr-hills)"/>
+            <path d="M0 102 L0 130 L1440 130 L1440 92 C1280 96 1140 82 960 88 C780 94 520 84 260 92 C120 98 40 96 0 102 Z" fill="url(#hdr-forest)" opacity="0.75"/>
+            <!-- Tree silhouettes -->
+            <g opacity="0.5" fill="#064e3b">
+              <polygon points="180,95 188,78 196,95"/><polygon points="220,98 228,80 236,98"/>
+              <polygon points="380,92 388,72 396,92"/><polygon points="420,96 428,76 436,96"/>
+              <polygon points="520,94 528,74 536,94"/>
+            </g>
+            <path d="M740 130 L1440 130 L1440 72 C1260 66 1060 82 740 86 Z" fill="url(#hdr-ocean)"/>
+            <!-- Church / heritage building -->
+            <g opacity="0.5" transform="translate(640, 48)">
+              <rect x="12" y="38" width="28" height="28" fill="#065f46" rx="1"/>
+              <polygon points="26,38 26,22 38,38" fill="#047857"/>
+              <rect x="18" y="48" width="6" height="10" fill="#064e3b"/>
+              <rect x="28" y="44" width="5" height="5" fill="#10b981" opacity="0.6"/>
+            </g>
+            <!-- Monument -->
+            <g opacity="0.48" transform="translate(720, 54)">
+              <rect x="18" y="30" width="14" height="34" fill="#065f46"/>
+              <polygon points="25,30 25,18 32,30" fill="#047857"/>
+              <rect x="8" y="42" width="34" height="4" fill="#064e3b"/>
+            </g>
+            <!-- Palms -->
+            <g class="hdr-palm" transform="translate(100, 52)" opacity="0.58">
+              <line x1="8" y1="46" x2="8" y2="10" stroke="#065f46" stroke-width="2.2"/>
+              <path d="M8 14 C-3 20 -7 32 2 28 M8 14 C19 18 23 30 14 26 M8 12 C-1 8 -5 16 3 18 M8 12 C17 10 21 18 13 20" stroke="#047857" stroke-width="1.5" fill="none"/>
+            </g>
+            <g class="hdr-palm hdr-palm--2" transform="translate(1100, 48)" opacity="0.52">
+              <line x1="8" y1="50" x2="8" y2="12" stroke="#065f46" stroke-width="2"/>
+              <path d="M8 16 C-2 22 -6 32 2 28 M8 16 C18 20 22 30 14 26" stroke="#047857" stroke-width="1.5" fill="none"/>
+            </g>
+            <g class="hdr-palm hdr-palm--3" transform="translate(320, 56)" opacity="0.4">
+              <line x1="6" y1="42" x2="6" y2="14" stroke="#065f46" stroke-width="1.5"/>
+              <path d="M6 16 C-1 20 -4 28 2 25 M6 16 C13 19 16 27 10 24" stroke="#047857" stroke-width="1.2" fill="none"/>
+            </g>
+            <!-- Waves -->
+            <g class="hdr-wave-1">
+              <path d="M760 82 C900 78 1060 84 1440 80" fill="none" stroke="#0284c7" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>
+            </g>
+            <g class="hdr-wave-2">
+              <path d="M780 88 C940 84 1100 90 1440 86" fill="none" stroke="#0284c7" stroke-opacity="0.28" stroke-width="1.1" stroke-linecap="round"/>
+            </g>
+            <!-- Birds -->
+            <path class="hdr-bird" d="M280 42 q5 -4 10 0 q5 4 10 0" fill="none" stroke="#475569" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
+            <path class="hdr-bird hdr-bird--2" d="M480 36 q4 -3 8 0 q4 3 8 0" fill="none" stroke="#64748b" stroke-width="1.1" stroke-linecap="round" opacity="0.45"/>
+          </svg>
+          <div class="header-scene__fade"></div>
+          <div class="header-scene__mist"></div>
+        </div>
 
-          <a
-            href="#"
-            class="font-medium transition duration-300 hover:text-cyan-300"
-          >
-            About Us
-          </a>
+        <div class="header-shimmer" aria-hidden="true"></div>
+        <div class="header-accent-line" aria-hidden="true"></div>
 
-          <a
-            href="game.html"
-            class="font-medium transition duration-300 hover:text-cyan-300"
-          >
-            Games
-          </a>
-
-          <a
-            href="#"
-            class="font-medium transition duration-300 hover:text-cyan-300"
-          >
-            Explore
-          </a>
-
-          <a
-            href="#"
-            class="font-medium transition duration-300 hover:text-cyan-300"
-          >
-            Gallery
-          </a>
-
-          <!-- TOTAL POINTS BADGE -->
-          <div
-            class="flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 shadow-[0_0_15px_rgba(34,211,238,0.1)]"
-          >
-            <div class="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></div>
-            <span class="text-xs font-bold tracking-widest text-cyan-400"
-              >TOTAL PTS:</span
-            >
-            <span id="header-total-points" class="text-sm font-bold text-white"
-              >0</span
-            >
-          </div>
-
-          <!-- USER PROFILE -->
-          <div class="relative group ml-4">
-            <div class="flex cursor-pointer items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/120?img=12"
-                alt="User avatar"
-                class="h-12 w-12 rounded-full border-2 border-white/20 object-cover transition duration-300 hover:scale-105"
-              />
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 text-white transition-transform duration-300 group-hover:rotate-180"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
+        <div class="site-header__bar">
+          <a href="index.html" class="site-brand">
+            <div class="site-brand__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3 2 8l10 5 10-5-10-5Z" />
+                <path d="m2 8 10 5 10-5" />
+                <path d="M12 13v8" />
+                <path d="M7 10.5v5.5c0 1.1 2.2 2 5 2s5-.9 5-2v-5.5" />
               </svg>
             </div>
-
-            <!-- DROPDOWN MENU -->
-            <div
-              class="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-xl border border-white/10 bg-[#0d1425]/95 backdrop-blur-xl p-2 shadow-2xl transition-all duration-300 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50"
-            >
-              <a
-                href="#"
-                class="block px-4 py-2.5 text-sm font-semibold tracking-wider hover:bg-cyan-500/10 hover:text-cyan-300 rounded-lg transition duration-200"
-                >ACCOUNT</a
-              >
-              <a
-                href="javascript:void(0)"
-                id="settings-link"
-                class="block px-4 py-2.5 text-sm font-semibold tracking-wider hover:bg-cyan-500/10 hover:text-cyan-300 rounded-lg transition duration-200"
-                >SETTINGS</a
-              >
-              <div class="my-1 h-px bg-white/5"></div>
-              <a
-                href="#"
-                class="block px-4 py-2.5 text-sm font-semibold tracking-wider text-red-400 hover:bg-red-500/10 rounded-lg transition duration-200"
-                >LOGOUT</a
-              >
+            <div class="site-brand__text">
+              <span class="site-brand__title">Mati Heritage 3D</span>
+              <div class="site-brand__meta">
+                <span class="site-brand__tagline header-tagline">Visitor Portal</span>
+                <span class="site-brand__locale">
+                  <span class="site-brand__locale-dot"></span>
+                  Mati City, PH
+                </span>
+              </div>
             </div>
+          </a>
+
+          <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+            <span class="site-nav__indicator" id="site-nav-indicator" aria-hidden="true"></span>
+            <a href="index.html" class="site-nav__link" data-nav="home">
+              <span class="site-nav__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"/></svg>
+              </span>
+              Home
+            </a>
+            <a href="about_us.html" class="site-nav__link" data-nav="about">
+              <span class="site-nav__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              </span>
+              About Us
+            </a>
+            <a href="game.html" class="site-nav__link" data-nav="games">
+              <span class="site-nav__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="10" rx="3"/><path d="M8 13h3M9.5 11.5v3M15.5 12.5v2M14.5 11.5h2"/></svg>
+              </span>
+              Games
+            </a>
+            <a href="3dexplore.html" class="site-nav__link site-nav__link--featured" data-nav="3d">
+              <span class="site-nav__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 8v8l10 5 10-5V8"/><path d="M12 13v8"/></svg>
+              </span>
+              3D Explore
+            </a>
+            <a href="gallery.html" class="site-nav__link" data-nav="gallery">
+              <span class="site-nav__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m3 16 5-5 4 4 3-3 6 6"/></svg>
+              </span>
+              Gallery
+            </a>
+          </nav>
+
+          <div class="site-header__end">
+            <div class="site-header__utilities" id="site-header-utilities">
+              <div class="header-points-badge">
+                <div class="header-points-dot"></div>
+                <span class="header-points-label">Points</span>
+                <span id="header-total-points">0</span>
+              </div>
+
+              <div class="site-profile group">
+                <div class="site-profile__trigger" tabindex="0" role="button" aria-haspopup="true">
+                  <img src="https://i.pravatar.cc/120?img=12" alt="User avatar" class="site-profile__avatar" />
+                  <svg class="site-profile__chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="header-dropdown">
+                  <a href="#">Account</a>
+                  <a href="javascript:void(0)" id="settings-link">Settings</a>
+                  <div class="header-dropdown__divider"></div>
+                  <a href="#" class="is-danger">Logout</a>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="site-nav-toggle" id="site-nav-toggle" aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Open menu">
+              <span class="site-nav-toggle__bars" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </span>
+            </button>
           </div>
-        </nav>
+        </div>
+
+        <div class="site-mobile-nav" id="site-mobile-nav" hidden>
+          <p class="site-mobile-nav__label">Navigate Mati Heritage</p>
+          <div class="site-mobile-nav__links" id="site-mobile-nav-links"></div>
+          <div class="site-mobile-nav__auth" id="site-mobile-auth"></div>
+        </div>
       </div>
 
-      <!-- SETTINGS MODAL -->
-      <div
-        id="settings-modal"
-        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal"
-      >
-        <div
-          class="bg-[#0d1425] border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl mx-4 max-h-[90vh] overflow-y-auto"
-        >
+      <div id="settings-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal">
+        <div class="header-panel border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl mx-4 max-h-[90vh] overflow-y-auto">
           <div class="flex justify-between items-center mb-8">
-            <h3
-              class="text-white text-2xl font-bold tracking-widest uppercase orbitron"
-            >
-              Settings
-            </h3>
-            <button id="close-settings" class="text-gray-400 hover:text-white">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+            <h3 class="text-white text-2xl font-bold tracking-widest uppercase" style="font-family: Syne, sans-serif">Settings</h3>
+            <button id="close-settings" class="text-gray-400 hover:text-white" aria-label="Close settings">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-
           <div class="space-y-6">
-            <!-- BG Music Volume -->
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <span
-                  class="text-gray-200 text-base font-semibold tracking-wide"
-                  >Background Music</span
-                >
-                <span
-                  id="music-vol-text"
-                  class="text-cyan-400 text-sm font-bold"
-                  >20%</span
-                >
+                <span class="text-gray-200 text-base font-semibold tracking-wide">Background Music</span>
+                <span id="music-vol-text" class="header-accent-text text-sm font-bold">20%</span>
               </div>
-              <input
-                type="range"
-                id="music-volume"
-                min="0"
-                max="1"
-                step="0.01"
-                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-              />
+              <input type="range" id="music-volume" min="0" max="1" step="0.01" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
             </div>
-
-            <!-- Language Selection -->
             <div class="flex items-center justify-between">
-              <span class="text-gray-200 text-base font-semibold tracking-wide"
-                >Language</span
-              >
-              <select
-                id="language-select"
-                class="bg-white/5 border border-white/20 text-white text-base rounded-lg p-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
-              >
-                <option value="en" class="bg-[#0d1425]">English</option>
-                <option value="ceb" class="bg-[#0d1425]">Cebuano</option>
-                <option value="fil" class="bg-[#0d1425]">Filipino</option>
+              <span class="text-gray-200 text-base font-semibold tracking-wide">Language</span>
+              <select id="language-select" class="bg-white/5 border border-white/20 text-white text-base rounded-lg p-2 focus:ring-2 outline-none">
+                <option value="en" class="header-panel">English</option>
+                <option value="ceb" class="header-panel">Cebuano</option>
+                <option value="fil" class="header-panel">Filipino</option>
               </select>
             </div>
-
-            <!-- SFX Volume -->
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <span
-                  class="text-gray-200 text-base font-semibold tracking-wide"
-                  >Sound Effects</span
-                >
-                <span id="sfx-vol-text" class="text-cyan-400 text-sm font-bold"
-                  >80%</span
-                >
+                <span class="text-gray-200 text-base font-semibold tracking-wide">Sound Effects</span>
+                <span id="sfx-vol-text" class="header-accent-text text-sm font-bold">80%</span>
               </div>
-              <input
-                type="range"
-                id="sfx-volume"
-                min="0"
-                max="1"
-                step="0.01"
-                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-              />
+              <input type="range" id="sfx-volume" min="0" max="1" step="0.01" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
             </div>
           </div>
-
-          <button
-            id="save-settings"
-            class="w-full mt-10 py-4 settings-save-btn rounded-xl text-white font-bold tracking-widest uppercase text-base"
-          >
-            Save Changes
-          </button>
+          <button id="save-settings" class="w-full mt-10 py-4 settings-save-btn rounded-xl text-white font-bold tracking-widest uppercase text-base">Save Changes</button>
         </div>
       </div>
     </header>
 
     <script>
-      /**
-       * Centralized Settings Logic
-       * Handles Audio volumes, Language, and Reduced Motion across all pages.
-       */
       window.initGlobalSettings = function () {
         const modal = document.getElementById("settings-modal");
         const musicSlider = document.getElementById("music-volume");
@@ -355,29 +1347,17 @@
         const langSelect = document.getElementById("language-select");
         const settingsLink = document.getElementById("settings-link");
         const saveBtn = document.getElementById("save-settings");
-
-        // List of all SFX IDs used across the application
-        const sfxIds = [
-          "click-sound",
-          "announcer-voice",
-          "correct-sfx",
-          "wrong-sfx",
-          "tetris-fall-sound",
-          "tetris-boom-sound",
-        ];
+        const sfxIds = ["click-sound", "announcer-voice", "correct-sfx", "wrong-sfx", "tetris-fall-sound", "tetris-boom-sound"];
 
         const loadPrefs = () => {
           const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
           const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
           const lang = localStorage.getItem("appLanguage") || "en";
-
           if (musicSlider) musicSlider.value = mVol;
           if (sfxSlider) sfxSlider.value = sVol;
-          if (musicVolText)
-            musicVolText.textContent = Math.round(mVol * 100) + "%";
+          if (musicVolText) musicVolText.textContent = Math.round(mVol * 100) + "%";
           if (sfxVolText) sfxVolText.textContent = Math.round(sVol * 100) + "%";
           if (langSelect) langSelect.value = lang;
-
           const applyVolumes = () => {
             const bg = document.getElementById("bg-music");
             if (bg) bg.volume = mVol;
@@ -386,16 +1366,10 @@
               if (sfx) sfx.volume = sVol;
             });
           };
-
-          // Wait for DOM to ensure audio tags are found before applying saved volume
-          if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", applyVolumes);
-          } else {
-            applyVolumes();
-          }
+          if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyVolumes);
+          else applyVolumes();
         };
 
-        // Event Listeners
         if (settingsLink) {
           settingsLink.onclick = (e) => {
             e.preventDefault();
@@ -403,8 +1377,7 @@
           };
         }
 
-        const closeModal = () => modal.classList.replace("flex", "hidden");
-
+        const closeModal = () => modal && modal.classList.replace("flex", "hidden");
         const closeBtn = document.getElementById("close-settings");
         if (closeBtn) closeBtn.onclick = closeModal;
         if (modal) modal.onclick = (e) => e.target === modal && closeModal();
@@ -412,38 +1385,20 @@
         if (musicSlider) {
           musicSlider.oninput = (e) => {
             const val = e.target.value;
-            musicVolText.textContent = Math.round(val * 100) + "%";
+            if (musicVolText) musicVolText.textContent = Math.round(val * 100) + "%";
             const bg = document.getElementById("bg-music");
             if (bg) bg.volume = val;
           };
         }
 
-        // Add hover sound effects to navigation links and other interactive header elements
-        const setupHoverSounds = () => {
-          const interactiveElements = document.querySelectorAll(
-            "header a, header button, .group > div",
-          );
-          interactiveElements.forEach((el) => {
-            el.addEventListener("mouseenter", () => {
-              const hoverSfx = document.getElementById("click-sound");
-              if (hoverSfx) {
-                hoverSfx.currentTime = 0;
-                hoverSfx.play().catch(() => {});
-              }
-            });
-          });
-        };
-
         if (sfxSlider) {
           sfxSlider.oninput = (e) => {
             const val = e.target.value;
-            sfxVolText.textContent = Math.round(val * 100) + "%";
+            if (sfxVolText) sfxVolText.textContent = Math.round(val * 100) + "%";
             sfxIds.forEach((id) => {
               const sfx = document.getElementById(id);
               if (sfx) sfx.volume = val;
             });
-
-            // Play a short preview sound so the user can hear the volume level immediately
             const preview = document.getElementById("click-sound");
             if (preview && val > 0) {
               preview.currentTime = 0;
@@ -454,22 +1409,128 @@
 
         if (saveBtn) {
           saveBtn.onclick = () => {
-            if (musicSlider)
-              localStorage.setItem("bgMusicVol", musicSlider.value);
+            if (musicSlider) localStorage.setItem("bgMusicVol", musicSlider.value);
             if (sfxSlider) localStorage.setItem("sfxVol", sfxSlider.value);
-            if (langSelect)
-              localStorage.setItem("appLanguage", langSelect.value);
-
+            if (langSelect) localStorage.setItem("appLanguage", langSelect.value);
             closeModal();
           };
         }
 
         loadPrefs();
-        setupHoverSounds();
       };
 
-      // Automatically initialize settings when the script is loaded
+      window.initSiteHeader = function () {
+        const header = document.getElementById("site-header");
+        const nav = document.getElementById("site-nav");
+        const indicator = document.getElementById("site-nav-indicator");
+        const toggle = document.getElementById("site-nav-toggle");
+        const mobileNav = document.getElementById("site-mobile-nav");
+        const mobileLinksWrap = document.getElementById("site-mobile-nav-links");
+        const scrollProgress = document.getElementById("header-scroll-progress");
+        const sceneSvg = document.getElementById("header-scene-svg");
+
+        if (!header) return;
+
+        const moveIndicator = (link) => {
+          if (!nav || !indicator || !link) return;
+          if (
+            link.classList.contains("site-nav__link--featured") &&
+            link.classList.contains("is-active")
+          ) {
+            indicator.style.opacity = "0";
+            nav.classList.remove("has-indicator");
+            return;
+          }
+          const navRect = nav.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          indicator.style.width = linkRect.width + "px";
+          indicator.style.transform = `translateX(${linkRect.left - navRect.left}px)`;
+          nav.classList.add("has-indicator");
+          indicator.style.opacity = "1";
+        };
+
+        const activeLink = document.querySelector(".site-nav__link.is-active");
+        if (activeLink) moveIndicator(activeLink);
+
+        document.querySelectorAll(".site-nav__link").forEach((link) => {
+          link.addEventListener("mouseenter", () => moveIndicator(link));
+          link.addEventListener("focus", () => moveIndicator(link));
+        });
+
+        if (nav) {
+          nav.addEventListener("mouseleave", () => {
+            const active = document.querySelector(".site-nav__link.is-active");
+            if (active) moveIndicator(active);
+            else {
+              nav.classList.remove("has-indicator");
+              indicator.style.opacity = "0";
+            }
+          });
+        }
+
+        window.addEventListener("resize", () => {
+          const active = document.querySelector(".site-nav__link.is-active");
+          if (active) moveIndicator(active);
+        });
+
+        const syncMobileLinks = () => {
+          if (!mobileLinksWrap) return;
+          mobileLinksWrap.innerHTML = "";
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            const clone = link.cloneNode(true);
+            clone.classList.remove("site-nav__link", "site-nav__link--featured");
+            clone.classList.add("site-mobile-nav__link");
+            if (link.classList.contains("is-active")) clone.classList.add("is-active");
+            clone.addEventListener("click", closeMobileMenu);
+            mobileLinksWrap.appendChild(clone);
+          });
+        };
+
+        const setMenuOpen = (open) => {
+          header.classList.toggle("is-menu-open", open);
+          if (toggle) {
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          }
+          if (mobileNav) mobileNav.hidden = !open;
+          document.body.style.overflow = open ? "hidden" : "";
+        };
+
+        const closeMobileMenu = () => setMenuOpen(false);
+
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            header.classList.contains("is-menu-open") ? closeMobileMenu() : setMenuOpen(true);
+          });
+        }
+
+        window.addEventListener("scroll", () => {
+          const y = window.scrollY;
+          header.classList.toggle("is-scrolled", y > 12);
+
+          if (scrollProgress) {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = docHeight > 0 ? `${Math.min((y / docHeight) * 100, 100)}%` : "0%";
+          }
+
+          if (sceneSvg && document.body.classList.contains("visitor-module")) {
+            sceneSvg.style.transform = `translateY(${Math.min(y * 0.12, 10)}px)`;
+          }
+        }, { passive: true });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 1024) closeMobileMenu();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeMobileMenu();
+        });
+
+        syncMobileLinks();
+      };
+
       initGlobalSettings();
+      initSiteHeader();
     </script>
   </body>
 </html>

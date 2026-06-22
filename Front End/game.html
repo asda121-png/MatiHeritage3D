@@ -813,8 +813,12 @@
           // Update total points in header
           const totalPoints =
             localStorage.getItem("totalHeritagePoints") || "0";
-          document.getElementById("header-total-points").textContent =
-            totalPoints;
+          const pointsEl = document.getElementById("header-total-points");
+          if (pointsEl) pointsEl.textContent = totalPoints;
+
+          if (typeof window.initSiteHeader === "function") {
+            window.initSiteHeader();
+          }
         });
 
       // Load Footer
@@ -829,10 +833,20 @@
           if (footer && placeholder) {
             placeholder.replaceWith(footer);
 
-            // Inject styles from footer.html
             const footerStyle = doc.querySelector("style");
             if (footerStyle) {
               document.head.appendChild(footerStyle.cloneNode(true));
+            }
+
+            const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+            if (scriptText) {
+              const s = document.createElement("script");
+              s.textContent = scriptText;
+              document.body.appendChild(s);
+            }
+
+            if (typeof window.initSiteFooter === "function") {
+              window.initSiteFooter("games");
             }
           }
         })
@@ -1109,6 +1123,8 @@
       if (leaderboardBtn) leaderboardBtn.onclick = showLeaderboard;
       if (closeLeaderboard) closeLeaderboard.onclick = hideLeaderboard;
       if (overlay) overlay.onclick = hideLeaderboard;
+
+      if (window.location.hash === "#leaderboard") showLeaderboard();
 
       // Sound FX integration
       const allButtons = [prevBtn, nextBtn, playBtn, leaderboardBtn];

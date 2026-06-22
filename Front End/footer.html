@@ -7,170 +7,416 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <style>
-      .footer-bg {
-        background: linear-gradient(
-          0deg,
-          rgba(18, 21, 36, 0.98),
-          rgba(9, 11, 20, 1)
-        );
-      }
-      .orbitron {
-        font-family: "Orbitron", sans-serif;
-      }
-      .rajdhani {
-        font-family: "Rajdhani", sans-serif;
-      }
-    </style>
+    <link rel="stylesheet" href="heritage-palette.css" />
   </head>
   <body>
-    <footer
-      class="footer-bg text-white py-16 px-8 lg:px-12 border-t border-cyan-500/20 rajdhani relative overflow-hidden"
-    >
-      <!-- Decorative background glow -->
-      <div
-        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"
-      ></div>
+    <style>
+      .site-footer {
+        position: relative;
+        font-family: "Source Sans 3", sans-serif;
+        color: rgba(236, 253, 245, 0.88);
+        background: linear-gradient(180deg, #0a1612 0%, #0c1a14 45%, #071009 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+      }
 
-      <div class="relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-          <!-- Left Side: Brand & Description -->
-          <div class="md:col-span-5">
-            <h2
-              class="text-2xl font-bold tracking-[0.2em] uppercase orbitron mb-2"
-            >
-              MATI HERITAGE 3D
-            </h2>
-            <p
-              class="text-cyan-400 text-sm font-semibold orbitron tracking-wider mb-6"
-            >
-              "Preserving the Past, Inspiring the Future."
-            </p>
-            <p class="text-gray-400 text-base leading-relaxed max-w-md">
-              Dedicated to the preservation, accessibility, and promotion of
-              Mati City's cultural heritage for present and future generations.
-            </p>
+      .site-footer__ambient {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 50% 40% at 0% 0%, rgba(4, 120, 87, 0.12) 0%, transparent 55%),
+          radial-gradient(ellipse 40% 35% at 100% 100%, rgba(2, 132, 199, 0.08) 0%, transparent 50%);
+      }
 
-            <div class="space-y-2 pt-4 border-t border-white/5">
-              <p
-                class="text-xs tracking-[0.2em] text-gray-500 uppercase font-bold"
-              >
-                Cultural Heritage Data Provided Through an Official Data Sharing
-                Agreement With
+      .site-footer__rule {
+        position: relative;
+        z-index: 1;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--forest-dark),
+          var(--forest) 30%,
+          var(--amber-dark) 50%,
+          var(--sky) 70%,
+          #0369a1
+        );
+      }
+
+      .site-footer__inner {
+        position: relative;
+        z-index: 1;
+        max-width: 90rem;
+        margin: 0 auto;
+        padding: 3.75rem clamp(1.25rem, 3vw, 2.5rem) 2rem;
+      }
+
+      .site-footer__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        padding-bottom: 2.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      @media (min-width: 768px) {
+        .site-footer__grid {
+          grid-template-columns: 1.55fr 1fr 1fr 1fr;
+          gap: 2.25rem;
+        }
+
+        .site-footer__col:not(:first-child) {
+          padding-left: 1.5rem;
+          border-left: 1px solid rgba(255, 255, 255, 0.06);
+        }
+      }
+
+      /* Brand */
+      .site-footer__brand-head {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1.1rem;
+      }
+
+      .site-footer__brand-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.875rem;
+        height: 2.875rem;
+        border-radius: 0.55rem;
+        border: 1px solid rgba(110, 231, 183, 0.2);
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
+      }
+
+      .site-footer__brand-mark svg {
+        width: 1.3rem;
+        height: 1.3rem;
+        color: #6ee7b7;
+      }
+
+      .site-footer__title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #fff;
+        letter-spacing: 0.01em;
+      }
+
+      .site-footer__tagline {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(167, 243, 208, 0.75);
+        margin-top: 0.2rem;
+      }
+
+      .site-footer__desc {
+        font-size: 0.9375rem;
+        line-height: 1.68;
+        color: rgba(236, 253, 245, 0.68);
+        max-width: 24rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .site-footer__partner {
+        padding: 1rem 1.1rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .site-footer__partner-label {
+        font-size: 0.6875rem;
+        line-height: 1.55;
+        color: rgba(236, 253, 245, 0.45);
+        margin-bottom: 0.45rem;
+      }
+
+      .site-footer__partner-name {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: rgba(236, 253, 245, 0.72);
+        line-height: 1.5;
+      }
+
+      /* Columns */
+      .site-footer__heading {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+        margin-bottom: 1.15rem;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid rgba(110, 231, 183, 0.15);
+      }
+
+      .site-footer__links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .site-footer__link {
+        display: inline-block;
+        font-size: 0.9375rem;
+        font-weight: 400;
+        color: rgba(236, 253, 245, 0.78);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        position: relative;
+      }
+
+      .site-footer__link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 1px;
+        background: rgba(167, 243, 208, 0.7);
+        transition: width 0.25s ease;
+      }
+
+      .site-footer__link:hover {
+        color: #fff;
+      }
+
+      .site-footer__link:hover::after,
+      .site-footer__link.is-active::after {
+        width: 100%;
+      }
+
+      .site-footer__link.is-active {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .site-footer__heritage-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .site-footer__heritage-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.9375rem;
+        color: rgba(236, 253, 245, 0.72);
+        line-height: 1.4;
+      }
+
+      .site-footer__heritage-list li::before {
+        content: "";
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        background: rgba(110, 231, 183, 0.55);
+        flex-shrink: 0;
+      }
+
+      /* LGU card */
+      .site-footer__lgu {
+        padding: 1rem 1.1rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .site-footer__lgu-badge {
+        display: inline-block;
+        margin-bottom: 0.65rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 0.25rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+        background: rgba(4, 120, 87, 0.2);
+        border: 1px solid rgba(110, 231, 183, 0.2);
+      }
+
+      .site-footer__lgu-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: rgba(236, 253, 245, 0.92);
+        line-height: 1.45;
+        margin-bottom: 0.35rem;
+      }
+
+      .site-footer__lgu-sub {
+        font-size: 0.8125rem;
+        color: rgba(236, 253, 245, 0.62);
+        line-height: 1.5;
+      }
+
+      /* Bottom bar */
+      .site-footer__bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 1.75rem;
+        text-align: center;
+      }
+
+      @media (min-width: 640px) {
+        .site-footer__bottom {
+          flex-direction: row;
+          justify-content: space-between;
+          text-align: left;
+        }
+      }
+
+      .site-footer__copy {
+        font-size: 0.8125rem;
+        color: rgba(236, 253, 245, 0.45);
+      }
+
+      .site-footer__back-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.375rem;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: rgba(236, 253, 245, 0.85);
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+
+      .site-footer__back-top svg {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+
+      .site-footer__back-top:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.22);
+        color: #fff;
+      }
+
+      body:not(.visitor-module) .site-footer {
+        background: linear-gradient(180deg, #070d0a 0%, #080f0c 100%);
+      }
+    </style>
+
+    <footer class="site-footer visitor-footer" id="site-footer">
+      <div class="site-footer__ambient" aria-hidden="true"></div>
+      <div class="site-footer__rule" aria-hidden="true"></div>
+
+      <div class="site-footer__inner">
+        <div class="site-footer__grid">
+          <div class="site-footer__col site-footer__brand">
+            <div class="site-footer__brand-head">
+              <div class="site-footer__brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3 2 8l10 5 10-5-10-5Z"/>
+                  <path d="m2 8 10 5 10-5"/>
+                  <path d="M12 13v8"/>
+                  <path d="M7 10.5v5.5c0 1.1 2.2 2 5 2s5-.9 5-2v-5.5"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="site-footer__title">Mati Heritage 3D</h2>
+                <p class="site-footer__tagline">Preserving the Past, Inspiring the Future</p>
+              </div>
+            </div>
+            <p class="site-footer__desc">
+              An interactive cultural heritage platform dedicated to the preservation,
+              accessibility, and promotion of Mati City's heritage for present and future generations.
+            </p>
+            <div class="site-footer__partner">
+              <p class="site-footer__partner-label">
+                Cultural heritage data provided through an official data sharing agreement with
               </p>
-              <p class="text-sm text-gray-400">
-                Local Government Unit of Mati City
-              </p>
-              <p class="text-sm text-gray-400">City Tourism Office</p>
+              <p class="site-footer__partner-name">Local Government Unit of Mati City</p>
+              <p class="site-footer__partner-name">City Tourism Office</p>
             </div>
           </div>
 
-          <!-- Center: Explore -->
-          <div class="md:col-span-3">
-            <h3
-              class="orbitron text-sm font-bold tracking-widest uppercase mb-8 text-cyan-400"
-            >
-              Explore
-            </h3>
-            <ul
-              class="space-y-4 text-sm font-semibold uppercase tracking-wider text-gray-300"
-            >
-              <li>
-                <a href="#" class="hover:text-white transition-all duration-300"
-                  >Home</a
-                >
-              </li>
-              <li>
-                <a href="#" class="hover:text-white transition-all duration-300"
-                  >About</a
-                >
-              </li>
-              <li>
-                <a href="#" class="hover:text-white transition-all duration-300"
-                  >Games</a
-                >
-              </li>
-              <li>
-                <a href="#" class="hover:text-white transition-all duration-300"
-                  >Explore</a
-                >
-              </li>
-              <li>
-                <a
-                  href="game.html"
-                  class="hover:text-white transition-all duration-300"
-                  >Gallery</a
-                >
-              </li>
-              <li>
-                <a href="#" class="hover:text-white transition-all duration-300"
-                  >Leaderboard</a
-                >
-              </li>
+          <div class="site-footer__col">
+            <h3 class="site-footer__heading">Quick Links</h3>
+            <ul class="site-footer__links">
+              <li><a href="index.html" class="site-footer__link" data-nav="home">Home</a></li>
+              <li><a href="about_us.html" class="site-footer__link" data-nav="about">About Us</a></li>
+              <li><a href="game.html" class="site-footer__link" data-nav="games">Games</a></li>
+              <li><a href="3dexplore.html" class="site-footer__link" data-nav="3d">3D Explore</a></li>
+              <li><a href="gallery.html" class="site-footer__link" data-nav="gallery">Gallery</a></li>
+              <li><a href="game.html#leaderboard" class="site-footer__link" data-nav="leaderboard">Leaderboard</a></li>
             </ul>
           </div>
 
-          <!-- Right Side: Heritage Resources & Contact -->
-          <div class="md:col-span-4">
-            <div class="mb-12">
-              <h3
-                class="orbitron text-sm font-bold tracking-widest uppercase mb-8 text-cyan-400"
-              >
-                Heritage Resources
-              </h3>
-              <ul
-                class="space-y-4 text-sm font-semibold uppercase tracking-wider text-gray-300"
-              >
-                <li>
-                  <a
-                    href="#"
-                    class="hover:text-white transition-all duration-300"
-                    >Built Heritage</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="hover:text-white transition-all duration-300"
-                    >Intangible Heritage</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="hover:text-white transition-all duration-300"
-                    >Natural Heritage</a
-                  >
-                </li>
-              </ul>
-            </div>
+          <div class="site-footer__col">
+            <h3 class="site-footer__heading">Heritage</h3>
+            <ul class="site-footer__heritage-list">
+              <li>Built Heritage</li>
+              <li>Intangible Cultural Heritage</li>
+              <li>Natural Heritage</li>
+            </ul>
+          </div>
 
-            <div>
-              <h3
-                class="orbitron text-sm font-bold tracking-widest uppercase mb-6 text-white"
-              >
-                Contact
-              </h3>
-              <p class="text-sm text-gray-400 tracking-wide">
-                City Tourism Office, Mati City
-              </p>
+          <div class="site-footer__col">
+            <h3 class="site-footer__heading">LGU Partner</h3>
+            <div class="site-footer__lgu">
+              <span class="site-footer__lgu-badge">Official Partner</span>
+              <p class="site-footer__lgu-title">Local Government Unit of Mati City</p>
+              <p class="site-footer__lgu-sub">City Tourism Office</p>
             </div>
           </div>
         </div>
 
-        <!-- Bottom Bar -->
-        <div
-          class="pt-8 border-t border-white/5 flex flex-col items-center justify-center text-center"
-        >
-          <p class="text-sm tracking-[0.3em] uppercase font-bold text-gray-500">
-            <span class="text-lg align-middle">&copy;</span> 2026 Mati Heritage
-            3D.All Rights Reserved.
-          </p>
+        <div class="site-footer__bottom">
+          <p class="site-footer__copy">&copy; 2026 Mati Heritage 3D. All Rights Reserved.</p>
+          <button type="button" class="site-footer__back-top" id="footer-back-top" aria-label="Back to top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            Back to top
+          </button>
         </div>
       </div>
     </footer>
+
+    <script>
+      window.initSiteFooter = function (pageKey) {
+        const footer = document.getElementById("site-footer");
+        if (!footer) return;
+
+        if (pageKey) {
+          footer.querySelectorAll(".site-footer__link[data-nav]").forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("data-nav") === pageKey);
+          });
+        }
+
+        const backTop = document.getElementById("footer-back-top");
+        if (backTop) {
+          backTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+      };
+
+      initSiteFooter();
+    </script>
   </body>
 </html>
