@@ -18,7 +18,7 @@
     },
     {
       src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/1.jpg",
-      tag: "Living Culture",
+      tag: "Intangible Cultural Heritage",
       title: "Sambuokan Festival",
     },
     {

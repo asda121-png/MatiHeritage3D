@@ -3,705 +3,1817 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slide Puzzle - Mati Heritage 3D</title>
+    <title>Slide Puzzle — Mati Natural Heritage</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="heritage-palette.css" />
     <style>
       :root {
-        --heritage-navy: #0a0f1a;
-        --heritage-deep: #020512;
-        --heritage-gold: #d4af37;
-        --heritage-gold-light: #e8c547;
-        --heritage-cyan: #00d4ff;
-        --heritage-coastal: #0891b2;
-        --heritage-parchment: #f5e6d3;
-        --heritage-muted: #94a3b8;
+        --nat-deep: #0d2818;
+        --nat-forest: #1b4332;
+        --nat-moss: #2d6a4f;
+        --nat-leaf: #40916c;
+        --nat-leaf-light: #52b788;
+        --nat-leaf-pale: #95d5b2;
+        --nat-bark: #5c4033;
+        --nat-earth: #a68a3a;
+        --nat-cream: #f5f1e8;
+        --nat-paper: #faf8f2;
+        --nat-ink: #1a2e1a;
+        --nat-muted: #5c6e5f;
+        --nat-glass: rgba(250, 248, 242, 0.94);
+        --nat-glass-dark: rgba(27, 67, 50, 0.88);
+        --nat-border: rgba(64, 145, 108, 0.35);
+        --nat-shadow: rgba(13, 40, 24, 0.35);
+        --header-h: 5.625rem;
+        --font-display: "Fraunces", serif;
+        --font-body: "Nunito", sans-serif;
       }
 
+      * { box-sizing: border-box; }
+
       body {
-        font-family: "Rajdhani", sans-serif;
-        background-color: var(--heritage-deep);
-        color: var(--heritage-parchment);
+        font-family: var(--font-body);
+        background: var(--nat-deep);
+        color: var(--nat-cream);
         overflow-x: hidden;
       }
 
-      .heritage-font {
-        font-family: "Cinzel", serif;
-      }
+      .hidden { display: none !important; }
 
+      /* ── Background ── */
       .page-bg {
         position: fixed;
         inset: 0;
-        z-index: -2;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .page-bg__photo {
+        display: none;
+      }
+
+      .page-bg__gradient {
+        position: absolute;
+        inset: 0;
         background:
-          radial-gradient(
-            circle at 15% 20%,
-            rgba(0, 212, 255, 0.08),
-            transparent 45%
-          ),
-          radial-gradient(
-            circle at 85% 80%,
-            rgba(212, 175, 55, 0.1),
-            transparent 40%
-          ),
-          linear-gradient(180deg, var(--heritage-deep) 0%, var(--heritage-navy) 100%);
+          radial-gradient(ellipse 90% 70% at 50% 40%, transparent 0%, rgba(13, 40, 24, 0.25) 100%),
+          linear-gradient(180deg, rgba(13, 40, 24, 0.15) 0%, transparent 35%, rgba(13, 40, 24, 0.45) 100%);
       }
 
-      .page-bg::before {
-        content: "";
-        position: fixed;
+      .page-bg__foliage {
+        position: absolute;
         inset: 0;
-        background-image: radial-gradient(
-          rgba(0, 212, 255, 0.12) 1px,
-          transparent 1px
-        );
-        background-size: 36px 36px;
-        opacity: 0.35;
+        background:
+          radial-gradient(ellipse 28% 22% at 0% 100%, rgba(27, 67, 50, 0.75) 0%, transparent 70%),
+          radial-gradient(ellipse 28% 22% at 100% 100%, rgba(27, 67, 50, 0.75) 0%, transparent 70%),
+          radial-gradient(ellipse 22% 18% at 0% 0%, rgba(13, 40, 24, 0.55) 0%, transparent 70%),
+          radial-gradient(ellipse 22% 18% at 100% 0%, rgba(13, 40, 24, 0.55) 0%, transparent 70%);
         pointer-events: none;
-        z-index: -1;
       }
 
-      .bg-overlay {
-        position: fixed;
+      .page-bg__mosaic {
+        display: none;
+      }
+
+      .page-bg__orb {
+        display: none;
+      }
+
+      #bg-tiles-container {
+        position: absolute;
         inset: 0;
-        background: radial-gradient(
-          circle at center,
-          transparent 0%,
-          rgba(2, 5, 18, 0.75) 100%
-        );
-        z-index: -1;
+        z-index: 1;
+        opacity: 1;
+        transition: opacity 0.9s ease;
+      }
+
+      .page-bg__game-photo {
+        position: absolute;
+        inset: -6%;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 1s ease;
+        background-size: cover;
+        background-position: center;
+        filter: blur(34px) brightness(0.48) saturate(1.4);
+        transform: scale(1.08);
+      }
+
+      .page-bg__game-rays {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 1s ease;
+        background:
+          radial-gradient(ellipse 75% 55% at 18% 22%, rgba(149, 213, 178, 0.28) 0%, transparent 58%),
+          radial-gradient(ellipse 65% 48% at 88% 78%, rgba(255, 196, 120, 0.14) 0%, transparent 52%),
+          linear-gradient(165deg, rgba(27, 67, 50, 0.72) 0%, rgba(13, 40, 24, 0.88) 100%);
+        animation: game-rays-shift 14s ease-in-out infinite alternate;
+      }
+
+      .page-bg__game-leaves {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 1s ease;
+        overflow: hidden;
         pointer-events: none;
+      }
+
+      .leaf-float {
+        position: absolute;
+        width: 14px;
+        height: 20px;
+        background: linear-gradient(145deg, #74c69d 0%, #40916c 55%, #2d6a4f 100%);
+        border-radius: 0 85% 0 85%;
+        opacity: 0;
+        animation: float-leaf linear infinite;
+        box-shadow: 0 2px 8px rgba(13, 40, 24, 0.25);
+      }
+
+      .leaf-float:nth-child(1) { left: 8%; animation-duration: 16s; animation-delay: 0s; width: 11px; height: 16px; }
+      .leaf-float:nth-child(2) { left: 22%; animation-duration: 19s; animation-delay: 2s; }
+      .leaf-float:nth-child(3) { left: 38%; animation-duration: 14s; animation-delay: 5s; width: 16px; height: 22px; }
+      .leaf-float:nth-child(4) { left: 55%; animation-duration: 21s; animation-delay: 1s; }
+      .leaf-float:nth-child(5) { left: 68%; animation-duration: 17s; animation-delay: 7s; width: 12px; height: 17px; }
+      .leaf-float:nth-child(6) { left: 82%; animation-duration: 15s; animation-delay: 3s; }
+      .leaf-float:nth-child(7) { left: 92%; animation-duration: 20s; animation-delay: 9s; width: 10px; height: 15px; }
+      .leaf-float:nth-child(8) { left: 45%; animation-duration: 18s; animation-delay: 11s; width: 13px; height: 19px; }
+
+      @keyframes float-leaf {
+        0% { transform: translateY(105vh) rotate(-20deg) translateX(0); opacity: 0; }
+        8% { opacity: 0.55; }
+        50% { transform: translateY(45vh) rotate(140deg) translateX(28px); opacity: 0.45; }
+        92% { opacity: 0.3; }
+        100% { transform: translateY(-12vh) rotate(320deg) translateX(-18px); opacity: 0; }
+      }
+
+      @keyframes game-rays-shift {
+        from { filter: hue-rotate(0deg) brightness(1); }
+        to { filter: hue-rotate(14deg) brightness(1.06); }
+      }
+
+      .page-bg.is-game-mode #bg-tiles-container {
+        opacity: 0;
+      }
+
+      .page-bg.is-game-mode .page-bg__game-photo,
+      .page-bg.is-game-mode .page-bg__game-rays,
+      .page-bg.is-game-mode .page-bg__game-leaves {
+        opacity: 1;
+      }
+
+      .page-bg.is-game-mode .page-bg__foliage {
+        opacity: 0.4;
+      }
+
+      .page-bg.is-game-mode .page-bg__gradient {
+        background:
+          radial-gradient(ellipse 90% 70% at 50% 40%, rgba(82, 183, 136, 0.18) 0%, rgba(13, 40, 24, 0.5) 100%),
+          linear-gradient(180deg, rgba(45, 106, 79, 0.22) 0%, transparent 38%, rgba(13, 40, 24, 0.62) 100%);
+      }
+
+      .bg-overlay.is-game-mode {
+        background:
+          radial-gradient(ellipse 80% 70% at 50% 45%, transparent 0%, rgba(13, 40, 24, 0.38) 100%);
       }
 
       .hero-tile-demo {
         position: absolute;
         width: calc(100vw / 4);
         height: calc(100vh / 4);
-        background-size: 100vw 100vh;
-        border: 1px solid rgba(0, 212, 255, 0.06);
-        transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-        filter: brightness(0.28) saturate(0.65);
-        z-index: -1;
+        background-size: 400% 400%;
+        border: none;
+        transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95), filter 0.4s ease, opacity 0.35s ease;
+        filter: brightness(0.72) saturate(1.12);
+        z-index: 1;
         will-change: transform;
       }
 
-      .heritage-title-glow {
-        background: linear-gradient(
-          to bottom,
-          var(--heritage-gold-light) 0%,
-          var(--heritage-gold) 55%,
-          #b8922a 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.35));
-        letter-spacing: 0.22em;
-        transition: opacity 1s ease, transform 1s ease;
+      #bg-tiles-container.is-complete .hero-tile-demo {
+        filter: brightness(0.9) saturate(1.2);
+      }
+
+      .bg-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        background: radial-gradient(ellipse 85% 75% at 50% 45%, transparent 0%, rgba(13, 40, 24, 0.28) 100%);
         pointer-events: none;
       }
 
-      .heritage-subtitle {
-        color: rgba(0, 212, 255, 0.65);
-        letter-spacing: 0.35em;
+      /* ── Header overrides (match trivia.html) ── */
+      #header-placeholder,
+      .site-header {
+        z-index: 500;
       }
 
-      .intro-slide-piece {
+      .site-header .header-bg {
+        overflow: visible;
+      }
+
+      .site-header .site-header__bar,
+      .site-header .site-header__end,
+      .site-header .site-header__utilities,
+      .site-header .site-profile {
+        overflow: visible;
+      }
+
+      .site-header .site-profile {
+        position: relative;
+        z-index: 510;
+      }
+
+      .site-header .header-dropdown {
+        z-index: 520;
+      }
+
+      body.game-page .site-header.is-scrolled {
+        height: var(--header-h);
+      }
+
+      body.game-page .site-header.is-scrolled .header-bg {
+        background: rgba(10, 28, 18, 0.97);
+        border-bottom-color: rgba(82, 183, 136, 0.15);
+        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
+      }
+
+      #settings-modal {
+        z-index: 7000 !important;
+      }
+
+      #settings-modal.flex {
+        display: flex !important;
+      }
+
+      #settings-modal .header-panel {
+        background: var(--surface-dark-elevated) !important;
+        border-color: rgba(82, 183, 136, 0.22) !important;
+      }
+
+      /* ── Nav — wooden pill ── */
+      .game-back-nav {
+        position: fixed;
+        top: calc(var(--header-h, 5.625rem) + 1.15rem);
+        left: 0;
+        right: 0;
+        z-index: 490;
+        max-width: 94rem;
+        margin: 0 auto;
+        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
+        pointer-events: none;
+      }
+
+      .game-back-nav__align {
+        margin-left: calc(3.25rem + 0.9rem);
+      }
+
+      .game-back-nav a {
+        pointer-events: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-family: var(--font-body);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #f5f1e8;
+        text-decoration: none;
+        padding: 0.55rem 1.15rem 0.55rem 0.85rem;
+        border-radius: 999px;
+        border: 2px solid #1a120e;
+        background: linear-gradient(180deg, #5c4033 0%, #3d2817 55%, #2e1f16 100%);
+        box-shadow:
+          0 4px 14px rgba(0, 0, 0, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        transition: all 0.2s ease;
+      }
+
+      .game-back-nav a::before {
+        content: "🌿";
+        font-size: 0.85rem;
+        line-height: 1;
+        margin-right: -0.15rem;
+      }
+
+      .game-back-nav a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      }
+
+      /* ── Now playing widget ── */
+      .now-playing {
+        position: fixed;
+        bottom: 1.15rem;
+        right: 1rem;
+        z-index: 480;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        max-width: min(22rem, 82vw);
+        padding: 0.5rem 0.85rem 0.5rem 0.5rem;
+        background: rgba(13, 40, 24, 0.92);
+        border: 2px solid rgba(82, 183, 136, 0.45);
+        border-radius: 999px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(10px);
+      }
+
+      .now-playing.is-muted {
+        border-color: rgba(255, 255, 255, 0.15);
+        opacity: 0.9;
+      }
+
+      .now-playing__mute {
+        flex-shrink: 0;
+        width: 2.2rem;
+        height: 2.2rem;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, var(--nat-leaf), var(--nat-moss));
+        color: #fff;
+        transition: transform 0.15s ease;
+      }
+
+      .now-playing__mute:hover { transform: scale(1.06); }
+
+      .now-playing__disc {
+        flex-shrink: 0;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, var(--nat-leaf-light) 0%, var(--nat-moss) 55%, var(--nat-forest) 100%);
+        border: 2px solid rgba(255, 255, 255, 0.85);
+        animation: disc-spin 4s linear infinite;
+        animation-play-state: paused;
+      }
+
+      .now-playing.is-active .now-playing__disc { animation-play-state: running; }
+
+      @keyframes disc-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .now-playing__info { min-width: 0; }
+
+      .now-playing__label {
+        display: block;
+        font-size: 0.52rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--nat-leaf-pale);
+      }
+
+      .now-playing__title {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .now-playing__bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        height: 14px;
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .now-playing__bars span {
+        width: 3px;
+        background: var(--nat-leaf-light);
+        border-radius: 2px;
+        animation: eq-bounce 0.8s ease-in-out infinite;
+        animation-play-state: paused;
+      }
+
+      .now-playing.is-active .now-playing__bars span { animation-play-state: running; }
+
+      .now-playing__bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
+      .now-playing__bars span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+      .now-playing__bars span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+      .now-playing__bars span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+
+      @keyframes eq-bounce {
+        0%, 100% { transform: scaleY(0.45); }
+        50% { transform: scaleY(1); }
+      }
+
+      @media (max-width: 640px) {
+        .now-playing {
+          left: 0.75rem;
+          right: 0.75rem;
+          max-width: none;
+        }
+      }
+
+      /* ── Stage ── */
+      .puzzle-stage {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        padding: calc(var(--header-h) + 3.25rem) clamp(0.75rem, 2vw, 1.5rem) 3.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ── Intro — enhanced mockup layout ── */
+      .intro-layout {
+        position: relative;
+        z-index: 20;
+        width: min(100%, 70rem);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+        align-items: stretch;
+        filter: drop-shadow(0 32px 48px rgba(0, 0, 0, 0.35));
+      }
+
+      @media (min-width: 900px) {
+        .intro-layout {
+          grid-template-columns: 1.22fr 0.78fr;
+          gap: 2.25rem;
+        }
+      }
+
+      .intro-layout .parchment-card {
+        animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .intro-layout .diff-panel {
+        animation:
+          intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both,
+          diff-panel-float 5s ease-in-out infinite 1.2s;
+      }
+
+      @keyframes intro-rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes diff-panel-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+
+      @media (max-width: 899px) {
+        .diff-panel {
+          max-width: 26rem;
+          margin: 0 auto;
+          perspective: 620px;
+        }
+
+        .diff-panel__frame {
+          transform: rotateX(8deg) rotateY(-6deg);
+        }
+      }
+
+      /* Left — parchment + wood frame */
+      .parchment-card {
+        position: relative;
+        padding: 0.9rem;
+        border-radius: 1.15rem;
+        border: 3px solid #1a120e;
+        background:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.08'/%3E%3C/svg%3E"),
+          linear-gradient(155deg, #5c4033 0%, #3d2817 38%, #2e1f16 72%, #4a3228 100%);
+        box-shadow:
+          0 32px 64px rgba(0, 0, 0, 0.55),
+          inset 0 2px 0 rgba(255, 255, 255, 0.1),
+          inset 0 -3px 8px rgba(0, 0, 0, 0.35);
+      }
+
+      .parchment-card__inner {
+        position: relative;
+        padding: 2.15rem 1.85rem 1.85rem;
+        border-radius: 0.55rem;
+        border: 1px solid rgba(92, 64, 51, 0.2);
+        background:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
+          linear-gradient(175deg, #fdfbf5 0%, #f5eede 45%, #ebe0cc 100%);
+        text-align: center;
+        color: var(--nat-ink);
+        overflow: hidden;
+        box-shadow:
+          inset 0 0 48px rgba(92, 64, 51, 0.06),
+          inset 0 2px 0 rgba(255, 255, 255, 0.85);
+      }
+
+      .parchment-card__inner::after {
+        content: "";
+        position: absolute;
+        inset: 0.65rem;
+        border-radius: 0.35rem;
+        border: 1px dashed rgba(64, 145, 108, 0.12);
+        pointer-events: none;
+      }
+
+      .parchment-card__vine {
+        position: absolute;
+        font-size: 1.85rem;
+        line-height: 1;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
+        z-index: 3;
+      }
+
+      .parchment-card__vine--tl { top: 0.25rem; left: 0.25rem; transform: rotate(-28deg); }
+      .parchment-card__vine--tr { top: 0.25rem; right: 0.25rem; transform: rotate(28deg) scaleX(-1); }
+      .parchment-card__vine--bl { bottom: 0.25rem; left: 0.25rem; transform: rotate(18deg); }
+      .parchment-card__vine--br { bottom: 0.25rem; right: 0.25rem; transform: rotate(-18deg) scaleX(-1); }
+
+      .parchment-card__title {
+        position: relative;
+        z-index: 1;
+        font-family: var(--font-display);
+        font-size: clamp(2.35rem, 7.5vw, 3.5rem);
+        font-weight: 900;
+        line-height: 0.92;
+        margin: 0 0 0.85rem;
+        color: #1b4332;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.65);
+        letter-spacing: 0.02em;
+      }
+
+      .parchment-card__leaf {
+        font-size: 0.5em;
+        line-height: 1;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+      }
+
+      .parchment-card__title-accent {
+        color: #4a3228;
+      }
+
+      .parchment-card__ribbon {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: calc(100% + 3.5rem);
+        margin: 0 -1.75rem 1.15rem;
+        padding: 0.62rem 1.25rem;
+        font-family: var(--font-display);
+        font-size: clamp(0.84rem, 2.1vw, 1rem);
+        font-weight: 700;
+        font-style: italic;
+        color: #f8f4ea;
+        background: linear-gradient(180deg, #357a5c 0%, #2d6a4f 45%, #1b4332 100%);
+        box-shadow:
+          0 4px 16px rgba(27, 67, 50, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      }
+
+      .parchment-card__ribbon::before,
+      .parchment-card__ribbon::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        width: 0;
+        height: 0;
+        border-style: solid;
+      }
+
+      .parchment-card__ribbon::before {
+        left: 1.25rem;
+        border-width: 7px 7px 0 0;
+        border-color: #0d2818 transparent transparent transparent;
+      }
+
+      .parchment-card__ribbon::after {
+        right: 1.25rem;
+        border-width: 7px 0 0 7px;
+        border-color: #0d2818 transparent transparent transparent;
+      }
+
+      .parchment-card__desc {
+        position: relative;
+        z-index: 1;
+        font-size: 0.9rem;
+        color: #4a5c4e;
+        max-width: 29rem;
+        margin: 0 auto 1.5rem;
+        line-height: 1.75;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid rgba(64, 145, 108, 0.18);
+      }
+
+      .polaroid-row {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 0;
+        flex-wrap: wrap;
+        padding-bottom: 0.35rem;
+      }
+
+      .polaroid {
+        position: relative;
+        width: min(44%, 10.25rem);
+        padding: 0.5rem 0.5rem 1.85rem;
+        background: #fff;
+        border-radius: 0.2rem;
+        box-shadow:
+          0 14px 32px rgba(13, 40, 24, 0.28),
+          0 2px 0 rgba(255, 255, 255, 0.9) inset;
+      }
+
+      .polaroid--tilt-l {
+        transform: rotate(-5deg);
+        z-index: 1;
+      }
+
+      .polaroid--tilt-r {
+        transform: rotate(4deg);
+        margin-left: -0.85rem;
+        z-index: 2;
+      }
+
+      .polaroid__tape {
+        position: absolute;
+        top: -0.4rem;
+        left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 2.75rem;
+        height: 0.9rem;
+        background: rgba(255, 255, 255, 0.62);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 3;
+      }
+
+      .polaroid__photo {
+        display: block;
         width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 0.08rem;
+      }
+
+      .polaroid__puzzle {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        aspect-ratio: 1;
+        background: rgba(13, 40, 24, 0.95);
+        border-radius: 0.08rem;
+        overflow: hidden;
+        padding: 2px;
+      }
+
+      .polaroid__tile {
+        background-image: url("data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
+        background-size: 300% 300%;
+        border-radius: 1px;
+      }
+
+      .polaroid__tile:nth-child(1) { background-position: 0% 0%; }
+      .polaroid__tile:nth-child(2) { background-position: 50% 0%; }
+      .polaroid__tile:nth-child(3) { background-position: 100% 0%; }
+      .polaroid__tile:nth-child(4) { background-position: 0% 50%; }
+      .polaroid__tile:nth-child(5) { visibility: hidden; }
+      .polaroid__tile:nth-child(6) { background-position: 100% 50%; }
+      .polaroid__tile:nth-child(7) { background-position: 0% 100%; }
+      .polaroid__tile:nth-child(8) { background-position: 50% 100%; }
+      .polaroid__tile:nth-child(9) { background-position: 100% 100%; }
+
+      /* Right — difficulty panel (trivia-style frame, nature theme) */
+      .diff-panel {
+        position: relative;
+        padding: 0.65rem 0.75rem 0.85rem;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        perspective: 720px;
+        perspective-origin: 50% 40%;
+      }
+
+      .diff-panel__frame {
+        position: relative;
+        padding: 1.35rem 1.25rem 1.45rem;
+        border-radius: 1.15rem;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid rgba(149, 213, 178, 0.38);
+        background:
+          radial-gradient(circle at 18% 22%, rgba(149, 213, 178, 0.1) 0%, transparent 42%),
+          linear-gradient(165deg, rgba(24, 62, 44, 0.96) 0%, rgba(12, 36, 24, 0.98) 55%, rgba(8, 24, 16, 0.99) 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          inset 0 -18px 28px rgba(0, 0, 0, 0.35),
+          0 22px 40px rgba(0, 0, 0, 0.5);
+        transform: rotateX(12deg) rotateY(-10deg);
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        overflow: hidden;
+        animation: diff-frame-glow 3.5s ease-in-out infinite alternate;
+      }
+
+      .diff-panel__frame::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: radial-gradient(circle, rgba(149, 213, 178, 0.16) 1px, transparent 1px);
+        background-size: 16px 16px;
+        opacity: 0.32;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 88%);
+        animation: diff-grid-drift 12s linear infinite;
+      }
+
+      .diff-panel__frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border: 1px solid transparent;
+        background:
+          linear-gradient(135deg, rgba(149, 213, 178, 0.55), transparent 38%, transparent 62%, rgba(166, 138, 58, 0.4)) border-box;
+        mask:
+          linear-gradient(#fff 0 0) padding-box,
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        opacity: 0.5;
+        animation: diff-corner-pulse 2.8s ease-in-out infinite alternate;
+      }
+
+      @keyframes diff-frame-glow {
+        from { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -18px 28px rgba(0, 0, 0, 0.35), 0 22px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(82, 183, 136, 0.08); }
+        to { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -18px 28px rgba(0, 0, 0, 0.35), 0 22px 40px rgba(0, 0, 0, 0.5), 0 0 36px rgba(82, 183, 136, 0.18); }
+      }
+
+      @keyframes diff-grid-drift {
+        from { background-position: 0 0; }
+        to { background-position: 16px 16px; }
+      }
+
+      @keyframes diff-corner-pulse {
+        from { opacity: 0.35; }
+        to { opacity: 0.65; }
+      }
+
+      @keyframes diff-label-glow {
+        from { text-shadow: 0 0 8px rgba(186, 228, 204, 0.2); }
+        to { text-shadow: 0 0 16px rgba(186, 228, 204, 0.45); }
+      }
+
+      @keyframes diff-label-line {
+        from { opacity: 0.55; transform: scaleX(0.85); }
+        to { opacity: 1; transform: scaleX(1); }
+      }
+
+      @keyframes diff-card-enter {
+        from { opacity: 0; transform: translateY(12px) translateZ(0); }
+        to { opacity: 1; transform: translateY(0) translateZ(8px); }
+      }
+
+      @keyframes diff-card-active-glow {
+        0%, 100% { box-shadow: 0 0 0 3px rgba(255, 220, 100, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 7px 0 rgba(0, 0, 0, 0.14); }
+        50% { box-shadow: 0 0 0 4px rgba(255, 220, 100, 0.72), 0 0 22px rgba(255, 220, 100, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 7px 0 rgba(0, 0, 0, 0.14); }
+      }
+
+      .diff-panel__header {
+        position: relative;
+        z-index: 1;
+        margin: 0 0 0.65rem;
+        padding: 0.7rem 1rem;
+        text-align: center;
+        border-radius: 0.55rem;
+        background:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.07'/%3E%3C/svg%3E"),
+          linear-gradient(180deg, #6b4a38 0%, #4a3228 40%, #3d2817 100%);
+        border: 2px solid #1a120e;
+        box-shadow:
+          0 4px 14px rgba(0, 0, 0, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      }
+
+      .diff-panel__title {
+        font-family: var(--font-display);
+        font-size: clamp(0.78rem, 1.4vw, 0.92rem);
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #e8f5ec;
+        margin: 0;
+        animation: diff-label-glow 2.4s ease-in-out infinite alternate;
+      }
+
+      .diff-panel__title::after {
+        content: "";
+        display: block;
+        width: min(70%, 8rem);
+        height: 2px;
+        margin: 0.5rem auto 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, var(--nat-leaf-light), var(--nat-earth), transparent);
+        animation: diff-label-line 2.2s ease-in-out infinite alternate;
+      }
+
+      .diff-panel__hint {
+        position: relative;
+        z-index: 1;
+        font-size: 0.8rem;
+        color: rgba(186, 228, 204, 0.92);
+        text-align: center;
+        margin: 0 0 1rem;
+        font-style: italic;
+        line-height: 1.45;
+        padding: 0.45rem 0.65rem;
+        border-radius: 0.45rem;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(149, 213, 178, 0.15);
+      }
+
+      .diff-panel__hint.is-hidden { display: none; }
+
+      .diff-grid {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-bottom: 1rem;
+        flex: 1;
+        transform-style: preserve-3d;
+      }
+
+      .diff-card {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 3.35rem;
+        padding: 0.85rem 1rem 0.85rem 1.15rem;
+        border-radius: 0.85rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        text-align: left;
         transition:
-          transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1),
-          opacity 0.42s ease,
-          filter 0.42s ease;
+          transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
+        overflow: hidden;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.3),
+          0 5px 0 rgba(0, 0, 0, 0.14);
+        transform: translateZ(8px);
+        animation: diff-card-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
       }
 
-      .intro-stage.intro-screen-scrambled .intro-slide-piece {
-        transform: translate(var(--sx, 0px), var(--sy, 0px))
-          rotate(var(--sr, 0deg));
-        opacity: 0.35;
-        filter: blur(1px);
+      .diff-card:nth-child(1) { animation-delay: 0.45s; }
+      .diff-card:nth-child(2) { animation-delay: 0.58s; }
+      .diff-card:nth-child(3) { animation-delay: 0.71s; }
+
+      .diff-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        border-radius: 0.85rem 0 0 0.85rem;
+        background: rgba(255, 255, 255, 0.45);
       }
 
-      .intro-stage.intro-screen-complete .intro-slide-piece {
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 1;
-        filter: blur(0);
+      .diff-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -130%;
+        width: 55%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+        transform: skewX(-18deg);
+        transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        pointer-events: none;
       }
 
-      .diff-btn {
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0, 212, 255, 0.2);
-        color: var(--heritage-muted);
+      .diff-card--easy {
+        background: linear-gradient(160deg, #9ed4a8 0%, #72b87e 55%, #5a9f68 100%);
+        color: #0d2818;
       }
 
-      .diff-btn:hover {
-        border-color: rgba(0, 212, 255, 0.45);
-        color: var(--heritage-cyan);
+      .diff-card--easy::before { background: rgba(13, 40, 24, 0.35); }
+
+      .diff-card--medium {
+        background: linear-gradient(160deg, #e0c878 0%, #c9a848 55%, #b89238 100%);
+        color: #2e1f16;
       }
 
-      .diff-btn.active {
-        border-color: var(--heritage-gold) !important;
-        background: rgba(212, 175, 55, 0.12) !important;
-        color: var(--heritage-gold) !important;
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+      .diff-card--medium::before { background: rgba(46, 31, 22, 0.35); }
+
+      .diff-card--hard {
+        background: linear-gradient(160deg, #c4a888 0%, #a08868 55%, #887050 100%);
+        color: #2a1a12;
+      }
+
+      .diff-card--hard::before { background: rgba(42, 26, 18, 0.35); }
+
+      .diff-card:hover {
+        transform: translateZ(14px) translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.55);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.4),
+          0 8px 0 rgba(0, 0, 0, 0.16),
+          0 0 18px rgba(149, 213, 178, 0.15);
+      }
+
+      .diff-card:hover::after {
+        left: 140%;
+      }
+
+      .diff-card.is-active {
+        border-color: rgba(255, 248, 220, 0.95);
+        transform: translateZ(18px) translateY(-1px);
+        animation: diff-card-active-glow 2.2s ease-in-out infinite;
+      }
+
+      .diff-card__body {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 0.75rem;
+        min-width: 0;
+      }
+
+      .diff-card__name {
+        font-family: var(--font-display);
+        font-size: 1.08rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .diff-card__meta {
+        font-family: var(--font-body);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        opacity: 0.88;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .diff-panel__divider {
+        position: relative;
+        z-index: 1;
+        height: 1px;
+        margin: 0.15rem 0 1rem;
+        background: linear-gradient(90deg, transparent, rgba(149, 213, 178, 0.45), transparent);
+      }
+
+      .diff-panel .start-btn {
+        position: relative;
+        z-index: 1;
+        transform: translateZ(10px);
       }
 
       .start-btn {
-        background: linear-gradient(
-          135deg,
-          var(--heritage-gold) 0%,
-          var(--heritage-gold-light) 100%
-        );
-        color: var(--heritage-deep);
-        box-shadow: 0 4px 28px rgba(212, 175, 55, 0.35);
-        transition: all 0.3s ease;
+        width: 100%;
+        font-family: var(--font-display);
+        font-size: 0.94rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 1.05rem 1.25rem;
+        border: 2px solid #0d0806;
+        border-radius: 0.8rem;
+        cursor: pointer;
+        color: #faf8f2;
+        background:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.06'/%3E%3C/svg%3E"),
+          linear-gradient(180deg, #5c4033 0%, #3d2817 50%, #2a1a12 100%);
+        box-shadow:
+          0 7px 0 #1a100a,
+          0 14px 32px rgba(0, 0, 0, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        transition: all 0.2s ease;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
       }
 
-      .start-btn:hover {
+      .diff-panel .start-btn:hover:not(:disabled) {
+        transform: translateZ(12px) translateY(-2px);
+      }
+
+      .start-btn:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 8px 36px rgba(212, 175, 55, 0.45);
+        background:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.06'/%3E%3C/svg%3E"),
+          linear-gradient(180deg, #6b4a38 0%, #4a3228 50%, #3d2817 100%);
+        box-shadow:
+          0 9px 0 #1a100a,
+          0 18px 36px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
       }
 
-      .stat-card {
-        background: rgba(10, 15, 26, 0.85);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 212, 255, 0.12);
-        border-left: 3px solid var(--heritage-gold);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      .start-btn:active:not(:disabled) {
+        transform: translateY(3px);
+        box-shadow:
+          0 3px 0 #1a100a,
+          0 8px 20px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .start-btn:disabled,
+      .start-btn.start-btn--disabled {
+        cursor: not-allowed;
+        opacity: 0.42;
+        color: rgba(250, 248, 242, 0.65);
+        background: linear-gradient(180deg, #2a2018 0%, #1a120e 100%);
+        box-shadow: 0 4px 0 #0d0806;
+        transform: none;
+      }
+
+      .game-console {
+        width: min(100%, 56rem);
+      }
+
+      .game-hud {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
+        margin-bottom: 1.25rem;
+      }
+
+      @media (min-width: 640px) {
+        .game-hud { grid-template-columns: repeat(3, 1fr); }
+      }
+
+      .hud-card {
+        padding: 0.85rem 1rem;
+        border-radius: 0.85rem;
+        background: var(--nat-glass-dark);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--nat-border);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      .hud-card__label {
+        display: block;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--nat-muted);
+        margin-bottom: 0.2rem;
+      }
+
+      .hud-card__value {
+        font-family: var(--font-display);
+        font-size: 1.65rem;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--nat-cream);
+      }
+
+      .hud-card__value--score { color: var(--nat-earth); }
+      .hud-card__value--timer { color: var(--nat-leaf-pale); }
+
+      .hud-meta {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
       }
 
       .difficulty-badge {
-        display: inline-block;
-        padding: 4px 12px;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 0.3rem 0.75rem;
         border-radius: 999px;
-        font-size: 10px;
-        letter-spacing: 0.15em;
-        border: 1px solid rgba(212, 175, 55, 0.35);
-        background: rgba(212, 175, 55, 0.1);
-        color: var(--heritage-gold);
-      }
-
-      .combo-badge {
-        opacity: 0;
-        transform: scale(0.85);
-        transition: all 0.25s ease;
-        color: var(--heritage-cyan);
-      }
-
-      .combo-badge.active {
-        opacity: 1;
-        transform: scale(1);
+        border: 1px solid rgba(82, 183, 136, 0.4);
+        background: rgba(82, 183, 136, 0.12);
+        color: var(--nat-leaf-pale);
       }
 
       .timer-bar-track {
+        grid-column: 1 / -1;
         height: 5px;
-        background: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.08);
         border-radius: 999px;
         overflow: hidden;
-        border: 1px solid rgba(0, 212, 255, 0.1);
       }
 
       .timer-bar-fill {
         height: 100%;
-        background: linear-gradient(
-          90deg,
-          var(--heritage-coastal),
-          var(--heritage-cyan)
-        );
+        background: linear-gradient(90deg, var(--nat-moss), var(--nat-leaf));
         border-radius: 999px;
         transition: width 1s linear;
-        box-shadow: 0 0 12px rgba(0, 212, 255, 0.35);
+        box-shadow: 0 0 12px rgba(82, 183, 136, 0.35);
       }
 
       .timer-bar-fill.critical {
-        background: linear-gradient(90deg, #991b1b, #ef4444);
+        background: linear-gradient(90deg, #dc2626, #f87171);
         animation: pulse-bar 0.8s ease-in-out infinite;
       }
 
       @keyframes pulse-bar {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.65;
-        }
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
       }
 
       .timer-critical {
-        color: #ef4444 !important;
-        text-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+        color: #f87171 !important;
         animation: pulse-text 0.8s ease-in-out infinite;
       }
 
       @keyframes pulse-text {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.7;
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.65; }
+      }
+
+      .game-main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        align-items: start;
+      }
+
+      @media (min-width: 900px) {
+        .game-main {
+          grid-template-columns: 1fr 240px;
         }
       }
 
-      .archive-frame {
-        padding: 14px;
-        background: rgba(10, 15, 26, 0.9);
-        border: 2px solid rgba(212, 175, 55, 0.45);
-        border-radius: 8px;
-        box-shadow:
-          0 0 0 1px rgba(0, 212, 255, 0.08),
-          0 24px 50px rgba(0, 0, 0, 0.55),
-          inset 0 0 30px rgba(0, 0, 0, 0.35);
+      /* ── Puzzle frame ── */
+      .puzzle-frame {
         position: relative;
+        padding: 14px;
+        border-radius: 1rem;
+        background: linear-gradient(145deg, var(--nat-bark), var(--nat-forest));
+        border: 3px solid rgba(166, 138, 58, 0.45);
+        box-shadow: 0 24px 56px var(--nat-shadow), inset 0 2px 8px rgba(255, 255, 255, 0.06);
       }
 
-      .archive-frame::before {
-        content: "";
+      .puzzle-frame__label {
         position: absolute;
-        inset: 6px;
-        border: 1px solid rgba(212, 175, 55, 0.15);
-        border-radius: 4px;
-        pointer-events: none;
-      }
-
-      .archive-label {
-        position: absolute;
-        top: -12px;
-        left: 20px;
-        background: var(--heritage-navy);
-        padding: 2px 12px;
-        font-size: 9px;
-        letter-spacing: 0.2em;
-        color: var(--heritage-gold);
-        border: 1px solid rgba(212, 175, 55, 0.35);
-        border-radius: 4px;
+        top: -11px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-display);
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--nat-forest);
+        background: var(--nat-paper);
+        padding: 0.2rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid var(--nat-border);
+        white-space: nowrap;
         z-index: 3;
       }
 
       #puzzle-board {
         display: grid;
-        gap: 3px;
-        background: rgba(2, 5, 18, 0.95);
-        padding: 3px;
-        border-radius: 4px;
+        gap: 4px;
+        background: rgba(13, 40, 24, 0.95);
+        padding: 4px;
+        border-radius: 0.5rem;
         width: 100%;
-        max-width: 500px;
-        aspect-ratio: 1/1;
+        max-width: 520px;
+        aspect-ratio: 1;
         margin: 0 auto;
-        position: relative;
-        z-index: 1;
+        box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.45);
       }
 
       .puzzle-tile {
         width: 100%;
         height: 100%;
         background-size: 0;
-        border-radius: 2px;
+        border-radius: 4px;
         cursor: pointer;
-        transition:
-          transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
-          box-shadow 0.18s,
-          filter 0.18s;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.25);
         user-select: none;
-        border: 1px solid rgba(212, 175, 55, 0.2);
-        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.35);
       }
 
-      .puzzle-tile:active {
-        transform: scale(0.97);
+      .puzzle-tile:hover:not(.empty-tile) {
+        filter: brightness(1.08);
+        border-color: rgba(82, 183, 136, 0.55);
+        z-index: 2;
+        box-shadow: 0 0 16px rgba(82, 183, 136, 0.3);
       }
+
+      .puzzle-tile:active:not(.empty-tile) { transform: scale(0.97); }
 
       .tile-move-flash {
-        animation: tile-move-flash 260ms ease-out;
+        animation: tile-flash 260ms ease-out;
       }
 
-      @keyframes tile-move-flash {
-        45% {
-          box-shadow: 0 0 22px rgba(0, 212, 255, 0.4);
-          filter: brightness(1.12);
-        }
-      }
-
-      .puzzle-tile:hover {
-        filter: brightness(1.1);
-        border-color: rgba(0, 212, 255, 0.45);
-        z-index: 2;
-      }
-
-      .tile-number {
-        background: rgba(2, 5, 18, 0.85);
-        color: var(--heritage-gold);
-        padding: 2px 6px;
-        border-radius: 0 0 4px 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: 11px;
-        font-family: "Rajdhani", sans-serif;
-        font-weight: 700;
-        opacity: 0;
-        transition: opacity 0.3s;
-        border: 1px solid rgba(212, 175, 55, 0.25);
-      }
-
-      .show-numbers .tile-number {
-        opacity: 1;
+      @keyframes tile-flash {
+        45% { box-shadow: 0 0 20px rgba(82, 183, 136, 0.55); filter: brightness(1.12); }
       }
 
       .empty-tile {
-        background: rgba(2, 5, 18, 0.8) !important;
+        background: rgba(13, 40, 24, 0.9) !important;
         cursor: default;
-        border-color: rgba(0, 212, 255, 0.08) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
       }
 
-      .empty-tile:hover {
-        filter: none;
+      /* ── Heritage completion reveal ── */
+      .heritage-reveal {
+        display: grid;
+        gap: 1.25rem;
+        animation: reveal-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes reveal-enter {
+        from { opacity: 0; transform: translateY(18px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      @media (min-width: 768px) {
+        .heritage-reveal {
+          grid-template-columns: 1.15fr 0.85fr;
+          align-items: start;
+        }
+      }
+
+      .heritage-reveal__image-wrap {
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 3px solid rgba(166, 138, 58, 0.45);
+        box-shadow: 0 24px 56px var(--nat-shadow), 0 0 0 1px rgba(82, 183, 136, 0.2);
+        background: rgba(13, 40, 24, 0.95);
+        aspect-ratio: 4 / 3;
+      }
+
+      .heritage-reveal__image-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        animation: reveal-image-pop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+      }
+
+      @keyframes reveal-image-pop {
+        from { opacity: 0; transform: scale(1.06); filter: blur(6px); }
+        to { opacity: 1; transform: scale(1); filter: blur(0); }
+      }
+
+      .heritage-reveal__badge {
+        position: absolute;
+        top: 0.85rem;
+        left: 0.85rem;
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--nat-forest);
+        background: var(--nat-paper);
+        padding: 0.28rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--nat-border);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      }
+
+      .heritage-reveal__info {
+        padding: 1.25rem;
+        border-radius: 1rem;
+        background: var(--nat-glass-dark);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--nat-border);
+      }
+
+      .heritage-reveal__eyebrow {
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--nat-leaf-pale);
+        margin-bottom: 0.35rem;
+      }
+
+      .heritage-reveal__name {
+        font-family: var(--font-display);
+        font-size: clamp(1.25rem, 3vw, 1.65rem);
+        font-weight: 800;
+        color: var(--nat-cream);
+        line-height: 1.2;
+        margin-bottom: 0.35rem;
+      }
+
+      .heritage-reveal__cat {
+        display: inline-block;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--nat-earth);
+        margin-bottom: 0.85rem;
+      }
+
+      .heritage-reveal__desc {
+        font-size: 0.88rem;
+        line-height: 1.65;
+        color: rgba(245, 241, 232, 0.88);
+        margin-bottom: 1rem;
+      }
+
+      .heritage-reveal__stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1.1rem;
+      }
+
+      .heritage-reveal__stat {
+        padding: 0.65rem 0.5rem;
+        border-radius: 0.65rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(82, 183, 136, 0.2);
+        text-align: center;
+      }
+
+      .heritage-reveal__stat-label {
+        display: block;
+        font-size: 0.52rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--nat-muted);
+        margin-bottom: 0.15rem;
+      }
+
+      .heritage-reveal__stat-value {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--nat-cream);
+      }
+
+      .heritage-reveal__continue {
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+
+      /* ── Site panel ── */
+      .site-panel {
+        padding: 1.25rem;
+        border-radius: 1rem;
+        background: var(--nat-glass-dark);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--nat-border);
+        text-align: center;
+      }
+
+      .site-panel__label {
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--nat-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .site-panel__name {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--nat-cream);
+        margin-bottom: 0.25rem;
+        line-height: 1.35;
+      }
+
+      .site-panel__cat {
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--nat-leaf-pale);
+        margin-bottom: 0.85rem;
+      }
+
+      .site-preview {
+        width: 100%;
+        max-width: 180px;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 0.65rem;
+        border: 2px solid rgba(82, 183, 136, 0.35);
+        margin: 0 auto 1rem;
+        display: block;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      /* ── Results ── */
+      .results-card {
+        width: min(100%, 36rem);
+        padding: 2.5rem 2rem;
+        border-radius: 1.25rem;
+        text-align: center;
+        background: var(--nat-glass);
+        border: 2px solid var(--nat-border);
+        box-shadow: 0 28px 56px var(--nat-shadow);
+        color: var(--nat-ink);
+      }
+
+      .results-card.is-win {
+        border-color: rgba(82, 183, 136, 0.55);
+        box-shadow: 0 28px 56px var(--nat-shadow), 0 0 48px rgba(82, 183, 136, 0.2);
+      }
+
+      .results-card__eyebrow {
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--nat-moss);
+        margin-bottom: 0.35rem;
+      }
+
+      .results-card__title {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+        color: var(--nat-forest);
+      }
+
+      .results-card__score {
+        font-family: var(--font-display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(90deg, var(--nat-moss), var(--nat-earth));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.75rem;
+      }
+
+      .results-card__msg {
+        color: var(--nat-muted);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.75rem;
+      }
+
+      .results-breakdown {
+        padding: 1.15rem;
+        margin-bottom: 1.75rem;
+        text-align: left;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(64, 145, 108, 0.2);
+        border-radius: 0.85rem;
       }
 
       .score-row {
         display: flex;
         justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        font-size: 0.95rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(64, 145, 108, 0.12);
+        font-size: 0.88rem;
+        color: var(--nat-muted);
       }
 
-      .archive-stamp {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 72px;
-        height: 72px;
-        opacity: 0.55;
-        pointer-events: none;
-        z-index: 2;
-        transform: rotate(12deg);
+      .score-row--total {
+        font-weight: 700;
+        color: var(--nat-moss);
+        border-top: 1px solid rgba(64, 145, 108, 0.25);
+        border-bottom: none;
+        padding-top: 0.75rem;
+        margin-top: 0.25rem;
       }
 
-      .results-card {
-        background: rgba(10, 15, 26, 0.95);
-        border: 1px solid rgba(212, 175, 55, 0.25);
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      .results-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+
+      @media (min-width: 480px) {
+        .results-actions { flex-direction: row; justify-content: center; }
+      }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        border-radius: 999px;
+        border: 2px solid rgba(64, 145, 108, 0.35);
+        color: var(--nat-forest);
+        font-family: var(--font-display);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--nat-leaf);
+        background: rgba(82, 183, 136, 0.1);
+      }
+
+      #elapsed-display {
+        font-size: 0.58rem;
+        color: var(--nat-muted);
+        font-weight: 600;
       }
     </style>
   </head>
-  <body>
-    <div id="header-placeholder" class="min-h-[90px]"></div>
+  <body class="game-page">
+    <div id="header-placeholder"></div>
 
     <div class="page-bg">
-      <div id="bg-tiles-container" class="absolute inset-0"></div>
+      <div class="page-bg__photo"></div>
+      <div id="game-bg-photo" class="page-bg__game-photo" aria-hidden="true"></div>
+      <div class="page-bg__game-rays" aria-hidden="true"></div>
+      <div class="page-bg__game-leaves" aria-hidden="true">
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+        <span class="leaf-float"></span>
+      </div>
+      <div class="page-bg__gradient"></div>
+      <div class="page-bg__foliage" aria-hidden="true"></div>
+      <div id="bg-tiles-container"></div>
     </div>
-    <div class="bg-overlay"></div>
+    <div class="bg-overlay" id="bg-overlay"></div>
 
-    <main
-      class="min-h-screen relative flex flex-col items-center justify-start pt-24 pb-12 px-4 z-10"
-    >
-      <p
-        class="heritage-font text-[10px] uppercase heritage-subtitle mb-3 text-center"
-      >
-        Mati Heritage 3D · Photo Archive
-      </p>
-      <h1
-        id="hero-title"
-        class="heritage-font text-4xl md:text-6xl font-black mb-2 heritage-title-glow text-center"
-      >
-        SLIDE PUZZLE
-      </h1>
-      <p class="text-sm text-slate-400 mb-8 text-center max-w-md">
-        Reassemble scrambled heritage photographs from Mati City
-      </p>
+    <nav class="game-back-nav" aria-label="Game navigation">
+      <div class="game-back-nav__align">
+        <a href="game.html">← Return to Game Hall</a>
+      </div>
+    </nav>
 
-      <div
-        id="intro-screen"
-        class="intro-stage intro-screen-complete w-full flex flex-col items-center justify-center relative z-20"
-      >
-        <div id="intro-pieces" class="flex flex-col items-center gap-6">
-          <div
-            class="intro-slide-piece"
-            data-scatter-x="-60"
-            data-scatter-y="-40"
-            data-scatter-r="-4"
-          >
-            <div class="flex flex-wrap justify-center gap-3">
-              <button
-                onclick="setDifficulty('easy')"
-                id="btn-easy"
-                class="diff-btn heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
-              >
-                EASY · 3×3
-              </button>
-              <button
-                onclick="setDifficulty('medium')"
-                id="btn-medium"
-                class="diff-btn active heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
-              >
-                MEDIUM · 4×4
-              </button>
-              <button
-                onclick="setDifficulty('hard')"
-                id="btn-hard"
-                class="diff-btn heritage-font px-5 py-2.5 rounded-lg text-xs tracking-widest"
-              >
-                HARD · 5×5
-              </button>
+    <aside id="now-playing" class="now-playing" aria-label="Now playing">
+      <button type="button" id="music-toggle" class="now-playing__mute" aria-pressed="false" aria-label="Mute ambience" title="Mute / Unmute">
+        <span id="music-icon-on" aria-hidden="true">🔊</span>
+        <span id="music-icon-off" class="hidden" aria-hidden="true">🔇</span>
+      </button>
+      <span class="now-playing__disc" aria-hidden="true"></span>
+      <span class="now-playing__info">
+        <span class="now-playing__label">Now Playing:</span>
+        <span class="now-playing__title" id="now-playing-title">Mati Nature Trail</span>
+      </span>
+      <span class="now-playing__bars" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </span>
+    </aside>
+
+    <main class="puzzle-stage">
+      <!-- INTRO -->
+      <section id="intro-screen" class="intro-layout">
+        <div class="parchment-card">
+          <div class="parchment-card__inner">
+            <span class="parchment-card__vine parchment-card__vine--tl" aria-hidden="true">🌿</span>
+            <span class="parchment-card__vine parchment-card__vine--tr" aria-hidden="true">🌿</span>
+            <span class="parchment-card__vine parchment-card__vine--bl" aria-hidden="true">🌿</span>
+            <span class="parchment-card__vine parchment-card__vine--br" aria-hidden="true">🌿</span>
+
+            <h1 id="hero-title" class="parchment-card__title">
+              <span class="parchment-card__leaf" aria-hidden="true">🍃</span>
+              SLIDE <span class="parchment-card__title-accent">PUZZLE</span>
+              <span class="parchment-card__leaf" aria-hidden="true">🍃</span>
+            </h1>
+            <div class="parchment-card__ribbon">Piece together Mati's landscapes and landmarks</div>
+
+            <p class="parchment-card__desc">
+              From the Sleeping Dinosaur to festival grounds — restore scrambled
+              photographs of Mati City's natural and cultural treasures.
+            </p>
+
+            <div class="polaroid-row" aria-hidden="true">
+              <div class="polaroid polaroid--tilt-l">
+                <span class="polaroid__tape"></span>
+                <img
+                  class="polaroid__photo"
+                  src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="polaroid polaroid--tilt-r">
+                <span class="polaroid__tape"></span>
+                <div class="polaroid__puzzle">
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                  <div class="polaroid__tile"></div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            class="intro-slide-piece"
-            data-scatter-x="0"
-            data-scatter-y="70"
-            data-scatter-r="0"
-          >
-            <button
-              id="start-btn"
-              class="heritage-font start-btn px-14 py-4 rounded-lg font-bold tracking-widest text-sm uppercase"
-            >
-              Start Puzzle
-            </button>
           </div>
         </div>
-      </div>
 
-      <div id="game-screen" class="hidden w-full max-w-6xl z-20">
-        <div class="flex flex-col lg:flex-row gap-6 items-start justify-center">
-          <div class="w-full lg:w-72 flex flex-col gap-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="difficulty-badge heritage-font" id="difficulty-badge"
-                >MEDIUM</span
-              >
-              <span
-                id="combo-badge"
-                class="combo-badge heritage-font text-xs font-bold tracking-wider"
-              >
-                ⚡ COMBO ×<span id="combo-count">0</span>
-              </span>
+        <aside class="diff-panel" aria-label="Select difficulty">
+          <div class="diff-panel__frame">
+            <div class="diff-panel__header">
+              <h2 class="diff-panel__title">Select Difficulty</h2>
             </div>
-
-            <div class="stat-card p-5 rounded-xl">
-              <span
-                class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest block mb-1 heritage-font"
-                >Heritage Points</span
-              >
-              <span
-                id="score-display"
-                class="text-3xl font-black heritage-font text-amber-400"
-                >0</span
-              >
-            </div>
-
-            <div class="stat-card p-5 rounded-xl">
-              <div class="flex justify-between items-end mb-2">
-                <span
-                  class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest heritage-font"
-                  >Time Remaining</span
-                >
-                <span
-                  id="elapsed-display"
-                  class="text-[10px] text-slate-500 heritage-font"
-                  >00:00 elapsed</span
-                >
-              </div>
-              <span
-                id="timer-display"
-                class="text-3xl font-black heritage-font block mb-3 text-cyan-300"
-                >08:00</span
-              >
-              <div class="timer-bar-track">
-                <div
-                  id="timer-bar"
-                  class="timer-bar-fill"
-                  style="width: 100%"
-                ></div>
-              </div>
-            </div>
-
-            <div class="stat-card p-5 rounded-xl">
-              <span
-                class="text-[10px] text-slate-500 uppercase font-bold tracking-widest block mb-1 heritage-font"
-                >Moves</span
-              >
-              <span id="moves-display" class="text-3xl font-black heritage-font"
-                >0</span
-              >
-            </div>
-
-            <div class="stat-card p-4 rounded-xl text-center">
-              <span
-                class="text-[10px] text-cyan-400/50 uppercase font-bold tracking-widest block mb-1 heritage-font"
-                >Heritage Site</span
-              >
-              <p
-                id="site-name-display"
-                class="text-sm font-bold text-amber-400 mb-1 heritage-font leading-snug"
-              >
-                —
-              </p>
-              <p
-                id="site-category-display"
-                class="text-[10px] text-slate-500 uppercase tracking-wider mb-3"
-              >
-                —
-              </p>
-              <img
-                id="reference-preview"
-                src=""
-                alt="Heritage photo preview"
-                class="w-[140px] h-[140px] mx-auto object-cover rounded-md border border-amber-500/25"
-              />
-              <button
-                id="toggle-numbers"
-                class="mt-4 w-full py-2 rounded-lg border border-cyan-500/20 text-[10px] heritage-font tracking-widest hover:bg-cyan-500/10 transition-all text-cyan-300/80"
-              >
-                Toggle Tile Numbers
+            <p id="diff-hint" class="diff-panel__hint">Choose a level to begin your adventure</p>
+            <div class="diff-grid">
+              <button type="button" id="btn-easy" class="diff-card diff-card--easy" data-level="easy" onclick="setDifficulty('easy')">
+                <span class="diff-card__body">
+                  <span class="diff-card__name">EASY</span>
+                  <span class="diff-card__meta">3×3 · 5 MIN</span>
+                </span>
+              </button>
+              <button type="button" id="btn-medium" class="diff-card diff-card--medium" data-level="medium" onclick="setDifficulty('medium')">
+                <span class="diff-card__body">
+                  <span class="diff-card__name">MEDIUM</span>
+                  <span class="diff-card__meta">4×4 · 8 MIN</span>
+                </span>
+              </button>
+              <button type="button" id="btn-hard" class="diff-card diff-card--hard" data-level="hard" onclick="setDifficulty('hard')">
+                <span class="diff-card__body">
+                  <span class="diff-card__name">HARD</span>
+                  <span class="diff-card__meta">5×5 · 10 MIN</span>
+                </span>
               </button>
             </div>
+            <div class="diff-panel__divider" aria-hidden="true"></div>
+            <button id="start-btn" class="start-btn start-btn--disabled" type="button" disabled>Start Puzzle</button>
           </div>
+        </aside>
+      </section>
 
-          <div class="flex-1 w-full max-w-[530px]">
-            <div class="archive-frame p-4">
-              <span class="archive-label heritage-font">ARCHIVE PHOTO</span>
-              <div class="archive-stamp" aria-hidden="true">
-                <svg
-                  viewBox="0 0 100 100"
-                  class="fill-none stroke-current text-amber-500/40"
-                >
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="44"
-                    stroke-width="2"
-                    stroke-dasharray="3 2"
-                  />
-                  <text
-                    x="50"
-                    y="44"
-                    text-anchor="middle"
-                    class="text-[7px] font-bold uppercase heritage-font fill-amber-500/50"
-                  >
-                    MATI
-                  </text>
-                  <text
-                    x="50"
-                    y="58"
-                    text-anchor="middle"
-                    class="text-[6px] font-bold uppercase heritage-font fill-amber-500/40"
-                  >
-                    HERITAGE
-                  </text>
-                  <text
-                    x="50"
-                    y="70"
-                    text-anchor="middle"
-                    class="text-[5px] uppercase heritage-font fill-cyan-400/40"
-                  >
-                    3D ARCHIVE
-                  </text>
-                </svg>
-              </div>
+      <!-- GAME -->
+      <section id="game-screen" class="hidden game-console">
+        <div class="hud-meta">
+          <span class="difficulty-badge" id="difficulty-badge">—</span>
+        </div>
+
+        <div class="game-hud">
+          <div class="hud-card">
+            <span class="hud-card__label">Points</span>
+            <span id="score-display" class="hud-card__value hud-card__value--score">0</span>
+          </div>
+          <div class="hud-card">
+            <span class="hud-card__label">Time Left</span>
+            <span id="timer-display" class="hud-card__value hud-card__value--timer">08:00</span>
+            <span id="elapsed-display">00:00 elapsed</span>
+          </div>
+          <div class="hud-card">
+            <span class="hud-card__label">Moves</span>
+            <span id="moves-display" class="hud-card__value">0</span>
+          </div>
+          <div class="timer-bar-track">
+            <div id="timer-bar" class="timer-bar-fill" style="width:100%"></div>
+          </div>
+        </div>
+
+        <div class="game-main" id="game-main">
+          <div id="game-play-area">
+            <div class="puzzle-frame">
               <div id="puzzle-board"></div>
             </div>
-            <div class="mt-5 text-center text-slate-500 text-sm italic">
-              Slide adjacent tiles to restore the heritage photograph.
+          </div>
+
+          <aside class="site-panel" id="site-panel">
+            <p class="site-panel__label">Heritage Site</p>
+            <p id="site-name-display" class="site-panel__name">—</p>
+            <p id="site-category-display" class="site-panel__cat">—</p>
+            <img id="reference-preview" src="" alt="Heritage photo preview" class="site-preview" />
+          </aside>
+        </div>
+
+        <div id="heritage-reveal" class="heritage-reveal hidden" aria-live="polite">
+          <div class="heritage-reveal__image-wrap">
+            <span class="heritage-reveal__badge">Restored</span>
+            <img id="reveal-image" src="" alt="" />
+          </div>
+          <div class="heritage-reveal__info">
+            <p class="heritage-reveal__eyebrow">Heritage Restored</p>
+            <h2 id="reveal-site-name" class="heritage-reveal__name">—</h2>
+            <p id="reveal-site-cat" class="heritage-reveal__cat">—</p>
+            <p id="reveal-site-desc" class="heritage-reveal__desc"></p>
+            <div class="heritage-reveal__stats">
+              <div class="heritage-reveal__stat">
+                <span class="heritage-reveal__stat-label">Time</span>
+                <span id="reveal-stat-time" class="heritage-reveal__stat-value">—</span>
+              </div>
+              <div class="heritage-reveal__stat">
+                <span class="heritage-reveal__stat-label">Moves</span>
+                <span id="reveal-stat-moves" class="heritage-reveal__stat-value">—</span>
+              </div>
+              <div class="heritage-reveal__stat">
+                <span class="heritage-reveal__stat-label">Points</span>
+                <span id="reveal-stat-score" class="heritage-reveal__stat-value">—</span>
+              </div>
             </div>
+            <button type="button" id="reveal-continue-btn" class="start-btn heritage-reveal__continue">View Results</button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div
-        id="results-screen"
-        class="hidden w-full max-w-2xl p-10 md:p-12 text-center z-20 results-card rounded-2xl"
-      >
-        <div
-          class="text-[10px] tracking-[0.4em] uppercase text-cyan-400/50 heritage-font mb-2"
-        >
-          Heritage Restored
-        </div>
-        <h2
-          class="heritage-font text-3xl font-bold mb-2 uppercase text-white"
-          id="victory-title"
-        >
-          Puzzle Solved
-        </h2>
-        <div
-          class="text-6xl font-black heritage-font mb-4 text-amber-400"
-          id="final-score"
-        >
-          0
-        </div>
-        <p class="text-slate-400 mb-8 text-lg" id="result-msg">
+      <!-- RESULTS -->
+      <section id="results-screen" class="hidden results-card">
+        <p class="results-card__eyebrow">Round Complete</p>
+        <h2 class="results-card__title" id="victory-title">Puzzle Solved</h2>
+        <div class="results-card__score" id="final-score">0</div>
+        <p class="results-card__msg" id="result-msg">
           You have successfully restored a Mati heritage photograph.
         </p>
-
-        <div
-          id="score-breakdown"
-          class="p-6 mb-8 text-left max-w-sm mx-auto heritage-font text-sm bg-black/30 border border-amber-500/15 rounded-xl"
-        ></div>
-
-        <div class="flex flex-col md:flex-row gap-4 justify-center">
-          <button
-            onclick="location.reload()"
-            class="start-btn px-10 py-4 rounded-lg heritage-font font-bold tracking-widest uppercase text-sm"
-          >
-            New Photograph
+        <div id="score-breakdown" class="results-breakdown"></div>
+        <div class="results-actions">
+          <button onclick="location.reload()" class="start-btn" style="width:auto;padding:1rem 2rem" type="button">
+            Play Again
           </button>
-          <a
-            href="game.html"
-            class="border border-cyan-500/30 px-10 py-4 rounded-lg heritage-font font-bold tracking-widest text-cyan-300/80 hover:bg-cyan-500/10 transition-all"
-          >
-            Return to Hub
-          </a>
+          <a href="game.html" class="btn-ghost">Back to Games</a>
         </div>
-      </div>
+      </section>
     </main>
 
     <div id="footer-placeholder"></div>
 
-    <audio
-      id="bg-music"
-      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3"
-      loop
-    ></audio>
-    <audio
-      id="slide-sfx"
-      src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
-    ></audio>
-    <audio
-      id="victory-sfx"
-      src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
-    ></audio>
+    <!-- Volume proxy for global settings -->
+    <audio id="bg-music" loop preload="none" aria-hidden="true"></audio>
+    <audio id="bg-music-intro" src="https://assets.mixkit.co/music/preview/mixkit-summer-fun-13.mp3" loop preload="auto"></audio>
+    <audio id="bg-music-game" src="https://assets.mixkit.co/music/preview/mixkit-games-worldbeat-466.mp3" loop preload="auto"></audio>
 
     <script>
       fetch("header.html")
         .then((res) => res.text())
         .then((data) => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(data, "text/html");
+          const doc = new DOMParser().parseFromString(data, "text/html");
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
+
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) document.body.appendChild(settingsModal);
+
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) {
-            document.head.appendChild(headerStyle.cloneNode(true));
-          }
+          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+
           const headerScript = Array.from(doc.scripts).find((s) => !s.src);
           if (headerScript) {
             const s = document.createElement("script");
             s.textContent = headerScript.textContent;
             document.body.appendChild(s);
           }
+
+          document.querySelectorAll(".site-nav__link, .site-mobile-nav__link").forEach((link) => {
+            if (link.getAttribute("data-nav") === "games") link.classList.add("is-active");
+          });
+
           const ptsEl = document.getElementById("header-total-points");
-          if (ptsEl) {
-            ptsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-          }
-        });
+          if (ptsEl) ptsEl.textContent = localStorage.getItem("totalHeritagePoints") || "0";
+
+          if (typeof window.initSiteHeader === "function") window.initSiteHeader();
+          if (typeof window.initGlobalSettings === "function") window.initGlobalSettings();
+
+          document.getElementById("music-volume")?.addEventListener("input", (e) => {
+            musicVol = parseFloat(e.target.value);
+            if (bgMusic) bgMusic.volume = musicVol;
+            syncBgmVolume();
+            updateMusicUI();
+          });
+        })
+        .catch((err) => console.error("Error loading header:", err));
 
       fetch("footer.html")
         .then((response) => response.text())
@@ -713,9 +1825,7 @@
           if (footer && placeholder) {
             placeholder.replaceWith(footer);
             const footerStyle = doc.querySelector("style");
-            if (footerStyle) {
-              document.head.appendChild(footerStyle.cloneNode(true));
-            }
+            if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
           }
         })
         .catch((err) => console.error("Error loading footer:", err));
@@ -725,61 +1835,73 @@
           name: "Pylon Monument",
           category: "Built Heritage",
           src: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          description: "Mati's \"Point Zero\" landmark — a 30-foot tower with a glass sphere and steel halo, redesigned in 2019 with koi ponds and a waterfall. A symbol of faith and resilience for the people of Mati.",
         },
         {
           name: "Centennial Clock & Pathway of Leaders",
           category: "Built Heritage",
           src: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+          description: "A civic landmark in Mati featuring a centennial clock tower, fountains, and the Pathway of Leaders — a landscaped walk lined with statues honoring the city's past and present leaders.",
         },
         {
           name: "Gabaldon Structure of RRMCES-1",
           category: "Built Heritage",
           src: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
+          description: "A two-story Gabaldon school building from 1920, blending American-era architecture with bahay kubo elements. Still an active school, it preserves over a century of Mati's educational heritage.",
         },
         {
           name: "Menzi Visitors Information Center",
           category: "Built Heritage",
           src: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+          description: "A 1.5-hectare coastal park on Mayo Bay with white sand, crystal waters, and Narra trees. A Significant Cultural Property serving tourism and heritage preservation in Dahican.",
         },
         {
           name: "Provincial Capitol of Davao Oriental",
           category: "Built Heritage",
           src: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+          description: "The historic seat of provincial government in Davao Oriental, recognized for its architectural heritage and its role as a center of governance in Eastern Mindanao.",
         },
         {
           name: "Taytay Daga (Sleeping Dinosaur)",
           category: "Natural Heritage",
           src: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+          description: "A 579-hectare mountain in Badas whose silhouette resembles a dinosaur resting on Pujada Bay. Steeped in Mandaya legend and formally protected as a heritage landscape.",
         },
         {
           name: "Pujada Island",
           category: "Natural Heritage",
           src: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+          description: "A 157-hectare sanctuary — the largest islet in Pujada Bay — with lush forests, white-sand coves, and coral reefs where the Pacific meets Davao Oriental's biodiversity.",
         },
         {
           name: "Oak Island",
           category: "Natural Heritage",
           src: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+          description: "Also called Vanishing Island, this white-sand bar emerges at low tide in Pujada Bay. Famous for crystal turquoise waters and premier snorkeling in the City of Mati.",
         },
         {
           name: "Mamacao Tree",
           category: "Natural Heritage",
           src: "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+          description: "A massive Dracontomelon dao tree in Bobon, planted during the American period and rooted in local legend. A living landmark that survived war and remains a symbol of Mati's heritage.",
         },
         {
           name: "Sambuokan Festival",
           category: "Intangible Cultural Heritage",
           src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
+          description: "Mati's premier festival — from the Mandaya word for unity — celebrating Mandaya, Muslim-Kagan, and local communities through dance, trade fairs, and the Indak-Indak competition every October.",
         },
         {
           name: "Sambuokan Festival Dance",
           category: "Intangible Cultural Heritage",
           src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2696.jpg",
+          description: "Vibrant street-dancing at the Sambuokan Festival — tribal-inspired choreography that honors Mati's living traditions and the spirit of \"Magsambuokan Kita\" (Let us unite).",
         },
         {
           name: "OMPO sa Tampat sa Baguidan",
           category: "Built Heritage",
           src: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
+          description: "An ancestral burial site of a pre-Hispanic Kalagan chieftain in Bobon. A Significant Cultural Property preserving Mati's pre-colonial history and indigenous identity.",
         },
       ];
 
@@ -788,39 +1910,12 @@
       }
 
       const config = {
-        easy: {
-          size: 3,
-          time: 300,
-          basePoints: 500,
-          movePenalty: 3,
-          timeBonusRate: 8,
-          comboBonus: 8,
-          multiplier: 1,
-          label: "EASY",
-        },
-        medium: {
-          size: 4,
-          time: 480,
-          basePoints: 1000,
-          movePenalty: 5,
-          timeBonusRate: 12,
-          comboBonus: 12,
-          multiplier: 1.5,
-          label: "MEDIUM",
-        },
-        hard: {
-          size: 5,
-          time: 600,
-          basePoints: 2000,
-          movePenalty: 8,
-          timeBonusRate: 18,
-          comboBonus: 18,
-          multiplier: 2,
-          label: "HARD",
-        },
+        easy: { size: 3, time: 300, basePoints: 500, movePenalty: 3, timeBonusRate: 8, comboBonus: 8, multiplier: 1, label: "EASY" },
+        medium: { size: 4, time: 480, basePoints: 1000, movePenalty: 5, timeBonusRate: 12, comboBonus: 12, multiplier: 1.5, label: "MEDIUM" },
+        hard: { size: 5, time: 600, basePoints: 2000, movePenalty: 8, timeBonusRate: 18, comboBonus: 18, multiplier: 2, label: "HARD" },
       };
 
-      let difficulty = "medium";
+      let difficulty = null;
       let board = [];
       let moves = 0;
       let timeLeft = 0;
@@ -837,36 +1932,328 @@
       const COMBO_WINDOW_MS = 1800;
 
       const boardEl = document.getElementById("puzzle-board");
-      const slideSfx = document.getElementById("slide-sfx");
-      const victorySfx = document.getElementById("victory-sfx");
       const bgMusic = document.getElementById("bg-music");
+      const bgMusicIntro = document.getElementById("bg-music-intro");
+      const bgMusicGame = document.getElementById("bg-music-game");
+
+      let musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+      let sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+      let musicStarted = false;
+      let musicMuted = localStorage.getItem("slidePuzzleBgmMuted") === "true";
+      let curatorAudioCtx = null;
+      let musicMode = "intro";
+      let lastHoverAt = 0;
+      let pendingWinScore = 0;
+
+      function getCuratorAudioCtx() {
+        if (!curatorAudioCtx) {
+          curatorAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (curatorAudioCtx.state === "suspended") curatorAudioCtx.resume();
+        return curatorAudioCtx;
+      }
+
+      function getSfxVolume() {
+        return parseFloat(localStorage.getItem("sfxVol") || "0.8");
+      }
+
+      function createNoiseBuffer(ctx, seconds = 0.12) {
+        const length = Math.max(1, Math.floor(ctx.sampleRate * seconds));
+        const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < length; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        return buffer;
+      }
+
+      function playKalimbaPluck(ctx, dest, freq, time, amp, decay = 0.38) {
+        const osc = ctx.createOscillator();
+        const oscG = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, time);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.92, time + decay);
+        filter.type = "bandpass";
+        filter.frequency.value = Math.min(freq * 2.4, 2800);
+        filter.Q.value = 4.5;
+        oscG.gain.setValueAtTime(0, time);
+        oscG.gain.linearRampToValueAtTime(amp, time + 0.006);
+        oscG.gain.exponentialRampToValueAtTime(0.001, time + decay);
+        osc.connect(filter);
+        filter.connect(oscG);
+        oscG.connect(dest);
+        osc.start(time);
+        osc.stop(time + decay + 0.02);
+      }
+
+      function playWoodKnock(ctx, dest, time, amp, lowHz = 118) {
+        const knock = ctx.createOscillator();
+        const knockG = ctx.createGain();
+        knock.type = "sine";
+        knock.frequency.setValueAtTime(lowHz, time);
+        knock.frequency.exponentialRampToValueAtTime(lowHz * 0.62, time + 0.07);
+        knockG.gain.setValueAtTime(amp, time);
+        knockG.gain.exponentialRampToValueAtTime(0.001, time + 0.09);
+        knock.connect(knockG);
+        knockG.connect(dest);
+        knock.start(time);
+        knock.stop(time + 0.1);
+      }
+
+      function playParchmentRustle(ctx, dest, time, amp) {
+        const src = ctx.createBufferSource();
+        src.buffer = createNoiseBuffer(ctx, 0.05);
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = 1400;
+        filter.Q.value = 0.85;
+        const rustleG = ctx.createGain();
+        rustleG.gain.setValueAtTime(0, time);
+        rustleG.gain.linearRampToValueAtTime(amp, time + 0.008);
+        rustleG.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+        src.connect(filter);
+        filter.connect(rustleG);
+        rustleG.connect(dest);
+        src.start(time);
+        src.stop(time + 0.07);
+      }
+
+      /** Heritage gallery UI — wooden frame, parchment, kalimba; unique to Slide Puzzle */
+      function playCuratorSound(variant = "click") {
+        const vol = getSfxVolume();
+        if (vol <= 0) return;
+        try {
+          const ctx = getCuratorAudioCtx();
+          const now = ctx.currentTime;
+          const master = ctx.createGain();
+          master.connect(ctx.destination);
+          const levels = { hover: 0.2, click: 0.42, start: 0.58, slide: 0.36, victory: 0.55 };
+          master.gain.value = vol * (levels[variant] || 0.4);
+
+          if (variant === "hover") {
+            playParchmentRustle(ctx, master, now, 0.14);
+            playWoodKnock(ctx, master, now + 0.012, 0.08, 240);
+            return;
+          }
+
+          if (variant === "click") {
+            playWoodKnock(ctx, master, now, 0.28, 128);
+            playKalimbaPluck(ctx, master, 659.25, now + 0.018, 0.2, 0.28);
+            playKalimbaPluck(ctx, master, 987.77, now + 0.055, 0.12, 0.22);
+            playParchmentRustle(ctx, master, now + 0.03, 0.06);
+            return;
+          }
+
+          if (variant === "start") {
+            const frame = ctx.createOscillator();
+            const frameG = ctx.createGain();
+            frame.type = "sawtooth";
+            frame.frequency.setValueAtTime(92, now);
+            frame.frequency.exponentialRampToValueAtTime(210, now + 0.14);
+            frameG.gain.setValueAtTime(0.06, now);
+            frameG.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+            frame.connect(frameG);
+            frameG.connect(master);
+            frame.start(now);
+            frame.stop(now + 0.18);
+
+            [293.66, 329.63, 392, 440, 587.33].forEach((freq, i) => {
+              playKalimbaPluck(ctx, master, freq, now + 0.08 + i * 0.07, 0.18 - i * 0.015, 0.42);
+            });
+            playWoodKnock(ctx, master, now + 0.42, 0.14, 98);
+            return;
+          }
+
+          if (variant === "slide") {
+            const scrape = ctx.createBufferSource();
+            scrape.buffer = createNoiseBuffer(ctx, 0.04);
+            const scrapeF = ctx.createBiquadFilter();
+            scrapeF.type = "bandpass";
+            scrapeF.frequency.setValueAtTime(620, now);
+            scrapeF.frequency.exponentialRampToValueAtTime(280, now + 0.035);
+            scrapeF.Q.value = 1.2;
+            const scrapeG = ctx.createGain();
+            scrapeG.gain.setValueAtTime(0.16, now);
+            scrapeG.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+            scrape.connect(scrapeF);
+            scrapeF.connect(scrapeG);
+            scrapeG.connect(master);
+            scrape.start(now);
+            scrape.stop(now + 0.05);
+            playWoodKnock(ctx, master, now + 0.028, 0.12, 86);
+            return;
+          }
+
+          if (variant === "victory") {
+            playWoodKnock(ctx, master, now, 0.22, 73);
+            [293.66, 369.99, 440, 587.33, 739.99, 880].forEach((freq, i) => {
+              playKalimbaPluck(ctx, master, freq, now + 0.06 + i * 0.09, 0.22, 0.55);
+            });
+            const bloom = ctx.createOscillator();
+            const bloomG = ctx.createGain();
+            bloom.type = "sine";
+            bloom.frequency.value = 146.83;
+            bloomG.gain.setValueAtTime(0, now);
+            bloomG.gain.linearRampToValueAtTime(0.1, now + 0.15);
+            bloomG.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+            bloom.connect(bloomG);
+            bloomG.connect(master);
+            bloom.start(now);
+            bloom.stop(now + 1.2);
+          }
+        } catch (_) {}
+      }
+
+      function bindHoverSound(elements) {
+        (elements instanceof NodeList ? [...elements] : elements).forEach((el) => {
+          if (!el || el.dataset.curatorHoverBound) return;
+          el.dataset.curatorHoverBound = "true";
+          el.addEventListener("mouseenter", () => {
+            const ts = Date.now();
+            if (ts - lastHoverAt < 100) return;
+            lastHoverAt = ts;
+            playCuratorSound("hover");
+          });
+        });
+      }
+
+      function getActiveBgm() {
+        return musicMode === "game" ? bgMusicGame : bgMusicIntro;
+      }
+
+      function pauseAllBgm() {
+        bgMusicIntro?.pause();
+        bgMusicGame?.pause();
+      }
+
+      function applyMusicVolume() {
+        musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+        if (bgMusic) bgMusic.volume = musicVol;
+        syncBgmVolume();
+      }
+
+      function syncBgmVolume() {
+        const vol = musicMuted || musicVol <= 0 ? 0 : musicVol;
+        if (bgMusicIntro) bgMusicIntro.volume = vol;
+        if (bgMusicGame) bgMusicGame.volume = vol;
+      }
+
+      function updateNowPlayingTitle() {
+        const titleEl = document.getElementById("now-playing-title");
+        if (!titleEl) return;
+        titleEl.textContent = musicMode === "game" ? "Heritage Puzzle Rush" : "Mati Summer Trail";
+      }
+
+      function setPageBackgroundMode(mode) {
+        const pageBg = document.querySelector(".page-bg");
+        const overlay = document.getElementById("bg-overlay");
+        const gamePhoto = document.getElementById("game-bg-photo");
+        const isGame = mode === "game";
+        pageBg?.classList.toggle("is-game-mode", isGame);
+        overlay?.classList.toggle("is-game-mode", isGame);
+        if (isGame && currentSite && gamePhoto) {
+          gamePhoto.style.backgroundImage = `url("${imgUrl(currentSite.src)}")`;
+        }
+      }
+
+      function setMusicMode(mode) {
+        musicMode = mode;
+        updateNowPlayingTitle();
+        const wasPlaying = musicStarted && !musicMuted && musicVol > 0;
+        pauseAllBgm();
+        if (wasPlaying) startPuzzleMusic();
+        else updateMusicUI();
+      }
+
+      function updateMusicUI() {
+        const nowPlayingEl = document.getElementById("now-playing");
+        const musicToggleBtn = document.getElementById("music-toggle");
+        const musicIconOn = document.getElementById("music-icon-on");
+        const musicIconOff = document.getElementById("music-icon-off");
+        if (!nowPlayingEl) return;
+
+        const active = getActiveBgm();
+        const playing = musicStarted && !musicMuted && musicVol > 0 && active && !active.paused;
+        nowPlayingEl.classList.toggle("is-active", playing);
+        nowPlayingEl.classList.toggle("is-muted", musicMuted);
+        if (musicIconOn) musicIconOn.classList.toggle("hidden", musicMuted);
+        if (musicIconOff) musicIconOff.classList.toggle("hidden", !musicMuted);
+        if (musicToggleBtn) {
+          musicToggleBtn.setAttribute("aria-pressed", String(musicMuted));
+          musicToggleBtn.title = musicMuted ? "Unmute music" : "Mute music";
+        }
+      }
+
+      function startPuzzleMusic() {
+        applyMusicVolume();
+        if (musicMuted || musicVol <= 0) {
+          musicStarted = musicStarted || musicVol > 0;
+          pauseAllBgm();
+          updateMusicUI();
+          return;
+        }
+
+        pauseAllBgm();
+        const active = getActiveBgm();
+        if (!active) return;
+
+        active.play()
+          .then(() => {
+            musicStarted = true;
+            updateMusicUI();
+          })
+          .catch(() => updateMusicUI());
+      }
+
+      function toggleMusicMute() {
+        musicMuted = !musicMuted;
+        localStorage.setItem("slidePuzzleBgmMuted", String(musicMuted));
+
+        if (musicMuted) {
+          pauseAllBgm();
+          updateMusicUI();
+          return;
+        }
+
+        applyMusicVolume();
+        if (musicVol <= 0) {
+          updateMusicUI();
+          return;
+        }
+
+        startPuzzleMusic();
+      }
+
+      function bindPuzzleMusicStart() {
+        const unlockCtx = () => getCuratorAudioCtx();
+        const tryStart = () => startPuzzleMusic();
+        document.addEventListener("click", unlockCtx, { once: true, capture: true });
+        document.addEventListener("keydown", unlockCtx, { once: true });
+        document.addEventListener("click", tryStart, { once: true });
+        document.addEventListener("keydown", tryStart, { once: true });
+      }
 
       function setDifficulty(level) {
+        playCuratorSound("click");
+        getCuratorAudioCtx();
+        startPuzzleMusic();
+
         difficulty = level;
-        document.querySelectorAll(".diff-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        document.getElementById(`btn-${level}`).classList.add("active");
+        document.querySelectorAll(".diff-card").forEach((btn) => btn.classList.remove("is-active"));
+        document.getElementById(`btn-${level}`).classList.add("is-active");
+
+        const startBtn = document.getElementById("start-btn");
+        startBtn.disabled = false;
+        startBtn.classList.remove("start-btn--disabled");
+
+        const hint = document.getElementById("diff-hint");
+        if (hint) hint.classList.add("is-hidden");
       }
 
       function pickRandomSite() {
-        currentSite =
-          heritageSites[Math.floor(Math.random() * heritageSites.length)];
+        currentSite = heritageSites[Math.floor(Math.random() * heritageSites.length)];
         return imgUrl(currentSite.src);
-      }
-
-      function initScatterVars() {
-        document.querySelectorAll(".intro-slide-piece").forEach((el) => {
-          el.style.setProperty("--sx", `${el.dataset.scatterX || 0}px`);
-          el.style.setProperty("--sy", `${el.dataset.scatterY || 0}px`);
-          el.style.setProperty("--sr", `${el.dataset.scatterR || 0}deg`);
-        });
-      }
-
-      function setIntroState(state) {
-        const intro = document.getElementById("intro-screen");
-        intro.classList.remove("intro-screen-complete", "intro-screen-scrambled");
-        if (state) intro.classList.add(`intro-screen-${state}`);
       }
 
       const demoPuzzle = (() => {
@@ -874,7 +2261,7 @@
         const SCRAMBLE_STEPS = 18;
         const SOLVE_DURATION = 10000;
         const container = document.getElementById("bg-tiles-container");
-        const image = imgUrl(heritageSites[0].src);
+        const image = imgUrl(heritageSites[5].src);
 
         let tiles = [];
         let currentBoard = [];
@@ -884,7 +2271,7 @@
         let tWidth, tHeight;
 
         function init() {
-          if (!running) return;
+          if (!running || !container) return;
           container.innerHTML = "";
           tiles = [];
           currentBoard = Array.from({ length: SIZE * SIZE }, (_, i) => i);
@@ -913,22 +2300,29 @@
           currentBoard.forEach((val, pos) => {
             const r = Math.floor(pos / SIZE);
             const c = pos % SIZE;
-            tiles[val].style.transform =
-              `translate(${c * tWidth}px, ${r * tHeight}px)`;
+            tiles[val].style.transform = `translate(${c * tWidth}px, ${r * tHeight}px)`;
           });
+        }
+
+        function revealCompleteImage() {
+          tiles[SIZE * SIZE - 1].style.opacity = "1";
+          container?.classList.add("is-complete");
+        }
+
+        function hideEmptySlot() {
+          tiles[SIZE * SIZE - 1].style.opacity = "0";
+          container?.classList.remove("is-complete");
         }
 
         async function startSequence() {
           while (running) {
+            hideEmptySlot();
             moveHistory = [];
-            setIntroState("complete");
 
             for (let i = 0; i < SCRAMBLE_STEPS; i++) {
               if (!running) return;
-              if (i === 0) setIntroState("scrambled");
               const neighbors = getNeighbors(emptyPos, SIZE);
-              const next =
-                neighbors[Math.floor(Math.random() * neighbors.length)];
+              const next = neighbors[Math.floor(Math.random() * neighbors.length)];
               moveHistory.push(emptyPos);
               const temp = currentBoard[emptyPos];
               currentBoard[emptyPos] = currentBoard[next];
@@ -939,7 +2333,6 @@
             }
 
             await new Promise((r) => setTimeout(r, 600));
-            setIntroState("complete");
 
             const delay = SOLVE_DURATION / moveHistory.length;
             while (moveHistory.length > 0) {
@@ -953,19 +2346,14 @@
               await new Promise((r) => setTimeout(r, delay));
             }
 
-            await new Promise((r) => setTimeout(r, 2200));
+            revealCompleteImage();
+            await new Promise((r) => setTimeout(r, 1000));
           }
         }
 
-        return {
-          init,
-          stop: () => {
-            running = false;
-          },
-        };
+        return { init, stop: () => { running = false; } };
       })();
 
-      initScatterVars();
       demoPuzzle.init();
       window.addEventListener("resize", () => demoPuzzle.init());
 
@@ -979,33 +2367,15 @@
         const cfg = config[difficulty];
         const timeBonus = timeLeft * cfg.timeBonusRate;
         const movePenalty = moves * cfg.movePenalty;
-        liveScore = Math.max(
-          0,
-          Math.floor(
-            (cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) *
-              cfg.multiplier,
-          ),
-        );
-        document.getElementById("score-display").textContent =
-          liveScore.toLocaleString();
-      }
-
-      function updateComboUI() {
-        const badge = document.getElementById("combo-badge");
-        document.getElementById("combo-count").textContent = comboStreak;
-        badge.classList.toggle("active", comboStreak >= 2);
+        liveScore = Math.max(0, Math.floor((cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) * cfg.multiplier));
+        document.getElementById("score-display").textContent = liveScore.toLocaleString();
       }
 
       function updateSiteUI() {
-        document.getElementById("site-name-display").textContent =
-          currentSite?.name || "—";
-        document.getElementById("site-category-display").textContent =
-          currentSite?.category || "—";
-        document.getElementById("reference-preview").src = imgUrl(
-          currentSite?.src || "",
-        );
-        document.getElementById("reference-preview").alt =
-          currentSite?.name || "Heritage photo";
+        document.getElementById("site-name-display").textContent = currentSite?.name || "—";
+        document.getElementById("site-category-display").textContent = currentSite?.category || "—";
+        document.getElementById("reference-preview").src = imgUrl(currentSite?.src || "");
+        document.getElementById("reference-preview").alt = currentSite?.name || "Heritage photo";
       }
 
       function initBoard() {
@@ -1016,8 +2386,7 @@
 
         pickRandomSite();
         updateSiteUI();
-        document.getElementById("difficulty-badge").textContent =
-          config[difficulty].label;
+        document.getElementById("difficulty-badge").textContent = config[difficulty].label;
 
         boardEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
         boardEl.style.gridTemplateRows = `repeat(${size}, 1fr)`;
@@ -1027,11 +2396,14 @@
         comboBonusTotal = 0;
         lastMoveTime = 0;
         document.getElementById("moves-display").textContent = moves;
-        updateComboUI();
 
         shuffleBoard();
         renderBoard();
         updateLiveScore();
+
+        document.getElementById("heritage-reveal").classList.add("hidden");
+        document.getElementById("game-main").classList.remove("hidden");
+        document.querySelector(".game-hud")?.classList.remove("hidden");
       }
 
       function shuffleBoard() {
@@ -1040,8 +2412,7 @@
 
         for (let i = 0; i < shuffleMoves; i++) {
           const neighbors = getNeighbors(emptyPos, size);
-          const randomNeighbor =
-            neighbors[Math.floor(Math.random() * neighbors.length)];
+          const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
           swap(emptyPos, randomNeighbor);
           emptyPos = randomNeighbor;
         }
@@ -1078,27 +2449,21 @@
           } else {
             const correctRow = Math.floor(tileValue / size);
             const correctCol = tileValue % size;
-            const posX = (correctCol / (size - 1)) * 100;
-            const posY = (correctRow / (size - 1)) * 100;
-
             tile.style.backgroundImage = `url("${image}")`;
             tile.style.backgroundSize = `${size * 100}%`;
-            tile.style.backgroundPosition = `${posX}% ${posY}%`;
-            tile.innerHTML = `<span class="tile-number">${tileValue + 1}</span>`;
+            tile.style.backgroundPosition = `${(correctCol / (size - 1)) * 100}% ${(correctRow / (size - 1)) * 100}%`;
             tile.onclick = () => {
               handleTileClick(index);
               tile.classList.add("tile-move-flash");
               setTimeout(() => tile.classList.remove("tile-move-flash"), 320);
             };
           }
-
           boardEl.appendChild(tile);
         });
       }
 
       function handleTileClick(index) {
         if (!gameActive) return;
-
         const { size, comboBonus } = config[difficulty];
         const neighbors = getNeighbors(index, size);
 
@@ -1111,25 +2476,51 @@
             comboStreak = 1;
           }
           lastMoveTime = now;
-
           swap(index, emptyPos);
           emptyPos = index;
           moves++;
           document.getElementById("moves-display").textContent = moves;
-
-          updateComboUI();
           updateLiveScore();
-
-          slideSfx.currentTime = 0;
-          slideSfx.play().catch(() => {});
-
+          playCuratorSound("slide");
           renderBoard();
           checkWin();
         }
       }
 
+      function showHeritageReveal() {
+        gameActive = false;
+        clearInterval(timerInterval);
+
+        const cfg = config[difficulty];
+        const timeBonus = timeLeft * cfg.timeBonusRate;
+        const movePenalty = moves * cfg.movePenalty;
+        pendingWinScore = Math.max(
+          100,
+          Math.floor((cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) * cfg.multiplier),
+        );
+
+        const imageUrl = imgUrl(currentSite.src);
+        document.getElementById("reveal-image").src = imageUrl;
+        document.getElementById("reveal-image").alt = currentSite.name;
+        document.getElementById("reveal-site-name").textContent = currentSite.name;
+        document.getElementById("reveal-site-cat").textContent = currentSite.category;
+        document.getElementById("reveal-site-desc").textContent = currentSite.description || "";
+        document.getElementById("reveal-stat-time").textContent = formatTime(elapsedSeconds);
+        document.getElementById("reveal-stat-moves").textContent = moves.toString();
+        document.getElementById("reveal-stat-score").textContent = pendingWinScore.toLocaleString();
+
+        document.getElementById("game-main").classList.add("hidden");
+        document.querySelector(".game-hud")?.classList.add("hidden");
+        document.getElementById("heritage-reveal").classList.remove("hidden");
+
+        const gamePhoto = document.getElementById("game-bg-photo");
+        if (gamePhoto) gamePhoto.style.backgroundImage = `url("${imageUrl}")`;
+
+        playCuratorSound("victory");
+      }
+
       function checkWin() {
-        if (board.every((val, i) => val === i)) endGame(true);
+        if (board.every((val, i) => val === i)) showHeritageReveal();
       }
 
       function startTimer() {
@@ -1137,7 +2528,6 @@
         timeLeft = totalTime;
         elapsedSeconds = 0;
         updateTimerUI();
-
         timerInterval = setInterval(() => {
           timeLeft--;
           elapsedSeconds++;
@@ -1150,13 +2540,9 @@
       function updateTimerUI() {
         const timerEl = document.getElementById("timer-display");
         const barEl = document.getElementById("timer-bar");
-
         timerEl.textContent = formatTime(timeLeft);
-        document.getElementById("elapsed-display").textContent =
-          `${formatTime(elapsedSeconds)} elapsed`;
-
+        document.getElementById("elapsed-display").textContent = `${formatTime(elapsedSeconds)} elapsed`;
         barEl.style.width = `${(timeLeft / totalTime) * 100}%`;
-
         const critical = timeLeft <= 30;
         timerEl.classList.toggle("timer-critical", critical);
         barEl.classList.toggle("critical", critical);
@@ -1166,10 +2552,8 @@
         document.getElementById("score-breakdown").innerHTML = data
           .map((row, i) => {
             const isLast = i === data.length - 1;
-            const extra = isLast
-              ? "font-bold border-t border-amber-500/20 pt-3 mt-2 text-amber-400"
-              : "";
-            return `<div class="score-row ${extra}"><span>${row.label}</span><span>${row.value}</span></div>`;
+            const cls = isLast ? "score-row score-row--total" : "score-row";
+            return `<div class="${cls}"><span>${row.label}</span><span>${row.value}</span></div>`;
           })
           .join("");
       }
@@ -1178,8 +2562,13 @@
         gameActive = false;
         clearInterval(timerInterval);
 
+        setPageBackgroundMode("intro");
+        setMusicMode("intro");
+
         document.getElementById("game-screen").classList.add("hidden");
-        document.getElementById("results-screen").classList.remove("hidden");
+        const resultsEl = document.getElementById("results-screen");
+        resultsEl.classList.remove("hidden");
+        resultsEl.classList.toggle("is-win", win);
 
         const cfg = config[difficulty];
         const siteName = currentSite?.name || "heritage site";
@@ -1187,61 +2576,35 @@
         if (win) {
           const timeBonus = timeLeft * cfg.timeBonusRate;
           const movePenalty = moves * cfg.movePenalty;
-          const rawScore =
-            cfg.basePoints + timeBonus - movePenalty + comboBonusTotal;
-          const totalEarned = Math.max(
-            100,
-            Math.floor(rawScore * cfg.multiplier),
-          );
+          const totalEarned = pendingWinScore > 0
+            ? pendingWinScore
+            : Math.max(100, Math.floor((cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) * cfg.multiplier));
 
-          document.getElementById("victory-title").textContent =
-            "Heritage Restored";
-          document.getElementById("final-score").textContent =
-            totalEarned.toLocaleString();
+          document.getElementById("victory-title").textContent = "Heritage Restored!";
+          document.getElementById("final-score").textContent = totalEarned.toLocaleString();
           document.getElementById("result-msg").textContent =
-            `You restored the ${siteName} photograph in ${formatTime(elapsedSeconds)} with ${moves} moves.`;
+            `You restored ${siteName} in ${formatTime(elapsedSeconds)} with ${moves} moves.`;
 
           renderScoreBreakdown([
             { label: "Heritage Site", value: siteName },
             { label: "Base Score", value: `+${cfg.basePoints.toLocaleString()}` },
-            {
-              label: `Time Bonus (${formatTime(timeLeft)} left)`,
-              value: `+${timeBonus.toLocaleString()}`,
-            },
-            {
-              label: `Move Penalty (${moves} moves)`,
-              value: `−${movePenalty.toLocaleString()}`,
-            },
-            {
-              label: "Combo Bonus",
-              value: `+${comboBonusTotal.toLocaleString()}`,
-            },
-            {
-              label: `${cfg.label} Multiplier (×${cfg.multiplier})`,
-              value: "Applied",
-            },
+            { label: `Time Bonus (${formatTime(timeLeft)} left)`, value: `+${timeBonus.toLocaleString()}` },
+            { label: `Move Penalty (${moves} moves)`, value: `−${movePenalty.toLocaleString()}` },
+            { label: `${cfg.label} Multiplier (×${cfg.multiplier})`, value: "Applied" },
             { label: "Total Earned", value: totalEarned.toLocaleString() },
           ]);
 
-          let currentTotal = parseInt(
-            localStorage.getItem("totalHeritagePoints") || "0",
-          );
-          localStorage.setItem(
-            "totalHeritagePoints",
-            currentTotal + totalEarned,
-          );
+          let currentTotal = parseInt(localStorage.getItem("totalHeritagePoints") || "0");
+          localStorage.setItem("totalHeritagePoints", currentTotal + totalEarned);
           const ptsEl = document.getElementById("header-total-points");
           if (ptsEl) ptsEl.textContent = currentTotal + totalEarned;
 
-          victorySfx.play().catch(() => {});
-          playAnnouncer(
-            `Heritage restored! You earned ${totalEarned.toLocaleString()} points for completing ${siteName}.`,
-          );
+          pendingWinScore = 0;
+          playAnnouncer(`Heritage restored! You earned ${totalEarned.toLocaleString()} points for completing ${siteName}.`);
         } else {
-          document.getElementById("victory-title").textContent = "Time Expired";
+          document.getElementById("victory-title").textContent = "Time's Up";
           document.getElementById("final-score").textContent = "0";
-          document.getElementById("result-msg").textContent =
-            `Time ran out before the ${siteName} photograph could be restored.`;
+          document.getElementById("result-msg").textContent = `Time ran out before ${siteName} could be restored. Try again!`;
           renderScoreBreakdown([
             { label: "Heritage Site", value: siteName },
             { label: "Difficulty", value: cfg.label },
@@ -1263,32 +2626,52 @@
         }
       }
 
+      document.getElementById("reveal-continue-btn").onclick = () => {
+        playCuratorSound("click");
+        endGame(true);
+      };
+
       document.getElementById("start-btn").onclick = () => {
+        if (!difficulty) return;
+
+        playCuratorSound("start");
+        getCuratorAudioCtx();
         demoPuzzle.stop();
 
-        const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
-        const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
-        bgMusic.volume = mVol;
-        slideSfx.volume = sVol;
-        victorySfx.volume = sVol;
+        sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
+        applyMusicVolume();
+        startPuzzleMusic();
 
-        if (mVol > 0) bgMusic.play().catch(() => {});
-
-        document.getElementById("hero-title").classList.add("opacity-0");
         document.getElementById("intro-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
 
         initBoard();
+        pendingWinScore = 0;
+        setPageBackgroundMode("game");
+        setMusicMode("game");
+
         gameActive = true;
         startTimer();
-        playAnnouncer(
-          `${config[difficulty].label} difficulty. Restore the ${currentSite.name} heritage photograph.`,
-        );
+        playAnnouncer(`${config[difficulty].label} difficulty. Restore the ${currentSite.name} heritage photograph.`);
       };
 
-      document.getElementById("toggle-numbers").onclick = () => {
-        boardEl.classList.toggle("show-numbers");
-      };
+      const musicToggleBtn = document.getElementById("music-toggle");
+      if (musicToggleBtn) {
+        musicToggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          playCuratorSound("click");
+          getCuratorAudioCtx();
+          toggleMusicMute();
+        });
+      }
+
+      bindHoverSound(document.querySelectorAll(".diff-card, .start-btn, .game-back-nav a, .results-actions .start-btn, .results-actions .btn-ghost, #reveal-continue-btn"));
+      document.querySelector(".results-actions .start-btn")?.addEventListener("click", () => playCuratorSound("click"));
+      document.querySelector(".results-actions .btn-ghost")?.addEventListener("click", () => playCuratorSound("click"));
+      bindPuzzleMusicStart();
+      applyMusicVolume();
+      updateNowPlayingTitle();
+      updateMusicUI();
     </script>
   </body>
 </html>

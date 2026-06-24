@@ -15,6 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="heritage-palette.css" />
 
     <style>
       body {
@@ -522,10 +523,80 @@
           opacity: 0;
         }
       }
+
+      /* Keep profile dropdown above arcade hero layers */
+      #header-placeholder,
+      .site-header {
+        z-index: 500;
+      }
+
+      .site-header .header-bg {
+        overflow: visible;
+      }
+
+      .site-header .site-header__bar,
+      .site-header .site-header__end,
+      .site-header .site-header__utilities,
+      .site-header .site-profile {
+        overflow: visible;
+      }
+
+      .site-header .site-profile {
+        position: relative;
+        z-index: 510;
+      }
+
+      .site-header .header-dropdown {
+        z-index: 520;
+      }
+
+      /* Keep header color and size unchanged when scrolling (games page only) */
+      body.game-page .site-header.is-scrolled {
+        height: var(--header-h);
+      }
+
+      body.game-page .site-header.is-scrolled .header-bg {
+        background: rgba(10, 16, 28, 0.97);
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
+      }
+
+      body.game-page .site-header.is-scrolled .header-scene__svg {
+        opacity: 0.78;
+      }
+
+      .hero-bg {
+        z-index: 1;
+      }
+
+      #settings-modal {
+        z-index: 7000 !important;
+      }
+
+      #settings-modal.flex {
+        display: flex !important;
+      }
+
+      #settings-modal .header-panel {
+        background: var(--surface-dark-elevated) !important;
+        border-color: rgba(34, 211, 238, 0.18) !important;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.55),
+          0 0 40px rgba(34, 211, 238, 0.08);
+      }
+
+      #settings-modal input[type="range"] {
+        accent-color: #22d3ee;
+      }
+
+      #settings-modal select option {
+        background: var(--surface-dark-elevated);
+        color: #fff;
+      }
     </style>
   </head>
 
-  <body>
+  <body class="game-page">
     <div id="header-placeholder"></div>
 
     <section
@@ -796,6 +867,9 @@
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
 
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) document.body.appendChild(settingsModal);
+
           // Inject the styles from header.html to ensure the Settings design is applied
           const headerStyle = doc.querySelector("style");
           if (headerStyle) {
@@ -819,6 +893,14 @@
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
+
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
+          bindHoverSoundToElements(document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
+          ));
         });
 
       // Load Footer
@@ -912,6 +994,20 @@
       const card = document.getElementById("game-card");
       const prevPreview = document.getElementById("prev-card-preview");
       const nextPreview = document.getElementById("next-card-preview");
+      if (prevPreview) {
+        prevPreview.style.cursor = "pointer";
+        prevPreview.addEventListener("click", () => {
+          currentIndex = (currentIndex - 1 + games.length) % games.length;
+          updateDisplay();
+        });
+      }
+      if (nextPreview) {
+        nextPreview.style.cursor = "pointer";
+        nextPreview.addEventListener("click", () => {
+          currentIndex = (currentIndex + 1) % games.length;
+          updateDisplay();
+        });
+      }
       const title2 = document.getElementById("game-title-2");
       const desc = document.getElementById("game-desc");
       const genre = document.getElementById("game-genre");
@@ -950,14 +1046,58 @@
         // Update Pagination Dots
         paginationContainer.innerHTML = "";
         games.forEach((_, i) => {
-          const dot = document.createElement("div");
-          if (i === currentIndex) {
-            dot.className =
-              "w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan]";
-          } else {
-            dot.className = "w-2 h-2 rounded-full bg-white/30";
-          }
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = i === currentIndex
+            ? "game-dot game-dot-active w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan] cursor-pointer"
+            : "game-dot w-2 h-2 rounded-full bg-white/30 cursor-pointer hover:bg-white/50 transition-colors";
+          dot.setAttribute("aria-label", `Show game ${i + 1}`);
+          dot.addEventListener("click", () => {
+            currentIndex = i;
+            updateDisplay();
+          });
           paginationContainer.appendChild(dot);
+        });
+
+        bindHoverSoundToElements(paginationContainer.querySelectorAll(".game-dot"));
+      }
+
+      function getSfxVolume() {
+        return parseFloat(localStorage.getItem("sfxVol") || "0.8");
+      }
+
+      let lastHoverSoundAt = 0;
+      let lastHoverSoundEl = null;
+
+      function playHoverSound() {
+        const clickSoundEl = document.getElementById("click-sound");
+        if (!clickSoundEl) return;
+
+        const vol = getSfxVolume();
+        if (vol <= 0) return;
+
+        const now = Date.now();
+        if (now - lastHoverSoundAt < 110) return;
+        lastHoverSoundAt = now;
+
+        clickSoundEl.volume = Math.min(vol * 0.45, 0.35);
+        clickSoundEl.currentTime = 0;
+        clickSoundEl.play().catch(() => {});
+      }
+
+      function bindHoverSoundToElements(elements) {
+        elements.forEach((el) => {
+          if (!el || el.dataset.hoverSoundBound === "true") return;
+          el.dataset.hoverSoundBound = "true";
+          el.addEventListener("mouseenter", () => {
+            if (lastHoverSoundEl === el) return;
+            lastHoverSoundEl = el;
+            playHoverSound();
+          });
+          el.addEventListener("mouseleave", () => {
+            if (lastHoverSoundEl === el) lastHoverSoundEl = null;
+          });
+          el.addEventListener("focus", playHoverSound);
         });
       }
 
@@ -1127,12 +1267,20 @@
       if (window.location.hash === "#leaderboard") showLeaderboard();
 
       // Sound FX integration
-      const allButtons = [prevBtn, nextBtn, playBtn, leaderboardBtn];
+      const allButtons = [prevBtn, nextBtn, playBtn, leaderboardBtn, closeLeaderboard];
+
+      bindHoverSoundToElements([
+        card,
+        prevPreview,
+        nextPreview,
+        ...allButtons,
+      ]);
 
       allButtons.forEach((btn) => {
         if (btn) {
           btn.addEventListener("click", () => {
-            clickSound.currentTime = 0; // Reset sound to beginning for rapid clicks
+            clickSound.volume = getSfxVolume();
+            clickSound.currentTime = 0;
             clickSound
               .play()
               .catch((e) =>
