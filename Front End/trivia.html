@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="game-tv-preview.css" />
 
     <style>
       :root {
@@ -64,11 +65,23 @@
       .show-stage {
         position: relative;
         min-height: 100vh;
-        padding: 6.5rem 1rem 2rem;
+        padding: 6.5rem 1rem 8rem;
         background:
-          radial-gradient(ellipse 90% 60% at 50% -10%, rgba(212, 175, 55, 0.14) 0%, transparent 55%),
-          radial-gradient(ellipse 50% 45% at 10% 25%, rgba(92, 24, 32, 0.35) 0%, transparent 55%),
-          radial-gradient(ellipse 50% 45% at 90% 25%, rgba(92, 24, 32, 0.35) 0%, transparent 55%),
+          radial-gradient(
+            ellipse 90% 60% at 50% -10%,
+            rgba(212, 175, 55, 0.14) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 50% 45% at 10% 25%,
+            rgba(92, 24, 32, 0.35) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 50% 45% at 90% 25%,
+            rgba(92, 24, 32, 0.35) 0%,
+            transparent 55%
+          ),
           linear-gradient(180deg, #141018 0%, #0a080e 45%, #060508 100%);
       }
 
@@ -79,14 +92,13 @@
         pointer-events: none;
         z-index: 0;
         opacity: 0.45;
-        background:
-          repeating-linear-gradient(
-            90deg,
-            transparent 0,
-            transparent 64px,
-            rgba(212, 175, 55, 0.025) 64px,
-            rgba(212, 175, 55, 0.025) 65px
-          );
+        background: repeating-linear-gradient(
+          90deg,
+          transparent 0,
+          transparent 64px,
+          rgba(212, 175, 55, 0.025) 64px,
+          rgba(212, 175, 55, 0.025) 65px
+        );
       }
 
       .spotlight {
@@ -98,8 +110,17 @@
         max-width: 680px;
         height: 85vh;
         background:
-          radial-gradient(ellipse 55% 35% at 50% 0%, rgba(255, 252, 245, 0.28) 0%, transparent 72%),
-          linear-gradient(180deg, rgba(255, 248, 235, 0.18) 0%, rgba(255, 248, 235, 0.06) 38%, transparent 72%);
+          radial-gradient(
+            ellipse 55% 35% at 50% 0%,
+            rgba(255, 252, 245, 0.28) 0%,
+            transparent 72%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 248, 235, 0.18) 0%,
+            rgba(255, 248, 235, 0.06) 38%,
+            transparent 72%
+          );
         clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
         pointer-events: none;
         z-index: 2;
@@ -119,7 +140,11 @@
       .spotlight--left {
         left: 8%;
         background:
-          radial-gradient(ellipse 50% 30% at 50% 0%, rgba(255, 248, 235, 0.2) 0%, transparent 70%),
+          radial-gradient(
+            ellipse 50% 30% at 50% 0%,
+            rgba(255, 248, 235, 0.2) 0%,
+            transparent 70%
+          ),
           linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, transparent 68%);
         clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
         animation: spotlight-drift-left 8s ease-in-out infinite alternate;
@@ -128,7 +153,11 @@
       .spotlight--right {
         right: 8%;
         background:
-          radial-gradient(ellipse 50% 30% at 50% 0%, rgba(255, 248, 235, 0.2) 0%, transparent 70%),
+          radial-gradient(
+            ellipse 50% 30% at 50% 0%,
+            rgba(255, 248, 235, 0.2) 0%,
+            transparent 70%
+          ),
           linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, transparent 68%);
         clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
         animation: spotlight-drift-right 9s ease-in-out infinite alternate;
@@ -174,18 +203,36 @@
       }
 
       @keyframes spotlight-drift-center {
-        from { transform: translateX(-50%) rotate(-4deg); opacity: 0.85; }
-        to { transform: translateX(-50%) rotate(4deg); opacity: 1; }
+        from {
+          transform: translateX(-50%) rotate(-4deg);
+          opacity: 0.85;
+        }
+        to {
+          transform: translateX(-50%) rotate(4deg);
+          opacity: 1;
+        }
       }
 
       @keyframes spotlight-drift-left {
-        from { transform: rotate(-10deg); opacity: 0.75; }
-        to { transform: rotate(-2deg); opacity: 0.95; }
+        from {
+          transform: rotate(-10deg);
+          opacity: 0.75;
+        }
+        to {
+          transform: rotate(-2deg);
+          opacity: 0.95;
+        }
       }
 
       @keyframes spotlight-drift-right {
-        from { transform: rotate(2deg); opacity: 0.75; }
-        to { transform: rotate(10deg); opacity: 0.95; }
+        from {
+          transform: rotate(2deg);
+          opacity: 0.75;
+        }
+        to {
+          transform: rotate(10deg);
+          opacity: 0.95;
+        }
       }
 
       /* Animated stage lights */
@@ -209,19 +256,35 @@
 
       .stage-light--1 {
         left: 5%;
-        background: conic-gradient(from 180deg at 50% 0%, transparent 42%, rgba(212, 175, 55, 0.45) 50%, transparent 58%);
+        background: conic-gradient(
+          from 180deg at 50% 0%,
+          transparent 42%,
+          rgba(212, 175, 55, 0.45) 50%,
+          transparent 58%
+        );
         animation-delay: 0s;
       }
 
       .stage-light--2 {
         right: 5%;
-        background: conic-gradient(from 180deg at 50% 0%, transparent 42%, rgba(255, 235, 200, 0.35) 50%, transparent 58%);
+        background: conic-gradient(
+          from 180deg at 50% 0%,
+          transparent 42%,
+          rgba(255, 235, 200, 0.35) 50%,
+          transparent 58%
+        );
         animation-delay: -4s;
       }
 
       @keyframes light-sweep {
-        from { transform: rotate(-18deg); opacity: 0.18; }
-        to { transform: rotate(18deg); opacity: 0.32; }
+        from {
+          transform: rotate(-18deg);
+          opacity: 0.18;
+        }
+        to {
+          transform: rotate(18deg);
+          opacity: 0.32;
+        }
       }
 
       .stage-floor {
@@ -233,7 +296,11 @@
         height: 120px;
         pointer-events: none;
         z-index: 1;
-        background: radial-gradient(ellipse 80% 100% at 50% 100%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+        background: radial-gradient(
+          ellipse 80% 100% at 50% 100%,
+          rgba(212, 175, 55, 0.12) 0%,
+          transparent 70%
+        );
         border-top: 2px solid rgba(212, 175, 55, 0.22);
         border-radius: 50% 50% 0 0 / 30% 30% 0 0;
       }
@@ -382,12 +449,18 @@
         line-height: 1;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        background: linear-gradient(180deg, #fff8ef 0%, #f0e6c8 48%, #d4af37 100%);
+        background: linear-gradient(
+          180deg,
+          #fff8ef 0%,
+          #f0e6c8 48%,
+          #d4af37 100%
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
         margin-bottom: 1.15rem;
-        filter: drop-shadow(0 3px 0 rgba(60, 40, 8, 0.35)) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
+        filter: drop-shadow(0 3px 0 rgba(60, 40, 8, 0.35))
+          drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
       }
 
       .intro-card__title-sub {
@@ -439,7 +512,11 @@
 
       .diff-btn.is-active {
         border-color: var(--tv-gold);
-        background: linear-gradient(180deg, rgba(61, 18, 24, 0.9), rgba(42, 12, 18, 0.95));
+        background: linear-gradient(
+          180deg,
+          rgba(61, 18, 24, 0.9),
+          rgba(42, 12, 18, 0.95)
+        );
         color: var(--tv-warm-white);
         box-shadow: inset 0 1px 0 rgba(255, 248, 235, 0.12);
       }
@@ -468,8 +545,17 @@
         border-radius: 1.15rem;
         border: 2px solid rgba(212, 175, 55, 0.38);
         background:
-          radial-gradient(circle at 18% 22%, rgba(212, 175, 55, 0.08) 0%, transparent 42%),
-          linear-gradient(165deg, rgba(36, 20, 18, 0.96) 0%, rgba(14, 10, 12, 0.98) 55%, rgba(8, 6, 8, 0.99) 100%);
+          radial-gradient(
+            circle at 18% 22%,
+            rgba(212, 175, 55, 0.08) 0%,
+            transparent 42%
+          ),
+          linear-gradient(
+            165deg,
+            rgba(36, 20, 18, 0.96) 0%,
+            rgba(14, 10, 12, 0.98) 55%,
+            rgba(8, 6, 8, 0.99) 100%
+          );
         box-shadow:
           inset 0 1px 0 rgba(255, 248, 235, 0.1),
           inset 0 -18px 28px rgba(0, 0, 0, 0.35),
@@ -488,11 +574,18 @@
         inset: 0;
         border-radius: inherit;
         pointer-events: none;
-        background:
-          radial-gradient(circle, rgba(212, 175, 55, 0.14) 1px, transparent 1px);
+        background: radial-gradient(
+          circle,
+          rgba(212, 175, 55, 0.14) 1px,
+          transparent 1px
+        );
         background-size: 16px 16px;
         opacity: 0.28;
-        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 88%);
+        mask-image: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.85),
+          transparent 88%
+        );
         animation: diff-grid-drift 12s linear infinite;
       }
 
@@ -503,8 +596,14 @@
         border-radius: inherit;
         pointer-events: none;
         border: 1px solid transparent;
-        background:
-          linear-gradient(135deg, rgba(212, 175, 55, 0.55), transparent 38%, transparent 62%, rgba(212, 175, 55, 0.35)) border-box;
+        background: linear-gradient(
+            135deg,
+            rgba(212, 175, 55, 0.55),
+            transparent 38%,
+            transparent 62%,
+            rgba(212, 175, 55, 0.35)
+          )
+          border-box;
         mask:
           linear-gradient(#fff 0 0) padding-box,
           linear-gradient(#fff 0 0);
@@ -534,7 +633,12 @@
         height: 2px;
         margin: 0.55rem auto 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, transparent, var(--tv-gold), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--tv-gold),
+          transparent
+        );
         animation: diff-label-line 2.2s ease-in-out infinite alternate;
       }
 
@@ -564,16 +668,26 @@
         animation: diff-btn-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
       }
 
-      .difficulty-panel__options .diff-btn:nth-child(1) { animation-delay: 0.55s; }
-      .difficulty-panel__options .diff-btn:nth-child(2) { animation-delay: 0.68s; }
-      .difficulty-panel__options .diff-btn:nth-child(3) { animation-delay: 0.81s; }
+      .difficulty-panel__options .diff-btn:nth-child(1) {
+        animation-delay: 0.55s;
+      }
+      .difficulty-panel__options .diff-btn:nth-child(2) {
+        animation-delay: 0.68s;
+      }
+      .difficulty-panel__options .diff-btn:nth-child(3) {
+        animation-delay: 0.81s;
+      }
 
       .difficulty-panel__options .diff-btn::before {
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        background: linear-gradient(180deg, rgba(255, 248, 235, 0.08) 0%, transparent 45%);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 248, 235, 0.08) 0%,
+          transparent 45%
+        );
         opacity: 0;
         transition: opacity 0.25s ease;
         pointer-events: none;
@@ -586,7 +700,12 @@
         left: -130%;
         width: 55%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 248, 235, 0.18), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 248, 235, 0.18),
+          transparent
+        );
         transform: skewX(-18deg);
         transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         pointer-events: none;
@@ -595,7 +714,9 @@
       .difficulty-panel__options .diff-btn:hover:not(:disabled) {
         transform: translateZ(16px) scale(1.03);
         border-color: rgba(212, 175, 55, 0.65);
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35), 0 0 18px rgba(212, 175, 55, 0.12);
+        box-shadow:
+          0 8px 22px rgba(0, 0, 0, 0.35),
+          0 0 18px rgba(212, 175, 55, 0.12);
       }
 
       .difficulty-panel__options .diff-btn:hover:not(:disabled)::before {
@@ -633,8 +754,13 @@
       }
 
       @keyframes diff-panel-float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-7px); }
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-7px);
+        }
       }
 
       @keyframes diff-frame-glow {
@@ -655,13 +781,21 @@
       }
 
       @keyframes diff-grid-drift {
-        from { background-position: 0 0; }
-        to { background-position: 16px 16px; }
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 16px 16px;
+        }
       }
 
       @keyframes diff-corner-pulse {
-        from { opacity: 0.3; }
-        to { opacity: 0.55; }
+        from {
+          opacity: 0.3;
+        }
+        to {
+          opacity: 0.55;
+        }
       }
 
       @keyframes diff-label-glow {
@@ -676,8 +810,14 @@
       }
 
       @keyframes diff-label-line {
-        from { opacity: 0.45; transform: scaleX(0.75); }
-        to { opacity: 1; transform: scaleX(1); }
+        from {
+          opacity: 0.45;
+          transform: scaleX(0.75);
+        }
+        to {
+          opacity: 1;
+          transform: scaleX(1);
+        }
       }
 
       @keyframes diff-btn-enter {
@@ -692,7 +832,8 @@
       }
 
       @keyframes diff-btn-active-glow {
-        0%, 100% {
+        0%,
+        100% {
           box-shadow:
             0 0 16px rgba(212, 175, 55, 0.2),
             inset 0 1px 0 rgba(255, 248, 235, 0.12);
@@ -757,11 +898,18 @@
         border: 2px solid rgba(255, 248, 235, 0.35);
         cursor: pointer;
         color: #2a1208;
-        background: linear-gradient(180deg, #f0e6c8 0%, #d4af37 48%, #b8922a 100%);
+        background: linear-gradient(
+          180deg,
+          #f0e6c8 0%,
+          #d4af37 48%,
+          #b8922a 100%
+        );
         box-shadow:
           0 8px 0 #7a6018,
           0 16px 36px rgba(0, 0, 0, 0.45);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
       }
 
       .start-btn:hover {
@@ -874,7 +1022,9 @@
         stroke-linecap: round;
         stroke-dasharray: 283;
         stroke-dashoffset: 0;
-        transition: stroke-dashoffset 0.35s linear, stroke 0.3s ease;
+        transition:
+          stroke-dashoffset 0.35s linear,
+          stroke 0.3s ease;
       }
 
       .timer-ring__progress.is-low {
@@ -915,7 +1065,9 @@
         width: 100%;
       }
 
-      .tv-studio { position: relative; }
+      .tv-studio {
+        position: relative;
+      }
 
       .show-logo-bar {
         display: grid;
@@ -962,8 +1114,13 @@
       }
 
       @keyframes live-blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.35; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
       }
 
       .show-logo-text {
@@ -994,8 +1151,12 @@
         position: relative;
         padding: 18px 18px 22px;
         border-radius: 1.35rem;
-        background:
-          linear-gradient(145deg, #4a4034 0%, #2a2218 42%, #12100c 100%);
+        background: linear-gradient(
+          145deg,
+          #4a4034 0%,
+          #2a2218 42%,
+          #12100c 100%
+        );
         border: 4px solid #6b5638;
         box-shadow:
           0 30px 80px rgba(0, 0, 0, 0.65),
@@ -1013,7 +1174,12 @@
         width: 42%;
         height: 5px;
         border-radius: 999px;
-        background: linear-gradient(90deg, transparent, rgba(255, 248, 235, 0.12), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 248, 235, 0.12),
+          transparent
+        );
         pointer-events: none;
       }
 
@@ -1035,7 +1201,11 @@
         border-radius: 0.75rem;
         overflow: hidden;
         background:
-          radial-gradient(ellipse 90% 70% at 50% 20%, rgba(255, 248, 235, 0.07) 0%, transparent 55%),
+          radial-gradient(
+            ellipse 90% 70% at 50% 20%,
+            rgba(255, 248, 235, 0.07) 0%,
+            transparent 55%
+          ),
           linear-gradient(180deg, #0e2048 0%, #081530 55%, #040a18 100%);
         padding: 1rem;
         border: 3px solid #1a1208;
@@ -1089,8 +1259,13 @@
         content: "";
         position: absolute;
         inset: 0;
-        background:
-          linear-gradient(90deg, rgba(255, 60, 60, 0.04) 0%, transparent 35%, transparent 65%, rgba(60, 200, 255, 0.04) 100%);
+        background: linear-gradient(
+          90deg,
+          rgba(255, 60, 60, 0.04) 0%,
+          transparent 35%,
+          transparent 65%,
+          rgba(60, 200, 255, 0.04) 100%
+        );
         mix-blend-mode: screen;
         opacity: 0;
         animation: tv-glitch-chromatic 9s infinite;
@@ -1122,58 +1297,157 @@
       }
 
       @keyframes tv-flicker-bright {
-        0%, 89%, 91%, 100% { filter: brightness(1) contrast(1); }
-        90% { filter: brightness(1.12) contrast(1.05); }
-        93% { filter: brightness(0.88) contrast(1.02); }
-        96% { filter: brightness(1.06) contrast(1); }
+        0%,
+        89%,
+        91%,
+        100% {
+          filter: brightness(1) contrast(1);
+        }
+        90% {
+          filter: brightness(1.12) contrast(1.05);
+        }
+        93% {
+          filter: brightness(0.88) contrast(1.02);
+        }
+        96% {
+          filter: brightness(1.06) contrast(1);
+        }
       }
 
       @keyframes tv-screen-warp {
-        0%, 100% { transform: perspective(600px) rotateX(0deg) skewX(0deg); }
-        25% { transform: perspective(600px) rotateX(0.35deg) skewX(0.08deg); }
-        50% { transform: perspective(600px) rotateX(-0.25deg) skewX(-0.06deg); }
-        75% { transform: perspective(600px) rotateX(0.2deg) skewX(0.04deg); }
+        0%,
+        100% {
+          transform: perspective(600px) rotateX(0deg) skewX(0deg);
+        }
+        25% {
+          transform: perspective(600px) rotateX(0.35deg) skewX(0.08deg);
+        }
+        50% {
+          transform: perspective(600px) rotateX(-0.25deg) skewX(-0.06deg);
+        }
+        75% {
+          transform: perspective(600px) rotateX(0.2deg) skewX(0.04deg);
+        }
       }
 
       @keyframes tv-noise-jitter {
-        0% { opacity: 0.08; transform: translate(0, 0); }
-        25% { opacity: 0.13; transform: translate(-1px, 1px); }
-        50% { opacity: 0.1; transform: translate(1px, -1px); }
-        75% { opacity: 0.14; transform: translate(-1px, 0); }
-        100% { opacity: 0.09; transform: translate(0, 1px); }
+        0% {
+          opacity: 0.08;
+          transform: translate(0, 0);
+        }
+        25% {
+          opacity: 0.13;
+          transform: translate(-1px, 1px);
+        }
+        50% {
+          opacity: 0.1;
+          transform: translate(1px, -1px);
+        }
+        75% {
+          opacity: 0.14;
+          transform: translate(-1px, 0);
+        }
+        100% {
+          opacity: 0.09;
+          transform: translate(0, 1px);
+        }
       }
 
       @keyframes tv-flicker-flash {
-        0%, 92%, 94%, 100% { opacity: 0; }
-        93% { opacity: 0.05; }
-        97% { opacity: 0.035; }
-        98% { opacity: 0; }
-        99% { opacity: 0.07; }
+        0%,
+        92%,
+        94%,
+        100% {
+          opacity: 0;
+        }
+        93% {
+          opacity: 0.05;
+        }
+        97% {
+          opacity: 0.035;
+        }
+        98% {
+          opacity: 0;
+        }
+        99% {
+          opacity: 0.07;
+        }
       }
 
       @keyframes tv-glitch-chromatic {
-        0%, 86%, 100% { opacity: 0; transform: translateX(0); }
-        87% { opacity: 1; transform: translateX(3px); }
-        88% { opacity: 0.7; transform: translateX(-4px); }
-        89% { opacity: 0; }
-        94% { opacity: 0.85; transform: translateX(-2px); }
-        95% { opacity: 0; }
+        0%,
+        86%,
+        100% {
+          opacity: 0;
+          transform: translateX(0);
+        }
+        87% {
+          opacity: 1;
+          transform: translateX(3px);
+        }
+        88% {
+          opacity: 0.7;
+          transform: translateX(-4px);
+        }
+        89% {
+          opacity: 0;
+        }
+        94% {
+          opacity: 0.85;
+          transform: translateX(-2px);
+        }
+        95% {
+          opacity: 0;
+        }
       }
 
       @keyframes tv-glitch-slice {
-        0%, 84%, 100% { opacity: 0; transform: translateX(0) scaleY(1); top: 28%; }
-        85% { opacity: 0.9; transform: translateX(10px) scaleY(1.2); top: 22%; }
-        86% { opacity: 0.5; transform: translateX(-14px) scaleY(0.8); top: 48%; }
-        87% { opacity: 0; }
-        91% { opacity: 0.75; transform: translateX(6px); top: 62%; }
-        92% { opacity: 0; }
+        0%,
+        84%,
+        100% {
+          opacity: 0;
+          transform: translateX(0) scaleY(1);
+          top: 28%;
+        }
+        85% {
+          opacity: 0.9;
+          transform: translateX(10px) scaleY(1.2);
+          top: 22%;
+        }
+        86% {
+          opacity: 0.5;
+          transform: translateX(-14px) scaleY(0.8);
+          top: 48%;
+        }
+        87% {
+          opacity: 0;
+        }
+        91% {
+          opacity: 0.75;
+          transform: translateX(6px);
+          top: 62%;
+        }
+        92% {
+          opacity: 0;
+        }
       }
 
       @keyframes tv-distort-roll {
-        0% { top: -6%; opacity: 0; }
-        8% { opacity: 0.35; }
-        12% { top: 108%; opacity: 0; }
-        100% { top: 108%; opacity: 0; }
+        0% {
+          top: -6%;
+          opacity: 0;
+        }
+        8% {
+          opacity: 0.35;
+        }
+        12% {
+          top: 108%;
+          opacity: 0;
+        }
+        100% {
+          top: 108%;
+          opacity: 0;
+        }
       }
 
       .tv-screen::after {
@@ -1182,7 +1456,12 @@
         inset: 0;
         pointer-events: none;
         border-radius: inherit;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 42%, transparent 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.07) 0%,
+          transparent 42%,
+          transparent 100%
+        );
         z-index: 28;
       }
 
@@ -1217,7 +1496,11 @@
         transform: translateX(-50%);
         width: 75%;
         height: 3rem;
-        background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255, 248, 235, 0.14) 0%, transparent 72%);
+        background: radial-gradient(
+          ellipse 80% 100% at 50% 0%,
+          rgba(255, 248, 235, 0.14) 0%,
+          transparent 72%
+        );
         pointer-events: none;
         z-index: -1;
       }
@@ -1228,7 +1511,13 @@
         border-radius: 0.75rem;
         pointer-events: none;
         z-index: 30;
-        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.1) 2px,
+          rgba(0, 0, 0, 0.1) 4px
+        );
         opacity: 0.45;
       }
 
@@ -1241,7 +1530,11 @@
         box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.55);
       }
 
-      .question-strip { display: flex; justify-content: center; margin-bottom: 0.75rem; }
+      .question-strip {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+      }
 
       .question-strip__badge {
         font-family: "Orbitron", sans-serif;
@@ -1278,10 +1571,18 @@
         transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
-      .curtain-panel--left { border-right: 4px solid #450a0a; }
-      .curtain-panel--right { border-left: 4px solid #450a0a; }
-      .curtain-overlay.is-open .curtain-panel--left { transform: translateX(-100%); }
-      .curtain-overlay.is-open .curtain-panel--right { transform: translateX(100%); }
+      .curtain-panel--left {
+        border-right: 4px solid #450a0a;
+      }
+      .curtain-panel--right {
+        border-left: 4px solid #450a0a;
+      }
+      .curtain-overlay.is-open .curtain-panel--left {
+        transform: translateX(-100%);
+      }
+      .curtain-overlay.is-open .curtain-panel--right {
+        transform: translateX(100%);
+      }
 
       .confetti-piece {
         position: fixed;
@@ -1293,18 +1594,36 @@
       }
 
       @keyframes confetti-fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
       }
 
       @keyframes question-reveal {
-        from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-        to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+          filter: blur(4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
       }
 
       @keyframes intro-glow {
-        from { filter: brightness(1); }
-        to { filter: brightness(1.04); }
+        from {
+          filter: brightness(1);
+        }
+        to {
+          filter: brightness(1.04);
+        }
       }
 
       .tv-screen .intro-card {
@@ -1320,7 +1639,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(180deg, rgba(12, 26, 61, 0.98), rgba(6, 15, 36, 0.99));
+        background: linear-gradient(
+          180deg,
+          rgba(12, 26, 61, 0.98),
+          rgba(6, 15, 36, 0.99)
+        );
         box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
       }
 
@@ -1336,8 +1659,12 @@
         border: 2px solid #2a1208;
       }
 
-      .question-panel::before { left: -6px; }
-      .question-panel::after { right: -6px; }
+      .question-panel::before {
+        left: -6px;
+      }
+      .question-panel::after {
+        right: -6px;
+      }
 
       .question-panel__text {
         font-family: "Oswald", sans-serif;
@@ -1357,7 +1684,10 @@
       }
 
       @media (min-width: 640px) {
-        .answers-grid { grid-template-columns: 1fr 1fr; gap: 0.65rem 1rem; }
+        .answers-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 0.65rem 1rem;
+        }
       }
 
       .answer-btn {
@@ -1369,7 +1699,12 @@
         padding: 0.75rem 1.1rem;
         border: 2px solid rgba(212, 175, 55, 0.55);
         border-radius: 999px;
-        background: linear-gradient(180deg, #122654 0%, #0a1838 55%, #061028 100%);
+        background: linear-gradient(
+          180deg,
+          #122654 0%,
+          #0a1838 55%,
+          #061028 100%
+        );
         color: var(--tv-warm-white);
         font-family: "Oswald", sans-serif;
         font-size: clamp(0.95rem, 2vw, 1.08rem);
@@ -1377,16 +1712,25 @@
         text-align: left;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: inset 0 1px 0 rgba(255, 248, 235, 0.1), 0 4px 12px rgba(0, 0, 0, 0.35);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 248, 235, 0.1),
+          0 4px 12px rgba(0, 0, 0, 0.35);
       }
 
       .answer-btn:hover:not(:disabled) {
         border-color: var(--tv-gold-light);
         transform: scale(1.02);
-        background: linear-gradient(180deg, #183070 0%, #0e2048 55%, #081830 100%);
+        background: linear-gradient(
+          180deg,
+          #183070 0%,
+          #0e2048 55%,
+          #081830 100%
+        );
       }
 
-      .answer-btn:disabled { cursor: default; }
+      .answer-btn:disabled {
+        cursor: default;
+      }
 
       .answer-btn__letter {
         flex-shrink: 0;
@@ -1424,7 +1768,11 @@
         padding: 2.5rem 2rem;
         border-radius: 1.25rem;
         border: 3px solid var(--tv-border);
-        background: linear-gradient(180deg, rgba(28, 16, 20, 0.96), rgba(12, 10, 14, 0.98));
+        background: linear-gradient(
+          180deg,
+          rgba(28, 16, 20, 0.96),
+          rgba(12, 10, 14, 0.98)
+        );
         text-align: center;
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
       }
@@ -1484,14 +1832,50 @@
       }
     </style>
   </head>
+  <style>
+    .music-toggle-btn {
+      background: linear-gradient(145deg, #d4af37, #b8922a);
+      border-color: #7a6018;
+      box-shadow:
+        0 3px 0 #4a3810,
+        inset 0 1px 0 rgba(255, 248, 235, 0.25);
+    }
+    .music-toggle-btn:hover {
+      filter: brightness(1.1);
+    }
+    .music-toggle-btn[aria-pressed="true"] {
+      background: linear-gradient(145deg, #5a5248, #2a2520);
+      border-color: #1a1208;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+      transform: translateY(1px);
+    }
+    .music-toggle-btn[aria-pressed="true"] .music-icon {
+      color: #94a3b8;
+      opacity: 0.7;
+    }
+  </style>
 
   <body class="game-page">
     <svg class="tv-filters" aria-hidden="true" focusable="false">
       <filter id="tv-static-filter" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" result="noise">
-          <animate attributeName="seed" dur="0.15s" values="1;2;3;4;5;6;7;8;9;10" repeatCount="indefinite"/>
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.75"
+          numOctaves="3"
+          stitchTiles="stitch"
+          result="noise"
+        >
+          <animate
+            attributeName="seed"
+            dur="0.15s"
+            values="1;2;3;4;5;6;7;8;9;10"
+            repeatCount="indefinite"
+          />
         </feTurbulence>
-        <feColorMatrix type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"/>
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"
+        />
       </filter>
     </svg>
 
@@ -1500,7 +1884,7 @@
     <nav class="game-back-nav" aria-label="Game navigation">
       <div class="game-back-nav__align">
         <a href="game.html">← Return to Game Hall</a>
-        </div>
+      </div>
     </nav>
 
     <div class="spotlight-rig" aria-hidden="true">
@@ -1517,10 +1901,14 @@
     </div>
     <div class="stage-floor" aria-hidden="true"></div>
 
-    <div id="curtain-overlay" class="curtain-overlay is-open" aria-hidden="true">
+    <div
+      id="curtain-overlay"
+      class="curtain-overlay is-open"
+      aria-hidden="true"
+    >
       <div class="curtain-panel curtain-panel--left"></div>
       <div class="curtain-panel curtain-panel--right"></div>
-          </div>
+    </div>
 
     <main class="show-stage">
       <!-- INTRO -->
@@ -1528,7 +1916,9 @@
         <div class="intro-tv-wrap">
           <div class="tv-set">
             <div class="show-logo-bar">
-              <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+              <span class="live-badge"
+                ><span class="live-dot"></span> LIVE</span
+              >
               <span class="show-logo-bar__spacer" aria-hidden="true"></span>
             </div>
 
@@ -1543,88 +1933,140 @@
               <div class="tv-screen">
                 <div class="tv-screen__inner">
                   <div class="intro-card">
-                  <span class="intro-card__badge">● ON AIR — LIVE TV BROADCAST</span>
-                  <h1>Mati Heritage<br><span class="intro-card__title-sub">TRIVIA CHALLENGE</span></h1>
-                  <p class="intro-card__desc">
-                    Answer heritage questions before time runs out. Score points for every
-                    correct answer!
-                  </p>
+                    <span class="intro-card__badge"
+                      >● ON AIR — LIVE TV BROADCAST</span
+                    >
+                    <h1>
+                      Mati Heritage<br /><span class="intro-card__title-sub"
+                        >TRIVIA CHALLENGE</span
+                      >
+                    </h1>
+                    <p class="intro-card__desc">
+                      Answer heritage questions before time runs out. Score
+                      points for every correct answer!
+                    </p>
 
-                  <button type="button" id="start-game-btn" class="start-btn">▶ START SHOW</button>
-        </div>
-      </div>
-            </div>
+                    <button type="button" id="start-game-btn" class="start-btn">
+                      ▶ START SHOW
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="tv-stand" aria-hidden="true"></div>
             <div class="tv-floor-glow" aria-hidden="true"></div>
-            </div>
           </div>
+        </div>
 
         <aside class="difficulty-panel" aria-label="Select difficulty">
           <div class="difficulty-panel__frame">
             <span class="difficulty-panel__label">SELECT DIFFICULTY:</span>
             <div class="difficulty-panel__options">
-              <button type="button" id="btn-easy" class="diff-btn" data-level="easy"><span class="diff-btn__label">EASY</span></button>
-              <button type="button" id="btn-medium" class="diff-btn" data-level="medium"><span class="diff-btn__label">MEDIUM</span></button>
-              <button type="button" id="btn-hard" class="diff-btn" data-level="hard"><span class="diff-btn__label">HARD</span></button>
-              </div>
+              <button
+                type="button"
+                id="btn-easy"
+                class="diff-btn"
+                data-level="easy"
+              >
+                <span class="diff-btn__label">EASY</span>
+              </button>
+              <button
+                type="button"
+                id="btn-medium"
+                class="diff-btn"
+                data-level="medium"
+              >
+                <span class="diff-btn__label">MEDIUM</span>
+              </button>
+              <button
+                type="button"
+                id="btn-hard"
+                class="diff-btn"
+                data-level="hard"
+              >
+                <span class="diff-btn__label">HARD</span>
+              </button>
             </div>
+          </div>
         </aside>
       </section>
 
       <!-- GAME SHOW STAGE -->
       <section id="game-show" class="game-show hidden">
         <div class="tv-studio">
-        <div class="tv-set">
-          <div class="show-logo-bar">
-            <span class="live-badge"><span class="live-dot"></span> LIVE</span>
-            <h2 class="show-logo-text">MATI HERITAGE<span>TRIVIA SHOWDOWN</span></h2>
-            <span class="show-logo-bar__spacer" aria-hidden="true"></span>
+          <div class="tv-set">
+            <div class="show-logo-bar">
+              <span class="live-badge"
+                ><span class="live-dot"></span> LIVE</span
+              >
+              <h2 class="show-logo-text">
+                MATI HERITAGE<span>TRIVIA SHOWDOWN</span>
+              </h2>
+              <span class="show-logo-bar__spacer" aria-hidden="true"></span>
             </div>
 
-          <div class="tv-bezel">
-            <span class="tv-power-led" aria-hidden="true"></span>
-            <div class="tv-vignette" aria-hidden="true"></div>
-            <div class="tv-scanlines" aria-hidden="true"></div>
-            <div class="tv-noise" aria-hidden="true"></div>
-            <div class="tv-flicker-overlay" aria-hidden="true"></div>
-            <div class="tv-glitch" aria-hidden="true"></div>
-            <div class="tv-distort-bar" aria-hidden="true"></div>
+            <div class="tv-bezel">
+              <span class="tv-power-led" aria-hidden="true"></span>
+              <div class="tv-vignette" aria-hidden="true"></div>
+              <div class="tv-scanlines" aria-hidden="true"></div>
+              <div class="tv-noise" aria-hidden="true"></div>
+              <div class="tv-flicker-overlay" aria-hidden="true"></div>
+              <div class="tv-glitch" aria-hidden="true"></div>
+              <div class="tv-distort-bar" aria-hidden="true"></div>
 
-            <div class="tv-screen">
-              <div class="tv-screen__inner">
-                <div class="game-show__main">
-                <div class="show-topbar">
-                  <div class="hud-stat hud-stat--score">
-                    <span class="hud-stat__label">SCORE</span>
-                    <span id="score-display" class="hud-stat__value">0</span>
-          </div>
+              <div class="tv-screen">
+                <div class="tv-screen__inner">
+                  <div class="game-show__main">
+                    <div class="show-topbar">
+                      <div class="hud-stat hud-stat--score">
+                        <span class="hud-stat__label">SCORE</span>
+                        <span id="score-display" class="hud-stat__value"
+                          >0</span
+                        >
+                      </div>
 
-                  <div class="timer-ring" aria-live="polite">
-                    <svg viewBox="0 0 100 100" aria-hidden="true">
-                      <circle class="timer-ring__track" cx="50" cy="50" r="45"/>
-                      <circle id="timer-progress" class="timer-ring__progress" cx="50" cy="50" r="45"/>
-                    </svg>
-                    <span id="timer-display" class="timer-ring__value">15</span>
-            </div>
+                      <div class="timer-ring" aria-live="polite">
+                        <svg viewBox="0 0 100 100" aria-hidden="true">
+                          <circle
+                            class="timer-ring__track"
+                            cx="50"
+                            cy="50"
+                            r="45"
+                          />
+                          <circle
+                            id="timer-progress"
+                            class="timer-ring__progress"
+                            cx="50"
+                            cy="50"
+                            r="45"
+                          />
+                        </svg>
+                        <span id="timer-display" class="timer-ring__value"
+                          >15</span
+                        >
+                      </div>
 
-                  <div class="hud-stat">
-                    <span class="hud-stat__label">QUESTION</span>
-                    <span id="question-badge" class="hud-stat__value">1/5</span>
+                      <div class="hud-stat">
+                        <span class="hud-stat__label">QUESTION</span>
+                        <span id="question-badge" class="hud-stat__value"
+                          >1/5</span
+                        >
+                      </div>
+                    </div>
+
+                    <div class="question-panel">
+                      <p id="question-text" class="question-panel__text">
+                        Loading question…
+                      </p>
+                    </div>
+
+                    <div id="options-grid" class="answers-grid"></div>
                   </div>
-            </div>
-
-                <div class="question-panel">
-                  <p id="question-text" class="question-panel__text">Loading question…</p>
                 </div>
-
-                <div id="options-grid" class="answers-grid"></div>
+              </div>
             </div>
-          </div>
-        </div>
-          </div>
-          <div class="tv-stand" aria-hidden="true"></div>
-          <div class="tv-floor-glow" aria-hidden="true"></div>
+            <div class="tv-stand" aria-hidden="true"></div>
+            <div class="tv-floor-glow" aria-hidden="true"></div>
           </div>
         </div>
       </section>
@@ -1636,19 +2078,94 @@
         <div id="final-score" class="results-card__score">0</div>
         <p id="result-message" class="results-card__message"></p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button type="button" id="retry-btn" class="start-btn text-sm py-3 px-8">PLAY AGAIN</button>
+          <button
+            type="button"
+            id="retry-btn"
+            class="start-btn text-sm py-3 px-8"
+          >
+            PLAY AGAIN
+          </button>
           <a href="game.html" class="results-card__link">Back to Games</a>
-      </div>
+        </div>
       </section>
     </main>
 
-    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" loop preload="auto"></audio>
+    <div id="footer-placeholder"></div>
 
+    <audio
+      id="bg-music"
+      src="game bgmusic/trivia.mp3"
+      loop
+      preload="auto"
+      autoplay
+    ></audio>
+
+    <aside
+      id="now-playing"
+      class="now-playing music-bar fixed bottom-4 right-4 z-[480] flex items-center gap-3 max-w-[min(22rem,88vw)] px-4 py-2.5 rounded-sm"
+      style="
+        background: rgba(18, 12, 20, 0.88);
+        border: 2px solid rgba(212, 175, 55, 0.4);
+        border-radius: 999px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+      "
+      aria-label="Now playing"
+    >
+      <button
+        type="button"
+        id="music-toggle"
+        class="music-toggle-btn shrink-0 w-9 h-9 rounded-full border-2 text-amber-100 text-sm grid place-items-center transition-all duration-150"
+        aria-pressed="false"
+        aria-label="Mute music"
+        title="Mute / Unmute"
+      >
+        <svg
+          id="music-icon-unmuted"
+          class="music-icon w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+          />
+        </svg>
+        <svg
+          id="music-icon-muted"
+          class="music-icon w-5 h-5 hidden"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"
+          />
+        </svg>
+      </button>
+      <span class="min-w-0 flex-1">
+        <span
+          class="now-playing__title block text-xs font-bold truncate text-amber-100"
+          >Trivia Showdown</span
+        >
+      </span>
+    </aside>
+
+    <script src="game-tv-transition.js"></script>
     <script>
+      if (typeof window.initTvExpandReceive === "function") {
+        window.initTvExpandReceive();
+      }
+
       const quizData = [
         {
           q: "Which Mati landmark is known for its shape resembling a prehistoric creature?",
-          options: ["Mount Hamiguitan", "Sleeping Dinosaur", "Dahican Beach", "Waniban Island"],
+          options: [
+            "Mount Hamiguitan",
+            "Sleeping Dinosaur",
+            "Dahican Beach",
+            "Waniban Island",
+          ],
           correct: 1,
         },
         {
@@ -1658,7 +2175,12 @@
         },
         {
           q: "In which museum can you find 'Davao', the 50-foot sperm whale skeleton?",
-          options: ["Subangan Museum", "Mati Cultural Center", "Heritage House", "People's Park"],
+          options: [
+            "Subangan Museum",
+            "Mati Cultural Center",
+            "Heritage House",
+            "People's Park",
+          ],
           correct: 0,
         },
         {
@@ -1668,7 +2190,12 @@
         },
         {
           q: "Which festival in Mati celebrates the city's founding anniversary and bountiful harvest?",
-          options: ["Kadawayan Festival", "Sambuokan Festival", "Pujada Festival", "Dahican Fest"],
+          options: [
+            "Kadawayan Festival",
+            "Sambuokan Festival",
+            "Pujada Festival",
+            "Dahican Fest",
+          ],
           correct: 1,
         },
       ];
@@ -1697,12 +2224,61 @@
 
       bgMusic.volume = musicVol;
 
+      let musicStarted = false;
+      let musicMuted = localStorage.getItem("triviaBgmMuted") === "true";
+
+      function applyMusicVolume() {
+        musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+        bgMusic.volume = musicVol;
+      }
+
+      function updateMusicUI() {
+        const nowPlayingEl = document.getElementById("now-playing");
+        const musicToggleBtn = document.getElementById("music-toggle");
+        const musicIconOn = document.getElementById("music-icon-unmuted");
+        const musicIconOff = document.getElementById("music-icon-muted");
+
+        if (!nowPlayingEl || !musicToggleBtn || !musicIconOn || !musicIconOff)
+          return;
+
+        musicIconOn.classList.toggle("hidden", musicMuted);
+        musicIconOff.classList.toggle("hidden", !musicMuted);
+
+        musicToggleBtn.setAttribute("aria-pressed", String(musicMuted));
+        musicToggleBtn.title = musicMuted ? "Unmute music" : "Mute music";
+      }
+
+      function startTriviaMusic() {
+        applyMusicVolume();
+        if (musicMuted || musicVol <= 0) {
+          updateMusicUI();
+          return;
+        }
+        bgMusic
+          .play()
+          .catch(() => {})
+          .then(() => {
+            musicStarted = true;
+            updateMusicUI();
+          });
+      }
+
+      function toggleMusicMute() {
+        musicMuted = !musicMuted;
+        bgMusic.muted = musicMuted;
+        localStorage.setItem("triviaBgmMuted", String(musicMuted));
+        updateMusicUI();
+        if (!musicMuted && bgMusic.paused) startTriviaMusic();
+      }
+
       let studioAudioCtx = null;
       let lastHoverAt = 0;
 
       function getStudioAudioCtx() {
         if (!studioAudioCtx) {
-          studioAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          studioAudioCtx = new (
+            window.AudioContext || window.webkitAudioContext
+          )();
         }
         if (studioAudioCtx.state === "suspended") studioAudioCtx.resume();
         return studioAudioCtx;
@@ -1723,7 +2299,12 @@
           const master = ctx.createGain();
           master.connect(ctx.destination);
 
-          const levels = { hover: 0.22, click: 0.42, answer: 0.55, start: 0.62 };
+          const levels = {
+            hover: 0.22,
+            click: 0.42,
+            answer: 0.55,
+            start: 0.62,
+          };
           master.gain.value = vol * (levels[variant] || 0.42);
 
           const thump = ctx.createOscillator();
@@ -1741,11 +2322,18 @@
           const brass = ctx.createOscillator();
           const brassGain = ctx.createGain();
           brass.type = "triangle";
-          const baseFreq = variant === "answer" ? 880 : variant === "start" ? 740 : 660;
+          const baseFreq =
+            variant === "answer" ? 880 : variant === "start" ? 740 : 660;
           brass.frequency.setValueAtTime(baseFreq, now);
-          brass.frequency.exponentialRampToValueAtTime(baseFreq * 1.18, now + 0.045);
+          brass.frequency.exponentialRampToValueAtTime(
+            baseFreq * 1.18,
+            now + 0.045,
+          );
           brassGain.gain.setValueAtTime(0, now);
-          brassGain.gain.linearRampToValueAtTime(variant === "hover" ? 0.08 : 0.18, now + 0.008);
+          brassGain.gain.linearRampToValueAtTime(
+            variant === "hover" ? 0.08 : 0.18,
+            now + 0.008,
+          );
           brassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
           brass.connect(brassGain);
           brassGain.connect(master);
@@ -1925,7 +2513,9 @@
         if (!("speechSynthesis" in window)) return null;
         const voices = window.speechSynthesis.getVoices();
         return (
-          voices.find((v) => /Daniel|David|Mark|James|Guy|English.*Male/i.test(v.name)) ||
+          voices.find((v) =>
+            /Daniel|David|Mark|James|Guy|English.*Male/i.test(v.name),
+          ) ||
           voices.find((v) => v.name.includes("Google US English")) ||
           voices.find((v) => v.name.includes("Microsoft")) ||
           voices.find((v) => v.lang.startsWith("en"))
@@ -1950,16 +2540,18 @@
       }
 
       function bindStudioHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach((el) => {
-          if (!el || el.dataset.studioHoverBound) return;
-          el.dataset.studioHoverBound = "true";
-          el.addEventListener("mouseenter", () => {
-            const now = Date.now();
-            if (now - lastHoverAt < 120) return;
-            lastHoverAt = now;
-            playShowClick("hover");
-          });
-        });
+        (elements instanceof NodeList ? [...elements] : elements).forEach(
+          (el) => {
+            if (!el || el.dataset.studioHoverBound) return;
+            el.dataset.studioHoverBound = "true";
+            el.addEventListener("mouseenter", () => {
+              const now = Date.now();
+              if (now - lastHoverAt < 120) return;
+              lastHoverAt = now;
+              playShowClick("hover");
+            });
+          },
+        );
       }
 
       function shuffle(array) {
@@ -1989,14 +2581,18 @@
         });
       });
 
-      bindStudioHoverSound(document.querySelectorAll(".diff-btn, .start-btn, #retry-btn, .results-card__link"));
+      bindStudioHoverSound(
+        document.querySelectorAll(
+          ".diff-btn, .start-btn, #retry-btn, .results-card__link",
+        ),
+      );
 
       function openCurtain() {
         playCurtainSting();
         const curtain = document.getElementById("curtain-overlay");
         curtain.classList.add("is-animating");
         curtain.classList.remove("is-open");
-            setTimeout(() => {
+        setTimeout(() => {
           curtain.classList.add("is-open");
           setTimeout(() => curtain.classList.remove("is-animating"), 1300);
         }, 60);
@@ -2110,21 +2706,34 @@
 
         document.getElementById("final-score").textContent = score;
 
-        let totalHeritagePoints = parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
+        let totalHeritagePoints = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+          10,
+        );
         totalHeritagePoints += score;
-        localStorage.setItem("totalHeritagePoints", String(totalHeritagePoints));
+        localStorage.setItem(
+          "totalHeritagePoints",
+          String(totalHeritagePoints),
+        );
         const pointsEl = document.getElementById("header-total-points");
         if (pointsEl) pointsEl.textContent = totalHeritagePoints;
 
         const maxScore = quizData.length * diffSettings[difficulty].points;
         let msg = "";
-        if (score === maxScore) msg = "Incredible! You are a true Mati Heritage Expert!";
-        else if (score >= maxScore * 0.6) msg = "Great job! You know your Mati history well.";
-        else msg = "Good effort! Explore more to learn about Mati's rich heritage.";
+        if (score === maxScore)
+          msg = "Incredible! You are a true Mati Heritage Expert!";
+        else if (score >= maxScore * 0.6)
+          msg = "Great job! You know your Mati history well.";
+        else
+          msg =
+            "Good effort! Explore more to learn about Mati's rich heritage.";
         document.getElementById("result-message").textContent = msg;
 
         if (score === maxScore) spawnConfetti();
-        playAnnouncer(`That wraps up Mati Heritage Trivia Challenge. Your final score is ${score} points. ${msg}`, "results");
+        playAnnouncer(
+          `That wraps up Mati Heritage Trivia Challenge. Your final score is ${score} points. ${msg}`,
+          "results",
+        );
       }
 
       function startGame() {
@@ -2137,19 +2746,21 @@
         if (bgMusic.paused && musicVol > 0) bgMusic.play().catch(() => {});
         playAnnouncer(
           `Welcome to Mati Heritage Trivia Challenge! ${diffSettings[difficulty].label} difficulty. The clock is ticking — good luck!`,
-          "welcome"
+          "welcome",
         );
 
         document.getElementById("intro-screen").classList.add("hidden");
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.remove("hidden");
-      loadQuestion();
+        loadQuestion();
       }
 
-      document.getElementById("start-game-btn").addEventListener("click", () => {
-        playShowClick("start");
-        startGame();
-      });
+      document
+        .getElementById("start-game-btn")
+        .addEventListener("click", () => {
+          playShowClick("start");
+          startGame();
+        });
 
       document.getElementById("retry-btn").addEventListener("click", () => {
         playShowClick("click");
@@ -2158,15 +2769,24 @@
         document.getElementById("intro-screen").classList.remove("hidden");
       });
 
+      document.getElementById("music-toggle")?.addEventListener("click", () => {
+        playShowClick("click");
+        toggleMusicMute();
+      });
+
+      applyMusicVolume();
+      updateMusicUI();
+
       const handleWelcome = () => {
         getStudioAudioCtx();
         if (!hasWelcomed) {
           playAnnouncer(
             "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
-            "welcome"
+            "welcome",
           );
           hasWelcomed = true;
         }
+        startTriviaMusic();
       };
       document.addEventListener("click", handleWelcome, { once: true });
 
@@ -2181,7 +2801,8 @@
           if (settingsModal) document.body.appendChild(settingsModal);
 
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+          if (headerStyle)
+            document.head.appendChild(headerStyle.cloneNode(true));
 
           const headerScript = Array.from(doc.scripts).find((s) => !s.src);
           if (headerScript) {
@@ -2190,17 +2811,61 @@
             document.body.appendChild(script);
           }
 
-          document.querySelectorAll(".site-nav__link, .site-mobile-nav__link").forEach((link) => {
-            if (link.getAttribute("data-nav") === "games") link.classList.add("is-active");
-          });
+          document
+            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
+            .forEach((link) => {
+              if (link.getAttribute("data-nav") === "games")
+                link.classList.add("is-active");
+            });
 
           const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl) pointsEl.textContent = localStorage.getItem("totalHeritagePoints") || "0";
+          if (pointsEl)
+            pointsEl.textContent =
+              localStorage.getItem("totalHeritagePoints") || "0";
 
-          if (typeof window.initSiteHeader === "function") window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function") window.initGlobalSettings();
+          if (typeof window.initSiteHeader === "function")
+            window.initSiteHeader();
+          if (typeof window.initGlobalSettings === "function")
+            window.initGlobalSettings();
+
+          if (!hasWelcomed) {
+            playAnnouncer(
+              "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
+              "welcome",
+            );
+            hasWelcomed = true;
+          }
+
+          bindStudioHoverSound(
+            document.querySelectorAll(
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
+            ),
+          );
         })
         .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle);
+
+          const footerScript = Array.from(doc.scripts).find((s) => !s.src);
+          if (footerScript) {
+            const script = document.createElement("script");
+            script.textContent = footerScript.textContent;
+            document.body.appendChild(script);
+          }
+
+          if (typeof window.initSiteFooter === "function")
+            window.initSiteFooter("games");
+        })
+        .catch((err) => console.error("Error loading footer:", err));
     </script>
   </body>
 </html>

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Orbitron:wght@400;500;600;700;800&family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Luckiest+Guy&family=Nunito:wght@400;600;700;800&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Satisfy&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link
@@ -19,6 +19,8 @@
     />
     <link rel="stylesheet" href="heritage-palette.css" />
     <link rel="stylesheet" href="visitor-portal-showcase.css" />
+    <link rel="stylesheet" href="game-tv-preview.css" />
+    <link rel="stylesheet" href="games-portal.css" />
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
@@ -58,7 +60,9 @@
         font-family: "Cormorant Garamond", Georgia, serif;
         font-weight: 700;
         letter-spacing: 0.01em;
-        font-feature-settings: "kern" 1, "liga" 1;
+        font-feature-settings:
+          "kern" 1,
+          "liga" 1;
       }
 
       body.visitor-module {
@@ -248,11 +252,7 @@
             rgba(2, 32, 26, 0.45) 62%,
             rgba(2, 24, 20, 0.25) 100%
           ),
-          linear-gradient(
-            to top,
-            rgba(2, 20, 16, 0.95) 0%,
-            transparent 45%
-          );
+          linear-gradient(to top, rgba(2, 20, 16, 0.95) 0%, transparent 45%);
       }
 
       .hero-cinematic-grain {
@@ -465,7 +465,12 @@
 
       .hero-cinematic-copy .btn-primary {
         border-radius: 999px;
-        background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
+        background: linear-gradient(
+          135deg,
+          #059669 0%,
+          #10b981 50%,
+          #047857 100%
+        );
         box-shadow:
           0 8px 32px rgba(16, 185, 129, 0.4),
           inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -644,7 +649,9 @@
         height: 12px;
         border-radius: 50%;
         background: #10b981;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25), 0 0 20px rgba(16, 185, 129, 0.6);
+        box-shadow:
+          0 0 0 4px rgba(16, 185, 129, 0.25),
+          0 0 20px rgba(16, 185, 129, 0.6);
         z-index: 2;
         animation: hero-pin-pulse 2.5s ease-in-out infinite;
       }
@@ -658,7 +665,9 @@
         bottom: 38%;
         right: 28%;
         background: #f59e0b;
-        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25), 0 0 20px rgba(245, 158, 11, 0.5);
+        box-shadow:
+          0 0 0 4px rgba(245, 158, 11, 0.25),
+          0 0 20px rgba(245, 158, 11, 0.5);
         animation-delay: -1s;
       }
 
@@ -817,7 +826,9 @@
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: #ffffff;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.28s ease, background 0.28s ease;
+        transition:
+          box-shadow 0.28s ease,
+          background 0.28s ease;
       }
 
       .hero-quick-link:hover .hero-quick-link-icon {
@@ -1057,7 +1068,8 @@
         box-shadow:
           0 8px 32px rgba(15, 23, 42, 0.06),
           inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        transition: transform 0.35s var(--ease-out-expo),
+        transition:
+          transform 0.35s var(--ease-out-expo),
           box-shadow 0.35s ease;
         position: relative;
         overflow: hidden;
@@ -1289,7 +1301,12 @@
         top: 50%;
         width: 1.75rem;
         height: 2px;
-        background: linear-gradient(90deg, var(--forest), var(--amber), var(--sky));
+        background: linear-gradient(
+          90deg,
+          var(--forest),
+          var(--amber),
+          var(--sky)
+        );
         transform: translateY(-50%);
       }
 
@@ -1333,7 +1350,9 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: transform 0.45s var(--ease-spring), box-shadow 0.45s ease,
+        transition:
+          transform 0.45s var(--ease-spring),
+          box-shadow 0.45s ease,
           border-color 0.35s ease;
       }
 
@@ -1356,7 +1375,11 @@
       }
 
       .feature-card-3d .feature-card-accent {
-        background: linear-gradient(90deg, var(--amber-dark), var(--amber-light));
+        background: linear-gradient(
+          90deg,
+          var(--amber-dark),
+          var(--amber-light)
+        );
       }
 
       .feature-card-glow {
@@ -1411,7 +1434,10 @@
         transform: translateX(120%) skewX(-10deg);
       }
 
-      .feature-card > *:not(.feature-card-accent):not(.feature-card-glow):not(.feature-card-shine):not(.feature-num) {
+      .feature-card
+        > *:not(.feature-card-accent):not(.feature-card-glow):not(
+          .feature-card-shine
+        ):not(.feature-num) {
         position: relative;
         z-index: 2;
       }
@@ -1474,7 +1500,9 @@
         align-items: center;
         justify-content: center;
         margin-bottom: 1.5rem;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        transition:
+          transform 0.4s ease,
+          box-shadow 0.4s ease;
       }
 
       .feature-icon-map {
@@ -1528,7 +1556,9 @@
         font-weight: 700;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        transition: gap 0.3s ease, color 0.3s ease;
+        transition:
+          gap 0.3s ease,
+          color 0.3s ease;
       }
 
       .feature-link-map {
@@ -1582,7 +1612,9 @@
         background: var(--ink);
         min-height: 400px;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        transition: transform 0.5s var(--ease-spring), box-shadow 0.5s ease,
+        transition:
+          transform 0.5s var(--ease-spring),
+          box-shadow 0.5s ease,
           border-color 0.4s ease;
       }
 
@@ -1793,7 +1825,9 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--amber-light);
-        transition: gap 0.3s ease, color 0.3s ease;
+        transition:
+          gap 0.3s ease,
+          color 0.3s ease;
       }
 
       .heritage-link:hover {
@@ -1903,7 +1937,9 @@
         gap: 1rem;
         padding: 0.85rem 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        transition: transform 0.3s ease, padding-left 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          padding-left 0.3s ease;
       }
 
       .plan-steps li:hover {
@@ -1962,12 +1998,12 @@
         }
       }
 
-
       /* Scroll reveal */
       .reveal {
         opacity: 0;
         transform: translateY(40px);
-        transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
           transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -2009,7 +2045,11 @@
       #mati-map {
         flex: 1;
         width: 100%;
-        min-height: clamp(420px, calc(100vh - var(--header-h, 5.625rem) - 5rem), 760px);
+        min-height: clamp(
+          420px,
+          calc(100vh - var(--header-h, 5.625rem) - 5rem),
+          760px
+        );
         height: 100%;
         z-index: 1;
         font-family: "Source Sans 3", sans-serif;
@@ -2055,7 +2095,8 @@
           rgba(12, 26, 20, 0.08) 28%,
           transparent 55%
         );
-        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -2082,7 +2123,8 @@
         box-shadow:
           0 20px 50px rgba(15, 23, 42, 0.14),
           inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           opacity 0.5s ease;
       }
 
@@ -2190,8 +2232,13 @@
       }
 
       @keyframes map-hint-pulse {
-        0%, 100% { opacity: 0.85; }
-        50% { opacity: 1; }
+        0%,
+        100% {
+          opacity: 0.85;
+        }
+        50% {
+          opacity: 1;
+        }
       }
 
       .map-intro-overlay__hint svg {
@@ -2234,7 +2281,7 @@
         border: 1px solid rgba(4, 120, 87, 0.18);
         background:
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23047857' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
-          no-repeat right 0.75rem center / 0.9rem,
+            no-repeat right 0.75rem center / 0.9rem,
           rgba(255, 255, 255, 0.96);
         box-shadow:
           0 10px 28px rgba(15, 23, 42, 0.1),
@@ -2539,7 +2586,9 @@
           0 0 0 1px rgba(15, 23, 42, 0.08);
         overflow: hidden;
         background: #ffffff;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
       .heritage-photo-marker.built {
@@ -2625,7 +2674,12 @@
       .section-heritage {
         position: relative;
         padding: 7rem 1.5rem;
-        background: linear-gradient(165deg, #0f172a 0%, #134e4a 45%, #0f172a 100%);
+        background: linear-gradient(
+          165deg,
+          #0f172a 0%,
+          #134e4a 45%,
+          #0f172a 100%
+        );
         overflow: hidden;
       }
 
@@ -2668,7 +2722,11 @@
           linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
         background-size: 64px 64px;
-        mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+        mask-image: radial-gradient(
+          ellipse 70% 60% at 50% 50%,
+          black,
+          transparent
+        );
         pointer-events: none;
         opacity: 0.5;
       }
@@ -2678,7 +2736,12 @@
       }
 
       .section-heritage .section-label::before {
-        background: linear-gradient(90deg, #6ee7b7, var(--amber-light), #38bdf8);
+        background: linear-gradient(
+          90deg,
+          #6ee7b7,
+          var(--amber-light),
+          #38bdf8
+        );
       }
 
       .section-heritage .section-title {
@@ -2688,7 +2751,6 @@
       .section-heritage .section-subtitle {
         color: rgba(226, 232, 240, 0.72);
       }
-
 
       @media (prefers-reduced-motion: reduce) {
         .plan-bg-image,
@@ -2780,12 +2842,21 @@
       body.visitor-module .visitor-auth-register {
         color: #ffffff !important;
         border: 1px solid transparent;
-        background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest) 50%, var(--sky) 100%) !important;
-        box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        background: linear-gradient(
+          135deg,
+          var(--forest-dark) 0%,
+          var(--forest) 50%,
+          var(--sky) 100%
+        ) !important;
+        box-shadow:
+          0 4px 18px rgba(4, 120, 87, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
       }
 
       body.visitor-module .visitor-auth-register:hover {
-        box-shadow: 0 8px 28px rgba(4, 120, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        box-shadow:
+          0 8px 28px rgba(4, 120, 87, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
         transform: translateY(-1px);
       }
 
@@ -2817,7 +2888,10 @@
               aria-label="Map of Mati City heritage sites"
             ></div>
             <div class="map-heritage-filter-wrap" id="map-heritage-filter-wrap">
-              <label class="map-heritage-filter-label" for="map-heritage-filter">
+              <label
+                class="map-heritage-filter-label"
+                for="map-heritage-filter"
+              >
                 Heritage type
               </label>
               <select
@@ -2830,36 +2904,73 @@
                 <option value="natural">Natural Heritage</option>
               </select>
             </div>
-            <div class="map-intro-overlay" id="map-intro-overlay" aria-hidden="false">
-            <div class="map-intro-overlay__content">
-              <p class="map-intro-overlay__eyebrow">
-                <span class="map-intro-overlay__eyebrow-line" aria-hidden="true"></span>
-                Official Heritage Sites
-              </p>
-              <h2 class="map-intro-overlay__title">
-                <span class="map-intro-overlay__title-main">Mati City</span>
-                <span class="map-intro-overlay__title-sub">Interactive Map</span>
-              </h2>
-              <p class="map-intro-overlay__desc">
-                Explore built, cultural, and natural heritage landmarks across every barangay.
-              </p>
-              <ul class="map-intro-overlay__hint" aria-label="Map controls">
-                <li>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
-                  Drag to pan
-                </li>
-                <li>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                  Scroll to zoom
-                </li>
-                <li>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.5"/></svg>
-                  Tap markers
-                </li>
-              </ul>
+            <div
+              class="map-intro-overlay"
+              id="map-intro-overlay"
+              aria-hidden="false"
+            >
+              <div class="map-intro-overlay__content">
+                <p class="map-intro-overlay__eyebrow">
+                  <span
+                    class="map-intro-overlay__eyebrow-line"
+                    aria-hidden="true"
+                  ></span>
+                  Official Heritage Sites
+                </p>
+                <h2 class="map-intro-overlay__title">
+                  <span class="map-intro-overlay__title-main">Mati City</span>
+                  <span class="map-intro-overlay__title-sub"
+                    >Interactive Map</span
+                  >
+                </h2>
+                <p class="map-intro-overlay__desc">
+                  Explore built, cultural, and natural heritage landmarks across
+                  every barangay.
+                </p>
+                <ul class="map-intro-overlay__hint" aria-label="Map controls">
+                  <li>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 9l7 7 7-7" />
+                    </svg>
+                    Drag to pan
+                  </li>
+                  <li>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Scroll to zoom
+                  </li>
+                  <li>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"
+                      />
+                      <circle cx="12" cy="11" r="2.5" />
+                    </svg>
+                    Tap markers
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
@@ -2880,12 +2991,35 @@
           <div class="hero-cinematic-overlay"></div>
         </div>
         <div class="hero-cinematic-grain" aria-hidden="true"></div>
-        <div class="hero-cinematic-glow hero-cinematic-glow--1" aria-hidden="true"></div>
-        <div class="hero-cinematic-glow hero-cinematic-glow--2" aria-hidden="true"></div>
+        <div
+          class="hero-cinematic-glow hero-cinematic-glow--1"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="hero-cinematic-glow hero-cinematic-glow--2"
+          aria-hidden="true"
+        ></div>
 
-        <svg class="hero-path-svg" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M480 120 Q560 200 620 280" fill="none" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" stroke-dasharray="6 8"/>
-          <path d="M200 350 Q380 280 520 200" fill="none" stroke="rgba(56,189,248,0.35)" stroke-width="1.5" stroke-dasharray="6 8"/>
+        <svg
+          class="hero-path-svg"
+          viewBox="0 0 800 500"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M480 120 Q560 200 620 280"
+            fill="none"
+            stroke="rgba(16,185,129,0.4)"
+            stroke-width="1.5"
+            stroke-dasharray="6 8"
+          />
+          <path
+            d="M200 350 Q380 280 520 200"
+            fill="none"
+            stroke="rgba(56,189,248,0.35)"
+            stroke-width="1.5"
+            stroke-dasharray="6 8"
+          />
         </svg>
 
         <div class="hero-cinematic-inner">
@@ -2902,84 +3036,141 @@
                 </h2>
               </div>
               <p class="hero-desc hero-desc--light">
-                Journey through Mati's rich culture, breathtaking landscapes, and
-                historic landmarks — an immersive digital portal curated for
+                Journey through Mati's rich culture, breathtaking landscapes,
+                and historic landmarks — an immersive digital portal curated for
                 explorers, students, and heritage lovers worldwide.
               </p>
 
               <div class="hero-actions">
-              <a
-                href="#mati-map-section"
+                <a
+                  href="#mati-map-section"
                   class="btn-primary inline-flex items-center gap-2 font-bold px-8 py-4 text-sm tracking-wide"
-              >
-                Start Exploring
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
-              </a>
-              <a
-                href="#heritage"
+                >
+                  Start Exploring
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="#heritage"
                   class="btn-outline inline-flex items-center font-bold px-8 py-4 text-sm tracking-wide"
-              >
-                View Heritage Sites
-              </a>
-            </div>
+                >
+                  View Heritage Sites
+                </a>
+              </div>
 
               <div class="hero-dock">
-                <div class="hero-dock-stats" role="list" aria-label="Heritage site counts">
-                  <div class="hero-dock-stat hero-dock-stat--built" role="listitem">
+                <div
+                  class="hero-dock-stats"
+                  role="list"
+                  aria-label="Heritage site counts"
+                >
+                  <div
+                    class="hero-dock-stat hero-dock-stat--built"
+                    role="listitem"
+                  >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="11">0</span>
+                      <span class="hero-dock-stat-num stat-num" data-count="11"
+                        >0</span
+                      >
                       <span class="hero-dock-stat-label">Built Heritage</span>
-                </div>
-              </div>
-                  <div class="hero-dock-stat hero-dock-stat--cultural" role="listitem">
+                    </div>
+                  </div>
+                  <div
+                    class="hero-dock-stat hero-dock-stat--cultural"
+                    role="listitem"
+                  >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="3">0</span>
-                      <span class="hero-dock-stat-label">Intangible Cultural Heritage</span>
-                </div>
-              </div>
-                  <div class="hero-dock-stat hero-dock-stat--natural" role="listitem">
+                      <span class="hero-dock-stat-num stat-num" data-count="3"
+                        >0</span
+                      >
+                      <span class="hero-dock-stat-label"
+                        >Intangible Cultural Heritage</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="hero-dock-stat hero-dock-stat--natural"
+                    role="listitem"
+                  >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="8">0</span>
+                      <span class="hero-dock-stat-num stat-num" data-count="8"
+                        >0</span
+                      >
                       <span class="hero-dock-stat-label">Natural Heritage</span>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
             <div class="hero-cinematic-stage" id="hero-parallax-stage">
-              <span class="hero-map-pin hero-map-pin--1" aria-hidden="true"></span>
-              <span class="hero-map-pin hero-map-pin--2" aria-hidden="true"></span>
+              <span
+                class="hero-map-pin hero-map-pin--1"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="hero-map-pin hero-map-pin--2"
+                aria-hidden="true"
+              ></span>
 
-              <div class="hero-float-wrap hero-float-wrap--main" data-parallax="18">
+              <div
+                class="hero-float-wrap hero-float-wrap--main"
+                data-parallax="18"
+              >
                 <article class="hero-float-card">
-                  <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg" alt="Taytay Daga - Sleeping Dinosaur"/>
+                  <img
+                    src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                    alt="Taytay Daga - Sleeping Dinosaur"
+                  />
                   <div class="hero-float-card-body">
                     <strong>Taytay Daga</strong>
                     <span>Natural Heritage</span>
                   </div>
                 </article>
-            </div>
+              </div>
 
-              <div class="hero-float-wrap hero-float-wrap--built" data-parallax="12">
+              <div
+                class="hero-float-wrap hero-float-wrap--built"
+                data-parallax="12"
+              >
                 <article class="hero-float-card">
-                  <img src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg" alt="Pylon Monument" loading="lazy"/>
+                  <img
+                    src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                    alt="Pylon Monument"
+                    loading="lazy"
+                  />
                   <div class="hero-float-card-body">
                     <strong>Pylon Monument</strong>
                     <span>Built Heritage</span>
-              </div>
+                  </div>
                 </article>
-            </div>
+              </div>
 
-              <div class="hero-float-wrap hero-float-wrap--cultural" data-parallax="14">
+              <div
+                class="hero-float-wrap hero-float-wrap--cultural"
+                data-parallax="14"
+              >
                 <article class="hero-float-card">
-                  <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg" alt="Sambuokan Festival" loading="lazy"/>
+                  <img
+                    src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                    alt="Sambuokan Festival"
+                    loading="lazy"
+                  />
                   <div class="hero-float-card-body">
                     <strong>Sambuokan Festival</strong>
                     <span>Intangible Cultural Heritage</span>
-            </div>
+                  </div>
                 </article>
               </div>
             </div>
@@ -2988,7 +3179,13 @@
 
         <div class="scroll-hint scroll-hint--cinematic" aria-hidden="true">
           <span>Scroll to explore</span>
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M10 4v12M10 16l-4-4M10 16l4-4" />
           </svg>
         </div>
@@ -3001,37 +3198,75 @@
 
       <!-- Gallery — interactive preview (full archive on gallery.html) -->
       <section id="portal-gallery" class="experience-section gallery-preview">
-        <div class="gallery-preview-bg" id="gallery-preview-bg" aria-hidden="true">
+        <div
+          class="gallery-preview-bg"
+          id="gallery-preview-bg"
+          aria-hidden="true"
+        >
           <div class="gallery-preview-aurora"></div>
           <div class="gallery-preview-light gallery-preview-light--1"></div>
           <div class="gallery-preview-light gallery-preview-light--2"></div>
           <div class="gallery-preview-light gallery-preview-light--3"></div>
           <div class="gallery-preview-parallax" id="gallery-parallax-layer">
-            <div class="gallery-preview-float gallery-preview-float--1" data-depth="0.04">
-              <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg" alt="" loading="lazy" />
+            <div
+              class="gallery-preview-float gallery-preview-float--1"
+              data-depth="0.04"
+            >
+              <img
+                src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
+                alt=""
+                loading="lazy"
+              />
             </div>
-            <div class="gallery-preview-float gallery-preview-float--2" data-depth="0.07">
-              <img src="data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg" alt="" loading="lazy" />
+            <div
+              class="gallery-preview-float gallery-preview-float--2"
+              data-depth="0.07"
+            >
+              <img
+                src="data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg"
+                alt=""
+                loading="lazy"
+              />
             </div>
-            <div class="gallery-preview-float gallery-preview-float--3" data-depth="0.05">
-              <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg" alt="" loading="lazy" />
+            <div
+              class="gallery-preview-float gallery-preview-float--3"
+              data-depth="0.05"
+            >
+              <img
+                src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                alt=""
+                loading="lazy"
+              />
             </div>
-            <div class="gallery-preview-float gallery-preview-float--4" data-depth="0.06">
-              <img src="data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg" alt="" loading="lazy" />
+            <div
+              class="gallery-preview-float gallery-preview-float--4"
+              data-depth="0.06"
+            >
+              <img
+                src="data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg"
+                alt=""
+                loading="lazy"
+              />
             </div>
           </div>
           <div class="gallery-preview-filmstrip gallery-preview-filmstrip--top">
             <div class="gallery-preview-filmstrip-track">
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span
+              ><span></span> <span></span><span></span><span></span><span></span
+              ><span></span><span></span> <span></span><span></span><span></span
+              ><span></span><span></span><span></span>
             </div>
           </div>
-          <div class="gallery-preview-filmstrip gallery-preview-filmstrip--bottom">
-            <div class="gallery-preview-filmstrip-track gallery-preview-filmstrip-track--reverse">
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
+          <div
+            class="gallery-preview-filmstrip gallery-preview-filmstrip--bottom"
+          >
+            <div
+              class="gallery-preview-filmstrip-track gallery-preview-filmstrip-track--reverse"
+            >
+              <span></span><span></span><span></span><span></span><span></span
+              ><span></span> <span></span><span></span><span></span><span></span
+              ><span></span><span></span> <span></span><span></span><span></span
+              ><span></span><span></span><span></span>
             </div>
           </div>
           <div class="gallery-preview-grain"></div>
@@ -3042,8 +3277,9 @@
             <p class="experience-eyebrow">Heritage Media</p>
             <h2 class="gallery-preview-title display-font">Gallery</h2>
             <p class="gallery-preview-lead">
-              Tap a collection, flip through samples, and watch a heritage clip —
-              then open the full gallery for every photo and film in the archive.
+              Tap a collection, flip through samples, and watch a heritage clip
+              — then open the full gallery for every photo and film in the
+              archive.
             </p>
           </header>
 
@@ -3072,60 +3308,151 @@
                     type="video/mp4"
                   />
                 </video>
-                <div class="gallery-preview-spotlight-shade" aria-hidden="true"></div>
-                <span class="gallery-preview-spotlight-mode" id="gallery-spotlight-mode">Photo</span>
+                <div
+                  class="gallery-preview-spotlight-shade"
+                  aria-hidden="true"
+                ></div>
+                <span
+                  class="gallery-preview-spotlight-mode"
+                  id="gallery-spotlight-mode"
+                  >Photo</span
+                >
               </div>
               <div class="gallery-preview-spotlight-meta">
-                <span class="gallery-preview-spotlight-cat gallery-preview-spotlight-cat--cultural" id="gallery-spotlight-cat">Cultural Heritage</span>
-                <h3 class="gallery-preview-spotlight-title" id="gallery-spotlight-title">Sambuokan Festival</h3>
-                <p class="gallery-preview-spotlight-desc" id="gallery-spotlight-desc">
-                  Living traditions and celebration — a sample from Mati&rsquo;s cultural collection.
+                <span
+                  class="gallery-preview-spotlight-cat gallery-preview-spotlight-cat--cultural"
+                  id="gallery-spotlight-cat"
+                  >Cultural Heritage</span
+                >
+                <h3
+                  class="gallery-preview-spotlight-title"
+                  id="gallery-spotlight-title"
+                >
+                  Sambuokan Festival
+                </h3>
+                <p
+                  class="gallery-preview-spotlight-desc"
+                  id="gallery-spotlight-desc"
+                >
+                  Living traditions and celebration — a sample from Mati&rsquo;s
+                  cultural collection.
                 </p>
               </div>
             </div>
 
             <div class="gallery-preview-controls">
-              <div class="gallery-preview-cats" role="tablist" aria-label="Heritage collections">
-                <button type="button" class="gallery-preview-cat is-active" data-category="cultural" role="tab" aria-selected="true">
-                  <span class="gallery-preview-cat-icon" aria-hidden="true">✦</span>
+              <div
+                class="gallery-preview-cats"
+                role="tablist"
+                aria-label="Heritage collections"
+              >
+                <button
+                  type="button"
+                  class="gallery-preview-cat is-active"
+                  data-category="cultural"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  <span class="gallery-preview-cat-icon" aria-hidden="true"
+                    >✦</span
+                  >
                   Cultural
                 </button>
-                <button type="button" class="gallery-preview-cat" data-category="built" role="tab" aria-selected="false">
-                  <span class="gallery-preview-cat-icon" aria-hidden="true">◈</span>
+                <button
+                  type="button"
+                  class="gallery-preview-cat"
+                  data-category="built"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  <span class="gallery-preview-cat-icon" aria-hidden="true"
+                    >◈</span
+                  >
                   Built
                 </button>
-                <button type="button" class="gallery-preview-cat" data-category="natural" role="tab" aria-selected="false">
-                  <span class="gallery-preview-cat-icon" aria-hidden="true">◎</span>
+                <button
+                  type="button"
+                  class="gallery-preview-cat"
+                  data-category="natural"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  <span class="gallery-preview-cat-icon" aria-hidden="true"
+                    >◎</span
+                  >
                   Natural
                 </button>
               </div>
 
-              <p class="gallery-preview-hint" id="gallery-preview-hint">Select a sample below to preview</p>
+              <p class="gallery-preview-hint" id="gallery-preview-hint">
+                Select a sample below to preview
+              </p>
 
-              <div class="gallery-preview-samples" id="gallery-preview-samples" aria-label="Gallery preview samples">
-                <button type="button" class="gallery-preview-sample is-active" data-category="cultural" data-index="0">
+              <div
+                class="gallery-preview-samples"
+                id="gallery-preview-samples"
+                aria-label="Gallery preview samples"
+              >
+                <button
+                  type="button"
+                  class="gallery-preview-sample is-active"
+                  data-category="cultural"
+                  data-index="0"
+                >
                   <span class="gallery-preview-sample-thumb">
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg" alt="" loading="lazy" />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
+                      alt=""
+                      loading="lazy"
+                    />
                   </span>
-                  <span class="gallery-preview-sample-label">Sambuokan Festival</span>
+                  <span class="gallery-preview-sample-label"
+                    >Sambuokan Festival</span
+                  >
                 </button>
-                <button type="button" class="gallery-preview-sample" data-category="built" data-index="0">
+                <button
+                  type="button"
+                  class="gallery-preview-sample"
+                  data-category="built"
+                  data-index="0"
+                >
                   <span class="gallery-preview-sample-thumb">
-                    <img src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg" alt="" loading="lazy" />
+                    <img
+                      src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                      alt=""
+                      loading="lazy"
+                    />
                   </span>
-                  <span class="gallery-preview-sample-label">Pylon Monument</span>
+                  <span class="gallery-preview-sample-label"
+                    >Pylon Monument</span
+                  >
                 </button>
-                <button type="button" class="gallery-preview-sample" data-category="natural" data-index="0">
+                <button
+                  type="button"
+                  class="gallery-preview-sample"
+                  data-category="natural"
+                  data-index="0"
+                >
                   <span class="gallery-preview-sample-thumb">
-                    <img src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg" alt="" loading="lazy" />
+                    <img
+                      src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
+                      alt=""
+                      loading="lazy"
+                    />
                   </span>
-                  <span class="gallery-preview-sample-label">Pujada Island</span>
+                  <span class="gallery-preview-sample-label"
+                    >Pujada Island</span
+                  >
                 </button>
               </div>
 
               <div class="gallery-preview-clips">
                 <span class="gallery-preview-clips-label">Heritage clips</span>
-                <div class="gallery-preview-clips-list" role="tablist" aria-label="Preview video clips">
+                <div
+                  class="gallery-preview-clips-list"
+                  role="tablist"
+                  aria-label="Preview video clips"
+                >
                   <button
                     type="button"
                     class="gallery-preview-clip"
@@ -3138,7 +3465,11 @@
                     data-desc="Crystal waters and white sand shores of Mati&rsquo;s island paradise."
                   >
                     <span class="gallery-preview-clip-thumb">
-                      <img src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg" alt="" loading="lazy" />
+                      <img
+                        src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
+                        alt=""
+                        loading="lazy"
+                      />
                       <span aria-hidden="true">▶</span>
                     </span>
                     Pujada Island
@@ -3155,7 +3486,11 @@
                     data-desc="A secluded coastal gem along Mati&rsquo;s dramatic shoreline."
                   >
                     <span class="gallery-preview-clip-thumb">
-                      <img src="data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG" alt="" loading="lazy" />
+                      <img
+                        src="data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG"
+                        alt=""
+                        loading="lazy"
+                      />
                       <span aria-hidden="true">▶</span>
                     </span>
                     Oak Island
@@ -3172,7 +3507,11 @@
                     data-desc="A celebration of Mati&rsquo;s living traditions and creative spirit."
                   >
                     <span class="gallery-preview-clip-thumb">
-                      <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg" alt="" loading="lazy" />
+                      <img
+                        src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
+                        alt=""
+                        loading="lazy"
+                      />
                       <span aria-hidden="true">▶</span>
                     </span>
                     Banwa na Madayaw
@@ -3184,8 +3523,12 @@
 
           <div class="gallery-preview-foot reveal reveal-delay-2">
             <div class="gallery-preview-foot-copy">
-              <span class="gallery-preview-foot-stat"><em data-count="22">0</em>+ sites</span>
-              <span class="gallery-preview-foot-stat"><em data-count="3">0</em> collections</span>
+              <span class="gallery-preview-foot-stat"
+                ><em data-count="22">0</em>+ sites</span
+              >
+              <span class="gallery-preview-foot-stat"
+                ><em data-count="3">0</em> collections</span
+              >
               <span class="gallery-preview-foot-stat">Photos &amp; video</span>
             </div>
             <a href="gallery.html" class="gallery-preview-cta">
@@ -3209,12 +3552,17 @@
               <p class="experience-eyebrow">Interactive 3D Model</p>
               <h2 class="experience-3d-title display-font">3D Explore</h2>
               <p class="experience-3d-lead">
-                Orbit, zoom, and inspect Mati&rsquo;s built heritage in photorealistic
-                3D — starting with the iconic Pylon Monument.
+                Orbit, zoom, and inspect Mati&rsquo;s built heritage in
+                photorealistic 3D — starting with the iconic Pylon Monument.
               </p>
 
-              <aside class="experience-3d-spec-panel" aria-label="Site metadata">
-                <h3 class="experience-3d-site-name display-font">Pylon Monument</h3>
+              <aside
+                class="experience-3d-spec-panel"
+                aria-label="Site metadata"
+              >
+                <h3 class="experience-3d-site-name display-font">
+                  Pylon Monument
+                </h3>
                 <ul class="experience-3d-specs">
                   <li>
                     <span class="experience-3d-spec-key">Model</span>
@@ -3230,11 +3578,15 @@
                   </li>
                   <li>
                     <span class="experience-3d-spec-key">Longitude</span>
-                    <span class="experience-3d-spec-val">126&deg; 13&prime; 0.8004&Prime; E</span>
+                    <span class="experience-3d-spec-val"
+                      >126&deg; 13&prime; 0.8004&Prime; E</span
+                    >
                   </li>
                   <li>
                     <span class="experience-3d-spec-key">Latitude</span>
-                    <span class="experience-3d-spec-val">6&deg; 57&prime; 8.1288&Prime; N</span>
+                    <span class="experience-3d-spec-val"
+                      >6&deg; 57&prime; 8.1288&Prime; N</span
+                    >
                   </li>
                 </ul>
                 <a href="3dexplore.html" class="experience-3d-launch-btn">
@@ -3274,238 +3626,142 @@
         </div>
       </section>
 
-      <!-- Heritage Games — arcade hub -->
+      <!-- Heritage Games — interactive game hall -->
       <section id="portal-games" class="experience-section experience-games">
         <div class="experience-games-bg" aria-hidden="true">
-          <div class="games-neon-grid"></div>
-          <div class="games-arcade-glow games-arcade-glow--1"></div>
-          <div class="games-arcade-glow games-arcade-glow--2"></div>
-          <div class="games-floor-glow"></div>
+          <div class="games-bg-base"></div>
+          <div class="games-aurora games-aurora--1"></div>
+          <div class="games-aurora games-aurora--2"></div>
+          <div class="games-aurora games-aurora--3"></div>
+          <div class="games-perspective-floor"></div>
+          <div class="games-grid-floor"></div>
+          <div class="games-pixel-field">
+            <span class="games-pixel games-pixel--1"></span>
+            <span class="games-pixel games-pixel--2"></span>
+            <span class="games-pixel games-pixel--3"></span>
+            <span class="games-pixel games-pixel--4"></span>
+            <span class="games-pixel games-pixel--5"></span>
+            <span class="games-pixel games-pixel--6"></span>
+            <span class="games-pixel games-pixel--7"></span>
+            <span class="games-pixel games-pixel--8"></span>
+          </div>
+          <div class="games-stage-lights">
+            <span class="games-stage-light games-stage-light--left"></span>
+            <span class="games-stage-light games-stage-light--right"></span>
+          </div>
+          <div class="games-horizon-line"></div>
+          <div class="games-corner-frame games-corner-frame--tl"></div>
+          <div class="games-corner-frame games-corner-frame--tr"></div>
+          <div class="games-corner-frame games-corner-frame--bl"></div>
+          <div class="games-corner-frame games-corner-frame--br"></div>
+          <div class="games-marquee games-marquee--top">
+            <div class="games-marquee-track">
+              <span>Trivia Showdown</span><span>Memory Pairs</span><span>Spot the Difference</span><span>Slide Puzzle</span><span>True or False Sprint</span><span>Heritage Quest</span><span>Insert Coin</span><span>Press Start</span>
+              <span>Trivia Showdown</span><span>Memory Pairs</span><span>Spot the Difference</span><span>Slide Puzzle</span><span>True or False Sprint</span><span>Heritage Quest</span><span>Insert Coin</span><span>Press Start</span>
+            </div>
+          </div>
+          <div class="games-marquee games-marquee--bottom">
+            <div class="games-marquee-track games-marquee-track--reverse">
+              <span>MATI HERITAGE 3D</span><span>Level Up</span><span>Earn Points</span><span>Play &amp; Learn</span><span>Built Heritage</span><span>Natural Heritage</span><span>Cultural Heritage</span><span>Game On</span>
+              <span>MATI HERITAGE 3D</span><span>Level Up</span><span>Earn Points</span><span>Play &amp; Learn</span><span>Built Heritage</span><span>Natural Heritage</span><span>Cultural Heritage</span><span>Game On</span>
+            </div>
+          </div>
           <div class="games-scanlines"></div>
+          <div class="games-grain"></div>
+          <div class="games-vignette"></div>
         </div>
 
         <div class="experience-games-inner">
-          <header class="games-hud reveal">
-            <div class="games-hud-main">
-              <div class="games-ready-pill" aria-hidden="true">
-                <span class="games-ready-dot"></span>
-                Player · Ready
-              </div>
-              <h2 class="games-title pixel-game-font">Games</h2>
-              <p class="games-lead genre-game-font">
-                Pick a game, earn points, and climb the leaderboard — five
-                heritage challenges await.
-              </p>
-            </div>
-            <div class="games-hud-side">
-              <div class="games-hud-stats" aria-hidden="true">
-                <div class="games-hud-stat">
-                  <span class="games-hud-stat-val">05</span>
-                  <span class="games-hud-stat-lbl">Games</span>
-                </div>
-                <div class="games-hud-stat">
-                  <span class="games-hud-stat-val">1.2K</span>
-                  <span class="games-hud-stat-lbl">Players</span>
-                </div>
-                <div class="games-hud-stat games-hud-stat--gold">
-                  <span class="games-hud-stat-val">PTS</span>
-                  <span class="games-hud-stat-lbl">Rewards</span>
-                </div>
-              </div>
-              <a href="game.html" class="games-hub-btn arcade-game-font">
-                <span class="games-hub-btn-icon" aria-hidden="true">▶</span>
-                Enter Lobby
+          <header class="games-portal-head reveal">
+            <p class="experience-eyebrow experience-eyebrow--light">
+              Interactive Learning
+            </p>
+            <div class="games-portal-title-row">
+              <h2 class="games-portal-title pixel-game-font">Games</h2>
+              <a href="game.html" class="games-portal-lobby-btn arcade-game-font">
+                <span class="games-portal-lobby-btn__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="8" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.75"/>
+                    <path d="M8 12h2M14 12h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                    <path d="M12 8V5.5a1.5 1.5 0 0 1 3 0V8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                    <circle cx="7" cy="5" r="1" fill="currentColor"/>
+                    <circle cx="17" cy="5" r="1" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="games-portal-lobby-btn__copy">
+                  <span class="games-portal-lobby-btn__label">Enter Game Lobby</span>
+                  <span class="games-portal-lobby-btn__hint">5 heritage challenges await</span>
+                </span>
+                <span class="games-portal-lobby-btn__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
               </a>
             </div>
+            <p class="games-portal-lead">
+              Five heritage challenges — preview each game, earn points, and
+              jump straight into the lobby.
+            </p>
           </header>
 
-          <div class="games-stage reveal reveal-delay-1">
-            <div
-              class="games-cabinet portal-game-spotlight"
-              id="portal-game-spotlight"
-              tabindex="0"
-              role="region"
-              aria-label="Featured game preview"
-            >
-              <div class="games-cabinet-shell">
-                <div class="games-cabinet-marquee arcade-game-font" aria-hidden="true">
-                  <span class="games-marquee-track">
-                    ★ NOW PLAYING ★ MATI HERITAGE GAMES ★ INSERT KNOWLEDGE ★
-                    EARN POINTS ★
-                  </span>
-                </div>
+          <div
+            class="games-portal-layout reveal reveal-delay-1"
+            id="portal-game-spotlight"
+            tabindex="0"
+            role="region"
+            aria-label="Featured game preview"
+          >
+            <nav
+              class="games-portal-rack"
+              id="portal-game-rack"
+              aria-label="Select a game"
+            ></nav>
 
-                <div class="games-cabinet-screen">
+            <div class="games-portal-main">
+              <div
+                class="games-portal-theater"
+                id="portal-game-cabinet-screen"
+              >
+                <div class="portal-game-preview-stage">
                   <div
-                    class="portal-game-featured-bg"
-                    id="portal-game-bg"
+                    id="portal-game-preview-root"
+                    class="game-preview-root portal-game-preview-root"
                   ></div>
-                  <div class="portal-game-featured-overlay"></div>
-                  <div class="games-crt-scanlines" aria-hidden="true"></div>
-                  <div class="games-screen-hud arcade-game-font" aria-hidden="true">
-                    <span id="portal-game-slot">SLOT 01</span>
-                  </div>
-                  <div class="portal-game-featured-content">
-                    <span class="portal-game-genre arcade-game-font" id="portal-game-genre"
-                      >Quiz Game</span
-                    >
-                    <h3 class="arcade-game-font" id="portal-game-title">
-                      Mati Heritage Trivia Challenge
-                    </h3>
-                    <p class="genre-game-font" id="portal-game-desc">
-                      Discover Mati City&rsquo;s heritage through fun and
-                      interactive trivia.
-                    </p>
-                    <div class="portal-game-meta">
-                      <span class="games-meta-chip arcade-game-font" id="portal-game-players"
-                        >12.4K playing</span
-                      >
-                      <span
-                        class="games-meta-chip games-meta-chip--pts arcade-game-font"
-                        id="portal-game-pts"
-                        >5 PTS</span
-                      >
-                    </div>
-                    <div class="portal-game-actions">
-                      <a
-                        href="trivia.html"
-                        class="games-play-btn arcade-game-font"
-                        id="portal-game-play"
-                      >
-                        <span class="games-play-btn-glow" aria-hidden="true"></span>
-                        Play Now
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="games-cabinet-deck">
-                  <div class="games-deck-controls">
-                    <button
-                      type="button"
-                      class="games-arcade-btn games-arcade-btn--prev"
-                      id="portal-game-prev"
-                      aria-label="Previous game"
-                    >
-                      ◀
-                    </button>
-                    <div class="portal-game-dots" id="portal-game-dots"></div>
-                    <button
-                      type="button"
-                      class="games-arcade-btn games-arcade-btn--next"
-                      id="portal-game-next"
-                      aria-label="Next game"
-                    >
-                      ▶
-                    </button>
-                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="games-select-panel">
-              <div class="games-select-head">
-                <span class="games-select-label arcade-game-font">Select Game</span>
-                <span class="games-select-count genre-game-font">05 titles</span>
-              </div>
-              <div class="games-cartridge-rail portal-game-grid">
-                <a
-                  href="trivia.html"
-                  class="games-cartridge portal-game-card is-active"
-                  data-game-index="0"
-                >
-                  <span class="games-cartridge-num arcade-game-font">01</span>
-                  <span
-                    class="portal-game-card-bg"
-                    style="background-image: url('data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg')"
-                  ></span>
-                  <span class="portal-game-card-overlay"></span>
-                  <span class="games-cartridge-frame" aria-hidden="true"></span>
-                  <span class="portal-game-card-body">
-                    <span class="portal-game-card-genre arcade-game-font">Quiz</span>
-                    <span class="portal-game-card-title genre-game-font"
-                      >Heritage Trivia</span
+              <div class="games-portal-detail">
+                <div class="games-portal-detail-copy">
+                  <h3 class="games-portal-game-title arcade-game-font" id="portal-game-title">
+                    Mati Heritage Trivia
+                  </h3>
+                  <p class="games-portal-game-desc genre-game-font" id="portal-game-desc">
+                    Discover Mati City&rsquo;s heritage through fun and interactive
+                    trivia.
+                  </p>
+                  <div class="games-portal-meta">
+                    <span class="games-portal-chip arcade-game-font" id="portal-game-players"
+                      >12.4K playing</span
                     >
-                  </span>
-                </a>
-                <a
-                  href="memorypairs.html"
-                  class="games-cartridge portal-game-card"
-                  data-game-index="1"
-                >
-                  <span class="games-cartridge-num arcade-game-font">02</span>
-                  <span
-                    class="portal-game-card-bg"
-                    style="background-image: url('data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg')"
-                  ></span>
-                  <span class="portal-game-card-overlay"></span>
-                  <span class="games-cartridge-frame" aria-hidden="true"></span>
-                  <span class="portal-game-card-body">
-                    <span class="portal-game-card-genre arcade-game-font">Memory</span>
-                    <span class="portal-game-card-title genre-game-font"
-                      >Matching Pairs</span
+                    <span
+                      class="games-portal-chip games-portal-chip--pts arcade-game-font"
+                      id="portal-game-pts"
+                      >5 PTS</span
                     >
-                  </span>
-                </a>
-                <a
-                  href="spotthedifference.html"
-                  class="games-cartridge portal-game-card"
-                  data-game-index="2"
-                >
-                  <span class="games-cartridge-num arcade-game-font">03</span>
-                  <span
-                    class="portal-game-card-bg"
-                    style="background-image: url('data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg')"
-                  ></span>
-                  <span class="portal-game-card-overlay"></span>
-                  <span class="games-cartridge-frame" aria-hidden="true"></span>
-                  <span class="portal-game-card-body">
-                    <span class="portal-game-card-genre arcade-game-font"
-                      >Observation</span
-                    >
-                    <span class="portal-game-card-title genre-game-font"
-                      >Spot the Difference</span
-                    >
-                  </span>
-                </a>
-                <a
-                  href="slidepuzzle.html"
-                  class="games-cartridge portal-game-card"
-                  data-game-index="3"
-                >
-                  <span class="games-cartridge-num arcade-game-font">04</span>
-                  <span
-                    class="portal-game-card-bg"
-                    style="background-image: url('data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg')"
-                  ></span>
-                  <span class="portal-game-card-overlay"></span>
-                  <span class="games-cartridge-frame" aria-hidden="true"></span>
-                  <span class="portal-game-card-body">
-                    <span class="portal-game-card-genre arcade-game-font">Puzzle</span>
-                    <span class="portal-game-card-title genre-game-font"
-                      >Slide Puzzle</span
-                    >
-                  </span>
-                </a>
-                <a
-                  href="truefalsesprint.html"
-                  class="games-cartridge portal-game-card"
-                  data-game-index="4"
-                >
-                  <span class="games-cartridge-num arcade-game-font">05</span>
-                  <span
-                    class="portal-game-card-bg"
-                    style="background-image: url('data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg')"
-                  ></span>
-                  <span class="portal-game-card-overlay"></span>
-                  <span class="games-cartridge-frame" aria-hidden="true"></span>
-                  <span class="portal-game-card-body">
-                    <span class="portal-game-card-genre arcade-game-font">Sprint</span>
-                    <span class="portal-game-card-title genre-game-font"
-                      >True or False</span
-                    >
-                  </span>
-                </a>
+                  </div>
+                </div>
+                <div class="games-portal-controls">
+                  
+                  <a
+                    href="trivia.html"
+                    class="games-portal-play-btn arcade-game-font"
+                    id="portal-game-play"
+                  >
+                    Play Now
+                  </a>
+                 
+                </div>
               </div>
             </div>
           </div>
@@ -3522,13 +3778,15 @@
               Three Pillars of Mati Heritage
             </h2>
             <p class="section-subtitle">
-              Built landmarks, living traditions, and protected landscapes —
-              the full spectrum of Mati City's cultural identity.
+              Built landmarks, living traditions, and protected landscapes — the
+              full spectrum of Mati City's cultural identity.
             </p>
           </div>
 
           <div class="heritage-grid">
-            <article class="heritage-card heritage-card-built reveal reveal-delay-1">
+            <article
+              class="heritage-card heritage-card-built reveal reveal-delay-1"
+            >
               <span class="heritage-card-index" aria-hidden="true">01</span>
               <span class="heritage-count">11 Sites</span>
               <img
@@ -3539,7 +3797,9 @@
               <div class="heritage-card-overlay"></div>
               <div class="heritage-card-shine" aria-hidden="true"></div>
               <div class="heritage-card-body">
-                <span class="heritage-tag heritage-tag-built">Built Heritage</span>
+                <span class="heritage-tag heritage-tag-built"
+                  >Built Heritage</span
+                >
                 <h3 class="display-font">Landmarks & Structures</h3>
                 <p>
                   Pylon Monument, Subangan Museum, Gabaldon buildings, and other
@@ -3548,11 +3808,13 @@
                 <a href="3dexplore.html" class="heritage-link">
                   Explore sites
                   <span aria-hidden="true">→</span>
-              </a>
+                </a>
               </div>
             </article>
 
-            <article class="heritage-card heritage-card-intangible reveal reveal-delay-2">
+            <article
+              class="heritage-card heritage-card-intangible reveal reveal-delay-2"
+            >
               <span class="heritage-card-index" aria-hidden="true">02</span>
               <span class="heritage-count">3 Traditions</span>
               <img
@@ -3574,11 +3836,13 @@
                 <a href="gallery.html" class="heritage-link">
                   View gallery
                   <span aria-hidden="true">→</span>
-              </a>
+                </a>
               </div>
             </article>
 
-            <article class="heritage-card heritage-card-natural reveal reveal-delay-3">
+            <article
+              class="heritage-card heritage-card-natural reveal reveal-delay-3"
+            >
               <span class="heritage-card-index" aria-hidden="true">03</span>
               <span class="heritage-count">8 Sites</span>
               <img
@@ -3589,7 +3853,9 @@
               <div class="heritage-card-overlay"></div>
               <div class="heritage-card-shine" aria-hidden="true"></div>
               <div class="heritage-card-body">
-                <span class="heritage-tag heritage-tag-natural">Natural Heritage</span>
+                <span class="heritage-tag heritage-tag-natural"
+                  >Natural Heritage</span
+                >
                 <h3 class="display-font">Coasts & Landscapes</h3>
                 <p>
                   Dahican Shoreline, Pujada Bay, Sleeping Dinosaur, Oak Island,
@@ -3598,7 +3864,7 @@
                 <a href="3dexplore.html" class="heritage-link">
                   Discover nature
                   <span aria-hidden="true">→</span>
-              </a>
+                </a>
               </div>
             </article>
           </div>
@@ -3664,13 +3930,13 @@
                   class="btn-primary text-sm font-bold px-7 py-3.5 rounded-full"
                 >
                   Register Account
-              </a>
+                </a>
                 <a
                   href="about_us.html"
                   class="inline-flex items-center text-sm font-bold px-7 py-3.5 rounded-full border-2 border-white/40 text-white hover:bg-white/10 transition"
                 >
                   About Mati Heritage 3D
-              </a>
+                </a>
               </div>
             </div>
           </div>
@@ -3686,6 +3952,8 @@
       crossorigin=""
     ></script>
     <script src="data/mati-city-boundary.js"></script>
+    <script src="game-previews.js"></script>
+    <script src="game-tv-transition.js"></script>
     <script>
       fetch("header.html")
         .then((res) => res.text())
@@ -3693,9 +3961,7 @@
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
           const header = doc.querySelector("header");
-          document
-            .getElementById("header-placeholder")
-            .replaceWith(header);
+          document.getElementById("header-placeholder").replaceWith(header);
 
           const headerStyle = doc.querySelector("style");
           if (headerStyle) {
@@ -3792,9 +4058,12 @@
           if (footer && placeholder) placeholder.replaceWith(footer);
 
           const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+          if (footerStyle)
+            document.head.appendChild(footerStyle.cloneNode(true));
 
-          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
           if (scriptText) {
             const s = document.createElement("script");
             s.textContent = scriptText;
@@ -3838,8 +4107,7 @@
         const items = [...MARQUEE_HERITAGE, ...MARQUEE_HERITAGE];
         marqueeTrack.innerHTML = items
           .map(
-            (item) =>
-              `<span class="marquee-${item.type}">${item.name}</span>`,
+            (item) => `<span class="marquee-${item.type}">${item.name}</span>`,
           )
           .join("");
       }
@@ -3895,7 +4163,10 @@
       // Cinematic hero parallax
       (function initHeroParallax() {
         const hero = document.getElementById("hero");
-        if (!hero || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        if (
+          !hero ||
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
           return;
 
         const bg = document.getElementById("hero-parallax-bg");
@@ -3942,8 +4213,7 @@
           lng: 126.216889,
           official: true,
           desc: "Gateway monument erected in memory of Mayor Luis G. Rabat.",
-          image:
-            "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
         },
         {
           name: "Centennial Clock & Pathway of Leaders",
@@ -4200,9 +4470,7 @@
         if (!geojson) return [];
 
         if (geojson.type === "Polygon") {
-          return [
-            geojson.coordinates[0].map(([lng, lat]) => [lat, lng]),
-          ];
+          return [geojson.coordinates[0].map(([lng, lat]) => [lat, lng])];
         }
 
         if (geojson.type === "MultiPolygon") {
@@ -4283,7 +4551,11 @@
         if (visibleSites.length) {
           const bounds = getMatiViewBounds(visibleSites);
           if (bounds) {
-            map.fitBounds(bounds, { padding: [32, 32], animate: true, duration: 0.65 });
+            map.fitBounds(bounds, {
+              padding: [32, 32],
+              animate: true,
+              duration: 0.65,
+            });
           }
         }
       }
@@ -4385,7 +4657,10 @@
         window.matiMapInstance = map;
         setTimeout(() => map.invalidateSize(), 150);
         bindMapScrollWheel(map);
-        bindMapVisibilityPause(map, document.getElementById("mati-map-section"));
+        bindMapVisibilityPause(
+          map,
+          document.getElementById("mati-map-section"),
+        );
         bindMapIntroDismiss(map);
       }
 
@@ -4487,117 +4762,137 @@
 
       initMatiMap();
 
-      const PORTAL_GAMES = [
-        {
-          title: "Mati Heritage Trivia",
-          genre: "Quiz Game",
-          desc: "Discover Mati City's heritage through fun and interactive trivia.",
-          players: "12.4K playing",
-          pts: "5 PTS",
-          url: "trivia.html",
-          img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg",
-        },
-        {
-          title: "Memory Matching Pairs",
-          genre: "Memory Game",
-          desc: "Test your memory by matching iconic landmarks and symbols of Mati City.",
-          players: "8.2K playing",
-          pts: "350 PTS",
-          url: "memorypairs.html",
-          img: "data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
-        },
-        {
-          title: "Spot the Difference",
-          genre: "Observation Game",
-          desc: "Sharpen your eyes and find subtle differences between images of Mati's scenic spots.",
-          players: "5.1K playing",
-          pts: "400 PTS",
-          url: "spotthedifference.html",
-          img: "data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg",
-        },
-        {
-          title: "Slide Puzzle",
-          genre: "Puzzle Game",
-          desc: "Reassemble scrambled heritage photographs of Mati City's built, natural, and cultural landmarks.",
-          players: "3.4K playing",
-          pts: "600 PTS",
-          url: "slidepuzzle.html",
-          img: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
-        },
-        {
-          title: "True or False Sprint",
-          genre: "Fast-Paced Game",
-          desc: "Think fast — decide if facts about Mati's culture and history are true or false.",
-          players: "15.2K playing",
-          pts: "450 PTS",
-          url: "truefalsesprint.html",
-          img: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
-        },
-      ];
-
       let portalGameIdx = 0;
       let portalGameSpotlightReady = false;
 
+      function launchPortalGame(game, launchEl) {
+        if (!game?.url) return;
+        if (
+          game.expandTransition !== false &&
+          typeof window.launchGameFromTvCard === "function" &&
+          launchEl
+        ) {
+          window.launchGameFromTvCard(launchEl, game.url);
+          return;
+        }
+        window.location.href = game.url;
+      }
+
       function initPortalGameSpotlight() {
-        if (portalGameSpotlightReady) return;
+        const previewApi = window.MatiGamePreviews;
+        if (portalGameSpotlightReady || !previewApi) return;
         portalGameSpotlightReady = true;
-        const bg = document.getElementById("portal-game-bg");
-        const genre = document.getElementById("portal-game-genre");
+
+        const games = previewApi.GAMES;
+        const previewRoot = document.getElementById("portal-game-preview-root");
+        const cabinetScreen = document.getElementById(
+          "portal-game-cabinet-screen",
+        );
         const title = document.getElementById("portal-game-title");
         const desc = document.getElementById("portal-game-desc");
         const players = document.getElementById("portal-game-players");
         const pts = document.getElementById("portal-game-pts");
         const play = document.getElementById("portal-game-play");
-        const slot = document.getElementById("portal-game-slot");
-        const dotsWrap = document.getElementById("portal-game-dots");
+        const rack = document.getElementById("portal-game-rack");
         const prevBtn = document.getElementById("portal-game-prev");
         const nextBtn = document.getElementById("portal-game-next");
-        const gameCards = document.querySelectorAll(
-          "#portal-games .portal-game-card[data-game-index]",
-        );
         const spotlight = document.getElementById("portal-game-spotlight");
 
-        if (!bg || !dotsWrap) return;
+        if (!previewRoot || !rack) return;
+
+        function getLaunchPreviewElement() {
+          return previewRoot.querySelector("[data-game-launch]");
+        }
+
+        function bindPortalGameLaunch() {
+          const game = games[portalGameIdx];
+          const launchEl = getLaunchPreviewElement();
+
+          if (launchEl) {
+            launchEl.style.cursor = "pointer";
+            launchEl.setAttribute("role", "button");
+            launchEl.setAttribute("tabindex", "0");
+            launchEl.setAttribute("aria-label", `Open ${game.title}`);
+            launchEl.onclick = (event) => {
+              event.preventDefault();
+              launchPortalGame(game, launchEl);
+            };
+            launchEl.onkeydown = (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                launchPortalGame(game, launchEl);
+              }
+            };
+          }
+
+          if (play) {
+            play.href = game.url;
+            play.onclick = (event) => {
+              event.preventDefault();
+              launchPortalGame(game, launchEl || previewRoot);
+            };
+          }
+        }
+
+        function renderPortalFeaturedPreview() {
+          const game = games[portalGameIdx];
+
+          previewApi.stopPortalPreviewDemo();
+
+          if (cabinetScreen) {
+            cabinetScreen.dataset.previewType = game.preview;
+          }
+
+          previewRoot.classList.add("is-switching");
+          window.setTimeout(() => {
+            previewRoot.innerHTML = previewApi.buildPortalFeaturedPreview(game);
+            previewRoot.classList.remove("is-switching");
+            previewApi.schedulePreviewFit(previewRoot);
+            bindPortalGameLaunch();
+            previewApi.startPortalPreviewDemo(previewRoot);
+          }, 220);
+
+          if (title) title.textContent = game.title;
+          if (desc) desc.textContent = game.desc;
+          if (players) players.textContent = game.players;
+          if (pts) pts.textContent = game.pts;
+
+          rack.querySelectorAll(".games-rack-item").forEach((item, i) => {
+            const isActive = i === portalGameIdx;
+            item.classList.toggle("is-active", isActive);
+            item.setAttribute("aria-current", isActive ? "true" : "false");
+          });
+        }
 
         function setPortalGameIndex(nextIdx) {
           portalGameIdx =
-            ((nextIdx % PORTAL_GAMES.length) + PORTAL_GAMES.length) %
-            PORTAL_GAMES.length;
-          renderPortalGame();
+            ((nextIdx % games.length) + games.length) % games.length;
+          renderPortalFeaturedPreview();
         }
 
-        function renderPortalGame() {
-          const game = PORTAL_GAMES[portalGameIdx];
-          bg.style.backgroundImage = `url('${game.img}')`;
-          genre.textContent = game.genre;
-          title.textContent = game.title;
-          desc.textContent = game.desc;
-          players.textContent = game.players;
-          pts.textContent = game.pts;
-          play.href = game.url;
-          if (slot) {
-            slot.textContent = `SLOT ${String(portalGameIdx + 1).padStart(2, "0")}`;
+        games.forEach((game, i) => {
+          const item = document.createElement("button");
+          item.type = "button";
+          item.className = "games-rack-item" + (i === 0 ? " is-active" : "");
+          item.setAttribute("data-game-index", String(i));
+          item.setAttribute("aria-label", `Select ${game.title}`);
+          item.setAttribute("aria-current", i === 0 ? "true" : "false");
+          item.innerHTML = `
+            <span class="games-rack-num arcade-game-font">${String(i + 1).padStart(2, "0")}</span>
+            <span class="games-rack-thumb"></span>
+            <span class="games-rack-copy">
+              <span class="games-rack-genre arcade-game-font">${game.cardGenre || game.genre}</span>
+              <span class="games-rack-title genre-game-font">${game.cardTitle || game.title}</span>
+            </span>
+            <span class="games-rack-arrow" aria-hidden="true">→</span>`;
+
+          const thumb = item.querySelector(".games-rack-thumb");
+          if (thumb) {
+            thumb.innerHTML = previewApi.buildPortalSidePreview(game);
           }
 
-          dotsWrap.querySelectorAll(".portal-game-dot").forEach((dot, i) => {
-            dot.classList.toggle("active", i === portalGameIdx);
-            dot.setAttribute("aria-current", i === portalGameIdx ? "true" : "false");
-          });
-
-          gameCards.forEach((card) => {
-            const cardIdx = Number(card.getAttribute("data-game-index"));
-            card.classList.toggle("is-active", cardIdx === portalGameIdx);
-          });
-        }
-
-        PORTAL_GAMES.forEach((_, i) => {
-          const dot = document.createElement("button");
-          dot.type = "button";
-          dot.className = "portal-game-dot" + (i === 0 ? " active" : "");
-          dot.setAttribute("aria-label", `Show game ${i + 1}`);
-          dot.setAttribute("aria-current", i === 0 ? "true" : "false");
-          dot.addEventListener("click", () => setPortalGameIndex(i));
-          dotsWrap.appendChild(dot);
+          item.addEventListener("click", () => setPortalGameIndex(i));
+          rack.appendChild(item);
         });
 
         if (prevBtn) {
@@ -4612,12 +4907,6 @@
           );
         }
 
-        gameCards.forEach((card) => {
-          const cardIdx = Number(card.getAttribute("data-game-index"));
-          card.addEventListener("mouseenter", () => setPortalGameIndex(cardIdx));
-          card.addEventListener("focus", () => setPortalGameIndex(cardIdx));
-        });
-
         if (spotlight) {
           spotlight.addEventListener("keydown", (event) => {
             if (event.key === "ArrowLeft") {
@@ -4631,18 +4920,34 @@
           });
         }
 
-        renderPortalGame();
+        window.addEventListener("resize", () => {
+          previewApi.schedulePreviewFit(previewRoot);
+        });
+
+        renderPortalFeaturedPreview();
       }
 
       const gallerySection = document.getElementById("portal-gallery");
       const galleryVideo = document.getElementById("gallery-feature-video");
-      const galleryVideoSource = document.getElementById("gallery-feature-source");
+      const galleryVideoSource = document.getElementById(
+        "gallery-feature-source",
+      );
       const gallerySpotlight = document.getElementById("gallery-spotlight");
-      const gallerySpotlightImg = document.getElementById("gallery-spotlight-img");
-      const gallerySpotlightCat = document.getElementById("gallery-spotlight-cat");
-      const gallerySpotlightTitle = document.getElementById("gallery-spotlight-title");
-      const gallerySpotlightDesc = document.getElementById("gallery-spotlight-desc");
-      const gallerySpotlightMode = document.getElementById("gallery-spotlight-mode");
+      const gallerySpotlightImg = document.getElementById(
+        "gallery-spotlight-img",
+      );
+      const gallerySpotlightCat = document.getElementById(
+        "gallery-spotlight-cat",
+      );
+      const gallerySpotlightTitle = document.getElementById(
+        "gallery-spotlight-title",
+      );
+      const gallerySpotlightDesc = document.getElementById(
+        "gallery-spotlight-desc",
+      );
+      const gallerySpotlightMode = document.getElementById(
+        "gallery-spotlight-mode",
+      );
 
       const gallerySamples = {
         cultural: {
@@ -4676,9 +4981,15 @@
           "(prefers-reduced-motion: reduce)",
         ).matches;
 
-        const catButtons = [...gallerySection.querySelectorAll(".gallery-preview-cat")];
-        const sampleButtons = [...gallerySection.querySelectorAll(".gallery-preview-sample")];
-        const clipButtons = [...gallerySection.querySelectorAll(".gallery-preview-clip")];
+        const catButtons = [
+          ...gallerySection.querySelectorAll(".gallery-preview-cat"),
+        ];
+        const sampleButtons = [
+          ...gallerySection.querySelectorAll(".gallery-preview-sample"),
+        ];
+        const clipButtons = [
+          ...gallerySection.querySelectorAll(".gallery-preview-clip"),
+        ];
         const countEls = [...gallerySection.querySelectorAll("[data-count]")];
 
         let activeCategory = "cultural";
@@ -4717,8 +5028,10 @@
             gallerySpotlightCat.textContent = data.cat;
             gallerySpotlightCat.className = `gallery-preview-spotlight-cat gallery-preview-spotlight-cat--${data.catClass}`;
           }
-          if (gallerySpotlightTitle) gallerySpotlightTitle.textContent = data.title;
-          if (gallerySpotlightDesc) gallerySpotlightDesc.textContent = data.desc;
+          if (gallerySpotlightTitle)
+            gallerySpotlightTitle.textContent = data.title;
+          if (gallerySpotlightDesc)
+            gallerySpotlightDesc.textContent = data.desc;
           if (gallerySpotlightMode) gallerySpotlightMode.textContent = "Photo";
 
           catButtons.forEach((btn) => {
@@ -4758,8 +5071,10 @@
             gallerySpotlightCat.textContent = clip.dataset.cat || "";
             gallerySpotlightCat.className = `gallery-preview-spotlight-cat gallery-preview-spotlight-cat--${clip.dataset.catClass || "natural"}`;
           }
-          if (gallerySpotlightTitle) gallerySpotlightTitle.textContent = clip.dataset.title || "";
-          if (gallerySpotlightDesc) gallerySpotlightDesc.textContent = clip.dataset.desc || "";
+          if (gallerySpotlightTitle)
+            gallerySpotlightTitle.textContent = clip.dataset.title || "";
+          if (gallerySpotlightDesc)
+            gallerySpotlightDesc.textContent = clip.dataset.desc || "";
           if (gallerySpotlightMode) gallerySpotlightMode.textContent = "Video";
 
           clipButtons.forEach((btn) => {

@@ -27,7 +27,8 @@
             },
             animation: {
               "fest-drift": "festDrift 22s ease-in-out infinite",
-              "fest-drift-reverse": "festDrift 28s ease-in-out infinite reverse",
+              "fest-drift-reverse":
+                "festDrift 28s ease-in-out infinite reverse",
               "fest-shimmer": "festShimmer 8s ease-in-out infinite",
               "fest-swing": "festSwing 6s ease-in-out infinite alternate",
               "fest-twinkle": "festTwinkle 2.4s ease-in-out infinite",
@@ -61,6 +62,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="game-tv-preview.css" />
 
     <style>
       :root {
@@ -103,7 +105,8 @@
       .fest-bg__photo {
         position: absolute;
         inset: 0;
-        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg") center/cover no-repeat;
+        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg")
+          center/cover no-repeat;
         transform: scale(1.08);
         filter: blur(1px) brightness(0.68) saturate(1.12);
       }
@@ -112,10 +115,27 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(180deg, rgba(15, 25, 55, 0.62) 0%, rgba(30, 15, 45, 0.48) 38%, rgba(18, 8, 31, 0.72) 100%),
-          radial-gradient(ellipse 85% 65% at 50% 42%, transparent 0%, rgba(0, 0, 0, 0.42) 100%),
-          radial-gradient(ellipse 40% 30% at 15% 85%, rgba(235, 59, 90, 0.12) 0%, transparent 70%),
-          radial-gradient(ellipse 40% 30% at 85% 85%, rgba(15, 185, 177, 0.1) 0%, transparent 70%);
+          linear-gradient(
+            180deg,
+            rgba(15, 25, 55, 0.62) 0%,
+            rgba(30, 15, 45, 0.48) 38%,
+            rgba(18, 8, 31, 0.72) 100%
+          ),
+          radial-gradient(
+            ellipse 85% 65% at 50% 42%,
+            transparent 0%,
+            rgba(0, 0, 0, 0.42) 100%
+          ),
+          radial-gradient(
+            ellipse 40% 30% at 15% 85%,
+            rgba(235, 59, 90, 0.12) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 40% 30% at 85% 85%,
+            rgba(15, 185, 177, 0.1) 0%,
+            transparent 70%
+          );
       }
 
       .fest-bg__weave {
@@ -145,7 +165,11 @@
         opacity: 0.1;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 2 L54 28 L28 54 L2 28 Z' fill='none' stroke='%23feca57' stroke-width='1.2'/%3E%3Cpath d='M28 10 L46 28 L28 46 L10 28 Z' fill='none' stroke='%23eb3b5a' stroke-width='0.8'/%3E%3Ccircle cx='28' cy='28' r='3' fill='%230fb9b1'/%3E%3C/svg%3E");
         background-size: 56px 56px;
-        mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 20%, transparent 85%);
+        mask-image: radial-gradient(
+          ellipse 75% 65% at 50% 50%,
+          #000 20%,
+          transparent 85%
+        );
       }
 
       .fest-bg__band {
@@ -161,7 +185,13 @@
 
       .fest-bg__band--top {
         top: calc(var(--header-h, 5.625rem) + 3.5rem);
-        mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 8%,
+          #000 92%,
+          transparent
+        );
       }
 
       .fest-bg__band--bottom {
@@ -169,7 +199,13 @@
         height: 3.25rem;
         opacity: 0.45;
         transform: scaleY(-1);
-        mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 5%,
+          #000 95%,
+          transparent
+        );
       }
 
       .fest-bg__totem {
@@ -271,8 +307,14 @@
       }
 
       @keyframes festPatternDrift {
-        0% { opacity: 0.11; transform: translate(0, 0); }
-        100% { opacity: 0.16; transform: translate(6px, -4px); }
+        0% {
+          opacity: 0.11;
+          transform: translate(0, 0);
+        }
+        100% {
+          opacity: 0.16;
+          transform: translate(6px, -4px);
+        }
       }
 
       .fest-bg__sun {
@@ -282,7 +324,11 @@
       .fest-bg__glow {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 60% 40% at 50% 85%, rgba(255, 140, 60, 0.2) 0%, transparent 70%);
+        background: radial-gradient(
+          ellipse 60% 40% at 50% 85%,
+          rgba(255, 140, 60, 0.2) 0%,
+          transparent 70%
+        );
       }
 
       .fest-bg__stars {
@@ -316,22 +362,72 @@
         width: 9px;
         height: 9px;
         border-radius: 50%;
-        box-shadow: 0 0 10px currentColor, 0 0 18px currentColor;
+        box-shadow:
+          0 0 10px currentColor,
+          0 0 18px currentColor;
         animation: festTwinkle 2.4s ease-in-out infinite;
       }
 
-      .fest-bg__lights span:nth-child(1) { left: 4%; color: #feca57; animation-delay: 0s; }
-      .fest-bg__lights span:nth-child(2) { left: 12%; color: #eb3b5a; animation-delay: 0.3s; }
-      .fest-bg__lights span:nth-child(3) { left: 20%; color: #20bf6b; animation-delay: 0.6s; }
-      .fest-bg__lights span:nth-child(4) { left: 28%; color: #0fb9b1; animation-delay: 0.9s; }
-      .fest-bg__lights span:nth-child(5) { left: 36%; color: #8854d0; animation-delay: 1.2s; }
-      .fest-bg__lights span:nth-child(6) { left: 44%; color: #fd9644; animation-delay: 0.2s; }
-      .fest-bg__lights span:nth-child(7) { left: 52%; color: #feca57; animation-delay: 0.5s; }
-      .fest-bg__lights span:nth-child(8) { left: 60%; color: #eb3b5a; animation-delay: 0.8s; }
-      .fest-bg__lights span:nth-child(9) { left: 68%; color: #20bf6b; animation-delay: 1.1s; }
-      .fest-bg__lights span:nth-child(10) { left: 76%; color: #0fb9b1; animation-delay: 0.4s; }
-      .fest-bg__lights span:nth-child(11) { left: 84%; color: #8854d0; animation-delay: 0.7s; }
-      .fest-bg__lights span:nth-child(12) { left: 92%; color: #fd9644; animation-delay: 1s; }
+      .fest-bg__lights span:nth-child(1) {
+        left: 4%;
+        color: #feca57;
+        animation-delay: 0s;
+      }
+      .fest-bg__lights span:nth-child(2) {
+        left: 12%;
+        color: #eb3b5a;
+        animation-delay: 0.3s;
+      }
+      .fest-bg__lights span:nth-child(3) {
+        left: 20%;
+        color: #20bf6b;
+        animation-delay: 0.6s;
+      }
+      .fest-bg__lights span:nth-child(4) {
+        left: 28%;
+        color: #0fb9b1;
+        animation-delay: 0.9s;
+      }
+      .fest-bg__lights span:nth-child(5) {
+        left: 36%;
+        color: #8854d0;
+        animation-delay: 1.2s;
+      }
+      .fest-bg__lights span:nth-child(6) {
+        left: 44%;
+        color: #fd9644;
+        animation-delay: 0.2s;
+      }
+      .fest-bg__lights span:nth-child(7) {
+        left: 52%;
+        color: #feca57;
+        animation-delay: 0.5s;
+      }
+      .fest-bg__lights span:nth-child(8) {
+        left: 60%;
+        color: #eb3b5a;
+        animation-delay: 0.8s;
+      }
+      .fest-bg__lights span:nth-child(9) {
+        left: 68%;
+        color: #20bf6b;
+        animation-delay: 1.1s;
+      }
+      .fest-bg__lights span:nth-child(10) {
+        left: 76%;
+        color: #0fb9b1;
+        animation-delay: 0.4s;
+      }
+      .fest-bg__lights span:nth-child(11) {
+        left: 84%;
+        color: #8854d0;
+        animation-delay: 0.7s;
+      }
+      .fest-bg__lights span:nth-child(12) {
+        left: 92%;
+        color: #fd9644;
+        animation-delay: 1s;
+      }
 
       @media (max-width: 768px) {
         .fest-bg__totem,
@@ -360,18 +456,37 @@
       }
 
       @keyframes festTwinkle {
-        0%, 100% { opacity: 0.35; transform: scale(0.85); }
-        50% { opacity: 1; transform: scale(1.15); }
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scale(0.85);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
       }
 
       @keyframes festDrift {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        50% { transform: translate(10px, -16px) scale(1.03); }
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(10px, -16px) scale(1.03);
+        }
       }
 
       @keyframes festShimmer {
-        0%, 100% { opacity: 0.75; transform: translateX(-50%) scale(1); }
-        50% { opacity: 1; transform: translateX(-50%) scale(1.04); }
+        0%,
+        100% {
+          opacity: 0.75;
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translateX(-50%) scale(1.04);
+        }
       }
 
       .fest-pattern-frame {
@@ -385,10 +500,15 @@
         inset: -8px;
         border-radius: inherit;
         padding: 7px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M0 0h20L10 20H0z' fill='%23eb3b5a'/%3E%3Cpath d='M20 0h20L30 20H20z' fill='%23feca57'/%3E%3Cpath d='M0 20h20L10 40H0z' fill='%2320bf6b'/%3E%3Cpath d='M20 20h20L30 40H20z' fill='%230fb9b1'/%3E%3C/svg%3E") repeat;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M0 0h20L10 20H0z' fill='%23eb3b5a'/%3E%3Cpath d='M20 0h20L30 20H20z' fill='%23feca57'/%3E%3Cpath d='M0 20h20L10 40H0z' fill='%2320bf6b'/%3E%3Cpath d='M20 20h20L30 40H20z' fill='%230fb9b1'/%3E%3C/svg%3E")
+          repeat;
         background-size: 20px 20px;
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
         pointer-events: none;
@@ -449,16 +569,32 @@
         left: 4%;
         right: 4%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(47, 27, 12, 0.18) 15%, rgba(47, 27, 12, 0.18) 85%, transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(47, 27, 12, 0.18) 15%,
+          rgba(47, 27, 12, 0.18) 85%,
+          transparent
+        );
         border-radius: 999px;
       }
 
-      .bunting-string--left { transform: rotate(-2deg); animation-delay: -1s; }
-      .bunting-string--right { transform: rotate(2deg); animation-delay: -2.5s; }
+      .bunting-string--left {
+        transform: rotate(-2deg);
+        animation-delay: -1s;
+      }
+      .bunting-string--right {
+        transform: rotate(2deg);
+        animation-delay: -2.5s;
+      }
 
       @keyframes bunting-sway {
-        0% { transform: rotate(-1.5deg) translateY(0); }
-        100% { transform: rotate(1.5deg) translateY(2px); }
+        0% {
+          transform: rotate(-1.5deg) translateY(0);
+        }
+        100% {
+          transform: rotate(1.5deg) translateY(2px);
+        }
       }
 
       .bunting-flag {
@@ -471,11 +607,21 @@
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
       }
 
-      .bunting-flag:nth-child(5n+1) { background: var(--fest-red); }
-      .bunting-flag:nth-child(5n+2) { background: var(--fest-gold); }
-      .bunting-flag:nth-child(5n+3) { background: var(--fest-green); }
-      .bunting-flag:nth-child(5n+4) { background: var(--fest-teal); }
-      .bunting-flag:nth-child(5n+5) { background: var(--fest-purple); }
+      .bunting-flag:nth-child(5n + 1) {
+        background: var(--fest-red);
+      }
+      .bunting-flag:nth-child(5n + 2) {
+        background: var(--fest-gold);
+      }
+      .bunting-flag:nth-child(5n + 3) {
+        background: var(--fest-green);
+      }
+      .bunting-flag:nth-child(5n + 4) {
+        background: var(--fest-teal);
+      }
+      .bunting-flag:nth-child(5n + 5) {
+        background: var(--fest-purple);
+      }
 
       /* Festival marquee */
       .fest-marquee-wrap {
@@ -485,7 +631,14 @@
         right: 0;
         z-index: 4;
         overflow: hidden;
-        background: linear-gradient(90deg, var(--fest-red), var(--fest-mango), var(--fest-gold), var(--fest-teal), var(--fest-purple));
+        background: linear-gradient(
+          90deg,
+          var(--fest-red),
+          var(--fest-mango),
+          var(--fest-gold),
+          var(--fest-teal),
+          var(--fest-purple)
+        );
         border-top: 3px solid rgba(255, 255, 255, 0.45);
         border-bottom: 3px solid rgba(255, 255, 255, 0.45);
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
@@ -511,8 +664,12 @@
       }
 
       @keyframes marquee-scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
       }
 
       /* Now playing — reference widget */
@@ -550,7 +707,14 @@
         justify-content: center;
         font-size: 0.95rem;
         line-height: 1;
-        background: conic-gradient(from 0deg, var(--fest-red), var(--fest-gold), var(--fest-teal), var(--fest-purple), var(--fest-red));
+        background: conic-gradient(
+          from 0deg,
+          var(--fest-red),
+          var(--fest-gold),
+          var(--fest-teal),
+          var(--fest-purple),
+          var(--fest-red)
+        );
         color: #fff;
         transition: transform 0.15s ease;
         position: relative;
@@ -583,8 +747,12 @@
         width: 2.1rem;
         height: 2.1rem;
         border-radius: 50%;
-        background:
-          radial-gradient(circle at 30% 30%, var(--fest-gold) 0%, var(--fest-red) 45%, var(--fest-purple) 100%);
+        background: radial-gradient(
+          circle at 30% 30%,
+          var(--fest-gold) 0%,
+          var(--fest-red) 45%,
+          var(--fest-purple) 100%
+        );
         border: 2px solid #fff;
         animation: disc-spin 4s linear infinite;
         animation-play-state: paused;
@@ -595,8 +763,12 @@
       }
 
       @keyframes disc-spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       .now-playing__info {
@@ -643,14 +815,31 @@
         animation-play-state: running;
       }
 
-      .now-playing__bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
-      .now-playing__bars span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
-      .now-playing__bars span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
-      .now-playing__bars span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+      .now-playing__bars span:nth-child(1) {
+        height: 6px;
+        animation-delay: 0s;
+      }
+      .now-playing__bars span:nth-child(2) {
+        height: 12px;
+        animation-delay: 0.15s;
+      }
+      .now-playing__bars span:nth-child(3) {
+        height: 8px;
+        animation-delay: 0.3s;
+      }
+      .now-playing__bars span:nth-child(4) {
+        height: 14px;
+        animation-delay: 0.1s;
+      }
 
       @keyframes eq-bounce {
-        0%, 100% { transform: scaleY(0.45); }
-        50% { transform: scaleY(1); }
+        0%,
+        100% {
+          transform: scaleY(0.45);
+        }
+        50% {
+          transform: scaleY(1);
+        }
       }
 
       @media (max-width: 640px) {
@@ -680,8 +869,14 @@
       }
 
       @keyframes confetti-fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg);
+          opacity: 0.3;
+        }
       }
 
       /* Intro entrance */
@@ -694,8 +889,14 @@
       }
 
       @keyframes intro-rise {
-        0% { opacity: 0; transform: translateY(28px); }
-        100% { opacity: 1; transform: translateY(0); }
+        0% {
+          opacity: 0;
+          transform: translateY(28px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .festival-stage {
@@ -788,7 +989,12 @@
         padding: 0.55rem 1.1rem 0.5rem;
         border-radius: 0.45rem;
         border: 3px solid #4a3018;
-        background: linear-gradient(180deg, #a0622a 0%, #6b4423 45%, #5c3d1e 100%);
+        background: linear-gradient(
+          180deg,
+          #a0622a 0%,
+          #6b4423 45%,
+          #5c3d1e 100%
+        );
         box-shadow:
           inset 0 2px 0 rgba(255, 255, 255, 0.25),
           0 6px 16px rgba(0, 0, 0, 0.45);
@@ -806,15 +1012,26 @@
         border-radius: 2px;
       }
 
-      .game-back-nav a::before { left: 1.25rem; transform: rotate(-8deg); }
-      .game-back-nav a::after { right: 1.25rem; transform: rotate(8deg); }
+      .game-back-nav a::before {
+        left: 1.25rem;
+        transform: rotate(-8deg);
+      }
+      .game-back-nav a::after {
+        right: 1.25rem;
+        transform: rotate(8deg);
+      }
 
       .game-back-nav a {
         position: relative;
       }
 
       .game-back-nav a:hover {
-        background: linear-gradient(180deg, #b87232 0%, #7a5028 45%, #6b4423 100%);
+        background: linear-gradient(
+          180deg,
+          #b87232 0%,
+          #7a5028 45%,
+          #6b4423 100%
+        );
         border-color: #c9a227;
         transform: translateY(-1px);
       }
@@ -846,7 +1063,11 @@
         border-radius: 1.35rem;
         background:
           url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
-          linear-gradient(175deg, var(--fest-parchment) 0%, var(--fest-parchment-dark) 100%);
+          linear-gradient(
+            175deg,
+            var(--fest-parchment) 0%,
+            var(--fest-parchment-dark) 100%
+          );
         border: none;
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
         overflow: hidden;
@@ -862,7 +1083,12 @@
         height: 2.85rem;
         margin: 0 auto 0.5rem;
         border-radius: 50%;
-        background: radial-gradient(circle at 35% 35%, #ffe066 0%, #fd9644 55%, #eb3b5a 100%);
+        background: radial-gradient(
+          circle at 35% 35%,
+          #ffe066 0%,
+          #fd9644 55%,
+          #eb3b5a 100%
+        );
         border: 3px solid var(--fest-gold);
         box-shadow: 0 0 18px rgba(254, 202, 87, 0.55);
         position: relative;
@@ -873,7 +1099,26 @@
         position: absolute;
         inset: -0.55rem;
         border-radius: 50%;
-        background: conic-gradient(from 0deg, transparent 0deg 20deg, rgba(254, 202, 87, 0.7) 20deg 28deg, transparent 28deg 50deg, rgba(254, 202, 87, 0.7) 50deg 58deg, transparent 58deg 80deg, rgba(254, 202, 87, 0.7) 80deg 88deg, transparent 88deg 110deg, rgba(254, 202, 87, 0.7) 110deg 118deg, transparent 118deg 140deg, rgba(254, 202, 87, 0.7) 140deg 148deg, transparent 148deg 170deg, rgba(254, 202, 87, 0.7) 170deg 178deg, transparent 178deg 200deg, rgba(254, 202, 87, 0.7) 200deg 208deg, transparent 208deg 230deg, rgba(254, 202, 87, 0.7) 230deg 238deg, transparent 238deg 360deg);
+        background: conic-gradient(
+          from 0deg,
+          transparent 0deg 20deg,
+          rgba(254, 202, 87, 0.7) 20deg 28deg,
+          transparent 28deg 50deg,
+          rgba(254, 202, 87, 0.7) 50deg 58deg,
+          transparent 58deg 80deg,
+          rgba(254, 202, 87, 0.7) 80deg 88deg,
+          transparent 88deg 110deg,
+          rgba(254, 202, 87, 0.7) 110deg 118deg,
+          transparent 118deg 140deg,
+          rgba(254, 202, 87, 0.7) 140deg 148deg,
+          transparent 148deg 170deg,
+          rgba(254, 202, 87, 0.7) 170deg 178deg,
+          transparent 178deg 200deg,
+          rgba(254, 202, 87, 0.7) 200deg 208deg,
+          transparent 208deg 230deg,
+          rgba(254, 202, 87, 0.7) 230deg 238deg,
+          transparent 238deg 360deg
+        );
       }
 
       .fest-banner__ribbon-wrap {
@@ -937,7 +1182,19 @@
         font-size: clamp(2.35rem, 7.5vw, 4rem);
         line-height: 0.95;
         margin-top: 0.1rem;
-        background: linear-gradient(90deg, #eb3b5a, #fd9644, #feca57, #20bf6b, #0fb9b1, #8854d0, #eb3b5a, #fd9644, #feca57, #20bf6b);
+        background: linear-gradient(
+          90deg,
+          #eb3b5a,
+          #fd9644,
+          #feca57,
+          #20bf6b,
+          #0fb9b1,
+          #8854d0,
+          #eb3b5a,
+          #fd9644,
+          #feca57,
+          #20bf6b
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -994,7 +1251,8 @@
         position: relative;
         aspect-ratio: 4/3;
         border-radius: 0.2rem;
-        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg") center/cover no-repeat;
+        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg")
+          center/cover no-repeat;
       }
 
       .fest-frames__panel--alt {
@@ -1076,7 +1334,8 @@
         inset: 0;
         z-index: 0;
         opacity: 0.07;
-        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg") center/cover no-repeat;
+        background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg")
+          center/cover no-repeat;
         filter: grayscale(1);
         pointer-events: none;
       }
@@ -1176,7 +1435,9 @@
 
       .diff-chip[data-level="medium"].is-active {
         border-color: #fd9644;
-        box-shadow: 0 0 0 2px rgba(253, 150, 68, 0.2), 0 6px 0 rgba(253, 150, 68, 0.15);
+        box-shadow:
+          0 0 0 2px rgba(253, 150, 68, 0.2),
+          0 6px 0 rgba(253, 150, 68, 0.15);
       }
 
       .diff-chip[data-level="hard"].is-active {
@@ -1230,7 +1491,9 @@
         color: #fff;
         background: linear-gradient(90deg, #fd9644 0%, #eb3b5a 100%);
         box-shadow: 0 8px 28px rgba(235, 59, 90, 0.45);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
         margin-top: auto;
         display: inline-flex;
         align-items: center;
@@ -1251,7 +1514,12 @@
         left: -100%;
         width: 60%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.28),
+          transparent
+        );
         transition: left 0.5s ease;
       }
 
@@ -1333,7 +1601,12 @@
         height: 100%;
         width: 0%;
         border-radius: 999px;
-        background: linear-gradient(90deg, var(--fest-red), var(--fest-gold), var(--fest-teal));
+        background: linear-gradient(
+          90deg,
+          var(--fest-red),
+          var(--fest-gold),
+          var(--fest-teal)
+        );
         transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
         box-shadow: 0 0 12px rgba(249, 202, 36, 0.45);
       }
@@ -1363,9 +1636,15 @@
       }
 
       @keyframes star-pop {
-        0% { transform: scale(0.5); }
-        70% { transform: scale(1.3); }
-        100% { transform: scale(1.15); }
+        0% {
+          transform: scale(0.5);
+        }
+        70% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1.15);
+        }
       }
 
       .gauge__value.is-pop {
@@ -1373,9 +1652,16 @@
       }
 
       @keyframes score-pop {
-        0% { transform: scale(1); }
-        40% { transform: scale(1.25); color: var(--fest-gold); }
-        100% { transform: scale(1); }
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(1.25);
+          color: var(--fest-gold);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .gauge {
@@ -1434,8 +1720,16 @@
           var(--fest-red) calc(var(--timer-pct) * 1%),
           rgba(45, 36, 32, 0.08) 0
         );
-        mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black calc(100% - 5px));
-        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black calc(100% - 5px));
+        mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 6px),
+          black calc(100% - 5px)
+        );
+        -webkit-mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 6px),
+          black calc(100% - 5px)
+        );
         pointer-events: none;
         transition: background 0.35s linear;
       }
@@ -1468,8 +1762,13 @@
       }
 
       @keyframes timer-shake {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.04); }
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.04);
+        }
       }
 
       /* ── Exhibit garland frames ── */
@@ -1491,10 +1790,14 @@
         height: 14px;
         background: repeating-linear-gradient(
           90deg,
-          var(--fest-red) 0, var(--fest-red) 12px,
-          var(--fest-gold) 12px, var(--fest-gold) 24px,
-          var(--fest-green) 24px, var(--fest-green) 36px,
-          var(--fest-teal) 36px, var(--fest-teal) 48px
+          var(--fest-red) 0,
+          var(--fest-red) 12px,
+          var(--fest-gold) 12px,
+          var(--fest-gold) 24px,
+          var(--fest-green) 24px,
+          var(--fest-green) 36px,
+          var(--fest-teal) 36px,
+          var(--fest-teal) 48px
         );
         border-radius: 4px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
@@ -1541,7 +1844,11 @@
         font-family: var(--font-display);
         font-size: 0.85rem;
         color: #fff;
-        background: linear-gradient(135deg, var(--fest-red), var(--fest-gold-deep));
+        background: linear-gradient(
+          135deg,
+          var(--fest-red),
+          var(--fest-gold-deep)
+        );
         border-radius: 50%;
         border: 3px solid #fff;
         box-shadow: 0 6px 20px var(--fest-shadow);
@@ -1580,8 +1887,18 @@
       }
 
       @keyframes fest-sparkle {
-        0%, 100% { box-shadow: inset 0 0 0 2px #fff, 0 10px 28px var(--fest-shadow); }
-        50% { box-shadow: inset 0 0 0 2px #fff, 0 10px 28px var(--fest-shadow), 0 0 20px rgba(249, 202, 36, 0.25); }
+        0%,
+        100% {
+          box-shadow:
+            inset 0 0 0 2px #fff,
+            0 10px 28px var(--fest-shadow);
+        }
+        50% {
+          box-shadow:
+            inset 0 0 0 2px #fff,
+            0 10px 28px var(--fest-shadow),
+            0 0 20px rgba(249, 202, 36, 0.25);
+        }
       }
 
       .slide-frame__plate img {
@@ -1602,7 +1919,11 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: #fff;
-        background: linear-gradient(90deg, var(--fest-red), var(--fest-gold-deep));
+        background: linear-gradient(
+          90deg,
+          var(--fest-red),
+          var(--fest-gold-deep)
+        );
         border-radius: 999px;
         pointer-events: none;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -1639,8 +1960,14 @@
       }
 
       @keyframes spot-pop {
-        0% { transform: translate(-50%, -50%) scale(2.5) rotate(-20deg); opacity: 0; }
-        100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+        0% {
+          transform: translate(-50%, -50%) scale(2.5) rotate(-20deg);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(0);
+          opacity: 1;
+        }
       }
 
       .spot-miss {
@@ -1663,9 +1990,17 @@
       }
 
       @keyframes spot-fade {
-        0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
-        30% { opacity: 1; }
-        100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+        0% {
+          transform: translate(-50%, -50%) scale(0.4);
+          opacity: 0;
+        }
+        30% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1.3);
+          opacity: 0;
+        }
       }
 
       /* Loupe */
@@ -1726,7 +2061,13 @@
         left: 0;
         right: 0;
         padding: 0.55rem;
-        background: linear-gradient(90deg, var(--fest-red), var(--fest-mango), var(--fest-gold), var(--fest-teal));
+        background: linear-gradient(
+          90deg,
+          var(--fest-red),
+          var(--fest-mango),
+          var(--fest-gold),
+          var(--fest-teal)
+        );
         font-family: var(--font-banner);
         font-size: 0.82rem;
         letter-spacing: 0.16em;
@@ -1739,8 +2080,14 @@
       }
 
       @keyframes results-in {
-        0% { transform: scale(0.92) translateY(16px); opacity: 0; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
+        0% {
+          transform: scale(0.92) translateY(16px);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
       }
 
       .results-card__title {
@@ -1753,7 +2100,11 @@
       .results-card__score {
         font-family: var(--font-display);
         font-size: clamp(3.25rem, 12vw, 4.75rem);
-        background: linear-gradient(180deg, var(--fest-gold), var(--fest-gold-deep));
+        background: linear-gradient(
+          180deg,
+          var(--fest-gold),
+          var(--fest-gold-deep)
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -1793,17 +2144,23 @@
         font-family: var(--font-display);
         font-size: 1.25rem;
         color: #fff;
-        background: linear-gradient(90deg, var(--fest-red), var(--fest-gold-deep));
+        background: linear-gradient(
+          90deg,
+          var(--fest-red),
+          var(--fest-gold-deep)
+        );
         border-radius: 999px;
         border: 3px solid #fff;
         box-shadow: 0 12px 40px var(--fest-shadow);
         pointer-events: none;
-          opacity: 0;
-        transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        opacity: 0;
+        transition:
+          opacity 0.2s ease,
+          transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      }
 
       .fest-toast.is-show {
-          opacity: 1;
+        opacity: 1;
         transform: translate(-50%, -50%) scale(1);
       }
 
@@ -1819,7 +2176,9 @@
     </style>
   </head>
 
-  <body class="festival-page game-page min-h-screen overflow-x-hidden antialiased bg-[#12081f]">
+  <body
+    class="festival-page game-page min-h-screen overflow-x-hidden antialiased bg-[#12081f]"
+  >
     <!-- Festive heritage game backdrop -->
     <div
       id="fest-bg"
@@ -1844,31 +2203,39 @@
       <span class="fest-bg__drum fest-bg__drum--right"></span>
       <div class="fest-bg__glow"></div>
       <div class="fest-bg__lights">
-        <span></span><span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span
+        ><span></span> <span></span><span></span><span></span><span></span
+        ><span></span><span></span>
       </div>
     </div>
 
     <div class="bunting-row" aria-hidden="true">
       <div class="bunting-string bunting-string--wide">
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
       </div>
     </div>
     <div class="bunting-row bunting-row--lower" aria-hidden="true">
       <div class="bunting-string bunting-string--wide">
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
-        <span class="bunting-flag"></span><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
+        <span class="bunting-flag"></span><span class="bunting-flag"></span
+        ><span class="bunting-flag"></span> <span class="bunting-flag"></span
+        ><span class="bunting-flag"></span><span class="bunting-flag"></span>
       </div>
     </div>
 
@@ -1888,16 +2255,15 @@
       <section id="intro-screen" class="intro-layout">
         <div class="fest-banner fest-pattern-frame">
           <span class="fest-banner__sun" aria-hidden="true"></span>
-          <div class="fest-banner__ribbon-wrap">
-          </div>
+          <div class="fest-banner__ribbon-wrap"></div>
           <h1 class="fest-banner__title">
             <span class="fest-banner__title-line">SPOT THE</span>
             <span class="fest-banner__title-diff">DIFFERENCE</span>
-        </h1>
+          </h1>
           <p class="fest-banner__subtitle">Train your eye on Mati heritage</p>
           <p class="fest-banner__desc">
-            Two photos sit side by side — one has been subtly changed. Spot every difference
-            before the clock runs out.
+            Two photos sit side by side — one has been subtly changed. Spot
+            every difference before the clock runs out.
           </p>
           <div class="fest-frames" aria-hidden="true">
             <div class="fest-frames__item fest-frames__item--a">
@@ -1910,10 +2276,26 @@
               <span class="fest-frames__tag">PHOTO B</span>
             </div>
           </div>
-          <span class="fest-banner__leaf fest-banner__leaf--left" aria-hidden="true">🌿</span>
-          <span class="fest-banner__leaf fest-banner__leaf--right" aria-hidden="true">🌿</span>
-          <span class="fest-banner__feather fest-banner__feather--left" aria-hidden="true">🪶</span>
-          <span class="fest-banner__feather fest-banner__feather--right" aria-hidden="true">🪶</span>
+          <span
+            class="fest-banner__leaf fest-banner__leaf--left"
+            aria-hidden="true"
+            >🌿</span
+          >
+          <span
+            class="fest-banner__leaf fest-banner__leaf--right"
+            aria-hidden="true"
+            >🌿</span
+          >
+          <span
+            class="fest-banner__feather fest-banner__feather--left"
+            aria-hidden="true"
+            >🪶</span
+          >
+          <span
+            class="fest-banner__feather fest-banner__feather--right"
+            aria-hidden="true"
+            >🪶</span
+          >
         </div>
 
         <aside class="ticket-booth fest-pattern-frame">
@@ -1925,25 +2307,40 @@
             <span class="ticket-booth__deco">✦</span>
           </p>
           <div class="diff-grid">
-            <button type="button" id="btn-easy" class="diff-chip" data-level="easy">
+            <button
+              type="button"
+              id="btn-easy"
+              class="diff-chip"
+              data-level="easy"
+            >
               EASY
               <span class="diff-chip__sub">90 SEC</span>
               <span class="diff-chip__dot" aria-hidden="true"></span>
-          </button>
-            <button type="button" id="btn-medium" class="diff-chip is-active" data-level="medium">
-            MEDIUM
+            </button>
+            <button
+              type="button"
+              id="btn-medium"
+              class="diff-chip is-active"
+              data-level="medium"
+            >
+              MEDIUM
               <span class="diff-chip__sub">60 SEC</span>
               <span class="diff-chip__dot" aria-hidden="true"></span>
-          </button>
-            <button type="button" id="btn-hard" class="diff-chip" data-level="hard">
+            </button>
+            <button
+              type="button"
+              id="btn-hard"
+              class="diff-chip"
+              data-level="hard"
+            >
               HARD
               <span class="diff-chip__sub">45 SEC</span>
               <span class="diff-chip__dot" aria-hidden="true"></span>
-          </button>
-        </div>
+            </button>
+          </div>
           <button type="button" id="start-btn" class="btn-fest btn-fest--start">
             ENTER
-        </button>
+          </button>
         </aside>
       </section>
 
@@ -1953,7 +2350,9 @@
           <div class="gauge">
             <span class="gauge__label">Differences</span>
             <div class="gauge__value">
-              <span id="found-count">0</span><span style="font-size:0.45em;opacity:0.4">/</span><span id="total-diffs" style="font-size:0.65em">5</span>
+              <span id="found-count">0</span
+              ><span style="font-size: 0.45em; opacity: 0.4">/</span
+              ><span id="total-diffs" style="font-size: 0.65em">5</span>
             </div>
           </div>
           <div class="gauge gauge--timer" id="timer-gauge">
@@ -1965,7 +2364,7 @@
             <span class="gauge__label">Score</span>
             <span id="score-display" class="gauge__value">0</span>
           </div>
-          </div>
+        </div>
 
         <div class="fest-progress">
           <div class="fest-progress__label">
@@ -1986,34 +2385,58 @@
             <div class="slide-frame">
               <div class="slide-frame__plate" id="panel-1">
                 <span class="slide-label">Photo A</span>
-                <img id="img-1" src="" alt="Heritage photo A" draggable="false" />
+                <img
+                  id="img-1"
+                  src=""
+                  alt="Heritage photo A"
+                  draggable="false"
+                />
+              </div>
             </div>
-          </div>
             <div class="slide-frame">
               <div class="slide-frame__plate" id="panel-2">
                 <span class="slide-label">Photo B</span>
-                <img id="img-2" src="" alt="Heritage photo B" draggable="false" />
+                <img
+                  id="img-2"
+                  src=""
+                  alt="Heritage photo B"
+                  draggable="false"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </section>
 
       <!-- RESULTS -->
       <section id="results-screen" class="results-card hidden">
         <div class="results-card__banner">Round Complete</div>
         <div class="results-card__body">
-          <div class="results-card__medals" id="results-medals" aria-hidden="true">🥇🎊🥇</div>
+          <div
+            class="results-card__medals"
+            id="results-medals"
+            aria-hidden="true"
+          >
+            🥇🎊🥇
+          </div>
           <h2 class="results-card__title">Great Job!</h2>
           <div id="final-score" class="results-card__score">0</div>
-          <p id="result-msg" class="results-card__msg">Your eye for heritage detail is remarkable.</p>
+          <p id="result-msg" class="results-card__msg">
+            Your eye for heritage detail is remarkable.
+          </p>
           <div class="action-row">
-            <button type="button" id="replay-btn" class="btn-fest">Play Again</button>
-            <a href="game.html" class="btn-fest btn-fest--ghost">Back to Games</a>
-        </div>
+            <button type="button" id="replay-btn" class="btn-fest">
+              Play Again
+            </button>
+            <a href="game.html" class="btn-fest btn-fest--ghost"
+              >Back to Games</a
+            >
+          </div>
         </div>
       </section>
     </main>
+
+    <div id="footer-placeholder"></div>
 
     <div id="loupe" class="loupe" aria-hidden="true">
       <img id="loupe-img" src="" alt="" />
@@ -2021,7 +2444,14 @@
     </div>
 
     <aside id="now-playing" class="now-playing" aria-label="Now playing">
-      <button type="button" id="music-toggle" class="now-playing__mute" aria-pressed="false" aria-label="Mute music" title="Mute / Unmute">
+      <button
+        type="button"
+        id="music-toggle"
+        class="now-playing__mute"
+        aria-pressed="false"
+        aria-label="Mute music"
+        title="Mute / Unmute"
+      >
         <span id="music-icon-on" aria-hidden="true">🔊</span>
         <span id="music-icon-off" class="hidden" aria-hidden="true">🔇</span>
       </button>
@@ -2037,23 +2467,21 @@
 
     <audio
       id="bg-music"
-      src="data/Intangible Cultural Heritage/Sambuokan Festival/Audio Recordings/Sambuokan 2019.mp3"
+      src="game bgmusic/spotthedifference.mp3"
       loop
       preload="auto"
+      autoplay
     ></audio>
 
+    <script src="game-tv-transition.js"></script>
     <script>
-      const FESTIVAL_IMG =
-        "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg";
-
-      const FESTIVAL_MUSIC = {
-        src: "data/Intangible Cultural Heritage/Sambuokan Festival/Audio Recordings/Sambuokan 2019.mp3",
-        title: "Mati Heritage — Festive Trail",
-      };
+      if (typeof window.initTvExpandReceive === "function") {
+        window.initTvExpandReceive();
+      }
 
       const levels = [
         {
-          img: FESTIVAL_IMG,
+          img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
           differences: [
             { x: 20, y: 30, found: false },
             { x: 50, y: 45, found: false },
@@ -2080,10 +2508,9 @@
 
       const bgMusic = document.getElementById("bg-music");
       const nowPlayingEl = document.getElementById("now-playing");
-      const nowPlayingTitle = nowPlayingEl?.querySelector(".now-playing__title");
-      const musicToggleBtn = document.getElementById("music-toggle");
-      const musicIconOn = document.getElementById("music-icon-on");
-      const musicIconOff = document.getElementById("music-icon-off");
+      const nowPlayingTitle = nowPlayingEl?.querySelector(
+        ".now-playing__title",
+      );
       let musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
       let sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
       let musicStarted = false;
@@ -2099,6 +2526,10 @@
       }
 
       function updateMuteUI() {
+        const musicToggleBtn = document.getElementById("music-toggle");
+        const musicIconOn = document.getElementById("music-icon-on");
+        const musicIconOff = document.getElementById("music-icon-off");
+
         if (!nowPlayingEl || !musicToggleBtn) return;
         nowPlayingEl.classList.toggle("is-muted", musicMuted);
         musicToggleBtn.setAttribute("aria-pressed", String(musicMuted));
@@ -2109,8 +2540,12 @@
         musicToggleBtn.title = musicMuted ? "Unmute music" : "Mute music";
         if (musicIconOn) musicIconOn.classList.toggle("hidden", musicMuted);
         if (musicIconOff) musicIconOff.classList.toggle("hidden", !musicMuted);
-        const playing = musicStarted && !musicMuted && !getActiveMusic().paused && musicVol > 0;
-        setNowPlaying(playing, FESTIVAL_MUSIC.title);
+        const playing =
+          musicStarted &&
+          !musicMuted &&
+          !getActiveMusic().paused &&
+          musicVol > 0;
+        setNowPlaying(playing, "Mati Heritage — Festive Trail");
       }
 
       function setNowPlaying(active, title) {
@@ -2155,7 +2590,8 @@
           return;
         }
 
-        audio.play()
+        audio
+          .play()
           .then(() => {
             musicStarted = true;
             updateMuteUI();
@@ -2165,6 +2601,7 @@
           });
       }
 
+      const musicToggleBtn = document.getElementById("music-toggle");
       if (musicToggleBtn) {
         musicToggleBtn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -2172,6 +2609,14 @@
           playFestSound("click");
         });
       }
+      document.addEventListener(
+        "click",
+        () => {
+          getFestAudioCtx();
+          startFestivalMusic();
+        },
+        { once: true },
+      );
 
       applyMusicVolume();
       updateMuteUI();
@@ -2189,8 +2634,21 @@
       const resultsScreen = document.getElementById("results-screen");
       const LOUPE_ZOOM = 2.2;
       const canLoupe = window.matchMedia("(pointer: fine)").matches;
-      const CONFETTI_COLORS = ["#eb4d4b", "#f9ca24", "#6ab04c", "#22a6b3", "#8854d0", "#ff6b6b"];
-      const TOAST_MSGS = ["Ayos!", "Found it!", "Nice spot!", "Sharp eye!", "Mabuhay!"];
+      const CONFETTI_COLORS = [
+        "#eb4d4b",
+        "#f9ca24",
+        "#6ab04c",
+        "#22a6b3",
+        "#8854d0",
+        "#ff6b6b",
+      ];
+      const TOAST_MSGS = [
+        "Ayos!",
+        "Found it!",
+        "Nice spot!",
+        "Sharp eye!",
+        "Mabuhay!",
+      ];
       let toastTimeout = null;
 
       function spawnConfetti(count = 40, originX = null, originY = null) {
@@ -2198,9 +2656,10 @@
         for (let i = 0; i < count; i++) {
           const piece = document.createElement("span");
           piece.className = "confetti-piece";
-          const left = originX != null
-            ? originX + (Math.random() - 0.5) * 120
-            : Math.random() * window.innerWidth;
+          const left =
+            originX != null
+              ? originX + (Math.random() - 0.5) * 120
+              : Math.random() * window.innerWidth;
           piece.style.left = `${left}px`;
           piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
           piece.style.animationDuration = `${2.2 + Math.random() * 2}s`;
@@ -2217,7 +2676,10 @@
         festToast.textContent = text;
         festToast.classList.add("is-show");
         clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => festToast.classList.remove("is-show"), 700);
+        toastTimeout = setTimeout(
+          () => festToast.classList.remove("is-show"),
+          700,
+        );
       }
 
       function buildFestStars(total) {
@@ -2236,7 +2698,8 @@
         const total = levels[0].differences.length;
         const pct = total > 0 ? (found / total) * 100 : 0;
         if (progressFill) progressFill.style.width = `${pct}%`;
-        if (progressText) progressText.textContent = `${found} of ${total} found`;
+        if (progressText)
+          progressText.textContent = `${found} of ${total} found`;
         if (festStarsEl) {
           festStarsEl.querySelectorAll(".fest-star").forEach((star, i) => {
             star.classList.toggle("is-found", i < found);
@@ -2252,7 +2715,9 @@
 
       function getFestAudioCtx() {
         if (!festAudioCtx) {
-          festAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          festAudioCtx = new (
+            window.AudioContext || window.webkitAudioContext
+          )();
         }
         if (festAudioCtx.state === "suspended") festAudioCtx.resume();
         return festAudioCtx;
@@ -2269,7 +2734,13 @@
           const ctx = getFestAudioCtx();
           const now = ctx.currentTime;
           const master = ctx.createGain();
-          const gainMap = { hover: 0.14, click: 0.3, find: 0.45, miss: 0.25, tick: 0.18 };
+          const gainMap = {
+            hover: 0.14,
+            click: 0.3,
+            find: 0.45,
+            miss: 0.25,
+            tick: 0.18,
+          };
           master.gain.value = vol * (gainMap[variant] || 0.28);
           master.connect(ctx.destination);
 
@@ -2348,16 +2819,18 @@
       }
 
       function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach((el) => {
-          if (!el || el.dataset.festHoverBound) return;
-          el.dataset.festHoverBound = "true";
-          el.addEventListener("mouseenter", () => {
-            const now = Date.now();
-            if (now - lastHoverAt < 100) return;
-            lastHoverAt = now;
-            playFestSound("hover");
-          });
-        });
+        (elements instanceof NodeList ? [...elements] : elements).forEach(
+          (el) => {
+            if (!el || el.dataset.festHoverBound) return;
+            el.dataset.festHoverBound = "true";
+            el.addEventListener("mouseenter", () => {
+              const now = Date.now();
+              if (now - lastHoverAt < 100) return;
+              lastHoverAt = now;
+              playFestSound("hover");
+            });
+          },
+        );
       }
 
       function setDifficulty(level) {
@@ -2381,7 +2854,9 @@
       }
 
       function clearMarkers() {
-        document.querySelectorAll(".spot-found, .spot-miss").forEach((el) => el.remove());
+        document
+          .querySelectorAll(".spot-found, .spot-miss")
+          .forEach((el) => el.remove());
       }
 
       function updateTimerProgress() {
@@ -2421,7 +2896,8 @@
           wrap.className = "spot-found";
           wrap.style.left = `${x}%`;
           wrap.style.top = `${y}%`;
-          wrap.innerHTML = '<span class="spot-found__ring"></span><span class="spot-found__dot"></span>';
+          wrap.innerHTML =
+            '<span class="spot-found__ring"></span><span class="spot-found__dot"></span>';
           document.getElementById(id).appendChild(wrap);
         });
       }
@@ -2510,8 +2986,9 @@
         if (!("speechSynthesis" in window)) return null;
         const voices = window.speechSynthesis.getVoices();
         return (
-          voices.find((v) => /Daniel|David|Mark|James|English.*Male/i.test(v.name)) ||
-          voices.find((v) => v.lang.startsWith("en"))
+          voices.find((v) =>
+            /Daniel|David|Mark|James|English.*Male/i.test(v.name),
+          ) || voices.find((v) => v.lang.startsWith("en"))
         );
       }
 
@@ -2548,10 +3025,17 @@
 
         const medals = document.getElementById("results-medals");
         if (medals) {
-          medals.textContent = isWin ? "🥇🎊🥇" : found > 0 ? "🎪✨🎪" : "🎭💫🎭";
+          medals.textContent = isWin
+            ? "🥇🎊🥇"
+            : found > 0
+              ? "🎪✨🎪"
+              : "🎭💫🎭";
         }
 
-        let total = parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
+        let total = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+          10,
+        );
         total += score;
         localStorage.setItem("totalHeritagePoints", String(total));
         const pointsEl = document.getElementById("header-total-points");
@@ -2569,7 +3053,8 @@
         totalTime = timeLeft;
         updateStats();
         document.getElementById("timer-display").textContent = `${timeLeft}s`;
-        document.getElementById("total-diffs").textContent = levels[0].differences.length;
+        document.getElementById("total-diffs").textContent =
+          levels[0].differences.length;
         buildFestStars(levels[0].differences.length);
         updateProgressUI();
         updateTimerProgress();
@@ -2624,7 +3109,9 @@
       setupLoupe(panel1, img1);
       setupLoupe(panel2, img2);
 
-      bindHoverSound(document.querySelectorAll(".diff-chip, .btn-fest, .game-back-nav a"));
+      bindHoverSound(
+        document.querySelectorAll(".diff-chip, .btn-fest, .game-back-nav a"),
+      );
       bindFestivalMusicStart();
 
       fetch("header.html")
@@ -2638,7 +3125,8 @@
           if (settingsModal) document.body.appendChild(settingsModal);
 
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+          if (headerStyle)
+            document.head.appendChild(headerStyle.cloneNode(true));
 
           const headerScript = Array.from(doc.scripts).find((s) => !s.src);
           if (headerScript) {
@@ -2647,32 +3135,71 @@
             document.body.appendChild(script);
           }
 
-          document.querySelectorAll(".site-nav__link, .site-mobile-nav__link").forEach((link) => {
-            if (link.getAttribute("data-nav") === "games") link.classList.add("is-active");
-          });
+          document
+            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
+            .forEach((link) => {
+              if (link.getAttribute("data-nav") === "games")
+                link.classList.add("is-active");
+            });
 
           const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl) pointsEl.textContent = localStorage.getItem("totalHeritagePoints") || "0";
+          if (pointsEl)
+            pointsEl.textContent =
+              localStorage.getItem("totalHeritagePoints") || "0";
 
-          if (typeof window.initSiteHeader === "function") window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function") window.initGlobalSettings();
+          if (typeof window.initSiteHeader === "function")
+            window.initSiteHeader();
+          if (typeof window.initGlobalSettings === "function")
+            window.initGlobalSettings();
 
           const musicSlider = document.getElementById("music-volume");
           if (musicSlider) {
             musicSlider.addEventListener("input", () => {
               applyMusicVolume();
-              if (parseFloat(musicSlider.value) > 0 && musicStarted && !musicMuted) {
-                getActiveMusic().play().catch(() => {});
+              if (
+                parseFloat(musicSlider.value) > 0 &&
+                musicStarted &&
+                !musicMuted
+              ) {
+                getActiveMusic()
+                  .play()
+                  .catch(() => {});
                 updateMuteUI();
               }
             });
           }
 
-          bindHoverSound(document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
-          ));
+          bindHoverSound(
+            document.querySelectorAll(
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
+            ),
+          );
         })
         .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle);
+
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+          if (typeof window.initSiteFooter === "function")
+            window.initSiteFooter("games");
+        })
+        .catch((err) => console.error("Error loading footer:", err));
     </script>
   </body>
 </html>

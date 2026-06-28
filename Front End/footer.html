@@ -18,7 +18,12 @@
         position: relative;
         font-family: "Source Sans 3", sans-serif;
         color: rgba(236, 253, 245, 0.88);
-        background: linear-gradient(180deg, #0a1612 0%, #0c1a14 45%, #071009 100%);
+        background: linear-gradient(
+          180deg,
+          #0a1612 0%,
+          #0c1a14 45%,
+          #071009 100%
+        );
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         overflow: hidden;
       }
@@ -28,8 +33,16 @@
         inset: 0;
         pointer-events: none;
         background:
-          radial-gradient(ellipse 50% 40% at 0% 0%, rgba(4, 120, 87, 0.12) 0%, transparent 55%),
-          radial-gradient(ellipse 40% 35% at 100% 100%, rgba(2, 132, 199, 0.08) 0%, transparent 50%);
+          radial-gradient(
+            ellipse 50% 40% at 0% 0%,
+            rgba(4, 120, 87, 0.12) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 40% 35% at 100% 100%,
+            rgba(2, 132, 199, 0.08) 0%,
+            transparent 50%
+          );
       }
 
       .site-footer__rule {
@@ -303,7 +316,10 @@
         background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.14);
         cursor: pointer;
-        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
       }
 
       .site-footer__back-top svg {
@@ -331,27 +347,40 @@
           <div class="site-footer__col site-footer__brand">
             <div class="site-footer__brand-head">
               <div class="site-footer__brand-mark" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 3 2 8l10 5 10-5-10-5Z"/>
-                  <path d="m2 8 10 5 10-5"/>
-                  <path d="M12 13v8"/>
-                  <path d="M7 10.5v5.5c0 1.1 2.2 2 5 2s5-.9 5-2v-5.5"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 3 2 8l10 5 10-5-10-5Z" />
+                  <path d="m2 8 10 5 10-5" />
+                  <path d="M12 13v8" />
+                  <path d="M7 10.5v5.5c0 1.1 2.2 2 5 2s5-.9 5-2v-5.5" />
                 </svg>
               </div>
               <div>
                 <h2 class="site-footer__title">Mati Heritage 3D</h2>
-                <p class="site-footer__tagline">Preserving the Past, Inspiring the Future</p>
+                <p class="site-footer__tagline">
+                  Preserving the Past, Inspiring the Future
+                </p>
               </div>
             </div>
             <p class="site-footer__desc">
-              An interactive cultural heritage platform dedicated to the preservation,
-              accessibility, and promotion of Mati City's heritage for present and future generations.
+              An interactive cultural heritage platform dedicated to the
+              preservation, accessibility, and promotion of Mati City's heritage
+              for present and future generations.
             </p>
             <div class="site-footer__partner">
               <p class="site-footer__partner-label">
-                Cultural heritage data provided through an official data sharing agreement with
+                Cultural heritage data provided through an official data sharing
+                agreement with
               </p>
-              <p class="site-footer__partner-name">Local Government Unit of Mati City</p>
+              <p class="site-footer__partner-name">
+                Local Government Unit of Mati City
+              </p>
               <p class="site-footer__partner-name">City Tourism Office</p>
             </div>
           </div>
@@ -359,12 +388,45 @@
           <div class="site-footer__col">
             <h3 class="site-footer__heading">Quick Links</h3>
             <ul class="site-footer__links">
-              <li><a href="index.html" class="site-footer__link" data-nav="home">Home</a></li>
-              <li><a href="about_us.html" class="site-footer__link" data-nav="about">About Us</a></li>
-              <li><a href="game.html" class="site-footer__link" data-nav="games">Games</a></li>
-              <li><a href="3dexplore.html" class="site-footer__link" data-nav="3d">3D Explore</a></li>
-              <li><a href="gallery.html" class="site-footer__link" data-nav="gallery">Gallery</a></li>
-              <li><a href="game.html#leaderboard" class="site-footer__link" data-nav="leaderboard">Leaderboard</a></li>
+              <li>
+                <a href="index.html" class="site-footer__link" data-nav="home"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="about_us.html"
+                  class="site-footer__link"
+                  data-nav="about"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a href="game.html" class="site-footer__link" data-nav="games"
+                  >Games</a
+                >
+              </li>
+              <li>
+                <a href="3dexplore.html" class="site-footer__link" data-nav="3d"
+                  >3D Explore</a
+                >
+              </li>
+              <li>
+                <a
+                  href="gallery.html"
+                  class="site-footer__link"
+                  data-nav="gallery"
+                  >Gallery</a
+                >
+              </li>
+              <li>
+                <a
+                  href="game.html#leaderboard"
+                  class="site-footer__link"
+                  data-nav="leaderboard"
+                  >Leaderboard</a
+                >
+              </li>
             </ul>
           </div>
 
@@ -381,16 +443,32 @@
             <h3 class="site-footer__heading">LGU Partner</h3>
             <div class="site-footer__lgu">
               <span class="site-footer__lgu-badge">Official Partner</span>
-              <p class="site-footer__lgu-title">Local Government Unit of Mati City</p>
+              <p class="site-footer__lgu-title">
+                Local Government Unit of Mati City
+              </p>
               <p class="site-footer__lgu-sub">City Tourism Office</p>
             </div>
           </div>
         </div>
 
         <div class="site-footer__bottom">
-          <p class="site-footer__copy">&copy; 2026 Mati Heritage 3D. All Rights Reserved.</p>
-          <button type="button" class="site-footer__back-top" id="footer-back-top" aria-label="Back to top">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          <p class="site-footer__copy">
+            &copy; 2026 Mati Heritage 3D. All Rights Reserved.
+          </p>
+          <button
+            type="button"
+            class="site-footer__back-top"
+            id="footer-back-top"
+            aria-label="Back to top"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
             Back to top
           </button>
         </div>
@@ -403,9 +481,14 @@
         if (!footer) return;
 
         if (pageKey) {
-          footer.querySelectorAll(".site-footer__link[data-nav]").forEach((link) => {
-            link.classList.toggle("is-active", link.getAttribute("data-nav") === pageKey);
-          });
+          footer
+            .querySelectorAll(".site-footer__link[data-nav]")
+            .forEach((link) => {
+              link.classList.toggle(
+                "is-active",
+                link.getAttribute("data-nav") === pageKey,
+              );
+            });
         }
 
         const backTop = document.getElementById("footer-back-top");

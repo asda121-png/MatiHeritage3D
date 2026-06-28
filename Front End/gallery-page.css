@@ -1,0 +1,1193 @@
+/* Mati Heritage Gallery — folder explorer */
+
+.gal-page {
+  --gal-ink: #0f172a;
+  --gal-muted: #64748b;
+  --gal-border: #e2e8f0;
+  --gal-bg: #eef2f6;
+  --gal-card: #ffffff;
+  --gal-cultural: #d97706;
+  --gal-cultural-soft: #fffbeb;
+  --gal-natural: #0284c7;
+  --gal-natural-soft: #f0f9ff;
+  --gal-forest: #047857;
+  --header-h: 5.625rem;
+  font-family: "Source Sans 3", "Inter", system-ui, sans-serif;
+  background: var(--gal-bg);
+  color: var(--gal-ink);
+  min-height: 100vh;
+  position: relative;
+}
+
+.gal-page *,
+.gal-page *::before,
+.gal-page *::after {
+  box-sizing: border-box;
+}
+
+/* Safety: hide settings modal if header injects it without Tailwind */
+#settings-modal:not(.flex) {
+  display: none !important;
+}
+
+/* Visitor header auth (gallery page) */
+body.visitor-module.gal-page {
+  --header-h: 5.625rem;
+  --header-h-scrolled: 4.875rem;
+}
+
+body.visitor-module.gal-page .visitor-auth-actions {
+  gap: 0.5rem;
+  margin-left: 0.75rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid rgba(12, 26, 20, 0.08);
+}
+
+body.visitor-module.gal-page .visitor-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.58rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.28s ease,
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+body.visitor-module.gal-page .visitor-auth-btn svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+body.visitor-module.gal-page .visitor-auth-login {
+  color: #334155;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(12, 26, 20, 0.1);
+}
+
+body.visitor-module.gal-page .visitor-auth-register {
+  color: #fff;
+  background: linear-gradient(135deg, #064e3b, #047857 50%, #0284c7);
+  box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28);
+}
+
+/* ── Ambient page background ── */
+.gal-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gal-ambient-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 70% 50% at 50% 0%,
+      rgba(167, 243, 208, 0.35) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 100% 80%,
+      rgba(186, 230, 253, 0.25) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #e8f5e9 0%, var(--gal-bg) 35%, #f8fafc 100%);
+}
+
+.gal-ambient-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image:
+    radial-gradient(circle at 25% 25%, #047857 1.5px, transparent 1.5px),
+    radial-gradient(circle at 75% 75%, #0284c7 1px, transparent 1px);
+  background-size:
+    48px 48px,
+    64px 64px;
+}
+
+.gal-ambient-orbs span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+}
+
+.gal-ambient-orbs span:nth-child(1) {
+  width: 320px;
+  height: 320px;
+  top: 12%;
+  left: -5%;
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.gal-ambient-orbs span:nth-child(2) {
+  width: 280px;
+  height: 280px;
+  top: 45%;
+  right: -8%;
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.gal-ambient-orbs span:nth-child(3) {
+  width: 240px;
+  height: 240px;
+  bottom: 8%;
+  left: 30%;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+/* ── Hero — static full-screen gallery header ── */
+.gal-hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--header-h) clamp(1.25rem, 4vw, 2rem) clamp(2rem, 4vw, 3rem);
+  background: #052e16;
+  overflow: hidden;
+  text-align: center;
+}
+
+.gal-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(5, 46, 22, 0.68), rgba(5, 46, 22, 0.68)),
+    url("data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg") center / cover no-repeat;
+  pointer-events: none;
+}
+
+.gal-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.gal-hero-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(4rem, 14vw, 7rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fefce8;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 6px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Explorer shell ── */
+.gal-explorer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.gal-explorer[data-view="category"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 0;
+  margin-top: 0;
+}
+
+.gal-explorer[data-view="category"] .gal-panel {
+  padding: 0;
+  min-height: 100vh;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.gal-explorer[data-view="category"] .gal-panel::before,
+.gal-explorer[data-view="category"] .gal-panel::after {
+  display: none;
+}
+
+.gal-explorer:not([data-view="category"]) {
+  padding: 0 clamp(1rem, 3vw, 1.5rem);
+}
+
+.gal-explorer:not([data-view="category"]) .gal-panel {
+  max-width: 72rem;
+  margin: -3rem auto clamp(4rem, 8vw, 5rem);
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.gal-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #047857, #0ea5e9, #f59e0b);
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.gal-panel::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  right: -80px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(4, 120, 87, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.gal-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 24px 64px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(4, 120, 87, 0.04) inset;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  width: 100%;
+}
+
+.gal-explorer:not([data-view="category"]) .gal-panel {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* Breadcrumb */
+.gal-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+  font-size: 0.82rem;
+}
+
+.gal-crumb-btn {
+  border: none;
+  background: none;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--gal-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.gal-crumb-btn:hover {
+  color: var(--gal-forest);
+  background: rgba(4, 120, 87, 0.06);
+}
+
+.gal-crumb-btn.is-current {
+  color: var(--gal-ink);
+  cursor: default;
+}
+
+.gal-crumb-sep {
+  color: #cbd5e1;
+  user-select: none;
+}
+
+/* Step titles */
+.gal-step-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gal-muted);
+  margin-bottom: 0.5rem;
+}
+
+.gal-step-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  color: var(--gal-ink);
+}
+
+.gal-step-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--gal-muted);
+  margin: 0 0 2rem;
+  max-width: 36rem;
+}
+
+/* ── Step 1: Category cards ── */
+.gal-category-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 700px) {
+  .gal-category-grid {
+    flex-direction: row;
+  }
+}
+
+.gal-category-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: left;
+  padding: clamp(2.5rem, 5vw, 4rem);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  flex: 1;
+  min-height: 50vh;
+  transition:
+    flex 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+}
+
+.gal-category-grid:hover .gal-category-card {
+  flex: 0.85;
+  filter: brightness(0.75) saturate(0.85);
+}
+
+.gal-category-grid:hover .gal-category-card:hover {
+  flex: 1.3;
+  filter: brightness(1) saturate(1.05);
+  z-index: 2;
+}
+
+.gal-category-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+
+.gal-category-card--intangible::after {
+  background-image: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg");
+}
+
+.gal-category-card--natural::after {
+  background-image: url("data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg");
+}
+
+.gal-category-card:hover::after {
+  transform: scale(1.06);
+}
+
+.gal-category-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 1;
+  background:
+    linear-gradient(to top, rgba(4, 16, 8, 0.92) 0%, rgba(4, 16, 8, 0.45) 45%, rgba(4, 16, 8, 0.25) 100%);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.gal-category-card:hover::before {
+  opacity: 0.88;
+}
+
+.gal-category-card--intangible {
+  background: #1a1208;
+}
+
+.gal-category-card--natural {
+  background: #081820;
+}
+
+.gal-category-name {
+  position: relative;
+  z-index: 2;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 700;
+  margin: 0;
+  color: #fefce8;
+  line-height: 1.1;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(0);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gal-category-card:hover .gal-category-name {
+  transform: translateY(-6px);
+}
+
+.gal-category-card--intangible .gal-category-name::after {
+  content: "Festivals · Music · Traditions";
+  display: block;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fcd34d;
+  margin-top: 0.65rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.gal-category-card--natural .gal-category-name::after {
+  content: "Islands · Landmarks · Landscapes";
+  display: block;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  margin-top: 0.65rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.gal-category-card:hover .gal-category-name::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Decorative arrow on category hover */
+.gal-category-card .gal-category-name::before {
+  content: "→";
+  position: absolute;
+  right: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.35s ease, right 0.35s ease;
+}
+
+.gal-category-card:hover .gal-category-name::before {
+  opacity: 0.8;
+  right: -3rem;
+}
+
+/* ── Step 2: Heritage folders ── */
+.gal-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 1.25rem;
+}
+
+.gal-heritage-folder {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gal-heritage-folder:hover {
+  transform: translateY(-12px) scale(1.02);
+}
+
+.gal-heritage-folder.gal-reveal {
+  animation: galRevealUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--gal-i, 0) * 0.07s);
+}
+
+@keyframes galRevealUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gal-heritage-folder:hover {
+  transform: translateY(-12px) scale(1.02);
+}
+
+.gal-folder-visual {
+  position: relative;
+  margin-bottom: 0.85rem;
+}
+
+.gal-folder-tab {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 42%;
+  height: 1.35rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  z-index: 1;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.gal-explorer[data-category="intangible"] .gal-folder-tab {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.gal-explorer[data-category="natural"] .gal-folder-tab {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+}
+
+.gal-explorer[data-category="intangible"] .gal-folder-body {
+  box-shadow: 0 12px 32px rgba(217, 119, 6, 0.18);
+}
+
+.gal-explorer[data-category="natural"] .gal-folder-body {
+  box-shadow: 0 12px 32px rgba(2, 132, 199, 0.18);
+}
+
+.gal-folder-body {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 0 1rem 1rem 1rem;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  transition: box-shadow 0.45s ease;
+}
+
+.gal-heritage-folder:hover .gal-folder-body {
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.22);
+}
+
+.gal-folder-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  filter: saturate(0.95);
+}
+
+.gal-heritage-folder:hover .gal-folder-cover {
+  transform: scale(1.1);
+  filter: saturate(1.08) brightness(1.03);
+}
+
+.gal-folder-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 23, 42, 0.55) 0%,
+    transparent 50%
+  );
+}
+
+.gal-folder-counts {
+  position: absolute;
+  bottom: 0.65rem;
+  left: 0.65rem;
+  right: 0.65rem;
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.gal-folder-counts span {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--gal-ink);
+}
+
+.gal-folder-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gal-ink);
+  margin: 0 0 0.2rem;
+  line-height: 1.2;
+}
+
+.gal-folder-location {
+  font-size: 0.78rem;
+  color: var(--gal-muted);
+}
+
+/* ── Step 3: Site view with subfolders ── */
+.gal-site-header {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--gal-border);
+}
+
+@media (min-width: 768px) {
+  .gal-site-header {
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+}
+
+.gal-site-cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.gal-site-header:hover .gal-site-cover {
+  transform: scale(1.02);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
+}
+
+.gal-subfolder-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+}
+
+.gal-site-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.gal-site-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--gal-muted);
+  margin: 0 0 0.65rem;
+}
+
+.gal-site-location {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gal-forest);
+}
+
+.gal-subfolder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 1rem;
+}
+
+.gal-subfolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  border: 2px solid var(--gal-border);
+  border-radius: 1.15rem;
+  background: #fafbfc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.gal-subfolder:hover {
+  border-color: var(--gal-forest);
+  background: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(4, 120, 87, 0.12);
+}
+
+.gal-subfolder.gal-reveal {
+  animation: galRevealUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--gal-i, 0) * 0.08s);
+}
+
+.gal-category-card.gal-reveal {
+  animation: galRevealUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--gal-i, 0) * 0.15s);
+}
+
+.gal-subfolder--photos .gal-subfolder-icon {
+  background: #ecfdf5;
+}
+.gal-subfolder--videos .gal-subfolder-icon {
+  background: #eff6ff;
+}
+.gal-subfolder--links .gal-subfolder-icon {
+  background: #fffbeb;
+}
+.gal-subfolder--timeline .gal-subfolder-icon {
+  background: #fdf4ff;
+}
+
+.gal-subfolder-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--gal-ink);
+}
+
+.gal-subfolder-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gal-muted);
+}
+
+/* ── Step 4: Media grid inside subfolder ── */
+.gal-media-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.gal-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--gal-border);
+  border-radius: 9999px;
+  background: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--gal-muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.gal-back-btn:hover {
+  color: var(--gal-forest);
+  border-color: var(--gal-forest);
+}
+
+.gal-media-count {
+  font-size: 0.85rem;
+  color: var(--gal-muted);
+}
+
+.gal-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 1rem;
+}
+
+.gal-media-item {
+  position: relative;
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  aspect-ratio: 1;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease;
+}
+
+.gal-media-item:nth-child(6n + 4) {
+  aspect-ratio: 4 / 5;
+}
+
+.gal-media-item.gal-reveal {
+  animation: galRevealUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--gal-i, 0) * 0.04s);
+}
+
+.gal-media-item:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.gal-media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gal-media-item:hover img {
+  transform: scale(1.08);
+}
+
+.gal-media-item-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.gal-media-item-play svg {
+  width: 44px;
+  height: 44px;
+  fill: #fff;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.gal-link-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(145deg, #064e3b, #047857);
+  color: #fff;
+  text-align: center;
+}
+
+.gal-link-card svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.9;
+}
+
+.gal-link-card span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.gal-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--gal-muted);
+}
+
+.gal-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.6;
+}
+
+/* Timeline inside folder */
+.gal-timeline-compact {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.gal-timeline-compact::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gal-forest), #e2e8f0);
+  border-radius: 2px;
+}
+
+.gal-timeline-row {
+  position: relative;
+  padding: 0 0 1.5rem 1.5rem;
+}
+
+.gal-timeline-row:last-child {
+  padding-bottom: 0;
+}
+
+.gal-timeline-row::before {
+  content: "";
+  position: absolute;
+  left: -1.25rem;
+  top: 0.35rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--gal-forest);
+  transform: translateX(-50%);
+}
+
+.gal-timeline-row time {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gal-forest);
+  margin-bottom: 0.25rem;
+}
+
+.gal-timeline-row h4 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
+
+.gal-timeline-row p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--gal-muted);
+  margin: 0;
+}
+
+.gal-timeline-highlights {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.gal-timeline-highlight {
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  border-left: 3px solid var(--gal-forest);
+}
+
+.gal-timeline-highlight strong {
+  display: block;
+  font-size: 0.82rem;
+  margin-bottom: 0.2rem;
+}
+
+.gal-timeline-highlight span {
+  font-size: 0.85rem;
+  color: var(--gal-muted);
+  line-height: 1.55;
+}
+
+.gal-ref-links a {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--gal-forest);
+  padding: 0.5rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(4, 120, 87, 0.25);
+  background: rgba(4, 120, 87, 0.06);
+  transition: background 0.25s ease;
+}
+
+.gal-ref-links a:hover {
+  background: rgba(4, 120, 87, 0.12);
+}
+
+/* Lightbox — cinematic frame */
+.gal-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.gal-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 16, 8, 0.92);
+  backdrop-filter: blur(16px);
+}
+
+.gal-lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gal-lightbox.active .gal-lightbox-frame {
+  animation: galLightboxIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes galLightboxIn {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.gal-lightbox-inner {
+  position: relative;
+  z-index: 1;
+  max-width: min(1000px, 94vw);
+  width: 100%;
+}
+
+.gal-lightbox-frame {
+  padding: 0.65rem;
+  background: linear-gradient(145deg, #fff, #f1f5f9);
+  border-radius: 1rem;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.gal-lightbox-media {
+  border-radius: 0.65rem;
+  overflow: hidden;
+  background: #000;
+  max-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gal-lightbox-media img,
+.gal-lightbox-media video {
+  max-width: 100%;
+  max-height: 75vh;
+  display: block;
+}
+
+.gal-lightbox-caption {
+  text-align: center;
+  color: #fff;
+  margin-top: 1rem;
+}
+
+.gal-lightbox-caption h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.35rem;
+  margin: 0 0 0.25rem;
+}
+
+.gal-lightbox-caption p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.gal-lightbox-close,
+.gal-lightbox-nav {
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.gal-lightbox-close:hover,
+.gal-lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.gal-lightbox-close {
+  top: -2.75rem;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 1.4rem;
+}
+
+.gal-lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+}
+
+.gal-lightbox-nav.prev {
+  left: -0.5rem;
+}
+.gal-lightbox-nav.next {
+  right: -0.5rem;
+}
+
+.gal-view {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  animation: galSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes galSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .gal-lightbox-close {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .gal-lightbox-nav.prev {
+    left: 0.25rem;
+  }
+  .gal-lightbox-nav.next {
+    right: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-view,
+  .gal-category-card,
+  .gal-heritage-folder,
+  .gal-subfolder,
+  .gal-media-item,
+  .gal-float-frame,
+  .gal-hero-backdrop-slide,
+  .gal-filmstrip-track,
+  .gal-hero-glow,
+  .gal-lightbox.active .gal-lightbox-frame {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+#footer-placeholder {
+  position: relative;
+  z-index: 2;
+}

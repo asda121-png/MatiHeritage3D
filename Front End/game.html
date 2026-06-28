@@ -12,10 +12,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@600;700;800&family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Luckiest+Guy&family=MedievalSharp&family=Nunito:wght@400;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Passion+One:wght@400;700&family=Patrick+Hand&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Satisfy&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="game-tv-preview.css" />
 
     <style>
       body {
@@ -103,42 +104,7 @@
         }
       }
 
-      @keyframes card-3d-tilt {
-        0%,
-        100% {
-          transform: perspective(2000px) rotateX(2deg) rotateY(-1deg) scale(1);
-        }
-        50% {
-          transform: perspective(2000px) rotateX(-2deg) rotateY(1deg)
-            scale(1.01);
-        }
-      }
-
-      .side-card {
-        width: 250px;
-        height: 350px;
-        border-radius: 20px;
-        background-size: cover;
-        background-position: center;
-        opacity: 0.3;
-        filter: blur(2px) grayscale(50%);
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .side-card-left {
-        transform: perspective(1000px) rotateY(25deg) scale(0.8);
-      }
-      .side-card-right {
-        transform: perspective(1000px) rotateY(-25deg) scale(0.8);
-      }
-
       .game-card {
-        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85));
-        background-size: cover;
-        background-position: center;
-        animation: card-3d-tilt 8s ease-in-out infinite;
-        transition: background-image 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 10;
       }
 
@@ -597,6 +563,28 @@
   </head>
 
   <body class="game-page">
+    <svg class="game-tv-filters" aria-hidden="true" focusable="false">
+      <filter id="game-tv-static-filter" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.75"
+          numOctaves="3"
+          stitchTiles="stitch"
+          result="noise"
+        >
+          <animate
+            attributeName="seed"
+            dur="0.15s"
+            values="1;2;3;4;5;6;7;8;9;10"
+            repeatCount="indefinite"
+          />
+        </feTurbulence>
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"
+        />
+      </filter>
+    </svg>
     <div id="header-placeholder"></div>
 
     <section
@@ -669,74 +657,10 @@
         ></div>
 
         <!-- FEATURED CARD (ACTIVE) -->
-        <div
-          id="game-card"
-          class="game-card relative w-full max-w-3xl min-h-[420px] md:min-h-[520px] rounded-[24px] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8),0_0_20px_rgba(34,211,238,0.1)]"
-        >
-          <div
-            id="card-content"
-            class="p-6 md:pt-12 md:pb-20 md:px-10 transition-all duration-500"
-          >
-            <!-- CONTENT -->
-            <div class="flex justify-between items-start gap-6">
-              <div class="flex-1">
-                <h1
-                  class="text-3xl md:text-5xl font-extrabold leading-tight uppercase"
-                >
-                  <span
-                    id="game-title-2"
-                    class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
-                  >
-                    Trivia Challenge
-                  </span>
-                </h1>
-
-                <p
-                  id="game-desc"
-                  class="mt-6 text-gray-300 text-sm md:text-lg leading-relaxed max-w-2xl min-h-[4.5em]"
-                >
-                  Discover Mati City's heritage through fun and interactive
-                  trivia.
-                </p>
-
-                <!-- ACTIONS -->
-                <div class="flex flex-wrap items-center gap-5 mt-10">
-                  <div
-                    id="player-count"
-                    class="flex items-center gap-2 text-gray-300 text-sm font-medium"
-                  >
-                    👥 12.4K PLAYING
-                  </div>
-
-                  <div
-                    id="points-reward"
-                    class="flex items-center gap-2 text-gray-300 text-sm font-medium"
-                  >
-                    🏆 500 PTS
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="hidden md:flex items-center justify-center text-center"
-              >
-                <span
-                  id="game-genre"
-                  class="text-white text-lg md:text-xl uppercase tracking-widest leading-tight genre-font opacity-90 font-bold bg-black/40 backdrop-blur-md px-6 py-2"
-                >
-                  QUIZ GAME
-                </span>
-              </div>
-            </div>
+        <div id="game-card" class="game-card relative z-10 game-card--trivia">
+          <div id="game-studio" class="game-studio">
+            <div id="game-preview-root" class="game-preview-root"></div>
           </div>
-
-          <!-- CENTERED PLAY BUTTON -->
-          <button
-            id="play-now-btn"
-            class="play-btn absolute bottom-10 left-1/2 -translate-x-1/2 px-12 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:scale-105 transition flex items-center gap-3 z-10"
-          >
-            ▶ PLAY NOW
-          </button>
         </div>
 
         <!-- NEXT GAME PREVIEW -->
@@ -858,6 +782,8 @@
       preload="auto"
     ></audio>
 
+    <script src="game-previews.js"></script>
+    <script src="game-tv-transition.js"></script>
     <script>
       fetch("header.html")
         .then((response) => response.text())
@@ -898,9 +824,11 @@
             window.initGlobalSettings();
           }
 
-          bindHoverSoundToElements(document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
-          ));
+          bindHoverSoundToElements(
+            document.querySelectorAll(
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
+            ),
+          );
         });
 
       // Load Footer
@@ -920,7 +848,9 @@
               document.head.appendChild(footerStyle.cloneNode(true));
             }
 
-            const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+            const scriptText = Array.from(doc.scripts).find(
+              (s) => !s.src,
+            )?.textContent;
             if (scriptText) {
               const s = document.createElement("script");
               s.textContent = scriptText;
@@ -934,59 +864,33 @@
         })
         .catch((err) => console.error("Error loading footer:", err));
 
-      // Game Data
-      const games = [
-        {
-          title2: "Mati Heritage Trivia Challenge",
-          url: "trivia.html",
-          desc: "Discover Mati City's heritage through fun and interactive trivia.",
-          genre: "QUIZ GAME",
-          players: "12.4K PLAYING",
-          points: "5 PTS",
-          image:
-            "https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1600",
-        },
-        {
-          title2: "Memory Matching Pairs",
-          url: "memorypairs.html",
-          desc: "Test your memory by matching iconic landmarks and symbols of Mati City.",
-          genre: "MEMORY GAME",
-          players: "8.2K PLAYING",
-          points: "350 PTS",
-          image:
-            "https://images.unsplash.com/photo-1605462863863-10d9e47e15ee?w=1600",
-        },
-        {
-          title2: "Spot the Difference",
-          url: "spotthedifference.html",
-          desc: "Sharpen your eyes and find the subtle differences between images of Mati's scenic spots.",
-          genre: "OBSERVATION GAME",
-          players: "5.1K PLAYING",
-          points: "400 PTS",
-          image:
-            "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600",
-        },
-        {
-          title2: "Slide Puzzle",
-          url: "slidepuzzle.html",
-          desc: "Reassemble scrambled heritage photographs of Mati City's built, natural, and cultural landmarks.",
-          genre: "PUZZLE GAME",
-          players: "3.4K PLAYING",
-          points: "600 PTS",
-          image:
-            "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=1600",
-        },
-        {
-          title2: "True or False Sprint",
-          url: "truefalsesprint.html",
-          desc: "Think fast and decide if the facts about Mati's culture and history are true or false!",
-          genre: "FAST-PACED EDUCATIONAL GAME",
-          players: "15.2K PLAYING",
-          points: "450 PTS",
-          image:
-            "https://images.unsplash.com/photo-1544124499-58912cbddaad?w=1600",
-        },
-      ];
+      const gamePreviewApi = window.MatiGamePreviews;
+      const games = gamePreviewApi.GAMES;
+      const buildFeaturedPreview = gamePreviewApi.buildFeaturedPreview;
+      const buildSidePreview = gamePreviewApi.buildSidePreview;
+
+      function updatePreviewLayout(game) {
+        gamePreviewApi.applyPreviewLayoutClass(
+          document.getElementById("game-card"),
+          game,
+        );
+      }
+
+      function getLaunchPreviewElement() {
+        return document.querySelector("#game-preview-root [data-game-launch]");
+      }
+
+      function fitFeaturedPreviewToFrame() {
+        gamePreviewApi.fitPreviewToFrame(
+          document.getElementById("game-preview-root"),
+        );
+      }
+
+      function scheduleFeaturedPreviewFit() {
+        gamePreviewApi.schedulePreviewFit(
+          document.getElementById("game-preview-root"),
+        );
+      }
 
       let currentIndex = 0;
 
@@ -1008,49 +912,59 @@
           updateDisplay();
         });
       }
-      const title2 = document.getElementById("game-title-2");
-      const desc = document.getElementById("game-desc");
-      const genre = document.getElementById("game-genre");
-      const players = document.getElementById("player-count");
-      const points = document.getElementById("points-reward");
       const paginationContainer = document.getElementById("pagination-dots");
+
+      function launchCurrentGame() {
+        const currentGame = games[currentIndex];
+        if (!currentGame.url) {
+          console.log(`${currentGame.title2} is not yet implemented.`);
+          return;
+        }
+        const launchEl = getLaunchPreviewElement();
+        if (
+          currentGame.expandTransition !== false &&
+          typeof window.launchGameFromTvCard === "function"
+        ) {
+          window.launchGameFromTvCard(launchEl, currentGame.url);
+        } else {
+          window.location.href = currentGame.url;
+        }
+      }
 
       function updateDisplay() {
         const game = games[currentIndex];
         const prevIdx = (currentIndex - 1 + games.length) % games.length;
         const nextIdx = (currentIndex + 1) % games.length;
+        const previewRoot = document.getElementById("game-preview-root");
 
-        // Smooth content transition
-        const content = document.getElementById("card-content");
-        content.style.opacity = "0";
-        content.style.transform = "translateY(15px)";
+        if (previewRoot) previewRoot.classList.add("is-switching");
 
         setTimeout(() => {
-          // Update Images
-          card.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('${game.image}')`;
-          prevPreview.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('${games[prevIdx].image}')`;
-          nextPreview.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('${games[nextIdx].image}')`;
+          if (previewRoot) {
+            previewRoot.innerHTML = buildFeaturedPreview(game);
+            previewRoot.classList.remove("is-switching");
+          }
+          updatePreviewLayout(game);
 
-          // Update Text content
-          title2.textContent = game.title2;
-          desc.textContent = game.desc;
-          genre.textContent = game.genre;
-          players.innerHTML = `👥 ${game.players}`;
-          points.innerHTML = `🏆 ${game.points}`;
+          if (prevPreview) {
+            prevPreview.innerHTML = buildSidePreview(games[prevIdx]);
+          }
+          if (nextPreview) {
+            nextPreview.innerHTML = buildSidePreview(games[nextIdx]);
+          }
 
-          // Fade back in
-          content.style.opacity = "1";
-          content.style.transform = "translateY(0)";
-        }, 300);
+          scheduleFeaturedPreviewFit();
+        }, 220);
 
         // Update Pagination Dots
         paginationContainer.innerHTML = "";
         games.forEach((_, i) => {
           const dot = document.createElement("button");
           dot.type = "button";
-          dot.className = i === currentIndex
-            ? "game-dot game-dot-active w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan] cursor-pointer"
-            : "game-dot w-2 h-2 rounded-full bg-white/30 cursor-pointer hover:bg-white/50 transition-colors";
+          dot.className =
+            i === currentIndex
+              ? "game-dot game-dot-active w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan] cursor-pointer"
+              : "game-dot w-2 h-2 rounded-full bg-white/30 cursor-pointer hover:bg-white/50 transition-colors";
           dot.setAttribute("aria-label", `Show game ${i + 1}`);
           dot.addEventListener("click", () => {
             currentIndex = i;
@@ -1059,7 +973,9 @@
           paginationContainer.appendChild(dot);
         });
 
-        bindHoverSoundToElements(paginationContainer.querySelectorAll(".game-dot"));
+        bindHoverSoundToElements(
+          paginationContainer.querySelectorAll(".game-dot"),
+        );
       }
 
       function getSfxVolume() {
@@ -1103,11 +1019,12 @@
 
       // Initial Load
       updateDisplay();
+      window.addEventListener("resize", scheduleFeaturedPreviewFit);
 
       // Controls
       const prevBtn = document.getElementById("prev-btn");
       const nextBtn = document.getElementById("next-btn");
-      const playBtn = document.getElementById("play-now-btn");
+      const gameStudio = document.getElementById("game-studio");
       const leaderboardBtn = document.getElementById("leaderboard-btn");
       const clickSound = document.getElementById("click-sound");
 
@@ -1121,14 +1038,22 @@
         updateDisplay();
       });
 
-      playBtn.addEventListener("click", () => {
-        const currentGame = games[currentIndex];
-        if (currentGame.url) {
-          window.location.href = currentGame.url;
-        } else {
-          console.log(`${currentGame.title2} is not yet implemented.`);
-        }
-      });
+      function bindGameLaunch(el) {
+        if (!el) return;
+        el.style.cursor = "pointer";
+        el.setAttribute("role", "button");
+        el.setAttribute("tabindex", "0");
+        el.setAttribute("aria-label", "Open selected game");
+        el.addEventListener("click", launchCurrentGame);
+        el.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            launchCurrentGame();
+          }
+        });
+      }
+
+      bindGameLaunch(gameStudio);
 
       // Leaderboard Modal Logic
       const drawer = document.getElementById("leaderboard-drawer");
@@ -1267,14 +1192,15 @@
       if (window.location.hash === "#leaderboard") showLeaderboard();
 
       // Sound FX integration
-      const allButtons = [prevBtn, nextBtn, playBtn, leaderboardBtn, closeLeaderboard];
+      const allButtons = [
+        prevBtn,
+        nextBtn,
+        gameStudio,
+        leaderboardBtn,
+        closeLeaderboard,
+      ];
 
-      bindHoverSoundToElements([
-        card,
-        prevPreview,
-        nextPreview,
-        ...allButtons,
-      ]);
+      bindHoverSoundToElements(allButtons);
 
       allButtons.forEach((btn) => {
         if (btn) {

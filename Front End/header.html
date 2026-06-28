@@ -48,7 +48,12 @@
         height: 3px;
         width: 0%;
         z-index: 20;
-        background: linear-gradient(90deg, var(--forest), var(--sky), var(--amber));
+        background: linear-gradient(
+          90deg,
+          var(--forest),
+          var(--sky),
+          var(--amber)
+        );
         box-shadow: 0 0 12px rgba(4, 120, 87, 0.45);
         transition: width 0.08s linear;
         border-radius: 0 2px 2px 0;
@@ -69,7 +74,9 @@
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.98) inset,
           0 16px 48px rgba(4, 120, 87, 0.05);
-        transition: box-shadow 0.45s ease, background 0.45s ease;
+        transition:
+          box-shadow 0.45s ease,
+          background 0.45s ease;
       }
 
       .site-header.is-scrolled .header-bg {
@@ -86,24 +93,56 @@
         z-index: 0;
         pointer-events: none;
         overflow: hidden;
-        mask-image: linear-gradient(to top, black 0%, black 55%, transparent 94%);
-        -webkit-mask-image: linear-gradient(to top, black 0%, black 55%, transparent 94%);
+        mask-image: linear-gradient(
+          to top,
+          black 0%,
+          black 55%,
+          transparent 94%
+        );
+        -webkit-mask-image: linear-gradient(
+          to top,
+          black 0%,
+          black 55%,
+          transparent 94%
+        );
       }
 
       .header-scene__mesh {
         position: absolute;
         inset: 0;
         background:
-          radial-gradient(ellipse 60% 85% at 90% 115%, rgba(2, 132, 199, 0.22) 0%, transparent 55%),
-          radial-gradient(ellipse 50% 75% at 8% 108%, rgba(4, 120, 87, 0.24) 0%, transparent 52%),
-          radial-gradient(ellipse 35% 45% at 70% 6%, rgba(251, 191, 36, 0.16) 0%, transparent 68%),
-          radial-gradient(ellipse 25% 30% at 25% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+          radial-gradient(
+            ellipse 60% 85% at 90% 115%,
+            rgba(2, 132, 199, 0.22) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse 50% 75% at 8% 108%,
+            rgba(4, 120, 87, 0.24) 0%,
+            transparent 52%
+          ),
+          radial-gradient(
+            ellipse 35% 45% at 70% 6%,
+            rgba(251, 191, 36, 0.16) 0%,
+            transparent 68%
+          ),
+          radial-gradient(
+            ellipse 25% 30% at 25% 15%,
+            rgba(16, 185, 129, 0.08) 0%,
+            transparent 70%
+          );
         animation: hdr-mesh-shift 16s ease-in-out infinite alternate;
       }
 
       @keyframes hdr-mesh-shift {
-        0% { opacity: 0.88; transform: scale(1) translateX(0); }
-        100% { opacity: 1; transform: scale(1.04) translateX(-1.5%); }
+        0% {
+          opacity: 0.88;
+          transform: scale(1) translateX(0);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1.04) translateX(-1.5%);
+        }
       }
 
       .header-scene__rays {
@@ -127,8 +166,12 @@
       }
 
       @keyframes hdr-rays-spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       .header-scene__sun {
@@ -138,13 +181,24 @@
         width: 4rem;
         height: 4rem;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(251, 191, 36, 0.42) 0%, rgba(251, 191, 36, 0) 68%);
+        background: radial-gradient(
+          circle,
+          rgba(251, 191, 36, 0.42) 0%,
+          rgba(251, 191, 36, 0) 68%
+        );
         animation: hdr-sun-pulse 5s ease-in-out infinite;
       }
 
       @keyframes hdr-sun-pulse {
-        0%, 100% { transform: scale(1); opacity: 0.75; }
-        50% { transform: scale(1.15); opacity: 1; }
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.75;
+        }
+        50% {
+          transform: scale(1.15);
+          opacity: 1;
+        }
       }
 
       .header-scene__cloud {
@@ -172,7 +226,10 @@
       }
 
       .header-scene__cloud--1::before {
-        width: 2rem; height: 1.4rem; top: -0.5rem; left: 1rem;
+        width: 2rem;
+        height: 1.4rem;
+        top: -0.5rem;
+        left: 1rem;
       }
 
       .header-scene__cloud--2 {
@@ -196,8 +253,12 @@
       }
 
       @keyframes hdr-cloud-drift {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(calc(100vw + 16rem)); }
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(calc(100vw + 16rem));
+        }
       }
 
       .header-scene__particles span {
@@ -209,14 +270,41 @@
         animation: hdr-particle 6s ease-in-out infinite;
       }
 
-      .header-scene__particles span:nth-child(1) { top: 35%; left: 18%; animation-delay: 0s; }
-      .header-scene__particles span:nth-child(2) { top: 28%; left: 42%; animation-delay: -2s; width: 2px; height: 2px; }
-      .header-scene__particles span:nth-child(3) { top: 40%; left: 65%; animation-delay: -4s; }
-      .header-scene__particles span:nth-child(4) { top: 22%; left: 78%; animation-delay: -1s; width: 2px; height: 2px; }
+      .header-scene__particles span:nth-child(1) {
+        top: 35%;
+        left: 18%;
+        animation-delay: 0s;
+      }
+      .header-scene__particles span:nth-child(2) {
+        top: 28%;
+        left: 42%;
+        animation-delay: -2s;
+        width: 2px;
+        height: 2px;
+      }
+      .header-scene__particles span:nth-child(3) {
+        top: 40%;
+        left: 65%;
+        animation-delay: -4s;
+      }
+      .header-scene__particles span:nth-child(4) {
+        top: 22%;
+        left: 78%;
+        animation-delay: -1s;
+        width: 2px;
+        height: 2px;
+      }
 
       @keyframes hdr-particle {
-        0%, 100% { opacity: 0; transform: translateY(0); }
-        50% { opacity: 0.8; transform: translateY(-6px); }
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 0.8;
+          transform: translateY(-6px);
+        }
       }
 
       .header-scene__svg {
@@ -248,46 +336,105 @@
 
       .header-scene__mist {
         position: absolute;
-        left: 0; right: 0; bottom: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         height: 50%;
-        background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.42));
+        background: linear-gradient(
+          180deg,
+          transparent,
+          rgba(255, 255, 255, 0.42)
+        );
         animation: hdr-mist 11s ease-in-out infinite alternate;
       }
 
       @keyframes hdr-mist {
-        0% { opacity: 0.35; transform: translateX(0); }
-        100% { opacity: 0.7; transform: translateX(-1%); }
+        0% {
+          opacity: 0.35;
+          transform: translateX(0);
+        }
+        100% {
+          opacity: 0.7;
+          transform: translateX(-1%);
+        }
       }
 
-      .hdr-palm { transform-origin: bottom center; animation: hdr-palm-sway 4.5s ease-in-out infinite; }
-      .hdr-palm--2 { animation-delay: -2.2s; }
-      .hdr-palm--3 { animation-delay: -1s; opacity: 0.45; }
+      .hdr-palm {
+        transform-origin: bottom center;
+        animation: hdr-palm-sway 4.5s ease-in-out infinite;
+      }
+      .hdr-palm--2 {
+        animation-delay: -2.2s;
+      }
+      .hdr-palm--3 {
+        animation-delay: -1s;
+        opacity: 0.45;
+      }
       @keyframes hdr-palm-sway {
-        0%, 100% { transform: rotate(0deg); }
-        50% { transform: rotate(1.5deg); }
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(1.5deg);
+        }
       }
 
-      .hdr-wave-1 { animation: hdr-wave-a 3.5s ease-in-out infinite; }
-      .hdr-wave-2 { animation: hdr-wave-b 4.2s ease-in-out infinite; animation-delay: -1.5s; }
+      .hdr-wave-1 {
+        animation: hdr-wave-a 3.5s ease-in-out infinite;
+      }
+      .hdr-wave-2 {
+        animation: hdr-wave-b 4.2s ease-in-out infinite;
+        animation-delay: -1.5s;
+      }
 
       @keyframes hdr-wave-a {
-        0%, 100% { transform: translateX(0); opacity: 0.5; }
-        50% { transform: translateX(-8px); opacity: 0.75; }
+        0%,
+        100% {
+          transform: translateX(0);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translateX(-8px);
+          opacity: 0.75;
+        }
       }
 
       @keyframes hdr-wave-b {
-        0%, 100% { transform: translateX(0); opacity: 0.3; }
-        50% { transform: translateX(6px); opacity: 0.5; }
+        0%,
+        100% {
+          transform: translateX(0);
+          opacity: 0.3;
+        }
+        50% {
+          transform: translateX(6px);
+          opacity: 0.5;
+        }
       }
 
-      .hdr-bird { animation: hdr-bird-fly 24s linear infinite; }
-      .hdr-bird--2 { animation-delay: -12s; animation-duration: 28s; }
+      .hdr-bird {
+        animation: hdr-bird-fly 24s linear infinite;
+      }
+      .hdr-bird--2 {
+        animation-delay: -12s;
+        animation-duration: 28s;
+      }
 
       @keyframes hdr-bird-fly {
-        0% { transform: translate(0, 0); opacity: 0; }
-        4% { opacity: 0.65; }
-        96% { opacity: 0.65; }
-        100% { transform: translate(200px, -14px); opacity: 0; }
+        0% {
+          transform: translate(0, 0);
+          opacity: 0;
+        }
+        4% {
+          opacity: 0.65;
+        }
+        96% {
+          opacity: 0.65;
+        }
+        100% {
+          transform: translate(200px, -14px);
+          opacity: 0;
+        }
       }
 
       body:not(.visitor-module) .header-scene {
@@ -296,7 +443,9 @@
 
       .header-accent-line {
         position: absolute;
-        left: 0; right: 0; bottom: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         height: 2px;
         z-index: 1;
         background: linear-gradient(
@@ -314,23 +463,38 @@
       }
 
       @keyframes hdr-accent-flow {
-        0% { background-position: 100% 0; }
-        100% { background-position: -100% 0; }
+        0% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: -100% 0;
+        }
       }
 
       .header-shimmer {
         position: absolute;
         inset: 0;
         z-index: 1;
-        background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.4) 50%, transparent 62%);
+        background: linear-gradient(
+          105deg,
+          transparent 38%,
+          rgba(255, 255, 255, 0.4) 50%,
+          transparent 62%
+        );
         transform: translateX(-130%);
         animation: hdr-shimmer 10s ease-in-out infinite;
         pointer-events: none;
       }
 
       @keyframes hdr-shimmer {
-        0%, 65%, 100% { transform: translateX(-130%); }
-        82% { transform: translateX(130%); }
+        0%,
+        65%,
+        100% {
+          transform: translateX(-130%);
+        }
+        82% {
+          transform: translateX(130%);
+        }
       }
 
       /* ── Bar ── */
@@ -348,7 +512,9 @@
       }
 
       @media (max-width: 1023px) {
-        .site-header__bar { grid-template-columns: 1fr auto; }
+        .site-header__bar {
+          grid-template-columns: 1fr auto;
+        }
       }
 
       /* ── Brand ── */
@@ -372,8 +538,12 @@
         border-radius: 0.9rem;
         background: linear-gradient(145deg, #fff 0%, #ecfdf5 100%);
         border: 1px solid rgba(4, 120, 87, 0.24);
-        box-shadow: 0 6px 20px rgba(4, 120, 87, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        transition: transform 0.4s var(--header-ease), box-shadow 0.4s ease;
+        box-shadow:
+          0 6px 20px rgba(4, 120, 87, 0.14),
+          inset 0 1px 0 rgba(255, 255, 255, 0.98);
+        transition:
+          transform 0.4s var(--header-ease),
+          box-shadow 0.4s ease;
       }
 
       .site-brand__mark::before {
@@ -381,7 +551,12 @@
         position: absolute;
         inset: -3px;
         border-radius: 1rem;
-        background: linear-gradient(135deg, var(--forest), var(--sky), var(--amber));
+        background: linear-gradient(
+          135deg,
+          var(--forest),
+          var(--sky),
+          var(--amber)
+        );
         z-index: -1;
         opacity: 0;
         transition: opacity 0.4s ease;
@@ -398,8 +573,15 @@
       }
 
       @keyframes hdr-mark-ring {
-        0%, 100% { opacity: 0; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.04); }
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.04);
+        }
       }
 
       .site-brand:hover .site-brand__mark {
@@ -407,7 +589,9 @@
         box-shadow: 0 12px 32px rgba(4, 120, 87, 0.2);
       }
 
-      .site-brand:hover .site-brand__mark::before { opacity: 0.65; }
+      .site-brand:hover .site-brand__mark::before {
+        opacity: 0.65;
+      }
 
       .site-brand__mark svg {
         width: 1.55rem;
@@ -416,7 +600,9 @@
         transition: transform 0.4s var(--header-ease);
       }
 
-      .site-brand:hover .site-brand__mark svg { transform: scale(1.06); }
+      .site-brand:hover .site-brand__mark svg {
+        transform: scale(1.06);
+      }
 
       .site-brand__text {
         display: flex;
@@ -433,11 +619,18 @@
         line-height: 1;
         color: var(--hdr-ink);
         white-space: nowrap;
-        transition: background 0.4s ease, color 0.3s ease;
+        transition:
+          background 0.4s ease,
+          color 0.3s ease;
       }
 
       .site-brand:hover .site-brand__title {
-        background: linear-gradient(90deg, var(--forest-dark), var(--sky), var(--forest));
+        background: linear-gradient(
+          90deg,
+          var(--forest-dark),
+          var(--sky),
+          var(--forest)
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -486,7 +679,9 @@
       }
 
       @media (max-width: 640px) {
-        .site-brand__locale { display: none; }
+        .site-brand__locale {
+          display: none;
+        }
       }
 
       /* ── Nav dock ── */
@@ -512,16 +707,25 @@
         position: absolute;
         inset: -1px;
         border-radius: 9999px;
-        background: linear-gradient(135deg, rgba(4, 120, 87, 0.12), rgba(2, 132, 199, 0.08), rgba(245, 158, 11, 0.06));
+        background: linear-gradient(
+          135deg,
+          rgba(4, 120, 87, 0.12),
+          rgba(2, 132, 199, 0.08),
+          rgba(245, 158, 11, 0.06)
+        );
         z-index: -1;
         opacity: 0;
         transition: opacity 0.35s ease;
       }
 
-      .site-nav:hover::before { opacity: 1; }
+      .site-nav:hover::before {
+        opacity: 1;
+      }
 
       @media (min-width: 1024px) {
-        .site-nav { display: flex; }
+        .site-nav {
+          display: flex;
+        }
       }
 
       .site-nav__indicator {
@@ -539,11 +743,16 @@
         pointer-events: none;
         opacity: 0;
         transform: translateX(0);
-        transition: transform 0.45s var(--header-ease), width 0.45s var(--header-ease), opacity 0.25s ease;
+        transition:
+          transform 0.45s var(--header-ease),
+          width 0.45s var(--header-ease),
+          opacity 0.25s ease;
         z-index: 0;
       }
 
-      .site-nav.has-indicator .site-nav__indicator { opacity: 1; }
+      .site-nav.has-indicator .site-nav__indicator {
+        opacity: 1;
+      }
 
       .site-nav__link {
         position: relative;
@@ -560,10 +769,15 @@
         color: var(--hdr-muted);
         white-space: nowrap;
         border-radius: 9999px;
-        transition: color 0.25s ease, transform 0.3s var(--header-ease);
+        transition:
+          color 0.25s ease,
+          transform 0.3s var(--header-ease);
       }
 
-      .site-nav__link:hover { color: var(--hdr-ink); transform: translateY(-1px); }
+      .site-nav__link:hover {
+        color: var(--hdr-ink);
+        transform: translateY(-1px);
+      }
 
       .site-nav__icon {
         display: flex;
@@ -572,10 +786,16 @@
         width: 1.1rem;
         height: 1.1rem;
         opacity: 0.72;
-        transition: opacity 0.25s ease, transform 0.35s var(--header-ease), color 0.25s ease;
+        transition:
+          opacity 0.25s ease,
+          transform 0.35s var(--header-ease),
+          color 0.25s ease;
       }
 
-      .site-nav__icon svg { width: 100%; height: 100%; }
+      .site-nav__icon svg {
+        width: 100%;
+        height: 100%;
+      }
 
       .site-nav__link:hover .site-nav__icon {
         opacity: 1;
@@ -610,9 +830,15 @@
 
       .site-nav__link--featured.is-active {
         color: var(--forest-dark);
-        background: linear-gradient(135deg, rgba(4, 120, 87, 0.14), rgba(2, 132, 199, 0.12));
+        background: linear-gradient(
+          135deg,
+          rgba(4, 120, 87, 0.14),
+          rgba(2, 132, 199, 0.12)
+        );
         border: 1px solid rgba(4, 120, 87, 0.2);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 0 20px rgba(4, 120, 87, 0.1);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.85),
+          0 0 20px rgba(4, 120, 87, 0.1);
       }
 
       .site-nav__link--featured.is-active .site-nav__chip {
@@ -622,7 +848,9 @@
         box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);
       }
 
-      .site-nav__link--featured.is-active .site-nav__icon { color: var(--sky); }
+      .site-nav__link--featured.is-active .site-nav__icon {
+        color: var(--sky);
+      }
 
       /* ── End ── */
       .site-header__end {
@@ -639,7 +867,9 @@
       }
 
       @media (min-width: 1024px) {
-        .site-header__utilities { display: flex; }
+        .site-header__utilities {
+          display: flex;
+        }
       }
 
       .header-points-badge {
@@ -652,7 +882,9 @@
         background: rgba(255, 255, 255, 0.88);
         font-family: "Source Sans 3", sans-serif;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        transition: box-shadow 0.25s ease, transform 0.25s ease;
+        transition:
+          box-shadow 0.25s ease,
+          transform 0.25s ease;
       }
 
       .header-points-badge:hover {
@@ -670,8 +902,15 @@
       }
 
       @keyframes hdr-dot-pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(0.85); }
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.85);
+        }
       }
 
       .header-points-label {
@@ -689,7 +928,9 @@
         font-variant-numeric: tabular-nums;
       }
 
-      .site-profile { position: relative; }
+      .site-profile {
+        position: relative;
+      }
 
       .site-profile__trigger {
         display: flex;
@@ -700,7 +941,10 @@
         border: 1px solid var(--hdr-line);
         background: rgba(255, 255, 255, 0.92);
         cursor: pointer;
-        transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          transform 0.25s ease;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
       }
 
@@ -765,7 +1009,10 @@
         text-decoration: none;
         color: #475569;
         border-radius: 0.55rem;
-        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.2s ease;
       }
 
       .header-dropdown a:hover {
@@ -774,8 +1021,12 @@
         transform: translateX(2px);
       }
 
-      .header-dropdown a.is-danger { color: #dc2626; }
-      .header-dropdown a.is-danger:hover { background: #fef2f2; }
+      .header-dropdown a.is-danger {
+        color: #dc2626;
+      }
+      .header-dropdown a.is-danger:hover {
+        background: #fef2f2;
+      }
 
       .header-dropdown__divider {
         height: 1px;
@@ -794,7 +1045,10 @@
         background: rgba(255, 255, 255, 0.92);
         color: var(--hdr-ink);
         cursor: pointer;
-        transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+        transition:
+          background 0.22s ease,
+          box-shadow 0.22s ease,
+          transform 0.22s ease;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
       }
 
@@ -805,7 +1059,9 @@
       }
 
       @media (min-width: 1024px) {
-        .site-nav-toggle { display: none; }
+        .site-nav-toggle {
+          display: none;
+        }
       }
 
       .site-nav-toggle__bars {
@@ -821,19 +1077,30 @@
         height: 2px;
         border-radius: 1px;
         background: currentColor;
-        transition: transform 0.32s var(--header-ease), opacity 0.2s ease, top 0.32s ease;
+        transition:
+          transform 0.32s var(--header-ease),
+          opacity 0.2s ease,
+          top 0.32s ease;
       }
 
-      .site-nav-toggle__bars span:nth-child(1) { top: 0; }
-      .site-nav-toggle__bars span:nth-child(2) { top: 0.375rem; }
-      .site-nav-toggle__bars span:nth-child(3) { top: 0.75rem; }
+      .site-nav-toggle__bars span:nth-child(1) {
+        top: 0;
+      }
+      .site-nav-toggle__bars span:nth-child(2) {
+        top: 0.375rem;
+      }
+      .site-nav-toggle__bars span:nth-child(3) {
+        top: 0.75rem;
+      }
 
       .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(1) {
         top: 0.375rem;
         transform: rotate(45deg);
       }
 
-      .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(2) { opacity: 0; }
+      .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(2) {
+        opacity: 0;
+      }
 
       .site-header.is-menu-open .site-nav-toggle__bars span:nth-child(3) {
         top: 0.375rem;
@@ -846,14 +1113,21 @@
         inset: var(--header-h) 0 0 0;
         z-index: 90;
         padding: 2rem clamp(1.25rem, 4vw, 2.5rem) 2.5rem;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(236, 253, 245, 0.96) 100%);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(236, 253, 245, 0.96) 100%
+        );
         backdrop-filter: blur(24px);
         border-top: 1px solid var(--hdr-line);
         overflow-y: auto;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-0.75rem);
-        transition: opacity 0.35s ease, transform 0.35s var(--header-ease), visibility 0.35s;
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s var(--header-ease),
+          visibility 0.35s;
       }
 
       .site-header.is-menu-open .site-mobile-nav {
@@ -863,7 +1137,9 @@
       }
 
       @media (min-width: 1024px) {
-        .site-mobile-nav { display: none; }
+        .site-mobile-nav {
+          display: none;
+        }
       }
 
       .site-mobile-nav__label {
@@ -896,7 +1172,12 @@
         border: 1px solid transparent;
         opacity: 0;
         transform: translateX(-12px);
-        transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, transform 0.35s var(--header-ease), opacity 0.35s ease;
+        transition:
+          background 0.22s ease,
+          color 0.22s ease,
+          border-color 0.22s ease,
+          transform 0.35s var(--header-ease),
+          opacity 0.35s ease;
       }
 
       .site-header.is-menu-open .site-mobile-nav__link {
@@ -904,11 +1185,21 @@
         transform: translateX(0);
       }
 
-      .site-header.is-menu-open .site-mobile-nav__link:nth-child(1) { transition-delay: 0.05s; }
-      .site-header.is-menu-open .site-mobile-nav__link:nth-child(2) { transition-delay: 0.1s; }
-      .site-header.is-menu-open .site-mobile-nav__link:nth-child(3) { transition-delay: 0.15s; }
-      .site-header.is-menu-open .site-mobile-nav__link:nth-child(4) { transition-delay: 0.2s; }
-      .site-header.is-menu-open .site-mobile-nav__link:nth-child(5) { transition-delay: 0.25s; }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(1) {
+        transition-delay: 0.05s;
+      }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(3) {
+        transition-delay: 0.15s;
+      }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(4) {
+        transition-delay: 0.2s;
+      }
+      .site-header.is-menu-open .site-mobile-nav__link:nth-child(5) {
+        transition-delay: 0.25s;
+      }
 
       .site-mobile-nav__link:hover {
         background: rgba(255, 255, 255, 0.85);
@@ -951,7 +1242,9 @@
       }
 
       body:not(.visitor-module) .header-shimmer,
-      body:not(.visitor-module) .header-accent-line { opacity: 0.55; }
+      body:not(.visitor-module) .header-accent-line {
+        opacity: 0.55;
+      }
 
       body:not(.visitor-module) .site-brand__mark {
         background: rgba(255, 255, 255, 0.06);
@@ -959,7 +1252,9 @@
         box-shadow: none;
       }
 
-      body:not(.visitor-module) .site-brand__mark svg { color: #6ee7b7; }
+      body:not(.visitor-module) .site-brand__mark svg {
+        color: #6ee7b7;
+      }
 
       body:not(.visitor-module) .site-brand:hover .site-brand__title {
         background: linear-gradient(90deg, #6ee7b7, #38bdf8, #fbbf24);
@@ -982,22 +1277,34 @@
       body:not(.visitor-module) .site-nav {
         background: rgba(255, 255, 255, 0.05);
         border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 0 40px rgba(212, 175, 55, 0.04);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.06),
+          0 0 40px rgba(212, 175, 55, 0.04);
       }
 
       body:not(.visitor-module) .site-nav__indicator {
         background: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.14);
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(212, 175, 55, 0.08);
+        box-shadow:
+          0 6px 24px rgba(0, 0, 0, 0.3),
+          0 0 20px rgba(212, 175, 55, 0.08);
       }
 
       body:not(.visitor-module) .site-nav__link:hover,
-      body:not(.visitor-module) .site-nav__link.is-active { color: #fff; }
+      body:not(.visitor-module) .site-nav__link.is-active {
+        color: #fff;
+      }
 
-      body:not(.visitor-module) .site-nav__link.is-active .site-nav__icon { color: #d4af37; }
+      body:not(.visitor-module) .site-nav__link.is-active .site-nav__icon {
+        color: #d4af37;
+      }
 
       body:not(.visitor-module) .site-nav__link--featured.is-active {
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(4, 120, 87, 0.14));
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.18),
+          rgba(4, 120, 87, 0.14)
+        );
         border-color: rgba(212, 175, 55, 0.28);
       }
 
@@ -1015,7 +1322,9 @@
         border-color: rgba(255, 255, 255, 0.1);
       }
 
-      body:not(.visitor-module) .header-dropdown a { color: #cbd5e1; }
+      body:not(.visitor-module) .header-dropdown a {
+        color: #cbd5e1;
+      }
 
       body:not(.visitor-module) .header-dropdown a:hover {
         background: rgba(255, 255, 255, 0.06);
@@ -1027,7 +1336,9 @@
         border-top-color: rgba(255, 255, 255, 0.08);
       }
 
-      body:not(.visitor-module) .site-mobile-nav__link { color: #94a3b8; }
+      body:not(.visitor-module) .site-mobile-nav__link {
+        color: #94a3b8;
+      }
 
       body:not(.visitor-module) .site-mobile-nav__link.is-active {
         color: #fff;
@@ -1035,18 +1346,31 @@
         border-color: rgba(255, 255, 255, 0.1);
       }
 
-      .header-panel { background: var(--surface-dark-elevated) !important; }
-      .header-panel option { background: var(--surface-dark-elevated); }
-      .header-accent-text { color: var(--amber-light) !important; }
+      .header-panel {
+        background: var(--surface-dark-elevated) !important;
+      }
+      .header-panel option {
+        background: var(--surface-dark-elevated);
+      }
+      .header-accent-text {
+        color: var(--amber-light) !important;
+      }
 
-      input[type="range"] { accent-color: var(--forest); }
+      input[type="range"] {
+        accent-color: var(--forest);
+      }
 
       select:focus {
         border-color: var(--sky) !important;
         --tw-ring-color: var(--sky) !important;
       }
 
-      .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
 
       .switch input {
         opacity: 0;
@@ -1084,7 +1408,9 @@
         border-color: var(--forest);
       }
 
-      input:checked + .slider:before { transform: translateX(26px); }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
 
       .settings-save-btn {
         background: var(--gradient-heritage);
@@ -1098,18 +1424,36 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .site-header, .header-bg, .site-nav__link, .site-nav__indicator,
-        .site-mobile-nav, .site-mobile-nav__link, .site-nav-toggle__bars span,
-        .site-brand__mark, .header-scene__mesh, .header-scene__sun,
-        .header-scene__rays, .header-scene__cloud, .header-scene__mist,
-        .header-scene__particles span, .header-accent-line, .header-shimmer,
-        .hdr-palm, .hdr-wave-1, .hdr-wave-2, .hdr-bird, .header-points-dot,
+        .site-header,
+        .header-bg,
+        .site-nav__link,
+        .site-nav__indicator,
+        .site-mobile-nav,
+        .site-mobile-nav__link,
+        .site-nav-toggle__bars span,
+        .site-brand__mark,
+        .header-scene__mesh,
+        .header-scene__sun,
+        .header-scene__rays,
+        .header-scene__cloud,
+        .header-scene__mist,
+        .header-scene__particles span,
+        .header-accent-line,
+        .header-shimmer,
+        .hdr-palm,
+        .hdr-wave-1,
+        .hdr-wave-2,
+        .hdr-bird,
+        .header-points-dot,
         .site-brand__mark::after {
           transition: none !important;
           animation: none !important;
         }
 
-        .site-mobile-nav__link { opacity: 1; transform: none; }
+        .site-mobile-nav__link {
+          opacity: 1;
+          transform: none;
+        }
       }
     </style>
   </head>
@@ -1117,7 +1461,11 @@
   <body>
     <header class="site-header" id="site-header">
       <div class="header-bg">
-        <div class="header-scroll-progress" id="header-scroll-progress" aria-hidden="true"></div>
+        <div
+          class="header-scroll-progress"
+          id="header-scroll-progress"
+          aria-hidden="true"
+        ></div>
 
         <div class="header-scene" aria-hidden="true">
           <div class="header-scene__mesh"></div>
@@ -1138,63 +1486,163 @@
           >
             <defs>
               <linearGradient id="hdr-hills" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#059669" stop-opacity="0.4"/>
-                <stop offset="100%" stop-color="#047857" stop-opacity="0.2"/>
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#047857" stop-opacity="0.2" />
               </linearGradient>
               <linearGradient id="hdr-forest" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#065f46" stop-opacity="0.55"/>
-                <stop offset="100%" stop-color="#064e3b" stop-opacity="0.28"/>
+                <stop offset="0%" stop-color="#065f46" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#064e3b" stop-opacity="0.28" />
               </linearGradient>
               <linearGradient id="hdr-ocean" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.18"/>
-                <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4"/>
+                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4" />
               </linearGradient>
             </defs>
-            <path d="M0 92 C180 55 400 70 620 58 C840 46 1080 65 1440 50 L1440 130 L0 130 Z" fill="url(#hdr-hills)"/>
-            <path d="M0 102 L0 130 L1440 130 L1440 92 C1280 96 1140 82 960 88 C780 94 520 84 260 92 C120 98 40 96 0 102 Z" fill="url(#hdr-forest)" opacity="0.75"/>
+            <path
+              d="M0 92 C180 55 400 70 620 58 C840 46 1080 65 1440 50 L1440 130 L0 130 Z"
+              fill="url(#hdr-hills)"
+            />
+            <path
+              d="M0 102 L0 130 L1440 130 L1440 92 C1280 96 1140 82 960 88 C780 94 520 84 260 92 C120 98 40 96 0 102 Z"
+              fill="url(#hdr-forest)"
+              opacity="0.75"
+            />
             <!-- Tree silhouettes -->
             <g opacity="0.5" fill="#064e3b">
-              <polygon points="180,95 188,78 196,95"/><polygon points="220,98 228,80 236,98"/>
-              <polygon points="380,92 388,72 396,92"/><polygon points="420,96 428,76 436,96"/>
-              <polygon points="520,94 528,74 536,94"/>
+              <polygon points="180,95 188,78 196,95" />
+              <polygon points="220,98 228,80 236,98" />
+              <polygon points="380,92 388,72 396,92" />
+              <polygon points="420,96 428,76 436,96" />
+              <polygon points="520,94 528,74 536,94" />
             </g>
-            <path d="M740 130 L1440 130 L1440 72 C1260 66 1060 82 740 86 Z" fill="url(#hdr-ocean)"/>
+            <path
+              d="M740 130 L1440 130 L1440 72 C1260 66 1060 82 740 86 Z"
+              fill="url(#hdr-ocean)"
+            />
             <!-- Church / heritage building -->
             <g opacity="0.5" transform="translate(640, 48)">
-              <rect x="12" y="38" width="28" height="28" fill="#065f46" rx="1"/>
-              <polygon points="26,38 26,22 38,38" fill="#047857"/>
-              <rect x="18" y="48" width="6" height="10" fill="#064e3b"/>
-              <rect x="28" y="44" width="5" height="5" fill="#10b981" opacity="0.6"/>
+              <rect
+                x="12"
+                y="38"
+                width="28"
+                height="28"
+                fill="#065f46"
+                rx="1"
+              />
+              <polygon points="26,38 26,22 38,38" fill="#047857" />
+              <rect x="18" y="48" width="6" height="10" fill="#064e3b" />
+              <rect
+                x="28"
+                y="44"
+                width="5"
+                height="5"
+                fill="#10b981"
+                opacity="0.6"
+              />
             </g>
             <!-- Monument -->
             <g opacity="0.48" transform="translate(720, 54)">
-              <rect x="18" y="30" width="14" height="34" fill="#065f46"/>
-              <polygon points="25,30 25,18 32,30" fill="#047857"/>
-              <rect x="8" y="42" width="34" height="4" fill="#064e3b"/>
+              <rect x="18" y="30" width="14" height="34" fill="#065f46" />
+              <polygon points="25,30 25,18 32,30" fill="#047857" />
+              <rect x="8" y="42" width="34" height="4" fill="#064e3b" />
             </g>
             <!-- Palms -->
             <g class="hdr-palm" transform="translate(100, 52)" opacity="0.58">
-              <line x1="8" y1="46" x2="8" y2="10" stroke="#065f46" stroke-width="2.2"/>
-              <path d="M8 14 C-3 20 -7 32 2 28 M8 14 C19 18 23 30 14 26 M8 12 C-1 8 -5 16 3 18 M8 12 C17 10 21 18 13 20" stroke="#047857" stroke-width="1.5" fill="none"/>
+              <line
+                x1="8"
+                y1="46"
+                x2="8"
+                y2="10"
+                stroke="#065f46"
+                stroke-width="2.2"
+              />
+              <path
+                d="M8 14 C-3 20 -7 32 2 28 M8 14 C19 18 23 30 14 26 M8 12 C-1 8 -5 16 3 18 M8 12 C17 10 21 18 13 20"
+                stroke="#047857"
+                stroke-width="1.5"
+                fill="none"
+              />
             </g>
-            <g class="hdr-palm hdr-palm--2" transform="translate(1100, 48)" opacity="0.52">
-              <line x1="8" y1="50" x2="8" y2="12" stroke="#065f46" stroke-width="2"/>
-              <path d="M8 16 C-2 22 -6 32 2 28 M8 16 C18 20 22 30 14 26" stroke="#047857" stroke-width="1.5" fill="none"/>
+            <g
+              class="hdr-palm hdr-palm--2"
+              transform="translate(1100, 48)"
+              opacity="0.52"
+            >
+              <line
+                x1="8"
+                y1="50"
+                x2="8"
+                y2="12"
+                stroke="#065f46"
+                stroke-width="2"
+              />
+              <path
+                d="M8 16 C-2 22 -6 32 2 28 M8 16 C18 20 22 30 14 26"
+                stroke="#047857"
+                stroke-width="1.5"
+                fill="none"
+              />
             </g>
-            <g class="hdr-palm hdr-palm--3" transform="translate(320, 56)" opacity="0.4">
-              <line x1="6" y1="42" x2="6" y2="14" stroke="#065f46" stroke-width="1.5"/>
-              <path d="M6 16 C-1 20 -4 28 2 25 M6 16 C13 19 16 27 10 24" stroke="#047857" stroke-width="1.2" fill="none"/>
+            <g
+              class="hdr-palm hdr-palm--3"
+              transform="translate(320, 56)"
+              opacity="0.4"
+            >
+              <line
+                x1="6"
+                y1="42"
+                x2="6"
+                y2="14"
+                stroke="#065f46"
+                stroke-width="1.5"
+              />
+              <path
+                d="M6 16 C-1 20 -4 28 2 25 M6 16 C13 19 16 27 10 24"
+                stroke="#047857"
+                stroke-width="1.2"
+                fill="none"
+              />
             </g>
             <!-- Waves -->
             <g class="hdr-wave-1">
-              <path d="M760 82 C900 78 1060 84 1440 80" fill="none" stroke="#0284c7" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round"/>
+              <path
+                d="M760 82 C900 78 1060 84 1440 80"
+                fill="none"
+                stroke="#0284c7"
+                stroke-opacity="0.55"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
             </g>
             <g class="hdr-wave-2">
-              <path d="M780 88 C940 84 1100 90 1440 86" fill="none" stroke="#0284c7" stroke-opacity="0.28" stroke-width="1.1" stroke-linecap="round"/>
+              <path
+                d="M780 88 C940 84 1100 90 1440 86"
+                fill="none"
+                stroke="#0284c7"
+                stroke-opacity="0.28"
+                stroke-width="1.1"
+                stroke-linecap="round"
+              />
             </g>
             <!-- Birds -->
-            <path class="hdr-bird" d="M280 42 q5 -4 10 0 q5 4 10 0" fill="none" stroke="#475569" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
-            <path class="hdr-bird hdr-bird--2" d="M480 36 q4 -3 8 0 q4 3 8 0" fill="none" stroke="#64748b" stroke-width="1.1" stroke-linecap="round" opacity="0.45"/>
+            <path
+              class="hdr-bird"
+              d="M280 42 q5 -4 10 0 q5 4 10 0"
+              fill="none"
+              stroke="#475569"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              opacity="0.55"
+            />
+            <path
+              class="hdr-bird hdr-bird--2"
+              d="M480 36 q4 -3 8 0 q4 3 8 0"
+              fill="none"
+              stroke="#64748b"
+              stroke-width="1.1"
+              stroke-linecap="round"
+              opacity="0.45"
+            />
           </svg>
           <div class="header-scene__fade"></div>
           <div class="header-scene__mist"></div>
@@ -1206,7 +1654,14 @@
         <div class="site-header__bar">
           <a href="index.html" class="site-brand">
             <div class="site-brand__mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M12 3 2 8l10 5 10-5-10-5Z" />
                 <path d="m2 8 10 5 10-5" />
                 <path d="M12 13v8" />
@@ -1216,7 +1671,9 @@
             <div class="site-brand__text">
               <span class="site-brand__title">Mati Heritage 3D</span>
               <div class="site-brand__meta">
-                <span class="site-brand__tagline header-tagline">Visitor Portal</span>
+                <span class="site-brand__tagline header-tagline"
+                  >Visitor Portal</span
+                >
                 <span class="site-brand__locale">
                   <span class="site-brand__locale-dot"></span>
                   Mati City, PH
@@ -1226,34 +1683,85 @@
           </a>
 
           <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-            <span class="site-nav__indicator" id="site-nav-indicator" aria-hidden="true"></span>
+            <span
+              class="site-nav__indicator"
+              id="site-nav-indicator"
+              aria-hidden="true"
+            ></span>
             <a href="index.html" class="site-nav__link" data-nav="home">
               <span class="site-nav__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"/></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"
+                  />
+                </svg>
               </span>
               Home
             </a>
             <a href="about_us.html" class="site-nav__link" data-nav="about">
               <span class="site-nav__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
               </span>
               About Us
             </a>
             <a href="game.html" class="site-nav__link" data-nav="games">
               <span class="site-nav__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="10" rx="3"/><path d="M8 13h3M9.5 11.5v3M15.5 12.5v2M14.5 11.5h2"/></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="8" width="18" height="10" rx="3" />
+                  <path d="M8 13h3M9.5 11.5v3M15.5 12.5v2M14.5 11.5h2" />
+                </svg>
               </span>
               Games
             </a>
-            <a href="3dexplore.html" class="site-nav__link site-nav__link--featured" data-nav="3d">
+            <a
+              href="3dexplore.html"
+              class="site-nav__link site-nav__link--featured"
+              data-nav="3d"
+            >
               <span class="site-nav__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 8v8l10 5 10-5V8"/><path d="M12 13v8"/></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 3 2 8l10 5 10-5-10-5Z" />
+                  <path d="M2 8v8l10 5 10-5V8" />
+                  <path d="M12 13v8" />
+                </svg>
               </span>
               3D Explore
             </a>
             <a href="gallery.html" class="site-nav__link" data-nav="gallery">
               <span class="site-nav__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m3 16 5-5 4 4 3-3 6 6"/></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <circle cx="8.5" cy="10" r="1.5" />
+                  <path d="m3 16 5-5 4 4 3-3 6 6" />
+                </svg>
               </span>
               Gallery
             </a>
@@ -1268,10 +1776,29 @@
               </div>
 
               <div class="site-profile group">
-                <div class="site-profile__trigger" tabindex="0" role="button" aria-haspopup="true">
-                  <img src="https://i.pravatar.cc/120?img=12" alt="User avatar" class="site-profile__avatar" />
-                  <svg class="site-profile__chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                <div
+                  class="site-profile__trigger"
+                  tabindex="0"
+                  role="button"
+                  aria-haspopup="true"
+                >
+                  <img
+                    src="https://i.pravatar.cc/120?img=12"
+                    alt="User avatar"
+                    class="site-profile__avatar"
+                  />
+                  <svg
+                    class="site-profile__chevron"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
                 <div class="header-dropdown">
@@ -1283,7 +1810,14 @@
               </div>
             </div>
 
-            <button type="button" class="site-nav-toggle" id="site-nav-toggle" aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Open menu">
+            <button
+              type="button"
+              class="site-nav-toggle"
+              id="site-nav-toggle"
+              aria-expanded="false"
+              aria-controls="site-mobile-nav"
+              aria-label="Open menu"
+            >
               <span class="site-nav-toggle__bars" aria-hidden="true">
                 <span></span><span></span><span></span>
               </span>
@@ -1298,27 +1832,71 @@
         </div>
       </div>
 
-      <div id="settings-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal">
-        <div class="header-panel border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div
+        id="settings-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal"
+      >
+        <div
+          class="header-panel border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl mx-4 max-h-[90vh] overflow-y-auto"
+        >
           <div class="flex justify-between items-center mb-8">
-            <h3 class="text-white text-2xl font-bold tracking-widest uppercase" style="font-family: Syne, sans-serif">Settings</h3>
-            <button id="close-settings" class="text-gray-400 hover:text-white" aria-label="Close settings">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <h3
+              class="text-white text-2xl font-bold tracking-widest uppercase"
+              style="font-family: Syne, sans-serif"
+            >
+              Settings
+            </h3>
+            <button
+              id="close-settings"
+              class="text-gray-400 hover:text-white"
+              aria-label="Close settings"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
           <div class="space-y-6">
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <span class="text-gray-200 text-base font-semibold tracking-wide">Background Music</span>
-                <span id="music-vol-text" class="header-accent-text text-sm font-bold">20%</span>
+                <span
+                  class="text-gray-200 text-base font-semibold tracking-wide"
+                  >Background Music</span
+                >
+                <span
+                  id="music-vol-text"
+                  class="header-accent-text text-sm font-bold"
+                  >20%</span
+                >
               </div>
-              <input type="range" id="music-volume" min="0" max="1" step="0.01" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+              <input
+                type="range"
+                id="music-volume"
+                min="0"
+                max="1"
+                step="0.01"
+                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer"
+              />
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-gray-200 text-base font-semibold tracking-wide">Language</span>
-              <select id="language-select" class="bg-white/5 border border-white/20 text-white text-base rounded-lg p-2 focus:ring-2 outline-none">
+              <span class="text-gray-200 text-base font-semibold tracking-wide"
+                >Language</span
+              >
+              <select
+                id="language-select"
+                class="bg-white/5 border border-white/20 text-white text-base rounded-lg p-2 focus:ring-2 outline-none"
+              >
                 <option value="en" class="header-panel">English</option>
                 <option value="ceb" class="header-panel">Cebuano</option>
                 <option value="fil" class="header-panel">Filipino</option>
@@ -1326,13 +1904,32 @@
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
-                <span class="text-gray-200 text-base font-semibold tracking-wide">Sound Effects</span>
-                <span id="sfx-vol-text" class="header-accent-text text-sm font-bold">80%</span>
+                <span
+                  class="text-gray-200 text-base font-semibold tracking-wide"
+                  >Sound Effects</span
+                >
+                <span
+                  id="sfx-vol-text"
+                  class="header-accent-text text-sm font-bold"
+                  >80%</span
+                >
               </div>
-              <input type="range" id="sfx-volume" min="0" max="1" step="0.01" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+              <input
+                type="range"
+                id="sfx-volume"
+                min="0"
+                max="1"
+                step="0.01"
+                class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer"
+              />
             </div>
           </div>
-          <button id="save-settings" class="w-full mt-10 py-4 settings-save-btn rounded-xl text-white font-bold tracking-widest uppercase text-base">Save Changes</button>
+          <button
+            id="save-settings"
+            class="w-full mt-10 py-4 settings-save-btn rounded-xl text-white font-bold tracking-widest uppercase text-base"
+          >
+            Save Changes
+          </button>
         </div>
       </div>
     </header>
@@ -1347,7 +1944,14 @@
         const langSelect = document.getElementById("language-select");
         const settingsLink = document.getElementById("settings-link");
         const saveBtn = document.getElementById("save-settings");
-        const sfxIds = ["click-sound", "announcer-voice", "correct-sfx", "wrong-sfx", "tetris-fall-sound", "tetris-boom-sound"];
+        const sfxIds = [
+          "click-sound",
+          "announcer-voice",
+          "correct-sfx",
+          "wrong-sfx",
+          "tetris-fall-sound",
+          "tetris-boom-sound",
+        ];
 
         const loadPrefs = () => {
           const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
@@ -1355,18 +1959,20 @@
           const lang = localStorage.getItem("appLanguage") || "en";
           if (musicSlider) musicSlider.value = mVol;
           if (sfxSlider) sfxSlider.value = sVol;
-          if (musicVolText) musicVolText.textContent = Math.round(mVol * 100) + "%";
+          if (musicVolText)
+            musicVolText.textContent = Math.round(mVol * 100) + "%";
           if (sfxVolText) sfxVolText.textContent = Math.round(sVol * 100) + "%";
           if (langSelect) langSelect.value = lang;
           const applyVolumes = () => {
             const bg = document.getElementById("bg-music");
             if (bg) bg.volume = mVol;
-            sfxIds.forEach((id) => {
-              const sfx = document.getElementById(id);
-              if (sfx) sfx.volume = sVol;
-            });
           };
-          if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyVolumes);
+          sfxIds.forEach((id) => {
+            const sfx = document.getElementById(id);
+            if (sfx) sfx.volume = sVol;
+          });
+          if (document.readyState === "loading")
+            document.addEventListener("DOMContentLoaded", applyVolumes);
           else applyVolumes();
         };
 
@@ -1377,7 +1983,8 @@
           };
         }
 
-        const closeModal = () => modal && modal.classList.replace("flex", "hidden");
+        const closeModal = () =>
+          modal && modal.classList.replace("flex", "hidden");
         const closeBtn = document.getElementById("close-settings");
         if (closeBtn) closeBtn.onclick = closeModal;
         if (modal) modal.onclick = (e) => e.target === modal && closeModal();
@@ -1385,7 +1992,8 @@
         if (musicSlider) {
           musicSlider.oninput = (e) => {
             const val = e.target.value;
-            if (musicVolText) musicVolText.textContent = Math.round(val * 100) + "%";
+            if (musicVolText)
+              musicVolText.textContent = Math.round(val * 100) + "%";
             const bg = document.getElementById("bg-music");
             if (bg) bg.volume = val;
           };
@@ -1394,7 +2002,8 @@
         if (sfxSlider) {
           sfxSlider.oninput = (e) => {
             const val = e.target.value;
-            if (sfxVolText) sfxVolText.textContent = Math.round(val * 100) + "%";
+            if (sfxVolText)
+              sfxVolText.textContent = Math.round(val * 100) + "%";
             sfxIds.forEach((id) => {
               const sfx = document.getElementById(id);
               if (sfx) sfx.volume = val;
@@ -1409,9 +2018,11 @@
 
         if (saveBtn) {
           saveBtn.onclick = () => {
-            if (musicSlider) localStorage.setItem("bgMusicVol", musicSlider.value);
+            if (musicSlider)
+              localStorage.setItem("bgMusicVol", musicSlider.value);
             if (sfxSlider) localStorage.setItem("sfxVol", sfxSlider.value);
-            if (langSelect) localStorage.setItem("appLanguage", langSelect.value);
+            if (langSelect)
+              localStorage.setItem("appLanguage", langSelect.value);
             closeModal();
           };
         }
@@ -1425,8 +2036,12 @@
         const indicator = document.getElementById("site-nav-indicator");
         const toggle = document.getElementById("site-nav-toggle");
         const mobileNav = document.getElementById("site-mobile-nav");
-        const mobileLinksWrap = document.getElementById("site-mobile-nav-links");
-        const scrollProgress = document.getElementById("header-scroll-progress");
+        const mobileLinksWrap = document.getElementById(
+          "site-mobile-nav-links",
+        );
+        const scrollProgress = document.getElementById(
+          "header-scroll-progress",
+        );
         const sceneSvg = document.getElementById("header-scene-svg");
 
         if (!header) return;
@@ -1478,9 +2093,13 @@
           mobileLinksWrap.innerHTML = "";
           document.querySelectorAll(".site-nav__link").forEach((link) => {
             const clone = link.cloneNode(true);
-            clone.classList.remove("site-nav__link", "site-nav__link--featured");
+            clone.classList.remove(
+              "site-nav__link",
+              "site-nav__link--featured",
+            );
             clone.classList.add("site-mobile-nav__link");
-            if (link.classList.contains("is-active")) clone.classList.add("is-active");
+            if (link.classList.contains("is-active"))
+              clone.classList.add("is-active");
             clone.addEventListener("click", closeMobileMenu);
             mobileLinksWrap.appendChild(clone);
           });
@@ -1490,7 +2109,10 @@
           header.classList.toggle("is-menu-open", open);
           if (toggle) {
             toggle.setAttribute("aria-expanded", open ? "true" : "false");
-            toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+            toggle.setAttribute(
+              "aria-label",
+              open ? "Close menu" : "Open menu",
+            );
           }
           if (mobileNav) mobileNav.hidden = !open;
           document.body.style.overflow = open ? "hidden" : "";
@@ -1500,23 +2122,36 @@
 
         if (toggle) {
           toggle.addEventListener("click", () => {
-            header.classList.contains("is-menu-open") ? closeMobileMenu() : setMenuOpen(true);
+            header.classList.contains("is-menu-open")
+              ? closeMobileMenu()
+              : setMenuOpen(true);
           });
         }
 
-        window.addEventListener("scroll", () => {
-          const y = window.scrollY;
-          header.classList.toggle("is-scrolled", y > 12);
+        window.addEventListener(
+          "scroll",
+          () => {
+            const y = window.scrollY;
+            header.classList.toggle("is-scrolled", y > 12);
 
-          if (scrollProgress) {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            scrollProgress.style.width = docHeight > 0 ? `${Math.min((y / docHeight) * 100, 100)}%` : "0%";
-          }
+            if (scrollProgress) {
+              const docHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
+              scrollProgress.style.width =
+                docHeight > 0
+                  ? `${Math.min((y / docHeight) * 100, 100)}%`
+                  : "0%";
+            }
 
-          if (sceneSvg && document.body.classList.contains("visitor-module")) {
-            sceneSvg.style.transform = `translateY(${Math.min(y * 0.12, 10)}px)`;
-          }
-        }, { passive: true });
+            if (
+              sceneSvg &&
+              document.body.classList.contains("visitor-module")
+            ) {
+              sceneSvg.style.transform = `translateY(${Math.min(y * 0.12, 10)}px)`;
+            }
+          },
+          { passive: true },
+        );
 
         window.addEventListener("resize", () => {
           if (window.innerWidth >= 1024) closeMobileMenu();

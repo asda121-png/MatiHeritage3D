@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="game-tv-preview.css" />
 
     <style>
       :root {
@@ -108,11 +109,17 @@
         font-size: clamp(1rem, 2.2vw, 1.35rem);
         font-weight: 700;
         letter-spacing: 0.03em;
-        background: linear-gradient(180deg, #fff7d6 0%, #fde68a 40%, #f59e0b 100%);
+        background: linear-gradient(
+          180deg,
+          #fff7d6 0%,
+          #fde68a 40%,
+          #f59e0b 100%
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        filter: drop-shadow(0 1px 0 #2a1808) drop-shadow(0 0 16px rgba(251, 191, 36, 0.35));
+        filter: drop-shadow(0 1px 0 #2a1808)
+          drop-shadow(0 0 16px rgba(251, 191, 36, 0.35));
         line-height: 1.2;
       }
 
@@ -190,11 +197,34 @@
         --px: 0px;
         --py: 0px;
         background:
-          radial-gradient(ellipse 82% 62% at 50% 44%, rgba(251, 191, 36, 0.15) 0%, transparent 64%),
-          radial-gradient(ellipse 42% 34% at 8% 18%, rgba(212, 168, 67, 0.18) 0%, transparent 58%),
-          radial-gradient(ellipse 42% 34% at 92% 16%, rgba(212, 168, 67, 0.15) 0%, transparent 58%),
-          radial-gradient(ellipse 55% 42% at 50% 100%, rgba(92, 61, 30, 0.42) 0%, transparent 58%),
-          linear-gradient(175deg, #1a1008 0%, #2a1808 26%, #3d2914 48%, #322010 72%, #1a1008 100%);
+          radial-gradient(
+            ellipse 82% 62% at 50% 44%,
+            rgba(251, 191, 36, 0.15) 0%,
+            transparent 64%
+          ),
+          radial-gradient(
+            ellipse 42% 34% at 8% 18%,
+            rgba(212, 168, 67, 0.18) 0%,
+            transparent 58%
+          ),
+          radial-gradient(
+            ellipse 42% 34% at 92% 16%,
+            rgba(212, 168, 67, 0.15) 0%,
+            transparent 58%
+          ),
+          radial-gradient(
+            ellipse 55% 42% at 50% 100%,
+            rgba(92, 61, 30, 0.42) 0%,
+            transparent 58%
+          ),
+          linear-gradient(
+            175deg,
+            #1a1008 0%,
+            #2a1808 26%,
+            #3d2914 48%,
+            #322010 72%,
+            #1a1008 100%
+          );
       }
 
       .chronicle-bg::before {
@@ -225,12 +255,20 @@
         position: absolute;
         inset: 0;
         z-index: 5;
-        background: radial-gradient(ellipse 88% 78% at 50% 45%, transparent 38%, rgba(42, 24, 8, 0.58) 100%);
+        background: radial-gradient(
+          ellipse 88% 78% at 50% 45%,
+          transparent 38%,
+          rgba(42, 24, 8, 0.58) 100%
+        );
         pointer-events: none;
       }
 
       body.is-playing .chronicle-bg::after {
-        background: radial-gradient(ellipse 88% 78% at 50% 45%, transparent 34%, rgba(42, 24, 8, 0.65) 100%);
+        background: radial-gradient(
+          ellipse 88% 78% at 50% 45%,
+          transparent 34%,
+          rgba(42, 24, 8, 0.65) 100%
+        );
       }
 
       .chronicle-stage::before {
@@ -240,8 +278,16 @@
         z-index: 1;
         pointer-events: none;
         background:
-          radial-gradient(ellipse 55% 48% at 50% 52%, rgba(251, 191, 36, 0.16) 0%, transparent 62%),
-          radial-gradient(ellipse 30% 25% at 50% 48%, rgba(243, 228, 196, 0.08) 0%, transparent 70%);
+          radial-gradient(
+            ellipse 55% 48% at 50% 52%,
+            rgba(251, 191, 36, 0.16) 0%,
+            transparent 62%
+          ),
+          radial-gradient(
+            ellipse 30% 25% at 50% 48%,
+            rgba(243, 228, 196, 0.08) 0%,
+            transparent 70%
+          );
       }
 
       body.is-playing .chronicle-stage::before {
@@ -256,7 +302,9 @@
         background-image:
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M10 30 Q40 20 70 35 T110 25' fill='none' stroke='%23d4a843' stroke-width='0.55' opacity='0.28'/%3E%3Cpath d='M15 75 Q45 65 75 80 T105 70' fill='none' stroke='%23b8956a' stroke-width='0.45' opacity='0.22'/%3E%3Cpath d='M25 50 Q55 45 85 55' fill='none' stroke='%23c4a574' stroke-width='0.35' opacity='0.2' stroke-dasharray='3 4'/%3E%3C/svg%3E"),
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.11'/%3E%3C/svg%3E");
-        background-size: 120px 120px, 64px 64px;
+        background-size:
+          120px 120px,
+          64px 64px;
         transform: translate(calc(var(--px) * 0.08), calc(var(--py) * 0.05));
         transition: transform 0.15s ease-out;
       }
@@ -267,8 +315,16 @@
         z-index: 2;
         border-radius: 12px;
         background:
-          radial-gradient(ellipse 90% 80% at 50% 42%, rgba(243, 228, 196, 0.09) 0%, transparent 70%),
-          linear-gradient(180deg, rgba(247, 237, 208, 0.05) 0%, rgba(220, 192, 128, 0.04) 100%);
+          radial-gradient(
+            ellipse 90% 80% at 50% 42%,
+            rgba(243, 228, 196, 0.09) 0%,
+            transparent 70%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(247, 237, 208, 0.05) 0%,
+            rgba(220, 192, 128, 0.04) 100%
+          );
         box-shadow:
           inset 0 0 80px rgba(212, 168, 67, 0.06),
           0 0 120px rgba(251, 191, 36, 0.05);
@@ -293,13 +349,12 @@
         bottom: 0;
         z-index: 3;
         width: clamp(28px, 5vw, 56px);
-        background:
-          repeating-linear-gradient(
-            180deg,
-            #4a3018 0,
-            #5c3d1e 14px,
-            #4a3018 28px
-          );
+        background: repeating-linear-gradient(
+          180deg,
+          #4a3018 0,
+          #5c3d1e 14px,
+          #4a3018 28px
+        );
         box-shadow:
           inset -4px 0 12px rgba(0, 0, 0, 0.35),
           inset 4px 0 12px rgba(0, 0, 0, 0.35);
@@ -357,8 +412,12 @@
         width: clamp(48px, 8vw, 88px);
         height: clamp(64px, 12vh, 120px);
         opacity: 0.34;
-        background:
-          linear-gradient(135deg, #dcc68a 0%, #c9a96e 40%, #a8844a 100%);
+        background: linear-gradient(
+          135deg,
+          #dcc68a 0%,
+          #c9a96e 40%,
+          #a8844a 100%
+        );
         border: 2px solid rgba(42, 24, 8, 0.55);
         border-radius: 4px 4px 12px 12px;
         box-shadow:
@@ -434,7 +493,12 @@
         width: 88%;
         height: 72%;
         border-radius: 4px 4px 8px 8px;
-        background: linear-gradient(180deg, #fef3c7 0%, #fbbf24 55%, #d97706 100%);
+        background: linear-gradient(
+          180deg,
+          #fef3c7 0%,
+          #fbbf24 55%,
+          #d97706 100%
+        );
         border: 2px solid #2a1808;
         box-shadow:
           0 0 24px rgba(251, 191, 36, 0.55),
@@ -519,14 +583,30 @@
         width: clamp(36px, 5vw, 56px);
         height: clamp(36px, 5vw, 56px);
         opacity: 0.35;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M4 4 H24 V10 H10 V24 H4 Z' fill='%23d4a843' stroke='%232a1808' stroke-width='1.5'/%3E%3Cpath d='M6 6 H20 V12 H12 V20 H6 Z' fill='%23fde68a' opacity='0.55'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fef3c7' stroke='%23b45309' stroke-width='0.8'/%3E%3C/svg%3E") center / contain no-repeat;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M4 4 H24 V10 H10 V24 H4 Z' fill='%23d4a843' stroke='%232a1808' stroke-width='1.5'/%3E%3Cpath d='M6 6 H20 V12 H12 V20 H6 Z' fill='%23fde68a' opacity='0.55'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fef3c7' stroke='%23b45309' stroke-width='0.8'/%3E%3C/svg%3E")
+          center / contain no-repeat;
         filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
       }
 
-      .bg-adv-frame-corner--tl { top: 18%; left: 10%; }
-      .bg-adv-frame-corner--tr { top: 18%; right: 10%; transform: scaleX(-1); }
-      .bg-adv-frame-corner--bl { bottom: 14%; left: 10%; transform: scaleY(-1); }
-      .bg-adv-frame-corner--br { bottom: 14%; right: 10%; transform: scale(-1); }
+      .bg-adv-frame-corner--tl {
+        top: 18%;
+        left: 10%;
+      }
+      .bg-adv-frame-corner--tr {
+        top: 18%;
+        right: 10%;
+        transform: scaleX(-1);
+      }
+      .bg-adv-frame-corner--bl {
+        bottom: 14%;
+        left: 10%;
+        transform: scaleY(-1);
+      }
+      .bg-adv-frame-corner--br {
+        bottom: 14%;
+        right: 10%;
+        transform: scale(-1);
+      }
 
       /* ── Adventure map panels ── */
       .scroll-panel {
@@ -536,7 +616,11 @@
         background-image:
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M10 30 Q40 20 70 35 T110 25' fill='none' stroke='%23b8956a' stroke-width='0.6' opacity='0.35'/%3E%3Cpath d='M15 75 Q45 65 75 80 T105 70' fill='none' stroke='%23b8956a' stroke-width='0.5' opacity='0.3'/%3E%3Cpath d='M25 50 Q55 45 85 55' fill='none' stroke='%23c4a574' stroke-width='0.4' opacity='0.25' stroke-dasharray='3 4'/%3E%3C/svg%3E"),
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
-          radial-gradient(ellipse 85% 65% at 50% 38%, rgba(255, 248, 220, 0.5) 0%, transparent 68%),
+          radial-gradient(
+            ellipse 85% 65% at 50% 38%,
+            rgba(255, 248, 220, 0.5) 0%,
+            transparent 68%
+          ),
           linear-gradient(155deg, rgba(255, 255, 255, 0.2) 0%, transparent 42%),
           linear-gradient(180deg, #f7edd0 0%, #edd9a8 42%, #dcc080 100%);
         border: none;
@@ -592,14 +676,31 @@
         pointer-events: none;
         z-index: 3;
         opacity: 0.92;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M4 4 H24 V10 H10 V24 H4 Z' fill='%23d4a843' stroke='%232a1808' stroke-width='1.5'/%3E%3Cpath d='M6 6 H20 V12 H12 V20 H6 Z' fill='%23fde68a' opacity='0.55'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fef3c7' stroke='%23b45309' stroke-width='0.8'/%3E%3C/svg%3E") center / contain no-repeat;
-        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 8px rgba(251, 191, 36, 0.2));
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M4 4 H24 V10 H10 V24 H4 Z' fill='%23d4a843' stroke='%232a1808' stroke-width='1.5'/%3E%3Cpath d='M6 6 H20 V12 H12 V20 H6 Z' fill='%23fde68a' opacity='0.55'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fef3c7' stroke='%23b45309' stroke-width='0.8'/%3E%3C/svg%3E")
+          center / contain no-repeat;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4))
+          drop-shadow(0 0 8px rgba(251, 191, 36, 0.2));
       }
 
-      .adventure-corner--tl { top: 0.65rem; left: 0.65rem; }
-      .adventure-corner--tr { top: 0.65rem; right: 0.65rem; transform: scaleX(-1); }
-      .adventure-corner--bl { bottom: 0.85rem; left: 0.65rem; transform: scaleY(-1); }
-      .adventure-corner--br { bottom: 0.85rem; right: 0.65rem; transform: scale(-1); }
+      .adventure-corner--tl {
+        top: 0.65rem;
+        left: 0.65rem;
+      }
+      .adventure-corner--tr {
+        top: 0.65rem;
+        right: 0.65rem;
+        transform: scaleX(-1);
+      }
+      .adventure-corner--bl {
+        bottom: 0.85rem;
+        left: 0.65rem;
+        transform: scaleY(-1);
+      }
+      .adventure-corner--br {
+        bottom: 0.85rem;
+        right: 0.65rem;
+        transform: scale(-1);
+      }
 
       /* ── Mascot keeper ── */
       .keeper-wrap {
@@ -634,11 +735,20 @@
         font-weight: 900;
         letter-spacing: 0.04em;
         line-height: 1.15;
-        background: linear-gradient(180deg, #fffbeb 0%, #fde68a 22%, #f59e0b 50%, #d97706 78%, #92400e 100%);
+        background: linear-gradient(
+          180deg,
+          #fffbeb 0%,
+          #fde68a 22%,
+          #f59e0b 50%,
+          #d97706 78%,
+          #92400e 100%
+        );
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        filter: drop-shadow(0 2px 0 #2a1808) drop-shadow(0 4px 0 rgba(42, 24, 8, 0.28)) drop-shadow(0 0 24px rgba(251, 191, 36, 0.4));
+        filter: drop-shadow(0 2px 0 #2a1808)
+          drop-shadow(0 4px 0 rgba(42, 24, 8, 0.28))
+          drop-shadow(0 0 24px rgba(251, 191, 36, 0.4));
       }
 
       .adventure-badge {
@@ -706,7 +816,11 @@
         position: relative;
         z-index: 2;
         border: 2px solid rgba(92, 61, 30, 0.45);
-        background: linear-gradient(180deg, rgba(255, 252, 240, 0.85), rgba(237, 217, 168, 0.75));
+        background: linear-gradient(
+          180deg,
+          rgba(255, 252, 240, 0.85),
+          rgba(237, 217, 168, 0.75)
+        );
         border-radius: 12px;
         transition: all 0.2s ease;
         box-shadow:
@@ -757,7 +871,13 @@
       .btn-chronicle--primary {
         overflow: hidden;
         color: var(--cartoon-outline);
-        background: linear-gradient(180deg, #fef3c7 0%, #fbbf24 30%, #f59e0b 60%, #b45309 100%);
+        background: linear-gradient(
+          180deg,
+          #fef3c7 0%,
+          #fbbf24 30%,
+          #f59e0b 60%,
+          #b45309 100%
+        );
         box-shadow:
           0 0 0 2px rgba(253, 224, 71, 0.4),
           0 6px 0 var(--adv-wood),
@@ -770,7 +890,12 @@
         content: "";
         position: absolute;
         inset: -20% -60%;
-        background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.45) 50%, transparent 58%);
+        background: linear-gradient(
+          105deg,
+          transparent 42%,
+          rgba(255, 255, 255, 0.45) 50%,
+          transparent 58%
+        );
         animation: treasure-shine 3.2s ease-in-out infinite;
         pointer-events: none;
       }
@@ -874,8 +999,7 @@
         width: min(260px, 72%);
         height: 12px;
         margin: 0.65rem auto 1rem;
-        background:
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14'%3E%3Cpath d='M0 7 H115' stroke='%23b45309' stroke-width='1.5'/%3E%3Cpath d='M185 7 H300' stroke='%23b45309' stroke-width='1.5'/%3E%3Ccircle cx='150' cy='7' r='5' fill='%23f59e0b' stroke='%232a1808' stroke-width='1'/%3E%3Cpath d='M150 2 L152 7 L150 12 L148 7 Z' fill='%23fde68a' stroke='%232a1808' stroke-width='0.8'/%3E%3C/svg%3E")
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14'%3E%3Cpath d='M0 7 H115' stroke='%23b45309' stroke-width='1.5'/%3E%3Cpath d='M185 7 H300' stroke='%23b45309' stroke-width='1.5'/%3E%3Ccircle cx='150' cy='7' r='5' fill='%23f59e0b' stroke='%232a1808' stroke-width='1'/%3E%3Cpath d='M150 2 L152 7 L150 12 L148 7 Z' fill='%23fde68a' stroke='%232a1808' stroke-width='0.8'/%3E%3C/svg%3E")
           center / contain no-repeat;
         opacity: 0.95;
       }
@@ -977,7 +1101,12 @@
       .pairs-progress__fill {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, var(--adv-teal), #34d399, var(--adv-gold-bright));
+        background: linear-gradient(
+          90deg,
+          var(--adv-teal),
+          #34d399,
+          var(--adv-gold-bright)
+        );
         transition: width 0.45s cubic-bezier(0.34, 1.2, 0.48, 1);
         border-radius: inherit;
       }
@@ -1082,7 +1211,9 @@
       @keyframes table-flash {
         0%,
         100% {
-          box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(0, 0, 0, 0.45);
+          box-shadow:
+            inset 0 4px 12px rgba(0, 0, 0, 0.35),
+            0 16px 40px rgba(0, 0, 0, 0.45);
         }
         50% {
           box-shadow:
@@ -1174,7 +1305,11 @@
         padding: 1rem 1.75rem;
         border: 3px solid var(--adv-gold);
         border-radius: 12px;
-        background: linear-gradient(180deg, rgba(74, 48, 24, 0.95), rgba(42, 24, 8, 0.92));
+        background: linear-gradient(
+          180deg,
+          rgba(74, 48, 24, 0.95),
+          rgba(42, 24, 8, 0.92)
+        );
         box-shadow: 0 0 40px rgba(251, 191, 36, 0.25);
         animation: deal-text-pulse 0.8s ease-in-out infinite;
       }
@@ -1328,7 +1463,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
         box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.25);
       }
 
@@ -1360,13 +1494,6 @@
         50% {
           transform: rotate(3deg);
         }
-      }
-
-      .card-back__caption {
-        font-family: "MedievalSharp", cursive;
-        font-size: clamp(0.48rem, 1.2vw, 0.65rem);
-        color: var(--ink-soft);
-        letter-spacing: 0.06em;
       }
 
       /* Illuminated front */
@@ -1476,15 +1603,21 @@
       }
 
       .memory-card.is-matched[data-category="built"] .card-front {
-        box-shadow: 0 0 0 4px #fca5a5, inset 0 0 0 5px rgba(255, 255, 255, 0.4);
+        box-shadow:
+          0 0 0 4px #fca5a5,
+          inset 0 0 0 5px rgba(255, 255, 255, 0.4);
       }
 
       .memory-card.is-matched[data-category="natural"] .card-front {
-        box-shadow: 0 0 0 4px #6ee7b7, inset 0 0 0 5px rgba(255, 255, 255, 0.4);
+        box-shadow:
+          0 0 0 4px #6ee7b7,
+          inset 0 0 0 5px rgba(255, 255, 255, 0.4);
       }
 
       .memory-card.is-matched[data-category="intangible"] .card-front {
-        box-shadow: 0 0 0 4px #fcd34d, inset 0 0 0 5px rgba(255, 255, 255, 0.4);
+        box-shadow:
+          0 0 0 4px #fcd34d,
+          inset 0 0 0 5px rgba(255, 255, 255, 0.4);
       }
 
       @keyframes match-glow {
@@ -1558,8 +1691,7 @@
         z-index: 500;
         width: min(94vw, 36rem);
         padding: 1rem 1.25rem 1.25rem;
-        background:
-          linear-gradient(180deg, #f7edd0, #e8cf94);
+        background: linear-gradient(180deg, #f7edd0, #e8cf94);
         border: 3px solid var(--adv-gold);
         border-radius: 8px;
         box-shadow:
@@ -1800,14 +1932,26 @@
       }
 
       @keyframes explorer-wave {
-        0%, 100% { transform: rotate(0deg); }
-        25% { transform: rotate(-2deg); }
-        75% { transform: rotate(2deg); }
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-2deg);
+        }
+        75% {
+          transform: rotate(2deg);
+        }
       }
 
       @keyframes explorer-float {
-        0%, 100% { transform: translateY(0) rotate(-1deg); }
-        50% { transform: translateY(-10px) rotate(1deg); }
+        0%,
+        100% {
+          transform: translateY(0) rotate(-1deg);
+        }
+        50% {
+          transform: translateY(-10px) rotate(1deg);
+        }
       }
 
       #intro-screen .keeper-bubble {
@@ -1870,96 +2014,313 @@
       <div class="bg-adv-texture" aria-hidden="true"></div>
       <div class="bg-adv-parchment-wash" aria-hidden="true"></div>
 
-      <svg class="bg-adv-map-deco" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        class="bg-adv-map-deco"
+        viewBox="0 0 1440 810"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <!-- Faint compass rose -->
         <g fill="none" stroke="#d4a843" stroke-width="1.2" opacity="0.55">
-          <circle cx="720" cy="405" r="118"/>
-          <circle cx="720" cy="405" r="78"/>
-          <path d="M720 275 V535 M590 405 H850"/>
-          <path d="M720 287 L748 405 L720 523 L692 405 Z" fill="#b8956a" fill-opacity="0.35" stroke="#d4a843"/>
-          <path d="M720 295 L735 405 L720 515 L705 405 Z" fill="#fde68a" fill-opacity="0.2"/>
-          <text x="720" y="268" text-anchor="middle" fill="#d4a843" font-family="serif" font-size="14" opacity="0.7">N</text>
+          <circle cx="720" cy="405" r="118" />
+          <circle cx="720" cy="405" r="78" />
+          <path d="M720 275 V535 M590 405 H850" />
+          <path
+            d="M720 287 L748 405 L720 523 L692 405 Z"
+            fill="#b8956a"
+            fill-opacity="0.35"
+            stroke="#d4a843"
+          />
+          <path
+            d="M720 295 L735 405 L720 515 L705 405 Z"
+            fill="#fde68a"
+            fill-opacity="0.2"
+          />
+          <text
+            x="720"
+            y="268"
+            text-anchor="middle"
+            fill="#d4a843"
+            font-family="serif"
+            font-size="14"
+            opacity="0.7"
+          >
+            N
+          </text>
         </g>
         <!-- Dashed expedition routes -->
-        <g fill="none" stroke="#b8956a" stroke-width="1.5" stroke-dasharray="8 10" opacity="0.45">
-          <path d="M180 620 Q420 480 720 405 T1260 320"/>
-          <path d="M120 380 Q360 440 580 520 T980 640"/>
-          <path d="M200 200 Q480 280 720 340 T1200 280"/>
+        <g
+          fill="none"
+          stroke="#b8956a"
+          stroke-width="1.5"
+          stroke-dasharray="8 10"
+          opacity="0.45"
+        >
+          <path d="M180 620 Q420 480 720 405 T1260 320" />
+          <path d="M120 380 Q360 440 580 520 T980 640" />
+          <path d="M200 200 Q480 280 720 340 T1200 280" />
         </g>
         <!-- Map landmark dots -->
         <g fill="#b8956a" opacity="0.45">
-          <circle cx="420" cy="480" r="5"/>
-          <circle cx="980" cy="340" r="4"/>
-          <circle cx="260" cy="560" r="4.5"/>
-          <circle cx="1100" cy="420" r="4"/>
+          <circle cx="420" cy="480" r="5" />
+          <circle cx="980" cy="340" r="4" />
+          <circle cx="260" cy="560" r="4.5" />
+          <circle cx="1100" cy="420" r="4" />
         </g>
         <!-- Coast & island sketch -->
-        <path fill="none" stroke="#8b6914" stroke-width="1.8" opacity="0.38" d="M80 650 Q320 590 520 610 Q720 630 920 600 Q1120 570 1360 620"/>
-        <ellipse cx="1080" cy="430" rx="48" ry="14" fill="none" stroke="#8b6914" stroke-width="1.2" opacity="0.3"/>
-        <path fill="none" stroke="#8b6914" stroke-width="1" opacity="0.25" d="M1040 430 Q1080 410 1120 430"/>
+        <path
+          fill="none"
+          stroke="#8b6914"
+          stroke-width="1.8"
+          opacity="0.38"
+          d="M80 650 Q320 590 520 610 Q720 630 920 600 Q1120 570 1360 620"
+        />
+        <ellipse
+          cx="1080"
+          cy="430"
+          rx="48"
+          ry="14"
+          fill="none"
+          stroke="#8b6914"
+          stroke-width="1.2"
+          opacity="0.3"
+        />
+        <path
+          fill="none"
+          stroke="#8b6914"
+          stroke-width="1"
+          opacity="0.25"
+          d="M1040 430 Q1080 410 1120 430"
+        />
         <!-- Map border frame -->
-        <rect x="100" y="120" width="1240" height="570" fill="none" stroke="#d4a843" stroke-width="1.5" opacity="0.2" rx="4"/>
+        <rect
+          x="100"
+          y="120"
+          width="1240"
+          height="570"
+          fill="none"
+          stroke="#d4a843"
+          stroke-width="1.5"
+          opacity="0.2"
+          rx="4"
+        />
       </svg>
 
-      <div class="bg-adv-wood-side bg-adv-wood-side--left" aria-hidden="true"></div>
-      <div class="bg-adv-wood-side bg-adv-wood-side--right" aria-hidden="true"></div>
+      <div
+        class="bg-adv-wood-side bg-adv-wood-side--left"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="bg-adv-wood-side bg-adv-wood-side--right"
+        aria-hidden="true"
+      ></div>
       <div class="bg-adv-wood-top" aria-hidden="true"></div>
 
-      <div class="bg-adv-scroll-edge bg-adv-scroll-edge--tl" aria-hidden="true"></div>
-      <div class="bg-adv-scroll-edge bg-adv-scroll-edge--tr" aria-hidden="true"></div>
-      <div class="bg-adv-scroll-edge bg-adv-scroll-edge--bl" aria-hidden="true"></div>
-      <div class="bg-adv-scroll-edge bg-adv-scroll-edge--br" aria-hidden="true"></div>
+      <div
+        class="bg-adv-scroll-edge bg-adv-scroll-edge--tl"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="bg-adv-scroll-edge bg-adv-scroll-edge--tr"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="bg-adv-scroll-edge bg-adv-scroll-edge--bl"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="bg-adv-scroll-edge bg-adv-scroll-edge--br"
+        aria-hidden="true"
+      ></div>
 
-      <span class="bg-adv-frame-corner bg-adv-frame-corner--tl" aria-hidden="true"></span>
-      <span class="bg-adv-frame-corner bg-adv-frame-corner--tr" aria-hidden="true"></span>
-      <span class="bg-adv-frame-corner bg-adv-frame-corner--bl" aria-hidden="true"></span>
-      <span class="bg-adv-frame-corner bg-adv-frame-corner--br" aria-hidden="true"></span>
+      <span
+        class="bg-adv-frame-corner bg-adv-frame-corner--tl"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="bg-adv-frame-corner bg-adv-frame-corner--tr"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="bg-adv-frame-corner bg-adv-frame-corner--bl"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="bg-adv-frame-corner bg-adv-frame-corner--br"
+        aria-hidden="true"
+      ></span>
 
-      <div class="bg-adv-lantern-glow bg-adv-lantern-glow--left" aria-hidden="true"></div>
-      <div class="bg-adv-lantern-glow bg-adv-lantern-glow--right" aria-hidden="true"></div>
+      <div
+        class="bg-adv-lantern-glow bg-adv-lantern-glow--left"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="bg-adv-lantern-glow bg-adv-lantern-glow--right"
+        aria-hidden="true"
+      ></div>
       <div class="bg-adv-lantern bg-adv-lantern--left" aria-hidden="true"></div>
-      <div class="bg-adv-lantern bg-adv-lantern--right" aria-hidden="true"></div>
+      <div
+        class="bg-adv-lantern bg-adv-lantern--right"
+        aria-hidden="true"
+      ></div>
     </div>
 
     <main class="chronicle-stage">
       <div class="relative z-10 mx-auto w-full max-w-6xl">
         <!-- INTRO -->
-        <section id="intro-screen" class="scroll-panel adventure-panel mx-auto max-w-3xl p-8 md:p-12 text-center panel-enter">
-          <span class="adventure-corner adventure-corner--tl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--tr" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--bl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--br" aria-hidden="true"></span>
+        <section
+          id="intro-screen"
+          class="scroll-panel adventure-panel mx-auto max-w-3xl p-8 md:p-12 text-center panel-enter"
+        >
+          <span
+            class="adventure-corner adventure-corner--tl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--tr"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--bl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--br"
+            aria-hidden="true"
+          ></span>
           <div class="scroll-curl" aria-hidden="true"></div>
 
           <div class="keeper-wrap" aria-hidden="true">
-            <svg class="keeper-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              class="keeper-svg"
+              viewBox="0 0 120 120"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <!-- Animated explorer mascot -->
-              <ellipse cx="60" cy="110" rx="30" ry="7" fill="rgba(0,0,0,0.22)"/>
+              <ellipse
+                cx="60"
+                cy="110"
+                rx="30"
+                ry="7"
+                fill="rgba(0,0,0,0.22)"
+              />
               <!-- Backpack -->
-              <rect x="78" y="58" width="18" height="28" rx="5" fill="#92400e" stroke="#2a1808" stroke-width="2"/>
-              <rect x="81" y="62" width="12" height="8" rx="2" fill="#b45309" stroke="#2a1808" stroke-width="1.2"/>
+              <rect
+                x="78"
+                y="58"
+                width="18"
+                height="28"
+                rx="5"
+                fill="#92400e"
+                stroke="#2a1808"
+                stroke-width="2"
+              />
+              <rect
+                x="81"
+                y="62"
+                width="12"
+                height="8"
+                rx="2"
+                fill="#b45309"
+                stroke="#2a1808"
+                stroke-width="1.2"
+              />
               <!-- Body / vest -->
-              <path d="M38 95 Q60 78 82 95 L78 108 L42 108 Z" fill="#0f766e" stroke="#2a1808" stroke-width="2.5"/>
-              <path d="M44 82 L76 82 L74 95 L46 95 Z" fill="#14532d" stroke="#2a1808" stroke-width="1.5"/>
-              <circle cx="60" cy="88" r="3" fill="#fde68a" stroke="#2a1808" stroke-width="1"/>
+              <path
+                d="M38 95 Q60 78 82 95 L78 108 L42 108 Z"
+                fill="#0f766e"
+                stroke="#2a1808"
+                stroke-width="2.5"
+              />
+              <path
+                d="M44 82 L76 82 L74 95 L46 95 Z"
+                fill="#14532d"
+                stroke="#2a1808"
+                stroke-width="1.5"
+              />
+              <circle
+                cx="60"
+                cy="88"
+                r="3"
+                fill="#fde68a"
+                stroke="#2a1808"
+                stroke-width="1"
+              />
               <!-- Head -->
-              <circle cx="60" cy="50" r="23" fill="#fcd9b6" stroke="#2a1808" stroke-width="2.5"/>
+              <circle
+                cx="60"
+                cy="50"
+                r="23"
+                fill="#fcd9b6"
+                stroke="#2a1808"
+                stroke-width="2.5"
+              />
               <!-- Safari hat -->
-              <ellipse cx="60" cy="36" rx="28" ry="8" fill="#c4a574" stroke="#2a1808" stroke-width="2"/>
-              <path d="M44 36 Q60 18 76 36 L74 44 Q60 30 46 44 Z" fill="#d4a843" stroke="#2a1808" stroke-width="2"/>
-              <rect x="54" y="28" width="12" height="10" rx="2" fill="#b8956a" stroke="#2a1808" stroke-width="1.5"/>
+              <ellipse
+                cx="60"
+                cy="36"
+                rx="28"
+                ry="8"
+                fill="#c4a574"
+                stroke="#2a1808"
+                stroke-width="2"
+              />
+              <path
+                d="M44 36 Q60 18 76 36 L74 44 Q60 30 46 44 Z"
+                fill="#d4a843"
+                stroke="#2a1808"
+                stroke-width="2"
+              />
+              <rect
+                x="54"
+                y="28"
+                width="12"
+                height="10"
+                rx="2"
+                fill="#b8956a"
+                stroke="#2a1808"
+                stroke-width="1.5"
+              />
               <!-- Face -->
-              <circle cx="52" cy="50" r="3.5" fill="#2a1808"/>
-              <circle cx="68" cy="50" r="3.5" fill="#2a1808"/>
-              <circle cx="53" cy="49" r="1" fill="#fff"/>
-              <circle cx="69" cy="49" r="1" fill="#fff"/>
-              <path d="M52 60 Q60 67 68 60" fill="none" stroke="#2a1808" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="52" cy="50" r="3.5" fill="#2a1808" />
+              <circle cx="68" cy="50" r="3.5" fill="#2a1808" />
+              <circle cx="53" cy="49" r="1" fill="#fff" />
+              <circle cx="69" cy="49" r="1" fill="#fff" />
+              <path
+                d="M52 60 Q60 67 68 60"
+                fill="none"
+                stroke="#2a1808"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
               <!-- Map in hand -->
-              <rect x="22" y="68" width="24" height="18" rx="2" fill="#f3e4c4" stroke="#2a1808" stroke-width="2" transform="rotate(-8 34 77)"/>
-              <path d="M26 73 L42 71 M26 78 L40 77 M26 83 L38 82" stroke="#b8956a" stroke-width="1" transform="rotate(-8 34 77)"/>
+              <rect
+                x="22"
+                y="68"
+                width="24"
+                height="18"
+                rx="2"
+                fill="#f3e4c4"
+                stroke="#2a1808"
+                stroke-width="2"
+                transform="rotate(-8 34 77)"
+              />
+              <path
+                d="M26 73 L42 71 M26 78 L40 77 M26 83 L38 82"
+                stroke="#b8956a"
+                stroke-width="1"
+                transform="rotate(-8 34 77)"
+              />
               <!-- Compass on chest -->
-              <circle cx="60" cy="86" r="5" fill="#fde68a" stroke="#2a1808" stroke-width="1.2"/>
-              <path d="M60 83 L61 87 L60 89 L59 87 Z" fill="#b45309"/>
+              <circle
+                cx="60"
+                cy="86"
+                r="5"
+                fill="#fde68a"
+                stroke="#2a1808"
+                stroke-width="1.2"
+              />
+              <path d="M60 83 L61 87 L60 89 L59 87 Z" fill="#b45309" />
             </svg>
           </div>
 
@@ -1969,84 +2330,153 @@
 
           <h1 class="chronicle-title chronicle-title--divider">
             Memory Matching Pairs
-        </h1>
-          <p class="intro-desc adventure-body text-lg md:text-xl leading-relaxed max-w-xl mx-auto mb-8">
+          </h1>
+          <p
+            class="intro-desc adventure-body text-lg md:text-xl leading-relaxed max-w-xl mx-auto mb-8"
+          >
             Your expedition begins here! Flip the wax-sealed cards and pair the
-            treasures of Mati — monuments, islands, and living traditions — before
-            time runs out.
+            treasures of Mati — monuments, islands, and living traditions —
+            before time runs out.
           </p>
 
-          <button type="button" id="start-btn" class="btn-chronicle btn-chronicle--primary btn-treasure-chest">
+          <button
+            type="button"
+            id="start-btn"
+            class="btn-chronicle btn-chronicle--primary btn-treasure-chest"
+          >
             PLAY
           </button>
         </section>
 
         <!-- DIFFICULTY -->
-        <section id="difficulty-screen" class="hidden scroll-panel adventure-panel mx-auto max-w-3xl p-8 md:p-12 text-center">
-          <span class="adventure-corner adventure-corner--tl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--tr" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--bl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--br" aria-hidden="true"></span>
+        <section
+          id="difficulty-screen"
+          class="hidden scroll-panel adventure-panel mx-auto max-w-3xl p-8 md:p-12 text-center"
+        >
+          <span
+            class="adventure-corner adventure-corner--tl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--tr"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--bl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--br"
+            aria-hidden="true"
+          ></span>
           <div class="scroll-curl" aria-hidden="true"></div>
 
-          <h2 class="chronicle-title text-2xl md:text-3xl mb-2 chronicle-title--divider">Choose Difficulty</h2>
+          <h2
+            class="chronicle-title text-2xl md:text-3xl mb-2 chronicle-title--divider"
+          >
+            Choose Difficulty
+          </h2>
           <p class="adventure-body text-lg mb-8">
             Pick your challenge before the cards are dealt.
           </p>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-xl mx-auto">
-            <button type="button" id="btn-easy" class="quest-tab px-4 py-3 is-active" data-level="easy">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-xl mx-auto"
+          >
+            <button
+              type="button"
+              id="btn-easy"
+              class="quest-tab px-4 py-3"
+              data-level="easy"
+            >
               <div class="quest-tab__label">EASY</div>
               <div class="text-sm text-[var(--ink-soft)]">6 pairs</div>
               <div class="journal-font text-sm text-[var(--teal)]">90 sec</div>
-          </button>
-            <button type="button" id="btn-medium" class="quest-tab px-4 py-3" data-level="medium">
+            </button>
+            <button
+              type="button"
+              id="btn-medium"
+              class="quest-tab px-4 py-3"
+              data-level="medium"
+            >
               <div class="quest-tab__label">MEDIUM</div>
               <div class="text-sm text-[var(--ink-soft)]">8 pairs</div>
               <div class="journal-font text-sm text-[var(--teal)]">60 sec</div>
             </button>
-            <button type="button" id="btn-hard" class="quest-tab px-4 py-3" data-level="hard">
+            <button
+              type="button"
+              id="btn-hard"
+              class="quest-tab px-4 py-3"
+              data-level="hard"
+            >
               <div class="quest-tab__label">HARD</div>
               <div class="text-sm text-[var(--ink-soft)]">12 pairs</div>
               <div class="journal-font text-sm text-[var(--teal)]">45 sec</div>
-          </button>
-        </div>
+            </button>
+          </div>
 
-          <button type="button" id="back-to-intro-btn" class="btn-chronicle btn-chronicle--ghost">
+          <button
+            type="button"
+            id="back-to-intro-btn"
+            class="btn-chronicle btn-chronicle--ghost"
+          >
             ← Back
-        </button>
+          </button>
         </section>
 
         <!-- GAME -->
         <section id="game-screen" class="hidden">
-          <div class="game-screen__top flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div
+            class="game-screen__top flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+          >
             <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
               <h2 class="game-screen__title">Pair the Treasures of Mati</h2>
-              <span id="streak-badge" class="streak-badge mt-0" aria-live="polite">
+              <span
+                id="streak-badge"
+                class="streak-badge mt-0"
+                aria-live="polite"
+              >
                 🔥 Streak ×<span id="streak-count">0</span>
               </span>
             </div>
             <div class="flex flex-wrap gap-1.5">
               <div class="hud-ribbon">
                 <div class="hud-ribbon__label">Time</div>
-                <div id="timer-display" class="hud-ribbon__value text-[var(--teal)]">60s</div>
-            </div>
+                <div
+                  id="timer-display"
+                  class="hud-ribbon__value text-[var(--teal)]"
+                >
+                  60s
+                </div>
+              </div>
               <div class="hud-ribbon">
                 <div class="hud-ribbon__label">Score</div>
-                <div id="score-display" class="hud-ribbon__value text-[var(--burgundy)]">0</div>
-          </div>
+                <div
+                  id="score-display"
+                  class="hud-ribbon__value text-[var(--burgundy)]"
+                >
+                  0
+                </div>
+              </div>
               <div class="hud-ribbon">
                 <div class="hud-ribbon__label">Turns</div>
-                <div id="moves-display" class="hud-ribbon__value text-[var(--gold)]">0</div>
+                <div
+                  id="moves-display"
+                  class="hud-ribbon__value text-[var(--gold)]"
+                >
+                  0
+                </div>
               </div>
               <div class="hud-ribbon">
                 <div class="hud-ribbon__label">Pairs</div>
                 <div class="hud-ribbon__value text-[var(--forest)]">
-                  <span id="pairs-count">0</span>/<span id="total-pairs">8</span>
+                  <span id="pairs-count">0</span>/<span id="total-pairs"
+                    >8</span
+                  >
                 </div>
               </div>
+            </div>
           </div>
-        </div>
 
           <div class="game-screen__bars">
             <div class="hourglass-track">
@@ -2054,37 +2484,121 @@
             </div>
             <div class="pairs-progress" aria-hidden="true">
               <div id="pairs-progress-fill" class="pairs-progress__fill"></div>
-        </div>
-      </div>
+            </div>
+          </div>
 
           <div id="game-table" class="game-table">
             <div id="card-grid" class="grid mx-auto"></div>
-        </div>
+          </div>
         </section>
 
         <!-- RESULTS -->
-        <section id="results-screen" class="hidden scroll-panel adventure-panel mx-auto max-w-2xl p-8 md:p-12 text-center">
-          <span class="adventure-corner adventure-corner--tl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--tr" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--bl" aria-hidden="true"></span>
-          <span class="adventure-corner adventure-corner--br" aria-hidden="true"></span>
+        <section
+          id="results-screen"
+          class="hidden scroll-panel adventure-panel mx-auto max-w-2xl p-8 md:p-12 text-center"
+        >
+          <span
+            class="adventure-corner adventure-corner--tl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--tr"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--bl"
+            aria-hidden="true"
+          ></span>
+          <span
+            class="adventure-corner adventure-corner--br"
+            aria-hidden="true"
+          ></span>
           <div class="scroll-curl" aria-hidden="true"></div>
-          <p class="adventure-badge mb-2" id="result-badge">Chronicle Complete</p>
-          <h2 class="chronicle-title text-2xl md:text-3xl mb-2 chronicle-title--divider" id="result-title">
+          <p class="adventure-badge mb-2" id="result-badge">
+            Chronicle Complete
+          </p>
+          <h2
+            class="chronicle-title text-2xl md:text-3xl mb-2 chronicle-title--divider"
+            id="result-title"
+          >
             The Codex is Restored!
           </h2>
-          <div id="final-score" class="chronicle-title adventure-score mb-2">0</div>
-          <p class="adventure-body text-xl mb-1" id="result-msg">Well done, chronicler!</p>
-          <p class="adventure-body text-sm mb-8 opacity-80" id="result-detail"></p>
+          <div id="final-score" class="chronicle-title adventure-score mb-2">
+            0
+          </div>
+          <p class="adventure-body text-xl mb-1" id="result-msg">
+            Well done, chronicler!
+          </p>
+          <p
+            class="adventure-body text-sm mb-8 opacity-80"
+            id="result-detail"
+          ></p>
 
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <button type="button" id="replay-btn" class="btn-chronicle btn-chronicle--primary">
+            <button
+              type="button"
+              id="replay-btn"
+              class="btn-chronicle btn-chronicle--primary"
+            >
               PLAY AGAIN
-          </button>
-        </div>
+            </button>
+          </div>
         </section>
       </div>
     </main>
+
+    <aside
+      id="now-playing"
+      class="now-playing music-bar fixed bottom-4 right-4 z-[480] flex items-center gap-3 max-w-[min(22rem,88vw)] px-4 py-2.5 rounded-sm"
+      style="
+        background: rgba(42, 24, 8, 0.88);
+        border: 2px solid rgba(212, 168, 67, 0.4);
+        border-radius: 999px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+      "
+      aria-label="Now playing"
+    >
+      <button
+        type="button"
+        id="music-toggle"
+        class="music-toggle-btn shrink-0 w-9 h-9 rounded-full border-2 text-amber-100 text-sm grid place-items-center transition-all duration-150"
+        aria-pressed="false"
+        aria-label="Mute music"
+        title="Mute / Unmute"
+      >
+        <svg
+          id="music-icon-unmuted"
+          class="music-icon w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+          />
+        </svg>
+        <svg
+          id="music-icon-muted"
+          class="music-icon w-5 h-5 hidden"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"
+          />
+        </svg>
+      </button>
+      <span class="min-w-0 flex-1">
+        <span
+          class="now-playing__title block text-xs font-bold truncate text-amber-100"
+          >Memory Chronicle</span
+        >
+      </span>
+    </aside>
+
+    <div id="footer-placeholder"></div>
 
     <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
 
@@ -2094,16 +2608,40 @@
 
     <aside id="fact-scroll" class="fact-scroll" aria-live="polite">
       <span class="fact-scroll__quill" aria-hidden="true">🧭</span>
-      <div id="toast-category" class="heritage-stamp heritage-stamp--built mb-2">🏛 Built Heritage</div>
+      <div
+        id="toast-category"
+        class="heritage-stamp heritage-stamp--built mb-2"
+      >
+        🏛 Built Heritage
+      </div>
       <h3 id="toast-title" class="fact-scroll__title">Pylon Monument</h3>
       <p id="toast-text" class="fact-scroll__text"></p>
     </aside>
 
-    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" loop preload="auto"></audio>
-    <audio id="correct-sfx" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
-    <audio id="wrong-sfx" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio
+      id="bg-music"
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3"
+      loop
+      preload="auto"
+      autoplay
+    ></audio>
+    <audio
+      id="correct-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="wrong-sfx"
+      src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
+      preload="auto"
+    ></audio>
 
+    <script src="game-tv-transition.js"></script>
     <script>
+      if (typeof window.initTvExpandReceive === "function") {
+        window.initTvExpandReceive();
+      }
+
       const HERITAGE_DECK = [
         {
           id: "pylon",
@@ -2216,9 +2754,27 @@
       };
 
       const CONFIG = {
-        easy: { cols: 4, pairs: 6, time: 90, basePoints: 80, colsClass: "max-w-3xl" },
-        medium: { cols: 4, pairs: 8, time: 60, basePoints: 100, colsClass: "max-w-3xl" },
-        hard: { cols: 6, pairs: 12, time: 45, basePoints: 120, colsClass: "max-w-5xl" },
+        easy: {
+          cols: 4,
+          pairs: 6,
+          time: 90,
+          basePoints: 80,
+          colsClass: "max-w-3xl",
+        },
+        medium: {
+          cols: 4,
+          pairs: 8,
+          time: 60,
+          basePoints: 100,
+          colsClass: "max-w-3xl",
+        },
+        hard: {
+          cols: 6,
+          pairs: 12,
+          time: 45,
+          basePoints: 120,
+          colsClass: "max-w-5xl",
+        },
       };
 
       let difficulty = "medium";
@@ -2245,13 +2801,77 @@
       const correctSfx = document.getElementById("correct-sfx");
       const wrongSfx = document.getElementById("wrong-sfx");
 
+      let musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+      let musicStarted = false;
+      let musicMuted = localStorage.getItem("memoryPairsBgmMuted") === "true";
+
       let chronicleAudioCtx = null;
 
       function getChronicleAudioCtx() {
         if (!chronicleAudioCtx) {
-          chronicleAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          chronicleAudioCtx = new (
+            window.AudioContext || window.webkitAudioContext
+          )();
         }
         return chronicleAudioCtx;
+      }
+
+      function applyMusicVolume() {
+        musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
+        if (bgMusic) bgMusic.volume = musicVol;
+      }
+
+      function updateMusicUI() {
+        const nowPlayingEl = document.getElementById("now-playing");
+        const musicToggleBtn = document.getElementById("music-toggle");
+        const musicIconOn = document.getElementById("music-icon-unmuted");
+        const musicIconOff = document.getElementById("music-icon-muted");
+
+        if (!nowPlayingEl || !musicToggleBtn || !musicIconOn || !musicIconOff)
+          return;
+
+        musicIconOn.classList.toggle("hidden", musicMuted);
+        musicIconOff.classList.toggle("hidden", !musicMuted);
+
+        musicToggleBtn.setAttribute("aria-pressed", String(musicMuted));
+        musicToggleBtn.title = musicMuted ? "Unmute music" : "Mute music";
+      }
+
+      function initMusic() {
+        const musicToggleBtn = document.getElementById("music-toggle");
+        if (musicToggleBtn) {
+          musicToggleBtn.addEventListener("click", toggleMusicMute);
+        }
+        updateMusicUI();
+        document.body.addEventListener("click", () => startChronicleMusic(), {
+          once: true,
+        });
+      }
+
+      function startChronicleMusic() {
+        applyMusicVolume();
+        if (musicMuted || musicVol <= 0) {
+          updateMusicUI();
+          if (!musicStarted && musicVol > 0) musicStarted = true;
+          return;
+        }
+        bgMusic
+          .play()
+          .catch(() => {
+            // Autoplay was prevented
+          })
+          .then(() => {
+            musicStarted = true;
+            updateMusicUI();
+          });
+      }
+
+      function toggleMusicMute() {
+        musicMuted = !musicMuted;
+        bgMusic.muted = musicMuted;
+        localStorage.setItem("memoryPairsBgmMuted", String(musicMuted));
+        updateMusicUI();
+        if (!musicMuted && bgMusic.paused) startChronicleMusic();
       }
 
       /** Wax-seal tap + parchment rustle + gold chime — unique to this game */
@@ -2287,7 +2907,10 @@
         chime.frequency.setValueAtTime(784, now);
         chime.frequency.linearRampToValueAtTime(988, now + 0.03);
         chimeGain.gain.setValueAtTime(0, now);
-        chimeGain.gain.linearRampToValueAtTime(variant === "hover" ? 0.07 : 0.16, now + 0.012);
+        chimeGain.gain.linearRampToValueAtTime(
+          variant === "hover" ? 0.07 : 0.16,
+          now + 0.012,
+        );
         chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
         chime.connect(chimeGain);
         chimeGain.connect(master);
@@ -2341,19 +2964,22 @@
 
       let lastHoverAt = 0;
       function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach((el) => {
-          if (!el || el.dataset.hoverBound) return;
-          el.dataset.hoverBound = "true";
-          el.addEventListener("mouseenter", () => {
-            const now = Date.now();
-            if (now - lastHoverAt < 110) return;
-            lastHoverAt = now;
-            playChronicleClick("hover");
-          });
-          el.addEventListener("click", () => {
-            if (!el.classList.contains("memory-card")) playChronicleClick("click");
-          });
-        });
+        (elements instanceof NodeList ? [...elements] : elements).forEach(
+          (el) => {
+            if (!el || el.dataset.hoverBound) return;
+            el.dataset.hoverBound = "true";
+            el.addEventListener("mouseenter", () => {
+              const now = Date.now();
+              if (now - lastHoverAt < 110) return;
+              lastHoverAt = now;
+              playChronicleClick("hover");
+            });
+            el.addEventListener("click", () => {
+              if (!el.classList.contains("memory-card"))
+                playChronicleClick("click");
+            });
+          },
+        );
       }
 
       function setDifficulty(level) {
@@ -2368,7 +2994,7 @@
           btn.classList.add("is-selecting");
           setTimeout(() => btn.classList.remove("is-selecting"), 350);
           setDifficulty(btn.dataset.level);
-          startGame();
+          startGame(btn.dataset.level);
         });
       });
 
@@ -2417,7 +3043,14 @@
       function spawnConfetti(count = 48) {
         const fx = document.getElementById("fx-layer");
         if (!fx) return;
-        const colors = ["#fbbf24", "#ef4444", "#34d399", "#38bdf8", "#fde68a", "#7c2d12"];
+        const colors = [
+          "#fbbf24",
+          "#ef4444",
+          "#34d399",
+          "#38bdf8",
+          "#fde68a",
+          "#7c2d12",
+        ];
         for (let i = 0; i < count; i++) {
           const piece = document.createElement("div");
           piece.className = "confetti-piece";
@@ -2437,8 +3070,13 @@
         if (!table) return;
         table.classList.remove("is-match-flash", "is-miss-shake");
         void table.offsetWidth;
-        table.classList.add(type === "match" ? "is-match-flash" : "is-miss-shake");
-        setTimeout(() => table.classList.remove("is-match-flash", "is-miss-shake"), 450);
+        table.classList.add(
+          type === "match" ? "is-match-flash" : "is-miss-shake",
+        );
+        setTimeout(
+          () => table.classList.remove("is-match-flash", "is-miss-shake"),
+          450,
+        );
       }
 
       function animateCardsDeal() {
@@ -2446,15 +3084,21 @@
         return new Promise((resolve) => {
           cardEls.forEach((card, i) => {
             card.classList.add("is-dealing");
-            setTimeout(() => {
-              card.classList.remove("is-dealing");
-              card.classList.add("is-dealt");
-            }, 60 + i * 45);
+            setTimeout(
+              () => {
+                card.classList.remove("is-dealing");
+                card.classList.add("is-dealt");
+              },
+              60 + i * 45,
+            );
           });
-          setTimeout(() => {
-            playChronicleClick("deal");
-            resolve();
-          }, 60 + cardEls.length * 45 + 200);
+          setTimeout(
+            () => {
+              playChronicleClick("deal");
+              resolve();
+            },
+            60 + cardEls.length * 45 + 200,
+          );
         });
       }
 
@@ -2515,7 +3159,13 @@
         const grid = document.getElementById("card-grid");
         const table = document.getElementById("game-table");
         const gameScreen = document.getElementById("game-screen");
-        if (!grid || !table || !gameScreen || gameScreen.classList.contains("hidden")) return;
+        if (
+          !grid ||
+          !table ||
+          !gameScreen ||
+          gameScreen.classList.contains("hidden")
+        )
+          return;
 
         const totalCards = settings.pairs * 2;
         const rows = Math.ceil(totalCards / settings.cols);
@@ -2573,7 +3223,6 @@
             <div class="card-inner">
               <div class="card-face card-back">
                 <div class="wax-seal">M</div>
-                <div class="card-back__caption">Mati Codex</div>
                 </div>
               <div class="card-face card-front">
                 <div class="card-front__frame">
@@ -2669,7 +3318,7 @@
             if (img) img.alt = item.name;
             card.setAttribute(
               "aria-label",
-              `${item.emoji} ${item.name} — ${CATEGORY_LABELS[item.category]}`
+              `${item.emoji} ${item.name} — ${CATEGORY_LABELS[item.category]}`,
             );
           });
           if (matchedPairs === CONFIG[difficulty].pairs) endGame(true);
@@ -2700,7 +3349,10 @@
         document.getElementById("toast-text").textContent = item.fact;
         scroll.classList.add("is-visible");
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => scroll.classList.remove("is-visible"), 3600);
+        toastTimer = setTimeout(
+          () => scroll.classList.remove("is-visible"),
+          3600,
+        );
       }
 
       function updateTimerBar() {
@@ -2760,7 +3412,9 @@
         finalEl.classList.add("final-score-pop");
 
         if (win) spawnConfetti();
-        document.getElementById("result-badge").textContent = win ? "✦ Codex Restored ✦" : "⏳ Time's Up";
+        document.getElementById("result-badge").textContent = win
+          ? "✦ Codex Restored ✦"
+          : "⏳ Time's Up";
         document.getElementById("result-title").textContent = win
           ? "The Chronicle is Complete!"
           : "Some Treasures Stay Hidden";
@@ -2771,8 +3425,14 @@
           ? `+${timeBonus} time bonus · ${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`
           : `${matchedPairs}/${settings.pairs} pairs matched before time ran out`;
 
-        const currentTotal = parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
-        localStorage.setItem("totalHeritagePoints", String(currentTotal + totalEarned));
+        const currentTotal = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+          10,
+        );
+        localStorage.setItem(
+          "totalHeritagePoints",
+          String(currentTotal + totalEarned),
+        );
         const pointsEl = document.getElementById("header-total-points");
         if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
 
@@ -2795,10 +3455,6 @@
       }
 
       async function startGame() {
-        const mVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
-        bgMusic.volume = mVol;
-        if (mVol > 0) bgMusic.play().catch(() => {});
-
         matchedPairs = 0;
         score = 0;
         moves = 0;
@@ -2825,8 +3481,12 @@
         playAnnouncer("Find the matching heritage pairs before time runs out.");
       }
 
-      document.getElementById("start-btn").addEventListener("click", showDifficultyScreen);
-      document.getElementById("back-to-intro-btn").addEventListener("click", showIntroScreen);
+      document
+        .getElementById("start-btn")
+        .addEventListener("click", showDifficultyScreen);
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", showIntroScreen);
       document.getElementById("replay-btn").addEventListener("click", () => {
         clearInterval(timerInterval);
         gameActive = false;
@@ -2842,6 +3502,7 @@
       ]);
 
       startKeeperTips();
+      initMusic();
 
       const chronicleBg = document.querySelector(".chronicle-bg");
       if (chronicleBg && window.matchMedia("(pointer: fine)").matches) {
@@ -2868,7 +3529,8 @@
           if (settingsModal) document.body.appendChild(settingsModal);
 
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+          if (headerStyle)
+            document.head.appendChild(headerStyle.cloneNode(true));
 
           const headerScript = Array.from(doc.scripts).find((s) => !s.src);
           if (headerScript) {
@@ -2877,21 +3539,60 @@
             document.body.appendChild(script);
           }
 
-          document.querySelectorAll(".site-nav__link, .site-mobile-nav__link").forEach((link) => {
-            if (link.getAttribute("data-nav") === "games") link.classList.add("is-active");
-          });
+          document
+            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
+            .forEach((link) => {
+              if (link.getAttribute("data-nav") === "games")
+                link.classList.add("is-active");
+            });
 
           const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl) pointsEl.textContent = localStorage.getItem("totalHeritagePoints") || "0";
+          if (pointsEl)
+            pointsEl.textContent =
+              localStorage.getItem("totalHeritagePoints") || "0";
 
-          if (typeof window.initSiteHeader === "function") window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function") window.initGlobalSettings();
+          if (typeof window.initSiteHeader === "function")
+            window.initSiteHeader();
+          if (typeof window.initGlobalSettings === "function")
+            window.initGlobalSettings();
 
-          bindHoverSound(document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
-          ));
+          bindHoverSound(
+            document.querySelectorAll(
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
+            ),
+          );
+
+          bindHoverSound(
+            document.querySelectorAll(
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
+            ),
+          );
         })
         .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle);
+
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+          if (typeof window.initSiteFooter === "function")
+            window.initSiteFooter("games");
+        })
+        .catch((err) => console.error("Error loading footer:", err));
     </script>
   </body>
 </html>
