@@ -145,36 +145,7 @@
         }
       }
 
-      .header-scene__rays {
-        position: absolute;
-        top: 8%;
-        right: 10%;
-        width: 6rem;
-        height: 6rem;
-        background: conic-gradient(
-          from 200deg,
-          transparent 0deg,
-          rgba(251, 191, 36, 0.07) 30deg,
-          transparent 60deg,
-          rgba(251, 191, 36, 0.05) 90deg,
-          transparent 120deg,
-          rgba(251, 191, 36, 0.06) 150deg,
-          transparent 180deg
-        );
-        animation: hdr-rays-spin 40s linear infinite;
-        opacity: 0.8;
-      }
-
-      @keyframes hdr-rays-spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .header-scene__sun {
+      .header-scene__mesh {
         position: absolute;
         top: 16%;
         right: 12%;
@@ -1434,7 +1405,6 @@
         .site-brand__mark,
         .header-scene__mesh,
         .header-scene__sun,
-        .header-scene__rays,
         .header-scene__cloud,
         .header-scene__mist,
         .header-scene__particles span,
@@ -1469,7 +1439,6 @@
 
         <div class="header-scene" aria-hidden="true">
           <div class="header-scene__mesh"></div>
-          <div class="header-scene__rays"></div>
           <div class="header-scene__sun"></div>
           <div class="header-scene__cloud header-scene__cloud--1"></div>
           <div class="header-scene__cloud header-scene__cloud--2"></div>
@@ -1507,14 +1476,6 @@
               fill="url(#hdr-forest)"
               opacity="0.75"
             />
-            <!-- Tree silhouettes -->
-            <g opacity="0.5" fill="#064e3b">
-              <polygon points="180,95 188,78 196,95" />
-              <polygon points="220,98 228,80 236,98" />
-              <polygon points="380,92 388,72 396,92" />
-              <polygon points="420,96 428,76 436,96" />
-              <polygon points="520,94 528,74 536,94" />
-            </g>
             <path
               d="M740 130 L1440 130 L1440 72 C1260 66 1060 82 740 86 Z"
               fill="url(#hdr-ocean)"
@@ -1653,21 +1614,6 @@
 
         <div class="site-header__bar">
           <a href="index.html" class="site-brand">
-            <div class="site-brand__mark" aria-hidden="true">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 3 2 8l10 5 10-5-10-5Z" />
-                <path d="m2 8 10 5 10-5" />
-                <path d="M12 13v8" />
-                <path d="M7 10.5v5.5c0 1.1 2.2 2 5 2s5-.9 5-2v-5.5" />
-              </svg>
-            </div>
             <div class="site-brand__text">
               <span class="site-brand__title">Mati Heritage 3D</span>
               <div class="site-brand__meta">

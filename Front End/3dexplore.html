@@ -334,11 +334,30 @@
         gap: 0.55rem;
       }
 
+      .explore3d-stage-head__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: clamp(0.75rem, 2vw, 1.25rem);
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
       .explore3d-stage-head__title {
         margin: 0;
         font-size: clamp(1.85rem, 3.5vw, 2.65rem);
         line-height: 1.05;
         color: var(--ink);
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .explore3d-stage-head__actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex: 0 0 auto;
+        margin-left: auto;
       }
 
       .explore3d-stage-grid {
@@ -352,6 +371,231 @@
         .explore3d-stage-grid {
           grid-template-columns: minmax(0, 1.15fr) minmax(300px, 400px);
         }
+      }
+
+      .explore3d-stage-media {
+        display: grid;
+        gap: 0.85rem;
+        min-width: 0;
+      }
+
+      .explore3d-photo-gallery {
+        padding: 0.85rem 1rem 1rem;
+        border-radius: 1.15rem;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(4, 120, 87, 0.1);
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+      }
+
+      .explore3d-photo-gallery[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-details-pane .explore3d-photo-gallery {
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+      }
+
+      .explore3d-site-map__label {
+        color: #0369a1;
+      }
+
+      .explore3d-photo-gallery__label {
+        margin: 0 0 0.65rem;
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+      }
+
+      .explore3d-photo-gallery__track {
+        display: flex;
+        gap: 0.55rem;
+        overflow-x: auto;
+        padding-bottom: 0.15rem;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(4, 120, 87, 0.35) transparent;
+      }
+
+      .explore3d-photo-thumb {
+        flex: 0 0 auto;
+        width: clamp(4.5rem, 14vw, 5.75rem);
+        height: clamp(3.25rem, 10vw, 4.25rem);
+        padding: 0;
+        border: 2px solid rgba(4, 120, 87, 0.12);
+        border-radius: 0.65rem;
+        background: #f8fafc;
+        overflow: hidden;
+        cursor: pointer;
+        scroll-snap-align: start;
+        transition:
+          border-color 0.25s ease,
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .explore3d-photo-thumb:hover {
+        transform: translateY(-2px);
+        border-color: rgba(4, 120, 87, 0.35);
+      }
+
+      .explore3d-photo-thumb.is-active {
+        border-color: var(--forest);
+        box-shadow: 0 8px 20px rgba(4, 120, 87, 0.18);
+      }
+
+      .explore3d-photo-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .explore3d-site-map {
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .explore3d-site-map[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-details-nav {
+        display: none;
+      }
+
+      .explore3d-details-tab {
+        padding: 0.48rem 0.9rem;
+        border: 1px solid rgba(4, 120, 87, 0.14);
+        border-radius: 9999px;
+        background: #fff;
+        font-family: inherit;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #64748b;
+        cursor: pointer;
+        transition:
+          background 0.22s ease,
+          border-color 0.22s ease,
+          color 0.22s ease,
+          box-shadow 0.22s ease;
+      }
+
+      .explore3d-details-tab:hover {
+        color: var(--forest-dark);
+        border-color: rgba(4, 120, 87, 0.28);
+      }
+
+      .explore3d-details-tab.is-active {
+        color: #fff;
+        background: linear-gradient(135deg, var(--forest), var(--sky));
+        border-color: transparent;
+        box-shadow: 0 8px 20px rgba(4, 120, 87, 0.2);
+      }
+
+      .explore3d-details-tab.is-active[data-detail-view="map"] {
+        background: linear-gradient(135deg, #0369a1, #0284c7);
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.22);
+      }
+
+      .explore3d-details-tab[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-details-pane {
+        display: none;
+      }
+
+      .explore3d-details-pane.is-active {
+        display: block;
+      }
+
+      .explore3d-details-photo-stage {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.85rem;
+        padding: 0;
+        border-radius: 0.85rem;
+        overflow: hidden;
+        border: 1px solid rgba(4, 120, 87, 0.12);
+        background: #f8fafc;
+        cursor: zoom-in;
+      }
+
+      .explore3d-details-photo-stage img {
+        width: 100%;
+        max-height: 16rem;
+        object-fit: cover;
+        display: block;
+      }
+
+      .explore3d-details-map-card {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: 1px solid rgba(2, 132, 199, 0.16);
+        border-radius: 0.85rem;
+        background: #f0f9ff;
+        overflow: hidden;
+        cursor: zoom-in;
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          transform 0.25s ease;
+      }
+
+      .explore3d-details-map-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(2, 132, 199, 0.35);
+        box-shadow: 0 12px 28px rgba(2, 132, 199, 0.12);
+      }
+
+      .explore3d-details-map-card img {
+        width: 100%;
+        max-height: 18rem;
+        object-fit: contain;
+        display: block;
+        background: #f8fafc;
+      }
+
+      .explore3d-details-empty {
+        margin: 0;
+        padding: 1.25rem 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #64748b;
+        border-radius: 0.85rem;
+        background: #f8fafc;
+        border: 1px dashed rgba(4, 120, 87, 0.16);
+      }
+
+      .explore3d-viewer-empty {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: inherit;
+        margin: 0;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        color: #64748b;
+      }
+
+      .explore3d-viewer-empty[hidden] {
+        display: none !important;
       }
 
       .explore3d-stage-layout.is-loading .explore3d-stage-grid .explore3d-panel {
@@ -533,6 +777,11 @@
         min-height: inherit;
         object-fit: cover;
         display: block;
+        cursor: zoom-in;
+      }
+
+      .explore3d-viewer.is-photo .explore3d-preview-img {
+        cursor: zoom-in;
       }
 
       .explore3d-viewer-lines {
@@ -1051,12 +1300,6 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
-      .explore3d-view-btn svg {
-        width: 0.95rem;
-        height: 0.95rem;
-        flex-shrink: 0;
-      }
-
       .explore3d-view-btn:hover {
         transform: translateY(-1px);
         box-shadow: 0 14px 34px rgba(2, 132, 199, 0.28);
@@ -1291,7 +1534,39 @@
             <div class="explore3d-stage-head__meta">
               <span class="explore3d-details-type built" id="detail-type">Built Heritage</span>
             </div>
-            <h2 class="explore3d-stage-head__title display-font" id="stage-title"></h2>
+            <div class="explore3d-stage-head__row">
+              <h2 class="explore3d-stage-head__title display-font" id="stage-title"></h2>
+              <div
+                class="explore3d-stage-head__actions"
+                role="tablist"
+                aria-label="Site media"
+              >
+                <button
+                  type="button"
+                  class="explore3d-details-tab"
+                  data-detail-view="map"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="detail-pane-map"
+                  id="detail-tab-map"
+                  hidden
+                >
+                  Map
+                </button>
+                <button
+                  type="button"
+                  class="explore3d-details-tab"
+                  data-detail-view="photos"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="detail-pane-photos"
+                  id="detail-tab-photos"
+                  hidden
+                >
+                  Photographs
+                </button>
+              </div>
+            </div>
           </header>
 
           <div class="explore3d-reveal-loader" id="explore-reveal-loader" hidden>
@@ -1302,7 +1577,9 @@
           </div>
 
           <div class="explore3d-stage-grid">
+            <div class="explore3d-stage-media">
             <section class="explore3d-panel explore3d-viewer" id="heritage-viewer-panel" aria-label="3D model viewer">
+              <span class="explore3d-viewer-badge" id="viewer-badge">3D Preview</span>
               <div class="explore3d-viewer-lines" aria-hidden="true"></div>
               <model-viewer
                 id="heritage-model"
@@ -1325,27 +1602,78 @@
                 hidden
               ></model-viewer>
               <img id="preview-image" class="explore3d-preview-img" src="" alt="" hidden />
+              <p class="explore3d-viewer-empty" id="viewer-empty" hidden>
+                No 3D model for this site — use Map or Photographs beside the title.
+              </p>
               <p class="explore3d-viewer-hint" id="viewer-hint" hidden>
                 Drag to rotate · Scroll to zoom
               </p>
             </section>
+            </div>
 
             <aside class="explore3d-panel explore3d-details" aria-label="Site information">
               <div class="explore3d-details-body">
-                <p class="explore3d-details-label">About this site</p>
-                <h3 class="explore3d-details-title display-font" id="detail-title"></h3>
-                <p class="explore3d-details-desc" id="detail-desc"></p>
-                <p class="explore3d-specs-heading">Site details</p>
-                <ul class="explore3d-specs" id="detail-specs"></ul>
-                <ul class="explore3d-facts" id="detail-facts"></ul>
+                <div
+                  class="explore3d-details-pane is-active"
+                  id="detail-pane-about"
+                  data-detail-pane="about"
+                  role="tabpanel"
+                  aria-labelledby="stage-title"
+                >
+                  <p class="explore3d-details-label">About this site</p>
+                  <h3 class="explore3d-details-title display-font" id="detail-title"></h3>
+                  <p class="explore3d-details-desc" id="detail-desc"></p>
+                  <p class="explore3d-specs-heading">Site details</p>
+                  <ul class="explore3d-specs" id="detail-specs"></ul>
+                  <ul class="explore3d-facts" id="detail-facts"></ul>
+                </div>
+
+                <div
+                  class="explore3d-details-pane"
+                  id="detail-pane-map"
+                  data-detail-pane="map"
+                  role="tabpanel"
+                  aria-labelledby="detail-tab-map"
+                  hidden
+                >
+                  <p class="explore3d-photo-gallery__label explore3d-site-map__label">Site Map</p>
+                  <div class="explore3d-site-map" id="explore-site-map" hidden>
+                    <button type="button" class="explore3d-details-map-card" id="explore-site-map-btn">
+                      <img id="explore-site-map-img" src="" alt="" loading="lazy" decoding="async" />
+                    </button>
+                  </div>
+                  <p class="explore3d-details-empty" id="detail-map-empty" hidden>
+                    No site map on file for this location.
+                  </p>
+                </div>
+
+                <div
+                  class="explore3d-details-pane"
+                  id="detail-pane-photos"
+                  data-detail-pane="photos"
+                  role="tabpanel"
+                  aria-labelledby="detail-tab-photos"
+                  hidden
+                >
+                  <p class="explore3d-photo-gallery__label">Photographs</p>
+                  <button type="button" class="explore3d-details-photo-stage" id="detail-photo-main-btn" hidden>
+                    <img id="detail-photo-main" src="" alt="" loading="lazy" decoding="async" />
+                  </button>
+                  <div class="explore3d-photo-gallery" id="explore-photo-gallery" hidden>
+                    <div
+                      class="explore3d-photo-gallery__track"
+                      id="explore-photo-track"
+                      role="list"
+                      aria-label="Built heritage photographs"
+                    ></div>
+                  </div>
+                  <p class="explore3d-details-empty" id="detail-photos-empty" hidden>
+                    No photographs on file for this site yet.
+                  </p>
+                </div>
               </div>
               <div class="explore3d-details-foot">
                 <button type="button" class="explore3d-view-btn" id="view-heritage-btn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true">
-                    <path d="M12 3 2 8l10 5 10-5-10-5Z"/>
-                    <path d="M2 8v8l10 5 10-5V8"/>
-                    <path d="M12 13v8"/>
-                  </svg>
                   View Heritage
                 </button>
                 <a href="#mati-map-section" class="explore3d-map-link">
@@ -1413,6 +1741,8 @@
     ></script>
     <script src="data/mati-city-boundary.js"></script>
     <script>
+      const BH = "data/Built Heritage";
+
       const HERITAGE_3D_SITES = [
         {
           id: "pylon",
@@ -1422,8 +1752,17 @@
           lat: 6.952258,
           lng: 126.216889,
           official: true,
-          modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
-          image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          modelSrc: `${BH}/Pylon Monument/Pylon.glb`,
+          image: `${BH}/Pylon Monument/Photographs/Old/Pylon.jpg`,
+          photos: [
+            `${BH}/Pylon Monument/Photographs/Old/Pylon.jpg`,
+            `${BH}/Pylon Monument/Photographs/New/J6000x4000-00255.jpg`,
+            `${BH}/Pylon Monument/Photographs/New/2020-05-07 19-20.jpg`,
+            `${BH}/Pylon Monument/Photographs/Old/J1600x1200-00287.jpg`,
+            `${BH}/Pylon Monument/Photographs/New/1000068055.jpg`,
+            `${BH}/Pylon Monument/Photographs/Old/J380x566-00301.jpg`,
+          ],
+          map: `${BH}/Pylon Monument/Map/map_pylon.jpg`,
           available: true,
           desc: "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \u201cPoint Zero\u201d geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere\u2014crafted from recycled San Miguel Beer bottles\u2014and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city\u2019s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
           specs: [
@@ -1444,7 +1783,15 @@
           lng: 126.23609,
           official: true,
           image:
-            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg`,
+          photos: [
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg`,
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg`,
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00290.jpg`,
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/2008-12-08 22-44.jpg`,
+            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/J2000x1333-00244.jpg`,
+          ],
+          map: `${BH}/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg`,
           available: false,
           desc: "Centennial Park and Pathway of Leaders in the poblacion — a civic space honoring Mati\u2019s leaders and history.",
           specs: [
@@ -1462,7 +1809,9 @@
           lat: 6.949853,
           lng: 126.216161,
           official: true,
-          image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+          image: `${BH}/MFGR Park and Baywalk/Map/map_baywalk.jpg`,
+          photos: [],
+          map: `${BH}/MFGR Park and Baywalk/Map/map_baywalk.jpg`,
           available: false,
           desc: "Mayor Francisco G. Rabat Park and Baywalk overlooking Pujada Bay — a waterfront promenade and gathering place.",
           specs: [
@@ -1481,7 +1830,12 @@
           lng: 126.248353,
           official: true,
           image:
-            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
+          photos: [
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg`,
+          ],
           available: false,
           desc: "Provincial museum featuring Davor the whale and Mandaya heritage collections.",
           specs: [
@@ -1500,7 +1854,11 @@
           lng: 126.2478,
           official: false,
           image:
-            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
+          photos: [
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
+            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
+          ],
           available: false,
           desc: "Provincial government center within Mati City.",
           specs: [
@@ -1519,7 +1877,11 @@
           lng: 126.2465,
           official: false,
           image:
-            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
+          photos: [
+            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
+            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
+          ],
           available: false,
           desc: "Historic mansion linked to Davao Oriental governance.",
           specs: [
@@ -1538,7 +1900,15 @@
           lng: 126.219444,
           official: true,
           image:
-            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg`,
+          photos: [
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg`,
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00505.jpg`,
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00504.jpg`,
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00532.jpg`,
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg`,
+            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/J960x720-00477.jpg`,
+          ],
           available: false,
           desc: "Heritage Gabaldon school building of Roxas Memorial Colleges — an architectural landmark from the American era.",
           specs: [
@@ -1557,7 +1927,11 @@
           lng: 126.325,
           official: true,
           image:
-            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
+            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
+          photos: [
+            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
+            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
+          ],
           available: false,
           desc: "Preserved ancestral house in Barangay Bobon.",
           specs: [
@@ -1576,7 +1950,14 @@
           lng: 126.33,
           official: true,
           image:
-            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg`,
+          photos: [
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg`,
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg`,
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00628.jpg`,
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J1920x2740-00616.jpg`,
+            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg`,
+          ],
           available: false,
           desc: "Indigenous graveyard and cultural landmark in Barangay Bobon.",
           specs: [
@@ -1595,7 +1976,14 @@
           lng: 126.281047,
           official: true,
           image:
-            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg`,
+          photos: [
+            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg`,
+            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg`,
+            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00292.jpg`,
+            `${BH}/Menzi Visitors Information Center/Photographs/Old/2016-05-18 07-50.jpg`,
+          ],
+          map: `${BH}/Menzi Visitors Information Center/Map/map_mvic.jpg`,
           available: false,
           desc: "Visitor center and campsite along the Dahican shoreline — gateway to Mati\u2019s surf and eco-tourism corridor.",
           specs: [
@@ -1622,6 +2010,20 @@
       const previewImage = document.getElementById("preview-image");
       const heritageModel = document.getElementById("heritage-model");
       const viewerHint = document.getElementById("viewer-hint");
+      const explorePhotoGallery = document.getElementById("explore-photo-gallery");
+      const explorePhotoTrack = document.getElementById("explore-photo-track");
+      const exploreSiteMap = document.getElementById("explore-site-map");
+      const exploreSiteMapImg = document.getElementById("explore-site-map-img");
+      const exploreSiteMapBtn = document.getElementById("explore-site-map-btn");
+      const detailPhotoMain = document.getElementById("detail-photo-main");
+      const detailPhotoMainBtn = document.getElementById("detail-photo-main-btn");
+      const detailMapEmpty = document.getElementById("detail-map-empty");
+      const detailPhotosEmpty = document.getElementById("detail-photos-empty");
+      const detailTabMap = document.getElementById("detail-tab-map");
+      const detailTabPhotos = document.getElementById("detail-tab-photos");
+      const viewerEmpty = document.getElementById("viewer-empty");
+      let activePhotoIndex = 0;
+      let activeDetailView = "about";
       const detailType = document.getElementById("detail-type");
       const detailTitle = document.getElementById("detail-title");
       const detailDesc = document.getElementById("detail-desc");
@@ -1703,6 +2105,34 @@
         exploreStageLayout?.setAttribute("hidden", "");
         exploreStageLayout?.classList.remove("is-loading", "is-revealed");
         exploreRevealLoader?.setAttribute("hidden", "");
+        explorePhotoGallery?.setAttribute("hidden", "");
+        exploreSiteMap?.setAttribute("hidden", "");
+        setDetailView("about");
+      }
+
+      function setDetailView(view) {
+        activeDetailView = view;
+        document.querySelectorAll(".explore3d-details-tab").forEach((tab) => {
+          if (tab.hidden) return;
+          const isActive = view !== "about" && tab.dataset.detailView === view;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+        document.querySelectorAll(".explore3d-details-pane").forEach((pane) => {
+          const isActive = pane.dataset.detailPane === view;
+          pane.classList.toggle("is-active", isActive);
+          if (isActive) pane.removeAttribute("hidden");
+          else pane.setAttribute("hidden", "");
+        });
+      }
+
+      function updateDetailTabs(site) {
+        const photos = getSitePhotos(site);
+        const mapSrc = getSiteMap(site);
+        if (detailTabMap) detailTabMap.hidden = !mapSrc;
+        if (detailTabPhotos) detailTabPhotos.hidden = !photos.length;
+        if (activeDetailView === "map" && !mapSrc) setDetailView("about");
+        if (activeDetailView === "photos" && !photos.length) setDetailView("about");
       }
 
       async function revealSiteFromMap(site, options = {}) {
@@ -1732,6 +2162,7 @@
 
         updateDetails(site);
         updateViewer(site);
+        setDetailView("about");
 
         exploreRevealLoader?.setAttribute("hidden", "");
         exploreStageLayout?.classList.remove("is-loading");
@@ -1751,6 +2182,130 @@
         }
 
         revealInProgress = false;
+      }
+
+      function getSitePhotos(site) {
+        if (!site) return [];
+        if (Array.isArray(site.photos)) {
+          return site.photos.filter((src) => src && src !== site.map);
+        }
+        if (site.image && site.image !== site.map) return [site.image];
+        return [];
+      }
+
+      function getSiteMap(site) {
+        return site?.map || null;
+      }
+
+      function getSiteMarkerImage(site) {
+        if (!site) return "";
+        const photos = getSitePhotos(site);
+        return photos[0] || site.image || site.map || "";
+      }
+
+      function setActivePhotoThumb(index) {
+        explorePhotoTrack?.querySelectorAll(".explore3d-photo-thumb").forEach((btn, i) => {
+          btn.classList.toggle("is-active", i === index);
+        });
+      }
+
+      function openFullscreenPhoto(site, photoSrc, options = {}) {
+        if (!site || !photoSrc || !heritageFullscreen) return;
+
+        fullscreenTitle.textContent = site.name;
+        heritageFullscreen.hidden = false;
+        heritageFullscreen.setAttribute("aria-hidden", "false");
+        document.body.classList.add("heritage-fullscreen-open");
+        hideFullscreenLoading();
+
+        if (fullscreenModel) {
+          fullscreenModel.hidden = true;
+          fullscreenModel.autoRotate = false;
+        }
+
+        fullscreenPhoto.src = photoSrc;
+        fullscreenPhoto.alt = options.isMap ? `${site.name} site map` : site.name;
+        fullscreenPhoto.hidden = false;
+        if (fullscreenHint) {
+          fullscreenHint.textContent = options.isMap
+            ? "Site map"
+            : "Built heritage photograph";
+        }
+      }
+
+      function selectSitePhoto(site, index) {
+        const photos = getSitePhotos(site);
+        const src = photos[index];
+        if (!src) return;
+
+        activePhotoIndex = index;
+        setActivePhotoThumb(index);
+
+        if (detailPhotoMain) {
+          detailPhotoMain.src = src;
+          detailPhotoMain.alt = site.name;
+        }
+      }
+
+      function renderPhotoGallery(site) {
+        const photos = getSitePhotos(site);
+        if (!explorePhotoGallery || !explorePhotoTrack) return;
+
+        if (!photos.length) {
+          explorePhotoGallery.hidden = true;
+          explorePhotoTrack.innerHTML = "";
+          detailPhotoMainBtn?.setAttribute("hidden", "");
+          detailPhotosEmpty?.removeAttribute("hidden");
+          return;
+        }
+
+        detailPhotosEmpty?.setAttribute("hidden", "");
+        explorePhotoGallery.hidden = false;
+        detailPhotoMainBtn?.removeAttribute("hidden");
+        activePhotoIndex = 0;
+
+        if (detailPhotoMain) {
+          detailPhotoMain.src = photos[0];
+          detailPhotoMain.alt = site.name;
+        }
+
+        explorePhotoTrack.innerHTML = photos
+          .map(
+            (src, index) => `
+          <button
+            type="button"
+            class="explore3d-photo-thumb${index === 0 ? " is-active" : ""}"
+            data-photo-index="${index}"
+            role="listitem"
+            aria-label="View photograph ${index + 1} of ${photos.length}"
+          >
+            <img src="${encodeURI(src)}" alt="" loading="lazy" decoding="async" />
+          </button>`,
+          )
+          .join("");
+
+        explorePhotoTrack.querySelectorAll("[data-photo-index]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            selectSitePhoto(site, Number(btn.dataset.photoIndex));
+          });
+        });
+      }
+
+      function renderSiteMap(site) {
+        const mapSrc = getSiteMap(site);
+        if (!exploreSiteMap || !exploreSiteMapImg) return;
+
+        if (!mapSrc) {
+          exploreSiteMap.hidden = true;
+          exploreSiteMapImg.removeAttribute("src");
+          detailMapEmpty?.removeAttribute("hidden");
+          return;
+        }
+
+        detailMapEmpty?.setAttribute("hidden", "");
+        exploreSiteMap.hidden = false;
+        exploreSiteMapImg.src = mapSrc;
+        exploreSiteMapImg.alt = `${site.name} site map`;
       }
 
       function openFullscreenHeritage(site = getActiveSite()) {
@@ -1774,11 +2329,23 @@
           hideFullscreenLoading();
           fullscreenModel.hidden = true;
           fullscreenModel.autoRotate = false;
-          fullscreenPhoto.src = site.image;
-          fullscreenPhoto.alt = site.name;
-          fullscreenPhoto.hidden = false;
-          if (fullscreenHint) {
-            fullscreenHint.textContent = "Full-size heritage photograph";
+          const photos = getSitePhotos(site);
+          const mapSrc = getSiteMap(site);
+          const photoSrc = photos[activePhotoIndex] || photos[0];
+          if (photoSrc) {
+            fullscreenPhoto.src = photoSrc;
+            fullscreenPhoto.alt = site.name;
+            fullscreenPhoto.hidden = false;
+            if (fullscreenHint) {
+              fullscreenHint.textContent = "Full-size heritage photograph";
+            }
+          } else if (mapSrc) {
+            fullscreenPhoto.src = mapSrc;
+            fullscreenPhoto.alt = `${site.name} site map`;
+            fullscreenPhoto.hidden = false;
+            if (fullscreenHint) {
+              fullscreenHint.textContent = "Site map";
+            }
           }
         }
       }
@@ -1802,14 +2369,16 @@
       function updateViewer(site) {
         const hasModel = site.available && site.modelSrc && heritageModel;
 
-        heritageViewerPanel?.classList.toggle("is-photo", !hasModel);
+        heritageViewerPanel?.classList.remove("is-photo");
 
         if (viewerBadge) {
-          viewerBadge.textContent = hasModel ? "3D Preview" : "Archive Photo";
+          viewerBadge.textContent = hasModel ? "3D Preview" : "Built Heritage";
         }
 
+        previewImage.hidden = true;
+
         if (hasModel) {
-          previewImage.hidden = true;
+          viewerEmpty?.setAttribute("hidden", "");
           heritageModel.hidden = false;
           if (heritageModel.getAttribute("src") !== site.modelSrc) {
             heritageModel.setAttribute("src", site.modelSrc);
@@ -1825,11 +2394,13 @@
             heritageModel.hidden = true;
             heritageModel.autoRotate = false;
           }
-          previewImage.hidden = false;
-          previewImage.src = site.image;
-          previewImage.alt = site.name;
+          viewerEmpty?.removeAttribute("hidden");
           if (viewerHint) viewerHint.hidden = true;
         }
+
+        renderSiteMap(site);
+        renderPhotoGallery(site);
+        updateDetailTabs(site);
       }
 
       function initFromQuery() {
@@ -1850,6 +2421,49 @@
           if (site) openFullscreenHeritage(site);
         });
       }
+
+      previewImage?.addEventListener("click", () => {
+        const site = getActiveSite();
+        if (!site || previewImage.hidden) return;
+        openFullscreenPhoto(site, previewImage.src);
+      });
+
+      detailPhotoMainBtn?.addEventListener("click", () => {
+        const site = getActiveSite();
+        const photos = getSitePhotos(site);
+        const src = photos[activePhotoIndex] || photos[0];
+        if (!site || !src) return;
+        openFullscreenPhoto(site, src);
+      });
+
+      exploreSiteMapBtn?.addEventListener("click", () => {
+        const site = getActiveSite();
+        const mapSrc = getSiteMap(site);
+        if (!site || !mapSrc) return;
+        openFullscreenPhoto(site, mapSrc, { isMap: true });
+      });
+
+      document.querySelectorAll(".explore3d-details-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          if (tab.hidden) return;
+          const view = tab.dataset.detailView || "about";
+          if (activeDetailView === view) {
+            setDetailView("about");
+          } else {
+            setDetailView(view);
+          }
+        });
+      });
+
+      stageTitle?.addEventListener("click", () => {
+        if (activeDetailView !== "about") setDetailView("about");
+      });
+      stageTitle?.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          if (activeDetailView !== "about") setDetailView("about");
+        }
+      });
 
       fullscreenClose?.addEventListener("click", closeFullscreenHeritage);
       document.addEventListener("keydown", (event) => {
@@ -1896,7 +2510,7 @@
       }
 
       function createHeritagePhotoIcon(site, size = 40) {
-        const imgSrc = encodeURI(site.image);
+        const imgSrc = encodeURI(getSiteMarkerImage(site));
         const half = size / 2;
         const isActive = site.id === activeSiteId;
         return L.divIcon({

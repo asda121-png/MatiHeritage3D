@@ -1,14 +1,35 @@
 (function () {
   "use strict";
 
-  const state = {
-    step: "category",
-    category: null,
-    siteId: null,
-    folder: null,
-    lightboxIndex: 0,
-    lightboxItems: [],
-  };
+  const GALLERY_HOME = document.documentElement.dataset.galleryHome || null;
+  const INITIAL_CATEGORY = document.documentElement.dataset.galleryCategory || null;
+
+  function getInitialState() {
+    const base = {
+      lightboxIndex: 0,
+      lightboxItems: [],
+    };
+
+    if (INITIAL_CATEGORY === "intangible" || INITIAL_CATEGORY === "natural") {
+      return {
+        ...base,
+        step: "sites",
+        category: INITIAL_CATEGORY,
+        siteId: null,
+        folder: null,
+      };
+    }
+
+    return {
+      ...base,
+      step: "category",
+      category: null,
+      siteId: null,
+      folder: null,
+    };
+  }
+
+  const state = getInitialState();
 
   const CATEGORY_LABELS = {
     intangible: "Intangible Cultural Heritage",
@@ -25,6 +46,37 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  const PILE_PRINT_FILTERS = ["none", "sepia(0.35)", "grayscale(1)", "saturate(1.2)"];
+
+  function getPilePhotos(siteId, cover) {
+    const fromMedia = getSiteMedia(siteId)
+      .filter((item) => item.type === "photo")
+      .map((item) => item.src);
+    const photos = [...new Set([cover, ...fromMedia])];
+    while (photos.length < 4) photos.push(cover);
+    return photos.slice(0, 4);
+  }
+
+  function renderPilePrints(siteId, cover) {
+    return getPilePhotos(siteId, cover)
+      .map((src, index) => {
+        return `
+          <span
+            class="gal-print gal-print--${index + 1}"
+            style="--print-i: ${index}"
+            data-print="${index}"
+          >
+            <img
+              src="${escapeHtml(src)}"
+              alt=""
+              loading="lazy"
+              style="filter: ${PILE_PRINT_FILTERS[index]}"
+            />
+          </span>`;
+      })
+      .join("");
   }
 
   function setState(patch) {
@@ -49,6 +101,8 @@
       setState({ step: "site", folder: null });
     } else if (state.step === "site") {
       setState({ step: "sites", siteId: null, folder: null });
+    } else if (state.step === "sites" && GALLERY_HOME) {
+      window.location.href = getGalleryHomeUrl();
     } else if (state.step === "sites") {
       setState({
         step: "category",
@@ -57,6 +111,36 @@
         folder: null,
       });
     }
+  }
+
+  function getGalleryHomeUrl() {
+    if (!GALLERY_HOME) return null;
+    const base = GALLERY_HOME.split("#")[0];
+    return `${base}#heritage-collections`;
+  }
+
+  function scrollToHeritageCollections() {
+    const target = document.getElementById("heritage-collections");
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handleGalleryHomeHash() {
+    if (INITIAL_CATEGORY) return;
+    if (location.hash === "#heritage-collections") {
+      const scroll = () => scrollToHeritageCollections();
+      requestAnimationFrame(scroll);
+      setTimeout(scroll, 120);
+    }
+  }
+
+  function renderCategoryBack() {
+    if (!GALLERY_HOME || state.step === "category") return "";
+    const homeUrl = getGalleryHomeUrl();
+    return `
+      <div class="gal-category-nav">
+        <a href="${escapeHtml(homeUrl)}" class="gal-category-back">← Choose a Heritage Collection</a>
+      </div>`;
   }
 
   function renderBreadcrumb() {
@@ -83,7 +167,8 @@
       const folderLabels = {
         photos: "Photographs",
         videos: "Videos",
-        links: "External Media",
+        links: "Videos",
+        recordings: "Recordings",
         timeline: "Timeline",
       };
       parts.push('<span class="gal-crumb-sep">/</span>');
@@ -99,13 +184,18 @@
     container.querySelectorAll("[data-crumb]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const target = btn.dataset.crumb;
-        if (target === "home")
+        if (target === "home") {
+          if (GALLERY_HOME) {
+            window.location.href = getGalleryHomeUrl();
+            return;
+          }
           setState({
             step: "category",
             category: null,
             siteId: null,
             folder: null,
           });
+        }
         if (target === "category" && state.category)
           setState({ step: "sites", siteId: null, folder: null });
         if (target === "site" && state.siteId)
@@ -115,29 +205,106 @@
   }
 
   function renderCategoryView() {
-    const intangible = getCategoryStats("intangible");
-    const natural = getCategoryStats("natural");
+    function categoryCard(key, desc, image, reverse, href) {
+      const reverseClass = reverse ? " is-reverse" : "";
+      const panel = `
+          <div class="gal-category-panel">
+            <div class="gal-category-media">
+              <img class="gal-category-image" src="${escapeHtml(image)}" alt="" loading="lazy" />
+              <div class="gal-category-media-edge" aria-hidden="true"></div>
+            </div>
+            <div class="gal-category-body">
+              <h3 class="gal-category-name">${escapeHtml(CATEGORY_LABELS[key])}</h3>
+              <p class="gal-category-desc">${escapeHtml(desc)}</p>
+              <span class="gal-category-cta">Explore collection</span>
+            </div>
+          </div>`;
+
+      if (href) {
+        return `<a class="gal-category-card gal-category-card--${key}${reverseClass}" href="${escapeHtml(href)}">${panel}</a>`;
+      }
+
+      return `<button type="button" class="gal-category-card gal-category-card--${key}${reverseClass}" data-category="${key}">${panel}</button>`;
+    }
 
     return `
-      <div class="gal-view">
-        <div class="gal-category-grid">
-          <button type="button" class="gal-category-card gal-category-card--intangible" data-category="intangible">
-            <h3 class="gal-category-name">Intangible Cultural Heritage</h3>
-          </button>
-          <button type="button" class="gal-category-card gal-category-card--natural" data-category="natural">
-            <h3 class="gal-category-name">Natural Heritage</h3>
-          </button>
+      <div class="gal-view gal-view--category">
+        <div class="gal-category-stage" id="heritage-collections">
+          <div class="gal-category-intro">
+            <p class="gal-category-eyebrow">Mati Heritage Gallery</p>
+            <h2 class="gal-category-prompt">Choose a Heritage Collection</h2>
+            <p class="gal-category-hint">
+              Select <strong>Intangible Cultural Heritage</strong> or
+              <strong>Natural Heritage</strong> below to begin exploring.
+            </p>
+          </div>
+          <div class="gal-category-grid">
+            ${categoryCard(
+              "intangible",
+              "Festivals, music, and creative works passed down through generations.",
+              "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
+              false,
+              "galleryintangibleculturalheritage.html",
+            )}
+            <div class="gal-category-or" aria-hidden="true"><span>or</span></div>
+            ${categoryCard(
+              "natural",
+              "Islands, coastlines, and landscapes that define Mati's natural legacy.",
+              "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+              true,
+              "gallerynaturalheritage.html",
+            )}
+          </div>
         </div>
       </div>`;
   }
 
   function renderSitesView() {
     const sites = getSitesByCategory(state.category);
-    const label = CATEGORY_LABELS[state.category];
+    const isShowcase =
+      state.category === "intangible" || state.category === "natural";
+
+    if (isShowcase) {
+      const piles = sites
+        .map((site, index) => {
+          const order = String(index + 1).padStart(2, "0");
+          return `
+          <div
+            class="gal-pile"
+            data-site="${site.id}"
+            role="button"
+            tabindex="0"
+            style="--pile-i: ${index}"
+          >
+            <span class="gal-pile-num" aria-hidden="true">${order}</span>
+            <div class="gal-pile-stack-wrap">
+              <div class="gal-pile-stack-shadow" aria-hidden="true"></div>
+              <div class="gal-pile-stack" aria-hidden="true">
+                ${renderPilePrints(site.id, site.cover)}
+              </div>
+            </div>
+            <div class="gal-pile-caption">
+              <h3 class="gal-pile-title">${escapeHtml(site.albumName || site.name)}</h3>
+              <span class="gal-pile-cta">Open collection <span aria-hidden="true">→</span></span>
+            </div>
+          </div>`;
+        })
+        .join("");
+
+      return `
+        <div class="gal-view gal-view--sites gal-view--album">
+          <div class="gal-album-stage">
+            <p class="gal-album-hint">
+              <span class="gal-album-hint-chip">Drag prints to sift</span>
+              <span class="gal-album-hint-chip">Double-click to open</span>
+            </p>
+            <div class="gal-album-grid">${piles}</div>
+          </div>
+        </div>`;
+    }
 
     const folders = sites
       .map((site) => {
-        const stats = getSiteStats(site.id);
         return `
           <button type="button" class="gal-heritage-folder" data-site="${site.id}">
             <div class="gal-folder-visual">
@@ -145,24 +312,18 @@
               <div class="gal-folder-body">
                 <img class="gal-folder-cover" src="${escapeHtml(site.cover)}" alt="" loading="lazy" />
                 <div class="gal-folder-shade"></div>
-                <div class="gal-folder-counts">
-                  ${stats.photos ? `<span>${stats.photos} Photos</span>` : ""}
-                  ${stats.videos ? `<span>${stats.videos} Videos</span>` : ""}
-                  ${stats.links ? `<span>${stats.links} Links</span>` : ""}
-                </div>
               </div>
             </div>
-            <h3 class="gal-folder-name">${escapeHtml(site.name)}</h3>
-            <p class="gal-folder-location">${escapeHtml(site.location)}</p>
+            <div class="gal-folder-meta">
+              <h3 class="gal-folder-name">${escapeHtml(site.name)}</h3>
+              <p class="gal-folder-location">${escapeHtml(site.location)}</p>
+            </div>
           </button>`;
       })
       .join("");
 
     return `
-      <div class="gal-view">
-        <p class="gal-step-label">Step 2</p>
-        <h2 class="gal-step-title">${escapeHtml(label)}</h2>
-        <p class="gal-step-desc">Open a heritage folder to view its photographs, videos, and archives.</p>
+      <div class="gal-view gal-view--sites">
         <div class="gal-folder-grid">${folders}</div>
       </div>`;
   }
@@ -184,21 +345,30 @@
         </button>`);
     }
 
-    if (stats.videos > 0) {
+    if (stats.videos > 0 || site.category === "natural") {
       subfolders.push(`
         <button type="button" class="gal-subfolder gal-subfolder--videos" data-folder="videos">
           <span class="gal-subfolder-icon">🎬</span>
           <span class="gal-subfolder-label">Videos</span>
-          <span class="gal-subfolder-count">${stats.videos} items</span>
+          <span class="gal-subfolder-count">${stats.videos} ${stats.videos === 1 ? "item" : "items"}</span>
         </button>`);
     }
 
     if (stats.links > 0) {
       subfolders.push(`
         <button type="button" class="gal-subfolder gal-subfolder--links" data-folder="links">
-          <span class="gal-subfolder-icon">🔗</span>
-          <span class="gal-subfolder-label">External Media</span>
-          <span class="gal-subfolder-count">${stats.links} links</span>
+          <span class="gal-subfolder-icon">🎬</span>
+          <span class="gal-subfolder-label">Videos</span>
+          <span class="gal-subfolder-count">${stats.links} videos</span>
+        </button>`);
+    }
+
+    if (stats.recordings > 0) {
+      subfolders.push(`
+        <button type="button" class="gal-subfolder gal-subfolder--recordings" data-folder="recordings">
+          <span class="gal-subfolder-icon">🎵</span>
+          <span class="gal-subfolder-label">Recordings</span>
+          <span class="gal-subfolder-count">${stats.recordings} recordings</span>
         </button>`);
     }
 
@@ -212,17 +382,15 @@
     }
 
     return `
-      <div class="gal-view">
+      <div class="gal-view gal-view--site">
         <div class="gal-site-header">
           <img class="gal-site-cover" src="${escapeHtml(site.cover)}" alt="${escapeHtml(site.name)}" loading="lazy" />
           <div>
-            <p class="gal-step-label">${escapeHtml(site.categoryLabel)}</p>
             <h2 class="gal-site-name">${escapeHtml(site.name)}</h2>
             <p class="gal-site-desc">${escapeHtml(site.description)}</p>
-            <p class="gal-site-location">📍 ${escapeHtml(site.location)}</p>
+            ${site.location ? `<p class="gal-site-location">📍 ${escapeHtml(site.location)}</p>` : ""}
           </div>
         </div>
-        <p class="gal-step-label">Step 3</p>
         <h3 class="gal-step-title" style="font-size:1.5rem;margin-bottom:1.25rem;">Open a folder</h3>
         <div class="gal-subfolder-grid">${subfolders.join("")}</div>
       </div>`;
@@ -236,19 +404,20 @@
       return renderTimelineView(site);
     }
 
-    const typeMap = { photos: "photo", videos: "video", links: "link" };
+    const typeMap = { photos: "photo", videos: "video", links: "link", recordings: "audio" };
     const type = typeMap[state.folder];
     const items = getSiteMedia(site.id).filter((m) => m.type === type);
 
     const folderTitles = {
       photos: "Photographs",
       videos: "Videos",
-      links: "External Media",
+      links: "Videos",
+      recordings: "recordings",
     };
 
     if (items.length === 0) {
       return `
-        <div class="gal-view">
+        <div class="gal-view gal-view--media">
           <div class="gal-media-toolbar">
             <button type="button" class="gal-back-btn" data-back>← Back to folders</button>
           </div>
@@ -274,6 +443,14 @@
               <span class="gal-media-item-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
             </button>`;
         }
+        if (item.type === "audio") {
+          return `
+            <button type="button" class="gal-media-item gal-media-item--audio" data-index="${index}" aria-label="${escapeHtml(item.title)}">
+              <img src="${escapeHtml(site.cover)}" alt="" loading="lazy" />
+              <span class="gal-media-item-audio" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg></span>
+              <span class="gal-media-item-audio-label">${escapeHtml(item.title)}</span>
+            </button>`;
+        }
         return `
           <button type="button" class="gal-media-item" data-index="${index}" aria-label="${escapeHtml(item.title)}">
             <div class="gal-link-card">
@@ -285,12 +462,11 @@
       .join("");
 
     return `
-      <div class="gal-view">
+      <div class="gal-view gal-view--media">
         <div class="gal-media-toolbar">
           <button type="button" class="gal-back-btn" data-back>← Back to folders</button>
           <span class="gal-media-count">${items.length} ${folderTitles[state.folder]?.toLowerCase() || "items"}</span>
         </div>
-        <h3 class="gal-step-title" style="font-size:1.5rem;margin-bottom:1rem;">${escapeHtml(site.name)} — ${folderTitles[state.folder]}</h3>
         <div class="gal-media-grid">${grid}</div>
       </div>`;
   }
@@ -299,43 +475,168 @@
     const festival = getFestivalForSite(site.id);
     if (!festival) return "";
 
-    const highlights = festival.highlights
-      .map(
-        (h) =>
-          `<div class="gal-timeline-highlight"><strong>${escapeHtml(h.title)}</strong><span>${escapeHtml(h.text)}</span></div>`,
-      )
+    const entries = festival.timeline
+      .map((entry, index) => {
+        const side = index % 2 === 0 ? "left" : "right";
+        const yearClass =
+          entry.period.length > 8 || /[a-z]/i.test(entry.period)
+            ? " gal-timeline-chapter-year--long"
+            : "";
+
+        const visual = entry.image
+          ? `
+          <figure class="gal-timeline-chapter-figure">
+            <img src="${escapeHtml(entry.image)}" alt="${escapeHtml(entry.imageAlt || entry.title)}" loading="lazy" decoding="async" />
+            ${entry.imageCaption ? `<figcaption>${escapeHtml(entry.imageCaption)}</figcaption>` : ""}
+          </figure>`
+          : `<div class="gal-timeline-chapter-placeholder" aria-hidden="true"></div>`;
+
+        return `
+        <article class="gal-timeline-chapter gal-timeline-chapter--${side}" id="timeline-${index}" style="--entry-i: ${index}">
+          <div class="gal-timeline-chapter-row">
+            <div class="gal-timeline-chapter-copy">
+              <p class="gal-timeline-chapter-year${yearClass}">${escapeHtml(entry.period)}</p>
+              <h3 class="gal-timeline-chapter-title">${escapeHtml(entry.title)}</h3>
+              <p class="gal-timeline-chapter-text">${escapeHtml(entry.text)}</p>
+            </div>
+            <div class="gal-timeline-chapter-axis" aria-hidden="true">
+              <span class="gal-timeline-node"></span>
+            </div>
+            <div class="gal-timeline-chapter-visual">
+              ${visual}
+            </div>
+          </div>
+        </article>`;
+      })
       .join("");
 
-    const timeline = festival.timeline
+    const highlights = festival.highlights
       .map(
-        (t) => `
-        <article class="gal-timeline-row">
-          <time>${escapeHtml(t.period)}</time>
-          <h4>${escapeHtml(t.title)}</h4>
-          <p>${escapeHtml(t.text)}</p>
+        (item) => `
+        <article class="gal-timeline-highlight-card">
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.text)}</p>
         </article>`,
       )
       .join("");
 
     const refs = festival.references
       .map(
-        (r) =>
-          `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.label)}</a>`,
+        (ref) =>
+          `<a href="${escapeHtml(ref.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ref.label)}</a>`,
       )
       .join("");
 
     return `
-      <div class="gal-view">
+      <div class="gal-view gal-view--timeline" style="--timeline-accent: ${festival.accent}">
         <div class="gal-media-toolbar">
           <button type="button" class="gal-back-btn" data-back>← Back to folders</button>
         </div>
-        <h3 class="gal-step-title" style="font-size:1.5rem;margin-bottom:0.5rem;">${escapeHtml(festival.name)}</h3>
-        <p class="gal-step-desc" style="margin-bottom:1.5rem;">Culmination: ${escapeHtml(festival.culmination)} · ${escapeHtml(festival.location)}</p>
-        <div class="gal-timeline-highlights">${highlights}</div>
-        <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin-bottom:1rem;">Historical Timeline</h4>
-        <div class="gal-timeline-compact">${timeline}</div>
-        ${refs ? `<div class="gal-ref-links" style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.5rem;">${refs}</div>` : ""}
+
+        <header class="gal-timeline-hero" id="gal-timeline-top">
+          <p class="gal-timeline-eyebrow">Festival Timeline</p>
+          <h2 class="gal-timeline-hero-title">A Walk through Time</h2>
+          <p class="gal-timeline-hero-name">${escapeHtml(festival.name)}</p>
+          <dl class="gal-timeline-meta">
+            <div><dt>Culmination</dt><dd>${escapeHtml(festival.culmination)}</dd></div>
+            <div><dt>Theme</dt><dd>${escapeHtml(festival.theme)}</dd></div>
+          </dl>
+          <p class="gal-timeline-etymology">${escapeHtml(festival.etymology)}</p>
+        </header>
+
+        <section class="gal-timeline-walk" aria-label="Historical timeline">
+          ${entries}
+        </section>
+
+        <section class="gal-timeline-highlights-section" aria-label="Festival highlights">
+          <h3 class="gal-timeline-section-title">Festival Highlights</h3>
+          <div class="gal-timeline-highlights-grid">${highlights}</div>
+        </section>
+
+        ${refs ? `<nav class="gal-timeline-refs" aria-label="References">${refs}</nav>` : ""}
       </div>`;
+  }
+
+  function bindPileInteraction(container) {
+    container.querySelectorAll(".gal-pile").forEach((pile) => {
+      const siteId = pile.dataset.site;
+
+      pile.querySelectorAll(".gal-print").forEach((print) => {
+        let startX = 0;
+        let startY = 0;
+        let baseX = 0;
+        let baseY = 0;
+        let moved = false;
+
+        print.addEventListener("pointerdown", (event) => {
+          event.stopPropagation();
+          moved = false;
+          startX = event.clientX;
+          startY = event.clientY;
+          print.setPointerCapture(event.pointerId);
+          print.classList.add("is-dragging");
+          pile.classList.add("is-sifting");
+        });
+
+        print.addEventListener("pointermove", (event) => {
+          if (!print.hasPointerCapture(event.pointerId)) return;
+          const dx = event.clientX - startX;
+          const dy = event.clientY - startY;
+          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+          print.style.setProperty("--print-dx", `${baseX + dx}px`);
+          print.style.setProperty("--print-dy", `${baseY + dy}px`);
+          print.style.setProperty(
+            "--print-drag-rot",
+            `${Math.max(-10, Math.min(10, dx * 0.05))}deg`,
+          );
+        });
+
+        const endDrag = (event) => {
+          if (!print.hasPointerCapture(event.pointerId)) return;
+          baseX += event.clientX - startX;
+          baseY += event.clientY - startY;
+          print.style.setProperty("--print-dx", `${baseX}px`);
+          print.style.setProperty("--print-dy", `${baseY}px`);
+          print.style.setProperty("--print-drag-rot", "0deg");
+          print.releasePointerCapture(event.pointerId);
+          print.classList.remove("is-dragging");
+          pile.classList.remove("is-sifting");
+        };
+
+        print.addEventListener("pointerup", endDrag);
+        print.addEventListener("pointercancel", endDrag);
+
+        print.addEventListener("dblclick", (event) => {
+          event.stopPropagation();
+          goSite(siteId);
+        });
+
+        print.addEventListener("click", (event) => {
+          if (moved) event.stopPropagation();
+        });
+      });
+
+      pile.querySelector(".gal-pile-title")?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        goSite(siteId);
+      });
+
+      pile.querySelector(".gal-pile-cta")?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        goSite(siteId);
+      });
+
+      pile.addEventListener("dblclick", (event) => {
+        if (!event.target.closest(".gal-print")) goSite(siteId);
+      });
+
+      pile.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          goSite(siteId);
+        }
+      });
+    });
   }
 
   function bindViewEvents(container) {
@@ -343,9 +644,11 @@
       btn.addEventListener("click", () => goCategory(btn.dataset.category));
     });
 
-    container.querySelectorAll("[data-site]").forEach((btn) => {
+    container.querySelectorAll("[data-site]:not(.gal-pile)").forEach((btn) => {
       btn.addEventListener("click", () => goSite(btn.dataset.site));
     });
+
+    bindPileInteraction(container);
 
     container.querySelectorAll("[data-folder]").forEach((btn) => {
       btn.addEventListener("click", () => goFolder(btn.dataset.folder));
@@ -365,7 +668,7 @@
   }
 
   function openMediaItem(index) {
-    const typeMap = { photos: "photo", videos: "video", links: "link" };
+    const typeMap = { photos: "photo", videos: "video", links: "link", recordings: "audio" };
     const type = typeMap[state.folder];
     const items = getSiteMedia(state.siteId).filter((m) => m.type === type);
     const item = items[index];
@@ -377,7 +680,7 @@
     }
 
     state.lightboxItems = items.filter(
-      (i) => i.type === "photo" || i.type === "video",
+      (i) => i.type === "photo" || i.type === "video" || i.type === "audio",
     );
     state.lightboxIndex = state.lightboxItems.findIndex(
       (i) => i.id === item.id,
@@ -395,6 +698,8 @@
 
     if (item.type === "photo") {
       media.innerHTML = `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.title)}" />`;
+    } else if (item.type === "audio") {
+      media.innerHTML = `<audio src="${escapeHtml(item.src)}" controls autoplay></audio>`;
     } else {
       media.innerHTML = `<video src="${escapeHtml(item.src)}" controls autoplay playsinline></video>`;
     }
@@ -410,6 +715,7 @@
     const media = $("galLightboxMedia");
     if (media) {
       media.querySelector("video")?.pause();
+      media.querySelector("audio")?.pause();
       media.innerHTML = "";
     }
     box?.classList.remove("active");
@@ -433,7 +739,10 @@
     explorer.dataset.view = state.step;
 
     let html = "";
-    if (state.step !== "category") html += renderBreadcrumb();
+    if (state.step !== "category") {
+      html += renderCategoryBack();
+      html += renderBreadcrumb();
+    }
     if (state.step === "category") html += renderCategoryView();
     else if (state.step === "sites") html += renderSitesView();
     else if (state.step === "site") html += renderSiteView();
@@ -562,9 +871,114 @@
     }
   }
 
+  function revealExplorer() {
+    const explorer = document.getElementById("galExplorer");
+    if (
+      !explorer ||
+      !document.querySelector(".gal-hero") ||
+      explorer.classList.contains("gal-explorer--unveiled")
+    ) {
+      return;
+    }
+
+    explorer.classList.add("gal-explorer--unveiled");
+
+    requestAnimationFrame(() => {
+      explorer.querySelectorAll(".gal-category-card").forEach((el, i) => {
+        el.style.setProperty("--gal-i", i + 1);
+        el.classList.add("gal-reveal");
+      });
+    });
+  }
+
+  function initHeroReveal() {
+    const hero = document.querySelector(".gal-hero");
+    if (!hero) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      hero.classList.remove("gal-hero--loading");
+      hero.classList.add("gal-hero--revealed");
+      revealExplorer();
+      return;
+    }
+
+    const stage = hero.querySelector(".gal-hero-stage");
+    const images = Array.from(hero.querySelectorAll(".gal-hero-stage img"));
+    const waitForImage = (img) =>
+      new Promise((resolve) => {
+        const finish = async () => {
+          if (typeof img.decode === "function") {
+            try {
+              await img.decode();
+            } catch (_err) {
+              /* decoded or unsupported */
+            }
+          }
+          resolve();
+        };
+
+        if (img.complete && img.naturalWidth > 0) {
+          finish();
+          return;
+        }
+
+        const done = () => {
+          img.removeEventListener("load", done);
+          img.removeEventListener("error", done);
+          finish();
+        };
+        img.addEventListener("load", done);
+        img.addEventListener("error", done);
+      });
+
+    const revealHero = () => {
+      if (!hero.classList.contains("gal-hero--loading")) return;
+
+      images.forEach((img) => {
+        void img.offsetWidth;
+      });
+      void hero.offsetWidth;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            hero.classList.remove("gal-hero--loading");
+            hero.classList.add("gal-hero--revealed");
+
+            if (stage) {
+              stage.addEventListener(
+                "animationend",
+                (event) => {
+                  if (event.animationName === "galHeroStageReveal") {
+                    revealExplorer();
+                  }
+                },
+                { once: true },
+              );
+            } else {
+              setTimeout(revealExplorer, 1700);
+            }
+          }, 60);
+        });
+      });
+    };
+
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 120));
+    const imagesReady = Promise.all(images.map(waitForImage));
+
+    Promise.all([minDelay, imagesReady]).then(revealHero);
+
+    setTimeout(revealHero, 6000);
+  }
+
   function init() {
+    if (document.querySelector(".gal-hero")) {
+      window.scrollTo(0, 0);
+    }
     initLightbox();
+    if (document.querySelector(".gal-hero")) initHeroReveal();
     render();
+    handleGalleryHomeHash();
     loadHeaderAndFooter();
   }
 

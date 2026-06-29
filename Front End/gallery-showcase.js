@@ -12,7 +12,7 @@
     const observer = new MutationObserver(() => {
       requestAnimationFrame(() => {
         panel.querySelectorAll(
-          ".gal-heritage-folder, .gal-subfolder, .gal-media-item, .gal-category-card, .gal-timeline-row, .gal-timeline-highlight",
+          ".gal-heritage-folder, .gal-subfolder, .gal-media-item, .gal-category-card, .gal-timeline-chapter, .gal-timeline-highlight-card",
         ).forEach((el, i) => {
           el.style.setProperty("--gal-i", i);
           el.classList.remove("gal-reveal");
@@ -27,22 +27,23 @@
 
   function initHeroParallax() {
     const hero = document.querySelector(".gal-hero");
-    const frames = document.querySelectorAll(".gal-float-frame");
-    if (!hero || !frames.length) return;
+    const layers = hero?.querySelectorAll("[data-depth]");
+    if (!hero || !layers?.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     hero.addEventListener("mousemove", (e) => {
       const rect = hero.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      frames.forEach((frame, i) => {
-        const depth = (i + 1) * 8;
-        frame.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+      layers.forEach((layer) => {
+        const depth = Number(layer.dataset.depth) || 1;
+        layer.style.transform = `translate(${x * depth * 5}px, ${y * depth * 4}px)`;
       });
     });
 
     hero.addEventListener("mouseleave", () => {
-      frames.forEach((frame) => {
-        frame.style.transform = "";
+      layers.forEach((layer) => {
+        layer.style.transform = "";
       });
     });
   }

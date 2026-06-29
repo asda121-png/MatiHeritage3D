@@ -1,6 +1,7 @@
 # GitHub blocks files over 100 MB — never commit these
 *.mov
 *.MOV
+Front End/data/Intangible Cultural Heritage/Samboukan & Pujada Festival Timeline.pdf
 
 # macOS / Windows junk
 .DS_Store
