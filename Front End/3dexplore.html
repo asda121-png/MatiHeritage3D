@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="gallery-page.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -391,11 +392,174 @@
         display: none !important;
       }
 
-      .explore3d-details-pane .explore3d-photo-gallery {
+      .explore3d-details-section .explore3d-photo-gallery {
         padding: 0;
         border: none;
         box-shadow: none;
         background: transparent;
+      }
+
+      .explore3d-media-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 120;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(0.75rem, 2.5vw, 1.75rem);
+      }
+
+      .explore3d-media-overlay[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-media-overlay__backdrop {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        background: rgba(15, 23, 42, 0.66);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        animation: explore3d-overlay-fade 0.32s ease both;
+      }
+
+      .explore3d-media-overlay__sheet {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: min(1120px, 100%);
+        max-height: calc(100vh - clamp(1.5rem, 4vw, 3rem));
+        border-radius: 1.25rem;
+        background: #fff;
+        border: 1px solid rgba(4, 120, 87, 0.12);
+        box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+        overflow: hidden;
+        animation: explore3d-overlay-rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .explore3d-media-overlay.is-map .explore3d-media-overlay__sheet {
+        border-color: rgba(2, 132, 199, 0.22);
+      }
+
+      .explore3d-media-overlay.is-photos .explore3d-media-overlay__sheet {
+        border-color: rgba(4, 120, 87, 0.18);
+        width: min(1180px, 100%);
+      }
+
+      .explore3d-media-overlay__panel--photos .gal-media-grid {
+        width: 100%;
+      }
+
+      @keyframes explore3d-overlay-fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes explore3d-overlay-rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .explore3d-media-overlay__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-shrink: 0;
+        padding: 0.95rem 1.2rem;
+        background: linear-gradient(90deg, rgba(236, 253, 245, 0.92), rgba(255, 255, 255, 0.98));
+        border-bottom: 1px solid rgba(4, 120, 87, 0.08);
+      }
+
+      .explore3d-media-overlay.is-map .explore3d-media-overlay__bar {
+        background: linear-gradient(90deg, rgba(224, 242, 254, 0.95), rgba(255, 255, 255, 0.98));
+        border-bottom-color: rgba(2, 132, 199, 0.1);
+      }
+
+      .explore3d-media-overlay__label {
+        margin: 0;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+      }
+
+      .explore3d-media-overlay.is-map .explore3d-media-overlay__label {
+        color: #0369a1;
+      }
+
+      .explore3d-media-overlay__site {
+        margin: 0.2rem 0 0;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #334155;
+      }
+
+      .explore3d-media-overlay__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        padding: 0;
+        border: 1px solid rgba(4, 120, 87, 0.14);
+        border-radius: 9999px;
+        background: #fff;
+        font-size: 1.35rem;
+        line-height: 1;
+        color: #64748b;
+        cursor: pointer;
+        transition:
+          color 0.2s ease,
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .explore3d-media-overlay__close:hover {
+        color: var(--forest-dark);
+        border-color: rgba(4, 120, 87, 0.28);
+        background: #f8fafc;
+      }
+
+      .explore3d-media-overlay__content {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: clamp(1rem, 2.2vw, 1.5rem);
+      }
+
+      .explore3d-media-overlay__panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        min-height: 0;
+      }
+
+      .explore3d-media-overlay__panel[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-media-overlay .explore3d-details-map-card img {
+        max-height: min(72vh, 720px);
+      }
+
+      body.explore3d-media-open {
+        overflow: hidden;
       }
 
       .explore3d-site-map__label {
@@ -509,14 +673,6 @@
 
       .explore3d-details-tab[hidden] {
         display: none !important;
-      }
-
-      .explore3d-details-pane {
-        display: none;
-      }
-
-      .explore3d-details-pane.is-active {
-        display: block;
       }
 
       .explore3d-details-photo-stage {
@@ -667,6 +823,26 @@
       @keyframes explore3d-spin {
         to {
           transform: rotate(360deg);
+        }
+      }
+
+      @keyframes heritage-marker-bounce {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(0, -8px, 0);
+        }
+      }
+
+      @keyframes heritage-marker-bounce-active {
+        0%,
+        100% {
+          transform: scale(1.08) translate3d(0, 0, 0);
+        }
+        50% {
+          transform: scale(1.08) translate3d(0, -8px, 0);
         }
       }
 
@@ -1009,9 +1185,57 @@
 
       /* ── Mati City Map (built heritage) ── */
       .map-section {
+        position: relative;
         padding: 0;
         margin: 0;
-        background: var(--bg-site);
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          #f4f9ff 0%,
+          var(--ice) 42%,
+          #e8f3fb 100%
+        );
+      }
+
+      .map-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse 100% 75% at 50% -25%,
+            rgba(255, 255, 255, 0.95) 0%,
+            transparent 58%
+          ),
+          radial-gradient(
+            ellipse 50% 45% at 100% 55%,
+            rgba(56, 189, 248, 0.1) 0%,
+            transparent 52%
+          ),
+          radial-gradient(
+            ellipse 45% 40% at 0% 85%,
+            rgba(2, 132, 199, 0.07) 0%,
+            transparent 50%
+          );
+      }
+
+      .map-section::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.4;
+        background-image: radial-gradient(
+          rgba(2, 132, 199, 0.07) 0.65px,
+          transparent 0.65px
+        );
+        background-size: 22px 22px;
+        mask-image: radial-gradient(
+          ellipse 88% 78% at 50% 48%,
+          #000 35%,
+          transparent 80%
+        );
       }
 
       .map-section-first {
@@ -1029,10 +1253,12 @@
         height: 100%;
         z-index: 1;
         font-family: "Source Sans 3", sans-serif;
-        background: var(--bg-site);
+        background: #eef6fc;
       }
 
       .map-section__inner {
+        position: relative;
+        z-index: 1;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -1040,7 +1266,7 @@
         width: 100%;
         margin: 0 auto;
         min-height: calc(100vh - var(--header-h, 5.625rem));
-        padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1rem, 3vw, 2rem);
+        padding: clamp(1.25rem, 3vw, 2rem) clamp(1.15rem, 3.5vw, 2.25rem);
         box-sizing: border-box;
       }
 
@@ -1050,10 +1276,14 @@
         display: flex;
         flex-direction: column;
         min-height: 0;
-        border-radius: 1.35rem;
+        border-radius: 1.5rem;
         overflow: hidden;
-        border: 1px solid rgba(4, 120, 87, 0.1);
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+        background: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.98);
+        box-shadow:
+          0 36px 72px -20px rgba(2, 132, 199, 0.2),
+          0 12px 32px -8px rgba(15, 23, 42, 0.07),
+          0 0 0 1px rgba(2, 132, 199, 0.08);
       }
 
       .map-intro-overlay {
@@ -1067,9 +1297,9 @@
         pointer-events: none;
         background: linear-gradient(
           0deg,
-          rgba(12, 26, 20, 0.28) 0%,
-          rgba(12, 26, 20, 0.08) 28%,
-          transparent 55%
+          rgba(15, 23, 42, 0.18) 0%,
+          rgba(15, 23, 42, 0.04) 22%,
+          transparent 46%
         );
         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1088,14 +1318,16 @@
       .map-intro-overlay__content {
         position: relative;
         text-align: left;
-        padding: 1.1rem 1.25rem;
+        padding: 1.15rem 1.3rem 1.15rem 1.35rem;
         max-width: min(18rem, calc(100% - 1rem));
         background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 0.85rem;
-        border: 1px solid rgba(255, 255, 255, 0.65);
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.92);
+        box-shadow:
+          0 20px 48px rgba(2, 132, 199, 0.1),
+          0 0 0 1px rgba(2, 132, 199, 0.06);
         transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           opacity 0.5s ease;
       }
@@ -1104,11 +1336,11 @@
         content: "";
         position: absolute;
         left: 0;
-        top: 0.85rem;
-        bottom: 0.85rem;
+        top: 0.9rem;
+        bottom: 0.9rem;
         width: 3px;
         border-radius: 0 2px 2px 0;
-        background: linear-gradient(180deg, var(--forest), var(--amber-dark));
+        background: linear-gradient(180deg, var(--sky), var(--sky-light));
       }
 
       .map-intro-overlay__eyebrow {
@@ -1119,7 +1351,7 @@
         font-weight: 700;
         letter-spacing: 0.22em;
         text-transform: uppercase;
-        color: var(--forest-dark);
+        color: #0369a1;
         margin-bottom: 0.55rem;
         padding-left: 0.15rem;
       }
@@ -1127,7 +1359,7 @@
       .map-intro-overlay__eyebrow-line {
         width: 1.5rem;
         height: 2px;
-        background: linear-gradient(90deg, var(--forest), var(--amber));
+        background: linear-gradient(90deg, var(--sky), var(--sky-light));
         flex-shrink: 0;
       }
 
@@ -1153,7 +1385,7 @@
         font-weight: 600;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--forest-dark);
+        color: #0284c7;
         margin-top: 0.3rem;
       }
 
@@ -1176,34 +1408,70 @@
       }
 
       .heritage-photo-marker {
+        position: relative;
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        border: 3px solid var(--forest);
+        border: 2px solid #fff;
         box-shadow:
-          0 6px 20px rgba(15, 23, 42, 0.35),
-          0 0 0 1px rgba(15, 23, 42, 0.08);
+          0 4px 14px rgba(2, 132, 199, 0.28),
+          0 0 0 2px var(--forest);
         overflow: hidden;
-        background: #ffffff;
+        background: #e2e8f0;
+        animation: heritage-marker-bounce 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95)
+          infinite;
+        will-change: transform;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
       }
 
       .heritage-photo-marker.is-active {
+        animation: heritage-marker-bounce-active 2.2s
+          cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         box-shadow:
-          0 10px 28px rgba(15, 23, 42, 0.4),
-          0 0 0 3px rgba(245, 158, 11, 0.45);
-        transform: scale(1.08);
+          0 8px 24px rgba(2, 132, 199, 0.35),
+          0 0 0 2px var(--forest),
+          0 0 0 4px rgba(56, 189, 248, 0.45);
       }
 
-      .heritage-photo-marker img {
-        width: 100%;
-        height: 100%;
+      @media (prefers-reduced-motion: reduce) {
+        .heritage-photo-marker,
+        .heritage-photo-marker.is-active {
+          animation: none;
+        }
+      }
+
+      .heritage-marker-wrap .heritage-photo-marker img {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
         object-fit: cover;
+        object-position: center;
         display: block;
       }
 
+      .heritage-photo-marker--placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+        color: var(--forest);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .heritage-photo-marker--placeholder span {
+        line-height: 1;
+      }
+
       .heritage-marker-wrap:hover .heritage-photo-marker {
-        transform: scale(1.12);
+        animation-play-state: paused;
+        transform: scale(1.12) translate3d(0, 0, 0);
       }
 
       .map-popup-photo {
@@ -1521,7 +1789,7 @@
                 <circle cx="12" cy="11" r="2.5"/>
               </svg>
             </span>
-            <span class="explore3d-idle__eyebrow">Built Heritage Archive</span>
+            <span class="explore3d-idle__eyebrow">Built Heritage</span>
             <h2 class="explore3d-idle__title display-font">Select a site on the map</h2>
             <p class="explore3d-idle__desc">
               Tap any built heritage marker above to load its description, specifications, and 3D model below.
@@ -1538,16 +1806,14 @@
               <h2 class="explore3d-stage-head__title display-font" id="stage-title"></h2>
               <div
                 class="explore3d-stage-head__actions"
-                role="tablist"
-                aria-label="Site media"
+                role="navigation"
+                aria-label="Jump to site sections"
               >
                 <button
                   type="button"
                   class="explore3d-details-tab"
                   data-detail-view="map"
-                  role="tab"
                   aria-selected="false"
-                  aria-controls="detail-pane-map"
                   id="detail-tab-map"
                   hidden
                 >
@@ -1557,9 +1823,7 @@
                   type="button"
                   class="explore3d-details-tab"
                   data-detail-view="photos"
-                  role="tab"
                   aria-selected="false"
-                  aria-controls="detail-pane-photos"
                   id="detail-tab-photos"
                   hidden
                 >
@@ -1612,65 +1876,15 @@
             </div>
 
             <aside class="explore3d-panel explore3d-details" aria-label="Site information">
-              <div class="explore3d-details-body">
-                <div
-                  class="explore3d-details-pane is-active"
-                  id="detail-pane-about"
-                  data-detail-pane="about"
-                  role="tabpanel"
-                  aria-labelledby="stage-title"
-                >
+              <div class="explore3d-details-body" id="explore-details-body">
+                <section class="explore3d-details-section" id="detail-section-about">
                   <p class="explore3d-details-label">About this site</p>
                   <h3 class="explore3d-details-title display-font" id="detail-title"></h3>
                   <p class="explore3d-details-desc" id="detail-desc"></p>
                   <p class="explore3d-specs-heading">Site details</p>
                   <ul class="explore3d-specs" id="detail-specs"></ul>
                   <ul class="explore3d-facts" id="detail-facts"></ul>
-                </div>
-
-                <div
-                  class="explore3d-details-pane"
-                  id="detail-pane-map"
-                  data-detail-pane="map"
-                  role="tabpanel"
-                  aria-labelledby="detail-tab-map"
-                  hidden
-                >
-                  <p class="explore3d-photo-gallery__label explore3d-site-map__label">Site Map</p>
-                  <div class="explore3d-site-map" id="explore-site-map" hidden>
-                    <button type="button" class="explore3d-details-map-card" id="explore-site-map-btn">
-                      <img id="explore-site-map-img" src="" alt="" loading="lazy" decoding="async" />
-                    </button>
-                  </div>
-                  <p class="explore3d-details-empty" id="detail-map-empty" hidden>
-                    No site map on file for this location.
-                  </p>
-                </div>
-
-                <div
-                  class="explore3d-details-pane"
-                  id="detail-pane-photos"
-                  data-detail-pane="photos"
-                  role="tabpanel"
-                  aria-labelledby="detail-tab-photos"
-                  hidden
-                >
-                  <p class="explore3d-photo-gallery__label">Photographs</p>
-                  <button type="button" class="explore3d-details-photo-stage" id="detail-photo-main-btn" hidden>
-                    <img id="detail-photo-main" src="" alt="" loading="lazy" decoding="async" />
-                  </button>
-                  <div class="explore3d-photo-gallery" id="explore-photo-gallery" hidden>
-                    <div
-                      class="explore3d-photo-gallery__track"
-                      id="explore-photo-track"
-                      role="list"
-                      aria-label="Built heritage photographs"
-                    ></div>
-                  </div>
-                  <p class="explore3d-details-empty" id="detail-photos-empty" hidden>
-                    No photographs on file for this site yet.
-                  </p>
-                </div>
+                </section>
               </div>
               <div class="explore3d-details-foot">
                 <button type="button" class="explore3d-view-btn" id="view-heritage-btn">
@@ -1685,6 +1899,85 @@
         </div>
       </div>
     </main>
+
+    <div
+      class="explore3d-media-overlay"
+      id="explore-media-showcase"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="explore-media-showcase-label"
+    >
+      <button
+        type="button"
+        class="explore3d-media-overlay__backdrop"
+        id="explore-media-showcase-backdrop"
+        aria-label="Close overlay"
+      ></button>
+      <div class="explore3d-media-overlay__sheet">
+        <div class="explore3d-media-overlay__bar">
+          <div>
+            <p class="explore3d-media-overlay__label" id="explore-media-showcase-label">Site Map</p>
+            <p class="explore3d-media-overlay__site" id="explore-media-showcase-site"></p>
+          </div>
+          <button
+            type="button"
+            class="explore3d-media-overlay__close"
+            id="explore-media-showcase-close"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="explore3d-media-overlay__content">
+          <div class="explore3d-media-overlay__panel" id="explore-media-map-panel" hidden>
+            <div class="explore3d-site-map" id="explore-site-map" hidden>
+              <button type="button" class="explore3d-details-map-card" id="explore-site-map-btn">
+                <img id="explore-site-map-img" src="" alt="" loading="lazy" decoding="async" />
+              </button>
+            </div>
+            <p class="explore3d-details-empty" id="detail-map-empty" hidden>
+              No site map on file for this location.
+            </p>
+          </div>
+          <div
+            class="explore3d-media-overlay__panel explore3d-media-overlay__panel--photos"
+            id="explore-media-photos-panel"
+            hidden
+          >
+            <div class="gal-media-grid" id="explore-photo-grid" hidden></div>
+            <p class="explore3d-details-empty" id="detail-photos-empty" hidden>
+              No photographs on file for this site yet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-label="Photograph viewer">
+      <div class="gal-lightbox-backdrop" aria-hidden="true"></div>
+      <button type="button" class="gal-lightbox-close" id="galLightboxClose" aria-label="Close">&times;</button>
+      <button type="button" class="gal-lightbox-nav prev" id="galLightboxPrev" aria-label="Previous photograph">
+        <span class="gal-lightbox-nav__icon" aria-hidden="true">&lsaquo;</span>
+        <span class="gal-lightbox-nav__label">Previous</span>
+      </button>
+      <button type="button" class="gal-lightbox-nav next" id="galLightboxNext" aria-label="Next photograph">
+        <span class="gal-lightbox-nav__label">Next</span>
+        <span class="gal-lightbox-nav__icon" aria-hidden="true">&rsaquo;</span>
+      </button>
+      <div class="gal-lightbox-inner">
+        <div class="gal-lightbox-stage">
+          <div class="gal-lightbox-frame">
+            <div class="gal-lightbox-media" id="galLightboxMedia"></div>
+          </div>
+        </div>
+        <div class="gal-lightbox-caption">
+          <h3 id="galLightboxTitle"></h3>
+          <p id="galLightboxMeta"></p>
+          <div class="gal-lightbox-citation" id="galLightboxCitation" hidden></div>
+        </div>
+      </div>
+    </div>
 
     <div
       id="heritage-fullscreen"
@@ -1743,63 +2036,100 @@
     <script>
       const BH = "data/Built Heritage";
 
+      function formatLciCoordinate(raw, isLatitude) {
+        if (!raw) return "";
+        const text = String(raw).trim();
+        if (/^-?\d+(\.\d+)?$/.test(text)) {
+          const dec = Math.abs(parseFloat(text));
+          const hemi = isLatitude
+            ? parseFloat(text) < 0 ? "S" : "N"
+            : parseFloat(text) < 0 ? "W" : "E";
+          const degrees = Math.floor(dec);
+          const minutesFloat = (dec - degrees) * 60;
+          const minutes = Math.floor(minutesFloat);
+          const seconds = ((minutesFloat - minutes) * 60)
+            .toFixed(4)
+            .replace(/\.?0+$/, "");
+          return `${degrees}\u00b0 ${minutes}\u2032 ${seconds}\u2033 ${hemi}`;
+        }
+        return text
+          .replace(/\(Latitude\)\s*/gi, "")
+          .replace(/\(Longitude\)\s*/gi, "")
+          .trim()
+          .replace(/''/g, "\u2033")
+          .replace(/'/g, "\u2032")
+          .replace(/"/g, "\u2033");
+      }
+
+      function heritageSpecs(name, barangay, category, longitudeRaw, latitudeRaw) {
+        const specs = [
+          { key: "Model", val: name },
+          { key: "Barangay", val: barangay },
+          { key: "Category", val: category },
+        ];
+        const longitude = formatLciCoordinate(longitudeRaw, false);
+        const latitude = formatLciCoordinate(latitudeRaw, true);
+        if (longitude) specs.push({ key: "Longitude", val: longitude });
+        if (latitude) specs.push({ key: "Latitude", val: latitude });
+        return specs;
+      }
+
       const HERITAGE_3D_SITES = [
         {
-          id: "pylon",
-          name: "Pylon Monument",
+          id: "centennial",
+          name: "Centennial Clock and Pathway of Leaders",
           barangay: "Central",
           barangayKey: "central",
-          lat: 6.952258,
-          lng: 126.216889,
+          lat: 6.9521319,
+          lng: 126.2167824,
           official: true,
-          modelSrc: `${BH}/Pylon Monument/Pylon.glb`,
-          image: `${BH}/Pylon Monument/Photographs/Old/Pylon.jpg`,
+          image: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
           photos: [
-            `${BH}/Pylon Monument/Photographs/Old/Pylon.jpg`,
-            `${BH}/Pylon Monument/Photographs/New/J6000x4000-00255.jpg`,
-            `${BH}/Pylon Monument/Photographs/New/2020-05-07 19-20.jpg`,
-            `${BH}/Pylon Monument/Photographs/Old/J1600x1200-00287.jpg`,
-            `${BH}/Pylon Monument/Photographs/New/1000068055.jpg`,
-            `${BH}/Pylon Monument/Photographs/Old/J380x566-00301.jpg`,
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/J1728x1296-00192.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00290.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/2008-12-08 22-44.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J2000x1333-00244.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00291.jpg",
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1200x675-00299.jpg",
           ],
-          map: `${BH}/Pylon Monument/Map/map_pylon.jpg`,
-          available: true,
-          desc: "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \u201cPoint Zero\u201d geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere\u2014crafted from recycled San Miguel Beer bottles\u2014and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city\u2019s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
-          specs: [
-            { key: "Model", val: "Pylon Monument" },
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Monument" },
-            { key: "Longitude", val: "126\u00b0 13\u2032 0.8004\u2033 E" },
-            { key: "Latitude", val: "6\u00b0 57\u2032 8.1288\u2033 N" },
-          ],
+          map: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg",
+          available: false,
+          desc: "The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year \"1903\" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city's historical journey, preserved in excellent condition for the inspiration and education of its citizens.",
+          specs: heritageSpecs(
+            "Centennial Clock and Pathway of Leaders",
+            "Central",
+            "Sites/Park",
+            "126.2167824",
+            "6.9521319",
+          ),
           facts: [],
         },
         {
-          id: "centennial",
-          name: "Centennial Clock & Pathway of Leaders",
+          id: "city-hall",
+          name: "City Hall",
           barangay: "Central",
           barangayKey: "central",
-          lat: 6.94429,
-          lng: 126.23609,
+          lat: 6.9519495,
+          lng: 126.2162107,
           official: true,
-          image:
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg`,
+          image: "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
           photos: [
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg`,
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg`,
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00290.jpg`,
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/2008-12-08 22-44.jpg`,
-            `${BH}/Centennial Clock and Pathway of Leaders/Photographs/Old/J2000x1333-00244.jpg`,
+            "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
+            "data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg",
+            "data/Built Heritage/City Hall/Photographs/Old/2008-10-07 08-37.jpg",
           ],
-          map: `${BH}/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg`,
           available: false,
-          desc: "Centennial Park and Pathway of Leaders in the poblacion — a civic space honoring Mati\u2019s leaders and history.",
-          specs: [
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Official LGU cultural property", "Poblacion landmark"],
+          desc: "The City Hall of Mati is the seat of the City Government of Mati, located along Nazareno Street in Barangay Central, Davao Oriental. As the municipal administrative center, it houses the offices responsible for local governance, public service, and community development. The building and its grounds form part of the city\u2019s civic core, together with the Centennial Park and Pathway of Leaders, serving as a focal point for municipal affairs and heritage in the poblacion.",
+          specs: heritageSpecs(
+            "City Hall",
+            "Central",
+            "Government Structure",
+            "126.2162107",
+            "6.9519495",
+          ),
+          facts: [],
         },
         {
           id: "mfgr",
@@ -1809,87 +2139,20 @@
           lat: 6.949853,
           lng: 126.216161,
           official: true,
-          image: `${BH}/MFGR Park and Baywalk/Map/map_baywalk.jpg`,
-          photos: [],
-          map: `${BH}/MFGR Park and Baywalk/Map/map_baywalk.jpg`,
-          available: false,
-          desc: "Mayor Francisco G. Rabat Park and Baywalk overlooking Pujada Bay — a waterfront promenade and gathering place.",
-          specs: [
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Baywalk along Pujada Bay", "Named for Mayor Francisco G. Rabat"],
-        },
-        {
-          id: "subangan",
-          name: "Subangan Museum",
-          barangay: "Central",
-          barangayKey: "central",
-          lat: 6.944219,
-          lng: 126.248353,
-          official: true,
-          image:
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
+          image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
           photos: [
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg`,
           ],
+          map: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
           available: false,
-          desc: "Provincial museum featuring Davor the whale and Mandaya heritage collections.",
-          specs: [
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Museum" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Home to Davor the whale exhibit", "Mandaya cultural displays"],
-        },
-        {
-          id: "capitol",
-          name: "Provincial Capitol of Davao Oriental",
-          barangay: "Central",
-          barangayKey: "central",
-          lat: 6.9435,
-          lng: 126.2478,
-          official: false,
-          image:
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
-          photos: [
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg`,
-            `${BH}/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg`,
-          ],
-          available: false,
-          desc: "Provincial government center within Mati City.",
-          specs: [
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Seat of provincial governance", "Central Mati landmark"],
-        },
-        {
-          id: "old-mansion",
-          name: "Provincial Capitol Old Mansion",
-          barangay: "Central",
-          barangayKey: "central",
-          lat: 6.9448,
-          lng: 126.2465,
-          official: false,
-          image:
-            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
-          photos: [
-            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
-            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
-          ],
-          available: false,
-          desc: "Historic mansion linked to Davao Oriental governance.",
-          specs: [
-            { key: "Barangay", val: "Central" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Historic provincial residence", "Architectural heritage"],
+          desc: "The Mayor Francisco G. Rabat Park and Baywalk, officially declared as a significant cultural property of the City of Mati under Resolution No. 61, Series of 2019, serves as a premier 3-hectare landmark of historical and socio-economic importance. Situated on a reclaimed area in Barangay Central that once served as the city’s original shoreline, the park was envisioned in 2003 by Mayor Francisco G. Rabat to provide a dedicated venue for public festivities and community engagement. The site features a concrete seawall bench, the iconic “I Love Mati” signage, and an events stage, all set against the aesthetic backdrop of Pujada Bay. As a center for local heritage, the Baywalk continues to function as a vital space for cultural expression, tourism, and economic activity, symbolizing the city's growth and its deep-rooted connection to the sea.",
+          specs: heritageSpecs(
+            "MFGR Park & Baywalk",
+            "Central",
+            "Sites/Park",
+            "(Latitude) 126° 12' 58.1796'' E",
+            "(Longitude) 6° 56' 59.4708'' N",
+          ),
+          facts: [],
         },
         {
           id: "gabaldon",
@@ -1899,73 +2162,27 @@
           lat: 6.955,
           lng: 126.219444,
           official: true,
-          image:
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg`,
+          image: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
           photos: [
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg`,
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00505.jpg`,
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00504.jpg`,
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00532.jpg`,
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg`,
-            `${BH}/Gabaldon Structure of RRMCES-1/Photographs/Old/J960x720-00477.jpg`,
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00505.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00504.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00532.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00500.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00525.jpg",
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/J960x720-00477.jpg",
           ],
           available: false,
-          desc: "Heritage Gabaldon school building of Roxas Memorial Colleges — an architectural landmark from the American era.",
-          specs: [
-            { key: "Barangay", val: "Sainz" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Classic Gabaldon school design", "Roxas Memorial Colleges campus"],
-        },
-        {
-          id: "noventa",
-          name: "Noventa Ancestral House",
-          barangay: "Bobon",
-          barangayKey: "bobon",
-          lat: 6.866667,
-          lng: 126.325,
-          official: true,
-          image:
-            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
-          photos: [
-            `${BH}/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg`,
-            `${BH}/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg`,
-          ],
-          available: false,
-          desc: "Preserved ancestral house in Barangay Bobon.",
-          specs: [
-            { key: "Barangay", val: "Bobon" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Preserved ancestral architecture", "Official LGU cultural property"],
-        },
-        {
-          id: "ompo",
-          name: "OMPO sa Tampat sa Baguidan",
-          barangay: "Bobon",
-          barangayKey: "bobon",
-          lat: 6.84,
-          lng: 126.33,
-          official: true,
-          image:
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg`,
-          photos: [
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg`,
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg`,
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00628.jpg`,
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J1920x2740-00616.jpg`,
-            `${BH}/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg`,
-          ],
-          available: false,
-          desc: "Indigenous graveyard and cultural landmark in Barangay Bobon.",
-          specs: [
-            { key: "Barangay", val: "Bobon" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
-          ],
-          facts: ["Indigenous cultural landmark", "Sacred burial ground"],
+          desc: "Established in 1920, the Gabaldon School Building of Rabat-Rocamora Mati Central Elementary School-I stands as a premier architectural landmark in the City of Mati, Davao Oriental. This two-story public structure is a fine example of American-era educational architecture, uniquely blending elements of the traditional bahay kubo with a symmetrical design featuring distinctive arches and a central porch. Constructed from Philippine hardwood with a concrete foundation, the building is designed for optimal natural ventilation and lighting, characterized by high ceilings and large wooden-framed awning windows. The school lot was donated by the heirs of the Sainz, Rocamora, and Rabat families, and in 2006, the institution was renamed to honor the Rabat and Rocamora legacies. Today, this well-maintained heritage site continues its vital role as an active educational facility, preserving more than a century of history while serving the youth of Barangay Sainz.",
+          specs: heritageSpecs(
+            "Gabaldon Structure (RRMCES-1)",
+            "Sainz",
+            "Schools and Educational Complexes",
+            "(Latitude) 126° 13' 10'' E",
+            "(Longitude) 6° 57' 18'' N",
+          ),
+          facts: [],
         },
         {
           id: "menzi",
@@ -1975,23 +2192,195 @@
           lat: 6.927318,
           lng: 126.281047,
           official: true,
-          image:
-            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg`,
+          image: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
           photos: [
-            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg`,
-            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg`,
-            `${BH}/Menzi Visitors Information Center/Photographs/New/J6000x4000-00292.jpg`,
-            `${BH}/Menzi Visitors Information Center/Photographs/Old/2016-05-18 07-50.jpg`,
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00292.jpg",
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/Old/2016-05-18 07-50.jpg",
           ],
-          map: `${BH}/Menzi Visitors Information Center/Map/map_mvic.jpg`,
+          map: "data/Built Heritage/Menzi Visitors Information Center/Map/map_mvic.jpg",
           available: false,
-          desc: "Visitor center and campsite along the Dahican shoreline — gateway to Mati\u2019s surf and eco-tourism corridor.",
-          specs: [
-            { key: "Barangay", val: "Dahican" },
-            { key: "Category", val: "Built Heritage" },
-            { key: "Status", val: "3D scan planned" },
+          desc: "The Menzi Visitors Information Center, also known as Menzi Beach, is a 1.5-hectare cultural property situated along the coastal shores of Mayo Bay in Barangay Dahican, City of Mati, Davao Oriental. Formally recognized as a significant cultural property of the City of Mati under Resolution No. 61, Series of 2019, the site serves as a vital landmark for tourism and heritage preservation. The park features a diverse landscape characterized by white sand beaches, crystal blue waters, and indigenous flora such as Narra and coconut trees, complemented by functional structures including an information center, a two-story function hall, and various recreational cottages. Established through a 2011 partnership between the Menzi Trust Fund, Inc. and the City Government of Mati, the center was designed to foster sustainable tourism development while honoring the historical harmony between nature and the area's early Kalagan and Christian settlers. Today, the site stands as a testament to the city’s commitment to environmental protection and the promotion of its unique natural and cultural endowments.",
+          specs: heritageSpecs(
+            "Menzi Visitors Information Center",
+            "Dahican",
+            "Sites/Park",
+            "(Latitude) 126° 16' 51.77'' E",
+            "(Longitude) 6° 55' 38.345'' N",
+          ),
+          facts: [],
+        },
+        {
+          id: "noventa",
+          name: "Noventa Ancestral House",
+          barangay: "Bobon",
+          barangayKey: "bobon",
+          lat: 6.866667,
+          lng: 126.325,
+          official: true,
+          image: "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
+          photos: [
+            "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22-01.jpg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-23.jpg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017443-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017445-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017447-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017448-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017455-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017456-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017457-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017458-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017460-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017462-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/1000017463-01.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/received_810998714366344.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/received_976616420095066.jpeg",
           ],
-          facts: ["Dahican beach access point", "Eco-tourism hub"],
+          available: false,
+          desc: "Built between 1943 and 1946, the Noventa Ancestral House is a two-story residential structure in Barangay Bobon, City of Mati, that stands as a well-preserved example of American Colonial-era architecture. Constructed primarily of Philippine hardwood, specifically Molave, the house features a simple rectangular design with a high-ceilinged receiving area, wide windows for natural ventilation, and thick floor planks. While the ground floor traditionally served as a storage area or bodega, the upper floor remains a habitable living space that continues to be lovingly maintained by the heirs of the original owners, Kiakban Magtacpao Noventa and Alberto Noventa. Beyond its physical form, the property holds deep social and aesthetic significance, serving as a living testament to the family's cultural heritage and a harmonious blend of indigenous and colonial influences within a lush 636-square-meter landscape.",
+          specs: heritageSpecs(
+            "Noventa Ancestral House",
+            "Bobon",
+            "Ancestral House",
+            "126.325",
+            "6.866667",
+          ),
+          facts: [],
+        },
+        {
+          id: "ompo",
+          name: "OMPO sa Tampat sa Baguidan",
+          barangay: "Bobon",
+          barangayKey: "bobon",
+          lat: 6.84,
+          lng: 126.33,
+          official: true,
+          image: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+          photos: [
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00628.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1920x2740-00616.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2143x3040-00624.jpg",
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1627x2328-00618.jpg",
+          ],
+          available: false,
+          desc: "Ompo na Tampat sa Bagidan is an ancestral burial site of profound historical and cultural significance, situated in the mountainous part of Baguidan, Barangay Bobon, City of Mati, Davao Oriental. This site serves as the final resting place of an Ompo (Chieftain), a prominent figure in the pre-Hispanic history of Mati and an ancestor of the Kalagan tribe. According to historical records, the Ompo was one of seven siblings of the Kapituanon tribe who originally ruled \"Kalagan Island\"—present-day Eastern Mindanao—before the arrival of Spanish expeditions. These siblings founded several of the region's indigenous groups, including the Manobo, Mamanwa, Mansaka, Mandaya, Taga-kaulo, and Mangguangan tribes, with the Ompo’s lineage specifically linked to the Mandagat defenders of the coast. Currently maintained in a fair condition and preserved in its original, unaltered state by the Kalagan people, the site remains a vital link to the region's pre-colonial heritage. Its paramount importance to local history and identity was formally recognized through Resolution No. 148, Series of 2023, which officially declared Ompo na Tampat sa Bagidan as a Significant Cultural Property of the City of Mati.",
+          specs: heritageSpecs(
+            "OMPO sa Tampat sa Baguidan",
+            "Bobon",
+            "Graveyard",
+            "(Latitude) 126° 19' 48'' E",
+            "(Longitude) 6° 50' 24'' N",
+          ),
+          facts: [],
+        },
+        {
+          id: "capitol",
+          name: "Provincial Capitol of Davao Oriental",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.9483186,
+          lng: 126.2271687,
+          official: false,
+          image: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+          photos: [
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+          ],
+          available: false,
+          desc: "The Provincial Capitol of Davao Oriental, popularly known as the \"White House,\" is a majestic three-story edifice that serves as the official seat of the provincial government. Situated atop Capitol Hills, the building holds an imposing presence in the city skyline. Its architectural design draws inspiration from classical Western landmarks, notably patterned after the U.S. White House, while incorporating neoclassical elements reminiscent of St. Peter’s Basilica in Rome. The construction of the New Capitol was a multi-generational project aimed at unifying the politics and people of Davao Oriental. The project commenced during the tenure of former Governor Elena Palma Gil and was brought to completion under the leadership of Governor Corazon N. Malanyaon. It stands as a legacy of the concerted efforts of the provincial leadership and the 11th and 12th Congresses. Since its grand opening in 2010, the building has transitioned from a purely administrative facility into a primary tourist attraction. It symbolizes a new era of public service for the province, replacing the original Old Mansion as the primary seat of power while preserving the long-standing communal spirit of the Capitol Hills area.",
+          specs: heritageSpecs(
+            "Provincial Capitol of Davao Oriental",
+            "Central",
+            "Government Structure/Capitol Building",
+            "126.2271687",
+            "6.9483186",
+          ),
+          facts: [],
+        },
+        {
+          id: "old-mansion",
+          name: "Provincial Capitol Old Mansion",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.9472,
+          lng: 126.2268,
+          official: false,
+          image: "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+          photos: [
+            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
+          ],
+          available: false,
+          desc: "The Provincial Capitol Old Mansion is a significant heritage structure situated atop the scenic Capitol Hills in Barangay Central. Historically recognized as the Old Governor’s Mansion, this site served as the primary administrative and residential seat for provincial leadership prior to the modernization of the capitol complex. For decades, it remained the center of political and social life in Davao Oriental, maintaining its prominence until the inauguration of the new Provincial Capitol building in 2010. Currently, the mansion stands as a resilient landmark of the city's administrative history. Following the relocation of the provincial seat, the building has been successfully repurposed to house the Professional Regulation Commission (PRC) Office for Region 11, demonstrating an effective adaptive reuse of one of the province's most notable civil structures",
+          specs: heritageSpecs(
+            "Provincial Capitol Old Mansion",
+            "Central",
+            "Government Structure/Capitol Building",
+            "126.2268",
+            "6.9472",
+          ),
+          facts: [],
+        },
+        {
+          id: "pylon",
+          name: "Pylon Monument",
+          barangay: "Central",
+          barangayKey: "central",
+          lat: 6.952258,
+          lng: 126.216889,
+          official: true,
+          modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
+          image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          photos: [
+            "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+            "data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
+            "data/Built Heritage/Pylon Monument/Photographs/New/2020-05-07 19-20.jpg",
+            "data/Built Heritage/Pylon Monument/Photographs/Old/J1600x1200-00287.jpg",
+            "data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg",
+            "data/Built Heritage/Pylon Monument/Photographs/Old/J380x566-00301.jpg",
+          ],
+          map: "data/Built Heritage/Pylon Monument/Map/map_pylon.jpg",
+          available: true,
+          desc: "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \"Point Zero\" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city’s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
+          specs: heritageSpecs(
+            "Pylon Monument",
+            "Central",
+            "Monument",
+            "(Latitude) 126° 13' 0.8004'' E",
+            "(Longitude) 6° 57' 8.1288'' N",
+          ),
+          facts: [],
+        },
+        {
+          id: "subangan",
+          name: "Subangan Museum",
+          barangay: "Don Martin Marundan",
+          barangayKey: "don-martin-marundan",
+          lat: 6.9442424,
+          lng: 126.2483375,
+          official: true,
+          image: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+          photos: [
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+          ],
+          available: false,
+          desc: "The Subangan Museum was inaugurated on January 8, 2014. As the flagship project of the provincial government, the museum was designed to centralize and preserve the region's heritage. The concept originated around 2010 after a sperm whale was discovered in the town of Governor Generoso, sparking the initiative to build a permanent home for its remains and other local treasures. Its name is derived from the Cebuano term \"Subangon\", meaning 'east' or 'place of the rising sun,' symbolizing the province's geographic position and cultural identity.",
+          specs: heritageSpecs(
+            "Subangan Museum",
+            "Don Martin Marundan",
+            "Museum",
+            "126.2483375",
+            "6.9442424",
+          ),
+          facts: [],
         },
       ];
 
@@ -2010,19 +2399,29 @@
       const previewImage = document.getElementById("preview-image");
       const heritageModel = document.getElementById("heritage-model");
       const viewerHint = document.getElementById("viewer-hint");
-      const explorePhotoGallery = document.getElementById("explore-photo-gallery");
-      const explorePhotoTrack = document.getElementById("explore-photo-track");
+      const explorePhotoGrid = document.getElementById("explore-photo-grid");
       const exploreSiteMap = document.getElementById("explore-site-map");
       const exploreSiteMapImg = document.getElementById("explore-site-map-img");
       const exploreSiteMapBtn = document.getElementById("explore-site-map-btn");
-      const detailPhotoMain = document.getElementById("detail-photo-main");
-      const detailPhotoMainBtn = document.getElementById("detail-photo-main-btn");
       const detailMapEmpty = document.getElementById("detail-map-empty");
       const detailPhotosEmpty = document.getElementById("detail-photos-empty");
+      const galLightbox = document.getElementById("galLightbox");
+      const galLightboxMedia = document.getElementById("galLightboxMedia");
+      const galLightboxTitle = document.getElementById("galLightboxTitle");
+      const galLightboxMeta = document.getElementById("galLightboxMeta");
+      const galLightboxCitation = document.getElementById("galLightboxCitation");
       const detailTabMap = document.getElementById("detail-tab-map");
       const detailTabPhotos = document.getElementById("detail-tab-photos");
+      const exploreMediaShowcase = document.getElementById("explore-media-showcase");
+      const exploreMediaShowcaseLabel = document.getElementById("explore-media-showcase-label");
+      const exploreMediaShowcaseSite = document.getElementById("explore-media-showcase-site");
+      const exploreMediaShowcaseClose = document.getElementById("explore-media-showcase-close");
+      const exploreMediaShowcaseBackdrop = document.getElementById("explore-media-showcase-backdrop");
+      const exploreMediaMapPanel = document.getElementById("explore-media-map-panel");
+      const exploreMediaPhotosPanel = document.getElementById("explore-media-photos-panel");
       const viewerEmpty = document.getElementById("viewer-empty");
-      let activePhotoIndex = 0;
+      let photoLightboxItems = [];
+      let photoLightboxIndex = 0;
       let activeDetailView = "about";
       const detailType = document.getElementById("detail-type");
       const detailTitle = document.getElementById("detail-title");
@@ -2038,6 +2437,18 @@
       const fullscreenClose = document.getElementById("fullscreen-close");
       const fullscreenLoading = document.getElementById("fullscreen-loading");
       const fullscreenLoadingLabel = document.getElementById("fullscreen-loading-label");
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function mediaUrl(src) {
+        return encodeURI(String(src));
+      }
 
       function hideFullscreenLoading() {
         fullscreenLoading?.setAttribute("hidden", "");
@@ -2105,25 +2516,61 @@
         exploreStageLayout?.setAttribute("hidden", "");
         exploreStageLayout?.classList.remove("is-loading", "is-revealed");
         exploreRevealLoader?.setAttribute("hidden", "");
-        explorePhotoGallery?.setAttribute("hidden", "");
         exploreSiteMap?.setAttribute("hidden", "");
-        setDetailView("about");
+        closePhotoLightbox();
+        closeMediaDisplay();
       }
 
-      function setDetailView(view) {
-        activeDetailView = view;
+      function setDetailSectionActive(section) {
         document.querySelectorAll(".explore3d-details-tab").forEach((tab) => {
           if (tab.hidden) return;
-          const isActive = view !== "about" && tab.dataset.detailView === view;
+          const isActive = tab.dataset.detailView === section;
           tab.classList.toggle("is-active", isActive);
           tab.setAttribute("aria-selected", isActive ? "true" : "false");
         });
-        document.querySelectorAll(".explore3d-details-pane").forEach((pane) => {
-          const isActive = pane.dataset.detailPane === view;
-          pane.classList.toggle("is-active", isActive);
-          if (isActive) pane.removeAttribute("hidden");
-          else pane.setAttribute("hidden", "");
-        });
+      }
+
+      function closeMediaDisplay() {
+        activeDetailView = "about";
+        setDetailSectionActive("");
+        closePhotoLightbox();
+        exploreMediaShowcase?.setAttribute("hidden", "");
+        exploreMediaShowcase?.setAttribute("aria-hidden", "true");
+        exploreMediaShowcase?.classList.remove("is-map", "is-photos");
+        exploreMediaMapPanel?.setAttribute("hidden", "");
+        exploreMediaPhotosPanel?.setAttribute("hidden", "");
+        document.body.classList.remove("explore3d-media-open");
+      }
+
+      function openMediaDisplay(view) {
+        const site = getActiveSite();
+        if (!site) return;
+
+        if (activeDetailView === view) {
+          closeMediaDisplay();
+          return;
+        }
+
+        if (view === "map" && !getSiteMap(site)) return;
+        if (view === "photos" && !getSitePhotos(site).length) return;
+
+        activeDetailView = view;
+        setDetailSectionActive(view);
+
+        if (exploreMediaShowcaseLabel) {
+          exploreMediaShowcaseLabel.textContent = view === "map" ? "Site Map" : "Photographs";
+        }
+        if (exploreMediaShowcaseSite) {
+          exploreMediaShowcaseSite.textContent = site.name;
+        }
+
+        exploreMediaShowcase?.classList.toggle("is-map", view === "map");
+        exploreMediaShowcase?.classList.toggle("is-photos", view === "photos");
+        exploreMediaShowcase?.removeAttribute("hidden");
+        exploreMediaShowcase?.setAttribute("aria-hidden", "false");
+        exploreMediaMapPanel?.toggleAttribute("hidden", view !== "map");
+        exploreMediaPhotosPanel?.toggleAttribute("hidden", view !== "photos");
+        document.body.classList.add("explore3d-media-open");
       }
 
       function updateDetailTabs(site) {
@@ -2131,8 +2578,7 @@
         const mapSrc = getSiteMap(site);
         if (detailTabMap) detailTabMap.hidden = !mapSrc;
         if (detailTabPhotos) detailTabPhotos.hidden = !photos.length;
-        if (activeDetailView === "map" && !mapSrc) setDetailView("about");
-        if (activeDetailView === "photos" && !photos.length) setDetailView("about");
+        closeMediaDisplay();
       }
 
       async function revealSiteFromMap(site, options = {}) {
@@ -2162,7 +2608,7 @@
 
         updateDetails(site);
         updateViewer(site);
-        setDetailView("about");
+        closeMediaDisplay();
 
         exploreRevealLoader?.setAttribute("hidden", "");
         exploreStageLayout?.classList.remove("is-loading");
@@ -2184,6 +2630,61 @@
         revealInProgress = false;
       }
 
+      function buildPhotoLightboxItems(site) {
+        const photos = getSitePhotos(site);
+        return photos.map((src, index) => ({
+          src,
+          title: site.name,
+          meta: `Built Heritage · Photograph ${index + 1} of ${photos.length}`,
+        }));
+      }
+
+      function showPhotoLightbox() {
+        const item = photoLightboxItems[photoLightboxIndex];
+        if (!item || !galLightbox || !galLightboxMedia) return;
+
+        galLightboxMedia.innerHTML = `<img src="${escapeHtml(mediaUrl(item.src))}" alt="${escapeHtml(item.title)}" />`;
+        if (galLightboxTitle) galLightboxTitle.textContent = item.title;
+        if (galLightboxMeta) galLightboxMeta.textContent = item.meta;
+        if (galLightboxCitation) {
+          galLightboxCitation.innerHTML = "";
+          galLightboxCitation.hidden = true;
+        }
+
+        const showNav = photoLightboxItems.length > 1;
+        document.getElementById("galLightboxPrev")?.classList.toggle("is-hidden", !showNav);
+        document.getElementById("galLightboxNext")?.classList.toggle("is-hidden", !showNav);
+
+        galLightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function openPhotoLightbox(index) {
+        if (!photoLightboxItems.length) return;
+        photoLightboxIndex = index;
+        showPhotoLightbox();
+      }
+
+      function closePhotoLightbox() {
+        if (galLightboxMedia) galLightboxMedia.innerHTML = "";
+        if (galLightboxCitation) {
+          galLightboxCitation.innerHTML = "";
+          galLightboxCitation.hidden = true;
+        }
+        galLightbox?.classList.remove("active");
+        if (!exploreMediaShowcase || exploreMediaShowcase.hidden) {
+          document.body.style.overflow = "";
+        }
+      }
+
+      function navigatePhotoLightbox(dir) {
+        if (!photoLightboxItems.length) return;
+        photoLightboxIndex =
+          (photoLightboxIndex + dir + photoLightboxItems.length) %
+          photoLightboxItems.length;
+        showPhotoLightbox();
+      }
+
       function getSitePhotos(site) {
         if (!site) return [];
         if (Array.isArray(site.photos)) {
@@ -2203,9 +2704,41 @@
         return photos[0] || site.image || site.map || "";
       }
 
-      function setActivePhotoThumb(index) {
-        explorePhotoTrack?.querySelectorAll(".explore3d-photo-thumb").forEach((btn, i) => {
-          btn.classList.toggle("is-active", i === index);
+      function renderPhotoGallery(site) {
+        const photos = getSitePhotos(site);
+        if (!explorePhotoGrid) return;
+
+        if (!photos.length) {
+          explorePhotoGrid.innerHTML = "";
+          explorePhotoGrid.hidden = true;
+          detailPhotosEmpty?.removeAttribute("hidden");
+          photoLightboxItems = [];
+          return;
+        }
+
+        detailPhotosEmpty?.setAttribute("hidden", "");
+        explorePhotoGrid.hidden = false;
+        photoLightboxItems = buildPhotoLightboxItems(site);
+
+        explorePhotoGrid.innerHTML = photos
+          .map(
+            (src, index) => `
+          <button
+            type="button"
+            class="gal-media-item gal-reveal"
+            data-photo-index="${index}"
+            style="--gal-i: ${index}"
+            aria-label="${escapeHtml(site.name)} — photograph ${index + 1}"
+          >
+            <img src="${escapeHtml(mediaUrl(src))}" alt="" loading="lazy" decoding="async" />
+          </button>`,
+          )
+          .join("");
+
+        explorePhotoGrid.querySelectorAll("[data-photo-index]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            openPhotoLightbox(Number(btn.dataset.photoIndex));
+          });
         });
       }
 
@@ -2231,64 +2764,6 @@
             ? "Site map"
             : "Built heritage photograph";
         }
-      }
-
-      function selectSitePhoto(site, index) {
-        const photos = getSitePhotos(site);
-        const src = photos[index];
-        if (!src) return;
-
-        activePhotoIndex = index;
-        setActivePhotoThumb(index);
-
-        if (detailPhotoMain) {
-          detailPhotoMain.src = src;
-          detailPhotoMain.alt = site.name;
-        }
-      }
-
-      function renderPhotoGallery(site) {
-        const photos = getSitePhotos(site);
-        if (!explorePhotoGallery || !explorePhotoTrack) return;
-
-        if (!photos.length) {
-          explorePhotoGallery.hidden = true;
-          explorePhotoTrack.innerHTML = "";
-          detailPhotoMainBtn?.setAttribute("hidden", "");
-          detailPhotosEmpty?.removeAttribute("hidden");
-          return;
-        }
-
-        detailPhotosEmpty?.setAttribute("hidden", "");
-        explorePhotoGallery.hidden = false;
-        detailPhotoMainBtn?.removeAttribute("hidden");
-        activePhotoIndex = 0;
-
-        if (detailPhotoMain) {
-          detailPhotoMain.src = photos[0];
-          detailPhotoMain.alt = site.name;
-        }
-
-        explorePhotoTrack.innerHTML = photos
-          .map(
-            (src, index) => `
-          <button
-            type="button"
-            class="explore3d-photo-thumb${index === 0 ? " is-active" : ""}"
-            data-photo-index="${index}"
-            role="listitem"
-            aria-label="View photograph ${index + 1} of ${photos.length}"
-          >
-            <img src="${encodeURI(src)}" alt="" loading="lazy" decoding="async" />
-          </button>`,
-          )
-          .join("");
-
-        explorePhotoTrack.querySelectorAll("[data-photo-index]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            selectSitePhoto(site, Number(btn.dataset.photoIndex));
-          });
-        });
       }
 
       function renderSiteMap(site) {
@@ -2331,7 +2806,7 @@
           fullscreenModel.autoRotate = false;
           const photos = getSitePhotos(site);
           const mapSrc = getSiteMap(site);
-          const photoSrc = photos[activePhotoIndex] || photos[0];
+          const photoSrc = photos[0];
           if (photoSrc) {
             fullscreenPhoto.src = photoSrc;
             fullscreenPhoto.alt = site.name;
@@ -2428,14 +2903,6 @@
         openFullscreenPhoto(site, previewImage.src);
       });
 
-      detailPhotoMainBtn?.addEventListener("click", () => {
-        const site = getActiveSite();
-        const photos = getSitePhotos(site);
-        const src = photos[activePhotoIndex] || photos[0];
-        if (!site || !src) return;
-        openFullscreenPhoto(site, src);
-      });
-
       exploreSiteMapBtn?.addEventListener("click", () => {
         const site = getActiveSite();
         const mapSrc = getSiteMap(site);
@@ -2443,31 +2910,45 @@
         openFullscreenPhoto(site, mapSrc, { isMap: true });
       });
 
+      exploreMediaShowcaseClose?.addEventListener("click", closeMediaDisplay);
+      exploreMediaShowcaseBackdrop?.addEventListener("click", closeMediaDisplay);
+
       document.querySelectorAll(".explore3d-details-tab").forEach((tab) => {
         tab.addEventListener("click", () => {
           if (tab.hidden) return;
-          const view = tab.dataset.detailView || "about";
-          if (activeDetailView === view) {
-            setDetailView("about");
-          } else {
-            setDetailView(view);
-          }
+          openMediaDisplay(tab.dataset.detailView || "about");
         });
       });
 
       stageTitle?.addEventListener("click", () => {
-        if (activeDetailView !== "about") setDetailView("about");
+        closeMediaDisplay();
       });
       stageTitle?.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          if (activeDetailView !== "about") setDetailView("about");
+          closeMediaDisplay();
         }
+      });
+
+      document.getElementById("galLightboxClose")?.addEventListener("click", closePhotoLightbox);
+      document.getElementById("galLightboxPrev")?.addEventListener("click", () => navigatePhotoLightbox(-1));
+      document.getElementById("galLightboxNext")?.addEventListener("click", () => navigatePhotoLightbox(1));
+      galLightbox?.addEventListener("click", (event) => {
+        if (event.target === galLightbox) closePhotoLightbox();
       });
 
       fullscreenClose?.addEventListener("click", closeFullscreenHeritage);
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeFullscreenHeritage();
+        if (event.key !== "Escape") return;
+        if (galLightbox?.classList.contains("active")) {
+          closePhotoLightbox();
+          return;
+        }
+        if (exploreMediaShowcase && !exploreMediaShowcase.hidden) {
+          closeMediaDisplay();
+          return;
+        }
+        closeFullscreenHeritage();
       });
 
       if (heritageModel) {
@@ -2509,14 +2990,19 @@
         }
       }
 
-      function createHeritagePhotoIcon(site, size = 40) {
-        const imgSrc = encodeURI(getSiteMarkerImage(site));
+      function createHeritagePhotoIcon(site, size = 40, bounceIndex = 0) {
+        const imgSrc = getSiteMarkerImage(site);
         const half = size / 2;
         const isActive = site.id === activeSiteId;
+        const bounceDelay = ((bounceIndex % 12) * 0.14).toFixed(2);
+        const markerInner = imgSrc
+          ? `<img src="${encodeURI(imgSrc)}" alt="${escapeHtml(site.name)}" loading="lazy" />`
+          : `<span aria-hidden="true">BH</span>`;
+        const placeholderClass = imgSrc ? "" : " heritage-photo-marker--placeholder";
         return L.divIcon({
           className: "heritage-marker-wrap",
-          html: `<div class="heritage-photo-marker ${isActive ? "is-active" : ""}" style="width:${size}px;height:${size}px" title="${site.name}">
-            <img src="${imgSrc}" alt="${site.name}" loading="lazy" />
+          html: `<div class="heritage-photo-marker${placeholderClass} ${isActive ? "is-active" : ""}" style="width:${size}px;height:${size}px;animation-delay:${bounceDelay}s" title="${escapeHtml(site.name)}">
+            ${markerInner}
           </div>`,
           iconSize: [size, size],
           iconAnchor: [half, half],
@@ -2752,9 +3238,9 @@
         map.fitBounds(viewBounds, { padding: [24, 24] });
         map.setMinZoom(map.getZoom());
 
-        HERITAGE_3D_SITES.forEach((site) => {
+        HERITAGE_3D_SITES.forEach((site, index) => {
           const marker = L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site),
+            icon: createHeritagePhotoIcon(site, 40, index),
           }).addTo(map);
 
           marker.on("click", () => {

@@ -111,16 +111,25 @@
 
     <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
       <div class="gal-lightbox-backdrop" aria-hidden="true"></div>
+      <button type="button" class="gal-lightbox-close" id="galLightboxClose" aria-label="Close">&times;</button>
+      <button type="button" class="gal-lightbox-nav prev" id="galLightboxPrev" aria-label="Previous photograph">
+        <span class="gal-lightbox-nav__icon" aria-hidden="true">&lsaquo;</span>
+        <span class="gal-lightbox-nav__label">Previous</span>
+      </button>
+      <button type="button" class="gal-lightbox-nav next" id="galLightboxNext" aria-label="Next photograph">
+        <span class="gal-lightbox-nav__label">Next</span>
+        <span class="gal-lightbox-nav__icon" aria-hidden="true">&rsaquo;</span>
+      </button>
       <div class="gal-lightbox-inner">
-        <button type="button" class="gal-lightbox-close" id="galLightboxClose" aria-label="Close">&times;</button>
-        <button type="button" class="gal-lightbox-nav prev" id="galLightboxPrev" aria-label="Previous">&lsaquo;</button>
-        <button type="button" class="gal-lightbox-nav next" id="galLightboxNext" aria-label="Next">&rsaquo;</button>
-        <div class="gal-lightbox-frame">
-          <div class="gal-lightbox-media" id="galLightboxMedia"></div>
+        <div class="gal-lightbox-stage">
+          <div class="gal-lightbox-frame">
+            <div class="gal-lightbox-media" id="galLightboxMedia"></div>
+          </div>
         </div>
         <div class="gal-lightbox-caption">
           <h3 id="galLightboxTitle"></h3>
           <p id="galLightboxMeta"></p>
+          <div class="gal-lightbox-citation" id="galLightboxCitation" hidden></div>
         </div>
       </div>
     </div>

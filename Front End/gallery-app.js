@@ -48,6 +48,21 @@
       .replace(/"/g, "&quot;");
   }
 
+  function mediaUrl(src) {
+    return encodeURI(String(src));
+  }
+
+  function linkifyCitation(text) {
+    return String(text)
+      .split(/(https?:\/\/[^\s]+)/g)
+      .map((part) =>
+        /^https?:\/\//.test(part)
+          ? `<a href="${escapeHtml(part)}" target="_blank" rel="noopener noreferrer">${escapeHtml(part)}</a>`
+          : escapeHtml(part),
+      )
+      .join("");
+  }
+
   const PILE_PRINT_FILTERS = ["none", "sepia(0.35)", "grayscale(1)", "saturate(1.2)"];
 
   function getPilePhotos(siteId, cover) {
@@ -246,7 +261,6 @@
               false,
               "galleryintangibleculturalheritage.html",
             )}
-            <div class="gal-category-or" aria-hidden="true"><span>or</span></div>
             ${categoryCard(
               "natural",
               "Islands, coastlines, and landscapes that define Mati's natural legacy.",
@@ -284,6 +298,7 @@
               </div>
             </div>
             <div class="gal-pile-caption">
+              ${site.heritageCategory ? `<span class="gal-pile-category">${escapeHtml(site.heritageCategory)}</span>` : ""}
               <h3 class="gal-pile-title">${escapeHtml(site.albumName || site.name)}</h3>
               <span class="gal-pile-cta">Open collection <span aria-hidden="true">→</span></span>
             </div>
@@ -386,6 +401,7 @@
         <div class="gal-site-header">
           <img class="gal-site-cover" src="${escapeHtml(site.cover)}" alt="${escapeHtml(site.name)}" loading="lazy" />
           <div>
+            ${site.heritageCategory ? `<p class="gal-site-category">${escapeHtml(site.heritageCategory)}</p>` : ""}
             <h2 class="gal-site-name">${escapeHtml(site.name)}</h2>
             <p class="gal-site-desc">${escapeHtml(site.description)}</p>
             ${site.location ? `<p class="gal-site-location">📍 ${escapeHtml(site.location)}</p>` : ""}
@@ -486,7 +502,13 @@
         const visual = entry.image
           ? `
           <figure class="gal-timeline-chapter-figure">
-            <img src="${escapeHtml(entry.image)}" alt="${escapeHtml(entry.imageAlt || entry.title)}" loading="lazy" decoding="async" />
+            <div class="gal-timeline-chapter-frame">
+              <div class="gal-timeline-lifted-photo">
+                <div class="gal-timeline-lifted-photo__mat">
+                  <img src="${escapeHtml(entry.image)}" alt="${escapeHtml(entry.imageAlt || entry.title)}" loading="lazy" decoding="async" />
+                </div>
+              </div>
+            </div>
             ${entry.imageCaption ? `<figcaption>${escapeHtml(entry.imageCaption)}</figcaption>` : ""}
           </figure>`
           : `<div class="gal-timeline-chapter-placeholder" aria-hidden="true"></div>`;
@@ -688,24 +710,66 @@
     showLightbox();
   }
 
+  function renderLightboxCitation(item) {
+    if (!item) return "";
+
+    if (item.citation) {
+      return `<p class="gal-lightbox-citation__source">${escapeHtml(item.citation)}</p>`;
+    }
+
+    const parts = [];
+    if (item.caption) {
+      parts.push(
+        `<p class="gal-lightbox-citation__figure"><span class="gal-lightbox-citation__label">Figure:</span> ${escapeHtml(item.caption)}</p>`,
+      );
+    }
+    if (item.event || item.date) {
+      const eventLine = [item.event, item.date].filter(Boolean).join(", ");
+      parts.push(`<p class="gal-lightbox-citation__event">${escapeHtml(eventLine)}.</p>`);
+    }
+    if (item.credit) {
+      parts.push(
+        `<p class="gal-lightbox-citation__source"><span class="gal-lightbox-citation__label">Source:</span> ${linkifyCitation(item.credit)}.</p>`,
+      );
+    }
+    return parts.join("");
+  }
+
   function showLightbox() {
     const item = state.lightboxItems[state.lightboxIndex];
     const box = $("galLightbox");
     const media = $("galLightboxMedia");
     const title = $("galLightboxTitle");
     const meta = $("galLightboxMeta");
+    const citation = $("galLightboxCitation");
     if (!item || !box || !media) return;
 
     if (item.type === "photo") {
-      media.innerHTML = `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.title)}" />`;
+      media.innerHTML = `<img src="${escapeHtml(mediaUrl(item.src))}" alt="${escapeHtml(item.title)}" />`;
     } else if (item.type === "audio") {
-      media.innerHTML = `<audio src="${escapeHtml(item.src)}" controls autoplay></audio>`;
+      media.innerHTML = `<audio src="${escapeHtml(mediaUrl(item.src))}" controls autoplay></audio>`;
     } else {
-      media.innerHTML = `<video src="${escapeHtml(item.src)}" controls autoplay playsinline></video>`;
+      media.innerHTML = `<video src="${escapeHtml(mediaUrl(item.src))}" controls autoplay playsinline></video>`;
     }
 
     title.textContent = item.title;
-    meta.textContent = item.siteName;
+    if (meta) meta.textContent = item.siteName;
+
+    const citationHtml = renderLightboxCitation(item);
+    if (citation) {
+      if (citationHtml) {
+        citation.innerHTML = citationHtml;
+        citation.hidden = false;
+      } else {
+        citation.innerHTML = "";
+        citation.hidden = true;
+      }
+    }
+
+    const showNav = state.lightboxItems.length > 1;
+    $("galLightboxPrev")?.classList.toggle("is-hidden", !showNav);
+    $("galLightboxNext")?.classList.toggle("is-hidden", !showNav);
+
     box.classList.add("active");
     document.body.style.overflow = "hidden";
   }
@@ -713,10 +777,15 @@
   function closeLightbox() {
     const box = $("galLightbox");
     const media = $("galLightboxMedia");
+    const citation = $("galLightboxCitation");
     if (media) {
       media.querySelector("video")?.pause();
       media.querySelector("audio")?.pause();
       media.innerHTML = "";
+    }
+    if (citation) {
+      citation.innerHTML = "";
+      citation.hidden = true;
     }
     box?.classList.remove("active");
     document.body.style.overflow = "";
@@ -749,6 +818,10 @@
     else if (state.step === "media") html += renderMediaView();
 
     panel.innerHTML = html;
+    panel.classList.toggle(
+      "gal-panel--timeline",
+      state.step === "media" && state.folder === "timeline",
+    );
     bindViewEvents(panel);
   }
 

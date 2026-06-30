@@ -288,6 +288,7 @@ const GALLERY_SITES = [
     name: "Sambuokan Festival",
     category: "intangible",
     categoryLabel: "Intangible Cultural Heritage",
+    heritageCategory: "Festive Events/Festival",
     cover: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
     description:
       'The Sambuokan Festival, celebrated annually in the City of Mati, is a premier cultural event, derived from the Mandaya word "buok", which means "one" or "unity" meaning "to unite as one". Established in 2001 to symbolize the unification of the city\'s diverse inhabitants, the festival honors the rich heritage of the Mandaya and Muslim-Kagan tribes alongside other local communities. It is officially recognized as a Significant Cultural Property of the city, serving as a grandiose celebration of resilience, faith, and the harmonious relationship between the people and their environment. The festivities are anchored by the Indak-Indak Dance Competition, a vibrant street-dancing showcase of tribal-inspired choreography, and are further enriched by the Indigenous Peoples Day, agricultural trade fairs, and the official theme song, "Magsambuokan Kita". Observed every October, the festival stands as a testament to Matinians\' commitment to preserving their historical values and cultural identity for future generations.',
@@ -298,6 +299,7 @@ const GALLERY_SITES = [
     name: "Pujada Festival",
     category: "intangible",
     categoryLabel: "Intangible Cultural Heritage",
+    heritageCategory: "Festive Events/Festival",
     cover: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
     description:
       "The Pujada Festival, celebrated annually every June 19th in the City of Mati, Davao Oriental, serves as a vibrant thanksgiving celebration and a vital call for environmental conservation. Formally established to honor the declaration of Pujada Bay as a protected area, the festival highlights the bay's status as an \"ecological jewel\" and one of the most biodiverse marine environments in the Philippines. The festivities coincide with the city's founding anniversary and feature a diverse array of events, including agri-cultural trade fairs, water sports, and the Bangka Race, primarily centered at the Francisco G. Rabat Mati Park and Baywalk. Beyond its aesthetic and socioeconomic contributions, the festival acknowledges the bay as a historical sanctuary and a primary source of livelihood for the community, reinforcing the collective commitment of the government and the people of Mati to preserve its natural majesty for future generations.",
@@ -308,6 +310,7 @@ const GALLERY_SITES = [
     name: "Works of Dioscoro Vicentino",
     category: "intangible",
     categoryLabel: "Intangible Cultural Heritage",
+    heritageCategory: "Song Composition",
     cover: "data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Photographs/g.png",
     description:
       'The Works of Dioscoro B. Vicentino represent a cornerstone of the intangible cultural heritage of the City of Mati and the province of Davao Oriental, serving as a melodic reflection of the region\'s identity, values, and natural beauty. This collection of musical compositions includes the official city hymn, "Taga-Mati," which encapsulates the seven core virtues of the local people—being helpful, courteous, respectful, knowledgeable, truthful, obedient, and God-fearing. Other significant works include the Mandaya welcome song "Madayaw na Pag-abot," expressing the innate hospitality of Matinians, and the provincial hymn "Banwa na Madayaw," which celebrates the agricultural richness and spirit of unity. Recognized through local ordinances and resolutions for their profound social and artistic significance, these songs are performed during flag ceremonies and official functions across all 26 barangays to foster a deep sense of pride and belonging within the community.',
@@ -395,12 +398,38 @@ const GALLERY_SITES = [
   },
 ];
 
-function galleryPhoto(siteId, siteName, category, src, title) {
-  return { id: `${siteId}-photo-${src}`, type: "photo", siteId, siteName, category, src, title: title || siteName };
+function galleryPhoto(siteId, siteName, category, src, title, meta = {}) {
+  return {
+    id: `${siteId}-photo-${src}`,
+    type: "photo",
+    siteId,
+    siteName,
+    category,
+    src,
+    title: title || siteName,
+    caption: meta.caption || "",
+    credit: meta.credit || "",
+    date: meta.date || "",
+    event: meta.event || "",
+    citation: meta.citation || "",
+  };
 }
 
-function galleryVideo(siteId, siteName, category, src, title) {
-  return { id: `${siteId}-video-${src}`, type: "video", siteId, siteName, category, src, title: title || siteName };
+function galleryVideo(siteId, siteName, category, src, title, meta = {}) {
+  return {
+    id: `${siteId}-video-${src}`,
+    type: "video",
+    siteId,
+    siteName,
+    category,
+    src,
+    title: title || siteName,
+    caption: meta.caption || "",
+    credit: meta.credit || "",
+    date: meta.date || "",
+    event: meta.event || "",
+    citation: meta.citation || "",
+  };
 }
 
 function galleryLink(siteId, siteName, category, url, title, year) {
@@ -429,7 +458,94 @@ const PUJADA_PHOTOS = [
 ];
 
 const DIOSCORO_BASE = "data/Intangible Cultural Heritage/Works of Dioscoro Vicentino";
-const DIOSCORO_PHOTOS = ["f.png", "g.png", "h.png"];
+const DIOSCORO_PHOTO_CREDIT =
+  "City Tourism and Promotions Office, City of Mati, Davao Oriental, Philippines";
+const DIOSCORO_PHOTO_DATE = "12 July 2025";
+const DIOSCORO_PHOTOS = [
+  {
+    file: "f.png",
+    title: "Interview of Dioscoro B. Vicentino",
+    caption:
+      "Dioscoro B. Vicentino during a recorded interview, reading notes (close view).",
+    event: "Photo taken during the interview of Dioscoro B. Vicentino",
+    date: DIOSCORO_PHOTO_DATE,
+  },
+  {
+    file: "g.png",
+    title: "Interview of Dioscoro B. Vicentino",
+    caption: "Research interview with Dioscoro B. Vicentino, City of Mati.",
+    event: "Photo taken during the interview of Dioscoro B. Vicentino",
+    date: DIOSCORO_PHOTO_DATE,
+  },
+  {
+    file: "h.png",
+    title: "Interview of Dioscoro B. Vicentino",
+    caption:
+      "Documentation of the interview session with Dioscoro B. Vicentino and project team.",
+    event: "Photo taken during the interview of Dioscoro B. Vicentino",
+    date: DIOSCORO_PHOTO_DATE,
+  },
+  {
+    file: "1.png",
+    title: "I'm A Teacher — composition specimen",
+    caption:
+      "A photo of the specimen of Dioscoro B. Vicentino's composition of \"I'm A Teacher\".",
+  },
+  {
+    file: "2.png",
+    title: "I'm A Teacher — Teachers' Magazine",
+    caption:
+      "A photo of Teachers' Magazine where Dioscoro's composition, \"I'm A Teacher\" was published dated December, 1995.",
+  },
+  {
+    file: "3.png",
+    title: "I'm A Teacher — national teachers' song",
+    caption:
+      "\"I'm A Teacher\" was declared by the late Secretary Ricardo T. Gloria as national song for teachers in the Philippines. A photo of the article of Philippine Graphic where Dioscoro's \"I'm A Teacher\" was featured July 29, 1996.",
+  },
+  {
+    file: "madayaw na pag-abot.png",
+    title: "Madayaw na Pag-abot — composition specimen",
+    caption:
+      "A copy of specimen of Dioscoro B. Vicentino's composition of \"Madayaw na Pag-abot\".",
+  },
+  {
+    file: "taga-mati.png",
+    title: "Taga Mati — composition specimen",
+    caption:
+      'A photo of the specimen of Dioscoro B. Vicentino\'s composition of "Taga Mati", which was declared as the official anthem of Mati City by virtue of City Ordinance No. 111 series of 2013.',
+  },
+  {
+    file: "banwa na madayaw pg.1.png",
+    title: "Banwa na Madayaw",
+    caption:
+      'A video with "Banwa na Madayaw" as background music was posted by the City LGU-Mati on their page.',
+  },
+  {
+    file: "banwa na madayaw pg.2.png",
+    title: "Banwa na Madayaw",
+    caption:
+      'A video with "Banwa na Madayaw" as background music was posted by the City LGU-Mati on their page.',
+  },
+  {
+    file: "mindanao.png",
+    title: "Mindanao — composition specimen",
+    caption:
+      "A photo of the specimen of Dioscoro B. Vicentino's composition of \"Mindanao\".",
+  },
+  {
+    file: "mindanaocoverpage.png",
+    title: "Mindanao — NCCA choral publication (cover)",
+    caption:
+      'An image of the composition of choral pieces published by NCCA, which includes one of Dioscoro Bakiao Vicentino\'s pieces, "Mindanao" — cover page.',
+  },
+  {
+    file: "4.png.png",
+    title: "Mindanao — NCCA choral publication",
+    caption:
+      'Dioscoro Bakiao Vicentino\'s piece, "Mindanao" included in the composition of choral pieces published by NCCA.',
+  },
+];
 
 const GUANG_GUANG_BASE = "data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park";
 const PUJADA_ISLAND_BASE = "data/Natural Heritage/Pujada Island";
@@ -464,23 +580,58 @@ const GALLERY_MEDIA = [
   ...GALLERY_FESTIVALS.pujada.externalVideos.map((v) =>
     galleryLink("pujada-festival", "Pujada Festival", "intangible", v.url, v.label, v.year),
   ),
-  ...DIOSCORO_PHOTOS.map((file) =>
+  ...DIOSCORO_PHOTOS.map((entry) =>
     galleryPhoto(
       "dioscoro",
       "Works of Dioscoro Vicentino",
       "intangible",
-      `${DIOSCORO_BASE}/Photographs/${file}`,
-      `Works of Dioscoro Vicentino — ${file.replace(/\.[^.]+$/, "")}`,
+      `${DIOSCORO_BASE}/Photographs/${entry.file}`,
+      entry.title,
+      {
+        caption: entry.caption,
+        credit: DIOSCORO_PHOTO_CREDIT,
+        ...(entry.event ? { event: entry.event } : {}),
+        ...(entry.date ? { date: entry.date } : {}),
+      },
     ),
   ),
-  galleryVideo("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Videos/Taga Mati.mp4`, "Taga Mati"),
-  galleryVideo("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Videos/Banwa na Madayaw.mp4`, "Banwa na Madayaw"),
   galleryVideo(
     "dioscoro",
     "Works of Dioscoro Vicentino",
     "intangible",
-    `${DIOSCORO_BASE}/Videos/I\u2019m A Teacher - by SDO Digos City Harmonic Mentors.mp4`,
+    `${DIOSCORO_BASE}/Videos/Taga Mati.mp4`,
+    "Taga Mati",
+    {
+      caption:
+        'Official video of "Taga Mati," the official anthem of Mati City by virtue of City Ordinance No. 111 series of 2013.',
+      credit: DIOSCORO_PHOTO_CREDIT,
+    },
+  ),
+  galleryVideo(
+    "dioscoro",
+    "Works of Dioscoro Vicentino",
+    "intangible",
+    `${DIOSCORO_BASE}/Videos/Banwa na Madayaw.mp4`,
+    "Banwa na Madayaw",
+    {
+      caption:
+        'Provincial hymn "Banwa na Madayaw," composed by Dioscoro B. Vicentino.',
+      credit:
+        "Cris Vincent Olvida. https://www.youtube.com/watch?v=Ta52YMq9bhs",
+    },
+  ),
+  galleryVideo(
+    "dioscoro",
+    "Works of Dioscoro Vicentino",
+    "intangible",
+    `${DIOSCORO_BASE}/Videos/I'm A Teacher.mp4`,
     "I'm A Teacher",
+    {
+      caption:
+        "\"I'm A Teacher\" — performed by SDO Digos City Harmonic Mentors.",
+      credit:
+        "Rodolfo II Osorno. https://www.youtube.com/watch?v=I1U3gsrqT7I",
+    },
   ),
   galleryAudio("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Audio Recordings/Taga Mati.mp3`, "Taga Mati"),
   galleryAudio("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Audio Recordings/Banwa na Madayaw.mp3`, "Banwa na Madayaw"),

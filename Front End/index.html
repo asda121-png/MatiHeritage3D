@@ -2571,12 +2571,33 @@
         letter-spacing: 0.02em;
       }
 
+      @keyframes heritage-marker-bounce {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(0, -8px, 0);
+        }
+      }
+
+      @keyframes heritage-marker-bounce-active {
+        0%,
+        100% {
+          transform: scale(1.08) translate3d(0, 0, 0);
+        }
+        50% {
+          transform: scale(1.08) translate3d(0, -8px, 0);
+        }
+      }
+
       .heritage-marker-wrap {
         background: transparent;
         border: none;
       }
 
       .heritage-photo-marker {
+        position: relative;
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -2585,10 +2606,19 @@
           0 6px 20px rgba(15, 23, 42, 0.35),
           0 0 0 1px rgba(15, 23, 42, 0.08);
         overflow: hidden;
-        background: #ffffff;
+        background: #e2e8f0;
+        animation: heritage-marker-bounce 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95)
+          infinite;
+        will-change: transform;
         transition:
           transform 0.25s ease,
           box-shadow 0.25s ease;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .heritage-photo-marker {
+          animation: none;
+        }
       }
 
       .heritage-photo-marker.built {
@@ -2599,15 +2629,21 @@
         border-color: var(--sky);
       }
 
-      .heritage-photo-marker img {
-        width: 100%;
-        height: 100%;
+      .heritage-marker-wrap .heritage-photo-marker img {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
         object-fit: cover;
+        object-position: center;
         display: block;
       }
 
       .heritage-marker-wrap:hover .heritage-photo-marker {
-        transform: scale(1.12);
+        animation-play-state: paused;
+        transform: scale(1.12) translate3d(0, 0, 0);
         box-shadow:
           0 10px 28px rgba(15, 23, 42, 0.4),
           0 0 0 3px rgba(245, 158, 11, 0.35);
@@ -3036,9 +3072,9 @@
                 </h2>
               </div>
               <p class="hero-desc hero-desc--light">
-                Journey through Mati's rich culture, breathtaking landscapes,
-                and historic landmarks — an immersive digital portal curated for
-                explorers, students, and heritage lovers worldwide.
+                Explore Mati's rich culture, breathtaking landscapes, and
+                historic landmarks through an immersive digital portal created
+                for explorers, students, and heritage lovers worldwide.
               </p>
 
               <div class="hero-actions">
@@ -3277,9 +3313,9 @@
             <p class="experience-eyebrow">Heritage Media</p>
             <h2 class="gallery-preview-title display-font">Gallery</h2>
             <p class="gallery-preview-lead">
-              Tap a collection, flip through samples, and watch a heritage clip
-              — then open the full gallery for every photo and film in the
-              archive.
+              Choose a collection, browse sample images, and watch heritage
+              clips. Open the full gallery to explore every photo and film in
+              the archive.
             </p>
           </header>
 
@@ -3322,7 +3358,7 @@
                 <span
                   class="gallery-preview-spotlight-cat gallery-preview-spotlight-cat--cultural"
                   id="gallery-spotlight-cat"
-                  >Cultural Heritage</span
+                  >Intangible Cultural Heritage</span
                 >
                 <h3
                   class="gallery-preview-spotlight-title"
@@ -3334,8 +3370,8 @@
                   class="gallery-preview-spotlight-desc"
                   id="gallery-spotlight-desc"
                 >
-                  Living traditions and celebration — a sample from Mati&rsquo;s
-                  cultural collection.
+                  A sample of living traditions and celebrations from
+                  Mati&rsquo;s cultural collection.
                 </p>
               </div>
             </div>
@@ -3501,7 +3537,7 @@
                     role="tab"
                     data-video="data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Videos/Banwa na Madayaw.mp4"
                     data-poster="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
-                    data-cat="Cultural Heritage"
+                    data-cat="Intangible Cultural Heritage"
                     data-cat-class="cultural"
                     data-title="Banwa na Madayaw"
                     data-desc="A celebration of Mati&rsquo;s living traditions and creative spirit."
@@ -3518,23 +3554,21 @@
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div class="gallery-preview-foot reveal reveal-delay-2">
-            <div class="gallery-preview-foot-copy">
-              <span class="gallery-preview-foot-stat"
-                ><em data-count="22">0</em>+ sites</span
-              >
-              <span class="gallery-preview-foot-stat"
-                ><em data-count="3">0</em> collections</span
-              >
-              <span class="gallery-preview-foot-stat">Photos &amp; video</span>
+              <div class="gallery-preview-controls-foot">
+                <p class="gallery-preview-archive-note">
+                  Open the full archive for every photo and film across all
+                  heritage collections.
+                </p>
+                <a
+                  href="gallery.html"
+                  class="gallery-preview-cta gallery-preview-cta--panel"
+                >
+                  Explore Full Gallery
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </div>
-            <a href="gallery.html" class="gallery-preview-cta">
-              Explore Full Gallery
-              <span aria-hidden="true">→</span>
-            </a>
           </div>
         </div>
       </section>
@@ -3553,7 +3587,7 @@
               <h2 class="experience-3d-title display-font">3D Explore</h2>
               <p class="experience-3d-lead">
                 Orbit, zoom, and inspect Mati&rsquo;s built heritage in
-                photorealistic 3D — starting with the iconic Pylon Monument.
+                photorealistic 3D, starting with the iconic Pylon Monument.
               </p>
 
               <aside
@@ -3700,8 +3734,8 @@
               </a>
             </div>
             <p class="games-portal-lead">
-              Five heritage challenges — preview each game, earn points, and
-              jump straight into the lobby.
+              Five heritage challenges await. Preview each game, earn points,
+              and jump straight into the lobby.
             </p>
           </header>
 
@@ -3778,8 +3812,8 @@
               Three Pillars of Mati Heritage
             </h2>
             <p class="section-subtitle">
-              Built landmarks, living traditions, and protected landscapes — the
-              full spectrum of Mati City's cultural identity.
+              Built landmarks, living traditions, and protected landscapes
+              reflect the full spectrum of Mati City's cultural identity.
             </p>
           </div>
 
@@ -4216,15 +4250,25 @@
           image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
         },
         {
-          name: "Centennial Clock & Pathway of Leaders",
+          name: "Centennial Clock and Pathway of Leaders",
           category: "built",
           barangay: "central",
-          lat: 6.94429,
-          lng: 126.23609,
+          lat: 6.9521319,
+          lng: 126.2167824,
           official: true,
           desc: "Centennial Park and Pathway of Leaders in the poblacion.",
           image:
             "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+        },
+        {
+          name: "City Hall",
+          category: "built",
+          barangay: "central",
+          lat: 6.9519495,
+          lng: 126.2162107,
+          official: true,
+          desc: "Seat of the City Government of Mati on Nazareno Street.",
+          image: "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
         },
         {
           name: "MFGR Park & Baywalk",
@@ -4240,9 +4284,9 @@
         {
           name: "Subangan Museum",
           category: "built",
-          barangay: "central",
-          lat: 6.944219,
-          lng: 126.248353,
+          barangay: "don-martin-marundan",
+          lat: 6.9442424,
+          lng: 126.2483375,
           official: true,
           desc: "Provincial museum featuring Davor the whale and Mandaya heritage.",
           image:
@@ -4252,8 +4296,8 @@
           name: "Provincial Capitol of Davao Oriental",
           category: "built",
           barangay: "central",
-          lat: 6.9435,
-          lng: 126.2478,
+          lat: 6.9483186,
+          lng: 126.2271687,
           official: false,
           desc: "Provincial government center within Mati City.",
           image:
@@ -4263,8 +4307,8 @@
           name: "Provincial Capitol Old Mansion",
           category: "built",
           barangay: "central",
-          lat: 6.9448,
-          lng: 126.2465,
+          lat: 6.9472,
+          lng: 126.2268,
           official: false,
           desc: "Historic mansion linked to Davao Oriental governance.",
           image:
@@ -4290,7 +4334,7 @@
           official: true,
           desc: "Preserved ancestral house in Barangay Bobon.",
           image:
-            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
+            "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
         },
         {
           name: "OMPO sa Tampat sa Baguidan",
@@ -4315,57 +4359,56 @@
             "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
         },
         {
-          name: "Mamacao Tree",
-          category: "natural",
-          barangay: "bobon",
-          lat: 6.865,
-          lng: 126.322778,
-          official: true,
-          desc: "Heritage tree landmark in Barangay Bobon.",
-          image:
-            "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
-        },
-        {
-          name: "Taytay Daga (Sleeping Dinosaur)",
-          category: "natural",
-          barangay: "badas",
-          lat: 6.886209,
-          lng: 126.184072,
-          official: true,
-          desc: "Iconic land formation and viewpoint in Barangay Badas.",
-          image:
-            "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
-        },
-        {
           name: "Dahican Shoreline",
           category: "natural",
           barangay: "dahican",
-          lat: 6.9255,
-          lng: 126.2795,
+          lat: 6.9243488,
+          lng: 126.2808986,
           official: false,
-          desc: "Seven-kilometer white sand coast — surfing and turtle sanctuary.",
+          desc: "Seven-kilometer stretch of white sand and turquoise waters — sea turtle sanctuary and hub for skimboarding and surfing.",
           image:
             "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
         },
         {
-          name: "Guang-guang Mangrove Nature Reserve",
+          name: "Guang-guang Mangrove Nature Reserve Park",
           category: "natural",
           barangay: "dahican",
-          lat: 6.929,
-          lng: 126.277,
+          lat: 6.9154687,
+          lng: 126.2617709,
           official: false,
-          desc: "201-hectare mangrove park with boardwalks in Barangay Dahican.",
+          desc: "201-hectare mangrove sanctuary in Barangay Dahican with boardwalks and an Environmental and Ecotourism Center.",
           image:
-            "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg",
+            "data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park/Photographs/d.jpg",
+        },
+        {
+          name: "Mamacao Tree",
+          category: "natural",
+          barangay: "bobon",
+          lat: 6.865,
+          lng: 126.3227778,
+          official: true,
+          desc: "Living heritage tree (Dracontomelon dao) in Purok Mamacaw, Barangay Bobon — a resilient symbol of Mati's natural and cultural history.",
+          image:
+            "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+        },
+        {
+          name: "Oak Island",
+          category: "natural",
+          barangay: "pujada-bay",
+          lat: 6.8676,
+          lng: 126.1913,
+          official: false,
+          desc: "Vanishing white-sand bar in Pujada Bay that emerges at low tide — a premier snorkeling and island-hopping destination.",
+          image: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
         },
         {
           name: "Pujada Bay",
           category: "natural",
           barangay: "central",
-          lat: 6.8914,
-          lng: 126.2272,
+          lat: 6.89139,
+          lng: 126.22722,
           official: false,
-          desc: "World-renowned bay at the heart of Mati City's coastline.",
+          desc: "Majestic cove with turquoise waters, coral reefs, seagrass beds, and mangrove forests linking Mount Hamiguitan to the Pacific.",
           image:
             "data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
         },
@@ -4376,40 +4419,47 @@
           lat: 6.875278,
           lng: 126.183611,
           official: false,
-          desc: "156-hectare island gem at the mouth of Pujada Bay.",
+          desc: "157-hectare protected island at the mouth of Pujada Bay with lush forests, white-sand coves, and vibrant coral reefs.",
           image:
             "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
         },
         {
-          name: "Oak Island",
+          name: "Taytay Daga (Sleeping Dinosaur)",
           category: "natural",
-          barangay: "pujada-bay",
-          lat: 6.868,
-          lng: 126.192,
-          official: false,
-          desc: "Vanishing sandbar island near Pujada Island.",
-          image: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+          barangay: "badas",
+          lat: 6.886209,
+          lng: 126.184072,
+          official: true,
+          desc: "579-hectare landform in Sitio Baso, Barangay Badas, resembling a dinosaur resting on Pujada Bay — protected under Resolution No. 61, Series of 2019.",
+          image:
+            "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
         },
         {
           name: "Waniban Island",
           category: "natural",
-          barangay: "pujada-bay",
-          lat: 6.8325,
-          lng: 126.273889,
+          barangay: "tamisan",
+          lat: 6.8324692,
+          lng: 126.273253,
           official: false,
-          desc: "White-sand island destination within Pujada Bay.",
-          image:
-            "data/Natural Heritage/Waniban Island/Photographs/Waniban-island.jpg",
+          desc: "Four-hectare white-sand islet in Pujada Bay — part of Mati's Tri-Island hopping circuit, a short boat ride from Barangay Tamisan.",
+          image: "data/GALLERY/Waniban-island.jpg",
         },
       ];
 
-      function createHeritagePhotoIcon(site, size = 40) {
-        const imgSrc = encodeURI(site.image);
+      function createHeritagePhotoIcon(site, size = 40, bounceIndex = 0) {
+        const imgSrc = site.image ? encodeURI(site.image) : "";
         const half = size / 2;
+        const bounceDelay = ((bounceIndex % 12) * 0.14).toFixed(2);
+        const markerInner = imgSrc
+          ? `<img src="${imgSrc}" alt="${site.name}" loading="lazy" />`
+          : `<span aria-hidden="true" style="font-size:0.62rem;font-weight:800;letter-spacing:0.04em">BH</span>`;
+        const placeholderStyle = imgSrc
+          ? ""
+          : "display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#ecfdf5,#d1fae5);color:#047857;";
         return L.divIcon({
           className: "heritage-marker-wrap",
-          html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size}px" title="${site.name}">
-            <img src="${imgSrc}" alt="${site.name}" loading="lazy" />
+          html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size}px;animation-delay:${bounceDelay}s;${placeholderStyle}" title="${site.name}">
+            ${markerInner}
           </div>`,
           iconSize: [size, size],
           iconAnchor: [half, half],
@@ -4423,7 +4473,9 @@
         badas: "Badas",
         bobon: "Bobon",
         sainz: "Sainz",
+        "don-martin-marundan": "Don Martin Marundan",
         "pujada-bay": "Pujada Bay",
+        tamisan: "Tamisan",
       };
 
       function barangayLabel(id) {
@@ -4434,10 +4486,10 @@
         const color = HERITAGE_COLORS[site.category];
         const label =
           site.category === "built" ? "Built Heritage" : "Natural Heritage";
-        const imgSrc = encodeURI(site.image);
+        const imgSrc = site.image ? encodeURI(site.image) : "";
         return `
           <div>
-            <img class="map-popup-photo" src="${imgSrc}" alt="${site.name}" />
+            ${imgSrc ? `<img class="map-popup-photo" src="${imgSrc}" alt="${site.name}" />` : ""}
             <span class="map-popup-cat" style="background:${color}22;color:${color}">${label}</span>
             <div class="map-popup-title">${site.name}</div>
             <div class="map-popup-desc" style="font-size:0.7rem;color:#94a3b8;margin-bottom:0.35rem">Brgy. ${barangayLabel(site.barangay)} · Mati City</div>
@@ -4540,9 +4592,9 @@
         layerGroup.clearLayers();
         const visibleSites = getFilteredHeritageSites(category);
 
-        visibleSites.forEach((site) => {
+        visibleSites.forEach((site, index) => {
           L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site),
+            icon: createHeritagePhotoIcon(site, 40, index),
           })
             .bindPopup(buildPopup(site), { maxWidth: 260, minWidth: 200 })
             .addTo(layerGroup);
@@ -4951,10 +5003,10 @@
 
       const gallerySamples = {
         cultural: {
-          cat: "Cultural Heritage",
+          cat: "Intangible Cultural Heritage",
           catClass: "cultural",
           title: "Sambuokan Festival",
-          desc: "Living traditions and celebration — a sample from Mati's cultural collection.",
+          desc: "A sample of living traditions and celebrations from Mati's cultural collection.",
           img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
           alt: "Sambuokan Festival",
         },
@@ -4962,7 +5014,7 @@
           cat: "Built Heritage",
           catClass: "built",
           title: "Pylon Monument",
-          desc: "Mati's iconic landmark — a sample from the built heritage collection.",
+          desc: "A sample of Mati's iconic landmark from the built heritage collection.",
           img: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           alt: "Pylon Monument",
         },
@@ -4970,7 +5022,7 @@
           cat: "Natural Heritage",
           catClass: "natural",
           title: "Pujada Island",
-          desc: "Coastal paradise — a sample from Mati's natural heritage collection.",
+          desc: "A sample of Mati's coastal paradise from the natural heritage collection.",
           img: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
           alt: "Pujada Island",
         },
@@ -4990,7 +5042,6 @@
         const clipButtons = [
           ...gallerySection.querySelectorAll(".gallery-preview-clip"),
         ];
-        const countEls = [...gallerySection.querySelectorAll("[data-count]")];
 
         let activeCategory = "cultural";
         let activeMode = "photo";
@@ -5116,32 +5167,11 @@
           clip.addEventListener("click", () => setVideoMode(clip));
         });
 
-        const animateCounts = () => {
-          countEls.forEach((el) => {
-            const target = Number(el.dataset.count) || 0;
-            const duration = 1200;
-            const start = performance.now();
-
-            const tick = (now) => {
-              const progress = Math.min((now - start) / duration, 1);
-              const eased = 1 - (1 - progress) ** 3;
-              el.textContent = String(Math.round(target * eased));
-              if (progress < 1) requestAnimationFrame(tick);
-            };
-
-            requestAnimationFrame(tick);
-          });
-        };
-
         const galleryObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 if (activeMode === "video") playGalleryVideo();
-                if (!gallerySection.dataset.counted) {
-                  gallerySection.dataset.counted = "true";
-                  animateCounts();
-                }
               } else if (galleryVideo) {
                 galleryVideo.pause();
               }
