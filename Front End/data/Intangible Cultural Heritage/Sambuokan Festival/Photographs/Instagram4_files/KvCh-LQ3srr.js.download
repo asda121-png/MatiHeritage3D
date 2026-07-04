@@ -1,0 +1,3 @@
+;/*FB_PKG_DELIM*/
+
+__d("IGExploreScrollBreakContext.react",["emptyFunction","react"],(function(t,n,r,o,a,i,l){"use strict";var e,s=e||(e=o("react")),u=e.useContext,c={isAboveThreshold:!1,isPause:!1,isPivot:!1,logImpression:r("emptyFunction"),logKeepScrollingClick:r("emptyFunction"),logPivotClick:r("emptyFunction"),markShown:r("emptyFunction"),onDismiss:r("emptyFunction")},d=s.createContext(c);function m(){return u(d)}l.IGExploreScrollBreakContext=d,l.useIGExploreScrollBreakContext=m}),98);

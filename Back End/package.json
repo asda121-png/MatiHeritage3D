@@ -1,0 +1,22 @@
+{
+  "name": "mati-heritage-3d-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "supabase:test": "node scripts/test-supabase.mjs",
+    "supabase:seed": "node scripts/seed-built-heritage.mjs",
+    "supabase:seed-sql": "node scripts/generate-built-heritage-seed-sql.mjs",
+    "supabase:seed-bootstrap": "node scripts/generate-bootstrap-rpc.mjs",
+    "supabase:seed-gallery": "node scripts/seed-gallery-heritage.mjs",
+    "supabase:seed-all": "node scripts/seed-built-heritage.mjs && node scripts/seed-gallery-heritage.mjs",
+    "supabase:link": "npx supabase link",
+    "supabase:push": "npx supabase db push"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.8",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "supabase": "^2.20.12"
+  }
+}

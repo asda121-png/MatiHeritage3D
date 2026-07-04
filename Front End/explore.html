@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Explore — Pylon Monument | Mati Heritage 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Orbitron:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="heritage-palette.css" />
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+    ></script>
+    <style>
+      body.explore-module {
+        font-family: "DM Sans", sans-serif !important;
+        background: var(--surface-dark);
+        color: #e2e8f0;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.explore-module .site-nav__link {
+        font-family: "Orbitron", sans-serif !important;
+        font-size: 0.8125rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.12em !important;
+      }
+
+      .explore-page {
+        padding-top: 72px;
+      }
+
+      .explore-hero {
+        position: relative;
+        padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem)
+          clamp(1.5rem, 3vw, 2rem);
+        text-align: center;
+        background:
+          radial-gradient(
+            ellipse 70% 80% at 50% 0%,
+            rgba(4, 120, 87, 0.14),
+            transparent 58%
+          ),
+          radial-gradient(
+            ellipse 50% 50% at 100% 100%,
+            rgba(2, 132, 199, 0.1),
+            transparent 55%
+          ),
+          var(--surface-dark);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .explore-hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.42rem 0.95rem;
+        border-radius: 9999px;
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--amber-light);
+        background: rgba(217, 119, 6, 0.14);
+        border: 1px solid rgba(245, 158, 11, 0.28);
+        margin-bottom: 1rem;
+      }
+
+      .explore-hero-eyebrow span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 8px rgba(52, 211, 153, 0.75);
+      }
+
+      .explore-hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin-bottom: 0.65rem;
+      }
+
+      .explore-hero p {
+        max-width: 40rem;
+        margin: 0 auto;
+        color: #94a3b8;
+        line-height: 1.7;
+        font-size: clamp(0.95rem, 2vw, 1.08rem);
+      }
+
+      .explore-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 88rem;
+        margin: 0 auto;
+      }
+
+      @media (min-width: 1024px) {
+        .explore-layout {
+          grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+          min-height: calc(100vh - 96px - 180px);
+        }
+      }
+
+      .explore-viewer-wrap {
+        position: relative;
+        min-height: clamp(420px, 62vh, 720px);
+        background:
+          radial-gradient(
+            ellipse at 50% 35%,
+            rgba(56, 189, 248, 0.08) 0%,
+            transparent 55%
+          ),
+          #0a0f18;
+      }
+
+      .explore-viewer-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(ellipse at center, black, transparent 78%);
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .explore-model {
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        --poster-color: #0a0f18;
+        background: transparent;
+      }
+
+      .explore-model::part(default-progress-bar) {
+        background-color: var(--forest-light);
+      }
+
+      .explore-viewer-hint {
+        position: absolute;
+        left: 50%;
+        bottom: 1.25rem;
+        transform: translateX(-50%);
+        z-index: 4;
+        padding: 0.45rem 0.9rem;
+        border-radius: 9999px;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        pointer-events: none;
+      }
+
+      .explore-sidebar {
+        padding: clamp(1.5rem, 3vw, 2.25rem);
+        background: rgba(15, 23, 42, 0.92);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      @media (min-width: 1024px) {
+        .explore-sidebar {
+          border-top: none;
+          border-left: 1px solid rgba(255, 255, 255, 0.06);
+        }
+      }
+
+      .explore-sidebar h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.35rem;
+      }
+
+      .explore-sidebar .site-type {
+        display: inline-block;
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--sky-light);
+        margin-bottom: 1.15rem;
+      }
+
+      .explore-sidebar p {
+        color: #94a3b8;
+        line-height: 1.75;
+        font-size: 0.92rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .explore-facts {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.75rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .explore-facts li {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #cbd5e1;
+        padding: 0.65rem 0.85rem;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .explore-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.72rem 1.15rem;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #fff;
+        background: var(--gradient-heritage);
+        box-shadow: 0 8px 24px rgba(4, 120, 87, 0.28);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .explore-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(2, 132, 199, 0.32);
+      }
+    </style>
+  </head>
+  <body class="explore-module">
+    <div id="header-placeholder" class="min-h-[96px]"></div>
+
+    <main class="explore-page">
+      <header class="explore-hero">
+        <p class="explore-hero-eyebrow">
+          <span aria-hidden="true"></span>
+          Built Heritage · 3D Archive
+        </p>
+        <h1>Pylon Monument</h1>
+        <p>
+          Orbit, zoom, and inspect Mati City&rsquo;s Point Zero — a live 3D model
+          of the province&rsquo;s geographic reference landmark.
+        </p>
+      </header>
+
+      <div class="explore-layout">
+        <div class="explore-viewer-wrap">
+          <model-viewer
+            id="explore-pylon-model"
+            class="explore-model"
+            src="data/Built Heritage/Pylon Monument/Pylon.glb"
+            alt="Pylon Monument 3D model"
+            auto-rotate
+            rotation-per-second="16deg"
+            camera-controls
+            touch-action="pan-y"
+            camera-orbit="auto 75deg 120%"
+            min-camera-orbit="auto 25deg 75%"
+            max-camera-orbit="auto 110deg 200%"
+            shadow-intensity="1.2"
+            exposure="1.08"
+            environment-image="neutral"
+            loading="eager"
+            reveal="auto"
+            interaction-prompt="auto"
+            aria-label="Interactive 3D model of Pylon Monument"
+          ></model-viewer>
+          <p class="explore-viewer-hint">Drag to rotate · Scroll to zoom</p>
+        </div>
+
+        <aside class="explore-sidebar">
+          <span class="site-type">Built Heritage</span>
+          <h2>Point Zero of Davao Oriental</h2>
+          <p>
+            The Pylon Monument stands on JP Rizal Street, Barangay Central, as
+            Mati&rsquo;s premier cultural landmark. Designed by National Artist
+            Juan F. Nakpil and later renovated with culturally themed
+            ornamentation, it remains a symbol of the city&rsquo;s faith and
+            resilience.
+          </p>
+          <ul class="explore-facts">
+            <li>30-foot reinforced concrete &amp; brick tower</li>
+            <li>Central glass sphere from recycled San Miguel bottles</li>
+            <li>Recognized under Resolution No. 61, Series of 2019</li>
+          </ul>
+          <a href="index.html#portal-3d" class="explore-back">
+            ← Back to Visitor Portal
+          </a>
+        </aside>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+      fetch("header.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          document.getElementById("header-placeholder").replaceWith(header);
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)
+            ?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          const navRoutes = {
+            home: "index.html",
+            map: "index.html#mati-map-section",
+            gallery: "gallery.html",
+            "3d": "3dexplore.html",
+            games: "game.html",
+            about: "about_us.html",
+          };
+
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            const key = link.getAttribute("data-nav");
+            if (key && navRoutes[key]) link.href = navRoutes[key];
+            if (key === "3d") link.classList.add("is-active");
+          });
+
+          if (typeof window.initSiteHeader === "function") {
+            window.initSiteHeader();
+          }
+        })
+        .catch((err) => console.error("Error loading header:", err));
+
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          if (typeof window.initSiteFooter === "function") {
+            window.initSiteFooter("3d");
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+
+      const exploreModel = document.getElementById("explore-pylon-model");
+      if (exploreModel) {
+        const modelObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              exploreModel.autoRotate = entry.isIntersecting;
+            });
+          },
+          { threshold: 0.05 },
+        );
+        modelObserver.observe(exploreModel);
+      }
+    </script>
+  </body>
+</html>

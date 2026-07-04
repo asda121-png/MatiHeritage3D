@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in — Mati Heritage 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Oswald:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="auth.css" />
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+    ></script>
+  </head>
+  <body class="auth-body auth-body--portal">
+    <div class="auth-portal-page">
+      <div class="auth-portal-card">
+        <aside class="auth-portal-visual">
+          <div class="auth-portal-visual__media">
+            <div
+              id="login-model-loading"
+              class="auth-portal-visual__loading"
+              aria-live="polite"
+              aria-busy="true"
+            >
+              <div class="auth-portal-visual__loading-spinner" aria-hidden="true"></div>
+              <p class="auth-portal-visual__loading-text">Loading 3D preview…</p>
+              <div class="auth-portal-visual__loading-bar" aria-hidden="true">
+                <span id="login-model-progress" class="auth-portal-visual__loading-fill"></span>
+              </div>
+            </div>
+            <model-viewer
+              id="login-pylon-model"
+              class="auth-portal-visual__model"
+              src="data/Built Heritage/Pylon Monument/Pylon.glb"
+              poster="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+              alt="Pylon Monument 3D model"
+              auto-rotate
+              rotation-per-second="24deg"
+              camera-controls
+              touch-action="pan-y"
+              camera-orbit="0deg 78deg 92%"
+              shadow-intensity="1"
+              exposure="1.05"
+              environment-image="neutral"
+              loading="eager"
+              reveal="auto"
+              interaction-prompt="none"
+              aria-label="Pylon Monument 3D model, City of Mati"
+            ></model-viewer>
+          </div>
+          <div class="auth-portal-visual__overlay"></div>
+          <div class="auth-portal-visual__grain" aria-hidden="true"></div>
+
+          <div class="auth-portal-visual__content">
+            <div class="auth-portal-visual__brand">
+              <img
+                class="auth-portal-visual__seal"
+                src="logo/Flag_of_Mati,_Davao_Oriental.png"
+                alt="City of Mati seal"
+                width="52"
+                height="52"
+              />
+              <div class="auth-portal-visual__brand-text">
+                <p class="auth-portal-visual__name">City of Mati</p>
+                <p class="auth-portal-visual__tagline">Tourism and Promotions Office</p>
+              </div>
+              <img
+                class="auth-portal-visual__tourism"
+                src="logo/City of Mati Tourism and Promotions Office.png"
+                alt="City Tourism and Promotions Office"
+                width="86"
+                height="48"
+              />
+            </div>
+          </div>
+        </aside>
+
+        <main class="auth-portal-form">
+          <a href="index.html" class="auth-portal-back" aria-label="Back to visitor portal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Visitor portal</span>
+          </a>
+
+          <div class="auth-portal-form__inner">
+            <header class="auth-portal-header">
+              <div class="auth-portal-logo">
+                <p class="auth-portal-logo__eyebrow">Mati Heritage</p>
+                <h1 class="auth-portal-logo__title">Portal</h1>
+                <span class="auth-portal-logo__line" aria-hidden="true"></span>
+              </div>
+              <p class="auth-portal-header__welcome">MADAYAW NA PAG-ABOT</p>
+            </header>
+
+            <div id="login-alert" class="auth-alert auth-alert--error hidden" role="alert"></div>
+
+            <form id="login-form" class="auth-portal-fields" novalidate>
+              <div class="auth-portal-field">
+                <label for="login-identifier">Email or username</label>
+                <div class="auth-portal-input">
+                  <svg class="auth-portal-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                  </svg>
+                  <input
+                    id="login-identifier"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Registered email or username"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="auth-portal-field">
+                <label for="login-password">Password</label>
+                <div class="auth-portal-input auth-portal-input--toggle">
+                  <svg class="auth-portal-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                  <input
+                    id="login-password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="toggle-password"
+                    class="auth-portal-input__toggle"
+                    aria-label="Show password"
+                  >
+                    <svg id="eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <svg id="eye-closed" class="hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="auth-portal-row">
+                <label class="auth-portal-check">
+                  <input type="checkbox" id="login-remember" checked />
+                  <span class="auth-portal-check__box" aria-hidden="true"></span>
+                  <span>Keep me signed in</span>
+                </label>
+              </div>
+
+              <div class="auth-portal-actions">
+                <button type="submit" id="login-submit" class="auth-portal-btn auth-portal-btn--primary">
+                  <span class="auth-portal-btn__label">Login</span>
+                  <span class="auth-portal-btn__spinner" aria-hidden="true"></span>
+                </button>
+                <a href="userregistration.html" class="auth-portal-btn auth-portal-btn--outline">Register</a>
+              </div>
+            </form>
+
+            <p class="auth-portal-foot">
+              <a href="#" id="forgot-password-link">Forgot Password?</a>
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="auth-ui.js"></script>
+    <script>
+      MatiAuthUI.bindPasswordToggle("login-password", "toggle-password", "eye-open", "eye-closed");
+
+      (function bindLoginModelLoading() {
+        const viewer = document.getElementById("login-pylon-model");
+        const loading = document.getElementById("login-model-loading");
+        const progressFill = document.getElementById("login-model-progress");
+        const loadingText = loading?.querySelector(".auth-portal-visual__loading-text");
+        if (!viewer || !loading) return;
+
+        function setProgress(ratio) {
+          if (!progressFill) return;
+          const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+          progressFill.style.width = `${pct}%`;
+        }
+
+        function hideLoading() {
+          loading.classList.add("is-hidden");
+          loading.setAttribute("aria-busy", "false");
+          window.setTimeout(() => {
+            loading.hidden = true;
+            loading.setAttribute("hidden", "");
+          }, 380);
+        }
+
+        if (viewer.loaded) {
+          setProgress(1);
+          hideLoading();
+          return;
+        }
+
+        viewer.addEventListener("progress", (event) => {
+          setProgress(event.detail.totalProgress);
+        });
+
+        viewer.addEventListener(
+          "load",
+          () => {
+            setProgress(1);
+            hideLoading();
+          },
+          { once: true },
+        );
+
+        viewer.addEventListener(
+          "error",
+          () => {
+            if (loadingText) {
+              loadingText.textContent = "3D preview unavailable";
+            }
+            setProgress(0);
+            window.setTimeout(hideLoading, 1400);
+          },
+          { once: true },
+        );
+      })();
+
+      (function () {
+        const form = document.getElementById("login-form");
+        const alertEl = document.getElementById("login-alert");
+        const submitBtn = document.getElementById("login-submit");
+        const identifierInput = document.getElementById("login-identifier");
+
+        identifierInput?.focus();
+
+        document.getElementById("forgot-password-link")?.addEventListener("click", (e) => {
+          e.preventDefault();
+          showAlert("Password recovery is not available yet. Please contact the portal administrator.");
+        });
+
+        function showAlert(message) {
+          if (!alertEl) return;
+          alertEl.textContent = message;
+          alertEl.classList.remove("hidden", "auth-alert--success");
+          alertEl.classList.add("auth-alert--error");
+        }
+
+        function setLoading(isLoading) {
+          if (!submitBtn) return;
+          submitBtn.disabled = isLoading;
+          submitBtn.classList.toggle("is-loading", isLoading);
+          submitBtn.setAttribute("aria-busy", isLoading ? "true" : "false");
+        }
+
+        form?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          alertEl?.classList.add("hidden");
+
+          const identifier = identifierInput?.value?.trim() || "";
+          const password = document.getElementById("login-password")?.value || "";
+
+          if (!identifier || !password) {
+            showAlert("Please enter your email or username and password.");
+            return;
+          }
+
+          setLoading(true);
+
+          window.setTimeout(() => {
+            const result = MatiAuth.login(identifier, password);
+            if (!result.ok) {
+              setLoading(false);
+              showAlert(result.message);
+              return;
+            }
+            window.location.href = "index.html";
+          }, 420);
+        });
+      })();
+    </script>
+  </body>
+</html>
