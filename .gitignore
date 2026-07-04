@@ -1,0 +1,22 @@
+# GitHub blocks files over 100 MB — never commit these
+*.mov
+*.MOV
+Front End/data/Intangible Cultural Heritage/Samboukan & Pujada Festival Timeline.pdf
+Front End/data/Built Heritage/Centennial Clock and Pathway of Leaders/Pylon.glb
+# macOS / Windows junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.swp
+
+# Optional: uncomment to keep ALL videos out of GitHub (host elsewhere)
+# Front End/data/**/Videos/
+
+# Dependencies & secrets
+node_modules/
+Back End/node_modules/
+.env
+Back End/.env

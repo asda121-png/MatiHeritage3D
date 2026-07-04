@@ -1,0 +1,288 @@
+/* Pixel logout overlay — smooth retro UI */
+
+.pixel-logout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 5, 18, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    backdrop-filter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pixel-logout-overlay[hidden] {
+  display: none !important;
+}
+
+.pixel-logout-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+  background: rgba(2, 5, 18, 0.94);
+}
+
+.pixel-logout-overlay.is-exiting {
+  opacity: 0;
+  visibility: hidden;
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+}
+
+.pixel-logout-overlay__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.16), transparent 48%),
+    radial-gradient(circle at 85% 85%, rgba(34, 211, 238, 0.12), transparent 48%),
+    #020512;
+}
+
+.pixel-logout-overlay.is-active .pixel-logout-overlay__bg {
+  opacity: 1;
+}
+
+.pixel-logout-overlay__bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(34, 211, 238, 0.14) 1px, transparent 1px),
+    radial-gradient(rgba(168, 85, 247, 0.08) 1.5px, transparent 1.5px);
+  background-size:
+    40px 40px,
+    120px 120px;
+  animation: pixel-logout-dots-scroll 28s linear infinite;
+}
+
+.pixel-logout-overlay__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(34, 211, 238, 0.04) 50%,
+    transparent 100%
+  );
+  background-size: 100% 220%;
+  animation: pixel-logout-scanline 16s ease-in-out infinite;
+}
+
+.pixel-logout-overlay__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.75rem;
+  padding: 2.5rem;
+  opacity: 0;
+  transform: scale(0.94) translateY(16px);
+  will-change: opacity, transform;
+}
+
+.pixel-logout-overlay.is-active .pixel-logout-overlay__panel {
+  animation: pixel-logout-panel-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.pixel-logout-overlay.is-exiting .pixel-logout-overlay__panel {
+  animation: pixel-logout-panel-out 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.pixel-logout-overlay__loader {
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  gap: 12px;
+}
+
+.pixel-logout-overlay__loader span {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: #164e63;
+  opacity: 0.35;
+  transform: scale(0.86);
+  box-shadow: none;
+  animation: pixel-logout-wave 1.35s cubic-bezier(0.45, 0.05, 0.25, 0.95) infinite;
+}
+
+.pixel-logout-overlay__loader span:nth-child(1) {
+  animation-delay: 0s;
+}
+.pixel-logout-overlay__loader span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.pixel-logout-overlay__loader span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+.pixel-logout-overlay__loader span:nth-child(4) {
+  animation-delay: 0.36s;
+}
+.pixel-logout-overlay__loader span:nth-child(5) {
+  animation-delay: 0.48s;
+}
+.pixel-logout-overlay__loader span:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.pixel-logout-overlay__loader span:nth-child(7) {
+  animation-delay: 0.72s;
+}
+.pixel-logout-overlay__loader span:nth-child(8) {
+  animation-delay: 0.84s;
+}
+.pixel-logout-overlay__loader span:nth-child(9) {
+  animation-delay: 0.96s;
+}
+
+.pixel-logout-overlay__text {
+  margin: 0;
+  max-width: min(92vw, 22rem);
+  font-family: "Press Start 2P", "Courier New", monospace;
+  font-size: clamp(1rem, 5.5vw, 1.45rem);
+  font-weight: 400;
+  line-height: 2.15;
+  letter-spacing: 0.07em;
+  color: #fff;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  text-shadow:
+    0 0 28px rgba(34, 211, 238, 0.6),
+    5px 5px 0 rgba(168, 85, 247, 0.38);
+}
+
+.pixel-logout-overlay.is-active .pixel-logout-overlay__text {
+  animation:
+    pixel-logout-text-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards,
+    pixel-logout-text-glow 2.2s ease-in-out 0.85s infinite;
+}
+
+@keyframes pixel-logout-dots-scroll {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      40px 40px,
+      120px 120px;
+  }
+}
+
+@keyframes pixel-logout-scanline {
+  0% {
+    background-position: 0 -120%;
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 120%;
+    opacity: 0.6;
+  }
+}
+
+@keyframes pixel-logout-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pixel-logout-panel-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(-10px);
+  }
+}
+
+@keyframes pixel-logout-wave {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.86);
+    background: #164e63;
+    box-shadow: none;
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+    background: #22d3ee;
+    box-shadow: 0 0 28px rgba(34, 211, 238, 0.75);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+    background: #67e8f9;
+    box-shadow: 0 0 38px rgba(103, 232, 249, 0.7);
+  }
+}
+
+@keyframes pixel-logout-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pixel-logout-text-glow {
+  0%,
+  100% {
+    text-shadow:
+      0 0 16px rgba(34, 211, 238, 0.4),
+      4px 4px 0 rgba(168, 85, 247, 0.28);
+  }
+  50% {
+    text-shadow:
+      0 0 32px rgba(34, 211, 238, 0.75),
+      5px 5px 0 rgba(168, 85, 247, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-logout-overlay {
+    transition: none;
+    backdrop-filter: none;
+  }
+
+  .pixel-logout-overlay__panel,
+  .pixel-logout-overlay__text,
+  .pixel-logout-overlay__loader span,
+  .pixel-logout-overlay__bg,
+  .pixel-logout-overlay__bg::before,
+  .pixel-logout-overlay__bg::after {
+    animation: none !important;
+    transition: none;
+  }
+
+  .pixel-logout-overlay.is-active .pixel-logout-overlay__panel,
+  .pixel-logout-overlay.is-active .pixel-logout-overlay__text,
+  .pixel-logout-overlay.is-active .pixel-logout-overlay__bg {
+    opacity: 1;
+    transform: none;
+  }
+}

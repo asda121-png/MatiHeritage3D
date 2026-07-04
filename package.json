@@ -1,0 +1,11 @@
+{
+  "name": "mati-heritage-3d",
+  "private": true,
+  "scripts": {
+    "install:backend": "npm install --prefix \"Back End\"",
+    "supabase:test": "npm run supabase:test --prefix \"Back End\"",
+    "supabase:seed": "npm run supabase:seed --prefix \"Back End\"",
+    "supabase:link": "npm run supabase:link --prefix \"Back End\"",
+    "supabase:push": "npm run supabase:push --prefix \"Back End\""
+  }
+}
