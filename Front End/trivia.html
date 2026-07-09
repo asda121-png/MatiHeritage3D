@@ -2151,59 +2151,71 @@
       </span>
     </aside>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="heritage-map-sites.js"></script>
+    <script src="admin-heritage-base.js"></script>
+    <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
+    <script src="heritage-game-content.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="heritage-points.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="game-exit-guard.js"></script>
     <script>
+      void MatiGameAuthGate.init({ returnTo: "trivia.html" });
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
 
-      const quizData = [
+      let quizData = [];
+      let heritageSession = null;
+
+      const FALLBACK_QUIZ = [
         {
-          q: "Which Mati landmark is known for its shape resembling a prehistoric creature?",
+          q: "Which Mati landmark resembles a prehistoric creature resting on Pujada Bay?",
           options: [
             "Mount Hamiguitan",
-            "Sleeping Dinosaur",
-            "Dahican Beach",
+            "Taytay Daga (Sleeping Dinosaur)",
+            "Dahican Shoreline",
             "Waniban Island",
           ],
           correct: 1,
+          category: "natural",
         },
         {
-          q: "What famous white sand beach in Mati is popular for surfing and skimboarding?",
-          options: ["Mayo Bay", "Dahican Beach", "Blue Lagoon", "Masao Beach"],
-          correct: 1,
-        },
-        {
-          q: "In which museum can you find 'Davao', the 50-foot sperm whale skeleton?",
-          options: [
-            "Subangan Museum",
-            "Mati Cultural Center",
-            "Heritage House",
-            "People's Park",
-          ],
-          correct: 0,
-        },
-        {
-          q: "What is the capital city of Davao Oriental?",
-          options: ["Lupon", "Banaybanay", "Mati", "Cateel"],
-          correct: 2,
-        },
-        {
-          q: "Which festival in Mati celebrates the city's founding anniversary and bountiful harvest?",
+          q: "Which festival celebrates Mati's founding anniversary and unity?",
           options: [
             "Kadawayan Festival",
             "Sambuokan Festival",
-            "Pujada Festival",
-            "Dahican Fest",
+            "Kadayawan Festival",
+            "Higalaay Festival",
           ],
           correct: 1,
+          category: "intangible",
+        },
+        {
+          q: "Which site is known as a gateway monument of Mati City?",
+          options: [
+            "Pylon Monument",
+            "Menzi Visitors Information Center",
+            "Oak Island",
+            "Mamacao Tree",
+          ],
+          correct: 0,
+          category: "built",
         },
       ];
 
       const diffSettings = {
-        easy: { time: 20, points: 10, label: "Easy" },
-        medium: { time: 15, points: 20, label: "Medium" },
-        hard: { time: 10, points: 50, label: "Hard" },
+        easy: { time: 20, points: 10, label: "Easy", questions: 5 },
+        medium: { time: 15, points: 20, label: "Medium", questions: 8 },
+        hard: { time: 10, points: 50, label: "Hard", questions: 10 },
       };
 
       const TIMER_CIRC = 283;
@@ -2211,6 +2223,7 @@
       let difficulty = "medium";
       let currentQuestion = 0;
       let score = 0;
+      let gameActive = false;
       let canAnswer = true;
       let timerInterval = null;
       let timeLeft = 15;
@@ -2701,22 +2714,27 @@
       }
 
       function showResults() {
+        gameActive = false;
         document.getElementById("game-show").classList.add("hidden");
         document.getElementById("results-screen").classList.remove("hidden");
 
         document.getElementById("final-score").textContent = score;
 
-        let totalHeritagePoints = parseInt(
-          localStorage.getItem("totalHeritagePoints") || "0",
-          10,
-        );
-        totalHeritagePoints += score;
-        localStorage.setItem(
-          "totalHeritagePoints",
-          String(totalHeritagePoints),
-        );
-        const pointsEl = document.getElementById("header-total-points");
-        if (pointsEl) pointsEl.textContent = totalHeritagePoints;
+        if (typeof MatiHeritagePoints !== "undefined") {
+          void MatiHeritagePoints.add(score);
+        } else {
+          let totalHeritagePoints = parseInt(
+            localStorage.getItem("totalHeritagePoints") || "0",
+            10,
+          );
+          totalHeritagePoints += score;
+          localStorage.setItem(
+            "totalHeritagePoints",
+            String(totalHeritagePoints),
+          );
+          const pointsEl = document.getElementById("header-total-points");
+          if (pointsEl) pointsEl.textContent = totalHeritagePoints;
+        }
 
         const maxScore = quizData.length * diffSettings[difficulty].points;
         let msg = "";
@@ -2736,11 +2754,38 @@
         );
       }
 
-      function startGame() {
+      async function prepareTriviaDeck() {
+        const questionCount = diffSettings[difficulty]?.questions || 8;
+        try {
+          if (typeof MatiHeritageGameContent !== "undefined") {
+            heritageSession = await MatiHeritageGameContent.createSession();
+            const generated = heritageSession.trivia(questionCount);
+            if (generated.length) {
+              quizData = heritageSession.rng.shuffle(generated);
+              return quizData;
+            }
+          }
+        } catch (error) {
+          console.warn("Trivia heritage deck failed, using fallback:", error);
+        }
+        quizData = shuffle(FALLBACK_QUIZ).slice(
+          0,
+          Math.min(questionCount, FALLBACK_QUIZ.length),
+        );
+        return quizData;
+      }
+
+      async function startGame() {
         currentQuestion = 0;
         score = 0;
+        gameActive = true;
         updateScoreDisplay();
-        shuffle(quizData);
+        await prepareTriviaDeck();
+        if (!quizData.length) {
+          gameActive = false;
+          playAnnouncer("No heritage questions are available yet.", "host");
+          return;
+        }
         openCurtain();
 
         if (bgMusic.paused && musicVol > 0) bgMusic.play().catch(() => {});
@@ -2759,15 +2804,20 @@
         .getElementById("start-game-btn")
         .addEventListener("click", () => {
           playShowClick("start");
-          startGame();
+          void startGame();
         });
 
       document.getElementById("retry-btn").addEventListener("click", () => {
         playShowClick("click");
+        gameActive = false;
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.add("hidden");
         document.getElementById("intro-screen").classList.remove("hidden");
       });
+
+      if (typeof MatiGameExitGuard !== "undefined") {
+        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "trivia" });
+      }
 
       document.getElementById("music-toggle")?.addEventListener("click", () => {
         playShowClick("click");

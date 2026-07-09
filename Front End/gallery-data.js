@@ -473,7 +473,166 @@ function galleryAudio(siteId, siteName, category, src, title, meta = {}) {
     credit: meta.credit || "",
     author: meta.author || meta.credit || "",
     caption: meta.caption || "",
+    lyrics: meta.lyrics || null,
   };
+}
+
+/** Hymn / song lyrics shown with Dioscoro audio recordings */
+const DIOSCORO_LYRICS = {
+  "Taga Mati": {
+    composer: "Dioscoro B. Vicentino",
+    note: "Official City Hymn of Mati — City Ordinance No. 111, Series of 2013",
+    sections: [
+      {
+        label: "Verse",
+        lines: [
+          "O Palangga, Siyudad ng Mati",
+          "Yang yaman mo di magkaati",
+          "Sang kabtayan, sang kapatagan,",
+          "Sang kadagatan, kabaybayunan",
+          "Mga langyaw, lumad yalipay",
+          "Kay yang palibot magandahay",
+          "Sang kadyawan yag sambuokan",
+          "Kinaiyahan yalimahan",
+        ],
+      },
+      {
+        label: "Chorus",
+        lines: [
+          "Taga-Mati, Matinabangon",
+          "Taga-Mati, Matinagdanon",
+          "Taga-Mati, Matinahuron",
+          "Taga-Mati, Matigam",
+          "Taga-Mati, Matinud-anon",
+          "Taga-Mati, Matinumanon",
+          "Taga-Mati, Matinuhuon",
+          "Sa Diyos Labawng Makagagahum",
+          "Taga-Mati, Madayaw",
+          "Taga-Mati kami",
+        ],
+      },
+    ],
+  },
+  "Banwa na Madayaw": {
+    composer: "Dioscoro B. Vicentino",
+    note: "Official Provincial Hymn of Davao Oriental",
+    sections: [
+      {
+        label: "Verse 1",
+        lines: [
+          "O probinsya nami na mahal,",
+          "Sang subangan ng Dabaw.",
+          "Ban-wa kaw na madayaw,",
+          "Yanaguyon yang utaw.",
+          "Malipayon kay palangga kaw ng Dios.",
+        ],
+      },
+      {
+        label: "Verse 2",
+        lines: [
+          "Mataba yang kalupaan mo,",
+          "Yang tanom mabungahon.",
+          "Dagat mo, mga suba",
+          "Madaigay yang isda.",
+          "Kabuhian, kawilihan ng tanan.",
+        ],
+      },
+      {
+        label: "Verse 3",
+        lines: [
+          "O mahal na Dabaw Oryental,",
+          "Langit mo mapawaay.",
+          "Yang kabutayan, yang kapatagan",
+          "Mayamanay, magandahay.",
+        ],
+      },
+      {
+        label: "Verse 4",
+        lines: [
+          "Maski hain pa kami kumadto,",
+          "Kami mo-uli ani kanmo.",
+          "Garbo nami na Dabawenyo,",
+          "Yang pagserbi sang kadyawan mo.",
+        ],
+      },
+    ],
+  },
+  "I'm a Teacher": {
+    composer: "Dioscoro B. Vicentino",
+    note: "Published in Teachers' Magazine, December 1995",
+    sections: [
+      {
+        label: "Verse 1",
+        lines: [
+          "I'm a teacher, a purveyor of truth and light",
+          "I'm a teacher, I was born to improve mankind;",
+          "It's my duty to enlighten the world",
+          "And guide the young to the path of the Lord.",
+        ],
+      },
+      {
+        label: "Verse 2",
+        lines: [
+          "I'm a teacher, I must teach what is good and right",
+          "I'm a teacher, I must live what I preach in life;",
+          "As a model citizen of the world",
+          "I must, in thoughts, words and deeds, be so good.",
+        ],
+      },
+      {
+        label: "Bridge",
+        lines: [
+          "In the children I write the future,",
+          "In their learning I find great joy;",
+          "I may never sit on a throne",
+          "But I'm contented, my life is full.",
+        ],
+      },
+      {
+        label: "Verse 3",
+        lines: [
+          "Yes, I'm a teacher;",
+          "I must brave all the roaring waves",
+          "And the fury of the river and windy seas;",
+          "I must climb on up the mountains and hills",
+          "Where children there wait for my love and care.",
+        ],
+      },
+      {
+        label: "Finale",
+        lines: [
+          "In a mountain or in a city,",
+          "On an island where I may be",
+          "I shall keep on bringing the light",
+          "And live as teacher until I die.",
+          "I'll live as teacher until I die.",
+        ],
+      },
+    ],
+  },
+};
+
+function getAudioLyrics(item) {
+  if (!item) return null;
+  if (item.lyrics?.sections?.length) return item.lyrics;
+  const byTitle = DIOSCORO_LYRICS[item.title];
+  if (byTitle) return byTitle;
+  const key = Object.keys(DIOSCORO_LYRICS).find(
+    (title) =>
+      String(item.title || "")
+        .toLowerCase()
+        .replace(/['']/g, "")
+        .includes(title.toLowerCase().replace(/['']/g, "")) ||
+      title
+        .toLowerCase()
+        .replace(/['']/g, "")
+        .includes(
+          String(item.title || "")
+            .toLowerCase()
+            .replace(/['']/g, ""),
+        ),
+  );
+  return key ? DIOSCORO_LYRICS[key] : null;
 }
 
 const SAMBUOKAN_PHOTOS = [
@@ -682,12 +841,15 @@ const GALLERY_MEDIA = [
   ),
   galleryAudio("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Audio Recordings/Taga Mati.mp3`, "Taga Mati", {
     credit: DIOSCORO_PHOTO_CREDIT,
+    lyrics: DIOSCORO_LYRICS["Taga Mati"],
   }),
   galleryAudio("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Audio Recordings/Banwa na Madayaw.mp3`, "Banwa na Madayaw", {
     credit: "Cris Vincent Olvida. https://www.youtube.com/watch?v=Ta52YMq9bhs",
+    lyrics: DIOSCORO_LYRICS["Banwa na Madayaw"],
   }),
   galleryAudio("dioscoro", "Works of Dioscoro Vicentino", "intangible", `${DIOSCORO_BASE}/Audio Recordings/I'm a Teacher.mp3`, "I'm a Teacher", {
     credit: "Rodolfo II Osorno. https://www.youtube.com/watch?v=I1U3gsrqT7I",
+    lyrics: DIOSCORO_LYRICS["I'm a Teacher"],
   }),
   galleryPhoto("mamacao", "Mamacao Tree", "natural", "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg", "Mamacao Tree"),
   ...["Sleeping.jpg", "DJI_0754.jpg", "DJI_0761.jpg", "DJI_0771.jpg", "DJI_0786.jpg", "DJI_0801.jpg", "DJI_0812.jpg", "2020-01-14 10-24.jpg", "J1926x1109-00300.jpg"].map((file) =>

@@ -3,6 +3,7 @@
 *.MOV
 Front End/data/Intangible Cultural Heritage/Samboukan & Pujada Festival Timeline.pdf
 Front End/data/Built Heritage/Centennial Clock and Pathway of Leaders/Pylon.glb
+Front End/data/Built Heritage/Pylon Monument/Pylon.glb
 # macOS / Windows junk
 .DS_Store
 Thumbs.db

@@ -44,8 +44,10 @@
 
     window.setTimeout(() => {
       overlay.classList.add("is-exiting");
-      window.setTimeout(() => {
-        if (typeof MatiAuth !== "undefined") MatiAuth.logout();
+      window.setTimeout(async () => {
+        if (typeof MatiAuth !== "undefined") {
+          await MatiAuth.logout();
+        }
         window.location.href = redirect;
       }, exitMs);
     }, showMs);

@@ -70,11 +70,59 @@
     return getSiteMedia(siteId);
   }
 
+  function readSharedMediaOrder(siteId, type) {
+    try {
+      // Admin drag order is stored here; same-browser visitor pages can mirror it.
+      const raw = localStorage.getItem("matiAdminHeritageStore");
+      if (!raw) return null;
+      const store = JSON.parse(raw);
+      const order = store?.mediaOrder?.[`${siteId}:${type}`];
+      return Array.isArray(order) && order.length ? order : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function applyMediaOrder(items, orderedIds) {
+    if (!orderedIds?.length) return items;
+    const rank = new Map(orderedIds.map((id, index) => [id, index]));
+    return [...items].sort((a, b) => {
+      const ra = rank.has(a.id) ? rank.get(a.id) : orderedIds.length;
+      const rb = rank.has(b.id) ? rank.get(b.id) : orderedIds.length;
+      if (ra !== rb) return ra - rb;
+      return String(a.title || "").localeCompare(String(b.title || ""));
+    });
+  }
+
   function resolveOrderedSiteMedia(siteId, type) {
-    if (typeof MatiAdminStore !== "undefined" && MatiAdminStore.getOrderedSiteMedia) {
+    if (
+      GALLERY_EMBED &&
+      typeof MatiAdminStore !== "undefined" &&
+      MatiAdminStore.getOrderedSiteMedia
+    ) {
       return MatiAdminStore.getOrderedSiteMedia(siteId, type);
     }
-    return resolveSiteMedia(siteId).filter((item) => item.type === type);
+
+    const items = resolveSiteMedia(siteId).filter((item) => item.type === type);
+    const sharedOrder = readSharedMediaOrder(siteId, type);
+    if (sharedOrder?.length) {
+      return applyMediaOrder(items, sharedOrder);
+    }
+
+    const sortValues = items
+      .map((item) => Number(item.sortOrder))
+      .filter((value) => Number.isFinite(value));
+    const hasMeaningfulSort =
+      sortValues.some((value) => value > 0) ||
+      new Set(sortValues).size > 1;
+
+    if (!hasMeaningfulSort) return items;
+
+    return [...items].sort((a, b) => {
+      const bySort = (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0);
+      if (bySort) return bySort;
+      return String(a.title || "").localeCompare(String(b.title || ""));
+    });
   }
 
   function resolveSiteStats(siteId) {
@@ -112,7 +160,12 @@
     return "Manage";
   }
 
-  const SELECTABLE_MEDIA_FOLDERS = new Set(["photos", "videos", "links"]);
+  const SELECTABLE_MEDIA_FOLDERS = new Set([
+    "photos",
+    "videos",
+    "links",
+    "recordings",
+  ]);
 
   function folderSupportsBulkSelect(folder) {
     return SELECTABLE_MEDIA_FOLDERS.has(folder);
@@ -123,6 +176,7 @@
       photos: count === 1 ? "photograph" : "photographs",
       videos: count === 1 ? "video" : "videos",
       links: count === 1 ? "video" : "videos",
+      recordings: count === 1 ? "recording" : "recordings",
     };
     return nouns[folder] || (count === 1 ? "item" : "items");
   }
@@ -221,7 +275,9 @@
   }
 
   function mediaUrl(src) {
-    return encodeURI(String(src));
+    const value = String(src || "");
+    if (/^https?:\/\//i.test(value)) return value;
+    return encodeURI(value);
   }
 
   function linkifyCitation(text) {
@@ -396,6 +452,15 @@
 
   function goFolder(folder) {
     setState({ step: "media", folder, mediaVisibleCount: MEDIA_BATCH_SIZE });
+    if (
+      GALLERY_EMBED &&
+      typeof MatiAdminStore?.publishSiteMediaOrder === "function"
+    ) {
+      const type = folderToMediaType(folder);
+      if (type && state.siteId) {
+        void MatiAdminStore.publishSiteMediaOrder(state.siteId, type);
+      }
+    }
   }
 
   function goBack() {
@@ -852,11 +917,17 @@
         ${adminWrapEnd}`;
     }
     if (item.type === "audio") {
+      const hasLyrics = Boolean(
+        item.lyrics?.sections?.length ||
+          (typeof getAudioLyrics === "function" && getAudioLyrics(item)),
+      );
       return `
         ${adminWrapStart}
-        <button type="button" class="gal-media-item gal-media-item--audio" data-index="${index}" aria-label="${escapeHtml(item.title)}" style="--gal-i: ${index % MEDIA_BATCH_SIZE}">
+        ${adminSelectCheck}
+        <button type="button" class="gal-media-item gal-media-item--audio${hasLyrics ? " gal-media-item--has-lyrics" : ""}" data-index="${index}" aria-label="${escapeHtml(item.title)}${hasLyrics ? " — with lyrics" : ""}" style="--gal-i: ${index % MEDIA_BATCH_SIZE}">
           <img data-src="${escapeHtml(site.cover)}" alt="" class="gal-media-img-lazy" decoding="async" />
           <span class="gal-media-item-audio" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg></span>
+          ${hasLyrics ? `<span class="gal-media-lyrics-badge">Lyrics</span>` : ""}
           ${renderMediaItemLabel(item)}
         </button>
         ${adminEditBtn}
@@ -1281,7 +1352,6 @@
     if (
       isEmbeddableLink(item) ||
       item.type === "video" ||
-      item.type === "audio" ||
       (item.type === "photo" && getMediaSourceText(item))
     ) {
       return `<div class="gal-lightbox-embed-credit gal-lightbox-embed-credit--pending" data-media-author hidden></div>`;
@@ -1379,9 +1449,12 @@
 
         ids.splice(from, 1);
         ids.splice(to, 0, dragId);
-        MatiAdminStore.reorderSiteMedia(state.siteId, type, ids);
-        mediaReorderMoved = true;
-        render();
+        void Promise.resolve(
+          MatiAdminStore.reorderSiteMedia(state.siteId, type, ids),
+        ).finally(() => {
+          mediaReorderMoved = true;
+          render();
+        });
       });
     });
   }
@@ -1496,14 +1569,20 @@
         const name = state.siteDraft?.name?.trim();
         if (!name) return;
 
-        MatiAdminStore.saveSite({
+        void MatiAdminStore.saveSite({
           ...site,
           heritageCategory: state.siteDraft.heritageCategory.trim(),
           name,
           description: state.siteDraft.description.trim(),
+        }).then((saved) => {
+          clearSiteEditState();
+          render();
+          if (saved?._sync && !saved._sync.ok && saved._sync.reason !== "not_configured") {
+            window.MatiAdminUi?.showToast?.(
+              "Site saved locally, but cloud sync failed. Run the deployment heritage writes SQL.",
+            );
+          }
         });
-        clearSiteEditState();
-        render();
         return;
       }
 
@@ -1556,29 +1635,48 @@
       render();
     });
 
-    container.querySelector("[data-media-delete-selected]")?.addEventListener("click", () => {
+    container.querySelector("[data-media-delete-selected]")?.addEventListener("click", async () => {
       const ids = [...state.selectedMediaIds];
       if (!ids.length) return;
 
       const noun = mediaDeleteNoun(state.folder, ids.length);
+      const title =
+        ids.length === 1 ? `Delete this ${noun}?` : `Delete ${ids.length} ${noun}?`;
       const message =
         ids.length === 1
-          ? `Delete this ${noun}? It will be removed from the gallery.`
-          : `Delete ${ids.length} ${noun}? They will be removed from the gallery.`;
-      if (!confirm(message)) return;
+          ? `It will be removed from the gallery.`
+          : `They will be removed from the gallery.`;
 
-      const deleted = MatiAdminStore.deleteMediaMany(ids);
-      clearMediaSelection();
-      window.MatiAdminUi?.onMediaDeleted?.(state.siteId);
-      render();
-      if (deleted) {
-        const toastNoun = mediaDeleteNoun(state.folder, deleted);
-        const capitalized =
-          toastNoun.charAt(0).toUpperCase() + toastNoun.slice(1);
+      const confirmed = await (window.MatiAdminUi?.confirmAction?.({
+        title,
+        message,
+        confirmLabel: ids.length === 1 ? "Delete" : `Delete (${ids.length})`,
+      }) ?? Promise.resolve(window.confirm(`${title} ${message}`)));
+      if (!confirmed) return;
+
+      try {
+        const deleted = await (window.MatiAdminUi?.runDeleteProgress
+          ? window.MatiAdminUi.runDeleteProgress(
+              () => MatiAdminStore.deleteMediaMany(ids),
+              { noun, count: ids.length },
+            )
+          : MatiAdminStore.deleteMediaMany(ids));
+        clearMediaSelection();
+        window.MatiAdminUi?.onMediaDeleted?.(state.siteId);
+        render();
+        if (deleted && !window.MatiAdminUi?.runDeleteProgress) {
+          const toastNoun = mediaDeleteNoun(state.folder, deleted);
+          const capitalized =
+            toastNoun.charAt(0).toUpperCase() + toastNoun.slice(1);
+          window.MatiAdminUi?.showToast?.(
+            deleted === 1
+              ? `${capitalized} deleted.`
+              : `${deleted} ${toastNoun} deleted.`,
+          );
+        }
+      } catch (error) {
         window.MatiAdminUi?.showToast?.(
-          deleted === 1
-            ? `${capitalized} deleted.`
-            : `${deleted} ${toastNoun} deleted.`,
+          error?.message || "Could not delete media.",
         );
       }
     });
@@ -1629,9 +1727,12 @@
 
     const parts = [];
     const creditOnPlayer =
-      item.type === "video" ||
-      item.type === "audio" ||
-      isEmbeddableLink(item);
+      item.type === "video" || isEmbeddableLink(item);
+    const hasLyricsPanel = Boolean(
+      item.type === "audio" &&
+        (item.lyrics?.sections?.length ||
+          (typeof getAudioLyrics === "function" && getAudioLyrics(item))),
+    );
 
     if (item.type === "link") {
       if (item.caption) {
@@ -1655,12 +1756,52 @@
       parts.push(`<p class="gal-lightbox-citation__event">${escapeHtml(eventLine)}.</p>`);
     }
 
-    if (item.credit && !creditOnPlayer && item.type !== "photo") {
+    // Audio with lyrics shows source in the lyrics panel; other types keep citation.
+    if (
+      item.credit &&
+      !creditOnPlayer &&
+      item.type !== "photo" &&
+      !(item.type === "audio" && hasLyricsPanel)
+    ) {
       parts.push(
         `<p class="gal-lightbox-citation__source"><span class="gal-lightbox-citation__label">${escapeHtml(getMediaSourceLabel(item))}:</span> ${linkifyCitation(item.credit)}.</p>`,
       );
     }
     return parts.join("");
+  }
+
+  function renderAudioLyrics(item) {
+    const lyrics =
+      item.lyrics ||
+      (typeof getAudioLyrics === "function" ? getAudioLyrics(item) : null);
+    if (!lyrics?.sections?.length) return "";
+
+    const sections = lyrics.sections
+      .map(
+        (section) => `
+          <div class="gal-lyrics-section">
+            ${section.label ? `<h4 class="gal-lyrics-section__label">${escapeHtml(section.label)}</h4>` : ""}
+            <p class="gal-lyrics-section__lines">${section.lines
+              .map((line) => escapeHtml(line))
+              .join("<br>")}</p>
+          </div>`,
+      )
+      .join("");
+
+    const source = getMediaSourceText(item)
+      ? `<p class="gal-lyrics__source"><span class="gal-lyrics__source-label">${escapeHtml(getMediaSourceLabel(item))}</span> ${linkifyCitation(getMediaSourceText(item))}</p>`
+      : "";
+
+    return `
+      <aside class="gal-lyrics" aria-label="Song lyrics">
+        <div class="gal-lyrics__header">
+          <span class="gal-lyrics__eyebrow">Lyrics</span>
+          ${lyrics.composer ? `<p class="gal-lyrics__composer">Music &amp; lyrics: ${escapeHtml(lyrics.composer)}</p>` : ""}
+          ${lyrics.note ? `<p class="gal-lyrics__note">${escapeHtml(lyrics.note)}</p>` : ""}
+        </div>
+        <div class="gal-lyrics__body">${sections}</div>
+        ${source ? `<div class="gal-lyrics__footer">${source}</div>` : ""}
+      </aside>`;
   }
 
   function showLightbox() {
@@ -1677,7 +1818,17 @@
     if (item.type === "photo") {
       media.innerHTML = `<div class="gal-lightbox-player-wrap"><img src="${escapeHtml(mediaUrl(item.src))}" alt="${escapeHtml(item.title)}" decoding="async" />${renderPlayerCreditOverlay(item)}</div>`;
     } else if (item.type === "audio") {
-      media.innerHTML = `<div class="gal-lightbox-player-wrap"><audio src="${escapeHtml(mediaUrl(item.src))}" controls autoplay preload="metadata"></audio>${renderPlayerCreditOverlay(item)}</div>`;
+      const lyricsHtml = renderAudioLyrics(item);
+      media.innerHTML = `
+        <div class="gal-lightbox-audio${lyricsHtml ? " gal-lightbox-audio--with-lyrics" : ""}">
+          <div class="gal-lightbox-player-wrap gal-lightbox-player-wrap--audio">
+            <div class="gal-lightbox-audio-visual" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <audio src="${escapeHtml(mediaUrl(item.src))}" controls autoplay preload="metadata"></audio>
+          </div>
+          ${lyricsHtml}
+        </div>`;
     } else if (isEmbeddableLink(item)) {
       const embed = getLinkEmbed(item.src);
       const fallback =
@@ -1994,13 +2145,94 @@
     setTimeout(revealHero, 6000);
   }
 
-  function init() {
+  async function hydrateFromSupabase() {
+    if (GALLERY_EMBED) return;
+    if (typeof MatiHeritageData === "undefined") return;
+    if (typeof MatiHeritageData.hydrateGalleryCatalog !== "function") return;
+
+    try {
+      await MatiHeritageData.hydrateGalleryCatalog({ force: true });
+    } catch (error) {
+      console.warn("Gallery: Supabase hydrate failed, using static catalog", error);
+    }
+  }
+
+  let galleryLiveRefreshTimer = null;
+  let galleryLiveRefreshing = false;
+
+  function clampMediaVisibleCount() {
+    if (state.step !== "media" || !state.siteId || !state.folder) return;
+    const type = folderToMediaType(state.folder);
+    if (!type) return;
+    const total = resolveOrderedSiteMedia(state.siteId, type).length;
+    if (state.mediaVisibleCount > total) {
+      state.mediaVisibleCount = Math.max(total, 0);
+    }
+  }
+
+  async function refreshGalleryFromLive() {
+    if (GALLERY_EMBED) return;
+    if (galleryLiveRefreshing) {
+      clearTimeout(galleryLiveRefreshTimer);
+      galleryLiveRefreshTimer = setTimeout(() => {
+        void refreshGalleryFromLive();
+      }, 220);
+      return;
+    }
+    galleryLiveRefreshing = true;
+    try {
+      if (typeof MatiHeritageData?.invalidateCaches === "function") {
+        MatiHeritageData.invalidateCaches();
+      }
+      if (typeof MatiHeritageData?.hydrateGalleryCatalog === "function") {
+        await MatiHeritageData.hydrateGalleryCatalog({ force: true });
+      }
+      clampMediaVisibleCount();
+      render();
+    } catch (error) {
+      console.warn("Gallery live refresh failed:", error);
+      render();
+    } finally {
+      galleryLiveRefreshing = false;
+    }
+  }
+
+  function ensureGalleryLive() {
+    if (GALLERY_EMBED) return;
+
+    if (typeof MatiHeritageData?.subscribeCatalog === "function") {
+      // subscribeCatalog already invalidates + hydrates before this callback.
+      MatiHeritageData.subscribeCatalog(() => {
+        clampMediaVisibleCount();
+        render();
+      });
+    } else if (typeof MatiHeritageRealtime?.on === "function") {
+      MatiHeritageRealtime.ensure?.();
+      MatiHeritageRealtime.on(MatiHeritageRealtime.TOPIC.catalog, () => {
+        void refreshGalleryFromLive();
+      });
+    }
+
+    window.addEventListener("storage", (event) => {
+      if (
+        event.key !== "matiAdminHeritageStore" &&
+        event.key !== "matiHeritageCatalogBump"
+      ) {
+        return;
+      }
+      void refreshGalleryFromLive();
+    });
+  }
+
+  async function init() {
     if (!GALLERY_EMBED && document.querySelector(".gal-hero")) {
       window.scrollTo(0, 0);
     }
     initLightbox();
     if (!GALLERY_EMBED && document.querySelector(".gal-hero")) initHeroReveal();
+    await hydrateFromSupabase();
     render();
+    ensureGalleryLive();
     if (GALLERY_EMBED) {
       revealExplorer();
     } else {

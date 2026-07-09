@@ -39,50 +39,123 @@
         </div>
 
         <nav class="admin-nav" aria-label="Admin sections">
-          <button type="button" class="admin-nav__btn is-active" data-view="dashboard">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          <button
+            type="button"
+            class="admin-nav__btn is-active"
+            data-view="dashboard"
+          >
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
             Dashboard
           </button>
 
-          <button type="button" class="admin-nav__btn" data-view="heritage" data-category="built">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          <button
+            type="button"
+            class="admin-nav__btn"
+            data-view="heritage"
+            data-category="built"
+          >
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
             </svg>
             Built Heritage
           </button>
 
           <button type="button" class="admin-nav__btn" data-view="location">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L20 12l-5.447 2.724A1 1 0 0113 13.618v-2.236a1 1 0 00-1.447-.894L7 12"
+              />
             </svg>
             Heritage Map
           </button>
           <button type="button" class="admin-nav__btn" data-view="gallery">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             Gallery
           </button>
 
           <button type="button" class="admin-nav__btn" data-view="leaderboard">
-            <svg class="admin-nav__icon admin-nav__icon--trophy" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"/>
+            <svg
+              class="admin-nav__icon admin-nav__icon--trophy"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
+              />
             </svg>
             Leaderboard
           </button>
 
           <button type="button" class="admin-nav__btn" data-view="reports">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6m4 6V7m4 10v-4M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
             </svg>
             Reports
           </button>
 
           <button type="button" class="admin-nav__btn" data-view="settings">
-            <svg class="admin-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <svg
+              class="admin-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             Settings
           </button>
@@ -90,8 +163,19 @@
 
         <div class="admin-sidebar__foot">
           <button type="button" id="admin-logout" class="admin-sidebar__logout">
-            <svg class="admin-sidebar__link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <svg
+              class="admin-sidebar__link-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
             </svg>
             Logout
           </button>
@@ -102,102 +186,109 @@
         <main class="admin-main">
           <!-- Dashboard -->
           <section id="view-dashboard" class="admin-view">
-            <header class="admin-official-letterhead" aria-label="City Tourism and Promotions Office">
-              <div class="admin-official-letterhead__logo admin-official-letterhead__logo--left">
-                <img
-                  src="logo/Flag_of_Mati,_Davao_Oriental.png"
-                  alt="City of Mati seal"
-                  height="148"
-                />
+            <!-- Official Letterhead -->
+            <header class="dashboard-header">
+              <div class="letterhead-container">
+                <div class="letterhead__logo letterhead__logo--left">
+                  <img
+                    src="logo/Flag_of_Mati,_Davao_Oriental.png"
+                    alt="Flag of Mati, Davao Oriental"
+                    height="120"
+                  />
+                </div>
+                <div class="letterhead__content">
+                  <p class="letterhead__line">Republic of the Philippines</p>
+                  <p class="letterhead__line">Province of Davao Oriental</p>
+                  <p class="letterhead__line">City of Mati</p>
+                  <p class="letterhead__office">City Tourism and Promotions Office</p>
+                </div>
+                <div class="letterhead__logo letterhead__logo--right">
+                  <img
+                    src="logo/City of Mati Tourism and Promotions Office.png"
+                    alt="City of Mati Tourism and Promotions Office Logo"
+                    height="120"
+                  />
+                </div>
               </div>
-              <div class="admin-official-letterhead__text">
-                <p>Republic of the Philippines</p>
-                <p>Province of Davao Oriental</p>
-                <p>City of Mati</p>
-                <p class="admin-official-letterhead__office">City Tourism and Promotions Office</p>
-              </div>
-              <div class="admin-official-letterhead__logo admin-official-letterhead__logo--right">
-                <img
-                  src="logo/City of Mati Tourism and Promotions Office.png"
-                  alt="City of Mati Tourism and Promotions Office"
-                  height="148"
-                />
-              </div>
-              <hr class="admin-official-letterhead__rule" />
             </header>
 
-            <div class="admin-dashboard">
-              <div
-                id="dashboard-supabase-empty"
-                class="admin-dashboard__empty-db"
-                hidden
-              >
-                <div class="admin-dashboard__empty-db-copy">
-                  <strong>Supabase is connected, but no heritage sites are stored yet.</strong>
-                  <p>
-                    The dashboard is showing your local built heritage catalog as a fallback.
-                    Import the 11 built sites into Supabase so admin and visitor pages stay in sync.
-                  </p>
-                  <ol class="admin-dashboard__empty-db-steps">
-                    <li>
-                      Open
-                      <a
-                        href="https://supabase.com/dashboard"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >Supabase Dashboard</a>
-                      → SQL Editor
-                    </li>
-                    <li>
-                      Run
-                      <code>Back End/supabase/seed/bootstrap_built_heritage_rpc.sql</code>
-                      (one time)
-                    </li>
-                    <li>Click <strong>Import built heritage</strong> below</li>
-                  </ol>
+            <!-- Dashboard Content -->
+            <div class="dashboard-container">
+              <!-- Welcome Section -->
+              <div class="dashboard-welcome">
+                <h1 class="dashboard-welcome__title">Dashboard Overview</h1>
+                <p class="dashboard-welcome__subtitle">
+                  Monitor heritage sites, user engagement, and multimedia assets
+                </p>
+              </div>
+
+              <!-- Heritage Statistics Cards -->
+              <section class="dashboard-section" aria-labelledby="heritage-stats-heading">
+                <h2 id="heritage-stats-heading" class="dashboard-section__title">Heritage Collections</h2>
+                <div id="dashboard-heritage-cards" class="stats-grid stats-grid--heritage"></div>
+              </section>
+
+              <!-- User Engagement Statistics -->
+              <section class="dashboard-section" aria-labelledby="engagement-stats-heading">
+                <h2 id="engagement-stats-heading" class="dashboard-section__title">User Engagement</h2>
+                <div class="stats-grid stats-grid--engagement">
+                  <article class="stat-card stat-card--users">
+                    <div class="stat-card__icon-wrapper">
+                      <svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <div class="stat-card__content">
+                      <p class="stat-card__label">Total Users</p>
+                      <p class="stat-card__value" id="total-users-stat">0</p>
+                      <p class="stat-card__trend">Registered accounts</p>
+                    </div>
+                  </article>
+
+                  <article class="stat-card stat-card--visits">
+                    <div class="stat-card__icon-wrapper">
+                      <svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                    <div class="stat-card__content">
+                      <p class="stat-card__label">Page Visits</p>
+                      <p class="stat-card__value" id="page-visits-stat">0</p>
+                      <p class="stat-card__trend">Total sessions</p>
+                    </div>
+                  </article>
                 </div>
-                <button
-                  type="button"
-                  id="btn-import-built-supabase"
-                  class="admin-btn admin-btn--primary"
-                >
-                  Import built heritage
-                </button>
-              </div>
+              </section>
 
-              <div class="admin-dashboard__section">
-                <div id="dashboard-heritage-cards" class="admin-dashboard__heritage-grid"></div>
-              </div>
-
-              <div class="admin-dashboard__section">
-                <div id="dashboard-community-cards" class="admin-dashboard__community-grid"></div>
-              </div>
-
-              <div class="admin-dashboard__section admin-dashboard__section--panel">
-                <div class="admin-dashboard__section-head">
-                  <h2 class="admin-dashboard__title">Multimedia by Collection</h2>
-                  <p class="admin-dashboard__desc">
-                    Photos, videos, audio, and 3D assets recorded per heritage category.
-                  </p>
+              <!-- Multimedia Summary Table -->
+              <section class="dashboard-section dashboard-section--table" aria-labelledby="multimedia-heading">
+                <div class="section-header">
+                  <div class="section-header__content">
+                    <h2 id="multimedia-heading" class="section-header__title">Multimedia by Collection</h2>
+                    <p class="section-header__description">
+                      Photos, videos, audio, and 3D assets recorded per heritage category
+                    </p>
+                  </div>
                 </div>
-                <div class="admin-dashboard__table-wrap">
-                  <table class="admin-dashboard-table">
+                <div class="table-container">
+                  <table class="data-table" aria-describedby="multimedia-heading">
                     <thead>
                       <tr>
-                        <th>Collection</th>
-                        <th>Type</th>
-                        <th>Sites</th>
-                        <th>Photos</th>
-                        <th>Videos</th>
-                        <th>Audio</th>
-                        <th>3D Models</th>
+                        <th scope="col">Collection</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Sites</th>
+                        <th scope="col">Photos</th>
+                        <th scope="col">Videos</th>
+                        <th scope="col">Audio</th>
+                        <th scope="col">3D Models</th>
                       </tr>
                     </thead>
                     <tbody id="dashboard-summary-body"></tbody>
                     <tfoot id="dashboard-summary-foot"></tfoot>
                   </table>
                 </div>
-              </div>
+              </section>
             </div>
           </section>
 
@@ -211,8 +302,14 @@
                     role="region"
                     aria-label="Map of heritage sites in Mati City"
                   ></div>
-                  <div class="map-heritage-filter-wrap" id="map-heritage-filter-wrap">
-                    <label class="map-heritage-filter-label" for="map-heritage-filter">
+                  <div
+                    class="map-heritage-filter-wrap"
+                    id="map-heritage-filter-wrap"
+                  >
+                    <label
+                      class="map-heritage-filter-label"
+                      for="map-heritage-filter"
+                    >
                       Heritage type
                     </label>
                     <select
@@ -225,36 +322,70 @@
                       <option value="natural">Natural Heritage</option>
                     </select>
                   </div>
-                  <div class="map-intro-overlay" id="map-intro-overlay" aria-hidden="false">
+                  <div
+                    class="map-intro-overlay"
+                    id="map-intro-overlay"
+                    aria-hidden="false"
+                  >
                     <div class="map-intro-overlay__content">
                       <p class="map-intro-overlay__eyebrow">
-                        <span class="map-intro-overlay__eyebrow-line" aria-hidden="true"></span>
+                        <span
+                          class="map-intro-overlay__eyebrow-line"
+                          aria-hidden="true"
+                        ></span>
                         Official Heritage Sites
                       </p>
                       <h2 class="map-intro-overlay__title">
-                        <span class="map-intro-overlay__title-main">Mati City</span>
-                        <span class="map-intro-overlay__title-sub">Interactive Map</span>
+                        <span class="map-intro-overlay__title-main"
+                          >Mati City</span
+                        >
+                        <span class="map-intro-overlay__title-sub"
+                          >Interactive Map</span
+                        >
                       </h2>
                       <p class="map-intro-overlay__desc">
-                        Explore built and natural heritage landmarks across every barangay.
-                        Click a pin to manage a site.
+                        Explore built and natural heritage landmarks across
+                        every barangay. Click a pin to manage a site.
                       </p>
-                      <ul class="map-intro-overlay__hint" aria-label="Map controls">
+                      <ul
+                        class="map-intro-overlay__hint"
+                        aria-label="Map controls"
+                      >
                         <li>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
                             <path d="M5 9l7 7 7-7" />
                           </svg>
                           Drag to pan
                         </li>
                         <li>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
                             <path d="M12 5v14M5 12h14" />
                           </svg>
                           Scroll to zoom
                         </li>
                         <li>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z" />
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"
+                            />
                             <circle cx="12" cy="11" r="2.5" />
                           </svg>
                           Tap markers
@@ -273,13 +404,24 @@
               <div id="heritage-built-shell" class="admin-built" hidden>
                 <div class="admin-built__toolbar">
                   <div class="admin-built__count" aria-live="polite">
-                    <span id="heritage-built-count" class="admin-built__count-value">0</span>
+                    <span
+                      id="heritage-built-count"
+                      class="admin-built__count-value"
+                      >0</span
+                    >
                     <span class="admin-built__count-label">Heritage sites</span>
                   </div>
                   <label class="admin-built__search" for="heritage-search">
-                    <svg class="admin-built__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <circle cx="11" cy="11" r="7"/>
-                      <path stroke-linecap="round" d="M20 20l-3.5-3.5"/>
+                    <svg
+                      class="admin-built__search-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path stroke-linecap="round" d="M20 20l-3.5-3.5" />
                     </svg>
                     <input
                       type="search"
@@ -288,9 +430,21 @@
                       placeholder="Search heritage by name"
                     />
                   </label>
-                  <button type="button" id="btn-add-site" class="admin-btn admin-btn--primary admin-built__add">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path stroke-linecap="round" d="M12 5v14M5 12h14"/>
+                  <button
+                    type="button"
+                    id="btn-add-site"
+                    class="admin-btn admin-btn--primary admin-built__add"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" d="M12 5v14M5 12h14" />
                     </svg>
                     Add site
                   </button>
@@ -302,7 +456,12 @@
               <div id="heritage-other-shell" hidden>
                 <div class="admin-panel__head admin-panel__head--heritage">
                   <div class="admin-toolbar admin-toolbar--end">
-                    <input type="search" id="heritage-search-other" class="admin-input admin-input--search" placeholder="Search by name or location…" />
+                    <input
+                      type="search"
+                      id="heritage-search-other"
+                      class="admin-input admin-input--search"
+                      placeholder="Search by name or location…"
+                    />
                   </div>
                 </div>
                 <div id="heritage-table-wrap" class="admin-table-wrap">
@@ -341,13 +500,28 @@
               <div class="admin-leaderboard__ambient" aria-hidden="true"></div>
 
               <header class="admin-leaderboard__hero">
-                <div class="admin-leaderboard__hero-bg" aria-hidden="true"></div>
+                <div
+                  class="admin-leaderboard__hero-bg"
+                  aria-hidden="true"
+                ></div>
                 <div class="admin-leaderboard__title-block">
                   <div class="admin-leaderboard__hud">
-                    <span class="admin-leaderboard__bracket admin-leaderboard__bracket--tl" aria-hidden="true"></span>
-                    <span class="admin-leaderboard__bracket admin-leaderboard__bracket--tr" aria-hidden="true"></span>
-                    <span class="admin-leaderboard__bracket admin-leaderboard__bracket--bl" aria-hidden="true"></span>
-                    <span class="admin-leaderboard__bracket admin-leaderboard__bracket--br" aria-hidden="true"></span>
+                    <span
+                      class="admin-leaderboard__bracket admin-leaderboard__bracket--tl"
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="admin-leaderboard__bracket admin-leaderboard__bracket--tr"
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="admin-leaderboard__bracket admin-leaderboard__bracket--bl"
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      class="admin-leaderboard__bracket admin-leaderboard__bracket--br"
+                      aria-hidden="true"
+                    ></span>
                     <div class="admin-leaderboard__title-inner">
                       <svg
                         class="admin-leaderboard__icon"
@@ -374,7 +548,7 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="admin-leaderboard__subtitle">Top Players</p>
+                  <p class="admin-leaderboard__subtitle">Live Top Players</p>
                 </div>
               </header>
 
@@ -402,37 +576,106 @@
             <div class="admin-reports">
               <header class="admin-reports__head">
                 <div class="admin-reports__intro">
-                  <h2 class="admin-reports__title" id="report-title">Built Heritage</h2>
+                  <h2 class="admin-reports__title" id="report-title">
+                    Built Heritage
+                  </h2>
                   <p class="admin-reports__desc" id="report-desc">
-                    Local Cultural Inventory records aligned with the official LCI document. Download Excel for a formatted report with summary counts and all properties.
+                    Local Cultural Inventory records aligned with the official
+                    LCI document. Download Excel for a formatted report with
+                    summary counts and all properties.
                   </p>
                 </div>
                 <div class="admin-reports__actions">
-                  <span id="report-meta" class="admin-reports__count" aria-live="polite"></span>
-                  <button type="button" id="btn-export-csv" class="admin-btn admin-btn--primary">
-                    <svg class="admin-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path stroke-linecap="round" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14"/>
+                  <span
+                    id="report-meta"
+                    class="admin-reports__count"
+                    aria-live="polite"
+                  ></span>
+                  <button
+                    type="button"
+                    id="btn-export-csv"
+                    class="admin-btn admin-btn--primary"
+                  >
+                    <svg
+                      class="admin-btn__icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14"
+                      />
                     </svg>
                     Download Excel
                   </button>
                 </div>
               </header>
 
-              <div class="admin-reports__summary" id="report-summary" aria-label="Inventory summary"></div>
+              <div
+                class="admin-reports__summary"
+                id="report-summary"
+                aria-label="Inventory summary"
+              ></div>
 
               <div class="admin-reports__tabs">
-                <div class="admin-tabs admin-tabs--reports" id="report-tabs" role="tablist" aria-label="Report categories">
-                  <button type="button" class="admin-tabs__btn is-active" data-report="built" role="tab">Built Heritage</button>
-                  <button type="button" class="admin-tabs__btn" data-report="natural" role="tab">Natural Heritage</button>
-                  <button type="button" class="admin-tabs__btn" data-report="intangible" role="tab">Intangible Heritage</button>
-                  <button type="button" class="admin-tabs__btn" data-report="users" role="tab">Registered Users</button>
-                  <button type="button" class="admin-tabs__btn" data-report="leaderboard" role="tab">Leaderboard</button>
+                <div
+                  class="admin-tabs admin-tabs--reports"
+                  id="report-tabs"
+                  role="tablist"
+                  aria-label="Report categories"
+                >
+                  <button
+                    type="button"
+                    class="admin-tabs__btn is-active"
+                    data-report="built"
+                    role="tab"
+                  >
+                    Built Heritage
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-tabs__btn"
+                    data-report="natural"
+                    role="tab"
+                  >
+                    Natural Heritage
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-tabs__btn"
+                    data-report="intangible"
+                    role="tab"
+                  >
+                    Intangible Heritage
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-tabs__btn"
+                    data-report="users"
+                    role="tab"
+                  >
+                    Registered Users
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-tabs__btn"
+                    data-report="leaderboard"
+                    role="tab"
+                  >
+                    Leaderboard
+                  </button>
                 </div>
               </div>
 
               <div class="admin-reports__panel" id="report-panel">
                 <div class="admin-table-wrap admin-table-wrap--reports">
-                  <table class="admin-table admin-table--reports" id="report-table">
+                  <table
+                    class="admin-table admin-table--reports"
+                    id="report-table"
+                  >
                     <thead id="report-thead"></thead>
                     <tbody id="report-tbody"></tbody>
                   </table>
@@ -445,7 +688,10 @@
           <section id="view-settings" class="admin-view" hidden>
             <div class="admin-panel admin-panel--flat">
               <div class="admin-placeholder">
-                <p>Staff roles, RBAC via portal sign-in, and system preferences will be configured here.</p>
+                <p>
+                  Staff roles, RBAC via portal sign-in, and system preferences
+                  will be configured here.
+                </p>
               </div>
             </div>
           </section>
@@ -455,22 +701,134 @@
 
     <div id="admin-toast" class="admin-toast" hidden role="status"></div>
 
-    <div id="logout-overlay" class="admin-logout-overlay" hidden aria-live="polite" aria-busy="true">
+    <div
+      id="admin-confirm-modal"
+      class="admin-modal admin-confirm-modal"
+      hidden
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="admin-confirm-title"
+      aria-describedby="admin-confirm-message"
+    >
+      <div class="admin-modal__dialog admin-confirm-modal__dialog">
+        <div class="admin-confirm-modal__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18" />
+            <path d="M8 6V4h8v2" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+          </svg>
+        </div>
+        <h2 id="admin-confirm-title" class="admin-confirm-modal__title">
+          Delete item?
+        </h2>
+        <p id="admin-confirm-message" class="admin-confirm-modal__message">
+          This action cannot be undone.
+        </p>
+        <div class="admin-modal__actions admin-confirm-modal__actions">
+          <button
+            type="button"
+            class="admin-btn admin-btn--ghost"
+            id="admin-confirm-cancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="admin-btn admin-btn--danger"
+            id="admin-confirm-ok"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="admin-upload-progress"
+      class="admin-upload-progress"
+      hidden
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="admin-upload-progress-title"
+      aria-describedby="admin-upload-progress-detail"
+      aria-busy="true"
+    >
+      <div class="admin-upload-progress__panel">
+        <div class="admin-upload-progress__spinner" aria-hidden="true"></div>
+        <h2 id="admin-upload-progress-title" class="admin-upload-progress__title">
+          Uploading…
+        </h2>
+        <p
+          id="admin-upload-progress-detail"
+          class="admin-upload-progress__detail"
+        >
+          Preparing file…
+        </p>
+        <div
+          class="admin-upload-progress__bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          id="admin-upload-progress-bar"
+        >
+          <span
+            class="admin-upload-progress__fill"
+            id="admin-upload-progress-fill"
+          ></span>
+        </div>
+        <p class="admin-upload-progress__pct">
+          <span id="admin-upload-progress-pct">0</span>%
+        </p>
+      </div>
+    </div>
+
+    <div
+      id="logout-overlay"
+      class="admin-logout-overlay"
+      hidden
+      aria-live="polite"
+      aria-busy="true"
+    >
       <div class="admin-logout-overlay__panel">
         <div class="admin-logout-overlay__loader" aria-hidden="true">
-          <svg class="admin-logout-overlay__loader-svg" viewBox="0 0 50 50" role="presentation">
+          <svg
+            class="admin-logout-overlay__loader-svg"
+            viewBox="0 0 50 50"
+            role="presentation"
+          >
             <defs>
-              <linearGradient id="admin-logout-loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient
+                id="admin-logout-loader-gradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
                 <stop offset="0%" stop-color="#166534" />
                 <stop offset="100%" stop-color="#4ade80" stop-opacity="0.35" />
               </linearGradient>
             </defs>
-            <circle class="admin-logout-overlay__loader-track" cx="25" cy="25" r="20" />
-            <circle class="admin-logout-overlay__loader-arc" cx="25" cy="25" r="20" />
+            <circle
+              class="admin-logout-overlay__loader-track"
+              cx="25"
+              cy="25"
+              r="20"
+            />
+            <circle
+              class="admin-logout-overlay__loader-arc"
+              cx="25"
+              cy="25"
+              r="20"
+            />
           </svg>
         </div>
         <p class="admin-logout-overlay__text">
-          Log out<span class="admin-logout-overlay__dots" aria-hidden="true"><span>.</span><span>.</span></span>
+          Log out<span class="admin-logout-overlay__dots" aria-hidden="true"
+            ><span>.</span><span>.</span></span
+          >
         </p>
       </div>
     </div>
@@ -478,70 +836,139 @@
     <!-- Full 3D model viewer -->
     <div
       id="model-viewer-modal"
-      class="admin-modal admin-modal--model"
-      hidden
+      class="heritage-fullscreen"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="model-viewer-title"
+      aria-labelledby="fullscreen-title"
+      hidden
     >
-      <div class="admin-modal__dialog admin-modal__dialog--model">
-        <div class="admin-modal__head">
-          <div>
-            <h2 id="model-viewer-title">3D Model</h2>
-          </div>
-          <button type="button" class="admin-modal__close" data-close-model-viewer aria-label="Close">&times;</button>
+      <div class="heritage-fullscreen__top">
+        <div>
+          <p class="heritage-fullscreen__eyebrow">Built Heritage</p>
+          <h2
+            class="heritage-fullscreen__title display-font"
+            id="fullscreen-title"
+          ></h2>
         </div>
-        <div id="model-viewer-host" class="admin-model-viewer-host"></div>
-        <div class="admin-modal__actions admin-modal__actions--model">
-          <a
-            id="model-viewer-open-explore"
-            class="admin-btn admin-btn--ghost"
-            href="3dexplore.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Open in 3D Explore</a>
-          <button type="button" class="admin-btn admin-btn--primary" data-close-model-viewer>Close</button>
-        </div>
+        <button
+          type="button"
+          class="heritage-fullscreen__close"
+          id="fullscreen-close"
+          data-close-model-viewer
+        >
+          Close
+        </button>
       </div>
+      <div class="heritage-fullscreen__stage">
+        <div
+          class="heritage-fullscreen__loading"
+          id="fullscreen-loading"
+          hidden
+        >
+          <span
+            class="heritage-fullscreen__loading-spinner"
+            aria-hidden="true"
+          ></span>
+          <p id="fullscreen-loading-label">Loading 3D model…</p>
+        </div>
+        <model-viewer
+          id="fullscreen-model"
+          class="heritage-fullscreen__model"
+          alt="Built heritage 3D model"
+          auto-rotate
+          rotation-per-second="14deg"
+          camera-controls
+          touch-action="pan-y"
+          camera-orbit="auto 72deg 88%"
+          min-camera-orbit="auto 18deg 52%"
+          max-camera-orbit="auto 105deg 160%"
+          shadow-intensity="1.25"
+          exposure="1.1"
+          environment-image="neutral"
+          loading="eager"
+          reveal="auto"
+          interaction-prompt="auto"
+          hidden
+        ></model-viewer>
+        <img
+          id="fullscreen-photo"
+          class="heritage-fullscreen__photo"
+          src=""
+          alt=""
+          hidden
+        />
+      </div>
+      <p class="heritage-fullscreen__hint" id="fullscreen-hint">
+        Drag to rotate · Scroll to zoom
+      </p>
     </div>
 
     <!-- Site editor modal -->
-    <div id="site-modal" class="admin-modal" hidden role="dialog" aria-modal="true" aria-labelledby="site-modal-title">
+    <div
+      id="site-modal"
+      class="admin-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="site-modal-title"
+    >
       <div class="admin-modal__dialog admin-modal__dialog--wide">
         <div class="admin-modal__head">
           <div>
             <h2 id="site-modal-title">Edit site</h2>
           </div>
-          <button type="button" class="admin-modal__close" data-close-modal aria-label="Close">&times;</button>
+          <button
+            type="button"
+            class="admin-modal__close"
+            data-close-modal
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
         <form id="site-form" class="admin-site-form">
           <input type="hidden" id="site-id" />
 
           <div class="admin-site-form__body">
-            <div id="site-built-preview" class="admin-site-preview" hidden aria-live="polite"></div>
+            <div
+              id="site-built-preview"
+              class="admin-site-preview"
+              hidden
+              aria-live="polite"
+            ></div>
 
             <div class="admin-form-section admin-form-section--card">
               <h3 class="admin-form-section__title">Site details</h3>
               <div class="admin-field">
                 <label class="admin-label" for="site-name">Site name</label>
-                <input id="site-name" class="admin-input" placeholder="Site name" />
+                <input
+                  id="site-name"
+                  class="admin-input"
+                  placeholder="Site name"
+                />
               </div>
               <div class="admin-field" id="site-category-built-wrap" hidden>
                 <span class="admin-label">Category</span>
                 <p class="admin-readonly-value">Built Heritage</p>
               </div>
               <div class="admin-field" id="site-category-select-wrap">
-                <label class="admin-label" for="site-category-select">Category</label>
+                <label class="admin-label" for="site-category-select"
+                  >Category</label
+                >
                 <select id="site-category-select" class="admin-select">
                   <option value="built">Built Heritage</option>
-                  <option value="intangible">Intangible Cultural Heritage</option>
+                  <option value="intangible">
+                    Intangible Cultural Heritage
+                  </option>
                   <option value="natural">Natural Heritage</option>
                 </select>
               </div>
               <input type="hidden" id="site-category" value="built" />
               <div class="admin-split admin-split--2">
                 <div class="admin-field" id="site-heritage-type-field" hidden>
-                  <label class="admin-label" for="site-heritage-type">Heritage type</label>
+                  <label class="admin-label" for="site-heritage-type"
+                    >Heritage type</label
+                  >
                   <input
                     id="site-heritage-type"
                     class="admin-input"
@@ -549,7 +976,9 @@
                   />
                 </div>
                 <div class="admin-field" id="site-ownership-field" hidden>
-                  <label class="admin-label" for="site-ownership">Ownership</label>
+                  <label class="admin-label" for="site-ownership"
+                    >Ownership</label
+                  >
                   <input
                     id="site-ownership"
                     class="admin-input"
@@ -559,16 +988,32 @@
               </div>
               <div class="admin-field">
                 <label class="admin-label" for="site-location">Location</label>
-                <input id="site-location" class="admin-input" placeholder="Barangay, address, or area" />
+                <input
+                  id="site-location"
+                  class="admin-input"
+                  placeholder="Barangay, address, or area"
+                />
               </div>
               <div class="admin-split admin-split--2">
                 <div class="admin-field">
                   <label class="admin-label" for="site-lat">Latitude</label>
-                  <input id="site-lat" class="admin-input" type="number" step="any" placeholder="6.952258" />
+                  <input
+                    id="site-lat"
+                    class="admin-input"
+                    type="number"
+                    step="any"
+                    placeholder="6.952258"
+                  />
                 </div>
                 <div class="admin-field">
                   <label class="admin-label" for="site-lng">Longitude</label>
-                  <input id="site-lng" class="admin-input" type="number" step="any" placeholder="126.216889" />
+                  <input
+                    id="site-lng"
+                    class="admin-input"
+                    type="number"
+                    step="any"
+                    placeholder="126.216889"
+                  />
                 </div>
               </div>
               <div class="admin-field admin-field--desc">
@@ -582,37 +1027,98 @@
               </div>
             </div>
 
-            <div class="admin-form-section admin-form-section--card" id="site-media-section">
-            <div class="admin-form-section__row">
-              <h3 class="admin-form-section__title">Media files</h3>
-              <div id="site-media-actions-built" class="admin-media-actions" hidden>
-                <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="map">+ Site map</button>
-                <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="photo">+ Photographs</button>
-                <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="model3d">+ 3D model</button>
+            <div
+              class="admin-form-section admin-form-section--card"
+              id="site-media-section"
+            >
+              <div class="admin-form-section__row">
+                <h3 class="admin-form-section__title">Media files</h3>
+                <div
+                  id="site-media-actions-built"
+                  class="admin-media-actions"
+                  hidden
+                >
+                  <button
+                    type="button"
+                    class="admin-btn admin-btn--ghost admin-btn--sm"
+                    data-add-media-type="map"
+                  >
+                    + Site map
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-btn admin-btn--ghost admin-btn--sm"
+                    data-add-media-type="photo"
+                  >
+                    + Photographs
+                  </button>
+                  <button
+                    type="button"
+                    class="admin-btn admin-btn--ghost admin-btn--sm"
+                    data-add-media-type="model3d"
+                  >
+                    + 3D model
+                  </button>
+                </div>
               </div>
-            </div>
-            <div id="site-media-list"></div>
-            <p id="site-media-hint" class="admin-hint" hidden>You can add media files anytime. Save the site when the details are ready.</p>
+              <div id="site-media-list"></div>
+              <p id="site-media-hint" class="admin-hint" hidden>
+                You can add media files anytime. Save the site when the details
+                are ready.
+              </p>
             </div>
           </div>
 
           <div class="admin-modal__actions">
-            <button type="button" id="btn-delete-site" class="admin-btn admin-btn--danger" hidden>Delete site</button>
-            <button type="button" class="admin-btn admin-btn--ghost" data-close-modal>Cancel</button>
-            <button type="submit" id="btn-save-site" class="admin-btn admin-btn--primary">Update</button>
+            <button
+              type="button"
+              id="btn-delete-site"
+              class="admin-btn admin-btn--danger"
+              hidden
+            >
+              Delete site
+            </button>
+            <button
+              type="button"
+              class="admin-btn admin-btn--ghost"
+              data-close-modal
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              id="btn-save-site"
+              class="admin-btn admin-btn--primary"
+            >
+              Update
+            </button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- Multimedia editor modal -->
-    <div id="media-modal" class="admin-modal" hidden role="dialog" aria-modal="true" aria-labelledby="media-modal-title">
+    <div
+      id="media-modal"
+      class="admin-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="media-modal-title"
+    >
       <div class="admin-modal__dialog">
         <div class="admin-modal__head">
           <div>
             <h2 id="media-modal-title">Add multimedia files</h2>
           </div>
-          <button type="button" class="admin-modal__close" data-close-modal aria-label="Close">&times;</button>
+          <button
+            type="button"
+            class="admin-modal__close"
+            data-close-modal
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
         <form id="media-form">
           <input type="hidden" id="media-id" />
@@ -622,49 +1128,108 @@
             <select id="media-type" class="admin-select">
               <option value="photo">Photograph</option>
               <option value="map" id="media-type-map">Site map</option>
-              <option value="model3d" id="media-type-model3d">3D model (.glb)</option>
+              <option value="model3d" id="media-type-model3d">
+                3D model (.glb)
+              </option>
               <option value="video" id="media-type-video">Video</option>
-              <option value="audio" id="media-type-audio">Audio recording</option>
-              <option value="link" id="media-type-link">External video link</option>
+              <option value="audio" id="media-type-audio">
+                Audio recording
+              </option>
+              <option value="link" id="media-type-link">
+                External video link
+              </option>
             </select>
           </div>
           <div class="admin-field" id="media-file-field">
-            <label class="admin-label" for="media-file" id="media-file-label">Upload file</label>
-            <input type="file" id="media-file" class="admin-file" accept="image/*" multiple />
+            <label class="admin-label" for="media-file" id="media-file-label"
+              >Upload file</label
+            >
+            <input
+              type="file"
+              id="media-file"
+              class="admin-file"
+              accept="image/*"
+              multiple
+            />
             <p id="media-file-hint" class="admin-hint"></p>
-            <div id="media-file-preview-wrap" class="admin-upload-preview" hidden>
-              <img id="media-file-preview" class="admin-upload-preview__img" alt="Preview" />
+            <div
+              id="media-file-preview-wrap"
+              class="admin-upload-preview"
+              hidden
+            >
+              <img
+                id="media-file-preview"
+                class="admin-upload-preview__img"
+                alt="Preview"
+              />
             </div>
           </div>
           <div class="admin-field" id="media-url-field" hidden>
             <label class="admin-label" for="media-src">File path or URL</label>
-            <input id="media-src" class="admin-input" placeholder="data/… or https://…" />
+            <input
+              id="media-src"
+              class="admin-input"
+              placeholder="data/… or https://…"
+            />
           </div>
           <div class="admin-field" id="media-title-field">
             <label class="admin-label" for="media-title">Title</label>
             <input id="media-title" class="admin-input" />
           </div>
           <div class="admin-field">
-            <label class="admin-label" for="media-caption">Caption (optional)</label>
+            <label class="admin-label" for="media-caption"
+              >Caption (optional)</label
+            >
             <input id="media-caption" class="admin-input" />
             <p id="media-caption-hint" class="admin-hint" hidden></p>
           </div>
           <div class="admin-modal__actions">
-            <button type="button" class="admin-btn admin-btn--ghost" data-close-modal>Cancel</button>
-            <button type="submit" class="admin-btn admin-btn--primary">Save</button>
+            <button
+              type="button"
+              class="admin-btn admin-btn--ghost"
+              data-close-modal
+            >
+              Cancel
+            </button>
+            <button type="submit" class="admin-btn admin-btn--primary">
+              Save
+            </button>
           </div>
         </form>
       </div>
     </div>
 
-    <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
+    <div
+      class="gal-lightbox"
+      id="galLightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Media viewer"
+    >
       <div class="gal-lightbox-backdrop" aria-hidden="true"></div>
-      <button type="button" class="gal-lightbox-close" id="galLightboxClose" aria-label="Close">&times;</button>
-      <button type="button" class="gal-lightbox-nav prev" id="galLightboxPrev" aria-label="Previous photograph">
+      <button
+        type="button"
+        class="gal-lightbox-close"
+        id="galLightboxClose"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+      <button
+        type="button"
+        class="gal-lightbox-nav prev"
+        id="galLightboxPrev"
+        aria-label="Previous photograph"
+      >
         <span class="gal-lightbox-nav__icon" aria-hidden="true">&lsaquo;</span>
         <span class="gal-lightbox-nav__label">Previous</span>
       </button>
-      <button type="button" class="gal-lightbox-nav next" id="galLightboxNext" aria-label="Next photograph">
+      <button
+        type="button"
+        class="gal-lightbox-nav next"
+        id="galLightboxNext"
+        aria-label="Next photograph"
+      >
         <span class="gal-lightbox-nav__label">Next</span>
         <span class="gal-lightbox-nav__icon" aria-hidden="true">&rsaquo;</span>
       </button>
@@ -678,7 +1243,11 @@
           <h3 id="galLightboxTitle"></h3>
           <p id="galLightboxMeta"></p>
           <p id="galLightboxAuthor" class="gal-lightbox-author" hidden></p>
-          <div class="gal-lightbox-citation" id="galLightboxCitation" hidden></div>
+          <div
+            class="gal-lightbox-citation"
+            id="galLightboxCitation"
+            hidden
+          ></div>
         </div>
       </div>
     </div>
@@ -699,12 +1268,17 @@
     <script src="../Back End/supabase-client.js"></script>
     <script src="../Back End/supabase-api.js"></script>
     <script src="../Back End/supabase-auth.js"></script>
+    <script src="heritage-realtime.js"></script>
     <script src="data/mati-city-boundary.js"></script>
     <script src="gallery-data.js"></script>
     <script src="admin-heritage-base.js"></script>
+    <script src="admin-built-media.js"></script>
     <script src="admin-heritage-scope.js"></script>
     <script src="heritage-map-sites.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
     <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="admin-auth.js"></script>
     <script src="admin-store.js"></script>
     <script src="admin-lci-export.js"></script>
     <script src="admin-uploads.js"></script>

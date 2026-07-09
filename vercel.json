@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "mati-heritage-3d",
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/", "destination": "/Front End/index.html" },
+    { "source": "/admin", "destination": "/Front End/admin.html" },
+    { "source": "/login", "destination": "/Front End/login.html" }
+  ]
+}

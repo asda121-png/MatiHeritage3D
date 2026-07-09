@@ -56,9 +56,6 @@
       <div class="gal-hero-media gal-hero-media--d" aria-hidden="true">
         <img src="data/GALLERY/d.jpg" alt="" loading="eager" decoding="async" />
       </div>
-      <div class="gal-hero-media gal-hero-media--design2" aria-hidden="true">
-        <img src="data/GALLERY/design2.png" alt="" loading="eager" decoding="async" />
-      </div>
       <div class="gal-hero-media gal-hero-media--design3" aria-hidden="true">
         <img src="data/GALLERY/design3.png" alt="" loading="eager" decoding="async" />
       </div>
@@ -135,8 +132,95 @@
       </div>
     </div>
 
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="visitor-auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="auth-logout.js"></script>
     <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
     <script src="gallery-app.js"></script>
     <script src="gallery-showcase.js"></script>
+
+    <script>
+      fetch("header.html")
+        .then((res) => res.text())
+        .then(async (data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const header = doc.querySelector("header");
+          const placeholder = document.getElementById("header-placeholder");
+          if (header && placeholder) placeholder.replaceWith(header);
+
+          const headerStyle = doc.querySelector("style");
+          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText;
+            document.body.appendChild(s);
+          }
+
+          document.querySelectorAll(".site-nav__link").forEach((link) => {
+            const routes = {
+              home: "index.html",
+              about: "about_us.html",
+              games: "game.html",
+              "3d": "3dexplore.html",
+              gallery: "gallery.html",
+            };
+            const key = link.getAttribute("data-nav");
+            if (key && routes[key]) link.href = routes[key];
+          });
+
+          document
+            .querySelectorAll('.site-nav__link[data-nav="gallery"]')
+            .forEach((link) => link.classList.add("is-active"));
+
+          if (typeof window.initSiteHeader === "function") {
+            window.initSiteHeader();
+          }
+          if (typeof window.MatiVisitorAuth !== "undefined") {
+            await window.MatiVisitorAuth.refresh();
+          }
+        })
+        .catch((err) => console.error("Error loading header:", err));
+
+      // Load footer
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          const doc = new DOMParser().parseFromString(data, "text/html");
+          const footer = doc.querySelector("footer");
+          const placeholder = document.getElementById("footer-placeholder");
+          if (footer && placeholder) placeholder.replaceWith(footer);
+
+          const footerStyle = doc.querySelector("style");
+          if (footerStyle)
+            document.head.appendChild(footerStyle.cloneNode(true));
+
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          );
+          if (scriptText) {
+            const s = document.createElement("script");
+            s.textContent = scriptText.textContent;
+            document.body.appendChild(s);
+          }
+
+          if (typeof window.initSiteFooter === "function") {
+            window.initSiteFooter("gallery");
+          }
+        })
+        .catch((err) => console.error("Error loading footer:", err));
+    </script>
   </body>
 </html>

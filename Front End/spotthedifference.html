@@ -2473,13 +2473,29 @@
       autoplay
     ></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="heritage-map-sites.js"></script>
+    <script src="admin-heritage-base.js"></script>
+    <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
+    <script src="heritage-game-content.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="heritage-points.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="game-exit-guard.js"></script>
     <script>
+      void MatiGameAuthGate.init({ returnTo: "spotthedifference.html" });
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
 
-      const levels = [
+      let levels = [
         {
           img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
           differences: [
@@ -2491,6 +2507,38 @@
           ],
         },
       ];
+      const FALLBACK_SPOT_LEVELS = levels.map((level) => ({
+        ...level,
+        differences: level.differences.map((d) => ({ ...d })),
+      }));
+      let heritageSession = null;
+      let activeLevel = levels[0];
+
+      async function prepareSpotLevel() {
+        try {
+          if (typeof MatiHeritageGameContent !== "undefined") {
+            heritageSession = await MatiHeritageGameContent.createSession();
+            const generated = heritageSession.spotLevels(4);
+            if (generated.length) {
+              levels = generated;
+              activeLevel = heritageSession.rng.pickOne(generated) || generated[0];
+              return activeLevel;
+            }
+          }
+        } catch (error) {
+          console.warn("Spot-the-difference heritage level failed, using fallback:", error);
+        }
+        levels = FALLBACK_SPOT_LEVELS.map((level) => ({
+          ...level,
+          differences: level.differences.map((d) => ({ ...d, found: false })),
+        }));
+        activeLevel = levels[Math.floor(Math.random() * levels.length)];
+        return activeLevel;
+      }
+
+      function currentSpotLevel() {
+        return activeLevel || levels[0] || FALLBACK_SPOT_LEVELS[0];
+      }
 
       const settings = {
         easy: { time: 90, points: 50, radius: 8 },
@@ -2695,7 +2743,7 @@
       }
 
       function updateProgressUI() {
-        const total = levels[0].differences.length;
+        const total = currentSpotLevel().differences.length;
         const pct = total > 0 ? (found / total) * 100 : 0;
         if (progressFill) progressFill.style.width = `${pct}%`;
         if (progressText)
@@ -2848,7 +2896,7 @@
       });
 
       function resetDifferences() {
-        levels[0].differences.forEach((d) => {
+        currentSpotLevel().differences.forEach((d) => {
           d.found = false;
         });
       }
@@ -2912,7 +2960,7 @@
         const radius = settings[currentDifficulty].radius;
 
         let hit = false;
-        levels[0].differences.forEach((diff) => {
+        currentSpotLevel().differences.forEach((diff) => {
           if (!diff.found) {
             const dist = Math.hypot(clickX - diff.x, clickY - diff.y);
             if (dist < radius) {
@@ -2932,7 +2980,7 @@
           popScoreDisplay();
           showFestToast(TOAST_MSGS[found % TOAST_MSGS.length]);
           spawnConfetti(18, e.clientX, e.clientY);
-          if (found === levels[0].differences.length) {
+          if (found === currentSpotLevel().differences.length) {
             endGame("Mabuhay! You found every difference!", true);
           }
         } else {
@@ -3032,19 +3080,24 @@
               : "🎭💫🎭";
         }
 
-        let total = parseInt(
-          localStorage.getItem("totalHeritagePoints") || "0",
-          10,
-        );
-        total += score;
-        localStorage.setItem("totalHeritagePoints", String(total));
-        const pointsEl = document.getElementById("header-total-points");
-        if (pointsEl) pointsEl.textContent = total;
+        if (typeof MatiHeritagePoints !== "undefined") {
+          void MatiHeritagePoints.add(score);
+        } else {
+          let total = parseInt(
+            localStorage.getItem("totalHeritagePoints") || "0",
+            10,
+          );
+          total += score;
+          localStorage.setItem("totalHeritagePoints", String(total));
+          const pointsEl = document.getElementById("header-total-points");
+          if (pointsEl) pointsEl.textContent = total;
+        }
 
         playAnnouncer(`${msg} You scored ${score} points.`);
       }
 
-      function startGame() {
+      async function startGame() {
+        await prepareSpotLevel();
         resetDifferences();
         clearMarkers();
         found = 0;
@@ -3053,14 +3106,15 @@
         totalTime = timeLeft;
         updateStats();
         document.getElementById("timer-display").textContent = `${timeLeft}s`;
+        const level = currentSpotLevel();
         document.getElementById("total-diffs").textContent =
-          levels[0].differences.length;
-        buildFestStars(levels[0].differences.length);
+          level.differences.length;
+        buildFestStars(level.differences.length);
         updateProgressUI();
         updateTimerProgress();
         updateTimerUrgency();
 
-        const imgSrc = levels[0].img;
+        const imgSrc = level.img;
         document.getElementById("img-1").src = imgSrc;
         document.getElementById("img-2").src = imgSrc;
 
@@ -3071,8 +3125,9 @@
         document.body.classList.add("is-playing");
         gameActive = true;
         startTimer();
+        const siteHint = level.name ? ` of ${level.name}` : "";
         playAnnouncer(
-          `${settings[currentDifficulty].time} seconds on the clock. Find all ${levels[0].differences.length} differences in these heritage photos.`,
+          `${settings[currentDifficulty].time} seconds on the clock. Find all ${level.differences.length} differences in these heritage photos${siteHint}.`,
         );
       }
 
@@ -3089,7 +3144,7 @@
         sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
         startFestivalMusic();
         getFestAudioCtx();
-        startGame();
+        void startGame();
       });
 
       document.getElementById("replay-btn").addEventListener("click", () => {
@@ -3113,6 +3168,10 @@
         document.querySelectorAll(".diff-chip, .btn-fest, .game-back-nav a"),
       );
       bindFestivalMusicStart();
+
+      if (typeof MatiGameExitGuard !== "undefined") {
+        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "festival" });
+      }
 
       fetch("header.html")
         .then((res) => res.text())

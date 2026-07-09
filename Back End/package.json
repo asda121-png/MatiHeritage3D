@@ -8,9 +8,11 @@
     "supabase:seed-sql": "node scripts/generate-built-heritage-seed-sql.mjs",
     "supabase:seed-bootstrap": "node scripts/generate-bootstrap-rpc.mjs",
     "supabase:seed-gallery": "node scripts/seed-gallery-heritage.mjs",
+    "supabase:seed-gallery-sql": "node scripts/generate-gallery-heritage-seed-sql.mjs",
     "supabase:seed-all": "node scripts/seed-built-heritage.mjs && node scripts/seed-gallery-heritage.mjs",
     "supabase:link": "npx supabase link",
-    "supabase:push": "npx supabase db push"
+    "supabase:push": "npx supabase db push",
+    "supabase:create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",

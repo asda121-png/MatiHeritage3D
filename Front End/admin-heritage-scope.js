@@ -66,6 +66,7 @@ function filterSitesToScope(sites, category, isUserAddedSite) {
   return sites.filter((site) => {
     if (site.category !== category) return false;
     if (allowed.has(site.id)) return true;
-    return category === "built" && typeof isUserAddedSite === "function" && isUserAddedSite(site.id);
+    // Allow admin-created sites in every heritage category (persisted to Supabase).
+    return typeof isUserAddedSite === "function" && isUserAddedSite(site.id);
   });
 }

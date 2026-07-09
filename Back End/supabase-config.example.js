@@ -8,4 +8,9 @@ window.MATI_SUPABASE_CONFIG = {
   anonKey: "YOUR_ANON_KEY",
   /** Set true after migrating player login from localStorage to Supabase Auth */
   useSupabaseAuth: false,
+  /**
+   * Optional full URL for password-reset emails.
+   * If omitted, Supabase uses the current site + reset-password.html
+   */
+  passwordResetRedirect: null,
 };

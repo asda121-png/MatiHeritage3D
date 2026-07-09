@@ -1,0 +1,20 @@
+# Mati Heritage 3D — free Netlify deploy
+# Publish the whole repo so Front End/ and Back End/ keep their relative paths.
+
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/Front End/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/Front End/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/Front End/login.html"
+  status = 200

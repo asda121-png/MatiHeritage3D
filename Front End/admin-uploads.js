@@ -1,4 +1,7 @@
-/** Client-side file storage for admin uploads (IndexedDB) */
+/**
+ * Admin file uploads — Supabase Storage when configured, IndexedDB local fallback.
+ * Deployed sites should always return public https Storage URLs.
+ */
 const MatiAdminUploads = (() => {
   const DB_NAME = "MatiAdminUploads";
   const STORE = "files";
@@ -33,7 +36,36 @@ const MatiAdminUploads = (() => {
     return Boolean(uri && uri.startsWith(PREFIX));
   }
 
-  async function put(key, file) {
+  function isHttpUrl(uri) {
+    return /^https?:\/\//i.test(String(uri || ""));
+  }
+
+  function supabaseUploadsEnabled() {
+    return (
+      typeof MatiSupabase !== "undefined" &&
+      MatiSupabase.isConfigured() &&
+      typeof MatiSupabaseApi !== "undefined" &&
+      typeof MatiSupabaseApi.uploadSiteMedia === "function"
+    );
+  }
+
+  function inferTypeFromKey(key) {
+    const lower = String(key || "").toLowerCase();
+    if (lower.includes("/map") || lower.endsWith("/map") || /\/map(\/|$)/.test(lower)) {
+      return "map";
+    }
+    if (lower.includes("/model") || lower.endsWith(".glb")) return "model3d";
+    if (lower.includes("/video") || /\.(mp4|webm|mov)$/i.test(lower)) return "video";
+    if (lower.includes("/audio") || /\.(mp3|wav|ogg|m4a)$/i.test(lower)) return "audio";
+    return "photo";
+  }
+
+  function siteIdFromKey(key) {
+    const first = String(key || "").split("/")[0];
+    return first || "uploads";
+  }
+
+  async function putLocal(key, file) {
     const db = await openDb();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE, "readwrite");
@@ -43,7 +75,42 @@ const MatiAdminUploads = (() => {
     });
   }
 
+  /**
+   * @param {string} key storage key (also used for IndexedDB fallback)
+   * @param {File|Blob} file
+   * @param {{ type?: string, siteId?: string, onProgress?: (pct:number)=>void }} [options]
+   */
+  async function put(key, file, options = {}) {
+    const type = options.type || inferTypeFromKey(key);
+    const siteId = options.siteId || siteIdFromKey(key);
+
+    if (supabaseUploadsEnabled()) {
+      const publicUrl = await MatiSupabaseApi.uploadSiteMedia(
+        siteId,
+        type,
+        file,
+        {
+          onProgress: options.onProgress,
+        },
+      );
+      if (!publicUrl) {
+        throw new Error("Supabase Storage did not return a public URL.");
+      }
+      return publicUrl;
+    }
+
+    if (typeof options.onProgress === "function") {
+      options.onProgress(15);
+      await new Promise((resolve) => setTimeout(resolve, 80));
+      options.onProgress(55);
+    }
+    const uri = await putLocal(key, file);
+    if (typeof options.onProgress === "function") options.onProgress(100);
+    return uri;
+  }
+
   async function get(keyOrUri) {
+    if (isHttpUrl(keyOrUri)) return null;
     const key = parseKey(keyOrUri) || keyOrUri;
     if (!key) return null;
     const db = await openDb();
@@ -56,11 +123,13 @@ const MatiAdminUploads = (() => {
   }
 
   async function createObjectUrl(keyOrUri) {
+    if (isHttpUrl(keyOrUri)) return String(keyOrUri);
     const blob = await get(keyOrUri);
     return blob ? URL.createObjectURL(blob) : null;
   }
 
   async function remove(keyOrUri) {
+    if (isHttpUrl(keyOrUri)) return;
     const key = parseKey(keyOrUri) || keyOrUri;
     if (!key) return;
     const db = await openDb();
@@ -78,6 +147,7 @@ const MatiAdminUploads = (() => {
     createObjectUrl,
     remove,
     isUploadUri,
+    isHttpUrl,
     parseKey,
     toUri,
   };
