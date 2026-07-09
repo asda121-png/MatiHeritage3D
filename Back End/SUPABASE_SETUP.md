@@ -409,6 +409,10 @@ Supabase Auth still verifies sign-in securely on the server.
 
 The **Continue with Google** button appears on login and registration pages.
 
+Players can customize **username** and **display name** on `account.html` (profile icon → Account → Edit player profile). Run:
+
+`Back End/supabase/migrations/20260709130000_update_player_profile.sql`
+
 ---
 
 ### Pre-deploy checklist
