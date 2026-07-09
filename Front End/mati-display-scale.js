@@ -1,6 +1,6 @@
 /**
- * Match published site density to local Live Server at ~75% browser zoom.
- * Skips localhost so local dev is not double-scaled.
+ * Match published site density to local Live Server (Front End/index.html).
+ * Skips localhost so local browser zoom is not double-scaled.
  */
 (function () {
   "use strict";
@@ -9,5 +9,19 @@
   if (host === "localhost" || host === "127.0.0.1") return;
   if (/admin\.html$/i.test(location.pathname)) return;
 
-  document.documentElement.style.zoom = "0.75";
+  const SCALE = "0.8";
+  document.documentElement.style.zoom = SCALE;
+
+  function refreshMapLayout() {
+    const map = window.matiMapInstance;
+    if (map && typeof map.invalidateSize === "function") {
+      map.invalidateSize();
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    refreshMapLayout();
+    setTimeout(refreshMapLayout, 200);
+    setTimeout(refreshMapLayout, 800);
+  });
 })();
