@@ -4,14 +4,13 @@
  * Usage:
  *   cd "Back End"
  *   copy .env.example .env   # add SUPABASE_SERVICE_ROLE_KEY
- *   node scripts/create-admin.mjs
- *
- * Optional env overrides:
- *   ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME, ADMIN_DISPLAY_NAME
+ *   npm run supabase:create-admin
  */
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createClient } from "@supabase/supabase-js";
+import { createDigest } from "../lib/password-hash.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -32,7 +31,7 @@ function loadEnvFile() {
 
 loadEnvFile();
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/$/, "");
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const ADMIN_EMAIL = (
@@ -50,78 +49,106 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
   process.exit(1);
 }
 
-const headers = {
-  apikey: SERVICE_KEY,
-  Authorization: `Bearer ${SERVICE_KEY}`,
-  "Content-Type": "application/json",
-};
+const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+});
+
+function friendlyError(error, context) {
+  const message = String(error?.message || error || "Unknown error");
+  if (/fetch failed|ENOTFOUND|ECONNREFUSED|ETIMEDOUT|certificate/i.test(message)) {
+    return [
+      `${context} failed: network error (${message}).`,
+      "Check SUPABASE_URL in Back End/.env and your internet connection.",
+      "If you are on a school/corporate network, try another connection or hotspot.",
+    ].join("\n");
+  }
+  return `${context} failed: ${message}`;
+}
 
 async function findUserByEmail(email) {
-  const res = await fetch(
-    `${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(email)}`,
-    { headers },
-  );
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`List users failed (${res.status}): ${text}`);
+  const { data, error } = await supabase.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000,
+  });
+
+  if (error) {
+    throw new Error(friendlyError(error, "List users"));
   }
-  const data = await res.json();
-  const users = Array.isArray(data?.users) ? data.users : data;
-  return users?.find?.(
+
+  return (data?.users || []).find(
     (user) => String(user.email || "").toLowerCase() === email,
   );
 }
 
 async function createUser() {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
-      email_confirm: true,
-      user_metadata: {
-        username: ADMIN_USERNAME,
-        display_name: ADMIN_DISPLAY_NAME,
-      },
-    }),
+  const { data, error } = await supabase.auth.admin.createUser({
+    email: ADMIN_EMAIL,
+    password: ADMIN_PASSWORD,
+    email_confirm: true,
+    user_metadata: {
+      username: ADMIN_USERNAME,
+      display_name: ADMIN_DISPLAY_NAME,
+    },
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Create user failed (${res.status}): ${text}`);
+  if (error) {
+    throw new Error(friendlyError(error, "Create user"));
   }
 
-  return res.json();
+  return data.user;
 }
 
 async function promoteProfile(userId) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}`, {
-    method: "PATCH",
-    headers: {
-      ...headers,
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify({
-      role: "admin",
-      username: ADMIN_USERNAME,
-      display_name: ADMIN_DISPLAY_NAME,
-      email: ADMIN_EMAIL,
-    }),
-  });
+  const { salt, hash } = createDigest(ADMIN_PASSWORD);
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Promote profile failed (${res.status}): ${text}`);
+  const payload = {
+    role: "admin",
+    username: ADMIN_USERNAME,
+    display_name: ADMIN_DISPLAY_NAME,
+    email: ADMIN_EMAIL,
+    password_salt: salt,
+    password_hash_sha256: hash,
+  };
+
+  let { data, error } = await supabase
+    .from("profiles")
+    .update(payload)
+    .eq("id", userId)
+    .select()
+    .maybeSingle();
+
+  if (
+    error &&
+    /password_salt|password_hash_sha256|column/i.test(error.message || "")
+  ) {
+    console.warn(
+      "Password digest columns missing — run migration 20260709120000_profiles_password_sha256.sql",
+    );
+    ({ data, error } = await supabase
+      .from("profiles")
+      .update({
+        role: "admin",
+        username: ADMIN_USERNAME,
+        display_name: ADMIN_DISPLAY_NAME,
+        email: ADMIN_EMAIL,
+      })
+      .eq("id", userId)
+      .select()
+      .maybeSingle());
   }
 
-  return res.json();
+  if (error) {
+    throw new Error(friendlyError(error, "Promote profile"));
+  }
+
+  return data;
 }
 
 async function main() {
   console.log("Mati Heritage 3D — create admin account");
   console.log(`Email:    ${ADMIN_EMAIL}`);
   console.log(`Username: ${ADMIN_USERNAME}`);
+  console.log(`Project:  ${SUPABASE_URL}`);
 
   let user = await findUserByEmail(ADMIN_EMAIL);
 
@@ -134,7 +161,7 @@ async function main() {
   }
 
   const profile = await promoteProfile(user.id);
-  console.log("Profile updated:", profile?.[0] || profile);
+  console.log("Profile updated:", profile);
 
   console.log("\nAdmin ready. Sign in at Front End/login.html?redirect=admin.html");
   console.log(`Password: ${ADMIN_PASSWORD}`);
