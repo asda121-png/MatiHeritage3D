@@ -155,6 +155,10 @@ const MatiSupabaseAuth = (() => {
       };
     }
 
+    if (data.session) {
+      await storePasswordDigest(password);
+    }
+
     return {
       ok: true,
       user: {
@@ -194,6 +198,8 @@ const MatiSupabaseAuth = (() => {
         return { ok: false, message: "Invalid email/username or password." };
       }
 
+      await storePasswordDigest(password);
+
       return {
         ok: true,
         user: {
@@ -213,6 +219,8 @@ const MatiSupabaseAuth = (() => {
     if (error) {
       return { ok: false, message: "Invalid email/username or password." };
     }
+
+    await storePasswordDigest(password);
 
     const { data: profile } = await sb
       .from("profiles")
@@ -282,6 +290,69 @@ const MatiSupabaseAuth = (() => {
     return `${window.location.origin}${path}reset-password.html`;
   }
 
+  function googleSignInEnabled() {
+    return Boolean(
+      enabled() && window.MATI_SUPABASE_CONFIG?.googleSignInEnabled,
+    );
+  }
+
+  function authRedirectUrl(pathname, redirectTarget) {
+    const path = String(pathname || window.location.pathname).replace(
+      /[^/]*$/,
+      "",
+    );
+    const target = redirectTarget || "index.html";
+    return `${window.location.origin}${path}login.html?redirect=${encodeURIComponent(target)}&oauth=1`;
+  }
+
+  async function storePasswordDigest(password) {
+    if (!password || typeof MatiPasswordHash === "undefined") return;
+    await MatiPasswordHash.storeDigestForCurrentUser(password);
+  }
+
+  async function signInWithGoogle(redirectTarget) {
+    if (!googleSignInEnabled()) {
+      return {
+        ok: false,
+        message:
+          "Google Sign-In is not enabled. Turn on googleSignInEnabled in supabase-config.js and configure Google in Supabase.",
+      };
+    }
+
+    const sb = client();
+    if (!sb) {
+      return { ok: false, message: "Sign-in is not available." };
+    }
+
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: authRedirectUrl(window.location.pathname, redirectTarget),
+      },
+    });
+
+    if (error) {
+      return { ok: false, message: error.message };
+    }
+
+    return { ok: true };
+  }
+
+  async function completeOAuthRedirect() {
+    if (!enabled()) return null;
+
+    const sb = client();
+    if (!sb) return null;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("oauth") !== "1") return null;
+
+    const { data, error } = await sb.auth.getSession();
+    if (error || !data?.session?.user) return null;
+
+    return getSession();
+  }
+
   async function requestPasswordReset(email) {
     if (!enabled()) {
       return {
@@ -340,6 +411,8 @@ const MatiSupabaseAuth = (() => {
       return { ok: false, message: error.message };
     }
 
+    await storePasswordDigest(newPassword);
+
     await sb.auth.signOut();
     return {
       ok: true,
@@ -359,5 +432,8 @@ const MatiSupabaseAuth = (() => {
     hasRecoverySession,
     updatePassword,
     passwordResetRedirectUrl,
+    googleSignInEnabled,
+    signInWithGoogle,
+    completeOAuthRedirect,
   };
 })();

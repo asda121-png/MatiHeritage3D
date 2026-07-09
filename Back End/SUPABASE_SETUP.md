@@ -368,6 +368,47 @@ In **Supabase Dashboard → Authentication → URL Configuration**:
 
 Under **Authentication → Providers → Email**, keep email auth enabled.
 
+Add these **Redirect URLs** for Google Sign-In (same screen):
+
+| Redirect URL |
+|--------------|
+| `https://YOUR-SITE.netlify.app/Front%20End/login.html` |
+| `http://127.0.0.1:5504/Front%20End/login.html` |
+
+---
+
+## 11. Authentication requirements (username/password, Google, SHA-256)
+
+### Username + password
+
+- Visitors sign in with **email or username** + password on `login.html`.
+- Admin uses the same login page with `?redirect=admin.html`.
+- Create the admin once: `cd "Back End"` → `npm run supabase:create-admin`
+  (requires `SUPABASE_SERVICE_ROLE_KEY` in `Back End/.env`).
+
+### SHA-256 password storage
+
+Plain passwords are **never** stored in the database or localStorage.
+
+Run in SQL Editor:
+
+`Back End/supabase/migrations/20260709120000_profiles_password_sha256.sql`
+
+This adds `password_salt` and `password_hash_sha256` on `profiles`. On register/login,
+the app stores `SHA-256(salt + password)` via the `set_password_digest` RPC.
+Supabase Auth still verifies sign-in securely on the server.
+
+### Google Sign-In (optional)
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → create OAuth client (Web).
+2. **Authorized JavaScript origins:** your site URL (local + Netlify).
+3. **Authorized redirect URI:**  
+   `https://cicrbvjykbsyptivlvzi.supabase.co/auth/v1/callback`
+4. Supabase → **Authentication → Providers → Google** → paste Client ID + Secret → Enable.
+5. Set `googleSignInEnabled: true` in `Back End/supabase-config.js` (already set when configured).
+
+The **Continue with Google** button appears on login and registration pages.
+
 ---
 
 ### Pre-deploy checklist
