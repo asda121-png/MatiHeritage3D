@@ -4,6 +4,9 @@
 [build]
   publish = "."
 
+[build.processing.html]
+  pretty_urls = false
+
 # Use 302 redirects (not 200 rewrites) so the browser URL includes /Front%20End/.
 # A 200 rewrite serves index.html at "/" and breaks relative paths (CSS, JS, header.html).
 
@@ -21,3 +24,33 @@
   from = "/login"
   to = "/Front%20End/login.html"
   status = 302
+
+[[redirects]]
+  from = "/front end/login"
+  to = "/Front%20End/login.html"
+  status = 301
+
+[[redirects]]
+  from = "/Front End/login"
+  to = "/Front%20End/login.html"
+  status = 301
+
+[[redirects]]
+  from = "/front end/userregistration"
+  to = "/Front%20End/userregistration.html"
+  status = 301
+
+[[redirects]]
+  from = "/front end/forgot-password"
+  to = "/Front%20End/forgot-password.html"
+  status = 301
+
+[[redirects]]
+  from = "/front end/reset-password"
+  to = "/Front%20End/reset-password.html"
+  status = 301
+
+[[redirects]]
+  from = "/front end/*"
+  to = "/Front%20End/:splat"
+  status = 301
