@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script src="mati-display-scale.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Visitor Portal - Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +40,6 @@
 
       html {
         scroll-behavior: auto;
-        font-size: 16px;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
       }
@@ -5014,6 +5012,10 @@
         }
         matiMapBooted = true;
         initMatiMap();
+        requestAnimationFrame(() => {
+          window.matiMapInstance?.invalidateSize?.();
+          setTimeout(() => window.matiMapInstance?.invalidateSize?.(), 200);
+        });
       }
 
       setTimeout(() => bootMatiMapAfterLayout(), 800);
