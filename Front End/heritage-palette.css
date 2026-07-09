@@ -41,4 +41,23 @@
     var(--forest) 50%,
     var(--sky) 100%
   );
+
+  /* UI density at 100% browser zoom (~75% browser zoom look on desktop). */
+  --visitor-ui-scale: 1;
+}
+
+/* Visitor portal: uniform scale so production (100% zoom) matches the designed density. */
+@media (min-width: 768px) {
+  body.visitor-module {
+    --visitor-ui-scale: 0.75;
+    zoom: 0.75;
+  }
+}
+
+@supports not (zoom: 0.75) {
+  @media (min-width: 768px) {
+    html:has(body.visitor-module) {
+      font-size: 12px;
+    }
+  }
 }
