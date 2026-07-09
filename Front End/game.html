@@ -517,8 +517,8 @@
         z-index: 520;
       }
 
-      /* Game lobby: always show points + profile (including mobile) */
-      body.game-page .site-header__utilities {
+      /* Game lobby: points + profile only when signed in */
+      body.games-hub-page.is-logged-in .site-header__utilities {
         display: flex !important;
         align-items: center;
         gap: 0.45rem;
@@ -651,7 +651,7 @@
     </style>
   </head>
 
-  <body class="game-page visitor-module">
+  <body class="game-page games-hub-page visitor-module">
     <svg class="game-tv-filters" aria-hidden="true" focusable="false">
       <filter id="game-tv-static-filter" x="0%" y="0%" width="100%" height="100%">
         <feTurbulence
