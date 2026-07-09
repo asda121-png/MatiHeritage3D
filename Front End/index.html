@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script src="/site-path-fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Visitor Portal - Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +78,7 @@
       .experience-section,
       .heritage-section,
       .games-section {
-        contain: layout style paint;
+        contain: style;
       }
 
       /* Optimize image rendering */
@@ -3101,6 +3100,10 @@
         --header-h-scrolled: 4.875rem;
       }
 
+      #header-placeholder {
+        min-height: var(--header-h, 5.625rem);
+      }
+
       #header-placeholder,
       .site-header {
         position: relative;
@@ -3276,7 +3279,7 @@
     </div>
     <div class="noise-overlay" aria-hidden="true"></div>
 
-    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
+    <div id="header-placeholder" class="relative z-50"></div>
 
     <div class="main-content">
       <!-- Mati City Map -->
@@ -4401,11 +4404,11 @@
     ></script>
     <script src="data/mati-city-boundary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="../Back End/supabase-config.js"></script>
+    <script src="_backend/supabase-config.js"></script>
     <script src="heritage-pylon-model.js"></script>
-    <script src="../Back End/supabase-client.js"></script>
-    <script src="../Back End/supabase-api.js"></script>
-    <script src="../Back End/supabase-auth.js"></script>
+    <script src="_backend/supabase-client.js"></script>
+    <script src="_backend/supabase-api.js"></script>
+    <script src="_backend/supabase-auth.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="admin-heritage-base.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -4480,8 +4483,15 @@
           if (typeof window.MatiVisitorAuth !== "undefined") {
             await window.MatiVisitorAuth.refresh();
           }
+
+          requestAnimationFrame(() => {
+            bootMatiMapAfterLayout();
+          });
         })
-        .catch((err) => console.error("Error loading header:", err));
+        .catch((err) => {
+          console.error("Error loading header:", err);
+          bootMatiMapAfterLayout();
+        });
 
       fetch("footer.html")
         .then((res) => res.text())
@@ -4984,23 +4994,28 @@
             if (nowVisible === isVisible) return;
             isVisible = nowVisible;
 
-            const container = map.getContainer();
-            if (!container) return;
-
             if (nowVisible) {
-              container.style.display = "";
               requestAnimationFrame(() => map.invalidateSize());
-            } else {
-              container.style.display = "none";
             }
           },
-          { rootMargin: "80px 0px", threshold: 0 },
+          { rootMargin: "80px 0px", threshold: 0.01 },
         );
 
         visibilityObserver.observe(sectionEl);
       }
 
-      initMatiMap();
+      let matiMapBooted = false;
+
+      function bootMatiMapAfterLayout() {
+        if (matiMapBooted) {
+          window.matiMapInstance?.invalidateSize?.();
+          return;
+        }
+        matiMapBooted = true;
+        initMatiMap();
+      }
+
+      setTimeout(() => bootMatiMapAfterLayout(), 800);
 
       let portalGameIdx = 0;
       let portalGameSpotlightReady = false;
