@@ -311,10 +311,58 @@ const MatiSupabaseApi = (() => {
           ? 0
           : profilePlayers.count ?? 0;
 
+    const analytics = await getVisitorAnalytics().catch(() => null);
+
     return {
       registeredUsers: registered.count ?? 0,
       gamePlayers,
+      ...(analytics || {}),
     };
+  }
+
+  async function getVisitorAnalytics() {
+    const sb = client();
+    if (!sb) return null;
+
+    const { data, error } = await sb.rpc("get_visitor_analytics");
+    if (error) throw error;
+    if (!data || typeof data !== "object") return null;
+
+    return {
+      totalPageViews: Number(data.totalPageViews) || 0,
+      uniqueSessions: Number(data.uniqueSessions) || 0,
+      activeSessions: Number(data.activeSessions) || 0,
+      pageVisits: Number(data.pageVisits ?? data.totalPageViews) || 0,
+    };
+  }
+
+  async function recordPageVisit(sessionId, pagePath) {
+    const sb = client();
+    if (!sb) return null;
+
+    const { data, error } = await sb.rpc("record_page_visit", {
+      p_session_id: sessionId,
+      p_page_path: pagePath || "/",
+    });
+    if (error) throw error;
+    if (!data || typeof data !== "object") return null;
+
+    return {
+      totalPageViews: Number(data.totalPageViews) || 0,
+      uniqueSessions: Number(data.uniqueSessions) || 0,
+      activeSessions: Number(data.activeSessions) || 0,
+      pageVisits: Number(data.pageVisits ?? data.totalPageViews) || 0,
+    };
+  }
+
+  function subscribeVisitorAnalytics(onChange) {
+    if (typeof onChange !== "function") return null;
+    if (typeof MatiHeritageRealtime === "undefined") return null;
+    MatiHeritageRealtime.ensure();
+    return MatiHeritageRealtime.on(
+      MatiHeritageRealtime.TOPIC.visitors,
+      onChange,
+    );
   }
 
   async function seedBuiltHeritageCatalog() {
@@ -440,10 +488,23 @@ const MatiSupabaseApi = (() => {
     subscribeLeaderboard,
     subscribeHeritageCatalog,
     getProfileStats,
+    getVisitorAnalytics,
+    recordPageVisit,
+    subscribeVisitorAnalytics,
     seedBuiltHeritageCatalog,
     uploadFile,
     uploadSiteMedia,
     siteFromRow,
     mediaFromRow,
   };
+})();
+
+(function bootVisitorAnalyticsScript() {
+  if (typeof window === "undefined" || window.MatiVisitorAnalytics) return;
+  if (/admin\.html/i.test(location.pathname)) return;
+
+  const script = document.createElement("script");
+  script.src = "visitor-analytics.js";
+  script.defer = true;
+  document.head.appendChild(script);
 })();
