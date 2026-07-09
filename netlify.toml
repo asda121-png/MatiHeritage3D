@@ -4,17 +4,20 @@
 [build]
   publish = "."
 
+# Use 302 redirects (not 200 rewrites) so the browser URL includes /Front%20End/.
+# A 200 rewrite serves index.html at "/" and breaks relative paths (CSS, JS, header.html).
+
 [[redirects]]
   from = "/"
-  to = "/Front End/index.html"
-  status = 200
+  to = "/Front%20End/index.html"
+  status = 302
 
 [[redirects]]
   from = "/admin"
-  to = "/Front End/admin.html"
-  status = 200
+  to = "/Front%20End/admin.html"
+  status = 302
 
 [[redirects]]
   from = "/login"
-  to = "/Front End/login.html"
-  status = 200
+  to = "/Front%20End/login.html"
+  status = 302

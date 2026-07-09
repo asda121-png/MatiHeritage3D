@@ -3,9 +3,9 @@
   "name": "mati-heritage-3d",
   "buildCommand": null,
   "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/", "destination": "/Front End/index.html" },
-    { "source": "/admin", "destination": "/Front End/admin.html" },
-    { "source": "/login", "destination": "/Front End/login.html" }
+  "redirects": [
+    { "source": "/", "destination": "/Front%20End/index.html", "permanent": false },
+    { "source": "/admin", "destination": "/Front%20End/admin.html", "permanent": false },
+    { "source": "/login", "destination": "/Front%20End/login.html", "permanent": false }
   ]
 }
