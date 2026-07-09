@@ -112,7 +112,7 @@ const MatiAuth = (() => {
     return registerLocal(payload);
   }
 
-  function registerLocal({ displayName, username, email, password }) {
+  async function registerLocal({ displayName, username, email, password }) {
     if (!displayName || !username || !email || !password) {
       return { ok: false, message: "Please fill in all fields." };
     }
@@ -146,11 +146,14 @@ const MatiAuth = (() => {
       return { ok: false, message: availability.message };
     }
 
+    const { salt, hash } = await MatiPasswordHash.createDigest(password);
+
     const newUser = {
       displayName: displayName.trim(),
       username: cleanUsername,
       email: cleanEmail,
-      password,
+      passwordSalt: salt,
+      passwordHash: hash,
       createdAt: new Date().toISOString(),
     };
 
@@ -193,7 +196,7 @@ const MatiAuth = (() => {
     return loginLocal(identifier, password);
   }
 
-  function loginLocal(identifier, password) {
+  async function loginLocal(identifier, password) {
     if (!identifier || !password) {
       return { ok: false, message: "Please enter your email/username and password." };
     }
@@ -209,7 +212,26 @@ const MatiAuth = (() => {
         : entry.username === key,
     );
 
-    if (!user || user.password !== password) {
+    let passwordOk = false;
+
+    if (user.passwordHash && user.passwordSalt) {
+      passwordOk = await MatiPasswordHash.verifyPassword(
+        password,
+        user.passwordSalt,
+        user.passwordHash,
+      );
+    } else if (user.password) {
+      passwordOk = user.password === password;
+      if (passwordOk) {
+        const { salt, hash } = await MatiPasswordHash.createDigest(password);
+        user.passwordSalt = salt;
+        user.passwordHash = hash;
+        delete user.password;
+        writeUsers(users);
+      }
+    }
+
+    if (!user || !passwordOk) {
       return { ok: false, message: "Invalid email/username or password." };
     }
 

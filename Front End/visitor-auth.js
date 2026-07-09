@@ -15,16 +15,23 @@ const MatiVisitorAuth = (() => {
     );
   }
 
+  function isGamesHubPage() {
+    return document.body.classList.contains("games-hub-page");
+  }
+
   function toggleAuthChrome(loggedIn) {
     const utilities = $("#site-header-utilities");
     const authActions = $("#visitor-auth-actions");
+    const showPlayerChrome = loggedIn && isGamesHubPage();
 
     document.body.classList.toggle("is-logged-in", loggedIn);
+    document.body.classList.toggle("is-games-hub", isGamesHubPage());
 
-    if (utilities && !isVisitorPortal()) {
-      utilities.style.display = loggedIn ? "" : "none";
+    if (utilities) {
+      utilities.style.display = showPlayerChrome ? "" : "none";
     }
-    if (authActions && !isVisitorPortal()) {
+
+    if (authActions && isVisitorPortal()) {
       authActions.style.display = loggedIn ? "none" : "";
     }
   }
@@ -124,6 +131,10 @@ const MatiVisitorAuth = (() => {
     if (!loggedIn) {
       updatePointsDisplay(0);
       return null;
+    }
+
+    if (!isGamesHubPage()) {
+      return session;
     }
 
     updateAvatar(session);
