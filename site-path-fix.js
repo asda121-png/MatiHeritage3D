@@ -1,15 +1,31 @@
 /**
- * On production hosts, normalize auth page URLs to /Front%20End/page.html
- * so relative CSS/JS and the 3D login preview load correctly.
+ * Production path fix — load with absolute URL: /site-path-fix.js
+ * Must run before CSS/JS so relative assets resolve under /Front%20End/.
  */
 (function () {
   const host = location.hostname;
   if (host === "localhost" || host === "127.0.0.1") return;
 
+  const canonicalPrefix = "/Front%20End/";
+  const canonicalBase = `${location.origin}${canonicalPrefix}`;
+
+  if (!document.querySelector("base[data-mati-base]")) {
+    const base = document.createElement("base");
+    base.href = canonicalBase;
+    base.setAttribute("data-mati-base", "1");
+    document.head.insertBefore(base, document.head.firstChild);
+  }
+
   const path = location.pathname;
   const lower = path.toLowerCase();
-  const canonicalPrefix = "/Front%20End/";
   const lowerPrefix = "/front%20end/";
+
+  if (path === "/" || lower === "/index.html") {
+    location.replace(
+      `${canonicalPrefix}index.html${location.search}${location.hash}`,
+    );
+    return;
+  }
 
   if (lower.startsWith(lowerPrefix) && !path.startsWith(canonicalPrefix)) {
     const rest = path.slice(lowerPrefix.length);

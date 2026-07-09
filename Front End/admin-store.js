@@ -946,6 +946,7 @@ const MatiAdminStore = (() => {
   let leaderboardCache = [];
   let leaderboardLoadedAt = 0;
   let leaderboardUnsubscribe = null;
+  let visitorUnsubscribe = null;
 
   function getLeaderboardLocal() {
     const users = getRegisteredUsers()
@@ -1038,6 +1039,55 @@ const MatiAdminStore = (() => {
     if (leaderboardUnsubscribe) {
       leaderboardUnsubscribe();
       leaderboardUnsubscribe = null;
+    }
+  }
+
+  async function refreshVisitorAnalytics() {
+    if (
+      typeof MatiSupabaseApi === "undefined" ||
+      typeof MatiSupabaseApi.getVisitorAnalytics !== "function"
+    ) {
+      return remoteCommunityStats;
+    }
+
+    try {
+      const analytics = await MatiSupabaseApi.getVisitorAnalytics();
+      if (!analytics) return remoteCommunityStats;
+      remoteCommunityStats = {
+        ...(remoteCommunityStats || getLocalCommunityStats()),
+        ...analytics,
+      };
+      return remoteCommunityStats;
+    } catch (error) {
+      console.warn("Visitor analytics refresh failed:", error);
+      return remoteCommunityStats;
+    }
+  }
+
+  function subscribeVisitorAnalytics(onChange) {
+    if (visitorUnsubscribe) {
+      visitorUnsubscribe();
+      visitorUnsubscribe = null;
+    }
+
+    if (
+      typeof MatiSupabaseApi === "undefined" ||
+      typeof MatiSupabaseApi.subscribeVisitorAnalytics !== "function"
+    ) {
+      return null;
+    }
+
+    visitorUnsubscribe = MatiSupabaseApi.subscribeVisitorAnalytics(async () => {
+      await refreshVisitorAnalytics();
+      if (typeof onChange === "function") onChange(getDashboardCommunityStats());
+    });
+    return visitorUnsubscribe;
+  }
+
+  function stopVisitorLive() {
+    if (visitorUnsubscribe) {
+      visitorUnsubscribe();
+      visitorUnsubscribe = null;
     }
   }
 
@@ -1374,6 +1424,9 @@ const MatiAdminStore = (() => {
     refreshLeaderboard,
     subscribeLeaderboard,
     stopLeaderboardLive,
+    subscribeVisitorAnalytics,
+    stopVisitorLive,
+    refreshVisitorAnalytics,
     subscribeCatalog,
     stopCatalogLive,
     heritageReportRows,
