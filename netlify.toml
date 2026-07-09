@@ -1,86 +1,34 @@
-# Mati Heritage 3D — free Netlify deploy
-# Publish the whole repo so Front End/ and Back End/ keep their relative paths.
+# Mati Heritage 3D — publish Front End/ (same layout as local Live Server)
 
 [build]
-  publish = "."
+  command = "node build-netlify.mjs"
+  publish = "Front End"
 
 [build.processing.html]
   pretty_urls = false
 
-# Use 302 redirects (not 200 rewrites) so the browser URL includes /Front%20End/.
-# A 200 rewrite serves index.html at "/" and breaks relative paths (CSS, JS, header.html).
-
+# Short URLs on the deployed site root
 [[redirects]]
-  from = "/"
-  to = "/Front%20End/index.html"
-  status = 302
-
-[[redirects]]
-  from = "/admin"
-  to = "/Front%20End/admin.html"
-  status = 302
-
-[[redirects]]
-  from = "/login"
-  to = "/Front%20End/login.html"
-  status = 302
-
-[[redirects]]
-  from = "/front end/login"
-  to = "/Front%20End/login.html"
-  status = 301
-
-[[redirects]]
-  from = "/Front End/login"
-  to = "/Front%20End/login.html"
-  status = 301
-
-[[redirects]]
-  from = "/front end/userregistration"
-  to = "/Front%20End/userregistration.html"
-  status = 301
-
-[[redirects]]
-  from = "/front end/forgot-password"
-  to = "/Front%20End/forgot-password.html"
-  status = 301
-
-[[redirects]]
-  from = "/front end/reset-password"
-  to = "/Front%20End/reset-password.html"
-  status = 301
-
-[[redirects]]
-  from = "/front end/*"
-  to = "/Front%20End/:splat"
+  from = "/Front%20End/*"
+  to = "/:splat"
   status = 301
 
 [[redirects]]
   from = "/Front End/*"
-  to = "/Front%20End/:splat"
+  to = "/:splat"
   status = 301
 
 [[redirects]]
-  from = "/front end"
-  to = "/Front%20End/index.html"
-  status = 301
-
-[[redirects]]
-  from = "/Front End"
-  to = "/Front%20End/index.html"
-  status = 301
-
-[[redirects]]
-  from = "/index"
-  to = "/Front%20End/index.html"
+  from = "/admin"
+  to = "/admin.html"
   status = 302
 
 [[redirects]]
-  from = "/index.html"
-  to = "/Front%20End/index.html"
+  from = "/login"
+  to = "/login.html"
   status = 302
 
 [[redirects]]
-  from = "/home"
-  to = "/Front%20End/index.html"
+  from = "/register"
+  to = "/userregistration.html"
   status = 302
