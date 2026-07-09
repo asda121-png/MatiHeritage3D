@@ -2636,13 +2636,29 @@
       preload="auto"
     ></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="heritage-map-sites.js"></script>
+    <script src="admin-heritage-base.js"></script>
+    <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
+    <script src="heritage-game-content.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="heritage-points.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="game-exit-guard.js"></script>
     <script>
+      void MatiGameAuthGate.init({ returnTo: "memorypairs.html" });
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
 
-      const HERITAGE_DECK = [
+      let HERITAGE_DECK = [
         {
           id: "pylon",
           name: "Pylon Monument",
@@ -2740,6 +2756,8 @@
           fact: "Annual founding celebration — music, dance, and the vibrant spirit of Mati City.",
         },
       ];
+      const FALLBACK_MEMORY_DECK = HERITAGE_DECK.slice();
+      let heritageSession = null;
 
       const CATEGORY_LABELS = {
         built: "Built Heritage",
@@ -3194,6 +3212,25 @@
         grid.style.gridTemplateRows = `repeat(${rows}, ${cardH}px)`;
       }
 
+      async function prepareMemoryDeck(pairCount) {
+        try {
+          if (typeof MatiHeritageGameContent !== "undefined") {
+            heritageSession = await MatiHeritageGameContent.createSession();
+            const generated = heritageSession.memory(
+              Math.max(pairCount, CONFIG.hard.pairs),
+            );
+            if (generated.length) {
+              HERITAGE_DECK = generated;
+              return HERITAGE_DECK;
+            }
+          }
+        } catch (error) {
+          console.warn("Memory heritage deck failed, using fallback:", error);
+        }
+        HERITAGE_DECK = FALLBACK_MEMORY_DECK.slice();
+        return HERITAGE_DECK;
+      }
+
       function createBoard() {
         const settings = CONFIG[difficulty];
         const grid = document.getElementById("card-grid");
@@ -3201,7 +3238,11 @@
         grid.className = "grid mx-auto";
         document.getElementById("game-screen").dataset.difficulty = difficulty;
 
-        const picked = shuffle(HERITAGE_DECK).slice(0, settings.pairs);
+        const deckSource =
+          HERITAGE_DECK.length >= settings.pairs
+            ? HERITAGE_DECK
+            : FALLBACK_MEMORY_DECK;
+        const picked = shuffle(deckSource).slice(0, settings.pairs);
         cards = shuffle([...picked, ...picked]);
 
         document.getElementById("total-pairs").textContent = settings.pairs;
@@ -3425,16 +3466,20 @@
           ? `+${timeBonus} time bonus · ${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`
           : `${matchedPairs}/${settings.pairs} pairs matched before time ran out`;
 
-        const currentTotal = parseInt(
-          localStorage.getItem("totalHeritagePoints") || "0",
-          10,
-        );
-        localStorage.setItem(
-          "totalHeritagePoints",
-          String(currentTotal + totalEarned),
-        );
-        const pointsEl = document.getElementById("header-total-points");
-        if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
+        if (typeof MatiHeritagePoints !== "undefined") {
+          void MatiHeritagePoints.add(totalEarned);
+        } else {
+          const currentTotal = parseInt(
+            localStorage.getItem("totalHeritagePoints") || "0",
+            10,
+          );
+          localStorage.setItem(
+            "totalHeritagePoints",
+            String(currentTotal + totalEarned),
+          );
+          const pointsEl = document.getElementById("header-total-points");
+          if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
+        }
 
         playAnnouncer(
           win
@@ -3468,6 +3513,7 @@
         document.body.classList.add("is-playing");
         if (overlay) overlay.classList.add("is-visible");
 
+        await prepareMemoryDeck(CONFIG[difficulty].pairs);
         createBoard();
         updatePairProgress();
         updateStreakUI();
@@ -3500,6 +3546,10 @@
         document.querySelector(".game-back-nav a"),
         ...document.querySelectorAll(".quest-tab, .btn-chronicle"),
       ]);
+
+      if (typeof MatiGameExitGuard !== "undefined") {
+        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "chronicle" });
+      }
 
       startKeeperTips();
       initMusic();

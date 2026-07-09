@@ -918,9 +918,17 @@
   }
 }
 
+
 .experience-3d-model::part(default-progress-bar) {
-  background-color: #047857;
-  height: 2px;
+  display: none;
+}
+
+.experience-3d-model::part(default-loading-bar) {
+  display: none;
+}
+
+.experience-3d-model::part(default-poster) {
+  display: none;
 }
 
 .experience-3d-hints {

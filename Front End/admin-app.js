@@ -36,6 +36,260 @@
     }, 2800);
   }
 
+  let uploadProgressHideTimer = null;
+  let uploadProgressAnimFrame = null;
+  let uploadProgressDisplay = 0;
+  let uploadProgressTarget = 0;
+  let uploadDetailSwapTimer = null;
+
+  function uploadProgressEls() {
+    return {
+      root: $("#admin-upload-progress"),
+      title: $("#admin-upload-progress-title"),
+      detail: $("#admin-upload-progress-detail"),
+      fill: $("#admin-upload-progress-fill"),
+      pct: $("#admin-upload-progress-pct"),
+      bar: $("#admin-upload-progress-bar"),
+    };
+  }
+
+  function paintUploadProgress(value) {
+    const { fill, pct, bar } = uploadProgressEls();
+    const rounded = Math.max(0, Math.min(100, Math.round(value)));
+    if (fill) fill.style.width = `${value}%`;
+    if (pct) pct.textContent = String(rounded);
+    if (bar) bar.setAttribute("aria-valuenow", String(rounded));
+  }
+
+  function tickUploadProgressAnim() {
+    uploadProgressAnimFrame = null;
+    const diff = uploadProgressTarget - uploadProgressDisplay;
+    if (Math.abs(diff) < 0.15) {
+      uploadProgressDisplay = uploadProgressTarget;
+      paintUploadProgress(uploadProgressDisplay);
+      return;
+    }
+    uploadProgressDisplay += diff * 0.22;
+    paintUploadProgress(uploadProgressDisplay);
+    uploadProgressAnimFrame = requestAnimationFrame(tickUploadProgressAnim);
+  }
+
+  function setUploadDetailText(detailEl, text) {
+    if (!detailEl || detailEl.textContent === text) return;
+    clearTimeout(uploadDetailSwapTimer);
+    detailEl.classList.add("is-swap");
+    uploadDetailSwapTimer = setTimeout(() => {
+      detailEl.textContent = text;
+      detailEl.classList.remove("is-swap");
+    }, 120);
+  }
+
+  function showUploadProgress({
+    title = "Uploading…",
+    detail = "Preparing file…",
+    percent = 0,
+  } = {}) {
+    const { root, title: titleEl, detail: detailEl } = uploadProgressEls();
+    if (!root) return;
+    clearTimeout(uploadProgressHideTimer);
+    root.hidden = false;
+    root.classList.remove("is-done", "is-error", "is-exiting");
+    root.setAttribute("aria-busy", "true");
+    if (titleEl) titleEl.textContent = title;
+    if (detailEl) {
+      detailEl.classList.remove("is-swap");
+      detailEl.textContent = detail;
+    }
+    uploadProgressDisplay = Math.max(0, Number(percent) || 0);
+    uploadProgressTarget = uploadProgressDisplay;
+    paintUploadProgress(uploadProgressDisplay);
+    document.body.classList.add("admin-upload-busy");
+    requestAnimationFrame(() => {
+      root.classList.add("is-visible");
+    });
+  }
+
+  function setUploadProgress(percent, detail) {
+    const { detail: detailEl, root } = uploadProgressEls();
+    const value = Math.max(0, Math.min(100, Number(percent) || 0));
+    uploadProgressTarget = value;
+    if (!uploadProgressAnimFrame) {
+      uploadProgressAnimFrame = requestAnimationFrame(tickUploadProgressAnim);
+    }
+    if (detail != null) setUploadDetailText(detailEl, detail);
+    if (root && value >= 99.5) {
+      root.classList.add("is-done");
+      root.setAttribute("aria-busy", "false");
+      const { title } = uploadProgressEls();
+      if (title && !/complete|saved|done/i.test(title.textContent || "")) {
+        title.textContent = "Complete";
+      }
+    }
+  }
+
+  function hideUploadProgress({ delay = 0 } = {}) {
+    const { root } = uploadProgressEls();
+    if (!root) return;
+    clearTimeout(uploadProgressHideTimer);
+    const close = () => {
+      root.classList.add("is-exiting");
+      root.classList.remove("is-visible");
+      const finish = () => {
+        root.hidden = true;
+        root.classList.remove("is-done", "is-error", "is-exiting", "is-visible");
+        root.setAttribute("aria-busy", "false");
+        document.body.classList.remove("admin-upload-busy");
+        if (uploadProgressAnimFrame) {
+          cancelAnimationFrame(uploadProgressAnimFrame);
+          uploadProgressAnimFrame = null;
+        }
+        uploadProgressDisplay = 0;
+        uploadProgressTarget = 0;
+        paintUploadProgress(0);
+        const { detail, title } = uploadProgressEls();
+        if (detail) {
+          detail.classList.remove("is-swap");
+          detail.textContent = "Preparing file…";
+        }
+        if (title) title.textContent = "Uploading…";
+      };
+      uploadProgressHideTimer = setTimeout(finish, 320);
+    };
+    if (delay > 0) {
+      uploadProgressHideTimer = setTimeout(close, delay);
+    } else {
+      close();
+    }
+  }
+
+  async function withUploadProgress(task, options = {}) {
+    showUploadProgress({
+      title: options.title || "Uploading…",
+      detail: options.detail || "Starting…",
+      percent: options.percent || 0,
+    });
+    try {
+      const result = await task({
+        setProgress: setUploadProgress,
+        show: showUploadProgress,
+      });
+      const { title } = uploadProgressEls();
+      if (title) title.textContent = options.doneTitle || "Complete";
+      setUploadProgress(100, options.doneDetail || "Done.");
+      hideUploadProgress({ delay: options.doneDelay ?? 900 });
+      return result;
+    } catch (error) {
+      hideUploadProgress();
+      throw error;
+    }
+  }
+
+  let confirmResolve = null;
+
+  function confirmEls() {
+    return {
+      root: $("#admin-confirm-modal"),
+      title: $("#admin-confirm-title"),
+      message: $("#admin-confirm-message"),
+      ok: $("#admin-confirm-ok"),
+      cancel: $("#admin-confirm-cancel"),
+    };
+  }
+
+  function closeConfirmModal(result = false) {
+    const { root } = confirmEls();
+    if (root) root.hidden = true;
+    const resolve = confirmResolve;
+    confirmResolve = null;
+    if (resolve) resolve(result);
+  }
+
+  function confirmAction({
+    title = "Are you sure?",
+    message = "This action cannot be undone.",
+    confirmLabel = "Delete",
+  } = {}) {
+    const { root, title: titleEl, message: messageEl, ok } = confirmEls();
+    if (!root) {
+      return Promise.resolve(
+        window.confirm([title, message].filter(Boolean).join("\n")),
+      );
+    }
+    if (confirmResolve) closeConfirmModal(false);
+    if (titleEl) titleEl.textContent = title;
+    if (messageEl) messageEl.textContent = message;
+    if (ok) ok.textContent = confirmLabel;
+    root.hidden = false;
+    requestAnimationFrame(() => ok?.focus());
+    return new Promise((resolve) => {
+      confirmResolve = resolve;
+    });
+  }
+
+  async function runDeleteProgress(task, options = {}) {
+    const count = Math.max(1, Number(options.count) || 1);
+    const noun = options.noun || (count === 1 ? "item" : "items");
+    return withUploadProgress(
+      async ({ setProgress }) => {
+        setProgress(18, "Processing…");
+        await new Promise((r) => setTimeout(r, 180));
+        setProgress(55, "Processing…");
+        const result = await task();
+        setProgress(92, "Finishing…");
+        await new Promise((r) => setTimeout(r, 160));
+        return result;
+      },
+      {
+        title: "Deleting…",
+        detail: "Processing…",
+        doneTitle: count === 1 ? "Complete deleted" : "Complete deleted",
+        doneDetail:
+          count === 1
+            ? `${noun.charAt(0).toUpperCase() + noun.slice(1)} removed from the gallery.`
+            : `${count} ${noun} removed from the gallery.`,
+        doneDelay: 1100,
+      },
+    );
+  }
+
+  function makeBatchProgress(totalFiles, baseLabel) {
+    let currentIndex = 0;
+    return {
+      startFile(index, fileName) {
+        currentIndex = index;
+        setUploadProgress(
+          Math.round((index / Math.max(totalFiles, 1)) * 100),
+          `${baseLabel} ${index + 1} of ${totalFiles}: ${fileName}`,
+        );
+      },
+      onFileProgress(pct) {
+        const overall =
+          ((currentIndex + pct / 100) / Math.max(totalFiles, 1)) * 100;
+        setUploadProgress(overall);
+      },
+    };
+  }
+
+  function syncOk(payload) {
+    return Boolean(
+      payload &&
+        (!payload._sync ||
+          payload._sync.ok ||
+          payload._sync.reason === "not_configured"),
+    );
+  }
+
+  function syncFailedMessage(payload, fallback) {
+    const err = payload?._sync?.error;
+    const message = err?.message || err?.error_description || "";
+    if (/row-level security|RLS|policy/i.test(message)) {
+      return "Saved locally, but Supabase blocked the write. Run the deployment heritage writes SQL in Supabase.";
+    }
+    return message
+      ? `Saved locally, but cloud sync failed: ${message}`
+      : fallback || "Saved locally, but cloud sync failed.";
+  }
+
   function autoGrowTextarea(textarea) {
     if (!textarea) return;
     textarea.style.height = "auto";
@@ -151,12 +405,23 @@
 
   function closeModelViewerModal() {
     const modal = $("#model-viewer-modal");
-    const host = $("#model-viewer-host");
-    if (host) host.innerHTML = "";
+    const fullscreenModel = $("#fullscreen-model");
+    const fullscreenPhoto = $("#fullscreen-photo");
+    const fullscreenLoading = $("#fullscreen-loading");
+    
+    if (fullscreenLoading) {
+      fullscreenLoading.setAttribute("hidden", "");
+    }
+    if (fullscreenModel) {
+      fullscreenModel.hidden = true;
+      fullscreenModel.autoRotate = false;
+    }
     if (modal) {
       modal.hidden = true;
       modal.setAttribute("hidden", "");
+      modal.setAttribute("aria-hidden", "true");
     }
+    document.body.classList.remove("heritage-fullscreen-open");
   }
 
   async function openModelViewerModal(siteId) {
@@ -173,10 +438,14 @@
     }
 
     const modal = $("#model-viewer-modal");
-    const host = $("#model-viewer-host");
-    const titleEl = $("#model-viewer-title");
-    const exploreLink = $("#model-viewer-open-explore");
-    if (!modal || !host || !titleEl) return;
+    const fullscreenTitle = $("#fullscreen-title");
+    const fullscreenModel = $("#fullscreen-model");
+    const fullscreenPhoto = $("#fullscreen-photo");
+    const fullscreenHint = $("#fullscreen-hint");
+    const fullscreenLoading = $("#fullscreen-loading");
+    const fullscreenLoadingLabel = $("#fullscreen-loading-label");
+    
+    if (!modal || !fullscreenModel) return;
 
     const src = await resolveModelViewerSrc(modelPath);
     if (!src) {
@@ -184,28 +453,65 @@
       return;
     }
 
-    titleEl.textContent = site.name;
-    if (exploreLink) {
-      exploreLink.href = `3dexplore.html?site=${encodeURIComponent(site.id)}`;
-    }
-
-    const viewer = document.createElement("model-viewer");
-    viewer.className = "admin-model-viewer";
-    viewer.setAttribute("src", src);
-    viewer.setAttribute("alt", site.name);
-    if (site.cover && !MatiAdminUploads?.isUploadUri?.(site.cover)) {
-      viewer.setAttribute("poster", site.cover);
-    }
-    viewer.setAttribute("camera-controls", "");
-    viewer.setAttribute("auto-rotate", "");
-    viewer.setAttribute("rotation-per-second", "24deg");
-    viewer.setAttribute("shadow-intensity", "1");
-    viewer.setAttribute("touch-action", "pan-y");
-    viewer.setAttribute("loading", "eager");
-
-    host.replaceChildren(viewer);
+    fullscreenTitle.textContent = site.name;
     modal.hidden = false;
     modal.removeAttribute("hidden");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("heritage-fullscreen-open");
+
+    showFullscreenLoading(`Loading ${site.name}…`);
+
+    // Show the model viewer and hide photo
+    fullscreenModel.hidden = false;
+    fullscreenModel.removeAttribute("hidden");
+    fullscreenPhoto.hidden = true;
+    fullscreenPhoto.setAttribute("hidden", "");
+    
+    if (fullscreenHint) {
+      fullscreenHint.textContent = "Drag to rotate · Scroll to zoom";
+      fullscreenHint.hidden = false;
+    }
+
+    const sameSrc = fullscreenModel.getAttribute("src") === src;
+    if (sameSrc && fullscreenModel.loaded) {
+      hideFullscreenLoading();
+      return;
+    }
+
+    return new Promise((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        fullscreenModel.removeEventListener("load", onLoad);
+        fullscreenModel.removeEventListener("error", onError);
+        hideFullscreenLoading();
+        resolve();
+      };
+      const onLoad = () => finish();
+      const onError = () => finish();
+
+      fullscreenModel.addEventListener("load", onLoad, { once: true });
+      fullscreenModel.addEventListener("error", onError, { once: true });
+
+      if (!sameSrc) {
+        fullscreenModel.setAttribute("src", src);
+      } else if (fullscreenModel.loaded) {
+        finish();
+      }
+    });
+  }
+
+  function showFullscreenLoading(label = "Loading 3D model…") {
+    const fullscreenLoadingLabel = $("#fullscreen-loading-label");
+    const fullscreenLoading = $("#fullscreen-loading");
+    if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
+    if (fullscreenLoading) fullscreenLoading.removeAttribute("hidden");
+  }
+
+  function hideFullscreenLoading() {
+    const fullscreenLoading = $("#fullscreen-loading");
+    if (fullscreenLoading) fullscreenLoading.setAttribute("hidden", "");
   }
 
   function builtSiteHasMap(site) {
@@ -544,7 +850,12 @@
 
     const activeType = $("#media-type")?.value || "photo";
     const usesFile =
-      !isEdit && (activeType === "photo" || activeType === "map" || activeType === "model3d");
+      !isEdit &&
+      (activeType === "photo" ||
+        activeType === "map" ||
+        activeType === "model3d" ||
+        activeType === "video" ||
+        activeType === "audio");
     const fileField = $("#media-file-field");
     const urlField = $("#media-url-field");
     const titleField = $("#media-title-field");
@@ -592,6 +903,12 @@
       } else if (activeType === "model3d") {
         fileInput.accept = ".glb,model/gltf-binary";
         fileInput.multiple = false;
+      } else if (activeType === "video") {
+        fileInput.accept = "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
+        fileInput.multiple = false;
+      } else if (activeType === "audio") {
+        fileInput.accept = "audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a";
+        fileInput.multiple = false;
       }
       if (!usesFile) fileInput.value = "";
     }
@@ -601,6 +918,8 @@
         photo: "Upload photographs",
         map: "Upload map image",
         model3d: "Upload 3D model (.glb)",
+        video: "Upload video file",
+        audio: "Upload audio recording",
       };
       fileLabel.textContent = labels[activeType] || "Upload file";
     }
@@ -621,6 +940,12 @@
           fileHint.textContent =
             "Choose one or many photographs, or drag images from a folder into this area.";
         }
+      } else if (activeType === "video") {
+        fileHint.textContent =
+          "Upload an MP4/WebM file (stored in Supabase Storage), or switch to Link for YouTube/Facebook.";
+      } else if (activeType === "audio") {
+        fileHint.textContent =
+          "Upload an MP3/WAV recording — it is stored in Supabase Storage for visitors.";
       }
     }
 
@@ -694,7 +1019,10 @@
     } else {
       teardownBuiltHeritageGrid();
     }
-    if (view === "leaderboard") renderLeaderboard();
+    if (view === "leaderboard") {
+      ensureLeaderboardLive();
+      void renderLeaderboard({ force: true });
+    }
     if (view === "reports") renderReport();
   }
 
@@ -745,8 +1073,10 @@
 
     window.setTimeout(() => {
       if (overlay) overlay.classList.add("is-exiting");
-      window.setTimeout(() => {
-        if (typeof MatiAuth !== "undefined") MatiAuth.logout();
+      window.setTimeout(async () => {
+        if (typeof MatiAuth !== "undefined") {
+          await MatiAuth.logout();
+        }
         window.location.href = "login.html";
       }, exitMs);
     }, showMs);
@@ -837,10 +1167,11 @@
     const collections = MatiAdminStore.getDashboardCollectionSummary();
     const community = MatiAdminStore.getDashboardCommunityStats();
     const heritageCards = $("#dashboard-heritage-cards");
-    const communityCards = $("#dashboard-community-cards");
     const emptyDb = $("#dashboard-supabase-empty");
     const tbody = $("#dashboard-summary-body");
     const tfoot = $("#dashboard-summary-foot");
+    const totalUsersStat = $("#total-users-stat");
+    const pageVisitsStat = $("#page-visits-stat");
 
     const supabaseConfigured =
       typeof MatiSupabase !== "undefined" && MatiSupabase.isConfigured();
@@ -853,47 +1184,42 @@
       emptyDb.hidden = !supabaseConfigured || remoteSiteCount > 0;
     }
 
+    // Update user stats
+    if (totalUsersStat) {
+      totalUsersStat.textContent = community.registeredUsers || 0;
+    }
+    if (pageVisitsStat) {
+      pageVisitsStat.textContent = community.pageVisits || 0;
+    }
+
     if (heritageCards) {
+      const cardIcons = {
+        built: `<svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>`,
+        intangible: `<svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>`,
+        natural: `<svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>`
+      };
+
       heritageCards.innerHTML = collections
         .map(
           (collection) => `
-        <button
-          type="button"
-          class="admin-dashboard-card admin-dashboard-card--${collection.key}"
-          data-go-heritage="${escapeAttr(collection.key)}"
-        >
-          <span class="admin-dashboard-card__count">${collection.sites}</span>
-          <span class="admin-dashboard-card__label">${escapeHtml(collection.label)}</span>
-          <span class="admin-dashboard-card__type">${escapeHtml(collection.type)}</span>
-          <span class="admin-dashboard-card__cta">Manage collection</span>
-        </button>`,
+        <article class="stat-card stat-card--${collection.key}">
+          <div class="stat-card__icon-wrapper">
+            ${cardIcons[collection.key] || cardIcons.built}
+          </div>
+          <div class="stat-card__content">
+            <p class="stat-card__label">${escapeHtml(collection.label)}</p>
+            <p class="stat-card__value">${collection.sites}</p>
+            <p class="stat-card__trend">${escapeHtml(collection.type)}</p>
+          </div>
+        </article>`,
         )
         .join("");
-    }
-
-    if (communityCards) {
-      communityCards.innerHTML = `
-        <button
-          type="button"
-          class="admin-dashboard-card admin-dashboard-card--users"
-          data-go-view="reports"
-          data-go-report="users"
-        >
-          <span class="admin-dashboard-card__count">${community.registeredUsers}</span>
-          <span class="admin-dashboard-card__label">Registered Users</span>
-          <span class="admin-dashboard-card__type">Player accounts</span>
-          <span class="admin-dashboard-card__cta">View user report</span>
-        </button>
-        <button
-          type="button"
-          class="admin-dashboard-card admin-dashboard-card--players"
-          data-go-view="leaderboard"
-        >
-          <span class="admin-dashboard-card__count">${community.gamePlayers}</span>
-          <span class="admin-dashboard-card__label">Game Players</span>
-          <span class="admin-dashboard-card__type">Earned heritage points</span>
-          <span class="admin-dashboard-card__cta">View leaderboard</span>
-        </button>`;
     }
 
     if (tbody && tfoot) {
@@ -966,7 +1292,7 @@
     if (q) {
       sites = sites.filter(
         (s) =>
-          s.name.toLowerCase().includes(q) ||
+          s.name.toLowerCase().startsWith(q) ||
           (s.location || "").toLowerCase().includes(q) ||
           (s.heritageCategory || "").toLowerCase().includes(q),
       );
@@ -1000,7 +1326,7 @@
         (site) => {
           const q = query.toLowerCase();
           if (!q) return true;
-          return site.name.toLowerCase().includes(q);
+          return site.name.toLowerCase().startsWith(q);
         },
       );
       const sites = filterAndSortBuiltSites(allBuilt);
@@ -1057,7 +1383,11 @@
       const posterHtml = poster
         ? `<img class="admin-heritage-card__cover admin-heritage-card__poster" src="${poster}" alt="" loading="lazy" decoding="async" />`
         : `<div class="admin-heritage-card__placeholder"><span class="admin-heritage-card__placeholder-icon" aria-hidden="true">3D</span><span>Loading preview…</span></div>`;
-      return `<div class="admin-heritage-card__model-slot" ${srcAttr} ${uploadAttr} ${posterAttr}>${posterHtml}</div>`;
+      const loadingOverlay = `<div class="admin-card-loading-overlay" id="admin-card-loading-overlay-${modelSrc ? escapeAttr(modelSrc).replace(/[^a-zA-Z0-9]/g, '') : 'default'}" hidden>
+        <div class="admin-card-loading-spinner"></div>
+        <div class="admin-card-loading-percentage">0%</div>
+      </div>`;
+      return `<div class="admin-heritage-card__model-slot" ${srcAttr} ${uploadAttr} ${posterAttr}>${posterHtml}${loadingOverlay}</div>`;
     }
 
     if (cover) {
@@ -1284,19 +1614,115 @@
       slot.closest(".admin-heritage-card")?.querySelector(
         ".admin-heritage-card__title",
       )?.textContent || "3D model";
+    
+    // Find and show loading overlay
+    const loadingOverlay = slot.querySelector(".admin-card-loading-overlay");
+    const loadingPercentage = slot.querySelector(".admin-card-loading-percentage");
+    if (loadingOverlay) {
+      loadingOverlay.removeAttribute("hidden");
+    }
+    if (loadingPercentage) {
+      loadingPercentage.textContent = "0%";
+    }
+    
+    // Remove poster/placeholder but keep loading overlay
+    const poster = slot.querySelector(".admin-heritage-card__poster");
+    const placeholder = slot.querySelector(".admin-heritage-card__placeholder");
+    if (poster) poster.remove();
+    if (placeholder) placeholder.remove();
+    
     const viewer = document.createElement("model-viewer");
     viewer.className = "admin-heritage-card__model";
     viewer.setAttribute("src", src);
     viewer.setAttribute("alt", title);
-    const poster = slot.dataset.modelPoster;
-    if (poster) viewer.setAttribute("poster", poster);
+    const posterSrc = slot.dataset.modelPoster;
+    if (posterSrc) viewer.setAttribute("poster", posterSrc);
     viewer.setAttribute("auto-rotate", "");
     viewer.setAttribute("rotation-per-second", "20deg");
     viewer.setAttribute("camera-orbit", "0deg 78deg 108%");
     viewer.setAttribute("interaction-prompt", "none");
     viewer.setAttribute("touch-action", "pan-y");
     viewer.setAttribute("loading", "lazy");
-    slot.replaceChildren(viewer);
+    
+    // Track loading progress
+    const handleProgress = (event) => {
+      if (event.detail && event.detail.totalProgress !== undefined) {
+        const progress = Math.round(event.detail.totalProgress * 100);
+        if (loadingPercentage) {
+          loadingPercentage.textContent = `${progress}%`;
+        }
+      }
+    };
+
+    const handleLoad = () => {
+      if (loadingOverlay) {
+        loadingOverlay.setAttribute("hidden", "");
+      }
+      viewer.removeEventListener("progress", handleProgress);
+      viewer.removeEventListener("load", handleLoad);
+    };
+
+    const handleError = () => {
+      if (loadingOverlay) {
+        loadingOverlay.setAttribute("hidden", "");
+      }
+      viewer.removeEventListener("progress", handleProgress);
+      viewer.removeEventListener("load", handleLoad);
+      viewer.removeEventListener("error", handleError);
+    };
+
+    viewer.addEventListener("progress", handleProgress);
+    viewer.addEventListener("load", handleLoad, { once: true });
+    viewer.addEventListener("error", handleError, { once: true });
+    
+    slot.appendChild(viewer);
+  }
+
+  let leaderboardLiveStarted = false;
+  let catalogLiveStarted = false;
+  let leaderboardRenderToken = 0;
+
+  function activeAdminView() {
+    return document.querySelector(".admin-nav__btn.is-active")?.dataset?.view;
+  }
+
+  function refreshActiveAdminViews() {
+    const view = activeAdminView();
+    if (view === "dashboard") renderDashboard();
+    if (view === "heritage") renderHeritage();
+    if (view === "location" && typeof MatiAdminMap !== "undefined") {
+      void MatiAdminMap.refresh?.();
+    }
+    if (view === "gallery") {
+      window.MatiGalleryEmbed?.refresh?.();
+    }
+    if (view === "reports") void renderReport();
+    if (view === "leaderboard") void renderLeaderboard({ force: true });
+  }
+
+  function ensureCatalogLive() {
+    if (catalogLiveStarted) return;
+    if (typeof MatiAdminStore.subscribeCatalog !== "function") return;
+    catalogLiveStarted = true;
+    MatiAdminStore.subscribeCatalog(() => {
+      refreshActiveAdminViews();
+    });
+  }
+
+  function ensureLeaderboardLive() {
+    if (leaderboardLiveStarted) return;
+    if (typeof MatiAdminStore.subscribeLeaderboard !== "function") return;
+    leaderboardLiveStarted = true;
+    MatiAdminStore.subscribeLeaderboard(() => {
+      const view = activeAdminView();
+      if (view === "leaderboard") {
+        void renderLeaderboard({ force: true });
+      }
+      if (view === "dashboard") renderDashboard();
+      if (currentReport === "leaderboard") {
+        void renderReport();
+      }
+    });
   }
 
   function renderLeaderboardCard(row, index) {
@@ -1392,26 +1818,51 @@
       </tr>`;
   }
 
-  function renderLeaderboard() {
+  function paintLeaderboardRows(rows) {
     const list = $("#leaderboard-body");
     const body = $(".admin-leaderboard__body");
     const columns = $(".admin-leaderboard__columns");
     if (!list) return;
 
-    const rows = MatiAdminStore.getLeaderboard().map((row, i) => ({
-      ...row,
-      rank: i + 1,
-    }));
-
     if (!rows.length) {
       if (columns) columns.hidden = true;
-      list.innerHTML = `<p class="admin-leaderboard__empty">No leaderboard records yet.</p>`;
+      list.innerHTML = `<p class="admin-leaderboard__empty">No leaderboard records yet. Rankings appear when players earn heritage points.</p>`;
       return;
     }
 
     if (columns) columns.hidden = false;
     list.innerHTML = rows.map((row, i) => renderLeaderboardCard(row, i)).join("");
     animateAdminLeaderboardPoints(body || list);
+  }
+
+  async function renderLeaderboard({ force = false } = {}) {
+    const list = $("#leaderboard-body");
+    if (!list) return;
+
+    const token = ++leaderboardRenderToken;
+    if (!list.children.length) {
+      list.innerHTML = `<p class="admin-leaderboard__empty">Loading live rankings…</p>`;
+    }
+
+    let rows = [];
+    try {
+      if (typeof MatiAdminStore.refreshLeaderboard === "function") {
+        rows = await MatiAdminStore.refreshLeaderboard({ force });
+      } else {
+        rows = MatiAdminStore.getLeaderboard();
+      }
+    } catch (error) {
+      console.warn("Admin leaderboard load failed:", error);
+      rows = MatiAdminStore.getLeaderboard();
+    }
+
+    if (token !== leaderboardRenderToken) return;
+
+    const ranked = (rows || []).map((row, i) => ({
+      ...row,
+      rank: i + 1,
+    }));
+    paintLeaderboardRows(ranked);
   }
 
   function renderSiteMediaList(siteId) {
@@ -1631,12 +2082,15 @@
     return `draft-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   }
 
-  function ensureSiteDraft() {
+  async function ensureSiteDraft() {
     let siteId = $("#site-id")?.value?.trim();
     const existing = siteId ? MatiAdminStore.getSiteById(siteId) : null;
     if (existing) return existing;
 
-    const site = persistSiteFromForm({ draft: true, siteId: siteId || createDraftSiteId() });
+    const site = await persistSiteFromForm({
+      draft: true,
+      siteId: siteId || createDraftSiteId(),
+    });
     if (!site) return null;
 
     editingSiteId = site.id;
@@ -1646,14 +2100,14 @@
     return site;
   }
 
-  function handleOpenAddMedia(presetType) {
-    const site = ensureSiteDraft();
+  async function handleOpenAddMedia(presetType) {
+    const site = await ensureSiteDraft();
     if (!site) return;
 
     openMediaModal(null, site.id, presetType);
   }
 
-  function persistSiteFromForm(options = {}) {
+  async function persistSiteFromForm(options = {}) {
     const { requireName = false, draft = false, siteId: forcedSiteId } = options;
     const existingId = $("#site-id").value.trim();
     const name = $("#site-name").value.trim();
@@ -1710,31 +2164,55 @@
       return;
     }
 
-    let siteId = $("#site-id").value.trim();
-    const wasDraft = MatiAdminStore.isDraftSiteId(siteId);
-    const nextId = MatiAdminStore.slugId(name);
+    try {
+      await withUploadProgress(
+        async ({ setProgress }) => {
+          setProgress(12, "Preparing site record…");
+          let siteId = $("#site-id").value.trim();
+          const wasDraft = MatiAdminStore.isDraftSiteId(siteId);
+          const nextId = MatiAdminStore.slugId(name);
 
-    if (wasDraft && siteId !== nextId) {
-      MatiAdminStore.migrateSite(siteId, nextId);
-      siteId = nextId;
-      $("#site-id").value = nextId;
+          if (wasDraft && siteId !== nextId) {
+            setProgress(28, "Finalizing site id…");
+            await MatiAdminStore.migrateSite(siteId, nextId);
+            siteId = nextId;
+            $("#site-id").value = nextId;
+          }
+
+          setProgress(55, "Saving site to database…");
+          const site = await persistSiteFromForm({ requireName: true, siteId });
+          if (!site) throw new Error("Could not save site.");
+
+          editingSiteId = site.id;
+          $("#site-id").value = site.id;
+          syncBuiltDeleteUi();
+          setProgress(82, "Refreshing admin views…");
+          refreshSiteViews(site.id);
+          syncSiteFormSubmitLabel(site.id);
+
+          if (!syncOk(site)) {
+            showToast(syncFailedMessage(site, "Site saved locally only."));
+            return site;
+          }
+
+          showToast(
+            wasDraft
+              ? "Site saved to database."
+              : MatiAdminStore.siteHasAdminEdits(site.id)
+                ? "Site updated in database."
+                : "Site saved to database.",
+          );
+          return site;
+        },
+        {
+          title: "Saving site…",
+          detail: "Preparing site record…",
+          doneDetail: "Site saved.",
+        },
+      );
+    } catch (error) {
+      showToast(error?.message || "Could not save site.");
     }
-
-    const site = persistSiteFromForm({ requireName: true, siteId });
-    if (!site) return;
-
-    editingSiteId = site.id;
-    $("#site-id").value = site.id;
-    syncBuiltDeleteUi();
-    refreshSiteViews(site.id);
-    syncSiteFormSubmitLabel(site.id);
-    showToast(
-      wasDraft
-        ? "Site created."
-        : MatiAdminStore.siteHasAdminEdits(site.id)
-          ? "Site updated."
-          : "Site saved.",
-    );
   }
 
   async function saveMediaForm(e) {
@@ -1745,7 +2223,7 @@
       $("#site-id")?.value?.trim();
 
     if (!siteId) {
-      const saved = ensureSiteDraft();
+      const saved = await ensureSiteDraft();
       if (!saved) {
         showToast("Could not prepare this site for upload.");
         return;
@@ -1781,7 +2259,14 @@
     const fileInput = $("#media-file");
     const files = fileInput?.files ? [...fileInput.files] : [];
 
-    if (isNew && (type === "photo" || type === "map" || type === "model3d")) {
+    if (
+      isNew &&
+      (type === "photo" ||
+        type === "map" ||
+        type === "model3d" ||
+        type === "video" ||
+        type === "audio")
+    ) {
       if (!files.length) {
         showToast("Choose a file to upload.");
         return;
@@ -1796,55 +2281,169 @@
           showToast("Uploads are not available.");
           return;
         }
-        if (type === "map") {
-          const cover = await MatiAdminUploads.put(`${siteId}/map`, files[0]);
-          MatiAdminStore.saveSite({ ...site, cover });
-          showToast("Site map uploaded.");
-        } else if (type === "model3d") {
-          const modelSrc = await MatiAdminUploads.put(`${siteId}/model`, files[0]);
-          MatiAdminStore.saveSite({ ...site, modelSrc });
-          showToast("3D model uploaded.");
-        } else {
-          const sharedCaption = $("#media-caption").value;
-          const sharedTitle = $("#media-title").value.trim();
-          const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-          if (!imageFiles.length) {
-            showToast("Choose at least one image file.");
-            return;
-          }
-          const uploadedIds = [];
-          for (const [i, file] of imageFiles.entries()) {
-            const key = `${siteId}/photos/${MatiAdminStore.slugId(file.name)}-${Date.now()}-${i}`;
-            const src = await MatiAdminUploads.put(key, file);
-            const saved = MatiAdminStore.saveMedia({
-              siteId,
-              type: "photo",
-              title:
-                imageFiles.length > 1
-                  ? photoTitleFromFile(file)
-                  : sharedTitle || photoTitleFromFile(file),
-              src,
-              caption: sharedCaption,
-            });
-            if (!saved) {
-              showToast("Could not save photograph.");
-              return;
+
+        const typeTitle =
+          type === "photo" && files.length > 1
+            ? "Uploading photographs…"
+            : `Uploading ${TYPE_LABELS[type] || "file"}…`;
+
+        await withUploadProgress(
+          async () => {
+            if (type === "map") {
+              setUploadProgress(5, `Uploading map: ${files[0].name}`);
+              const cover = await MatiAdminUploads.put(`${siteId}/map`, files[0], {
+                type: "map",
+                siteId,
+                onProgress: (pct) =>
+                  setUploadProgress(Math.round(pct * 0.85), `Uploading map: ${files[0].name}`),
+              });
+              setUploadProgress(90, "Saving map to database…");
+              const savedSite = await MatiAdminStore.saveSite({ ...site, cover });
+              if (!syncOk(savedSite)) {
+                showToast(syncFailedMessage(savedSite, "Map uploaded locally only."));
+              } else {
+                showToast("Site map uploaded to database.");
+              }
+            } else if (type === "model3d") {
+              setUploadProgress(5, `Uploading 3D model: ${files[0].name}`);
+              const modelSrc = await MatiAdminUploads.put(
+                `${siteId}/model`,
+                files[0],
+                {
+                  type: "model3d",
+                  siteId,
+                  onProgress: (pct) =>
+                    setUploadProgress(
+                      Math.round(pct * 0.85),
+                      `Uploading 3D model: ${files[0].name}`,
+                    ),
+                },
+              );
+              setUploadProgress(90, "Saving 3D model to database…");
+              const savedSite = await MatiAdminStore.saveSite({ ...site, modelSrc });
+              if (!syncOk(savedSite)) {
+                showToast(
+                  syncFailedMessage(savedSite, "3D model uploaded locally only."),
+                );
+              } else {
+                showToast("3D model uploaded to database.");
+              }
+            } else if (type === "video" || type === "audio") {
+              const title = $("#media-title").value.trim() || files[0].name;
+              const key = `${siteId}/${type}s/${MatiAdminStore.slugId(files[0].name)}-${Date.now()}`;
+              setUploadProgress(5, `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`);
+              const src = await MatiAdminUploads.put(key, files[0], {
+                type,
+                siteId,
+                onProgress: (pct) =>
+                  setUploadProgress(
+                    Math.round(pct * 0.85),
+                    `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
+                  ),
+              });
+              setUploadProgress(90, "Saving media record…");
+              const saved = await MatiAdminStore.saveMedia({
+                siteId,
+                type,
+                title,
+                src,
+                caption: $("#media-caption").value,
+              });
+              if (!saved) {
+                throw new Error(`Could not save ${type}.`);
+              }
+              if (!syncOk(saved)) {
+                showToast(
+                  syncFailedMessage(
+                    saved,
+                    `${TYPE_LABELS[type]} saved locally only.`,
+                  ),
+                );
+              } else {
+                showToast(`${TYPE_LABELS[type]} uploaded to database.`);
+              }
+            } else {
+              const sharedCaption = $("#media-caption").value;
+              const sharedTitle = $("#media-title").value.trim();
+              const imageFiles = files.filter((file) =>
+                file.type.startsWith("image/"),
+              );
+              if (!imageFiles.length) {
+                throw new Error("Choose at least one image file.");
+              }
+              const batch = makeBatchProgress(imageFiles.length, "Photograph");
+              const uploadedIds = [];
+              let lastSaved = null;
+              for (const [i, file] of imageFiles.entries()) {
+                batch.startFile(i, file.name);
+                const key = `${siteId}/photos/${MatiAdminStore.slugId(file.name)}-${Date.now()}-${i}`;
+                const src = await MatiAdminUploads.put(key, file, {
+                  type: "photo",
+                  siteId,
+                  onProgress: (pct) => batch.onFileProgress(pct),
+                });
+                setUploadProgress(
+                  Math.round(((i + 0.92) / imageFiles.length) * 100),
+                  `Saving photograph ${i + 1} of ${imageFiles.length}…`,
+                );
+                const saved = await MatiAdminStore.saveMedia({
+                  siteId,
+                  type: "photo",
+                  title:
+                    imageFiles.length > 1
+                      ? photoTitleFromFile(file)
+                      : sharedTitle || photoTitleFromFile(file),
+                  src,
+                  caption: sharedCaption,
+                });
+                if (!saved) {
+                  throw new Error("Could not save photograph.");
+                }
+                lastSaved = saved;
+                uploadedIds.push(saved.id);
+              }
+              if (uploadedIds.length > 1) {
+                const ordered = MatiAdminStore.getOrderedSiteMedia(
+                  siteId,
+                  "photo",
+                ).map((item) => item.id);
+                const rest = ordered.filter((id) => !uploadedIds.includes(id));
+                MatiAdminStore.reorderSiteMedia(siteId, "photo", [
+                  ...uploadedIds,
+                  ...rest,
+                ]);
+              }
+              if (lastSaved && !syncOk(lastSaved)) {
+                showToast(
+                  syncFailedMessage(
+                    lastSaved,
+                    "Photographs saved locally only.",
+                  ),
+                );
+              } else {
+                showToast(
+                  imageFiles.length > 1
+                    ? "Photographs uploaded to database."
+                    : "Photograph uploaded to database.",
+                );
+              }
             }
-            uploadedIds.push(saved.id);
-          }
-          if (uploadedIds.length > 1) {
-            const ordered = MatiAdminStore.getOrderedSiteMedia(siteId, "photo").map(
-              (item) => item.id,
-            );
-            const rest = ordered.filter((id) => !uploadedIds.includes(id));
-            MatiAdminStore.reorderSiteMedia(siteId, "photo", [...uploadedIds, ...rest]);
-          }
+          },
+          {
+            title: typeTitle,
+            detail: "Starting upload…",
+            doneDetail: "Upload complete.",
+          },
+        );
+      } catch (error) {
+        const message = error?.message || "";
+        if (/row-level security|RLS|policy/i.test(message)) {
           showToast(
-            imageFiles.length > 1 ? "Photographs uploaded." : "Photograph uploaded.",
+            "Upload blocked by Supabase. Run the deployment heritage writes SQL first.",
           );
+        } else {
+          showToast(message || "Could not upload file.");
         }
-      } catch {
-        showToast("Could not upload file.");
         return;
       }
 
@@ -1869,7 +2468,7 @@
         return;
       }
 
-      MatiAdminStore.saveMedia({
+      const saved = await MatiAdminStore.saveMedia({
         id: item.id,
         siteId,
         type: "photo",
@@ -1883,7 +2482,11 @@
       if ($("#site-modal") && !$("#site-modal").hidden) {
         syncSiteFormSubmitLabel(siteId);
       }
-      showToast("Photograph updated.");
+      showToast(
+        syncOk(saved)
+          ? "Photograph updated in database."
+          : syncFailedMessage(saved, "Photograph updated locally only."),
+      );
       return;
     }
 
@@ -1894,7 +2497,7 @@
       return;
     }
 
-    MatiAdminStore.saveMedia({
+    const saved = await MatiAdminStore.saveMedia({
       id: $("#media-id").value.trim() || undefined,
       siteId,
       type,
@@ -1908,7 +2511,11 @@
     if ($("#site-modal") && !$("#site-modal").hidden) {
       syncSiteFormSubmitLabel(siteId);
     }
-    showToast(isNew ? "Multimedia added." : "Multimedia updated.");
+    if (!syncOk(saved)) {
+      showToast(syncFailedMessage(saved, "Multimedia saved locally only."));
+      return;
+    }
+    showToast(isNew ? "Multimedia saved to database." : "Multimedia updated in database.");
   }
 
   const HERITAGE_REPORT_HEADERS_NATURAL = [
@@ -2627,9 +3234,18 @@
     },
   };
 
-  function renderReport() {
+  async function renderReport() {
     const cfg = REPORT_CONFIG[currentReport];
     if (!cfg) return;
+
+    if (currentReport === "leaderboard") {
+      ensureLeaderboardLive();
+      try {
+        await MatiAdminStore.refreshLeaderboard({ force: true });
+      } catch {
+        /* keep cache / local fallback */
+      }
+    }
 
     syncReportHeader();
     renderReportSummary();
@@ -2928,6 +3544,10 @@
         }
         return;
       }
+      if (e.target.id === "admin-confirm-modal") {
+        closeConfirmModal(false);
+        return;
+      }
       if (e.target.id === "media-modal") {
         closeMediaModal();
         return;
@@ -2946,16 +3566,42 @@
 
     $("#media-form")?.addEventListener("submit", saveMediaForm);
 
-    $("#btn-delete-site")?.addEventListener("click", () => {
+    $("#btn-delete-site")?.addEventListener("click", async () => {
       const id = $("#site-id").value.trim();
       if (!id) return;
-      if (!confirm("Delete this site and hide it from the catalog?")) return;
-      MatiAdminStore.deleteSite(id);
-      closeAllModals();
-      renderHeritage();
-      renderDashboard();
-      renderLocation();
-      showToast("Site deleted.");
+      const ok = await confirmAction({
+        title: "Delete this site?",
+        message: "It will be hidden from the catalog for visitors.",
+        confirmLabel: "Delete site",
+      });
+      if (!ok) return;
+      try {
+        await runDeleteProgress(() => MatiAdminStore.deleteSite(id), {
+          noun: "site",
+          count: 1,
+        });
+        closeAllModals();
+        renderHeritage();
+        renderDashboard();
+        renderLocation();
+      } catch (error) {
+        showToast(error?.message || "Could not delete site.");
+      }
+    });
+
+    $("#admin-confirm-cancel")?.addEventListener("click", () => {
+      closeConfirmModal(false);
+    });
+    $("#admin-confirm-ok")?.addEventListener("click", () => {
+      closeConfirmModal(true);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const confirmRoot = $("#admin-confirm-modal");
+      if (confirmRoot && !confirmRoot.hidden) {
+        e.preventDefault();
+        closeConfirmModal(false);
+      }
     });
 
     $$("#report-tabs .admin-tabs__btn").forEach((btn) => {
@@ -2998,23 +3644,31 @@
     }
 
     const boot = async () => {
+      if (typeof MatiAdminAuth?.requireAdmin === "function") {
+        const allowed = await MatiAdminAuth.requireAdmin();
+        if (!allowed) return;
+      }
+
       if (typeof MatiAdminStore?.initFromSupabase === "function") {
-        const result = await MatiAdminStore.initFromSupabase();
-        if (result.ok) {
-          const { built = 0, intangible = 0, natural = 0 } =
-            result.byCategory || {};
-          if (result.siteCount > 0) {
+        await MatiAdminStore.initFromSupabase();
+      }
+      // Push any existing admin drag/reorder so visitor gallery matches.
+      if (typeof MatiAdminStore?.syncAllMediaOrdersToSupabase === "function") {
+        const orderSync = await MatiAdminStore.syncAllMediaOrdersToSupabase();
+        if (orderSync && orderSync.ok === false && orderSync.synced === 0) {
+          if (orderSync.reason !== "not_configured") {
+            console.warn("Gallery media order sync failed", orderSync.error);
             showToast(
-              `Synced ${result.siteCount} sites (${built} built, ${intangible} intangible, ${natural} natural) from Supabase.`,
+              "Could not sync gallery photo order. Run the sort_order migration in Supabase.",
             );
           }
-        } else if (
-          typeof MatiSupabase !== "undefined" &&
-          MatiSupabase.isConfigured()
-        ) {
-          showToast("Supabase connected — run seed if heritage sites are empty.");
         }
       }
+      if (typeof MatiAdminStore?.refreshLeaderboard === "function") {
+        await MatiAdminStore.refreshLeaderboard({ force: true });
+      }
+      ensureCatalogLive();
+      ensureLeaderboardLive();
       setView("dashboard", {}, { skipDashboardRefresh: true });
     };
 
@@ -3027,6 +3681,12 @@
     },
     showToast(message) {
       showToast(message);
+    },
+    confirmAction(options) {
+      return confirmAction(options);
+    },
+    runDeleteProgress(task, options) {
+      return runDeleteProgress(task, options);
     },
     onMediaDeleted(siteId) {
       renderDashboard();

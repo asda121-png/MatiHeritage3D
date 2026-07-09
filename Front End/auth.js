@@ -47,7 +47,72 @@ const MatiAuth = (() => {
     localStorage.removeItem(SESSION_KEY);
   }
 
-  function register({ displayName, username, email, password }) {
+  function usesSupabaseAuth() {
+    return Boolean(
+      typeof MatiSupabaseAuth !== "undefined" && MatiSupabaseAuth.enabled?.(),
+    );
+  }
+
+  function checkRegistrationAvailability(email, username) {
+    const cleanEmail = normalizeEmail(email);
+    const cleanUsername = normalizeUsername(username);
+    const users = readUsers();
+
+    if (cleanEmail && users.some((user) => user.email === cleanEmail)) {
+      return {
+        ok: false,
+        field: "email",
+        message: "An account with this email already exists.",
+      };
+    }
+
+    if (
+      cleanUsername &&
+      users.some((user) => user.username === cleanUsername)
+    ) {
+      return {
+        ok: false,
+        field: "username",
+        message: "That username is already taken.",
+      };
+    }
+
+    return { ok: true };
+  }
+
+  async function checkRegistrationAvailabilityAsync(email, username) {
+    if (usesSupabaseAuth()) {
+      return MatiSupabaseAuth.checkRegistrationAvailability(email, username);
+    }
+    return checkRegistrationAvailability(email, username);
+  }
+
+  async function register(payload) {
+    if (usesSupabaseAuth()) {
+      const result = await MatiSupabaseAuth.register(payload);
+      if (!result) {
+        return {
+          ok: false,
+          message: "Registration is not available. Check Supabase configuration.",
+        };
+      }
+      if (result.ok && result.user) {
+        setSession(result.user);
+        if (localStorage.getItem("totalHeritagePoints") === null) {
+          localStorage.setItem("totalHeritagePoints", "0");
+        }
+        if (typeof MatiHeritagePoints !== "undefined") {
+          await MatiHeritagePoints.hydrateFromCloud?.();
+          void MatiHeritagePoints.syncToCloud();
+        }
+      }
+      return result;
+    }
+
+    return registerLocal(payload);
+  }
+
+  function registerLocal({ displayName, username, email, password }) {
     if (!displayName || !username || !email || !password) {
       return { ok: false, message: "Please fill in all fields." };
     }
@@ -76,12 +141,9 @@ const MatiAuth = (() => {
 
     const users = readUsers();
 
-    if (users.some((user) => user.username === cleanUsername)) {
-      return { ok: false, message: "That username is already taken." };
-    }
-
-    if (users.some((user) => user.email === cleanEmail)) {
-      return { ok: false, message: "An account with this email already exists." };
+    const availability = checkRegistrationAvailability(cleanEmail, cleanUsername);
+    if (!availability.ok) {
+      return { ok: false, message: availability.message };
     }
 
     const newUser = {
@@ -99,11 +161,39 @@ const MatiAuth = (() => {
     if (localStorage.getItem("totalHeritagePoints") === null) {
       localStorage.setItem("totalHeritagePoints", "0");
     }
+    if (typeof MatiHeritagePoints !== "undefined") {
+      void MatiHeritagePoints.syncToCloud();
+    }
 
     return { ok: true, user: newUser };
   }
 
-  function login(identifier, password) {
+  async function login(identifier, password) {
+    if (usesSupabaseAuth()) {
+      const result = await MatiSupabaseAuth.login(identifier, password);
+      if (!result) {
+        return {
+          ok: false,
+          message: "Sign-in is not available. Check Supabase configuration.",
+        };
+      }
+      if (result.ok && result.user) {
+        setSession(result.user);
+        if (localStorage.getItem("totalHeritagePoints") === null) {
+          localStorage.setItem("totalHeritagePoints", "0");
+        }
+        if (typeof MatiHeritagePoints !== "undefined") {
+          await MatiHeritagePoints.hydrateFromCloud?.();
+          void MatiHeritagePoints.syncToCloud();
+        }
+      }
+      return result;
+    }
+
+    return loginLocal(identifier, password);
+  }
+
+  function loginLocal(identifier, password) {
     if (!identifier || !password) {
       return { ok: false, message: "Please enter your email/username and password." };
     }
@@ -128,11 +218,31 @@ const MatiAuth = (() => {
     if (localStorage.getItem("totalHeritagePoints") === null) {
       localStorage.setItem("totalHeritagePoints", "0");
     }
+    if (typeof MatiHeritagePoints !== "undefined") {
+      void MatiHeritagePoints.hydrateFromCloud?.();
+      void MatiHeritagePoints.syncToCloud();
+    }
 
     return { ok: true, user };
   }
 
-  function logout() {
+  async function restoreSession() {
+    if (usesSupabaseAuth()) {
+      const cloud = await MatiSupabaseAuth.getSession();
+      if (cloud) {
+        setSession(cloud);
+        return cloud;
+      }
+      clearSession();
+      return null;
+    }
+    return getSession();
+  }
+
+  async function logout() {
+    if (usesSupabaseAuth()) {
+      await MatiSupabaseAuth.logout();
+    }
     clearSession();
   }
 
@@ -154,9 +264,12 @@ const MatiAuth = (() => {
     register,
     login,
     logout,
+    restoreSession,
     getSession,
     isLoggedIn,
     readUsers,
     getAvatarUrl,
+    usesSupabaseAuth,
+    checkRegistrationAvailability: checkRegistrationAvailabilityAsync,
   };
 })();

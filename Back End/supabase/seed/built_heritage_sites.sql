@@ -31,7 +31,7 @@ values
     6.9521319,
     126.2167824,
     'data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg',
-    'data/Built Heritage/Centennial Clock and Pathway of Leaders/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -47,7 +47,7 @@ values
     6.9519495,
     126.2162107,
     'data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg',
-    'data/Built Heritage/City Hall/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -63,7 +63,7 @@ values
     6.949853,
     126.216161,
     'data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg',
-    'data/Built Heritage/MFGR Park and Baywalk/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -79,7 +79,7 @@ values
     6.955,
     126.219444,
     'data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg',
-    'data/Built Heritage/Gabaldon Structure of RRMCES-1/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -95,7 +95,7 @@ values
     6.927318,
     126.281047,
     'data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg',
-    'data/Built Heritage/Menzi Visitors Information Center/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -111,7 +111,7 @@ values
     6.866667,
     126.325,
     'data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg',
-    'data/Built Heritage/Noventa Ancestral House/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -127,7 +127,7 @@ values
     6.84,
     126.33,
     'data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg',
-    'data/Built Heritage/OMPO sa Tampat sa Baguidan/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -143,7 +143,7 @@ values
     6.9483186,
     126.2271687,
     'data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg',
-    'data/Built Heritage/Provincial Capitol of Davao Oriental/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -159,7 +159,7 @@ values
     6.9472,
     126.2268,
     'data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg',
-    'data/Built Heritage/Provincial Capitol Old Mansion/Pylon.glb',
+    null,
     true,
     false
   ),
@@ -175,7 +175,7 @@ values
     6.952258,
     126.216889,
     'data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg',
-    'data/Built Heritage/Pylon Monument/Pylon.glb',
+    'https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb',
     true,
     false
   ),
@@ -191,7 +191,7 @@ values
     6.94425,
     126.248333,
     'data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg',
-    'data/Built Heritage/Subangan Museum/Pylon.glb',
+    null,
     true,
     false
   )

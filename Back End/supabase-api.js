@@ -43,6 +43,7 @@ const MatiSupabaseApi = (() => {
 
   function mediaFromRow(row) {
     if (!row) return null;
+    const credit = row.credit || "";
     return {
       id: row.id,
       siteId: row.site_id,
@@ -50,23 +51,32 @@ const MatiSupabaseApi = (() => {
       title: row.title,
       src: row.src,
       caption: row.caption || "",
-      credit: row.credit || "",
+      credit,
       year: row.year || "",
+      // Gallery UI reads author; seed/credit both land in credit column.
+      author: credit,
+      date: row.year || "",
+      sortOrder:
+        row.sort_order == null ? null : Number(row.sort_order),
     };
   }
 
   function mediaToRow(item) {
-    return {
+    const row = {
       id: item.id,
       site_id: item.siteId,
       type: item.type,
       title: item.title,
       src: item.src,
       caption: item.caption || "",
-      credit: item.credit || "",
-      year: item.year || "",
+      credit: item.credit || item.author || "",
+      year: item.year || item.date || "",
       is_deleted: false,
     };
+    if (item.sortOrder != null && Number.isFinite(Number(item.sortOrder))) {
+      row.sort_order = Number(item.sortOrder);
+    }
+    return row;
   }
 
   async function listSites(category) {
@@ -121,6 +131,7 @@ const MatiSupabaseApi = (() => {
       .from("heritage_media")
       .select("*")
       .eq("is_deleted", false)
+      .order("sort_order", { ascending: true })
       .order("title", { ascending: true });
 
     if (siteId) query = query.eq("site_id", siteId);
@@ -157,35 +168,134 @@ const MatiSupabaseApi = (() => {
     return true;
   }
 
+  async function setMediaSortOrder(siteId, type, orderedIds) {
+    const sb = client();
+    if (!sb) return null;
+
+    const { data, error } = await sb.rpc("set_heritage_media_sort_order", {
+      p_site_id: siteId,
+      p_type: type,
+      p_ordered_ids: orderedIds,
+    });
+
+    if (error) throw error;
+    return Number(data) || 0;
+  }
+
+  function mapLeaderboardRow(row) {
+    const username = row.username;
+    return {
+      username,
+      displayName: row.display_name || row.displayName || username,
+      points: Number(row.heritage_points ?? row.points) || 0,
+      avatarUrl:
+        row.avatar_url ||
+        row.avatarUrl ||
+        `https://i.pravatar.cc/150?u=${encodeURIComponent(username || "guest")}`,
+      updatedAt: row.updated_at || row.updatedAt || null,
+    };
+  }
+
   async function getLeaderboard(limit = 50) {
     const sb = client();
     if (!sb) return null;
 
+    // Prefer shared live board; fall back to Auth profiles if migration not applied yet.
+    const primary = await sb
+      .from("leaderboard_entries")
+      .select("username, display_name, heritage_points, avatar_url, updated_at")
+      .gt("heritage_points", 0)
+      .order("heritage_points", { ascending: false })
+      .limit(limit);
+
+    if (!primary.error) {
+      return (primary.data || []).map(mapLeaderboardRow);
+    }
+
     const { data, error } = await sb
       .from("profiles")
-      .select("username, display_name, heritage_points, avatar_url")
+      .select("username, display_name, heritage_points, avatar_url, updated_at")
       .gt("heritage_points", 0)
       .order("heritage_points", { ascending: false })
       .limit(limit);
 
     if (error) throw error;
+    return (data || []).map(mapLeaderboardRow);
+  }
 
-    return (data || []).map((row) => ({
-      username: row.username,
-      displayName: row.display_name,
-      points: row.heritage_points,
-      avatarUrl:
-        row.avatar_url ||
-        `https://i.pravatar.cc/150?u=${encodeURIComponent(row.username)}`,
-    }));
+  async function syncHeritagePoints({ username, points, displayName } = {}) {
+    const sb = client();
+    if (!sb) return null;
+
+    const cleanUsername = String(username || "")
+      .trim()
+      .toLowerCase();
+    if (!cleanUsername) return null;
+
+    const { data, error } = await sb.rpc("sync_heritage_points", {
+      p_username: cleanUsername,
+      p_points: Math.max(0, Number(points) || 0),
+      p_display_name: displayName || cleanUsername,
+    });
+
+    if (error) throw error;
+    return mapLeaderboardRow(data || { username: cleanUsername, heritage_points: points });
+  }
+
+  function subscribeLeaderboard(onChange) {
+    if (typeof onChange !== "function") return null;
+
+    if (typeof MatiHeritageRealtime !== "undefined") {
+      MatiHeritageRealtime.ensure();
+      return MatiHeritageRealtime.on(
+        MatiHeritageRealtime.TOPIC.leaderboard,
+        onChange,
+      );
+    }
+
+    const sb = client();
+    if (!sb) return null;
+
+    const channel = sb
+      .channel("leaderboard-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "leaderboard_entries" },
+        () => {
+          onChange();
+        },
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        sb.removeChannel(channel);
+      } catch {
+        /* ignore */
+      }
+    };
+  }
+
+  function subscribeHeritageCatalog(onChange) {
+    if (typeof onChange !== "function") return null;
+    if (typeof MatiHeritageRealtime === "undefined") return null;
+    MatiHeritageRealtime.ensure();
+    return MatiHeritageRealtime.on(
+      MatiHeritageRealtime.TOPIC.catalog,
+      onChange,
+    );
   }
 
   async function getProfileStats() {
     const sb = client();
     if (!sb) return null;
 
-    const [registered, players] = await Promise.all([
+    const [registered, boardPlayers, profilePlayers] = await Promise.all([
       sb.from("profiles").select("*", { count: "exact", head: true }),
+      sb
+        .from("leaderboard_entries")
+        .select("*", { count: "exact", head: true })
+        .gt("heritage_points", 0),
       sb
         .from("profiles")
         .select("*", { count: "exact", head: true })
@@ -193,11 +303,17 @@ const MatiSupabaseApi = (() => {
     ]);
 
     if (registered.error) throw registered.error;
-    if (players.error) throw players.error;
+
+    const gamePlayers =
+      !boardPlayers.error && boardPlayers.count != null
+        ? boardPlayers.count
+        : profilePlayers.error
+          ? 0
+          : profilePlayers.count ?? 0;
 
     return {
       registeredUsers: registered.count ?? 0,
-      gamePlayers: players.count ?? 0,
+      gamePlayers,
     };
   }
 
@@ -219,26 +335,96 @@ const MatiSupabaseApi = (() => {
     return "heritage-photos";
   }
 
+  function uploadFileWithProgress(bucket, path, file, options = {}) {
+    const cfg = window.MATI_SUPABASE_CONFIG;
+    if (!cfg?.url || !cfg?.anonKey) {
+      return Promise.reject(new Error("Supabase is not configured."));
+    }
+
+    const endpoint = `${String(cfg.url).replace(/\/$/, "")}/storage/v1/object/${encodeURIComponent(bucket)}/${path
+      .split("/")
+      .map((part) => encodeURIComponent(part))
+      .join("/")}`;
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", endpoint, true);
+      xhr.setRequestHeader("Authorization", `Bearer ${cfg.anonKey}`);
+      xhr.setRequestHeader("apikey", cfg.anonKey);
+      xhr.setRequestHeader(
+        "x-upsert",
+        options.upsert === false ? "false" : "true",
+      );
+      if (file.type || options.contentType) {
+        xhr.setRequestHeader(
+          "Content-Type",
+          file.type || options.contentType,
+        );
+      }
+
+      xhr.upload.onprogress = (event) => {
+        if (!event.lengthComputable || typeof options.onProgress !== "function") {
+          return;
+        }
+        const pct = Math.max(
+          0,
+          Math.min(100, Math.round((event.loaded / event.total) * 100)),
+        );
+        options.onProgress(pct, {
+          loaded: event.loaded,
+          total: event.total,
+        });
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          if (typeof options.onProgress === "function") {
+            options.onProgress(100, { loaded: file.size, total: file.size });
+          }
+          resolve(path);
+          return;
+        }
+
+        let message = `Upload failed (${xhr.status})`;
+        try {
+          const body = JSON.parse(xhr.responseText || "{}");
+          message = body.error || body.message || message;
+        } catch {
+          /* keep default */
+        }
+        reject(new Error(message));
+      };
+
+      xhr.onerror = () => reject(new Error("Network error while uploading."));
+      xhr.onabort = () => reject(new Error("Upload cancelled."));
+      xhr.send(file);
+    });
+  }
+
   async function uploadFile(bucket, path, file, options = {}) {
     const sb = client();
     if (!sb) return null;
 
-    const { data, error } = await sb.storage.from(bucket).upload(path, file, {
-      upsert: options.upsert ?? true,
-      contentType: file.type || options.contentType,
-    });
+    if (typeof options.onProgress === "function") {
+      await uploadFileWithProgress(bucket, path, file, options);
+    } else {
+      const { data, error } = await sb.storage.from(bucket).upload(path, file, {
+        upsert: options.upsert ?? true,
+        contentType: file.type || options.contentType,
+      });
+      if (error) throw error;
+      path = data.path;
+    }
 
-    if (error) throw error;
-
-    const { data: publicData } = sb.storage.from(bucket).getPublicUrl(data.path);
+    const { data: publicData } = sb.storage.from(bucket).getPublicUrl(path);
     return publicData.publicUrl;
   }
 
-  async function uploadSiteMedia(siteId, type, file) {
+  async function uploadSiteMedia(siteId, type, file, options = {}) {
     const bucket = bucketForMediaType(type);
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const path = `${siteId}/${Date.now()}-${safeName}`;
-    return uploadFile(bucket, path, file);
+    return uploadFile(bucket, path, file, options);
   }
 
   return {
@@ -248,7 +434,11 @@ const MatiSupabaseApi = (() => {
     listMedia,
     upsertMedia,
     softDeleteMedia,
+    setMediaSortOrder,
     getLeaderboard,
+    syncHeritagePoints,
+    subscribeLeaderboard,
+    subscribeHeritageCatalog,
     getProfileStats,
     seedBuiltHeritageCatalog,
     uploadFile,

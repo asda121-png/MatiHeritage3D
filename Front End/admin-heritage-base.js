@@ -14,8 +14,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.2167824,
     heritageCategory: "Sites/Park",
     ownership: "Government Property",
-    modelSrc:
-      "data/Built Heritage/Centennial Clock and Pathway of Leaders/Pylon.glb",
   },
   {
     id: "city-hall",
@@ -30,7 +28,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.2162107,
     heritageCategory: "Government Structure",
     ownership: "Government Property",
-    modelSrc: "data/Built Heritage/City Hall/Pylon.glb",
   },
   {
     id: "mfgr",
@@ -45,7 +42,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.216161,
     heritageCategory: "Sites/Park",
     ownership: "Government Property",
-    modelSrc: "data/Built Heritage/MFGR Park and Baywalk/Pylon.glb",
   },
   {
     id: "gabaldon",
@@ -61,8 +57,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.219444,
     heritageCategory: "Schools and Educational Complexes",
     ownership: "Government Property",
-    modelSrc:
-      "data/Built Heritage/Gabaldon Structure of RRMCES-1/Pylon.glb",
   },
   {
     id: "menzi",
@@ -78,8 +72,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.281047,
     heritageCategory: "Sites/Park",
     ownership: "Private Property",
-    modelSrc:
-      "data/Built Heritage/Menzi Visitors Information Center/Pylon.glb",
   },
   {
     id: "noventa",
@@ -95,7 +87,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.325,
     heritageCategory: "Ancestral House",
     ownership: "Private Property",
-    modelSrc: "data/Built Heritage/Noventa Ancestral House/Pylon.glb",
   },
   {
     id: "ompo",
@@ -111,7 +102,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.33,
     heritageCategory: "Graveyard",
     ownership: "Private Property",
-    modelSrc: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Pylon.glb",
   },
   {
     id: "capitol",
@@ -127,8 +117,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.2271687,
     heritageCategory: "Government Structure/Capitol Building",
     ownership: "Government Property",
-    modelSrc:
-      "data/Built Heritage/Provincial Capitol of Davao Oriental/Pylon.glb",
   },
   {
     id: "old-mansion",
@@ -144,8 +132,6 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.2268,
     heritageCategory: "Government Structure/Capitol Building",
     ownership: "Government Property",
-    modelSrc:
-      "data/Built Heritage/Provincial Capitol Old Mansion/Pylon.glb",
   },
   {
     id: "pylon",
@@ -160,7 +146,12 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.216889,
     heritageCategory: "Monument",
     ownership: "Government Property",
-    modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
+    modelSrc:
+      (typeof window !== "undefined" &&
+        window.MATI_SUPABASE_CONFIG?.pylonModelUrl) ||
+      (typeof window !== "undefined" && window.MATI_SUPABASE_CONFIG?.url
+        ? `${String(window.MATI_SUPABASE_CONFIG.url).replace(/\/$/, "")}/storage/v1/object/public/heritage-models/pylon/Pylon.glb`
+        : ""),
   },
   {
     id: "subangan",
@@ -176,6 +167,5 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.248333,
     heritageCategory: "Museum",
     ownership: "Government Property",
-    modelSrc: "data/Built Heritage/Subangan Museum/Pylon.glb",
   },
 ];

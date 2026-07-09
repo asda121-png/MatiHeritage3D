@@ -106,65 +106,103 @@ const MatiAdminStore = (() => {
     return ids;
   }
 
-  function syncSiteToSupabase(site) {
-    if (!supabaseEnabled() || !site?.id) return;
+  async function syncSiteToSupabase(site) {
+    if (!supabaseEnabled() || !site?.id) {
+      return { ok: false, reason: "not_configured" };
+    }
 
-    MatiSupabaseApi.upsertSite(site)
-      .then((saved) => {
-        const row = saved || site;
-        if (!remoteSites) remoteSites = [];
-        const idx = remoteSites.findIndex((item) => item.id === row.id);
-        if (idx >= 0) remoteSites[idx] = row;
-        else remoteSites.push(row);
-        supabaseReady = true;
-      })
-      .catch((error) => {
-        console.warn("Supabase site sync failed:", error);
-      });
+    try {
+      const saved = await MatiSupabaseApi.upsertSite(site);
+      const row = saved || site;
+      if (!remoteSites) remoteSites = [];
+      const idx = remoteSites.findIndex((item) => item.id === row.id);
+      if (idx >= 0) remoteSites[idx] = row;
+      else remoteSites.push(row);
+      supabaseReady = true;
+      return { ok: true, row };
+    } catch (error) {
+      console.warn("Supabase site sync failed:", error);
+      return { ok: false, error };
+    }
   }
 
-  function syncDeleteSiteToSupabase(siteId) {
-    if (!supabaseEnabled()) return;
+  async function syncDeleteSiteToSupabase(siteId) {
+    if (!supabaseEnabled()) {
+      return { ok: false, reason: "not_configured" };
+    }
 
-    MatiSupabaseApi.softDeleteSite(siteId)
-      .then(() => {
-        if (remoteSites) {
-          remoteSites = remoteSites.filter((site) => site.id !== siteId);
-        }
-      })
-      .catch((error) => {
-        console.warn("Supabase site delete failed:", error);
-      });
+    try {
+      await MatiSupabaseApi.softDeleteSite(siteId);
+      if (remoteSites) {
+        remoteSites = remoteSites.filter((site) => site.id !== siteId);
+      }
+      return { ok: true };
+    } catch (error) {
+      console.warn("Supabase site delete failed:", error);
+      return { ok: false, error };
+    }
   }
 
-  function syncMediaToSupabase(item, site) {
-    if (!supabaseEnabled() || !item?.id || !site?.id) return;
+  async function syncMediaToSupabase(item, site) {
+    if (!supabaseEnabled() || !item?.id || !site?.id) {
+      return { ok: false, reason: "not_configured" };
+    }
 
-    MatiSupabaseApi.upsertMedia(item)
-      .then((saved) => {
-        const row = saved || item;
-        if (!remoteMedia) remoteMedia = [];
-        const idx = remoteMedia.findIndex((media) => media.id === row.id);
-        if (idx >= 0) remoteMedia[idx] = row;
-        else remoteMedia.push(row);
-      })
-      .catch((error) => {
-        console.warn("Supabase media sync failed:", error);
-      });
+    try {
+      const saved = await MatiSupabaseApi.upsertMedia(item);
+      const row = saved || item;
+      if (!remoteMedia) remoteMedia = [];
+      const idx = remoteMedia.findIndex((media) => media.id === row.id);
+      if (idx >= 0) remoteMedia[idx] = row;
+      else remoteMedia.push(row);
+      return { ok: true, row };
+    } catch (error) {
+      console.warn("Supabase media sync failed:", error);
+      return { ok: false, error };
+    }
   }
 
-  function syncDeleteMediaToSupabase(mediaId) {
-    if (!supabaseEnabled()) return;
+  async function syncDeleteMediaToSupabase(mediaId) {
+    if (!supabaseEnabled()) {
+      return { ok: false, reason: "not_configured" };
+    }
 
-    MatiSupabaseApi.softDeleteMedia(mediaId)
-      .then(() => {
-        if (remoteMedia) {
-          remoteMedia = remoteMedia.filter((item) => item.id !== mediaId);
-        }
-      })
-      .catch((error) => {
-        console.warn("Supabase media delete failed:", error);
-      });
+    try {
+      await MatiSupabaseApi.softDeleteMedia(mediaId);
+      if (remoteMedia) {
+        remoteMedia = remoteMedia.filter((item) => item.id !== mediaId);
+      }
+      return { ok: true };
+    } catch (error) {
+      console.warn("Supabase media delete failed:", error);
+      return { ok: false, error };
+    }
+  }
+
+  function clearVisitorHeritageCaches() {
+    try {
+      [
+        "matiBuiltHeritageSites_v2",
+        "matiIntangibleHeritageSites_v1",
+        "matiNaturalHeritageSites_v1",
+        "matiGalleryHeritageMedia_v1",
+      ].forEach((key) => sessionStorage.removeItem(key));
+    } catch {
+      /* ignore */
+    }
+    // Same-browser visitor tabs (gallery, explore, map) refresh immediately.
+    if (typeof MatiHeritageRealtime?.bumpCatalog === "function") {
+      MatiHeritageRealtime.bumpCatalog({ media: true, sites: true });
+    } else {
+      try {
+        localStorage.setItem(
+          "matiHeritageCatalogBump",
+          String(Date.now()),
+        );
+      } catch {
+        /* ignore */
+      }
+    }
   }
 
   function emptyStore() {
@@ -214,16 +252,34 @@ const MatiAdminStore = (() => {
     });
   }
 
+  function staticBuiltMedia() {
+    return typeof BUILT_HERITAGE_MEDIA !== "undefined"
+      ? [...BUILT_HERITAGE_MEDIA]
+      : [];
+  }
+
   function baseMedia() {
     const staticGallery =
       typeof GALLERY_MEDIA !== "undefined" ? [...GALLERY_MEDIA] : [];
+    const staticBuilt = staticBuiltMedia();
+    const staticAll = [...staticBuilt, ...staticGallery];
 
-    if (!supabaseReady || !remoteMedia) return staticGallery;
+    if (!supabaseReady || !remoteMedia) return staticAll;
 
     const managed = remoteManagedSiteIds();
-    const staticRemainder = staticGallery.filter(
-      (item) => !managed.has(item.siteId),
+    // Prefer remote rows for managed sites; keep static media for any site
+    // not yet represented in the remote catalog (e.g. before media seed).
+    const remoteIds = new Set((remoteMedia || []).map((item) => item.id));
+    const remoteSiteIdsWithMedia = new Set(
+      (remoteMedia || []).map((item) => item.siteId),
     );
+    const staticRemainder = staticAll.filter((item) => {
+      if (remoteIds.has(item.id)) return false;
+      if (managed.has(item.siteId) && remoteSiteIdsWithMedia.has(item.siteId)) {
+        return false;
+      }
+      return true;
+    });
     return [...remoteMedia, ...staticRemainder];
   }
 
@@ -353,7 +409,7 @@ const MatiAdminStore = (() => {
     });
   }
 
-  function migrateSite(fromId, toId) {
+  async function migrateSite(fromId, toId) {
     if (!fromId || !toId || fromId === toId) {
       return getSiteById(toId || fromId);
     }
@@ -374,21 +430,36 @@ const MatiAdminStore = (() => {
       store.addedSites.push(payload);
     }
 
-    store.addedMedia.forEach((item) => {
-      if (item.siteId === fromId) item.siteId = toId;
-    });
-    Object.keys(store.mediaEdits).forEach((mediaId) => {
-      if (store.mediaEdits[mediaId].siteId === fromId) {
-        store.mediaEdits[mediaId].siteId = toId;
-      }
-    });
+    store.addedMedia = store.addedMedia.map((item) =>
+      item.siteId === fromId ? { ...item, siteId: toId, siteName: payload.name } : item,
+    );
+
+    if (store.mediaOrder) {
+      Object.keys(store.mediaOrder).forEach((key) => {
+        if (key.startsWith(`${fromId}:`)) {
+          const type = key.slice(fromId.length + 1);
+          store.mediaOrder[`${toId}:${type}`] = store.mediaOrder[key];
+          delete store.mediaOrder[key];
+        }
+      });
+    }
 
     delete store.siteEdits[fromId];
     writeStore(store);
+
+    const syncNew = await syncSiteToSupabase(payload);
+    await syncDeleteSiteToSupabase(fromId);
+
+    const movedMedia = getSiteMedia(toId);
+    await Promise.all(
+      movedMedia.map((item) => syncMediaToSupabase({ ...item, siteId: toId }, payload)),
+    );
+
+    if (syncNew.ok) clearVisitorHeritageCaches();
     return getSiteById(toId);
   }
 
-  function saveSite(site) {
+  async function saveSite(site) {
     const store = readStore();
     const isNew = !baseSites().some((s) => s.id === site.id);
     const lat = parseCoord(site.lat);
@@ -423,20 +494,23 @@ const MatiAdminStore = (() => {
     }
 
     writeStore(store);
-    syncSiteToSupabase(payload);
+    const sync = await syncSiteToSupabase(payload);
+    if (sync.ok) clearVisitorHeritageCaches();
+    payload._sync = sync;
     return payload;
   }
 
-  function deleteSite(siteId) {
+  async function deleteSite(siteId) {
     const store = readStore();
-    const site = getSiteById(siteId);
     if (!store.deletedSiteIds.includes(siteId)) {
       store.deletedSiteIds.push(siteId);
     }
     store.addedSites = store.addedSites.filter((s) => s.id !== siteId);
     delete store.siteEdits[siteId];
     writeStore(store);
-    syncDeleteSiteToSupabase(siteId);
+    const sync = await syncDeleteSiteToSupabase(siteId);
+    if (sync.ok) clearVisitorHeritageCaches();
+    return sync;
   }
 
   function categoryLabel(cat) {
@@ -473,11 +547,35 @@ const MatiAdminStore = (() => {
 
   function sortSiteMediaItems(items, siteId, type) {
     const store = readStore();
-    const order = store.mediaOrder?.[mediaOrderKey(siteId, type)];
+    const localOrder = store.mediaOrder?.[mediaOrderKey(siteId, type)];
+    const sortValues = items
+      .map((item) => Number(item.sortOrder))
+      .filter((value) => Number.isFinite(value));
+    const hasMeaningfulRemoteOrder =
+      sortValues.some((value) => value > 0) ||
+      new Set(sortValues).size > 1;
+
+    // Prefer admin local drag order when present; otherwise use DB sort_order.
+    const order =
+      Array.isArray(localOrder) && localOrder.length
+        ? localOrder
+        : hasMeaningfulRemoteOrder
+          ? [...items]
+              .sort(
+                (a, b) =>
+                  (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0) ||
+                  String(a.title || "").localeCompare(String(b.title || "")),
+              )
+              .map((item) => item.id)
+          : null;
+
     const indexMap = baseMediaIndexMap();
 
     if (!order?.length) {
       return [...items].sort((a, b) => {
+        const bySort =
+          (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0);
+        if (bySort) return bySort;
         const byUpdated = (b.updatedAt || "").localeCompare(a.updatedAt || "");
         if (byUpdated) return byUpdated;
         return (indexMap.get(a.id) ?? 0) - (indexMap.get(b.id) ?? 0);
@@ -501,19 +599,22 @@ const MatiAdminStore = (() => {
     const store = readStore();
     const deleted = new Set(store.deletedMediaIds);
     const managed = remoteManagedSiteIds();
-    const list = [];
+    const byId = new Map();
 
     baseMedia().forEach((item) => {
-      if (deleted.has(item.id)) return;
+      if (!item?.id || deleted.has(item.id)) return;
       const edit = managed.has(item.siteId) ? null : store.mediaEdits[item.id];
-      list.push({ ...item, ...edit });
+      byId.set(item.id, { ...item, ...edit });
     });
 
+    // Local additions (offline / pending sync). Skip any id already present
+    // from Supabase/base so a successful upload can't render as a duplicate.
     store.addedMedia.forEach((item) => {
-      if (!deleted.has(item.id)) list.push({ ...item });
+      if (!item?.id || deleted.has(item.id) || byId.has(item.id)) return;
+      byId.set(item.id, { ...item });
     });
 
-    return list;
+    return [...byId.values()];
   }
 
   function getSiteMedia(siteId) {
@@ -528,14 +629,100 @@ const MatiAdminStore = (() => {
     );
   }
 
-  function reorderSiteMedia(siteId, type, orderedIds) {
+  async function reorderSiteMedia(siteId, type, orderedIds) {
     const store = readStore();
     if (!store.mediaOrder) store.mediaOrder = {};
     store.mediaOrder[mediaOrderKey(siteId, type)] = [...orderedIds];
     writeStore(store);
+
+    // Mirror sort order onto in-memory remote rows immediately.
+    if (remoteMedia?.length) {
+      orderedIds.forEach((id, index) => {
+        const row = remoteMedia.find((item) => item.id === id);
+        if (row) row.sortOrder = index;
+      });
+    }
+
+    if (
+      supabaseEnabled() &&
+      typeof MatiSupabaseApi.setMediaSortOrder === "function"
+    ) {
+      try {
+        await MatiSupabaseApi.setMediaSortOrder(siteId, type, orderedIds);
+        clearVisitorHeritageCaches();
+        return { ok: true };
+      } catch (error) {
+        console.warn("Media sort order sync failed:", error);
+        return { ok: false, error };
+      }
+    }
+
+    return { ok: true, localOnly: true };
   }
 
-  function saveMedia(item) {
+  async function syncAllMediaOrdersToSupabase() {
+    if (
+      !supabaseEnabled() ||
+      typeof MatiSupabaseApi.setMediaSortOrder !== "function"
+    ) {
+      return { ok: false, reason: "not_configured" };
+    }
+
+    // Publish the order each folder currently shows in Admin (local drag,
+    // updatedAt, or catalog index) so visitors get the same placement.
+    const types = ["photo", "video", "audio"];
+    const sites = getAllSites();
+    let synced = 0;
+    let lastError = null;
+
+    for (const site of sites) {
+      if (!site?.id) continue;
+      for (const type of types) {
+        const items = getOrderedSiteMedia(site.id, type);
+        if (items.length < 2) continue;
+        const orderedIds = items.map((item) => item.id);
+        try {
+          const store = readStore();
+          if (!store.mediaOrder) store.mediaOrder = {};
+          store.mediaOrder[mediaOrderKey(site.id, type)] = [...orderedIds];
+          writeStore(store);
+
+          if (remoteMedia?.length) {
+            orderedIds.forEach((id, index) => {
+              const row = remoteMedia.find((item) => item.id === id);
+              if (row) row.sortOrder = index;
+            });
+          }
+
+          await MatiSupabaseApi.setMediaSortOrder(site.id, type, orderedIds);
+          synced += 1;
+        } catch (error) {
+          lastError = error;
+          console.warn(
+            `Failed syncing media order ${site.id}:${type}:`,
+            error,
+          );
+        }
+      }
+    }
+
+    if (synced) clearVisitorHeritageCaches();
+    return lastError
+      ? { ok: false, synced, error: lastError }
+      : { ok: true, synced };
+  }
+
+  async function publishSiteMediaOrder(siteId, type) {
+    const items = getOrderedSiteMedia(siteId, type);
+    if (items.length < 2) return { ok: true, skipped: true };
+    return reorderSiteMedia(
+      siteId,
+      type,
+      items.map((item) => item.id),
+    );
+  }
+
+  async function saveMedia(item) {
     const store = readStore();
     const site = getSiteById(item.siteId);
     if (!site) return null;
@@ -579,15 +766,41 @@ const MatiAdminStore = (() => {
     }
 
     writeStore(store);
-    syncMediaToSupabase(payload, site);
+    const sync = await syncMediaToSupabase(payload, site);
+    if (sync.ok) {
+      clearVisitorHeritageCaches();
+      // Once the row lives in remoteMedia, drop the local duplicate copy.
+      const after = readStore();
+      after.addedMedia = after.addedMedia.filter((item) => item.id !== payload.id);
+      writeStore(after);
+
+      // Keep visitor gallery placement in sync with admin order.
+      const order =
+        after.mediaOrder?.[mediaOrderKey(payload.siteId, payload.type)] || null;
+      if (
+        order?.length &&
+        typeof MatiSupabaseApi.setMediaSortOrder === "function"
+      ) {
+        try {
+          await MatiSupabaseApi.setMediaSortOrder(
+            payload.siteId,
+            payload.type,
+            order,
+          );
+        } catch (error) {
+          console.warn("Media order sync after upload failed:", error);
+        }
+      }
+    }
+    payload._sync = sync;
     return payload;
   }
 
-  function deleteMedia(mediaId) {
-    deleteMediaMany([mediaId]);
+  async function deleteMedia(mediaId) {
+    return deleteMediaMany([mediaId]);
   }
 
-  function deleteMediaMany(mediaIds) {
+  async function deleteMediaMany(mediaIds) {
     const store = readStore();
     const unique = [...new Set(mediaIds.filter(Boolean))];
     if (!unique.length) return 0;
@@ -607,7 +820,8 @@ const MatiAdminStore = (() => {
 
     writeStore(store);
 
-    targets.forEach((item) => syncDeleteMediaToSupabase(item.id));
+    await Promise.all(targets.map((item) => syncDeleteMediaToSupabase(item.id)));
+    clearVisitorHeritageCaches();
 
     return unique.length;
   }
@@ -729,68 +943,11 @@ const MatiAdminStore = (() => {
     return `https://i.pravatar.cc/150?u=${encodeURIComponent(username || "guest")}`;
   }
 
-  const LEADERBOARD_SAMPLE_USERNAMES = [
-    "ProGamer99",
-    "MatiExplorer",
-    "HistoryBuff",
-    "EcoWarrior_Mati",
-    "HeritageHunter",
-    "DahicanSurfer",
-    "MuseumExplorer",
-    "MatiLocal99",
-    "NatureLover",
-    "HistoryStudent",
-    "BaywalkRunner",
-    "SubanganSeeker",
-    "CulturalCurator",
-    "MindanaoMaven",
-    "TribalTrail",
-    "SanctuaryScout",
-    "PujadaWatcher",
-    "SleepingDino",
-    "CoconutGrove",
-    "BananaKing_Mati",
-    "DavaoOriental",
-    "HeritageHero",
-    "ArchiveAce",
-    "FestivalFan",
-    "SambuokanStar",
-    "MangroveMike",
-    "CoastalQuest",
-    "RuinsRunner",
-    "ChurchChaser",
-    "LanternLover",
-    "TouristTom",
-    "PixelPilgrim",
-    "QuizQueen_Mati",
-    "TriviaTitan",
-    "MemoryMaster",
-    "PuzzlePro99",
-    "SpotTheScout",
-    "SprintScholar",
-    "HeritageHub",
-    "MatiMariner",
-    "DawanDrifter",
-    "TagbibiraTrek",
-    "MayoMayhem",
-    "CapstoneCrew",
-    "VisitorVince",
-    "GalleryGuru",
-    "MapMarker",
-    "PointsPilot",
-    "RankRiser",
-    "HeritageHawk",
-  ];
+  let leaderboardCache = [];
+  let leaderboardLoadedAt = 0;
+  let leaderboardUnsubscribe = null;
 
-  function getLeaderboardSamples() {
-    return LEADERBOARD_SAMPLE_USERNAMES.map((username, index) => ({
-      username,
-      points: Math.max(90, 1985 - index * 38 - (index % 4) * 5),
-      avatarUrl: playerAvatarUrl(username),
-    }));
-  }
-
-  function getLeaderboard() {
+  function getLeaderboardLocal() {
     const users = getRegisteredUsers()
       .map((u) => ({
         username: u.username,
@@ -799,10 +956,10 @@ const MatiAdminStore = (() => {
       }))
       .filter((u) => u.points > 0);
 
-    const sessionPts = parseInt(
-      localStorage.getItem("totalHeritagePoints") || "0",
-      10,
-    );
+    const sessionPts =
+      typeof MatiHeritagePoints !== "undefined"
+        ? MatiHeritagePoints.readLocal()
+        : parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
     const session = typeof MatiAuth !== "undefined" ? MatiAuth.getSession() : null;
     if (session && sessionPts > 0) {
       const exists = users.some((u) => u.username === session.username);
@@ -815,20 +972,113 @@ const MatiAdminStore = (() => {
       }
     }
 
-    const samples = getLeaderboardSamples();
-    const merged = new Map();
+    return users.sort((a, b) => b.points - a.points).slice(0, 50);
+  }
 
-    [...users, ...samples].forEach((row) => {
-      const key = row.username.toLowerCase();
-      const existing = merged.get(key);
-      if (!existing || row.points > existing.points) {
-        merged.set(key, row);
+  function getLeaderboard() {
+    if (leaderboardCache.length) return leaderboardCache.slice(0, 50);
+    return getLeaderboardLocal();
+  }
+
+  async function refreshLeaderboard({ force = false } = {}) {
+    const now = Date.now();
+    if (!force && leaderboardCache.length && now - leaderboardLoadedAt < 2500) {
+      return leaderboardCache;
+    }
+
+    try {
+      if (
+        typeof MatiSupabaseApi !== "undefined" &&
+        typeof MatiSupabaseApi.getLeaderboard === "function"
+      ) {
+        const remote = await MatiSupabaseApi.getLeaderboard(50);
+        if (Array.isArray(remote)) {
+          leaderboardCache = remote.map((row) => ({
+            username: row.username,
+            displayName: row.displayName || row.username,
+            points: Number(row.points) || 0,
+            avatarUrl: row.avatarUrl || playerAvatarUrl(row.username),
+          }));
+          leaderboardLoadedAt = Date.now();
+          return leaderboardCache;
+        }
       }
-    });
+    } catch (error) {
+      console.warn("Leaderboard refresh failed:", error);
+    }
 
-    return [...merged.values()]
-      .sort((a, b) => b.points - a.points)
-      .slice(0, 50);
+    leaderboardCache = getLeaderboardLocal();
+    leaderboardLoadedAt = Date.now();
+    return leaderboardCache;
+  }
+
+  let catalogUnsubscribe = null;
+
+  function subscribeLeaderboard(onChange) {
+    if (leaderboardUnsubscribe) {
+      leaderboardUnsubscribe();
+      leaderboardUnsubscribe = null;
+    }
+
+    if (
+      typeof MatiSupabaseApi === "undefined" ||
+      typeof MatiSupabaseApi.subscribeLeaderboard !== "function"
+    ) {
+      return null;
+    }
+
+    leaderboardUnsubscribe = MatiSupabaseApi.subscribeLeaderboard(async () => {
+      await refreshLeaderboard({ force: true });
+      if (typeof onChange === "function") onChange(getLeaderboard());
+    });
+    return leaderboardUnsubscribe;
+  }
+
+  function stopLeaderboardLive() {
+    if (leaderboardUnsubscribe) {
+      leaderboardUnsubscribe();
+      leaderboardUnsubscribe = null;
+    }
+  }
+
+  function subscribeCatalog(onChange) {
+    if (catalogUnsubscribe) {
+      catalogUnsubscribe();
+      catalogUnsubscribe = null;
+    }
+
+    const attach = (handler) => {
+      catalogUnsubscribe = handler;
+      return catalogUnsubscribe;
+    };
+
+    if (typeof MatiHeritageRealtime !== "undefined") {
+      MatiHeritageRealtime.ensure();
+      return attach(
+        MatiHeritageRealtime.on(MatiHeritageRealtime.TOPIC.catalog, async () => {
+          await initFromSupabase();
+          if (typeof onChange === "function") onChange();
+        }),
+      );
+    }
+
+    if (typeof MatiSupabaseApi?.subscribeHeritageCatalog === "function") {
+      return attach(
+        MatiSupabaseApi.subscribeHeritageCatalog(async () => {
+          await initFromSupabase();
+          if (typeof onChange === "function") onChange();
+        }),
+      );
+    }
+
+    return null;
+  }
+
+  function stopCatalogLive() {
+    if (catalogUnsubscribe) {
+      catalogUnsubscribe();
+      catalogUnsubscribe = null;
+    }
   }
 
   function heritageReportRows(category) {
@@ -1110,6 +1360,8 @@ const MatiAdminStore = (() => {
     getSiteMedia,
     getOrderedSiteMedia,
     reorderSiteMedia,
+    syncAllMediaOrdersToSupabase,
+    publishSiteMediaOrder,
     saveMedia,
     deleteMedia,
     deleteMediaMany,
@@ -1119,6 +1371,11 @@ const MatiAdminStore = (() => {
     getDashboardCollectionSummary,
     getRegisteredUsers,
     getLeaderboard,
+    refreshLeaderboard,
+    subscribeLeaderboard,
+    stopLeaderboardLive,
+    subscribeCatalog,
+    stopCatalogLive,
     heritageReportRows,
     exportCsv,
     exportLciInventoryCsv,

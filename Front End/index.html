@@ -52,6 +52,42 @@
         text-rendering: optimizeLegibility;
       }
 
+      /* Performance optimizations */
+      .reveal,
+      .hero-float-wrap,
+      .hero-map-pin,
+      .hero-cinematic-bg-img,
+      .experience-3d-model,
+      .map-particle,
+      .orb,
+      .heritage-card,
+      .stat-card {
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      .hero-cinematic-stage,
+      .map-section__frame,
+      .experience-3d-stage,
+      .hero-section,
+      .map-section,
+      .experience-section,
+      .heritage-section,
+      .games-section {
+        contain: layout style paint;
+      }
+
+      /* Optimize image rendering */
+      img {
+        image-rendering: -webkit-optimize-contrast;
+      }
+
+      /* Reduce paint complexity for large sections */
+      .main-content {
+        contain: layout style;
+      }
+
       ::selection {
         background: rgba(4, 120, 87, 0.18);
         color: var(--forest-dark);
@@ -98,12 +134,7 @@
         position: relative;
         padding: clamp(2.75rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem)
           clamp(3rem, 7vw, 5rem);
-        background: linear-gradient(
-          180deg,
-          var(--bg-site) 0%,
-          var(--mint-deep) 42%,
-          rgba(209, 250, 229, 0.65) 100%
-        );
+        background: linear-gradient(180deg, var(--bg-site) 0%, #f0f4f8 100%);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -116,17 +147,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background:
-          radial-gradient(
-            ellipse 70% 80% at 50% 0%,
-            rgba(4, 120, 87, 0.07) 0%,
-            transparent 62%
-          ),
-          radial-gradient(
-            ellipse 45% 50% at 15% 100%,
-            rgba(2, 132, 199, 0.06) 0%,
-            transparent 55%
-          );
+        background: radial-gradient(
+          ellipse 45% 50% at 15% 100%,
+          rgba(2, 132, 199, 0.06) 0%,
+          transparent 55%
+        );
         pointer-events: none;
       }
 
@@ -135,16 +160,8 @@
         z-index: 1;
         width: min(12rem, 42vw);
         height: 3px;
-        border-radius: 9999px;
-        background: linear-gradient(
-          90deg,
-          transparent 0%,
-          var(--forest) 18%,
-          var(--amber) 50%,
-          var(--sky) 82%,
-          transparent 100%
-        );
-        opacity: 0.85;
+        background: var(--forest);
+        opacity: 0.45;
       }
 
       .map-hero-bridge__label {
@@ -177,7 +194,7 @@
       .orb-1 {
         width: 520px;
         height: 520px;
-        background: radial-gradient(circle, #34d399 0%, transparent 70%);
+        background: transparent;
         top: -120px;
         right: -80px;
       }
@@ -185,7 +202,7 @@
       .orb-2 {
         width: 480px;
         height: 480px;
-        background: radial-gradient(circle, #6ee7b7 0%, transparent 70%);
+        background: transparent;
         bottom: 10%;
         left: -120px;
       }
@@ -193,7 +210,7 @@
       .orb-3 {
         width: 360px;
         height: 360px;
-        background: radial-gradient(circle, #a7f3d0 0%, transparent 70%);
+        background: transparent;
         top: 45%;
         right: 15%;
       }
@@ -238,6 +255,7 @@
         height: 100%;
         object-fit: cover;
         object-position: center 40%;
+        will-change: transform;
         transform: scale(1.08);
         will-change: transform;
       }
@@ -279,16 +297,7 @@
         height: 420px;
         top: 10%;
         left: -5%;
-        background: rgba(16, 185, 129, 0.22);
-      }
-
-      .hero-cinematic-glow--2 {
-        width: 360px;
-        height: 360px;
-        bottom: 15%;
-        right: 5%;
         background: rgba(56, 189, 248, 0.15);
-        animation-delay: -6s;
       }
 
       @keyframes hero-glow-drift {
@@ -445,7 +454,7 @@
         width: 4rem;
         height: 2px;
         margin-top: 1rem;
-        background: linear-gradient(90deg, #fbbf24 0%, #10b981 100%);
+        background: #fbbf24;
         border-radius: 2px;
         opacity: 0.85;
       }
@@ -507,6 +516,7 @@
         position: relative;
         width: 100%;
         max-width: 280px;
+        will-change: transform;
         will-change: transform;
         transition: transform 0.15s ease-out;
       }
@@ -1156,12 +1166,7 @@
       .btn-primary {
         position: relative;
         overflow: hidden;
-        background: linear-gradient(
-          135deg,
-          var(--forest) 0%,
-          #10b981 50%,
-          var(--amber-dark) 100%
-        );
+        background: var(--forest);
         color: white;
         box-shadow:
           0 8px 32px rgba(4, 120, 87, 0.35),
@@ -2046,10 +2051,9 @@
         z-index: 1;
         background: linear-gradient(
           105deg,
-          rgba(6, 95, 70, 0.94) 0%,
-          rgba(6, 95, 70, 0.82) 38%,
-          rgba(217, 119, 6, 0.45) 62%,
-          rgba(2, 132, 199, 0.68) 100%
+          rgba(6, 78, 59, 0.98) 0%,
+          rgba(6, 78, 59, 0.88) 60%,
+          rgba(6, 78, 59, 0.65) 100%
         );
       }
 
@@ -2063,6 +2067,10 @@
           transparent 55%
         );
         opacity: 0.7;
+      }
+      .plan-section .section-label::before {
+        content: none;
+        display: none;
       }
 
       .plan-inner {
@@ -2080,11 +2088,12 @@
       }
 
       .plan-steps li {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        padding: 0.85rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: grid;
+        grid-template-columns: 3.25rem 1fr;
+        align-items: start;
+        gap: 0 1rem;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         transition:
           transform 0.3s ease,
           padding-left 0.3s ease;
@@ -2092,29 +2101,34 @@
 
       .plan-steps li:hover {
         transform: translateX(8px);
-        padding-left: 0.5rem;
+        padding-left: 0.25rem;
       }
 
       .plan-step-num {
-        width: 2rem;
-        height: 2rem;
+        grid-row: span 2;
+        width: 2.75rem;
+        height: 2.75rem;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: var(--amber);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        box-shadow:
+          0 4px 16px rgba(245, 158, 11, 0.25),
+          inset 0 1px 1px rgba(255, 255, 255, 0.3);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.75rem;
+        font-family: "Cormorant Garamond", serif;
+        color: #422006;
+        font-size: 1.5rem;
         font-weight: 800;
         flex-shrink: 0;
+        margin-top: 0.125rem;
       }
 
       .plan-cta-box {
         position: relative;
-        background: rgba(255, 255, 255, 0.14);
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 3rem;
+        background: rgba(10, 10, 9, 0.25);
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -2126,7 +2140,7 @@
         position: absolute;
         inset: 0;
         background: radial-gradient(
-          ellipse 90% 70% at 80% 20%,
+          ellipse 90% 70% at 90% 25%,
           rgba(255, 255, 255, 0.12) 0%,
           transparent 55%
         );
@@ -2142,7 +2156,7 @@
       @media (max-width: 1024px) {
         .plan-cta-box {
           border-left: none;
-          border-top: 1px solid rgba(255, 255, 255, 0.15);
+          border-top: 1px solid rgba(255, 255, 255, 0.12);
         }
       }
 
@@ -2179,7 +2193,189 @@
       .map-section {
         padding: 0;
         margin: 0;
-        background: var(--bg-site);
+        position: relative;
+        background: linear-gradient(
+          135deg,
+          #f8f5ee 0%,
+          #f3e8d2 50%,
+          #f0e4c8 100%
+        );
+        overflow: hidden;
+      }
+
+      /* Heritage-inspired pattern overlay */
+      .map-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 0.04;
+        background-image:
+          repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 8px,
+            rgba(4, 120, 87, 0.3) 8px,
+            rgba(4, 120, 87, 0.3) 9px
+          ),
+          repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 8px,
+            rgba(245, 158, 11, 0.2) 8px,
+            rgba(245, 158, 11, 0.2) 9px
+          );
+        pointer-events: none;
+      }
+
+      /* Soft vignette around edges */
+      .map-section::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: radial-gradient(
+          ellipse 70% 60% at 50% 50%,
+          transparent 0%,
+          transparent 40%,
+          rgba(15, 23, 42, 0.03) 70%,
+          rgba(15, 23, 42, 0.08) 100%
+        );
+      }
+
+      /* Floating particles */
+      .map-particles {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .map-particle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(4, 120, 87, 0.15);
+        animation: mapParticleFloat 20s ease-in-out infinite;
+      }
+
+      .map-particle:nth-child(1) {
+        width: 3px;
+        height: 3px;
+        top: 15%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .map-particle:nth-child(2) {
+        width: 2px;
+        height: 2px;
+        top: 25%;
+        right: 15%;
+        animation-delay: -5s;
+        background: rgba(245, 158, 11, 0.12);
+      }
+
+      .map-particle:nth-child(3) {
+        width: 4px;
+        height: 4px;
+        bottom: 30%;
+        left: 20%;
+        animation-delay: -10s;
+      }
+
+      .map-particle:nth-child(4) {
+        width: 2px;
+        height: 2px;
+        bottom: 20%;
+        right: 25%;
+        animation-delay: -15s;
+        background: rgba(56, 189, 248, 0.1);
+      }
+
+      .map-particle:nth-child(5) {
+        width: 3px;
+        height: 3px;
+        top: 40%;
+        left: 5%;
+        animation-delay: -8s;
+      }
+
+      @keyframes mapParticleFloat {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.3;
+        }
+        25% {
+          transform: translate(30px, -20px) scale(1.2);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translate(-20px, 30px) scale(0.8);
+          opacity: 0.4;
+        }
+        75% {
+          transform: translate(20px, 20px) scale(1.1);
+          opacity: 0.6;
+        }
+      }
+
+      /* Organic decorative elements in corners */
+      .map-decoration {
+        position: absolute;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0.08;
+      }
+
+      .map-decoration--top-left {
+        top: 0;
+        left: 0;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(
+          ellipse at top left,
+          rgba(4, 120, 87, 0.4) 0%,
+          transparent 60%
+        );
+      }
+
+      .map-decoration--top-right {
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 150px;
+        background: radial-gradient(
+          ellipse at top right,
+          rgba(245, 158, 11, 0.3) 0%,
+          transparent 60%
+        );
+      }
+
+      .map-decoration--bottom-left {
+        bottom: 0;
+        left: 0;
+        width: 160px;
+        height: 200px;
+        background: radial-gradient(
+          ellipse at bottom left,
+          rgba(56, 189, 248, 0.25) 0%,
+          transparent 60%
+        );
+      }
+
+      .map-decoration--bottom-right {
+        bottom: 0;
+        right: 0;
+        width: 190px;
+        height: 170px;
+        background: radial-gradient(
+          ellipse at bottom right,
+          rgba(4, 120, 87, 0.35) 0%,
+          transparent 60%
+        );
       }
 
       .map-section-first {
@@ -2224,8 +2420,26 @@
         min-height: 0;
         border-radius: 1.35rem;
         overflow: hidden;
-        border: 1px solid rgba(4, 120, 87, 0.1);
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(4, 120, 87, 0.15);
+        box-shadow:
+          0 25px 60px rgba(15, 23, 42, 0.08),
+          0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+        z-index: 10;
+      }
+
+      /* Radial glow behind map */
+      .map-section__frame::before {
+        content: "";
+        position: absolute;
+        inset: -40px;
+        z-index: -1;
+        background: radial-gradient(
+          ellipse 80% 70% at 50% 50%,
+          rgba(4, 120, 87, 0.08) 0%,
+          rgba(245, 158, 11, 0.05) 40%,
+          transparent 70%
+        );
+        pointer-events: none;
       }
 
       .map-intro-overlay {
@@ -2989,6 +3203,65 @@
           display: none;
         }
       }
+
+      /* ── 3D Model Loading ── */
+      .experience-3d-loading {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: transparent;
+        transition:
+          opacity 0.38s ease,
+          visibility 0.38s ease;
+      }
+
+      .experience-3d-loading[hidden] {
+        display: none !important;
+      }
+
+      .experience-3d-loading.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .experience-3d-loading-spinner {
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 3px solid rgba(255, 255, 255, 0.18);
+        border-top-color: #34d399;
+        border-radius: 50%;
+        animation: experience-3d-spin 0.8s linear infinite;
+      }
+
+      .experience-3d-loading-text {
+        margin: 0;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: #1c1917;
+        text-align: center;
+      }
+
+      .experience-3d-loading-percent {
+        margin: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #0f172a;
+        text-align: center;
+      }
+
+      @keyframes experience-3d-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body class="visitor-module">
@@ -3004,6 +3277,29 @@
     <div class="main-content">
       <!-- Mati City Map -->
       <section id="mati-map-section" class="map-section map-section-first">
+        <div
+          class="map-decoration map-decoration--top-left"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="map-decoration map-decoration--top-right"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="map-decoration map-decoration--bottom-left"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="map-decoration map-decoration--bottom-right"
+          aria-hidden="true"
+        ></div>
+        <div class="map-particles" aria-hidden="true">
+          <div class="map-particle"></div>
+          <div class="map-particle"></div>
+          <div class="map-particle"></div>
+          <div class="map-particle"></div>
+          <div class="map-particle"></div>
+        </div>
         <div class="map-section__inner">
           <div class="map-section__frame">
             <div
@@ -3098,11 +3394,6 @@
         </div>
       </section>
 
-      <div class="map-hero-bridge" aria-hidden="true">
-        <span class="map-hero-bridge__line"></span>
-        <span class="map-hero-bridge__label">Scroll to discover Mati City</span>
-      </div>
-
       <!-- Hero -->
       <section class="hero-section hero-cinematic" id="hero">
         <div class="hero-cinematic-media" aria-hidden="true">
@@ -3123,28 +3414,6 @@
           class="hero-cinematic-glow hero-cinematic-glow--2"
           aria-hidden="true"
         ></div>
-
-        <svg
-          class="hero-path-svg"
-          viewBox="0 0 800 500"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M480 120 Q560 200 620 280"
-            fill="none"
-            stroke="rgba(16,185,129,0.4)"
-            stroke-width="1.5"
-            stroke-dasharray="6 8"
-          />
-          <path
-            d="M200 350 Q380 280 520 200"
-            fill="none"
-            stroke="rgba(56,189,248,0.35)"
-            stroke-width="1.5"
-            stroke-dasharray="6 8"
-          />
-        </svg>
 
         <div class="hero-cinematic-inner">
           <div class="hero-welcome-block">
@@ -3331,48 +3600,6 @@
           <div class="gallery-preview-light gallery-preview-light--1"></div>
           <div class="gallery-preview-light gallery-preview-light--2"></div>
           <div class="gallery-preview-light gallery-preview-light--3"></div>
-          <div class="gallery-preview-parallax" id="gallery-parallax-layer">
-            <div
-              class="gallery-preview-float gallery-preview-float--1"
-              data-depth="0.04"
-            >
-              <img
-                src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
-                alt=""
-                loading="lazy"
-              />
-            </div>
-            <div
-              class="gallery-preview-float gallery-preview-float--2"
-              data-depth="0.07"
-            >
-              <img
-                src="data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg"
-                alt=""
-                loading="lazy"
-              />
-            </div>
-            <div
-              class="gallery-preview-float gallery-preview-float--3"
-              data-depth="0.05"
-            >
-              <img
-                src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
-                alt=""
-                loading="lazy"
-              />
-            </div>
-            <div
-              class="gallery-preview-float gallery-preview-float--4"
-              data-depth="0.06"
-            >
-              <img
-                src="data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg"
-                alt=""
-                loading="lazy"
-              />
-            </div>
-          </div>
           <div class="gallery-preview-filmstrip gallery-preview-filmstrip--top">
             <div class="gallery-preview-filmstrip-track">
               <span></span><span></span><span></span><span></span><span></span
@@ -3663,11 +3890,6 @@
 
       <!-- 3D Explore — heritage monument viewer -->
       <section id="portal-3d" class="experience-section experience-3d">
-        <div class="experience-3d-bg" aria-hidden="true">
-          <div class="experience-3d-stone"></div>
-          <div class="experience-3d-lines"></div>
-          <div class="experience-3d-warmth"></div>
-        </div>
         <div class="experience-3d-inner">
           <div class="experience-3d-layout reveal">
             <div class="experience-3d-copy">
@@ -3700,7 +3922,9 @@
                   </li>
                   <li>
                     <span class="experience-3d-spec-key">Ownership</span>
-                    <span class="experience-3d-spec-val">Government Property</span>
+                    <span class="experience-3d-spec-val"
+                      >Government Property</span
+                    >
                   </li>
                   <li>
                     <span class="experience-3d-spec-key">Longitude</span>
@@ -3723,10 +3947,29 @@
             </div>
 
             <div class="experience-3d-stage">
+              <div
+                id="portal-model-loading"
+                class="experience-3d-loading"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <div
+                  class="experience-3d-loading-spinner"
+                  aria-hidden="true"
+                ></div>
+                <p class="experience-3d-loading-text">Loading 3D preview…</p>
+                <p
+                  class="experience-3d-loading-percent"
+                  id="portal-model-percent"
+                  aria-hidden="true"
+                >
+                  0%
+                </p>
+              </div>
               <model-viewer
                 id="portal-pylon-model"
                 class="experience-3d-model"
-                data-src="data/Built Heritage/Pylon Monument/Pylon.glb"
+                data-src=""
                 alt="Pylon Monument 3D model"
                 auto-rotate
                 rotation-per-second="30deg"
@@ -3782,14 +4025,26 @@
           <div class="games-corner-frame games-corner-frame--br"></div>
           <div class="games-marquee games-marquee--top">
             <div class="games-marquee-track">
-              <span>Trivia Showdown</span><span>Memory Pairs</span><span>Spot the Difference</span><span>Slide Puzzle</span><span>True or False Sprint</span><span>Heritage Quest</span><span>Insert Coin</span><span>Press Start</span>
-              <span>Trivia Showdown</span><span>Memory Pairs</span><span>Spot the Difference</span><span>Slide Puzzle</span><span>True or False Sprint</span><span>Heritage Quest</span><span>Insert Coin</span><span>Press Start</span>
+              <span>Trivia Showdown</span><span>Memory Pairs</span
+              ><span>Spot the Difference</span><span>Slide Puzzle</span
+              ><span>True or False Sprint</span><span>Heritage Quest</span
+              ><span>Insert Coin</span><span>Press Start</span>
+              <span>Trivia Showdown</span><span>Memory Pairs</span
+              ><span>Spot the Difference</span><span>Slide Puzzle</span
+              ><span>True or False Sprint</span><span>Heritage Quest</span
+              ><span>Insert Coin</span><span>Press Start</span>
             </div>
           </div>
           <div class="games-marquee games-marquee--bottom">
             <div class="games-marquee-track games-marquee-track--reverse">
-              <span>MATI HERITAGE 3D</span><span>Level Up</span><span>Earn Points</span><span>Play &amp; Learn</span><span>Built Heritage</span><span>Natural Heritage</span><span>Cultural Heritage</span><span>Game On</span>
-              <span>MATI HERITAGE 3D</span><span>Level Up</span><span>Earn Points</span><span>Play &amp; Learn</span><span>Built Heritage</span><span>Natural Heritage</span><span>Cultural Heritage</span><span>Game On</span>
+              <span>MATI HERITAGE 3D</span><span>Level Up</span
+              ><span>Earn Points</span><span>Play &amp; Learn</span
+              ><span>Built Heritage</span><span>Natural Heritage</span
+              ><span>Cultural Heritage</span><span>Game On</span>
+              <span>MATI HERITAGE 3D</span><span>Level Up</span
+              ><span>Earn Points</span><span>Play &amp; Learn</span
+              ><span>Built Heritage</span><span>Natural Heritage</span
+              ><span>Cultural Heritage</span><span>Game On</span>
             </div>
           </div>
           <div class="games-scanlines"></div>
@@ -3804,23 +4059,62 @@
             </p>
             <div class="games-portal-title-row">
               <h2 class="games-portal-title pixel-game-font">Games</h2>
-              <a href="game.html" class="games-portal-lobby-btn arcade-game-font">
+              <a
+                href="game.html"
+                class="games-portal-lobby-btn arcade-game-font"
+              >
                 <span class="games-portal-lobby-btn__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="8" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.75"/>
-                    <path d="M8 12h2M14 12h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                    <path d="M12 8V5.5a1.5 1.5 0 0 1 3 0V8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                    <circle cx="7" cy="5" r="1" fill="currentColor"/>
-                    <circle cx="17" cy="5" r="1" fill="currentColor"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="3"
+                      y="8"
+                      width="18"
+                      height="10"
+                      rx="2"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                    />
+                    <path
+                      d="M8 12h2M14 12h2"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M12 8V5.5a1.5 1.5 0 0 1 3 0V8"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                    />
+                    <circle cx="7" cy="5" r="1" fill="currentColor" />
+                    <circle cx="17" cy="5" r="1" fill="currentColor" />
                   </svg>
                 </span>
                 <span class="games-portal-lobby-btn__copy">
-                  <span class="games-portal-lobby-btn__label">Enter Game Lobby</span>
-                  <span class="games-portal-lobby-btn__hint">5 heritage challenges await</span>
+                  <span class="games-portal-lobby-btn__label"
+                    >Enter Game Lobby</span
+                  >
+                  <span class="games-portal-lobby-btn__hint"
+                    >5 heritage challenges await</span
+                  >
                 </span>
                 <span class="games-portal-lobby-btn__arrow" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 12h14M13 6l6 6-6 6"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 </span>
               </a>
@@ -3845,10 +4139,7 @@
             ></nav>
 
             <div class="games-portal-main">
-              <div
-                class="games-portal-theater"
-                id="portal-game-cabinet-screen"
-              >
+              <div class="games-portal-theater" id="portal-game-cabinet-screen">
                 <div class="portal-game-preview-stage">
                   <div
                     id="portal-game-preview-root"
@@ -3859,15 +4150,23 @@
 
               <div class="games-portal-detail">
                 <div class="games-portal-detail-copy">
-                  <h3 class="games-portal-game-title arcade-game-font" id="portal-game-title">
+                  <h3
+                    class="games-portal-game-title arcade-game-font"
+                    id="portal-game-title"
+                  >
                     Mati Heritage Trivia
                   </h3>
-                  <p class="games-portal-game-desc genre-game-font" id="portal-game-desc">
-                    Discover Mati City&rsquo;s heritage through fun and interactive
-                    trivia.
+                  <p
+                    class="games-portal-game-desc genre-game-font"
+                    id="portal-game-desc"
+                  >
+                    Discover Mati City&rsquo;s heritage through fun and
+                    interactive trivia.
                   </p>
                   <div class="games-portal-meta">
-                    <span class="games-portal-chip arcade-game-font" id="portal-game-players"
+                    <span
+                      class="games-portal-chip arcade-game-font"
+                      id="portal-game-players"
                       >12.4K playing</span
                     >
                     <span
@@ -3878,7 +4177,6 @@
                   </div>
                 </div>
                 <div class="games-portal-controls">
-                  
                   <a
                     href="trivia.html"
                     class="games-portal-play-btn arcade-game-font"
@@ -3886,7 +4184,6 @@
                   >
                     Play Now
                   </a>
-                 
                 </div>
               </div>
             </div>
@@ -3999,7 +4296,7 @@
 
       <!-- Plan Your Visit -->
       <section id="plan" class="plan-section">
-        <div class="plan-panel reveal">
+        <div class="plan-panel">
           <div class="plan-bg" aria-hidden="true">
             <div class="plan-bg-image"></div>
             <div class="plan-bg-shimmer"></div>
@@ -4014,43 +4311,64 @@
           <div class="plan-overlay" aria-hidden="true"></div>
           <div class="plan-inner">
             <div class="p-10 lg:p-14 text-white">
-              <p
-                class="text-[10px] font-bold tracking-[0.35em] uppercase text-emerald-200 mb-4"
+              <p class="section-label text-amber-300 !pl-0">Plan Your Visit</p>
+              <h2
+                class="display-font text-3xl md:text-4xl font-bold mb-4 text-white"
               >
-                Plan Your Visit
-              </p>
-              <h2 class="display-font text-3xl md:text-4xl font-bold mb-8">
                 Experience Mati Heritage in Person
               </h2>
-              <ul class="plan-steps space-y-0 text-emerald-50">
+              <p class="text-stone-300 leading-relaxed mb-8 max-w-lg">
+                From digital exploration to an in-person adventure, follow these
+                steps to experience the full depth of Mati's cultural heritage.
+              </p>
+              <ul class="plan-steps space-y-0 text-stone-300">
                 <li>
                   <span class="plan-step-num">1</span>
-                  Browse heritage sites online before your trip
+                  <strong class="text-stone-100 font-semibold"
+                    >Discover Online</strong
+                  >
+                  <p class="text-sm text-stone-400 col-start-2">
+                    Browse heritage sites on this portal before your trip.
+                  </p>
                 </li>
                 <li>
                   <span class="plan-step-num">2</span>
-                  Visit the Menzi Visitors Information Center in Mati City
+                  <strong class="text-stone-100 font-semibold"
+                    >Visit the Info Center</strong
+                  >
+                  <p class="text-sm text-stone-400 col-start-2">
+                    Start at the Menzi Visitors Information Center in Mati City.
+                  </p>
                 </li>
                 <li>
                   <span class="plan-step-num">3</span>
-                  Explore Subangan Museum and the Pathway of Leaders
+                  <strong class="text-stone-100 font-semibold"
+                    >Explore Key Sites</strong
+                  >
+                  <p class="text-sm text-stone-400 col-start-2">
+                    Don't miss the Subangan Museum and Pathway of Leaders.
+                  </p>
                 </li>
                 <li>
                   <span class="plan-step-num">4</span>
-                  Register to save progress and join the heritage leaderboard
+                  <strong class="text-stone-100 font-semibold"
+                    >Join the Community</strong
+                  >
+                  <p class="text-sm text-stone-400 col-start-2">
+                    Register to save progress and join the heritage leaderboard.
+                  </p>
                 </li>
               </ul>
             </div>
-            <div class="plan-cta-box">
-              <h3 class="font-bold text-2xl text-white mb-4">
+            <div class="plan-cta-box p-10 lg:p-14">
+              <h3 class="display-font font-bold text-2xl text-amber-100 mb-3">
                 City Tourism Office
               </h3>
-              <p class="text-white/80 leading-relaxed mb-8">
-                Official cultural heritage data is provided through the Local
-                Government Unit of Mati City. For inquiries about site visits,
-                guided tours, and local events, contact the City Tourism Office.
+              <p class="text-stone-300 leading-relaxed mb-8">
+                For official inquiries about site visits, guided tours, and
+                local events, please contact the City Tourism Office.
               </p>
-              <div class="flex flex-wrap gap-3">
+              <div class="flex flex-wrap justify-center md:justify-start gap-3">
                 <a
                   href="userregistration.html"
                   class="btn-primary text-sm font-bold px-7 py-3.5 rounded-full"
@@ -4059,7 +4377,7 @@
                 </a>
                 <a
                   href="about_us.html"
-                  class="inline-flex items-center text-sm font-bold px-7 py-3.5 rounded-full border-2 border-white/40 text-white hover:bg-white/10 transition"
+                  class="inline-flex items-center text-sm font-bold px-7 py-3.5 rounded-full border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition"
                 >
                   About Mati Heritage 3D
                 </a>
@@ -4080,17 +4398,25 @@
     <script src="data/mati-city-boundary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="../Back End/supabase-config.js"></script>
+    <script src="heritage-pylon-model.js"></script>
     <script src="../Back End/supabase-client.js"></script>
     <script src="../Back End/supabase-api.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="heritage-realtime.js"></script>
     <script src="admin-heritage-base.js"></script>
     <script src="heritage-map-sites.js"></script>
     <script src="heritage-data.js"></script>
     <script src="game-previews.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="visitor-auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="auth-logout.js"></script>
     <script>
       fetch("header.html")
         .then((res) => res.text())
-        .then((data) => {
+        .then(async (data) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
           const header = doc.querySelector("header");
@@ -4146,6 +4472,9 @@
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
+          }
+          if (typeof window.MatiVisitorAuth !== "undefined") {
+            await window.MatiVisitorAuth.refresh();
           }
         })
         .catch((err) => console.error("Error loading header:", err));
@@ -4262,6 +4591,7 @@
       });
 
       // Cinematic hero parallax
+      // Optimized for smoother performance with throttling
       (function initHeroParallax() {
         const hero = document.getElementById("hero");
         if (
@@ -4272,6 +4602,9 @@
 
         const bg = document.getElementById("hero-parallax-bg");
         const layers = hero.querySelectorAll("[data-parallax]");
+        let animationFrameId = null;
+        let lastTime = 0;
+        const throttleDelay = 16; // ~60fps
 
         const reset = () => {
           if (bg) bg.style.transform = "scale(1.08)";
@@ -4281,21 +4614,34 @@
         };
 
         hero.addEventListener("mousemove", (e) => {
-          const rect = hero.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width - 0.5;
-          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const now = performance.now();
+          if (now - lastTime < throttleDelay) return;
+          lastTime = now;
 
-          if (bg) {
-            bg.style.transform = `scale(1.1) translate(${x * -24}px, ${y * -16}px)`;
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
           }
 
-          layers.forEach((el) => {
-            const depth = parseFloat(el.dataset.parallax) || 10;
-            el.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+          animationFrameId = requestAnimationFrame(() => {
+            const rect = hero.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+            if (bg) {
+              bg.style.transform = `scale(1.1) translate(${x * -24}px, ${y * -16}px)`;
+            }
+
+            layers.forEach((el) => {
+              const depth = parseFloat(el.dataset.parallax) || 10;
+              el.style.transform = `translate3d(${x * depth}px, ${y * depth}px, 0)`;
+            });
           });
         });
 
-        hero.addEventListener("mouseleave", reset);
+        hero.addEventListener("mouseleave", () => {
+          if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          reset();
+        });
       })();
 
       // Mati City map — locked to city bounds only (data in heritage-map-sites.js)
@@ -4526,6 +4872,7 @@
         );
 
         window.matiMapInstance = map;
+        window.matiHeritageMarkersLayer = heritageMarkersLayer;
         setTimeout(() => map.invalidateSize(), 150);
         bindMapScrollWheel(map);
         bindMapVisibilityPause(
@@ -4533,6 +4880,24 @@
           document.getElementById("mati-map-section"),
         );
         bindMapIntroDismiss(map);
+
+        if (typeof MatiHeritageData?.subscribeCatalog === "function") {
+          MatiHeritageData.subscribeCatalog(async () => {
+            try {
+              HERITAGE_SITES = await MatiHeritageData.getMapSites();
+            } catch (error) {
+              console.warn("Live map refresh failed:", error);
+              return;
+            }
+            const filter =
+              document.getElementById("map-heritage-filter")?.value || "all";
+            syncHeritageMapMarkers(
+              window.matiMapInstance,
+              window.matiHeritageMarkersLayer,
+              filter,
+            );
+          });
+        }
       }
 
       function bindMapScrollWheel(map) {
@@ -5004,7 +5369,10 @@
       }
 
       const portal3dSection = document.getElementById("portal-3d");
-      const PYLON_GLB = "data/Built Heritage/Pylon Monument/Pylon.glb";
+      const PYLON_GLB =
+        typeof MatiHeritagePylonModel !== "undefined"
+          ? MatiHeritagePylonModel.resolve()
+          : "";
 
       if (portal3dSection) {
         const portalPylonModel = document.getElementById("portal-pylon-model");
@@ -5049,6 +5417,65 @@
           { threshold: 0.08, rootMargin: "80px 0px 80px 0px" },
         );
         portal3dObserver.observe(portal3dSection);
+
+        // Loading progress tracking
+        (function bindPortalModelLoading() {
+          const viewer = document.getElementById("portal-pylon-model");
+          const loading = document.getElementById("portal-model-loading");
+          const progressPercent = document.getElementById(
+            "portal-model-percent",
+          );
+          const loadingText = loading?.querySelector(
+            ".experience-3d-loading-text",
+          );
+          if (!viewer || !loading) return;
+
+          function setProgress(ratio) {
+            if (!progressPercent) return;
+            const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+            progressPercent.textContent = `${pct}%`;
+          }
+
+          function hideLoading() {
+            loading.classList.add("is-hidden");
+            loading.setAttribute("aria-busy", "false");
+            window.setTimeout(() => {
+              loading.hidden = true;
+              loading.setAttribute("hidden", "");
+            }, 380);
+          }
+
+          if (viewer.loaded) {
+            setProgress(1);
+            hideLoading();
+            return;
+          }
+
+          viewer.addEventListener("progress", (event) => {
+            setProgress(event.detail.totalProgress);
+          });
+
+          viewer.addEventListener(
+            "load",
+            () => {
+              setProgress(1);
+              hideLoading();
+            },
+            { once: true },
+          );
+
+          viewer.addEventListener(
+            "error",
+            () => {
+              if (loadingText) {
+                loadingText.textContent = "3D preview unavailable";
+              }
+              setProgress(0);
+              window.setTimeout(hideLoading, 1400);
+            },
+            { once: true },
+          );
+        })();
       }
 
       const portalGamesSection = document.getElementById("portal-games");

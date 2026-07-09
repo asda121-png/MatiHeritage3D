@@ -139,11 +139,15 @@
         color: #ffffff !important;
         border: 1px solid transparent;
         background: var(--gradient-register) !important;
-        box-shadow: 0 4px 18px rgba(4, 120, 87, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 4px 18px rgba(4, 120, 87, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
       }
 
       body.visitor-module .visitor-auth-register:hover {
-        box-shadow: 0 8px 28px rgba(4, 120, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        box-shadow:
+          0 8px 28px rgba(4, 120, 87, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
         transform: translateY(-1px);
       }
 
@@ -181,17 +185,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background:
-          radial-gradient(
-            ellipse 70% 80% at 50% 0%,
-            rgba(4, 120, 87, 0.07) 0%,
-            transparent 62%
-          ),
-          radial-gradient(
-            ellipse 45% 50% at 15% 100%,
-            rgba(2, 132, 199, 0.06) 0%,
-            transparent 55%
-          );
+        background: radial-gradient(
+          ellipse 45% 50% at 15% 100%,
+          rgba(2, 132, 199, 0.06) 0%,
+          transparent 55%
+        );
         pointer-events: none;
       }
 
@@ -237,17 +235,11 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
-        background:
-          radial-gradient(
-            ellipse 80% 55% at 50% -10%,
-            rgba(4, 120, 87, 0.07) 0%,
-            transparent 58%
-          ),
-          radial-gradient(
-            ellipse 45% 40% at 100% 40%,
-            rgba(2, 132, 199, 0.05) 0%,
-            transparent 50%
-          );
+        background: radial-gradient(
+          ellipse 45% 40% at 100% 40%,
+          rgba(2, 132, 199, 0.05) 0%,
+          transparent 50%
+        );
       }
 
       .explore3d-idle {
@@ -438,7 +430,8 @@
         border: 1px solid rgba(4, 120, 87, 0.12);
         box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
         overflow: hidden;
-        animation: explore3d-overlay-rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation: explore3d-overlay-rise 0.38s cubic-bezier(0.22, 1, 0.36, 1)
+          both;
       }
 
       .explore3d-media-overlay.is-map .explore3d-media-overlay__sheet {
@@ -481,12 +474,20 @@
         gap: 1rem;
         flex-shrink: 0;
         padding: 0.95rem 1.2rem;
-        background: linear-gradient(90deg, rgba(236, 253, 245, 0.92), rgba(255, 255, 255, 0.98));
+        background: linear-gradient(
+          90deg,
+          rgba(236, 253, 245, 0.92),
+          rgba(255, 255, 255, 0.98)
+        );
         border-bottom: 1px solid rgba(4, 120, 87, 0.08);
       }
 
       .explore3d-media-overlay.is-map .explore3d-media-overlay__bar {
-        background: linear-gradient(90deg, rgba(224, 242, 254, 0.95), rgba(255, 255, 255, 0.98));
+        background: linear-gradient(
+          90deg,
+          rgba(224, 242, 254, 0.95),
+          rgba(255, 255, 255, 0.98)
+        );
         border-bottom-color: rgba(2, 132, 199, 0.1);
       }
 
@@ -754,14 +755,19 @@
         display: none !important;
       }
 
-      .explore3d-stage-layout.is-loading .explore3d-stage-grid .explore3d-panel {
+      .explore3d-stage-layout.is-loading
+        .explore3d-stage-grid
+        .explore3d-panel {
         opacity: 0.35;
         filter: blur(1px);
         pointer-events: none;
       }
 
-      .explore3d-stage-layout.is-revealed .explore3d-stage-grid .explore3d-panel {
-        animation: explore3d-panel-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      .explore3d-stage-layout.is-revealed
+        .explore3d-stage-grid
+        .explore3d-panel {
+        animation: explore3d-panel-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1)
+          both;
       }
 
       .explore3d-stage-layout.is-revealed .explore3d-details {
@@ -867,7 +873,11 @@
         gap: 0.85rem;
         padding: 1.15rem 1.5rem 1.5rem;
         border-top: 1px solid rgba(15, 23, 42, 0.06);
-        background: linear-gradient(180deg, rgba(248, 250, 252, 0.4), rgba(255, 255, 255, 0.95));
+        background: linear-gradient(
+          180deg,
+          rgba(248, 250, 252, 0.4),
+          rgba(255, 255, 255, 0.95)
+        );
       }
 
       .explore3d-viewer {
@@ -942,7 +952,49 @@
       }
 
       .explore3d-model::part(default-progress-bar) {
-        background-color: var(--forest-light);
+        display: none;
+      }
+
+      .explore3d-loading-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background: rgba(10, 15, 20, 0.85);
+        backdrop-filter: blur(8px);
+      }
+
+      .explore3d-loading-overlay[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-loading-spinner {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        border: 3px solid rgba(110, 231, 183, 0.2);
+        border-top-color: #6ee7b7;
+        animation: explore3d-spin 0.85s linear infinite;
+      }
+
+      .explore3d-loading-percentage {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #6ee7b7;
+        font-family: "Source Sans 3", sans-serif;
+        letter-spacing: 0.02em;
+      }
+
+      .explore3d-loading-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #cbd5e1;
+        font-family: "Source Sans 3", sans-serif;
+        letter-spacing: 0.04em;
       }
 
       .explore3d-preview-img {
@@ -1249,7 +1301,11 @@
       #mati-map {
         flex: 1;
         width: 100%;
-        min-height: clamp(420px, calc(100vh - var(--header-h, 5.625rem) - 5rem), 760px);
+        min-height: clamp(
+          420px,
+          calc(100vh - var(--header-h, 5.625rem) - 5rem),
+          760px
+        );
         height: 100%;
         z-index: 1;
         font-family: "Source Sans 3", sans-serif;
@@ -1301,7 +1357,8 @@
           rgba(15, 23, 42, 0.04) 22%,
           transparent 46%
         );
-        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -1328,7 +1385,8 @@
         box-shadow:
           0 20px 48px rgba(2, 132, 199, 0.1),
           0 0 0 1px rgba(2, 132, 199, 0.06);
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           opacity 0.5s ease;
       }
 
@@ -1418,10 +1476,12 @@
           0 0 0 2px var(--forest);
         overflow: hidden;
         background: #e2e8f0;
-        animation: heritage-marker-bounce 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95)
-          infinite;
+        animation: heritage-marker-bounce 2.2s
+          cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         will-change: transform;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
       .heritage-photo-marker.is-active {
@@ -1562,10 +1622,12 @@
         letter-spacing: 0.05em;
         text-transform: uppercase;
         color: #fff;
-        background: var(--gradient-heritage);
+        background: var(--forest);
         box-shadow: 0 10px 28px rgba(4, 120, 87, 0.24);
         cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
       .explore3d-view-btn:hover {
@@ -1754,15 +1816,26 @@
               role="region"
               aria-label="Map of Mati City built heritage sites"
             ></div>
-            <div class="map-intro-overlay" id="map-intro-overlay" aria-hidden="false">
+            <div
+              class="map-intro-overlay"
+              id="map-intro-overlay"
+              aria-hidden="false"
+            >
               <div class="map-intro-overlay__content">
                 <p class="map-intro-overlay__eyebrow">
-                  <span class="map-intro-overlay__eyebrow-line" aria-hidden="true"></span>
+                  <span
+                    class="map-intro-overlay__eyebrow-line"
+                    aria-hidden="true"
+                  ></span>
                   Built Heritage
                 </p>
                 <h2 class="map-intro-overlay__title">
-                  <span class="map-intro-overlay__title-main">Mati City Map</span>
-                  <span class="map-intro-overlay__title-sub">Tap a marker to begin</span>
+                  <span class="map-intro-overlay__title-main"
+                    >Mati City Map</span
+                  >
+                  <span class="map-intro-overlay__title-sub"
+                    >Tap a marker to begin</span
+                  >
                 </h2>
                 <p class="map-intro-overlay__desc">
                   Tap a marker to load its heritage details and 3D model.
@@ -1775,7 +1848,9 @@
 
       <div class="map-hero-bridge" aria-hidden="true">
         <span class="map-hero-bridge__line"></span>
-        <span class="map-hero-bridge__label">Scroll to explore built heritage</span>
+        <span class="map-hero-bridge__label"
+          >Scroll to explore built heritage</span
+        >
       </div>
 
       <div id="explore3d-viewer" class="explore3d-workspace">
@@ -1784,15 +1859,25 @@
         <div class="explore3d-idle" id="explore-idle-panel">
           <div class="explore3d-idle__card">
             <span class="explore3d-idle__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"/>
-                <circle cx="12" cy="11" r="2.5"/>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z" />
+                <circle cx="12" cy="11" r="2.5" />
               </svg>
             </span>
             <span class="explore3d-idle__eyebrow">Built Heritage</span>
-            <h2 class="explore3d-idle__title display-font">Select a site on the map</h2>
+            <h2 class="explore3d-idle__title display-font">
+              Select a site on the map
+            </h2>
             <p class="explore3d-idle__desc">
-              Tap any built heritage marker above to load its description, specifications, and 3D model below.
+              Tap any built heritage marker above to load its description,
+              specifications, and 3D model below.
             </p>
           </div>
         </div>
@@ -1800,10 +1885,15 @@
         <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
           <header class="explore3d-stage-head">
             <div class="explore3d-stage-head__meta">
-              <span class="explore3d-details-type built" id="detail-type">Built Heritage</span>
+              <span class="explore3d-details-type built" id="detail-type"
+                >Built Heritage</span
+              >
             </div>
             <div class="explore3d-stage-head__row">
-            <h2 class="explore3d-stage-head__title display-font" id="stage-title"></h2>
+              <h2
+                class="explore3d-stage-head__title display-font"
+                id="stage-title"
+              ></h2>
               <div
                 class="explore3d-stage-head__actions"
                 role="navigation"
@@ -1833,7 +1923,11 @@
             </div>
           </header>
 
-          <div class="explore3d-reveal-loader" id="explore-reveal-loader" hidden>
+          <div
+            class="explore3d-reveal-loader"
+            id="explore-reveal-loader"
+            hidden
+          >
             <div class="explore3d-reveal-loader-inner">
               <span class="explore3d-reveal-spinner" aria-hidden="true"></span>
               <p id="explore-reveal-label">Loading heritage site…</p>
@@ -1842,52 +1936,83 @@
 
           <div class="explore3d-stage-grid">
             <div class="explore3d-stage-media">
-            <section class="explore3d-panel explore3d-viewer" id="heritage-viewer-panel" aria-label="3D model viewer">
-              <span class="explore3d-viewer-badge" id="viewer-badge">3D Preview</span>
-              <div class="explore3d-viewer-lines" aria-hidden="true"></div>
-              <model-viewer
-                id="heritage-model"
-                class="explore3d-model"
-                src=""
-                alt="Built heritage 3D model"
-                auto-rotate
-                rotation-per-second="14deg"
-                camera-controls
-                touch-action="pan-y"
-                camera-orbit="0deg 82deg 52%"
-                min-camera-orbit="-180deg 30deg 42%"
-                max-camera-orbit="180deg 105deg 100%"
-                shadow-intensity="1.15"
-                exposure="1.06"
-                environment-image="neutral"
-                loading="eager"
-                reveal="auto"
-                interaction-prompt="auto"
-                hidden
-              ></model-viewer>
-              <img id="preview-image" class="explore3d-preview-img" src="" alt="" hidden />
-              <p class="explore3d-viewer-empty" id="viewer-empty" hidden>
-                No 3D model for this site — use Map or Photographs beside the title.
-              </p>
-              <p class="explore3d-viewer-hint" id="viewer-hint" hidden>
-                Drag to rotate · Scroll to zoom
-              </p>
-            </section>
+              <section
+                class="explore3d-panel explore3d-viewer"
+                id="heritage-viewer-panel"
+                aria-label="3D model viewer"
+              >
+                <span class="explore3d-viewer-badge" id="viewer-badge"
+                  >3D Preview</span
+                >
+                <div class="explore3d-viewer-lines" aria-hidden="true"></div>
+                <div class="explore3d-loading-overlay" id="model-loading-overlay" hidden>
+                  <div class="explore3d-loading-spinner"></div>
+                  <div class="explore3d-loading-percentage" id="model-loading-percentage">0%</div>
+                  <div class="explore3d-loading-text">Loading 3D model...</div>
+                </div>
+                <model-viewer
+                  id="heritage-model"
+                  class="explore3d-model"
+                  src=""
+                  alt="Built heritage 3D model"
+                  auto-rotate
+                  rotation-per-second="14deg"
+                  camera-controls
+                  touch-action="pan-y"
+                  camera-orbit="0deg 82deg 52%"
+                  min-camera-orbit="-180deg 30deg 42%"
+                  max-camera-orbit="180deg 105deg 100%"
+                  shadow-intensity="1.15"
+                  exposure="1.06"
+                  environment-image="neutral"
+                  loading="eager"
+                  reveal="auto"
+                  interaction-prompt="auto"
+                  hidden
+                ></model-viewer>
+                <img
+                  id="preview-image"
+                  class="explore3d-preview-img"
+                  src=""
+                  alt=""
+                  hidden
+                />
+                <p class="explore3d-viewer-empty" id="viewer-empty" hidden>
+                  No 3D model for this site — use Map or Photographs beside the
+                  title.
+                </p>
+                <p class="explore3d-viewer-hint" id="viewer-hint" hidden>
+                  Drag to rotate · Scroll to zoom
+                </p>
+              </section>
             </div>
 
-            <aside class="explore3d-panel explore3d-details" aria-label="Site information">
+            <aside
+              class="explore3d-panel explore3d-details"
+              aria-label="Site information"
+            >
               <div class="explore3d-details-body" id="explore-details-body">
-                <section class="explore3d-details-section" id="detail-section-about">
-                <p class="explore3d-details-label">About this site</p>
-                <h3 class="explore3d-details-title display-font" id="detail-title"></h3>
-                <p class="explore3d-details-desc" id="detail-desc"></p>
-                <p class="explore3d-specs-heading">Site details</p>
-                <ul class="explore3d-specs" id="detail-specs"></ul>
-                <ul class="explore3d-facts" id="detail-facts"></ul>
+                <section
+                  class="explore3d-details-section"
+                  id="detail-section-about"
+                >
+                  <p class="explore3d-details-label">About this site</p>
+                  <h3
+                    class="explore3d-details-title display-font"
+                    id="detail-title"
+                  ></h3>
+                  <p class="explore3d-details-desc" id="detail-desc"></p>
+                  <p class="explore3d-specs-heading">Site details</p>
+                  <ul class="explore3d-specs" id="detail-specs"></ul>
+                  <ul class="explore3d-facts" id="detail-facts"></ul>
                 </section>
               </div>
               <div class="explore3d-details-foot">
-                <button type="button" class="explore3d-view-btn" id="view-heritage-btn">
+                <button
+                  type="button"
+                  class="explore3d-view-btn"
+                  id="view-heritage-btn"
+                >
                   View Heritage
                 </button>
                 <a href="#mati-map-section" class="explore3d-map-link">
@@ -1917,8 +2042,16 @@
       <div class="explore3d-media-overlay__sheet">
         <div class="explore3d-media-overlay__bar">
           <div>
-            <p class="explore3d-media-overlay__label" id="explore-media-showcase-label">Site Map</p>
-            <p class="explore3d-media-overlay__site" id="explore-media-showcase-site"></p>
+            <p
+              class="explore3d-media-overlay__label"
+              id="explore-media-showcase-label"
+            >
+              Site Map
+            </p>
+            <p
+              class="explore3d-media-overlay__site"
+              id="explore-media-showcase-site"
+            ></p>
           </div>
           <button
             type="button"
@@ -1930,10 +2063,24 @@
           </button>
         </div>
         <div class="explore3d-media-overlay__content">
-          <div class="explore3d-media-overlay__panel" id="explore-media-map-panel" hidden>
+          <div
+            class="explore3d-media-overlay__panel"
+            id="explore-media-map-panel"
+            hidden
+          >
             <div class="explore3d-site-map" id="explore-site-map" hidden>
-              <button type="button" class="explore3d-details-map-card" id="explore-site-map-btn">
-                <img id="explore-site-map-img" src="" alt="" loading="lazy" decoding="async" />
+              <button
+                type="button"
+                class="explore3d-details-map-card"
+                id="explore-site-map-btn"
+              >
+                <img
+                  id="explore-site-map-img"
+                  src=""
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
               </button>
             </div>
             <p class="explore3d-details-empty" id="detail-map-empty" hidden>
@@ -1954,14 +2101,37 @@
       </div>
     </div>
 
-    <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-label="Photograph viewer">
+    <div
+      class="gal-lightbox"
+      id="galLightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photograph viewer"
+    >
       <div class="gal-lightbox-backdrop" aria-hidden="true"></div>
-      <button type="button" class="gal-lightbox-close" id="galLightboxClose" aria-label="Close">&times;</button>
-      <button type="button" class="gal-lightbox-nav prev" id="galLightboxPrev" aria-label="Previous photograph">
+      <button
+        type="button"
+        class="gal-lightbox-close"
+        id="galLightboxClose"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+      <button
+        type="button"
+        class="gal-lightbox-nav prev"
+        id="galLightboxPrev"
+        aria-label="Previous photograph"
+      >
         <span class="gal-lightbox-nav__icon" aria-hidden="true">&lsaquo;</span>
         <span class="gal-lightbox-nav__label">Previous</span>
       </button>
-      <button type="button" class="gal-lightbox-nav next" id="galLightboxNext" aria-label="Next photograph">
+      <button
+        type="button"
+        class="gal-lightbox-nav next"
+        id="galLightboxNext"
+        aria-label="Next photograph"
+      >
         <span class="gal-lightbox-nav__label">Next</span>
         <span class="gal-lightbox-nav__icon" aria-hidden="true">&rsaquo;</span>
       </button>
@@ -1974,7 +2144,11 @@
         <div class="gal-lightbox-caption">
           <h3 id="galLightboxTitle"></h3>
           <p id="galLightboxMeta"></p>
-          <div class="gal-lightbox-citation" id="galLightboxCitation" hidden></div>
+          <div
+            class="gal-lightbox-citation"
+            id="galLightboxCitation"
+            hidden
+          ></div>
         </div>
       </div>
     </div>
@@ -1990,15 +2164,29 @@
       <div class="heritage-fullscreen__top">
         <div>
           <p class="heritage-fullscreen__eyebrow">Built Heritage</p>
-          <h2 class="heritage-fullscreen__title display-font" id="fullscreen-title"></h2>
+          <h2
+            class="heritage-fullscreen__title display-font"
+            id="fullscreen-title"
+          ></h2>
         </div>
-        <button type="button" class="heritage-fullscreen__close" id="fullscreen-close">
+        <button
+          type="button"
+          class="heritage-fullscreen__close"
+          id="fullscreen-close"
+        >
           Close
         </button>
       </div>
       <div class="heritage-fullscreen__stage">
-        <div class="heritage-fullscreen__loading" id="fullscreen-loading" hidden>
-          <span class="heritage-fullscreen__loading-spinner" aria-hidden="true"></span>
+        <div
+          class="heritage-fullscreen__loading"
+          id="fullscreen-loading"
+          hidden
+        >
+          <span
+            class="heritage-fullscreen__loading-spinner"
+            aria-hidden="true"
+          ></span>
           <p id="fullscreen-loading-label">Loading 3D model…</p>
         </div>
         <model-viewer
@@ -2020,9 +2208,17 @@
           interaction-prompt="auto"
           hidden
         ></model-viewer>
-        <img id="fullscreen-photo" class="heritage-fullscreen__photo" src="" alt="" hidden />
+        <img
+          id="fullscreen-photo"
+          class="heritage-fullscreen__photo"
+          src=""
+          alt=""
+          hidden
+        />
       </div>
-      <p class="heritage-fullscreen__hint" id="fullscreen-hint">Drag to rotate · Scroll to zoom</p>
+      <p class="heritage-fullscreen__hint" id="fullscreen-hint">
+        Drag to rotate · Scroll to zoom
+      </p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -2035,8 +2231,10 @@
     <script src="data/mati-city-boundary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="../Back End/supabase-config.js"></script>
+    <script src="heritage-pylon-model.js"></script>
     <script src="../Back End/supabase-client.js"></script>
     <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
     <script src="admin-heritage-base.js"></script>
     <script src="heritage-data.js"></script>
     <script>
@@ -2048,8 +2246,12 @@
         if (/^-?\d+(\.\d+)?$/.test(text)) {
           const dec = Math.abs(parseFloat(text));
           const hemi = isLatitude
-            ? parseFloat(text) < 0 ? "S" : "N"
-            : parseFloat(text) < 0 ? "W" : "E";
+            ? parseFloat(text) < 0
+              ? "S"
+              : "N"
+            : parseFloat(text) < 0
+              ? "W"
+              : "E";
           const degrees = Math.floor(dec);
           const minutesFloat = (dec - degrees) * 60;
           const minutes = Math.floor(minutesFloat);
@@ -2097,7 +2299,8 @@
           lat: 6.9521319,
           lng: 126.2167824,
           official: true,
-          image: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+          image:
+            "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
           photos: [
             "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
             "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
@@ -2110,7 +2313,7 @@
           ],
           map: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg",
           available: false,
-          desc: "The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year \"1903\" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city's historical journey, preserved in excellent condition for the inspiration and education of its citizens.",
+          desc: 'The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year "1903" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city\'s historical journey, preserved in excellent condition for the inspiration and education of its citizens.',
           specs: heritageSpecs(
             "Centennial Clock and Pathway of Leaders",
             "Central",
@@ -2155,9 +2358,9 @@
           lat: 6.949853,
           lng: 126.216161,
           official: true,
-          image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
-          photos: [
-          ],
+          image:
+            "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+          photos: [],
           map: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
           available: false,
           desc: "The Mayor Francisco G. Rabat Park and Baywalk, officially declared as a significant cultural property of the City of Mati under Resolution No. 61, Series of 2019, serves as a premier 3-hectare landmark of historical and socio-economic importance. Situated on a reclaimed area in Barangay Central that once served as the city’s original shoreline, the park was envisioned in 2003 by Mayor Francisco G. Rabat to provide a dedicated venue for public festivities and community engagement. The site features a concrete seawall bench, the iconic “I Love Mati” signage, and an events stage, all set against the aesthetic backdrop of Pujada Bay. As a center for local heritage, the Baywalk continues to function as a vital space for cultural expression, tourism, and economic activity, symbolizing the city's growth and its deep-rooted connection to the sea.",
@@ -2179,7 +2382,8 @@
           lat: 6.955,
           lng: 126.219444,
           official: true,
-          image: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+          image:
+            "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
           photos: [
             "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
             "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
@@ -2210,7 +2414,8 @@
           lat: 6.927318,
           lng: 126.281047,
           official: true,
-          image: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+          image:
+            "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
           photos: [
             "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
             "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
@@ -2238,7 +2443,8 @@
           lat: 6.866667,
           lng: 126.325,
           official: true,
-          image: "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
+          image:
+            "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
           photos: [
             "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
             "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22-01.jpg",
@@ -2277,7 +2483,8 @@
           lat: 6.84,
           lng: 126.33,
           official: true,
-          image: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+          image:
+            "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
           photos: [
             "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
             "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg",
@@ -2307,14 +2514,15 @@
           lat: 6.9483186,
           lng: 126.2271687,
           official: false,
-          image: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+          image:
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
           photos: [
             "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
             "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
             "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
           ],
           available: false,
-          desc: "The Provincial Capitol of Davao Oriental, popularly known as the \"White House,\" is a majestic three-story edifice that serves as the official seat of the provincial government. Situated atop Capitol Hills, the building holds an imposing presence in the city skyline. Its architectural design draws inspiration from classical Western landmarks, notably patterned after the U.S. White House, while incorporating neoclassical elements reminiscent of St. Peter’s Basilica in Rome. The construction of the New Capitol was a multi-generational project aimed at unifying the politics and people of Davao Oriental. The project commenced during the tenure of former Governor Elena Palma Gil and was brought to completion under the leadership of Governor Corazon N. Malanyaon. It stands as a legacy of the concerted efforts of the provincial leadership and the 11th and 12th Congresses. Since its grand opening in 2010, the building has transitioned from a purely administrative facility into a primary tourist attraction. It symbolizes a new era of public service for the province, replacing the original Old Mansion as the primary seat of power while preserving the long-standing communal spirit of the Capitol Hills area.",
+          desc: 'The Provincial Capitol of Davao Oriental, popularly known as the "White House," is a majestic three-story edifice that serves as the official seat of the provincial government. Situated atop Capitol Hills, the building holds an imposing presence in the city skyline. Its architectural design draws inspiration from classical Western landmarks, notably patterned after the U.S. White House, while incorporating neoclassical elements reminiscent of St. Peter’s Basilica in Rome. The construction of the New Capitol was a multi-generational project aimed at unifying the politics and people of Davao Oriental. The project commenced during the tenure of former Governor Elena Palma Gil and was brought to completion under the leadership of Governor Corazon N. Malanyaon. It stands as a legacy of the concerted efforts of the provincial leadership and the 11th and 12th Congresses. Since its grand opening in 2010, the building has transitioned from a purely administrative facility into a primary tourist attraction. It symbolizes a new era of public service for the province, replacing the original Old Mansion as the primary seat of power while preserving the long-standing communal spirit of the Capitol Hills area.',
           specs: heritageSpecs(
             "Provincial Capitol of Davao Oriental",
             "Central",
@@ -2333,7 +2541,8 @@
           lat: 6.9472,
           lng: 126.2268,
           official: false,
-          image: "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+          image:
+            "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
           photos: [
             "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
             "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
@@ -2358,7 +2567,9 @@
           lat: 6.952258,
           lng: 126.216889,
           official: true,
-          modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
+          modelSrc:
+            window.MATI_SUPABASE_CONFIG?.pylonModelUrl ||
+            "https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb",
           image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           photos: [
             "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
@@ -2370,7 +2581,7 @@
           ],
           map: "data/Built Heritage/Pylon Monument/Map/map_pylon.jpg",
           available: true,
-          desc: "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \"Point Zero\" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city’s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
+          desc: 'The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the "Point Zero" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city’s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.',
           specs: heritageSpecs(
             "Pylon Monument",
             "Central",
@@ -2389,7 +2600,8 @@
           lat: 6.94425,
           lng: 126.248333,
           official: true,
-          image: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+          image:
+            "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
           photos: [
             "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
             "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
@@ -2413,17 +2625,27 @@
       let revealInProgress = false;
       const mapMarkers = new Map();
 
-      const exploreStageLayout = document.getElementById("explore-stage-layout");
+      const exploreStageLayout = document.getElementById(
+        "explore-stage-layout",
+      );
       const exploreIdlePanel = document.getElementById("explore-idle-panel");
       const exploreWorkspace = document.getElementById("explore3d-viewer");
-      const exploreRevealLoader = document.getElementById("explore-reveal-loader");
-      const exploreRevealLabel = document.getElementById("explore-reveal-label");
+      const exploreRevealLoader = document.getElementById(
+        "explore-reveal-loader",
+      );
+      const exploreRevealLabel = document.getElementById(
+        "explore-reveal-label",
+      );
       const stageTitle = document.getElementById("stage-title");
-      const heritageViewerPanel = document.getElementById("heritage-viewer-panel");
+      const heritageViewerPanel = document.getElementById(
+        "heritage-viewer-panel",
+      );
       const viewerBadge = document.getElementById("viewer-badge");
       const previewImage = document.getElementById("preview-image");
       const heritageModel = document.getElementById("heritage-model");
       const viewerHint = document.getElementById("viewer-hint");
+      const modelLoadingOverlay = document.getElementById("model-loading-overlay");
+      const modelLoadingPercentage = document.getElementById("model-loading-percentage");
       const explorePhotoGrid = document.getElementById("explore-photo-grid");
       const exploreSiteMap = document.getElementById("explore-site-map");
       const exploreSiteMapImg = document.getElementById("explore-site-map-img");
@@ -2434,16 +2656,32 @@
       const galLightboxMedia = document.getElementById("galLightboxMedia");
       const galLightboxTitle = document.getElementById("galLightboxTitle");
       const galLightboxMeta = document.getElementById("galLightboxMeta");
-      const galLightboxCitation = document.getElementById("galLightboxCitation");
+      const galLightboxCitation = document.getElementById(
+        "galLightboxCitation",
+      );
       const detailTabMap = document.getElementById("detail-tab-map");
       const detailTabPhotos = document.getElementById("detail-tab-photos");
-      const exploreMediaShowcase = document.getElementById("explore-media-showcase");
-      const exploreMediaShowcaseLabel = document.getElementById("explore-media-showcase-label");
-      const exploreMediaShowcaseSite = document.getElementById("explore-media-showcase-site");
-      const exploreMediaShowcaseClose = document.getElementById("explore-media-showcase-close");
-      const exploreMediaShowcaseBackdrop = document.getElementById("explore-media-showcase-backdrop");
-      const exploreMediaMapPanel = document.getElementById("explore-media-map-panel");
-      const exploreMediaPhotosPanel = document.getElementById("explore-media-photos-panel");
+      const exploreMediaShowcase = document.getElementById(
+        "explore-media-showcase",
+      );
+      const exploreMediaShowcaseLabel = document.getElementById(
+        "explore-media-showcase-label",
+      );
+      const exploreMediaShowcaseSite = document.getElementById(
+        "explore-media-showcase-site",
+      );
+      const exploreMediaShowcaseClose = document.getElementById(
+        "explore-media-showcase-close",
+      );
+      const exploreMediaShowcaseBackdrop = document.getElementById(
+        "explore-media-showcase-backdrop",
+      );
+      const exploreMediaMapPanel = document.getElementById(
+        "explore-media-map-panel",
+      );
+      const exploreMediaPhotosPanel = document.getElementById(
+        "explore-media-photos-panel",
+      );
       const viewerEmpty = document.getElementById("viewer-empty");
       let photoLightboxItems = [];
       let photoLightboxIndex = 0;
@@ -2461,7 +2699,9 @@
       const fullscreenHint = document.getElementById("fullscreen-hint");
       const fullscreenClose = document.getElementById("fullscreen-close");
       const fullscreenLoading = document.getElementById("fullscreen-loading");
-      const fullscreenLoadingLabel = document.getElementById("fullscreen-loading-label");
+      const fullscreenLoadingLabel = document.getElementById(
+        "fullscreen-loading-label",
+      );
 
       function escapeHtml(str) {
         return String(str)
@@ -2528,7 +2768,9 @@
 
       function pulseMapMarker(siteId) {
         const marker = mapMarkers.get(siteId);
-        const el = marker?.getElement()?.querySelector(".heritage-photo-marker");
+        const el = marker
+          ?.getElement()
+          ?.querySelector(".heritage-photo-marker");
         if (!el) return;
         el.classList.remove("is-pulsing");
         void el.offsetWidth;
@@ -2583,7 +2825,8 @@
         setDetailSectionActive(view);
 
         if (exploreMediaShowcaseLabel) {
-          exploreMediaShowcaseLabel.textContent = view === "map" ? "Site Map" : "Photographs";
+          exploreMediaShowcaseLabel.textContent =
+            view === "map" ? "Site Map" : "Photographs";
         }
         if (exploreMediaShowcaseSite) {
           exploreMediaShowcaseSite.textContent = site.name;
@@ -2624,7 +2867,9 @@
         }
 
         if (!options.skipFly && window.matiMapInstance) {
-          window.matiMapInstance.flyTo([site.lat, site.lng], 16, { duration: 0.85 });
+          window.matiMapInstance.flyTo([site.lat, site.lng], 16, {
+            duration: 0.85,
+          });
         }
 
         await new Promise((resolve) => {
@@ -2677,8 +2922,12 @@
         }
 
         const showNav = photoLightboxItems.length > 1;
-        document.getElementById("galLightboxPrev")?.classList.toggle("is-hidden", !showNav);
-        document.getElementById("galLightboxNext")?.classList.toggle("is-hidden", !showNav);
+        document
+          .getElementById("galLightboxPrev")
+          ?.classList.toggle("is-hidden", !showNav);
+        document
+          .getElementById("galLightboxNext")
+          ?.classList.toggle("is-hidden", !showNav);
 
         galLightbox.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -2760,11 +3009,13 @@
           )
           .join("");
 
-        explorePhotoGrid.querySelectorAll("[data-photo-index]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            openPhotoLightbox(Number(btn.dataset.photoIndex));
+        explorePhotoGrid
+          .querySelectorAll("[data-photo-index]")
+          .forEach((btn) => {
+            btn.addEventListener("click", () => {
+              openPhotoLightbox(Number(btn.dataset.photoIndex));
+            });
           });
-        });
       }
 
       function openFullscreenPhoto(site, photoSrc, options = {}) {
@@ -2782,7 +3033,9 @@
         }
 
         fullscreenPhoto.src = photoSrc;
-        fullscreenPhoto.alt = options.isMap ? `${site.name} site map` : site.name;
+        fullscreenPhoto.alt = options.isMap
+          ? `${site.name} site map`
+          : site.name;
         fullscreenPhoto.hidden = false;
         if (fullscreenHint) {
           fullscreenHint.textContent = options.isMap
@@ -2834,10 +3087,10 @@
           const photoSrc = photos[0];
           if (photoSrc) {
             fullscreenPhoto.src = photoSrc;
-          fullscreenPhoto.alt = site.name;
-          fullscreenPhoto.hidden = false;
-          if (fullscreenHint) {
-            fullscreenHint.textContent = "Full-size heritage photograph";
+            fullscreenPhoto.alt = site.name;
+            fullscreenPhoto.hidden = false;
+            if (fullscreenHint) {
+              fullscreenHint.textContent = "Full-size heritage photograph";
             }
           } else if (mapSrc) {
             fullscreenPhoto.src = mapSrc;
@@ -2861,7 +3114,9 @@
 
       function highlightMapMarker(siteId) {
         mapMarkers.forEach((marker, id) => {
-          const el = marker.getElement()?.querySelector(".heritage-photo-marker");
+          const el = marker
+            .getElement()
+            ?.querySelector(".heritage-photo-marker");
           if (el) el.classList.toggle("is-active", id === siteId);
         });
       }
@@ -2875,16 +3130,57 @@
           viewerBadge.textContent = hasModel ? "3D Preview" : "Built Heritage";
         }
 
-          previewImage.hidden = true;
+        previewImage.hidden = true;
 
         if (hasModel) {
           viewerEmpty?.setAttribute("hidden", "");
           heritageModel.hidden = false;
+          
+          // Show loading overlay and reset percentage
+          if (modelLoadingOverlay) {
+            modelLoadingOverlay.removeAttribute("hidden");
+          }
+          if (modelLoadingPercentage) {
+            modelLoadingPercentage.textContent = "0%";
+          }
+          
           if (heritageModel.getAttribute("src") !== site.modelSrc) {
             heritageModel.setAttribute("src", site.modelSrc);
           }
           heritageModel.setAttribute("alt", `${site.name} 3D model`);
           heritageModel.autoRotate = true;
+          
+          // Track loading progress
+          const handleProgress = (event) => {
+            if (event.detail && event.detail.totalProgress !== undefined) {
+              const progress = Math.round(event.detail.totalProgress * 100);
+              if (modelLoadingPercentage) {
+                modelLoadingPercentage.textContent = `${progress}%`;
+              }
+            }
+          };
+          
+          const handleLoad = () => {
+            if (modelLoadingOverlay) {
+              modelLoadingOverlay.setAttribute("hidden", "");
+            }
+            heritageModel.removeEventListener("progress", handleProgress);
+            heritageModel.removeEventListener("load", handleLoad);
+          };
+          
+          const handleError = () => {
+            if (modelLoadingOverlay) {
+              modelLoadingOverlay.setAttribute("hidden", "");
+            }
+            heritageModel.removeEventListener("progress", handleProgress);
+            heritageModel.removeEventListener("load", handleLoad);
+            heritageModel.removeEventListener("error", handleError);
+          };
+          
+          heritageModel.addEventListener("progress", handleProgress);
+          heritageModel.addEventListener("load", handleLoad, { once: true });
+          heritageModel.addEventListener("error", handleError, { once: true });
+          
           if (viewerHint) {
             viewerHint.hidden = false;
             viewerHint.textContent = "Drag to rotate · Scroll to zoom";
@@ -2893,6 +3189,9 @@
           if (heritageModel) {
             heritageModel.hidden = true;
             heritageModel.autoRotate = false;
+          }
+          if (modelLoadingOverlay) {
+            modelLoadingOverlay.setAttribute("hidden", "");
           }
           viewerEmpty?.removeAttribute("hidden");
           if (viewerHint) viewerHint.hidden = true;
@@ -2936,7 +3235,10 @@
       });
 
       exploreMediaShowcaseClose?.addEventListener("click", closeMediaDisplay);
-      exploreMediaShowcaseBackdrop?.addEventListener("click", closeMediaDisplay);
+      exploreMediaShowcaseBackdrop?.addEventListener(
+        "click",
+        closeMediaDisplay,
+      );
 
       document.querySelectorAll(".explore3d-details-tab").forEach((tab) => {
         tab.addEventListener("click", () => {
@@ -2955,9 +3257,15 @@
         }
       });
 
-      document.getElementById("galLightboxClose")?.addEventListener("click", closePhotoLightbox);
-      document.getElementById("galLightboxPrev")?.addEventListener("click", () => navigatePhotoLightbox(-1));
-      document.getElementById("galLightboxNext")?.addEventListener("click", () => navigatePhotoLightbox(1));
+      document
+        .getElementById("galLightboxClose")
+        ?.addEventListener("click", closePhotoLightbox);
+      document
+        .getElementById("galLightboxPrev")
+        ?.addEventListener("click", () => navigatePhotoLightbox(-1));
+      document
+        .getElementById("galLightboxNext")
+        ?.addEventListener("click", () => navigatePhotoLightbox(1));
       galLightbox?.addEventListener("click", (event) => {
         if (event.target === galLightbox) closePhotoLightbox();
       });
@@ -3023,7 +3331,9 @@
         const markerInner = imgSrc
           ? `<img src="${encodeURI(imgSrc)}" alt="${escapeHtml(site.name)}" loading="lazy" />`
           : `<span aria-hidden="true">BH</span>`;
-        const placeholderClass = imgSrc ? "" : " heritage-photo-marker--placeholder";
+        const placeholderClass = imgSrc
+          ? ""
+          : " heritage-photo-marker--placeholder";
         return L.divIcon({
           className: "heritage-marker-wrap",
           html: `<div class="heritage-photo-marker${placeholderClass} ${isActive ? "is-active" : ""}" style="width:${size}px;height:${size}px;animation-delay:${bounceDelay}s" title="${escapeHtml(site.name)}">
@@ -3283,7 +3593,10 @@
         if (activeSiteId) highlightMapMarker(activeSiteId);
         setTimeout(() => map.invalidateSize(), 150);
         bindMapScrollWheel(map);
-        bindMapVisibilityPause(map, document.getElementById("mati-map-section"));
+        bindMapVisibilityPause(
+          map,
+          document.getElementById("mati-map-section"),
+        );
         bindMapIntroDismiss(map);
 
         if (hasSiteFromQuery) {
@@ -3299,6 +3612,18 @@
       (async function bootExplore() {
         if (typeof MatiHeritageData !== "undefined") {
           await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
+          if (typeof MatiHeritageData.subscribeCatalog === "function") {
+            MatiHeritageData.subscribeCatalog(async () => {
+              await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
+              // Soft refresh: update idle/site copy without resetting the map view.
+              const active = typeof getActiveSite === "function" ? getActiveSite() : null;
+              if (active && typeof revealSiteFromMap === "function") {
+                revealSiteFromMap(active, { skipScroll: true });
+              } else if (typeof showIdleState === "function") {
+                showIdleState();
+              }
+            });
+          }
         }
         await initBuiltHeritageMap();
       })();
@@ -3310,9 +3635,11 @@
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
-          const scriptText = Array.from(doc.scripts).find((s) => !s.src)
-            ?.textContent;
+          if (headerStyle)
+            document.head.appendChild(headerStyle.cloneNode(true));
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
           if (scriptText) {
             const s = document.createElement("script");
             s.textContent = scriptText;
@@ -3372,18 +3699,23 @@
           if (footer && placeholderEl) placeholderEl.replaceWith(footer);
 
           const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+          if (footerStyle)
+            document.head.appendChild(footerStyle.cloneNode(true));
 
-          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
           if (scriptText) {
             const s = document.createElement("script");
             s.textContent = scriptText;
             document.body.appendChild(s);
           }
 
-          document.querySelectorAll('.site-footer__link[data-nav="3d"]').forEach((link) => {
-            link.href = "3dexplore.html";
-          });
+          document
+            .querySelectorAll('.site-footer__link[data-nav="3d"]')
+            .forEach((link) => {
+              link.href = "3dexplore.html";
+            });
 
           if (typeof window.initSiteFooter === "function") {
             window.initSiteFooter("3d");

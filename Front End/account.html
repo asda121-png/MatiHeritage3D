@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account — Mati Heritage 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="heritage-palette.css" />
+    <style>
+      .account-page {
+        min-height: calc(100vh - 6rem);
+        background: linear-gradient(180deg, #f8fafc 0%, #ecfdf5 55%, #f0f9ff 100%);
+        padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 2.5rem) 4rem;
+      }
+
+      .account-shell {
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+
+      .account-card {
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(12, 26, 20, 0.08);
+        border-radius: 1.25rem;
+        box-shadow: 0 24px 64px rgba(4, 120, 87, 0.08);
+        overflow: hidden;
+      }
+
+      .account-card__hero {
+        padding: 2rem 2rem 1.5rem;
+        background: linear-gradient(135deg, rgba(4, 120, 87, 0.1), rgba(2, 132, 199, 0.08));
+        border-bottom: 1px solid rgba(12, 26, 20, 0.06);
+      }
+
+      .account-card__title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        font-weight: 700;
+        color: #0c1a14;
+        line-height: 1.1;
+      }
+
+      .account-card__subtitle {
+        margin-top: 0.5rem;
+        font-family: "Source Sans 3", sans-serif;
+        color: #5c6b63;
+        font-size: 0.95rem;
+      }
+
+      .account-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .account-profile__avatar {
+        width: 4.5rem;
+        height: 4.5rem;
+        border-radius: 50%;
+        border: 3px solid rgba(4, 120, 87, 0.2);
+        object-fit: cover;
+      }
+
+      .account-profile__name {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0c1a14;
+      }
+
+      .account-profile__username {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        color: #64748b;
+      }
+
+      .account-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        padding: 1.5rem 2rem 2rem;
+      }
+
+      .account-stat {
+        padding: 1rem 1.1rem;
+        border-radius: 0.9rem;
+        background: #f8fafc;
+        border: 1px solid rgba(12, 26, 20, 0.06);
+      }
+
+      .account-stat__label {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+
+      .account-stat__value {
+        margin-top: 0.35rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #0c1a14;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .account-stat--points .account-stat__value {
+        color: #047857;
+      }
+
+      .account-details {
+        padding: 0 2rem 2rem;
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .account-detail {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.85rem 1rem;
+        border-radius: 0.75rem;
+        background: #fff;
+        border: 1px solid rgba(12, 26, 20, 0.06);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.9375rem;
+      }
+
+      .account-detail__label {
+        color: #64748b;
+        font-weight: 600;
+      }
+
+      .account-detail__value {
+        color: #0c1a14;
+        font-weight: 500;
+        text-align: right;
+        word-break: break-word;
+      }
+
+      .account-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0 2rem 2rem;
+      }
+
+      .account-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.25rem;
+        border-radius: 9999px;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .account-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .account-btn--primary {
+        color: #fff;
+        background: var(--forest);
+        box-shadow: 0 8px 24px rgba(4, 120, 87, 0.2);
+      }
+
+      .account-btn--ghost {
+        color: #334155;
+        background: #fff;
+        border: 1px solid rgba(12, 26, 20, 0.1);
+      }
+
+      .account-guest {
+        text-align: center;
+        padding: 3rem 2rem;
+      }
+
+      .account-guest p {
+        font-family: "Source Sans 3", sans-serif;
+        color: #64748b;
+        margin-bottom: 1.25rem;
+      }
+    </style>
+  </head>
+  <body class="visitor-module antialiased">
+    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
+
+    <main class="account-page">
+      <div class="account-shell">
+        <div class="account-card" id="account-card">
+          <div class="account-guest" id="account-guest" hidden>
+            <p>Sign in to view your account, heritage points, and leaderboard rank.</p>
+            <div class="account-actions" style="justify-content: center; padding: 0">
+              <a href="login.html" class="account-btn account-btn--primary">Sign in</a>
+              <a href="userregistration.html" class="account-btn account-btn--ghost">Create account</a>
+            </div>
+          </div>
+
+          <div id="account-content" hidden>
+            <div class="account-card__hero">
+              <h1 class="account-card__title">My Account</h1>
+              <p class="account-card__subtitle">Your player profile and heritage points</p>
+              <div class="account-profile">
+                <img
+                  id="account-avatar"
+                  class="account-profile__avatar"
+                  src="https://i.pravatar.cc/150?u=guest"
+                  alt="Your avatar"
+                />
+                <div>
+                  <p class="account-profile__name" id="account-display-name">Player</p>
+                  <p class="account-profile__username" id="account-username">@player</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="account-stats">
+              <div class="account-stat account-stat--points">
+                <p class="account-stat__label">Heritage points</p>
+                <p class="account-stat__value" id="account-points">0</p>
+              </div>
+              <div class="account-stat">
+                <p class="account-stat__label">Leaderboard rank</p>
+                <p class="account-stat__value" id="account-rank">—</p>
+              </div>
+            </div>
+
+            <div class="account-details">
+              <div class="account-detail">
+                <span class="account-detail__label">Email</span>
+                <span class="account-detail__value" id="account-email">—</span>
+              </div>
+              <div class="account-detail">
+                <span class="account-detail__label">Member since</span>
+                <span class="account-detail__value" id="account-since">—</span>
+              </div>
+            </div>
+
+            <div class="account-actions">
+              <a href="game.html" class="account-btn account-btn--primary">Play games</a>
+              <a href="index.html" class="account-btn account-btn--ghost">Back to portal</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="visitor-auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="auth-logout.js"></script>
+    <script src="visitor-shell.js"></script>
+    <script>
+      (async function () {
+        await loadVisitorHeaderAndFooter("home");
+
+        const guest = document.getElementById("account-guest");
+        const content = document.getElementById("account-content");
+
+        const session = await MatiVisitorAuth.restoreSession();
+        if (!session) {
+          guest.hidden = false;
+          content.hidden = true;
+          return;
+        }
+
+        guest.hidden = true;
+        content.hidden = false;
+
+        document.getElementById("account-display-name").textContent =
+          session.displayName || session.username;
+        document.getElementById("account-username").textContent =
+          `@${session.username}`;
+        document.getElementById("account-email").textContent =
+          session.email || "—";
+
+        const avatar = document.getElementById("account-avatar");
+        if (avatar) {
+          avatar.src = MatiAuth.getAvatarUrl(session.username);
+          avatar.alt = `${session.displayName || session.username} avatar`;
+        }
+
+        const points = await MatiVisitorAuth.hydratePoints();
+        document.getElementById("account-points").textContent = String(points);
+
+        if (session.loggedInAt) {
+          const since = new Date(session.loggedInAt);
+          document.getElementById("account-since").textContent =
+            Number.isNaN(since.getTime())
+              ? "—"
+              : since.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+        }
+
+        try {
+          if (typeof MatiSupabaseApi?.getLeaderboard === "function") {
+            const board = await MatiSupabaseApi.getLeaderboard(200);
+            const rank =
+              board?.findIndex(
+                (row) =>
+                  String(row.username).toLowerCase() ===
+                  String(session.username).toLowerCase(),
+              ) ?? -1;
+            document.getElementById("account-rank").textContent =
+              rank >= 0 ? `#${rank + 1}` : "—";
+          }
+        } catch (error) {
+          console.warn("Could not load leaderboard rank", error);
+        }
+      })();
+    </script>
+  </body>
+</html>

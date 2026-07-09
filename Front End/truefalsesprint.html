@@ -1528,8 +1528,24 @@
       preload="auto"
     ></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="heritage-map-sites.js"></script>
+    <script src="admin-heritage-base.js"></script>
+    <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
+    <script src="heritage-game-content.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="heritage-points.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="game-exit-guard.js"></script>
     <script>
+      void MatiGameAuthGate.init({ returnTo: "truefalsesprint.html" });
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
@@ -1598,44 +1614,58 @@
         })
         .catch((err) => console.error("Error loading footer:", err));
 
-      const facts = [
-        // ... (facts array remains unchanged)
+      let facts = [];
+      let heritageSession = null;
+      let factQueue = [];
+
+      const FALLBACK_FACTS = [
+        {
+          t: "Taytay Daga (Sleeping Dinosaur) is part of Mati's Natural Heritage.",
+          a: true,
+        },
+        {
+          t: "The Pylon Monument is classified as Natural Heritage.",
+          a: false,
+        },
+        {
+          t: "Sambuokan Festival is part of Mati's Intangible Cultural Heritage.",
+          a: true,
+        },
+        {
+          t: "Oak Island is classified as Built Heritage.",
+          a: false,
+        },
+        {
+          t: "The Provincial Capitol of Davao Oriental is part of Built Heritage.",
+          a: true,
+        },
+        {
+          t: "Waniban Island is primarily associated with downtown plaza landscaping.",
+          a: false,
+        },
+        {
+          t: "Gabaldon Structure of RRMCES-1 is part of Mati's Built Heritage.",
+          a: true,
+        },
+        {
+          t: "Mamacao Tree is part of Mati's Natural Heritage.",
+          a: true,
+        },
       ];
 
       const ROMAN = [
-        { t: "The Sleeping Dinosaur is located in Pujada Bay.", a: true },
-        { t: "Dahican Beach is famous for its black sand.", a: false },
-        {
-          t: "Subangan Museum houses a 50-foot sperm whale skeleton.",
-          a: true,
-        },
-        { t: "Mati City is the capital of Davao Oriental.", a: true },
-        { t: "Sambuokan Festival is a celebration in Mati City.", a: true },
-        { t: "Mount Hamiguitan is a UNESCO World Heritage Site.", a: true },
-        { t: "Waniban Island is located within the Davao Gulf.", a: false },
-        { t: "The word 'Mati' comes from the Mandaya word 'Maa-ti'.", a: true },
-        { t: "Dahican is known for its sea cow (Dugong) sightings.", a: true },
-        {
-          t: "Pujada Bay is recognized as one of the Most Beautiful Bays in the World.",
-          a: true,
-        },
-        { t: "The Carmelite Monastery is located in Mati City.", a: true },
-        { t: "Mati was founded as a city in 1950.", a: false },
-        { t: "The city celebrates its foundation day on June 19.", a: true },
-        { t: "Mati is the only city in Davao Oriental.", a: true },
-        {
-          t: "Dahican Beach is the skimming capital of the Philippines.",
-          a: true,
-        },
-        {
-          t: "The Pylon Monument serves as a geographic reference point in Mati.",
-          a: true,
-        },
-        { t: "Oak Island appears only during high tide.", a: false },
-        {
-          t: "The Provincial Capitol of Davao Oriental is in Mati City.",
-          a: true,
-        },
+        "I",
+        "II",
+        "III",
+        "IV",
+        "V",
+        "VI",
+        "VII",
+        "VIII",
+        "IX",
+        "X",
+        "XI",
+        "XII",
       ];
 
       const diffSettings = {
@@ -1859,13 +1889,34 @@
         }
       }
 
+      async function prepareFactDeck() {
+        const count = Math.max(totalRounds * 2, diffSettings[difficulty]?.rounds || 8);
+        try {
+          if (typeof MatiHeritageGameContent !== "undefined") {
+            heritageSession = await MatiHeritageGameContent.createSession();
+            const generated = heritageSession.trueFalse(count);
+            if (generated.length) {
+              facts = generated;
+              factQueue = [...generated];
+              return facts;
+            }
+          }
+        } catch (error) {
+          console.warn("True/False heritage deck failed, using fallback:", error);
+        }
+        facts = FALLBACK_FACTS.slice();
+        factQueue = heritageSession?.rng
+          ? heritageSession.rng.shuffle(facts)
+          : [...facts].sort(() => Math.random() - 0.5);
+        return facts;
+      }
+
       function pickFact() {
-        let idx;
-        do {
-          idx = Math.floor(Math.random() * facts.length);
-        } while (facts.length > 1 && idx === lastFactIndex);
-        lastFactIndex = idx;
-        currentFact = facts[idx];
+        if (!factQueue.length) {
+          factQueue = [...facts].sort(() => Math.random() - 0.5);
+        }
+        currentFact = factQueue.shift() || facts[0] || FALLBACK_FACTS[0];
+        lastFactIndex = facts.indexOf(currentFact);
         document.getElementById("fact-text").textContent = currentFact.t;
       }
 
@@ -1994,14 +2045,18 @@
         }
 
         const heritagePoints = currentScore * 10;
-        let total = parseInt(
-          localStorage.getItem("totalHeritagePoints") || "0",
-          10,
-        );
-        total += heritagePoints;
-        localStorage.setItem("totalHeritagePoints", String(total));
-        const ptsEl = document.getElementById("header-total-points");
-        if (ptsEl) ptsEl.textContent = total;
+        if (typeof MatiHeritagePoints !== "undefined") {
+          void MatiHeritagePoints.add(heritagePoints);
+        } else {
+          let total = parseInt(
+            localStorage.getItem("totalHeritagePoints") || "0",
+            10,
+          );
+          total += heritagePoints;
+          localStorage.setItem("totalHeritagePoints", String(total));
+          const ptsEl = document.getElementById("header-total-points");
+          if (ptsEl) ptsEl.textContent = total;
+        }
 
         const partialComplete =
           !isSuccess && correctCount > 0 && correctCount < totalRounds;
@@ -2053,7 +2108,7 @@
         finishRun(false, reason);
       }
 
-      document.getElementById("start-btn").addEventListener("click", () => {
+      document.getElementById("start-btn").addEventListener("click", async () => {
         if (!difficulty) return;
         playSprintSound("start");
         getSprintAudioCtx();
@@ -2061,7 +2116,6 @@
         document.body.classList.add("is-game-mode");
         document.getElementById("intro-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
-        gameActive = true;
         currentScore = 0;
         correctCount = 0;
         clueResults = [];
@@ -2078,6 +2132,16 @@
         const diffLabel = document.getElementById("game-diff-label");
         if (diffLabel) diffLabel.textContent = diffSettings[difficulty].label;
 
+        await prepareFactDeck();
+        if (!facts.length) {
+          playAnnouncer("No heritage facts are available yet.");
+          document.getElementById("game-screen").classList.add("hidden");
+          document.getElementById("intro-screen").classList.remove("hidden");
+          document.body.classList.remove("is-game-mode");
+          return;
+        }
+
+        gameActive = true;
         updateRoundDisplay();
         playAnnouncer(`Ready! ${diffSettings[difficulty].label} difficulty.`);
         nextFact();
@@ -2117,6 +2181,10 @@
           ".speed-chip, .start-btn, .enter-btn, .verdict-btn, nav a, .results-actions .start-btn, .results-actions a",
         ),
       );
+
+      if (typeof MatiGameExitGuard !== "undefined") {
+        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "scroll" });
+      }
 
       applyMusicVolume();
       updateMusicUI();

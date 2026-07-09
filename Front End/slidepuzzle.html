@@ -144,11 +144,6 @@
         transition: opacity 1s ease;
         background:
           radial-gradient(
-            ellipse 75% 55% at 18% 22%,
-            rgba(149, 213, 178, 0.28) 0%,
-            transparent 58%
-          ),
-          radial-gradient(
             ellipse 65% 48% at 88% 78%,
             rgba(255, 196, 120, 0.14) 0%,
             transparent 52%
@@ -2281,8 +2276,24 @@
       autoplay
     ></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
+    <script src="heritage-map-sites.js"></script>
+    <script src="admin-heritage-base.js"></script>
+    <script src="gallery-data.js"></script>
+    <script src="heritage-data.js"></script>
+    <script src="heritage-game-content.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="game-auth-gate.js"></script>
+    <script src="heritage-points.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="game-exit-guard.js"></script>
     <script>
+      void MatiGameAuthGate.init({ returnTo: "slidepuzzle.html" });
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
@@ -2367,7 +2378,7 @@
         })
         .catch((err) => console.error("Error loading footer:", err));
 
-      const heritageSites = [
+      let heritageSites = [
         {
           name: "Pylon Monument",
           category: "Built Heritage",
@@ -2453,6 +2464,8 @@
             "An ancestral burial site of a pre-Hispanic Kalagan chieftain in Bobon. A Significant Cultural Property preserving Mati's pre-colonial history and indigenous identity.",
         },
       ];
+      const FALLBACK_SLIDE_SITES = heritageSites.slice();
+      let heritageSession = null;
 
       function imgUrl(path) {
         return encodeURI(path).replace(/#/g, "%23");
@@ -2877,9 +2890,26 @@
         if (hint) hint.classList.add("is-hidden");
       }
 
+      async function prepareSlideSites() {
+        try {
+          if (typeof MatiHeritageGameContent !== "undefined") {
+            heritageSession = await MatiHeritageGameContent.createSession();
+            const generated = heritageSession.slideSites();
+            if (generated.length) {
+              heritageSites = generated;
+              return heritageSites;
+            }
+          }
+        } catch (error) {
+          console.warn("Slide puzzle heritage pool failed, using fallback:", error);
+        }
+        heritageSites = FALLBACK_SLIDE_SITES.slice();
+        return heritageSites;
+      }
+
       function pickRandomSite() {
-        currentSite =
-          heritageSites[Math.floor(Math.random() * heritageSites.length)];
+        const pool = heritageSites.length ? heritageSites : FALLBACK_SLIDE_SITES;
+        currentSite = pool[Math.floor(Math.random() * pool.length)];
         return imgUrl(currentSite.src);
       }
 
@@ -2888,7 +2918,10 @@
         const SCRAMBLE_STEPS = 18;
         const SOLVE_DURATION = 10000;
         const container = document.getElementById("bg-tiles-container");
-        const image = imgUrl(heritageSites[5].src);
+        const image = imgUrl(
+          (heritageSites[5] || FALLBACK_SLIDE_SITES[5] || FALLBACK_SLIDE_SITES[0])
+            .src,
+        );
 
         let tiles = [];
         let currentBoard = [];
@@ -3285,15 +3318,19 @@
             { label: "Total Earned", value: totalEarned.toLocaleString() },
           ]);
 
-          let currentTotal = parseInt(
-            localStorage.getItem("totalHeritagePoints") || "0",
-          );
-          localStorage.setItem(
-            "totalHeritagePoints",
-            currentTotal + totalEarned,
-          );
-          const ptsEl = document.getElementById("header-total-points");
-          if (ptsEl) ptsEl.textContent = currentTotal + totalEarned;
+          if (typeof MatiHeritagePoints !== "undefined") {
+            void MatiHeritagePoints.add(totalEarned);
+          } else {
+            let currentTotal = parseInt(
+              localStorage.getItem("totalHeritagePoints") || "0",
+            );
+            localStorage.setItem(
+              "totalHeritagePoints",
+              currentTotal + totalEarned,
+            );
+            const ptsEl = document.getElementById("header-total-points");
+            if (ptsEl) ptsEl.textContent = currentTotal + totalEarned;
+          }
 
           pendingWinScore = 0;
           playAnnouncer(
@@ -3332,7 +3369,7 @@
         endGame(true);
       };
 
-      document.getElementById("start-btn").onclick = () => {
+      document.getElementById("start-btn").onclick = async () => {
         if (!difficulty) return;
 
         playCuratorSound("start");
@@ -3345,6 +3382,7 @@
         document.getElementById("intro-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
 
+        await prepareSlideSites();
         initBoard();
         pendingWinScore = 0;
         setPageBackgroundMode("game");
@@ -3372,6 +3410,10 @@
           ".diff-card, .start-btn, .game-back-nav a, .results-actions .start-btn, .results-actions .btn-ghost, #reveal-continue-btn",
         ),
       );
+
+      if (typeof MatiGameExitGuard !== "undefined") {
+        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "nature" });
+      }
       document
         .querySelector(".results-actions .start-btn")
         ?.addEventListener("click", () => playCuratorSound("click"));

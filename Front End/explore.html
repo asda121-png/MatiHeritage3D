@@ -43,11 +43,6 @@
         text-align: center;
         background:
           radial-gradient(
-            ellipse 70% 80% at 50% 0%,
-            rgba(4, 120, 87, 0.14),
-            transparent 58%
-          ),
-          radial-gradient(
             ellipse 50% 50% at 100% 100%,
             rgba(2, 132, 199, 0.1),
             transparent 55%
@@ -237,7 +232,9 @@
         color: #fff;
         background: var(--gradient-heritage);
         box-shadow: 0 8px 24px rgba(4, 120, 87, 0.28);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
       .explore-back:hover {
@@ -257,8 +254,8 @@
         </p>
         <h1>Pylon Monument</h1>
         <p>
-          Orbit, zoom, and inspect Mati City&rsquo;s Point Zero — a live 3D model
-          of the province&rsquo;s geographic reference landmark.
+          Orbit, zoom, and inspect Mati City&rsquo;s Point Zero — a live 3D
+          model of the province&rsquo;s geographic reference landmark.
         </p>
       </header>
 
@@ -267,7 +264,7 @@
           <model-viewer
             id="explore-pylon-model"
             class="explore-model"
-            src="data/Built Heritage/Pylon Monument/Pylon.glb"
+            src=""
             alt="Pylon Monument 3D model"
             auto-rotate
             rotation-per-second="16deg"
@@ -311,6 +308,8 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="heritage-pylon-model.js"></script>
     <script>
       fetch("header.html")
         .then((res) => res.text())
@@ -319,9 +318,11 @@
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) document.head.appendChild(headerStyle.cloneNode(true));
-          const scriptText = Array.from(doc.scripts).find((s) => !s.src)
-            ?.textContent;
+          if (headerStyle)
+            document.head.appendChild(headerStyle.cloneNode(true));
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
           if (scriptText) {
             const s = document.createElement("script");
             s.textContent = scriptText;
@@ -358,9 +359,12 @@
           if (footer && placeholder) placeholder.replaceWith(footer);
 
           const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle.cloneNode(true));
+          if (footerStyle)
+            document.head.appendChild(footerStyle.cloneNode(true));
 
-          const scriptText = Array.from(doc.scripts).find((s) => !s.src)?.textContent;
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
           if (scriptText) {
             const s = document.createElement("script");
             s.textContent = scriptText;
@@ -374,6 +378,9 @@
         .catch((err) => console.error("Error loading footer:", err));
 
       const exploreModel = document.getElementById("explore-pylon-model");
+      if (exploreModel && typeof MatiHeritagePylonModel !== "undefined") {
+        MatiHeritagePylonModel.applyToModelViewer(exploreModel);
+      }
       if (exploreModel) {
         const modelObserver = new IntersectionObserver(
           (entries) => {

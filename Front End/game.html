@@ -651,7 +651,7 @@
     </style>
   </head>
 
-  <body class="game-page">
+  <body class="game-page visitor-module">
     <svg class="game-tv-filters" aria-hidden="true" focusable="false">
       <filter id="game-tv-static-filter" x="0%" y="0%" width="100%" height="100%">
         <feTurbulence
@@ -871,14 +871,23 @@
       preload="auto"
     ></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="heritage-realtime.js"></script>
     <script src="game-previews.js"></script>
     <script src="game-tv-transition.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
     <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="visitor-auth.js"></script>
+    <script src="game-auth-gate.js"></script>
     <script src="auth-logout.js"></script>
     <script>
       fetch("header.html")
         .then((response) => response.text())
-        .then((data) => {
+        .then(async (data) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
           const header = doc.querySelector("header");
@@ -901,44 +910,36 @@
             document.body.appendChild(script);
           }
 
-          // Update total points in header
-          const totalPoints =
-            localStorage.getItem("totalHeritagePoints") || "0";
-          const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl) pointsEl.textContent = totalPoints;
+          // Update header auth + points
+          if (typeof window.MatiVisitorAuth !== "undefined") {
+            await window.MatiVisitorAuth.refresh();
+          } else {
+            const totalPoints =
+              localStorage.getItem("totalHeritagePoints") || "0";
+            const pointsEl = document.getElementById("header-total-points");
+            if (pointsEl) pointsEl.textContent = totalPoints;
+          }
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
-          }
-
-          const gameProfile = document.querySelector(".site-profile");
-          const gameProfileTrigger = document.querySelector(
-            ".site-profile__trigger",
-          );
-          if (gameProfile && gameProfileTrigger) {
-            gameProfileTrigger.addEventListener("click", (event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              gameProfile.classList.toggle("is-open");
-            });
-            document.addEventListener("click", (event) => {
-              if (!gameProfile.contains(event.target)) {
-                gameProfile.classList.remove("is-open");
-              }
-            });
-            document.addEventListener("keydown", (event) => {
-              if (event.key === "Escape") {
-                gameProfile.classList.remove("is-open");
-              }
-            });
           }
 
           if (typeof window.initGlobalSettings === "function") {
             window.initGlobalSettings();
           }
 
-          if (window.MatiAuthLogout) {
+          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
             MatiAuthLogout.bind({ redirect: "login.html" });
+            document.body.dataset.logoutBound = "1";
+          }
+
+          if (typeof window.MatiGameAuthGate !== "undefined") {
+            const canPlay = await window.MatiGameAuthGate.guardPage({
+              returnTo: "game.html",
+            });
+            window.__matiGameHallUnlocked = canPlay;
+          } else {
+            window.__matiGameHallUnlocked = true;
           }
 
           bindHoverSoundToElements(
@@ -1032,6 +1033,16 @@
       const paginationContainer = document.getElementById("pagination-dots");
 
       function launchCurrentGame() {
+        if (
+          window.__matiGameHallUnlocked === false ||
+          (typeof MatiGameAuthGate !== "undefined" && !MatiGameAuthGate.isAllowed())
+        ) {
+          if (typeof MatiGameAuthGate !== "undefined") {
+            MatiGameAuthGate.open({ returnTo: "game.html" });
+          }
+          return;
+        }
+
         const currentGame = games[currentIndex];
         if (!currentGame.url) {
           console.log(`${currentGame.title2} is not yet implemented.`);
@@ -1177,19 +1188,8 @@
       const overlay = document.getElementById("drawer-overlay");
       const closeLeaderboard = document.getElementById("close-leaderboard");
       const leaderboardList = document.getElementById("leaderboard-list");
-
-      const dummyLeaderboard = [
-        { name: "ProGamer99", points: 1950 },
-        { name: "MatiExplorer", points: 1820 },
-        { name: "HistoryBuff", points: 1710 },
-        { name: "EcoWarrior_Mati", points: 1540 },
-        { name: "HeritageHunter", points: 1280 },
-        { name: "DahicanSurfer", points: 1020 },
-        { name: "MuseumExplorer", points: 890 },
-        { name: "MatiLocal99", points: 760 },
-        { name: "NatureLover", points: 540 },
-        { name: "HistoryStudent", points: 320 },
-      ];
+      let leaderboardRows = [];
+      let leaderboardLiveStop = null;
 
       function animateValue(obj, start, end, duration) {
         let startTimestamp = null;
@@ -1203,15 +1203,25 @@
         window.requestAnimationFrame(step);
       }
 
-      function showLeaderboard() {
-        overlay.classList.remove("hidden");
-        setTimeout(() => (overlay.style.opacity = "1"), 10);
-        drawer.classList.remove("translate-x-full");
-
+      function paintLeaderboard(entries) {
         leaderboardList.innerHTML = "";
-        dummyLeaderboard.forEach((entry, index) => {
+        if (!entries.length) {
+          const empty = document.createElement("p");
+          empty.className = "text-center text-white/50 py-8";
+          empty.textContent =
+            "No rankings yet. Play heritage games while logged in to appear here.";
+          leaderboardList.appendChild(empty);
+          return;
+        }
+
+        entries.forEach((entry, index) => {
           const item = document.createElement("div");
           const rank = index + 1;
+          const name = entry.username || entry.name || "Player";
+          const points = Number(entry.points) || 0;
+          const avatar =
+            entry.avatarUrl ||
+            `https://i.pravatar.cc/150?u=${encodeURIComponent(name)}`;
 
           let rankStyle = "bg-white/5 border-white/5";
           let glowColor = "rgba(34, 211, 238, 0.4)";
@@ -1219,15 +1229,11 @@
           let crown = "";
           let rankNumberColor = "text-white/40";
 
-          // Sizing logic for ranks 4+ to highlight Top 3
           const isRunnerUp = rank > 3;
           const paddingClass = isRunnerUp ? "p-4" : "p-5";
           const avatarSizeClass = isRunnerUp ? "h-12 w-12" : "h-16 w-16";
           const nameSizeClass = "text-lg";
           const pointsSizeClass = isRunnerUp ? "text-lg" : "text-2xl";
-          const badgeSizeClass = isRunnerUp
-            ? "w-5 h-5 text-[8px]"
-            : "w-6 h-6 text-[10px]";
 
           if (rank === 1) {
             rankStyle = "rank-1-highlight";
@@ -1258,13 +1264,13 @@
               <div class="relative">
                 ${crown}
                 <div class="${avatarSizeClass} rounded-full border-2 p-0.5" style="border-color: ${glowColor}">
-                   <img src="https://i.pravatar.cc/150?u=${entry.name}" class="rounded-full h-full w-full object-cover" />
+                   <img src="${avatar}" class="rounded-full h-full w-full object-cover" />
                 </div>
               </div>
-              <p class="genre-font text-white ${nameSizeClass} tracking-wider truncate">${entry.name}</p>
+              <p class="genre-font text-white ${nameSizeClass} tracking-wider truncate">${name}</p>
             </div>
             <div class="text-right">
-               <span class="points-val ${pointsSizeClass} font-black orbitron text-white" data-target="${entry.points}">0 <span class="text-[10px] opacity-60 uppercase">Pts</span></span>
+               <span class="points-val ${pointsSizeClass} font-black orbitron text-white" data-target="${points}">0 <span class="text-[10px] opacity-60 uppercase">Pts</span></span>
             </div>
           `;
           leaderboardList.appendChild(item);
@@ -1274,26 +1280,86 @@
               animateValue(
                 item.querySelector(".points-val"),
                 0,
-                entry.points,
+                points,
                 1000,
               );
             },
             500 + index * 100,
           );
         });
+      }
 
-        // Update Your Ranking section
-        const userPts = parseInt(
-          localStorage.getItem("totalHeritagePoints") || "0",
-        );
-        document.getElementById("user-rank-val").innerText =
-          userPts > 0 ? "42" : "--";
+      function updateUserRankPanel(entries) {
+        const userPts =
+          typeof MatiHeritagePoints !== "undefined"
+            ? MatiHeritagePoints.readLocal()
+            : parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
+        const session =
+          typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() : null;
+        let rankLabel = "--";
+        if (session?.username && entries.length) {
+          const idx = entries.findIndex(
+            (row) =>
+              String(row.username || "").toLowerCase() ===
+              String(session.username).toLowerCase(),
+          );
+          if (idx >= 0) rankLabel = String(idx + 1);
+          else if (userPts > 0) rankLabel = `${entries.length}+`;
+        } else if (userPts > 0) {
+          rankLabel = "—";
+        }
+        const rankEl = document.getElementById("user-rank-val");
+        if (rankEl) rankEl.innerText = rankLabel;
         animateValue(
           document.getElementById("user-points-val"),
           0,
           userPts,
           1000,
         );
+      }
+
+      async function loadLeaderboard() {
+        leaderboardList.innerHTML =
+          '<p class="text-center text-white/50 py-8">Loading live rankings…</p>';
+        try {
+          if (typeof MatiSupabaseApi?.getLeaderboard === "function") {
+            const remote = await MatiSupabaseApi.getLeaderboard(50);
+            if (Array.isArray(remote)) leaderboardRows = remote;
+          }
+        } catch (error) {
+          console.warn("Visitor leaderboard load failed:", error);
+        }
+        paintLeaderboard(leaderboardRows);
+        updateUserRankPanel(leaderboardRows);
+      }
+
+      function ensureVisitorLeaderboardLive() {
+        if (leaderboardLiveStop) return;
+        if (typeof MatiHeritageRealtime !== "undefined") {
+          MatiHeritageRealtime.ensure();
+          leaderboardLiveStop = MatiHeritageRealtime.on(
+            MatiHeritageRealtime.TOPIC.leaderboard,
+            () => {
+              void loadLeaderboard();
+            },
+          );
+          return;
+        }
+        if (typeof MatiSupabaseApi?.subscribeLeaderboard !== "function") return;
+        leaderboardLiveStop = MatiSupabaseApi.subscribeLeaderboard(() => {
+          void loadLeaderboard();
+        });
+      }
+
+      function showLeaderboard() {
+        overlay.classList.remove("hidden");
+        setTimeout(() => (overlay.style.opacity = "1"), 10);
+        drawer.classList.remove("translate-x-full");
+        ensureVisitorLeaderboardLive();
+        void loadLeaderboard();
+        if (typeof MatiHeritagePoints !== "undefined") {
+          void MatiHeritagePoints.syncToCloud();
+        }
       }
 
       const hideLeaderboard = () => {

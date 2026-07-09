@@ -106,8 +106,18 @@
   inset: 0;
   z-index: 2;
   background:
-    linear-gradient(180deg, rgba(5, 13, 24, 0.55) 0%, rgba(5, 13, 24, 0.15) 38%, rgba(5, 13, 24, 0.82) 100%),
-    linear-gradient(135deg, rgba(4, 120, 87, 0.35) 0%, transparent 45%, rgba(2, 132, 199, 0.28) 100%);
+    linear-gradient(
+      180deg,
+      rgba(5, 13, 24, 0.55) 0%,
+      rgba(5, 13, 24, 0.15) 38%,
+      rgba(5, 13, 24, 0.82) 100%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(4, 120, 87, 0.35) 0%,
+      transparent 45%,
+      rgba(2, 132, 199, 0.28) 100%
+    );
 }
 
 .auth-brand-visual-grain {
@@ -312,8 +322,11 @@
   flex-direction: column;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(16, 185, 129, 0.06), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(2, 132, 199, 0.05), transparent 50%),
+    radial-gradient(
+      ellipse 60% 40% at 0% 100%,
+      rgba(2, 132, 199, 0.05),
+      transparent 50%
+    ),
     #faf8f5;
 }
 
@@ -336,7 +349,10 @@
   text-decoration: none;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(15, 23, 42, 0.06);
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .auth-panel-back:hover {
@@ -366,7 +382,10 @@
   font-weight: 600;
   color: #64748b;
   text-decoration: none;
-  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .auth-switch a.is-active {
@@ -577,7 +596,9 @@
   color: #94a3b8;
   background: transparent;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
 .auth-field-toggle:hover {
@@ -661,8 +682,28 @@
   border: 1px solid #a7f3d0;
 }
 
+.auth-alert--info {
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
 .auth-alert.hidden {
   display: none;
+}
+
+.auth-field-hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.auth-field-hint--error {
+  color: #b91c1c;
+}
+
+.auth-field-hint--ok {
+  color: #166534;
 }
 
 .hidden {
@@ -739,7 +780,7 @@
 }
 
 .auth-panel-foot {
-  padding: 0  clamp(1.25rem, 4vw, 2.5rem) 1.5rem;
+  padding: 0 clamp(1.25rem, 4vw, 2.5rem) 1.5rem;
   text-align: center;
   font-size: 0.75rem;
   color: #94a3b8;
@@ -772,7 +813,12 @@
 
 .auth-body--focused {
   position: relative;
-  background: linear-gradient(180deg, var(--mint) 0%, #ffffff 52%, var(--ice) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--mint) 0%,
+    #ffffff 52%,
+    var(--ice) 100%
+  );
   overflow-x: hidden;
 }
 
@@ -783,9 +829,21 @@
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 75% 55% at 10% 0%, rgba(16, 185, 129, 0.16), transparent 58%),
-    radial-gradient(ellipse 60% 50% at 92% 8%, rgba(56, 189, 248, 0.14), transparent 52%),
-    radial-gradient(ellipse 55% 45% at 50% 100%, rgba(245, 158, 11, 0.07), transparent 55%);
+    radial-gradient(
+      ellipse 75% 55% at 10% 0%,
+      rgba(16, 185, 129, 0.16),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 92% 8%,
+      rgba(56, 189, 248, 0.14),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 50% 100%,
+      rgba(245, 158, 11, 0.07),
+      transparent 55%
+    );
 }
 
 .auth-body--focused::after {
@@ -796,8 +854,15 @@
   z-index: 0;
   opacity: 0.3;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--forest) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--sky) 7%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--forest) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--sky) 7%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 52px 52px;
   mask-image: radial-gradient(ellipse 85% 75% at 50% 35%, black, transparent);
 }
@@ -996,7 +1061,12 @@
    ═══════════════════════════════════════════ */
 
 .auth-body--signin {
-  background: linear-gradient(180deg, var(--mint) 0%, #ffffff 48%, var(--ice) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--mint) 0%,
+    #ffffff 48%,
+    var(--ice) 100%
+  );
 }
 
 .auth-brand--minimal .auth-brand-content--minimal {
@@ -1043,7 +1113,9 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.28);
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .auth-brand-dot.is-active {
@@ -1147,7 +1219,10 @@
   text-align: center;
   text-decoration: none;
   color: #64748b;
-  transition: background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+  transition:
+    background 0.22s ease,
+    color 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .auth-tabs__link.is-active {
@@ -1406,7 +1481,9 @@
   padding: 1.5rem;
   background: var(--portal-navy);
   color: rgba(255, 255, 255, 0.92);
-  transition: opacity 0.38s ease, visibility 0.38s ease;
+  transition:
+    opacity 0.38s ease,
+    visibility 0.38s ease;
 }
 
 .auth-portal-visual__loading[hidden] {
@@ -1436,21 +1513,13 @@
   text-align: center;
 }
 
-.auth-portal-visual__loading-bar {
-  width: min(11rem, 72%);
-  height: 4px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.auth-portal-visual__loading-fill {
-  display: block;
-  width: 0%;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #34d399, #6ee7b7);
-  transition: width 0.25s ease;
+.auth-portal-visual__loading-percent {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
 }
 
 @keyframes auth-portal-model-spin {
@@ -1478,7 +1547,12 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(12, 35, 64, 0.72) 0%, rgba(12, 35, 64, 0.18) 32%, transparent 58%),
+    linear-gradient(
+      180deg,
+      rgba(12, 35, 64, 0.72) 0%,
+      rgba(12, 35, 64, 0.18) 32%,
+      transparent 58%
+    ),
     linear-gradient(0deg, rgba(12, 35, 64, 0.45) 0%, transparent 38%);
   pointer-events: none;
 }
@@ -1562,7 +1636,11 @@
   justify-content: center;
   padding: clamp(2rem, 4.5vw, 3.25rem);
   background:
-    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(4, 120, 87, 0.05), transparent 55%),
+    radial-gradient(
+      ellipse 80% 60% at 100% 0%,
+      rgba(4, 120, 87, 0.05),
+      transparent 55%
+    ),
     #fff;
 }
 
@@ -1741,7 +1819,9 @@
   color: #94a3b8;
   background: transparent;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
 .auth-portal-input__toggle:hover {
@@ -1856,7 +1936,11 @@
 .auth-portal-btn--primary {
   border: 1px solid var(--portal-navy);
   color: #fff;
-  background: linear-gradient(180deg, var(--portal-navy-soft) 0%, var(--portal-navy) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--portal-navy-soft) 0%,
+    var(--portal-navy) 100%
+  );
   box-shadow: 0 10px 24px rgba(12, 35, 64, 0.22);
 }
 
@@ -2019,8 +2103,16 @@
   gap: clamp(1.5rem, 4cqi, 2rem);
   padding: clamp(2rem, 5vw, 3rem) 1.25rem;
   background:
-    radial-gradient(circle at 18% 18%, rgba(168, 85, 247, 0.14), transparent 46%),
-    radial-gradient(circle at 82% 82%, rgba(34, 211, 238, 0.12), transparent 46%),
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(168, 85, 247, 0.14),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 82% 82%,
+      rgba(34, 211, 238, 0.12),
+      transparent 46%
+    ),
     #020818;
 }
 
@@ -2098,15 +2190,33 @@
   animation: auth-portal-games-pixel-wave 1.35s steps(2) infinite;
 }
 
-.auth-portal-games-pixel-loader span:nth-child(1) { animation-delay: 0s; }
-.auth-portal-games-pixel-loader span:nth-child(2) { animation-delay: 0.12s; }
-.auth-portal-games-pixel-loader span:nth-child(3) { animation-delay: 0.24s; }
-.auth-portal-games-pixel-loader span:nth-child(4) { animation-delay: 0.36s; }
-.auth-portal-games-pixel-loader span:nth-child(5) { animation-delay: 0.48s; }
-.auth-portal-games-pixel-loader span:nth-child(6) { animation-delay: 0.6s; }
-.auth-portal-games-pixel-loader span:nth-child(7) { animation-delay: 0.72s; }
-.auth-portal-games-pixel-loader span:nth-child(8) { animation-delay: 0.84s; }
-.auth-portal-games-pixel-loader span:nth-child(9) { animation-delay: 0.96s; }
+.auth-portal-games-pixel-loader span:nth-child(1) {
+  animation-delay: 0s;
+}
+.auth-portal-games-pixel-loader span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.auth-portal-games-pixel-loader span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+.auth-portal-games-pixel-loader span:nth-child(4) {
+  animation-delay: 0.36s;
+}
+.auth-portal-games-pixel-loader span:nth-child(5) {
+  animation-delay: 0.48s;
+}
+.auth-portal-games-pixel-loader span:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.auth-portal-games-pixel-loader span:nth-child(7) {
+  animation-delay: 0.72s;
+}
+.auth-portal-games-pixel-loader span:nth-child(8) {
+  animation-delay: 0.84s;
+}
+.auth-portal-games-pixel-loader span:nth-child(9) {
+  animation-delay: 0.96s;
+}
 
 @keyframes auth-portal-games-pixel-wave {
   0%,
@@ -2210,7 +2320,7 @@
   }
 
   .auth-portal-visual {
-    min-height: 12.5rem;
+    min-height: 17.5rem;
   }
 
   .auth-portal-visual--games {
@@ -2233,7 +2343,7 @@
   }
 
   .auth-portal-form {
-    padding-top: 3.25rem;
+    padding-top: 2.25rem;
   }
 
   .auth-portal-back span {
@@ -2270,4 +2380,47 @@
   .auth-portal-btn--primary:hover:not(:disabled) {
     transform: none;
   }
+}
+
+/* Forgot / reset password — match login portal layout */
+.auth-portal-visual__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.auth-portal-visual--recover .auth-portal-visual__overlay {
+  background: linear-gradient(
+    165deg,
+    rgba(12, 35, 64, 0.55) 0%,
+    rgba(12, 35, 64, 0.82) 55%,
+    rgba(4, 47, 46, 0.9) 100%
+  );
+}
+
+.auth-portal-header--recover {
+  margin-bottom: 1.65rem;
+}
+
+.auth-portal-header__recover-title {
+  margin: 1rem 0 0;
+  font-family: "Oswald", "Source Sans 3", system-ui, sans-serif;
+  font-size: clamp(1.05rem, 4.2cqi, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--portal-forest);
+}
+
+.auth-portal-header__sub {
+  margin: 0.65rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #64748b;
+  max-width: 26rem;
+}
+
+.auth-portal-actions--single {
+  grid-template-columns: 1fr;
 }

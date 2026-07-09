@@ -58,6 +58,10 @@
     if (typeof window.initSiteHeader === "function") {
       window.initSiteHeader();
     }
+
+    if (typeof window.MatiVisitorAuth !== "undefined") {
+      await window.MatiVisitorAuth.refresh();
+    }
   }
 
   async function injectFooter(pageKey) {
