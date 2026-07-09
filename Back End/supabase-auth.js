@@ -338,6 +338,116 @@ const MatiSupabaseAuth = (() => {
     return { ok: true };
   }
 
+  async function checkUsernameAvailability(username, excludeUserId = null) {
+    if (!enabled()) return { ok: true };
+
+    const cleanUsername = normalizeUsername(username);
+    if (!cleanUsername) return { ok: true };
+
+    if (!/^[a-z0-9._-]{3,24}$/.test(cleanUsername)) {
+      return {
+        ok: false,
+        field: "username",
+        message:
+          "Username must be 3–24 characters (letters, numbers, . _ -).",
+      };
+    }
+
+    const sb = client();
+    if (!sb) return { ok: true };
+
+    const { data, error } = await sb
+      .from("profiles")
+      .select("id")
+      .eq("username", cleanUsername)
+      .maybeSingle();
+
+    if (error) {
+      console.warn("Username availability check failed:", error);
+      return { ok: true };
+    }
+
+    if (data && data.id !== excludeUserId) {
+      return {
+        ok: false,
+        field: "username",
+        message: "That username is already taken.",
+      };
+    }
+
+    return { ok: true };
+  }
+
+  async function getCurrentUserId() {
+    const sb = client();
+    if (!sb) return null;
+    const { data } = await sb.auth.getUser();
+    return data?.user?.id || null;
+  }
+
+  async function updateProfile({ username, displayName }) {
+    if (!enabled()) {
+      return {
+        ok: false,
+        message: "Profile updates require Supabase Auth.",
+      };
+    }
+
+    const sb = client();
+    if (!sb) {
+      return { ok: false, message: "Could not connect to Supabase." };
+    }
+
+    const cleanUsername = normalizeUsername(username);
+    const cleanDisplay = String(displayName || "").trim();
+
+    if (!cleanDisplay) {
+      return { ok: false, message: "Please enter a display name." };
+    }
+
+    const userId = await getCurrentUserId();
+    const availability = await checkUsernameAvailability(cleanUsername, userId);
+    if (!availability.ok) {
+      return availability;
+    }
+
+    const { data, error } = await sb.rpc("update_player_profile", {
+      p_username: cleanUsername,
+      p_display_name: cleanDisplay,
+    });
+
+    if (error) {
+      const message = String(error.message || "Could not update profile.");
+      if (message.toLowerCase().includes("already taken")) {
+        return { ok: false, field: "username", message };
+      }
+      return { ok: false, message };
+    }
+
+    const profile = Array.isArray(data) ? data[0] : data;
+    const points = Math.max(0, Number(profile?.heritage_points) || 0);
+
+    if (typeof MatiHeritagePoints !== "undefined") {
+      void MatiHeritagePoints.syncToCloud(points);
+    }
+
+    await sb.auth.updateUser({
+      data: {
+        username: profile?.username || cleanUsername,
+        display_name: profile?.display_name || cleanDisplay,
+      },
+    });
+
+    return {
+      ok: true,
+      user: {
+        username: profile?.username || cleanUsername,
+        displayName: profile?.display_name || cleanDisplay,
+        email: profile?.email,
+      },
+    };
+  }
+
   async function completeOAuthRedirect() {
     if (!enabled()) return null;
 
@@ -428,6 +538,9 @@ const MatiSupabaseAuth = (() => {
     getSession,
     isLoggedIn,
     checkRegistrationAvailability,
+    checkUsernameAvailability,
+    updateProfile,
+    getCurrentUserId,
     requestPasswordReset,
     hasRecoverySession,
     updatePassword,
