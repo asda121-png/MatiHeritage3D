@@ -282,6 +282,113 @@ const MatiAuth = (() => {
     return `https://i.pravatar.cc/150?u=${encodeURIComponent(key)}`;
   }
 
+  async function updateProfile(payload) {
+    if (usesSupabaseAuth()) {
+      const result = await MatiSupabaseAuth.updateProfile(payload);
+      if (!result) {
+        return {
+          ok: false,
+          message: "Profile updates are not available.",
+        };
+      }
+      if (result.ok && result.user) {
+        const current = getSession() || {};
+        setSession({
+          ...current,
+          username: result.user.username,
+          displayName: result.user.displayName,
+          email: result.user.email || current.email,
+        });
+      }
+      return result;
+    }
+
+    return updateProfileLocal(payload);
+  }
+
+  async function updateProfileLocal({ username, displayName }) {
+    const session = getSession();
+    if (!session) {
+      return { ok: false, message: "You must be signed in to update your profile." };
+    }
+
+    const cleanUsername = normalizeUsername(username);
+    const cleanDisplay = String(displayName || "").trim();
+
+    if (!cleanDisplay) {
+      return { ok: false, message: "Please enter a display name." };
+    }
+
+    if (!/^[a-z0-9._-]{3,24}$/.test(cleanUsername)) {
+      return {
+        ok: false,
+        field: "username",
+        message:
+          "Username must be 3–24 characters (letters, numbers, . _ -).",
+      };
+    }
+
+    const users = readUsers();
+    const taken = users.some(
+      (entry) =>
+        entry.username === cleanUsername &&
+        entry.username !== session.username,
+    );
+    if (taken) {
+      return {
+        ok: false,
+        field: "username",
+        message: "That username is already taken.",
+      };
+    }
+
+    const user = users.find((entry) => entry.username === session.username);
+    if (user) {
+      user.username = cleanUsername;
+      user.displayName = cleanDisplay;
+      writeUsers(users);
+    }
+
+    setSession({
+      ...session,
+      username: cleanUsername,
+      displayName: cleanDisplay,
+    });
+
+    return {
+      ok: true,
+      user: {
+        username: cleanUsername,
+        displayName: cleanDisplay,
+        email: session.email,
+      },
+    };
+  }
+
+  async function checkUsernameAvailability(username) {
+    if (usesSupabaseAuth()) {
+      const userId = await MatiSupabaseAuth.getCurrentUserId?.();
+      return MatiSupabaseAuth.checkUsernameAvailability(username, userId);
+    }
+
+    const cleanUsername = normalizeUsername(username);
+    const session = getSession();
+    const users = readUsers();
+    const taken = users.some(
+      (entry) =>
+        entry.username === cleanUsername &&
+        entry.username !== session?.username,
+    );
+    if (taken) {
+      return {
+        ok: false,
+        field: "username",
+        message: "That username is already taken.",
+      };
+    }
+    return { ok: true };
+  }
+
   return {
     register,
     login,
@@ -293,5 +400,7 @@ const MatiAuth = (() => {
     getAvatarUrl,
     usesSupabaseAuth,
     checkRegistrationAvailability: checkRegistrationAvailabilityAsync,
+    checkUsernameAvailability,
+    updateProfile,
   };
 })();

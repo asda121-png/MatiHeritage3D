@@ -1172,6 +1172,7 @@
     const tfoot = $("#dashboard-summary-foot");
     const totalUsersStat = $("#total-users-stat");
     const pageVisitsStat = $("#page-visits-stat");
+    const pageVisitsTrend = $("#page-visits-trend");
 
     const supabaseConfigured =
       typeof MatiSupabase !== "undefined" && MatiSupabase.isConfigured();
@@ -1189,7 +1190,13 @@
       totalUsersStat.textContent = community.registeredUsers || 0;
     }
     if (pageVisitsStat) {
-      pageVisitsStat.textContent = community.pageVisits || 0;
+      pageVisitsStat.textContent =
+        community.pageVisits ?? community.totalPageViews ?? 0;
+    }
+    if (pageVisitsTrend) {
+      const active = community.activeSessions ?? 0;
+      const sessions = community.uniqueSessions ?? 0;
+      pageVisitsTrend.textContent = `${active} active now · ${sessions} unique sessions`;
     }
 
     if (heritageCards) {
@@ -1680,6 +1687,7 @@
 
   let leaderboardLiveStarted = false;
   let catalogLiveStarted = false;
+  let visitorLiveStarted = false;
   let leaderboardRenderToken = 0;
 
   function activeAdminView() {
@@ -1706,6 +1714,16 @@
     catalogLiveStarted = true;
     MatiAdminStore.subscribeCatalog(() => {
       refreshActiveAdminViews();
+    });
+  }
+
+  function ensureVisitorLive() {
+    if (visitorLiveStarted) return;
+    if (typeof MatiAdminStore.subscribeVisitorAnalytics !== "function") return;
+    visitorLiveStarted = true;
+    MatiAdminStore.subscribeVisitorAnalytics(() => {
+      const view = activeAdminView();
+      if (view === "dashboard") renderDashboard();
     });
   }
 
@@ -3669,6 +3687,7 @@
       }
       ensureCatalogLive();
       ensureLeaderboardLive();
+      ensureVisitorLive();
       setView("dashboard", {}, { skipDashboardRefresh: true });
     };
 

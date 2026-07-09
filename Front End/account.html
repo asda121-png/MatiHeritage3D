@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/site-path-fix.js"></script>
     <title>My Account — Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -193,6 +194,119 @@
         color: #64748b;
         margin-bottom: 1.25rem;
       }
+
+      .account-edit {
+        padding: 0 2rem 1.5rem;
+        border-top: 1px solid rgba(12, 26, 20, 0.06);
+      }
+
+      .account-edit__title {
+        margin: 1.5rem 0 0.35rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0c1a14;
+      }
+
+      .account-edit__hint {
+        margin: 0 0 1rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        color: #64748b;
+        line-height: 1.5;
+      }
+
+      .account-field {
+        display: grid;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .account-field label {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #475569;
+      }
+
+      .account-field input {
+        width: 100%;
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.7rem;
+        border: 1px solid rgba(12, 26, 20, 0.12);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.9375rem;
+        color: #0c1a14;
+        background: #fff;
+      }
+
+      .account-field input:focus {
+        outline: none;
+        border-color: rgba(4, 120, 87, 0.45);
+        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.12);
+      }
+
+      .account-field input[readonly] {
+        background: #f8fafc;
+        color: #64748b;
+      }
+
+      .account-field-hint {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        color: #64748b;
+      }
+
+      .account-field-hint.is-error {
+        color: #dc2626;
+      }
+
+      .account-field-hint.is-ok {
+        color: #047857;
+      }
+
+      .account-alert {
+        margin-bottom: 1rem;
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.7rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+      }
+
+      .account-alert.is-error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+      }
+
+      .account-alert.is-success {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .account-alert.hidden {
+        display: none;
+      }
+
+      .account-edit__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 0.25rem;
+      }
+
+      .account-btn--save {
+        color: #fff;
+        background: var(--forest);
+        border: none;
+        cursor: pointer;
+      }
+
+      .account-btn--save:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
     </style>
   </head>
   <body class="visitor-module antialiased">
@@ -249,6 +363,71 @@
               </div>
             </div>
 
+            <section class="account-edit" aria-labelledby="account-edit-title">
+              <h2 class="account-edit__title" id="account-edit-title">
+                Edit player profile
+              </h2>
+              <p class="account-edit__hint">
+                Choose how you appear on the leaderboard. Google players can
+                customize their username and display name here.
+              </p>
+
+              <div
+                id="account-profile-alert"
+                class="account-alert hidden"
+                role="status"
+              ></div>
+
+              <form id="account-profile-form" novalidate>
+                <div class="account-field">
+                  <label for="account-edit-display-name">Display name</label>
+                  <input
+                    id="account-edit-display-name"
+                    type="text"
+                    maxlength="48"
+                    autocomplete="name"
+                    required
+                  />
+                </div>
+
+                <div class="account-field">
+                  <label for="account-edit-username">Username</label>
+                  <input
+                    id="account-edit-username"
+                    type="text"
+                    maxlength="24"
+                    autocomplete="username"
+                    required
+                  />
+                  <p
+                    id="account-username-hint"
+                    class="account-field-hint"
+                    aria-live="polite"
+                  ></p>
+                </div>
+
+                <div class="account-field">
+                  <label for="account-edit-email">Email</label>
+                  <input
+                    id="account-edit-email"
+                    type="email"
+                    readonly
+                    tabindex="-1"
+                  />
+                </div>
+
+                <div class="account-edit__actions">
+                  <button
+                    type="submit"
+                    id="account-save-profile"
+                    class="account-btn account-btn--save"
+                  >
+                    Save profile
+                  </button>
+                </div>
+              </form>
+            </section>
+
             <div class="account-actions">
               <a href="game.html" class="account-btn account-btn--primary">Play games</a>
               <a href="index.html" class="account-btn account-btn--ghost">Back to portal</a>
@@ -294,6 +473,113 @@
           `@${session.username}`;
         document.getElementById("account-email").textContent =
           session.email || "—";
+
+        const displayNameInput = document.getElementById(
+          "account-edit-display-name",
+        );
+        const usernameInput = document.getElementById("account-edit-username");
+        const emailInput = document.getElementById("account-edit-email");
+        const usernameHint = document.getElementById("account-username-hint");
+        const profileAlert = document.getElementById("account-profile-alert");
+        const profileForm = document.getElementById("account-profile-form");
+        const saveBtn = document.getElementById("account-save-profile");
+
+        if (displayNameInput) {
+          displayNameInput.value = session.displayName || session.username || "";
+        }
+        if (usernameInput) {
+          usernameInput.value = session.username || "";
+        }
+        if (emailInput) {
+          emailInput.value = session.email || "";
+        }
+
+        function showProfileAlert(message, type = "error") {
+          if (!profileAlert) return;
+          profileAlert.textContent = message;
+          profileAlert.classList.remove("hidden", "is-error", "is-success");
+          profileAlert.classList.add(
+            type === "success" ? "is-success" : "is-error",
+          );
+        }
+
+        function setUsernameHint(message, type = "") {
+          if (!usernameHint) return;
+          usernameHint.textContent = message || "";
+          usernameHint.classList.remove("is-error", "is-ok");
+          if (type) usernameHint.classList.add(type === "ok" ? "is-ok" : "is-error");
+        }
+
+        let usernameTimer = null;
+        usernameInput?.addEventListener("input", () => {
+          clearTimeout(usernameTimer);
+          usernameTimer = window.setTimeout(async () => {
+            const value = usernameInput.value.trim();
+            if (!value) {
+              setUsernameHint("");
+              return;
+            }
+            const result = await MatiAuth.checkUsernameAvailability(value);
+            if (!result.ok) {
+              setUsernameHint(result.message, "error");
+              return;
+            }
+            if (/^[a-z0-9._-]{3,24}$/i.test(value)) {
+              setUsernameHint("Username is available.", "ok");
+            } else {
+              setUsernameHint(
+                "Use 3–24 characters: letters, numbers, . _ -",
+                "error",
+              );
+            }
+          }, 320);
+        });
+
+        profileForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          profileAlert?.classList.add("hidden");
+
+          const displayName = displayNameInput?.value?.trim() || "";
+          const username = usernameInput?.value?.trim() || "";
+
+          if (!displayName || !username) {
+            showProfileAlert("Please fill in your display name and username.");
+            return;
+          }
+
+          if (saveBtn) saveBtn.disabled = true;
+
+          const result = await MatiAuth.updateProfile({
+            displayName,
+            username,
+          });
+
+          if (saveBtn) saveBtn.disabled = false;
+
+          if (!result.ok) {
+            showProfileAlert(result.message || "Could not save profile.");
+            if (result.field === "username") {
+              setUsernameHint(result.message, "error");
+            }
+            return;
+          }
+
+          showProfileAlert("Profile updated successfully.", "success");
+
+          document.getElementById("account-display-name").textContent =
+            result.user.displayName;
+          document.getElementById("account-username").textContent =
+            `@${result.user.username}`;
+
+          const avatar = document.getElementById("account-avatar");
+          if (avatar) {
+            avatar.src = MatiAuth.getAvatarUrl(result.user.username);
+          }
+
+          if (typeof MatiVisitorAuth !== "undefined") {
+            void MatiVisitorAuth.refresh();
+          }
+        });
 
         const avatar = document.getElementById("account-avatar");
         if (avatar) {

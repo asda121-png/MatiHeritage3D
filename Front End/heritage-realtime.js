@@ -8,6 +8,7 @@ const MatiHeritageRealtime = (() => {
     media: "heritage:media",
     catalog: "heritage:catalog",
     leaderboard: "heritage:leaderboard",
+    visitors: "heritage:visitors",
     any: "heritage:any",
   };
 
@@ -19,6 +20,7 @@ const MatiHeritageRealtime = (() => {
     sites: false,
     media: false,
     leaderboard: false,
+    visitors: false,
   };
 
   function client() {
@@ -54,14 +56,21 @@ const MatiHeritageRealtime = (() => {
       sites: pending.sites,
       media: pending.media,
       leaderboard: pending.leaderboard,
+      visitors: pending.visitors,
       at: Date.now(),
     };
-    pending = { sites: false, media: false, leaderboard: false };
+    pending = {
+      sites: false,
+      media: false,
+      leaderboard: false,
+      visitors: false,
+    };
 
     if (detail.sites) emit(TOPIC.sites, detail);
     if (detail.media) emit(TOPIC.media, detail);
     if (detail.sites || detail.media) emit(TOPIC.catalog, detail);
     if (detail.leaderboard) emit(TOPIC.leaderboard, detail);
+    if (detail.visitors) emit(TOPIC.visitors, detail);
     emit(TOPIC.any, detail);
   }
 
@@ -93,6 +102,11 @@ const MatiHeritageRealtime = (() => {
         "postgres_changes",
         { event: "*", schema: "public", table: "leaderboard_entries" },
         () => queue("leaderboard"),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "site_analytics" },
+        () => queue("visitors"),
       )
       .subscribe((status) => {
         if (status === "CHANNEL_ERROR") {
