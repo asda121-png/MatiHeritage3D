@@ -1,22 +1,17 @@
 /* Heritage Games — visitor portal game hall */
 
+.experience-games {
+  padding: clamp(3.25rem, 6.5vw, 5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  background: #030510;
+  color: #e2e8f0;
+  contain: layout style paint;
+}
 .pixel-game-font {
   font-family: "Press Start 2P", cursive;
 }
 
 .arcade-game-font {
   font-family: "Orbitron", sans-serif;
-}
-
-.genre-game-font {
-  font-family: "Rajdhani", sans-serif;
-}
-
-.experience-games {
-  padding: clamp(3.25rem, 6.5vw, 5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
-  background: #030510;
-  color: #e2e8f0;
-  contain: layout style paint;
 }
 
 .experience-games-bg {
@@ -443,6 +438,9 @@
   margin: 0 auto;
   padding: 0 clamp(1.25rem, 4vw, 2.5rem);
 }
+.genre-game-font {
+  font-family: "Rajdhani", sans-serif;
+}
 
 /* Header */
 .games-portal-head {
@@ -457,6 +455,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  align-items: flex-end;
   gap: 1rem;
   margin-bottom: 0.85rem;
 }
@@ -804,6 +803,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  margin-top: -1.5rem;
   min-width: 0;
 }
 
