@@ -64,7 +64,7 @@ const MatiGameAuthGate = (() => {
 
       .game-auth-gate__dialog {
         display: block;
-        width: min(100%, 26rem);
+        width: min(100%, 36rem);
         min-height: 0;
         max-height: calc(100vh - 1.75rem);
         border-radius: 1.15rem;
@@ -86,26 +86,34 @@ const MatiGameAuthGate = (() => {
       }
 
       .game-auth-gate__dialog .auth-portal-form {
-        padding: clamp(1.75rem, 4vw, 2.35rem);
+        padding: clamp(2.5rem, 5.5vw, 3.5rem);
         border-radius: 1.15rem;
       }
 
       .game-auth-gate__dialog .auth-portal-header {
-        margin-bottom: 1.65rem;
+        margin-bottom: 2.5rem;
       }
 
       .game-auth-gate__dialog .auth-portal-logo__title {
-        font-size: clamp(2.35rem, 5.5vw, 3rem);
+        font-size: clamp(3.2rem, 7vw, 4.25rem);
       }
 
       .game-auth-gate__dialog .auth-portal-header__welcome {
-        margin-top: 0.85rem;
-        font-size: 0.92rem;
+        margin-top: 1.25rem;
+        font-size: 1.25rem;
         letter-spacing: 0.14em;
       }
 
       .game-auth-gate__dialog .auth-portal-actions {
-        margin-top: 0.25rem;
+        margin-top: 0.75rem;
+        gap: 1.25rem;
+      }
+
+      .game-auth-gate__dialog .auth-portal-btn {
+        height: 3.75rem;
+        padding: 0 2rem;
+        font-size: 1.1rem;
+        border-radius: 0.75rem;
       }
 
       .game-auth-gate__dialog .auth-portal-btn--primary {
@@ -148,6 +156,58 @@ const MatiGameAuthGate = (() => {
         }
         .game-auth-gate__dialog {
           transform: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .game-auth-gate__dialog {
+          width: min(100%, 28rem);
+        }
+
+        .game-auth-gate__dialog .auth-portal-form {
+          padding: clamp(1.75rem, 4vw, 2.35rem);
+        }
+
+        .game-auth-gate__dialog .auth-portal-logo__title {
+          font-size: clamp(2.35rem, 5.5vw, 3rem);
+        }
+
+        .game-auth-gate__dialog .auth-portal-header__welcome {
+          font-size: 0.92rem;
+        }
+
+        .game-auth-gate__dialog .auth-portal-btn {
+          height: 3rem;
+          padding: 0 1.25rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .game-auth-gate__dialog {
+          width: min(100%, 24rem);
+        }
+
+        .game-auth-gate__dialog .auth-portal-form {
+          padding: 1.5rem;
+        }
+
+        .game-auth-gate__dialog .auth-portal-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .game-auth-gate__dialog .auth-portal-logo__title {
+          font-size: 2rem;
+        }
+
+        .game-auth-gate__dialog .auth-portal-header__welcome {
+          font-size: 0.85rem;
+        }
+
+        .game-auth-gate__dialog .auth-portal-btn {
+          height: 2.75rem;
+          padding: 0 1rem;
+          font-size: 0.85rem;
         }
       }
 

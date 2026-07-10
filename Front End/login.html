@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="h-full">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,40 @@
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
     ></script>
+    <style>
+      html,
+      .auth-body {
+        height: 100%;
+      }
+      /* Responsive styles for tablets and smaller devices */
+      @media (max-width: 1024px) {
+        .auth-portal-visual {
+          display: none; /* Hide the 3D model visual on smaller screens */
+        }
+        .auth-portal-card {
+          width: 100%;
+          max-width: 480px; /* Set a max-width for the form card */
+          margin: auto;
+        }
+        .auth-portal-form {
+          padding: 2rem;
+        }
+      }
+
+      /* Additional adjustments for mobile phones */
+      @media (max-width: 768px) {
+        .auth-portal-form {
+          padding: 1.5rem;
+        }
+        .auth-portal-header {
+          text-align: center;
+        }
+        .auth-portal-logo__line {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    </style>
   </head>
   <body class="auth-body auth-body--portal">
     <div class="auth-portal-page">
