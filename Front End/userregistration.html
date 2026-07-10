@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create account — Mati Heritage 3D</title>    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <title>Create account — Mati Heritage 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Oswald:wght@500;600;700&family=Press+Start+2P&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
@@ -109,7 +110,7 @@
                 <h1 class="auth-portal-logo__title">Portal</h1>
                 <span class="auth-portal-logo__line" aria-hidden="true"></span>
               </div>
-              <p class="auth-portal-header__welcome">MADAYAW NA PAG-ABOT</p>
+              <p class="auth-portal-header__welcome">Create Your Account</p>
             </header>
 
             <div
@@ -465,11 +466,18 @@
           if (!message) {
             el.textContent = "";
             el.classList.add("hidden");
-            el.classList.remove("auth-field-hint--error", "auth-field-hint--ok");
+            el.classList.remove(
+              "auth-field-hint--error",
+              "auth-field-hint--ok",
+            );
             return;
           }
           el.textContent = message;
-          el.classList.remove("hidden", "auth-field-hint--error", "auth-field-hint--ok");
+          el.classList.remove(
+            "hidden",
+            "auth-field-hint--error",
+            "auth-field-hint--ok",
+          );
           el.classList.add(
             type === "ok" ? "auth-field-hint--ok" : "auth-field-hint--error",
           );
@@ -573,8 +581,7 @@
           setLoading(true);
           const result = await MatiAuth.register({
             displayName: displayNameInput?.value || "",
-            username:
-              document.getElementById("register-username")?.value || "",
+            username: document.getElementById("register-username")?.value || "",
             email: document.getElementById("register-email")?.value || "",
             password,
           });
