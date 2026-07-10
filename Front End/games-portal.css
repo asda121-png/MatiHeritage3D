@@ -30,9 +30,21 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 120% 70% at 50% 110%, rgba(109, 40, 217, 0.28) 0%, transparent 58%),
-    radial-gradient(ellipse 90% 55% at 12% 18%, rgba(99, 102, 241, 0.18) 0%, transparent 52%),
-    radial-gradient(ellipse 75% 50% at 88% 22%, rgba(34, 211, 238, 0.14) 0%, transparent 48%),
+    radial-gradient(
+      ellipse 120% 70% at 50% 110%,
+      rgba(109, 40, 217, 0.28) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 90% 55% at 12% 18%,
+      rgba(99, 102, 241, 0.18) 0%,
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 75% 50% at 88% 22%,
+      rgba(34, 211, 238, 0.14) 0%,
+      transparent 48%
+    ),
     linear-gradient(180deg, #030510 0%, #050816 38%, #070b1c 72%, #0a1028 100%);
 }
 
@@ -110,7 +122,13 @@
     );
   transform: perspective(620px) rotateX(68deg);
   transform-origin: center top;
-  mask-image: linear-gradient(180deg, transparent 0%, black 22%, black 78%, transparent 100%);
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    black 22%,
+    black 78%,
+    transparent 100%
+  );
   opacity: 0.75;
 }
 
@@ -120,7 +138,9 @@
   background-image:
     radial-gradient(rgba(34, 211, 238, 0.14) 1px, transparent 1px),
     radial-gradient(rgba(168, 85, 247, 0.1) 1.5px, transparent 1.5px);
-  background-size: 44px 44px, 132px 132px;
+  background-size:
+    44px 44px,
+    132px 132px;
   mask-image: radial-gradient(ellipse 100% 85% at 50% 40%, black, transparent);
   opacity: 0.5;
 }
@@ -143,14 +163,56 @@
   -webkit-backface-visibility: hidden;
 }
 
-.games-pixel--1 { top: 14%; left: 8%; animation-delay: 0s; }
-.games-pixel--2 { top: 22%; right: 12%; background: rgba(168, 85, 247, 0.9); box-shadow: 0 0 8px rgba(168, 85, 247, 0.55); animation-delay: -0.8s; }
-.games-pixel--3 { top: 48%; left: 5%; width: 6px; height: 6px; animation-delay: -1.6s; }
-.games-pixel--4 { top: 62%; right: 7%; animation-delay: -2.4s; }
-.games-pixel--5 { top: 78%; left: 14%; background: rgba(232, 121, 249, 0.9); box-shadow: 0 0 10px rgba(232, 121, 249, 0.5); animation-delay: -3.2s; }
-.games-pixel--6 { top: 32%; right: 22%; width: 3px; height: 3px; animation-delay: -1.2s; }
-.games-pixel--7 { top: 55%; left: 18%; animation-delay: -2.8s; }
-.games-pixel--8 { top: 70%; right: 28%; width: 5px; height: 5px; animation-delay: -0.4s; }
+.games-pixel--1 {
+  top: 14%;
+  left: 8%;
+  animation-delay: 0s;
+}
+.games-pixel--2 {
+  top: 22%;
+  right: 12%;
+  background: rgba(168, 85, 247, 0.9);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.55);
+  animation-delay: -0.8s;
+}
+.games-pixel--3 {
+  top: 48%;
+  left: 5%;
+  width: 6px;
+  height: 6px;
+  animation-delay: -1.6s;
+}
+.games-pixel--4 {
+  top: 62%;
+  right: 7%;
+  animation-delay: -2.4s;
+}
+.games-pixel--5 {
+  top: 78%;
+  left: 14%;
+  background: rgba(232, 121, 249, 0.9);
+  box-shadow: 0 0 10px rgba(232, 121, 249, 0.5);
+  animation-delay: -3.2s;
+}
+.games-pixel--6 {
+  top: 32%;
+  right: 22%;
+  width: 3px;
+  height: 3px;
+  animation-delay: -1.2s;
+}
+.games-pixel--7 {
+  top: 55%;
+  left: 18%;
+  animation-delay: -2.8s;
+}
+.games-pixel--8 {
+  top: 70%;
+  right: 28%;
+  width: 5px;
+  height: 5px;
+  animation-delay: -0.4s;
+}
 
 @keyframes games-pixel-twinkle {
   0%,
@@ -279,7 +341,13 @@
   right: 0;
   overflow: hidden;
   opacity: 0.42;
-  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
 }
 
 .games-marquee--top {
@@ -311,12 +379,12 @@
   font-size: clamp(0.42rem, 1.1vw, 0.52rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(34, 211, 238, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   white-space: nowrap;
 }
 
 .games-marquee--bottom .games-marquee-track span {
-  color: rgba(168, 85, 247, 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes games-marquee-scroll {
@@ -359,7 +427,13 @@
       transparent 30%,
       rgba(5, 8, 22, 0.55) 100%
     ),
-    linear-gradient(180deg, rgba(3, 5, 16, 0.35) 0%, transparent 18%, transparent 82%, rgba(3, 5, 16, 0.5) 100%);
+    linear-gradient(
+      180deg,
+      rgba(3, 5, 16, 0.35) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(3, 5, 16, 0.5) 100%
+    );
 }
 
 .experience-games-inner {
@@ -423,8 +497,12 @@
   text-transform: uppercase;
   text-decoration: none;
   color: #f8fafc;
-  background:
-    linear-gradient(135deg, rgba(168, 85, 247, 0.95) 0%, rgba(99, 102, 241, 0.92) 48%, rgba(34, 211, 238, 0.88) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.95) 0%,
+    rgba(99, 102, 241, 0.92) 48%,
+    rgba(34, 211, 238, 0.88) 100%
+  );
   border: 1px solid rgba(232, 121, 249, 0.45);
   border-radius: 0.75rem;
   box-shadow:
@@ -711,7 +789,9 @@
 .games-rack-arrow {
   font-size: 0.85rem;
   color: rgba(148, 163, 184, 0.35);
-  transition: color 0.25s ease, transform 0.25s ease;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .games-rack-item.is-active .games-rack-arrow {
@@ -737,7 +817,11 @@
   border: 1px solid rgba(168, 85, 247, 0.28);
   border-bottom: none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.12), transparent),
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(99, 102, 241, 0.12),
+      transparent
+    ),
     #08080c;
   box-shadow:
     0 0 0 1px rgba(34, 211, 238, 0.08) inset,
@@ -1012,7 +1096,9 @@
   }
 }
 
-.portal-memory-preview .memory-card.promo-memory-card:not(.is-flipped):not(.is-matched) .wax-seal {
+.portal-memory-preview
+  .memory-card.promo-memory-card:not(.is-flipped):not(.is-matched)
+  .wax-seal {
   animation: promo-wax-wiggle 3.2s ease-in-out infinite;
   animation-delay: calc(var(--promo-i, 0) * 0.28s);
 }
@@ -1202,7 +1288,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(12, 26, 61, 0.98), rgba(6, 15, 36, 0.99));
+  background: linear-gradient(
+    180deg,
+    rgba(12, 26, 61, 0.98),
+    rgba(6, 15, 36, 0.99)
+  );
   box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.4);
 }
 
@@ -1468,7 +1558,12 @@
 .portal-memory-preview .pairs-progress__fill {
   height: 100%;
   width: 50%;
-  background: linear-gradient(90deg, var(--adv-teal), #34d399, var(--gold-bright));
+  background: linear-gradient(
+    90deg,
+    var(--adv-teal),
+    #34d399,
+    var(--gold-bright)
+  );
   border-radius: inherit;
 }
 
@@ -1856,7 +1951,12 @@
   height: 100%;
   width: 40%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--fest-red), var(--fest-gold), var(--fest-teal));
+  background: linear-gradient(
+    90deg,
+    var(--fest-red),
+    var(--fest-gold),
+    var(--fest-teal)
+  );
 }
 
 .portal-spot-preview .fest-stars {
@@ -1890,14 +1990,13 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 6px,
-      rgba(249, 202, 36, 0.04) 6px,
-      rgba(249, 202, 36, 0.04) 12px
-    );
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(249, 202, 36, 0.04) 6px,
+    rgba(249, 202, 36, 0.04) 12px
+  );
 }
 
 .portal-spot-preview .exhibit-stage__garland {
@@ -2284,7 +2383,9 @@
   }
 }
 
-.portal-slide-preview .portal-puzzle-frame-solved.is-complete .portal-puzzle-board.is-unified {
+.portal-slide-preview
+  .portal-puzzle-frame-solved.is-complete
+  .portal-puzzle-board.is-unified {
   box-shadow: 0 0 0 2px rgba(82, 183, 136, 0.45);
 }
 
@@ -2384,7 +2485,9 @@
 }
 
 .portal-tf-preview .promo-tf-plaque {
-  animation: promo-tf-plaque-bad 8s ease-in-out infinite, promo-tf-plaque-ok 8s ease-in-out infinite;
+  animation:
+    promo-tf-plaque-bad 8s ease-in-out infinite,
+    promo-tf-plaque-ok 8s ease-in-out infinite;
 }
 
 @keyframes promo-tf-verdict-wrong {
@@ -2828,7 +2931,10 @@
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .games-portal-nav-btn:hover {
@@ -2854,7 +2960,9 @@
   box-shadow:
     0 0 28px rgba(34, 211, 238, 0.35),
     0 4px 0 #0891b2;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .games-portal-play-btn:hover {

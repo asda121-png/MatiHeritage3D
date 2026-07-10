@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in — Mati Heritage 3D</title>    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <title>Sign in — Mati Heritage 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Oswald:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
@@ -18,7 +19,7 @@
   </head>
   <body class="auth-body auth-body--portal">
     <div class="auth-portal-page">
-      <div class="auth-portal-card">
+      <div class="auth-portal-card auth-portal-card--login">
         <aside class="auth-portal-visual">
           <div class="auth-portal-visual__media">
             <div
@@ -34,7 +35,11 @@
               <p class="auth-portal-visual__loading-text">
                 Loading 3D preview…
               </p>
-              <p class="auth-portal-visual__loading-percent" id="login-model-percent" aria-hidden="true">
+              <p
+                class="auth-portal-visual__loading-percent"
+                id="login-model-percent"
+                aria-hidden="true"
+              >
                 0%
               </p>
             </div>
@@ -416,7 +421,11 @@
         function showAlert(message, type = "error") {
           if (!alertEl) return;
           alertEl.textContent = message;
-          alertEl.classList.remove("hidden", "auth-alert--error", "auth-alert--success");
+          alertEl.classList.remove(
+            "hidden",
+            "auth-alert--error",
+            "auth-alert--success",
+          );
           alertEl.classList.add(
             type === "success" ? "auth-alert--success" : "auth-alert--error",
           );

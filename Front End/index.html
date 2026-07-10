@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Visitor Portal - Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,6 +43,7 @@
 
       html {
         scroll-behavior: auto;
+        font-size: 16px;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
       }
@@ -93,6 +97,13 @@
       ::selection {
         background: rgba(4, 120, 87, 0.18);
         color: var(--forest-dark);
+      }
+
+      /* Fix for full height sections */
+      .map-section-first {
+        height: 115dvh !important;
+        min-height: 115dvh !important;
+        max-height: 115dvh !important;
       }
 
       .display-font {
@@ -236,7 +247,7 @@
         position: relative;
         width: 100%;
         max-width: 100%;
-        min-height: max(720px, calc(100vh - 80px));
+        min-height: 100vh;
         padding: clamp(5rem, 10vh, 7rem) clamp(1.25rem, 4vw, 2.5rem)
           clamp(7rem, 12vh, 9rem);
         display: flex;
@@ -2382,7 +2393,7 @@
 
       .map-section-first {
         padding-top: 0;
-        min-height: calc(100vh - var(--header-h, 5.625rem));
+        min-height: 100svh;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -2409,7 +2420,9 @@
         max-width: 94rem;
         width: 100%;
         margin: 0 auto;
-        min-height: calc(100vh - var(--header-h, 5.625rem));
+        min-height: calc(
+          (100svh - var(--header-h, 5.625rem)) / var(--visitor-ui-scale, 1)
+        );
         padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1.25rem, 3vw, 2.5rem);
         box-sizing: border-box;
       }
@@ -5012,10 +5025,6 @@
         }
         matiMapBooted = true;
         initMatiMap();
-        requestAnimationFrame(() => {
-          window.matiMapInstance?.invalidateSize?.();
-          setTimeout(() => window.matiMapInstance?.invalidateSize?.(), 200);
-        });
       }
 
       setTimeout(() => bootMatiMapAfterLayout(), 800);
