@@ -7,7 +7,7 @@ const MatiSupabaseAuth = (() => {
   function enabled() {
     return Boolean(
       MatiSupabase?.isConfigured?.() &&
-        window.MATI_SUPABASE_CONFIG?.useSupabaseAuth,
+      window.MATI_SUPABASE_CONFIG?.useSupabaseAuth,
     );
   }
 
@@ -16,11 +16,15 @@ const MatiSupabaseAuth = (() => {
   }
 
   function normalizeEmail(email) {
-    return String(email || "").trim().toLowerCase();
+    return String(email || "")
+      .trim()
+      .toLowerCase();
   }
 
   function normalizeUsername(username) {
-    return String(username || "").trim().toLowerCase();
+    return String(username || "")
+      .trim()
+      .toLowerCase();
   }
 
   function friendlyAuthError(error) {
@@ -107,8 +111,7 @@ const MatiSupabaseAuth = (() => {
     if (!/^[a-z0-9._-]{3,24}$/.test(cleanUsername)) {
       return {
         ok: false,
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
@@ -234,10 +237,7 @@ const MatiSupabaseAuth = (() => {
       user: {
         username: profile?.username || meta.username || email.split("@")[0],
         displayName:
-          profile?.display_name ||
-          meta.display_name ||
-          meta.username ||
-          email,
+          profile?.display_name || meta.display_name || meta.username || email,
         email: profile?.email || email,
       },
       session: data.session,
@@ -269,10 +269,7 @@ const MatiSupabaseAuth = (() => {
       username:
         profile?.username || meta.username || session.user.email?.split("@")[0],
       displayName:
-        profile?.display_name ||
-        meta.display_name ||
-        meta.username ||
-        "Player",
+        profile?.display_name || meta.display_name || meta.username || "Player",
       email: profile?.email || session.user.email,
       avatarUrl: profile?.avatar_url || null,
       loggedInAt: session.user.last_sign_in_at || new Date().toISOString(),
@@ -348,8 +345,7 @@ const MatiSupabaseAuth = (() => {
       return {
         ok: false,
         field: "username",
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
@@ -544,6 +540,7 @@ const MatiSupabaseAuth = (() => {
     requestPasswordReset,
     hasRecoverySession,
     updatePassword,
+    updatePasswordWithCurrent,
     passwordResetRedirectUrl,
     googleSignInEnabled,
     signInWithGoogle,

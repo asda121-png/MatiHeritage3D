@@ -99,13 +99,6 @@
         color: var(--forest-dark);
       }
 
-      /* Fix for full height sections */
-      .map-section-first {
-        height: 115dvh !important;
-        min-height: 115dvh !important;
-        max-height: 115dvh !important;
-      }
-
       .display-font {
         font-family: "Cormorant Garamond", Georgia, serif;
         font-weight: 700;
@@ -2393,7 +2386,7 @@
 
       .map-section-first {
         padding-top: 0;
-        min-height: 100svh;
+        min-height: 115svh;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -2692,8 +2685,7 @@
 
       @media (max-width: 480px) {
         .map-heritage-filter-wrap {
-          left: 1rem;
-          right: 1rem;
+          /* No change needed, defaults to top-right */
         }
 
         .map-heritage-filter {
@@ -3609,7 +3601,10 @@
       </div>
 
       <!-- Gallery — interactive preview (full archive on gallery.html) -->
-      <section id="portal-gallery" class="experience-section gallery-preview">
+      <section
+        id="portal-gallery"
+        class="experience-section gallery-preview full-screen-section"
+      >
         <div
           class="gallery-preview-bg"
           id="gallery-preview-bg"
@@ -3908,7 +3903,10 @@
       </section>
 
       <!-- 3D Explore — heritage monument viewer -->
-      <section id="portal-3d" class="experience-section experience-3d">
+      <section
+        id="portal-3d"
+        class="experience-section experience-3d full-screen-section"
+      >
         <div class="experience-3d-inner">
           <div class="experience-3d-layout reveal">
             <div class="experience-3d-copy">
@@ -3988,7 +3986,7 @@
               <model-viewer
                 id="portal-pylon-model"
                 class="experience-3d-model"
-                data-src=""
+                src="https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb"
                 alt="Pylon Monument 3D model"
                 auto-rotate
                 rotation-per-second="30deg"
@@ -4015,7 +4013,10 @@
       </section>
 
       <!-- Heritage Games — interactive game hall -->
-      <section id="portal-games" class="experience-section experience-games">
+      <section
+        id="portal-games"
+        class="experience-section experience-games full-screen-section"
+      >
         <div class="experience-games-bg" aria-hidden="true">
           <div class="games-bg-base"></div>
           <div class="games-aurora games-aurora--1"></div>
@@ -4157,7 +4158,7 @@
               aria-label="Select a game"
             ></nav>
 
-            <div class="games-portal-main">
+            <div class="games-portal-main mt-8 md:mt-0">
               <div class="games-portal-theater" id="portal-game-cabinet-screen">
                 <div class="portal-game-preview-stage">
                   <div
@@ -4379,7 +4380,7 @@
                 </li>
               </ul>
             </div>
-            <div class="plan-cta-box p-10 lg:p-14">
+            <div class="plan-cta-box p-10 lg:p-14 text-center lg:text-left">
               <h3 class="display-font font-bold text-2xl text-amber-100 mb-3">
                 City Tourism Office
               </h3>
@@ -4491,9 +4492,6 @@
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
-          }
-          if (typeof window.MatiVisitorAuth !== "undefined") {
-            await window.MatiVisitorAuth.refresh();
           }
 
           requestAnimationFrame(() => {

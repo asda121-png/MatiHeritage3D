@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="heritage-palette.css" />
     <link rel="stylesheet" href="gallery-page.css" />
-      <style>
+    <style>
       /* Fix for gallery layout to ensure full viewport height hero section */
       .gal-hero {
         height: 115dvh !important;
@@ -351,9 +351,6 @@
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
-          }
-          if (typeof window.MatiVisitorAuth !== "undefined") {
-            await window.MatiVisitorAuth.refresh();
           }
         })
         .catch((err) => console.error("Error loading header:", err));

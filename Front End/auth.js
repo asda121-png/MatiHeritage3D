@@ -93,7 +93,8 @@ const MatiAuth = (() => {
       if (!result) {
         return {
           ok: false,
-          message: "Registration is not available. Check Supabase configuration.",
+          message:
+            "Registration is not available. Check Supabase configuration.",
         };
       }
       if (result.ok && result.user) {
@@ -130,8 +131,7 @@ const MatiAuth = (() => {
     if (!/^[a-z0-9._-]{3,24}$/.test(cleanUsername)) {
       return {
         ok: false,
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
@@ -141,7 +141,10 @@ const MatiAuth = (() => {
 
     const users = readUsers();
 
-    const availability = checkRegistrationAvailability(cleanEmail, cleanUsername);
+    const availability = checkRegistrationAvailability(
+      cleanEmail,
+      cleanUsername,
+    );
     if (!availability.ok) {
       return { ok: false, message: availability.message };
     }
@@ -198,7 +201,10 @@ const MatiAuth = (() => {
 
   async function loginLocal(identifier, password) {
     if (!identifier || !password) {
-      return { ok: false, message: "Please enter your email/username and password." };
+      return {
+        ok: false,
+        message: "Please enter your email/username and password.",
+      };
     }
 
     const key = identifier.includes("@")
@@ -207,9 +213,7 @@ const MatiAuth = (() => {
 
     const users = readUsers();
     const user = users.find((entry) =>
-      identifier.includes("@")
-        ? entry.email === key
-        : entry.username === key,
+      identifier.includes("@") ? entry.email === key : entry.username === key,
     );
 
     let passwordOk = false;
@@ -309,7 +313,10 @@ const MatiAuth = (() => {
   async function updateProfileLocal({ username, displayName }) {
     const session = getSession();
     if (!session) {
-      return { ok: false, message: "You must be signed in to update your profile." };
+      return {
+        ok: false,
+        message: "You must be signed in to update your profile.",
+      };
     }
 
     const cleanUsername = normalizeUsername(username);
@@ -323,16 +330,14 @@ const MatiAuth = (() => {
       return {
         ok: false,
         field: "username",
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
     const users = readUsers();
     const taken = users.some(
       (entry) =>
-        entry.username === cleanUsername &&
-        entry.username !== session.username,
+        entry.username === cleanUsername && entry.username !== session.username,
     );
     if (taken) {
       return {
@@ -389,6 +394,21 @@ const MatiAuth = (() => {
     return { ok: true };
   }
 
+  async function updatePasswordWithCurrent(currentPassword, newPassword) {
+    if (usesSupabaseAuth()) {
+      return MatiSupabaseAuth.updatePasswordWithCurrent(
+        currentPassword,
+        newPassword,
+      );
+    }
+    // Local storage implementation would go here.
+    // For now, we assume this is only for Supabase-enabled auth.
+    return {
+      ok: false,
+      message: "Password updates are only available with a server connection.",
+    };
+  }
+
   return {
     register,
     login,
@@ -402,5 +422,6 @@ const MatiAuth = (() => {
     checkRegistrationAvailability: checkRegistrationAvailabilityAsync,
     checkUsernameAvailability,
     updateProfile,
+    updatePasswordWithCurrent,
   };
 })();

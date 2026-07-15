@@ -65,7 +65,7 @@
       .show-stage {
         position: relative;
         min-height: 100vh;
-        padding: 6.5rem 1rem 8rem;
+        padding: 6.5rem 1rem 12rem;
         background:
           radial-gradient(
             ellipse 90% 60% at 50% -10%,
@@ -303,42 +303,6 @@
         );
         border-top: 2px solid rgba(212, 175, 55, 0.22);
         border-radius: 50% 50% 0 0 / 30% 30% 0 0;
-      }
-
-      /* ── Header overrides (match game.html) ── */
-      #header-placeholder,
-      .site-header {
-        z-index: 500;
-      }
-
-      .site-header .header-bg {
-        overflow: visible;
-      }
-
-      .site-header .site-header__bar,
-      .site-header .site-header__end,
-      .site-header .site-header__utilities,
-      .site-header .site-profile {
-        overflow: visible;
-      }
-
-      .site-header .site-profile {
-        position: relative;
-        z-index: 510;
-      }
-
-      .site-header .header-dropdown {
-        z-index: 520;
-      }
-
-      body.game-page .site-header.is-scrolled {
-        height: var(--header-h);
-      }
-
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(10, 16, 28, 0.97);
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
       }
 
       #settings-modal {
@@ -1855,7 +1819,7 @@
     }
   </style>
 
-  <body class="game-page">
+  <body class="game-page visitor-module">
     <svg class="tv-filters" aria-hidden="true" focusable="false">
       <filter id="tv-static-filter" x="0%" y="0%" width="100%" height="100%">
         <feTurbulence
@@ -2151,9 +2115,11 @@
       </span>
     </aside>
 
+    <script src="visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
+    <script src="visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -2840,82 +2806,25 @@
       };
       document.addEventListener("click", handleWelcome, { once: true });
 
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const header = doc.querySelector("header");
-          document.getElementById("header-placeholder").replaceWith(header);
+      window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
 
-          const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) document.body.appendChild(settingsModal);
-
-          const headerStyle = doc.querySelector("style");
-          if (headerStyle)
-            document.head.appendChild(headerStyle.cloneNode(true));
-
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
-            const script = document.createElement("script");
-            script.textContent = headerScript.textContent;
-            document.body.appendChild(script);
-          }
-
-          document
-            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
-            .forEach((link) => {
-              if (link.getAttribute("data-nav") === "games")
-                link.classList.add("is-active");
-            });
-
-          const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl)
-            pointsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-
-          if (typeof window.initSiteHeader === "function")
-            window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function")
-            window.initGlobalSettings();
-
-          if (!hasWelcomed) {
-            playAnnouncer(
-              "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
-              "welcome",
-            );
-            hasWelcomed = true;
-          }
-
-          bindStudioHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-            ),
+        if (!hasWelcomed) {
+          playAnnouncer(
+            "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
+            "welcome",
           );
-        })
-        .catch((err) => console.error("Error loading header:", err));
+          hasWelcomed = true;
+        }
 
-      fetch("footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholder = document.getElementById("footer-placeholder");
-          placeholder.replaceWith(footer);
-
-          const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle);
-
-          const footerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (footerScript) {
-            const script = document.createElement("script");
-            script.textContent = footerScript.textContent;
-            document.body.appendChild(script);
-          }
-
-          if (typeof window.initSiteFooter === "function")
-            window.initSiteFooter("games");
-        })
-        .catch((err) => console.error("Error loading footer:", err));
+        bindStudioHoverSound(
+          document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
+          ),
+        );
+      });
     </script>
   </body>
 </html>

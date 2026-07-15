@@ -1,7 +1,6 @@
 /* Heritage Games — visitor portal game hall */
 
 .experience-games {
-  padding: clamp(3.25rem, 6.5vw, 5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
   background: #030510;
   color: #e2e8f0;
   contain: layout style paint;

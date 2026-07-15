@@ -5,7 +5,8 @@
   --about-surface: #ffffff;
   --about-radius: 1rem;
   --about-radius-lg: 1.25rem;
-  --about-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.05);
+  --about-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.05);
   --about-shadow-hover: 0 12px 32px rgba(4, 120, 87, 0.1);
   --about-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --about-shell-max: 94rem;
@@ -108,8 +109,15 @@ body.visitor-module.about-page::before {
   inset: 0;
   opacity: 0.35;
   background-image:
-    linear-gradient(color-mix(in srgb, var(--forest) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--sky) 4%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--forest) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--sky) 4%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 90% 80% at 50% 35%, black, transparent);
   pointer-events: none;
@@ -814,7 +822,8 @@ body.visitor-module.about-page::before {
   .about-timeline-chapter--left:not(.is-inview) .about-timeline-chapter-copy,
   .about-timeline-chapter--right:not(.is-inview) .about-timeline-chapter-copy,
   .about-timeline-chapter--left:not(.is-inview) .about-timeline-chapter-visual,
-  .about-timeline-chapter--right:not(.is-inview) .about-timeline-chapter-visual {
+  .about-timeline-chapter--right:not(.is-inview)
+    .about-timeline-chapter-visual {
     transform: translateY(24px);
   }
 }

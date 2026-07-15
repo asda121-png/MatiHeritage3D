@@ -290,7 +290,13 @@
       </div>`;
   }
 
-  function buildPortalScrollPreview(type, previewClass, panelClass, innerHtml, options) {
+  function buildPortalScrollPreview(
+    type,
+    previewClass,
+    panelClass,
+    innerHtml,
+    options,
+  ) {
     options = options || {};
     const miniClass = options.mini ? ` ${previewClass}--mini` : "";
 
@@ -336,7 +342,11 @@
 
     const grid = layout
       .map((state, index) =>
-        buildMemoryCardPreview(MEMORY_PORTAL_DECK[state.deckIndex], state, index),
+        buildMemoryCardPreview(
+          MEMORY_PORTAL_DECK[state.deckIndex],
+          state,
+          index,
+        ),
       )
       .join("");
 
@@ -843,12 +853,33 @@
         </div>`;
     }
 
+    if (game.preview === "trivia") {
+      return `
+      <div class="game-tv-set game-tv-set--trivia">
+        <div class="game-tv-bezel">
+          <div class="game-tv-scanlines" aria-hidden="true"></div>
+          <div class="game-tv-screen">
+            <div class="game-tv-screen__inner" style="display: flex; align-items: center; justify-content: center;">
+              <div class="text-center" style="transform: scale(0.85);">
+                <h1 class="text-xl font-bold uppercase" style="font-family: 'Anton', sans-serif; color: #f0e6c8; letter-spacing: 0.05em; line-height: 1.1;">${game.title || "Trivia Challenge"}</h1>
+                <span class="inline-block text-xs font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-sm" style="background: #d4af37; color: #2a1208; font-family: 'Oswald', sans-serif;">▶ Start</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="game-tv-stand" aria-hidden="true"></div>
+      </div>
+      `;
+    }
+
     const inner =
       game.preview === "trivia"
         ? buildTriviaIntroContent()
         : buildGenericPreviewContent(game);
     const tvClass =
-      game.preview === "trivia" ? "game-tv-set game-tv-set--trivia" : "game-tv-set";
+      game.preview === "trivia"
+        ? "game-tv-set game-tv-set--trivia"
+        : "game-tv-set";
 
     return `
       <div class="${tvClass}">
@@ -1234,10 +1265,16 @@
           moveIndex >= SLIDE_DEMO_MOVES.length
             ? "Complete!"
             : `Move ${moveIndex + 1} of ${SLIDE_DEMO_MOVES.length}`;
-        badge.classList.toggle("is-complete", moveIndex >= SLIDE_DEMO_MOVES.length);
+        badge.classList.toggle(
+          "is-complete",
+          moveIndex >= SLIDE_DEMO_MOVES.length,
+        );
       }
       if (frame) {
-        frame.classList.toggle("is-complete", moveIndex >= SLIDE_DEMO_MOVES.length);
+        frame.classList.toggle(
+          "is-complete",
+          moveIndex >= SLIDE_DEMO_MOVES.length,
+        );
       }
     }
 
@@ -1271,7 +1308,11 @@
       if (!tile || !empty) return;
 
       const direction = getSlideDirection(move.from, move.to);
-      tile.classList.add("portal-puzzle-slide-tile", "is-sliding", `is-sliding-${direction}`);
+      tile.classList.add(
+        "portal-puzzle-slide-tile",
+        "is-sliding",
+        `is-sliding-${direction}`,
+      );
 
       window.setTimeout(() => {
         boardState[move.to] = boardState[move.from];

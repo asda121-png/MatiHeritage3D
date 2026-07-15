@@ -8,7 +8,7 @@ const BUILT_HERITAGE_SITES = [
     cover:
       "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
     description:
-      "The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year \"1903\" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city's historical journey, preserved in excellent condition for the inspiration and education of its citizens.",
+      'The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year "1903" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city\'s historical journey, preserved in excellent condition for the inspiration and education of its citizens.',
     location: "Barangay Central",
     lat: 6.9521319,
     lng: 126.2167824,
@@ -111,7 +111,7 @@ const BUILT_HERITAGE_SITES = [
     cover:
       "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
     description:
-      "The Provincial Capitol of Davao Oriental, popularly known as the \"White House,\" is a majestic three-story edifice that serves as the official seat of the provincial government. Situated atop Capitol Hills, the building holds an imposing presence in the city skyline. Its architectural design draws inspiration from classical Western landmarks, notably patterned after the U.S. White House, while incorporating neoclassical elements reminiscent of St. Peter's Basilica in Rome. The construction of the New Capitol was a multi-generational project aimed at unifying the politics and people of Davao Oriental. The project commenced during the tenure of former Governor Elena Palma Gil and was brought to completion under the leadership of Governor Corazon N. Malanyaon. Since its grand opening in 2010, the building has transitioned from a purely administrative facility into a primary tourist attraction, symbolizing a new era of public service for the province.",
+      'The Provincial Capitol of Davao Oriental, popularly known as the "White House," is a majestic three-story edifice that serves as the official seat of the provincial government. Situated atop Capitol Hills, the building holds an imposing presence in the city skyline. Its architectural design draws inspiration from classical Western landmarks, notably patterned after the U.S. White House, while incorporating neoclassical elements reminiscent of St. Peter\'s Basilica in Rome. The construction of the New Capitol was a multi-generational project aimed at unifying the politics and people of Davao Oriental. The project commenced during the tenure of former Governor Elena Palma Gil and was brought to completion under the leadership of Governor Corazon N. Malanyaon. Since its grand opening in 2010, the building has transitioned from a purely administrative facility into a primary tourist attraction, symbolizing a new era of public service for the province.',
     location: "Barangay Central",
     lat: 6.9483186,
     lng: 126.2271687,
@@ -140,18 +140,14 @@ const BUILT_HERITAGE_SITES = [
     categoryLabel: "Built Heritage",
     cover: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
     description:
-      "The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the \"Point Zero\" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city's historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.",
+      'The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the "Point Zero" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city\'s historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.',
     location: "Barangay Central",
     lat: 6.952258,
     lng: 126.216889,
     heritageCategory: "Monument",
     ownership: "Government Property",
     modelSrc:
-      (typeof window !== "undefined" &&
-        window.MATI_SUPABASE_CONFIG?.pylonModelUrl) ||
-      (typeof window !== "undefined" && window.MATI_SUPABASE_CONFIG?.url
-        ? `${String(window.MATI_SUPABASE_CONFIG.url).replace(/\/$/, "")}/storage/v1/object/public/heritage-models/pylon/Pylon.glb`
-        : ""),
+      "https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb",
   },
   {
     id: "subangan",

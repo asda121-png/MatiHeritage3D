@@ -464,7 +464,11 @@
     <script src="auth-oauth.js"></script>
     <script src="auth-ui.js"></script>
     <script>
-      MatiAuthOAuth.bindGoogleButton("google-signin-btn", "index.html");
+      const params = new URLSearchParams(window.location.search);
+      const redirectTarget = params.get("redirect") || "index.html";
+
+      void MatiAuthOAuth.handleRedirectIfNeeded(redirectTarget);
+      MatiAuthOAuth.bindGoogleButton("google-signin-btn", redirectTarget);
       MatiAuthUI.bindPasswordToggle(
         "register-password",
         "toggle-password",
@@ -575,9 +579,6 @@
           submitBtn.classList.toggle("is-loading", isLoading);
           submitBtn.setAttribute("aria-busy", isLoading ? "true" : "false");
         }
-
-        const params = new URLSearchParams(window.location.search);
-        const redirectTarget = params.get("redirect") || "index.html";
 
         form?.addEventListener("submit", async (e) => {
           e.preventDefault();
