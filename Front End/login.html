@@ -80,7 +80,7 @@
             <model-viewer
               id="login-pylon-model"
               class="auth-portal-visual__model"
-              src=""
+              src="https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb"
               poster="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
               alt="Pylon Monument 3D model"
               auto-rotate
@@ -439,16 +439,17 @@
           await MatiAuth.restoreSession?.();
           if (!MatiAuth.isLoggedIn?.()) return;
 
+          if (params.get("oauth") === "1") {
+            // OAuth callbacks are handled by MatiAuthOAuth (including password setup checks).
+            return;
+          }
+
           if (
             typeof MatiAdminAuth !== "undefined" &&
             (await MatiAdminAuth.isAdmin())
           ) {
             window.location.replace("admin.html");
             return;
-          }
-
-          if (params.get("oauth") === "1") {
-            window.location.replace(redirectTarget);
           }
         })();
 

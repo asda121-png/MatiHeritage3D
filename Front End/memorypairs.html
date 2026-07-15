@@ -45,6 +45,7 @@
         overflow-x: hidden;
         min-height: 100vh;
         background: #2a1808;
+        zoom: 0.8;
       }
 
       .chronicle-font {
@@ -62,10 +63,13 @@
       /* ── Stage: cartoon medieval library ── */
       .chronicle-stage {
         position: relative;
-        min-height: 100vh;
-        padding: 8rem 1rem 3.5rem;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - var(--header-h, 5.625rem));
+        padding: 1rem;
         background: transparent;
-        z-index: 2;
+        justify-content: center;
+        align-items: center;
       }
 
       body.chronicle-page.is-playing {
@@ -75,21 +79,56 @@
       body.chronicle-page.is-playing .chronicle-stage {
         padding: 5.25rem 0.75rem 0.75rem;
         min-height: 100vh;
-        max-height: 100vh;
-        overflow: hidden;
       }
 
       body.chronicle-page.is-playing .chronicle-stage > .relative {
-        height: calc(100vh - 5.25rem - 0.75rem);
-        max-height: calc(100vh - 5.25rem - 0.75rem);
+        height: auto;
       }
 
       #game-screen:not(.hidden) {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        max-height: 100%;
-        overflow: hidden;
+        padding: 1rem;
+        min-height: 0;
+      }
+
+      .game-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+      }
+
+      .game-header__title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .game-header__actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .game-header__stats {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .game-progress {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-shrink: 0;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .game-progress .hourglass-track,
+      .game-progress .pairs-progress {
+        flex: 1;
       }
 
       #intro-screen,
@@ -1017,6 +1056,19 @@
         text-align: center;
       }
 
+      .game-header__actions .btn-chronicle--ghost {
+        background: linear-gradient(180deg, #fffef8, #f7eed8);
+        border: 2px solid rgba(180, 134, 11, 0.55);
+        box-shadow:
+          0 3px 0 rgba(92, 61, 30, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      .game-header__actions .btn-chronicle--ghost:hover {
+        background: linear-gradient(180deg, #fffef8, #f7eed8);
+        transform: translateY(-1px);
+      }
+
       .hud-ribbon__label {
         font-family: "Quicksand", sans-serif;
         font-size: 0.68rem;
@@ -1731,33 +1783,117 @@
 
       /* Game board on dark wood table */
       .game-table {
-        flex: 1;
-        min-height: 0;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
-        padding: 0.5rem 0.5rem 0.75rem;
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        max-width: 90%;
+        margin: 0 auto;
+        background: linear-gradient(
+          135deg,
+          #3d2914 0%,
+          #2a1808 50%,
+          #1a0f05 100%
+        );
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.6),
+          inset 0 2px 4px rgba(255, 255, 255, 0.05),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+          0 0 0 2px rgba(212, 168, 67, 0.3),
+          0 0 40px rgba(212, 168, 67, 0.15);
+        position: relative;
+      }
+
+      .game-table::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
         background:
           repeating-linear-gradient(
             90deg,
-            rgba(0, 0, 0, 0.04) 0 2px,
-            transparent 2px 28px
+            transparent 0px,
+            transparent 40px,
+            rgba(212, 168, 67, 0.03) 40px,
+            rgba(212, 168, 67, 0.03) 41px
           ),
-          linear-gradient(180deg, #5c3d1e 0%, #3d2914 100%);
-        border: 4px solid var(--cartoon-outline);
-        border-radius: 16px;
-        box-shadow:
-          inset 0 4px 12px rgba(0, 0, 0, 0.35),
-          0 16px 40px rgba(0, 0, 0, 0.45);
+          repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 40px,
+            rgba(212, 168, 67, 0.03) 40px,
+            rgba(212, 168, 67, 0.03) 41px
+          );
+        pointer-events: none;
       }
 
       /* Header: match game.html (dark game hall style) */
       #header-placeholder,
       .site-header {
         z-index: 500;
+      }
+
+      #footer-placeholder {
+        margin-top: 20rem;
+      }
+
+      .site-footer {
+        margin-top: 20rem;
+      }
+
+      /* Leave Game Modal */
+      .leave-game-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+
+      .leave-game-modal.hidden {
+        display: none;
+      }
+
+      .leave-game-modal__content {
+        background: linear-gradient(135deg, #f3e4c4 0%, #e8d3a8 100%);
+        border: 4px solid var(--adv-gold);
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow:
+          0 0 0 2px var(--adv-wood),
+          0 20px 60px rgba(0, 0, 0, 0.5),
+          0 0 30px rgba(251, 191, 36, 0.2);
+      }
+
+      .leave-game-modal__title {
+        font-family: "Cinzel Decorative", serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--adv-wood-dark);
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .leave-game-modal__message {
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        color: var(--ink);
+        margin-bottom: 1.5rem;
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      .leave-game-modal__actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
       }
 
       .site-header .header-bg {
@@ -1784,15 +1920,7 @@
         height: var(--header-h);
       }
 
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(10, 16, 28, 0.97);
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
-      }
-
-      body.game-page .site-header.is-scrolled .header-scene__svg {
-        opacity: 0.78;
-      }
+      /* Removed scrolled state transition to prevent header background change */
 
       #settings-modal {
         z-index: 7000 !important;
@@ -1906,6 +2034,10 @@
       }
 
       /* ── Intro screen extras ── */
+      #intro-screen {
+        margin-top: 8rem;
+      }
+
       #intro-screen .chronicle-title {
         font-size: clamp(2.1rem, 6vw, 3.35rem);
         letter-spacing: 0.05em;
@@ -2001,7 +2133,7 @@
     </style>
   </head>
 
-  <body class="chronicle-page game-page">
+  <body class="chronicle-page game-page visitor-module">
     <div id="header-placeholder"></div>
 
     <nav class="game-back-nav" aria-label="Game navigation">
@@ -2166,7 +2298,7 @@
     </div>
 
     <main class="chronicle-stage">
-      <div class="relative z-10 mx-auto w-full max-w-6xl">
+      <div class="relative z-10 mx-auto w-full max-w-6xl flex flex-col">
         <!-- INTRO -->
         <section
           id="intro-screen"
@@ -2426,20 +2558,15 @@
 
         <!-- GAME -->
         <section id="game-screen" class="hidden">
-          <div
-            class="game-screen__top flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-          >
-            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <!-- Game Header -->
+          <div class="game-header">
+            <div class="game-header__title">
               <h2 class="game-screen__title">Pair the Treasures of Mati</h2>
-              <span
-                id="streak-badge"
-                class="streak-badge mt-0"
-                aria-live="polite"
-              >
+              <span id="streak-badge" class="streak-badge" aria-live="polite">
                 🔥 Streak ×<span id="streak-count">0</span>
               </span>
             </div>
-            <div class="flex flex-wrap gap-1.5">
+            <div class="game-header__stats">
               <div class="hud-ribbon">
                 <div class="hud-ribbon__label">Time</div>
                 <div
@@ -2476,9 +2603,19 @@
                 </div>
               </div>
             </div>
+            <div class="game-header__actions">
+              <button
+                type="button"
+                id="game-back-btn"
+                class="btn-chronicle btn-chronicle--ghost"
+              >
+                ← Back
+              </button>
+            </div>
           </div>
 
-          <div class="game-screen__bars">
+          <!-- Progress Bar -->
+          <div class="game-progress">
             <div class="hourglass-track">
               <div id="timer-bar" class="hourglass-fill"></div>
             </div>
@@ -2487,8 +2624,9 @@
             </div>
           </div>
 
+          <!-- Game Board -->
           <div id="game-table" class="game-table">
-            <div id="card-grid" class="grid mx-auto"></div>
+            <div id="card-grid" class="grid"></div>
           </div>
         </section>
 
@@ -2606,6 +2744,37 @@
       <p class="dealing-overlay__text">Dealing the relic cards…</p>
     </div>
 
+    <!-- Leave Game Confirmation Modal -->
+    <div
+      id="leave-game-modal"
+      class="leave-game-modal hidden"
+      aria-hidden="true"
+    >
+      <div class="leave-game-modal__content">
+        <h3 class="leave-game-modal__title">Leave Game?</h3>
+        <p class="leave-game-modal__message">
+          Your progress will be lost if you leave now. Are you sure you want to
+          quit?
+        </p>
+        <div class="leave-game-modal__actions">
+          <button
+            type="button"
+            id="leave-game-cancel"
+            class="btn-chronicle btn-chronicle--ghost"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="leave-game-confirm"
+            class="btn-chronicle btn-chronicle--primary"
+          >
+            Leave Game
+          </button>
+        </div>
+      </div>
+    </div>
+
     <aside id="fact-scroll" class="fact-scroll" aria-live="polite">
       <span class="fact-scroll__quill" aria-hidden="true">🧭</span>
       <div
@@ -2636,9 +2805,11 @@
       preload="auto"
     ></audio>
 
+    <script src="visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
+    <script src="visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -2654,11 +2825,13 @@
     <script src="game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "memorypairs.html" });
+    </script>
+    <script>
       if (typeof window.initTvExpandReceive === "function") {
         window.initTvExpandReceive();
       }
 
-      let HERITAGE_DECK = [
+      const HERITAGE_DECK = [
         {
           id: "pylon",
           name: "Pylon Monument",
@@ -2756,8 +2929,6 @@
           fact: "Annual founding celebration — music, dance, and the vibrant spirit of Mati City.",
         },
       ];
-      const FALLBACK_MEMORY_DECK = HERITAGE_DECK.slice();
-      let heritageSession = null;
 
       const CATEGORY_LABELS = {
         built: "Built Heritage",
@@ -2777,21 +2948,18 @@
           pairs: 6,
           time: 90,
           basePoints: 80,
-          colsClass: "max-w-3xl",
         },
         medium: {
           cols: 4,
           pairs: 8,
           time: 60,
           basePoints: 100,
-          colsClass: "max-w-3xl",
         },
         hard: {
           cols: 6,
           pairs: 12,
           time: 45,
           basePoints: 120,
-          colsClass: "max-w-5xl",
         },
       };
 
@@ -3187,12 +3355,16 @@
 
         const totalCards = settings.pairs * 2;
         const rows = Math.ceil(totalCards / settings.cols);
-        const gap = 6;
-        const fitScale = 0.82;
-        const rect = table.getBoundingClientRect();
-        const availH = Math.max(rect.height * fitScale - 8, 120);
-        const availW = Math.max(rect.width - 8, 200);
+        const gap = 16;
         const aspect = 0.72;
+
+        // Calculate available space based on viewport
+        const headerHeight = 120;
+        const progressHeight = 50;
+        const padding = 32;
+        const availH =
+          window.innerHeight - headerHeight - progressHeight - padding;
+        const availW = window.innerWidth * 0.9;
 
         let cardH = (availH - gap * (rows - 1)) / rows;
         let cardW = cardH * aspect;
@@ -3203,46 +3375,24 @@
           cardH = cardW / aspect;
         }
 
-        cardH = Math.max(48, Math.floor(cardH));
-        cardW = Math.max(36, Math.floor(cardH * aspect));
+        cardH = Math.max(140, Math.floor(cardH));
+        cardW = Math.max(100, Math.floor(cardH * aspect));
 
         gameScreen.style.setProperty("--card-w", `${cardW}px`);
         gameScreen.style.setProperty("--card-h", `${cardH}px`);
         grid.style.gridTemplateColumns = `repeat(${settings.cols}, ${cardW}px)`;
         grid.style.gridTemplateRows = `repeat(${rows}, ${cardH}px)`;
-      }
-
-      async function prepareMemoryDeck(pairCount) {
-        try {
-          if (typeof MatiHeritageGameContent !== "undefined") {
-            heritageSession = await MatiHeritageGameContent.createSession();
-            const generated = heritageSession.memory(
-              Math.max(pairCount, CONFIG.hard.pairs),
-            );
-            if (generated.length) {
-              HERITAGE_DECK = generated;
-              return HERITAGE_DECK;
-            }
-          }
-        } catch (error) {
-          console.warn("Memory heritage deck failed, using fallback:", error);
-        }
-        HERITAGE_DECK = FALLBACK_MEMORY_DECK.slice();
-        return HERITAGE_DECK;
+        grid.style.gap = `${gap}px`;
       }
 
       function createBoard() {
         const settings = CONFIG[difficulty];
         const grid = document.getElementById("card-grid");
         grid.innerHTML = "";
-        grid.className = "grid mx-auto";
+        grid.className = "grid";
         document.getElementById("game-screen").dataset.difficulty = difficulty;
 
-        const deckSource =
-          HERITAGE_DECK.length >= settings.pairs
-            ? HERITAGE_DECK
-            : FALLBACK_MEMORY_DECK;
-        const picked = shuffle(deckSource).slice(0, settings.pairs);
+        const picked = shuffle(HERITAGE_DECK).slice(0, settings.pairs);
         cards = shuffle([...picked, ...picked]);
 
         document.getElementById("total-pairs").textContent = settings.pairs;
@@ -3466,20 +3616,16 @@
           ? `+${timeBonus} time bonus · ${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`
           : `${matchedPairs}/${settings.pairs} pairs matched before time ran out`;
 
-        if (typeof MatiHeritagePoints !== "undefined") {
-          void MatiHeritagePoints.add(totalEarned);
-        } else {
-          const currentTotal = parseInt(
-            localStorage.getItem("totalHeritagePoints") || "0",
-            10,
-          );
-          localStorage.setItem(
-            "totalHeritagePoints",
-            String(currentTotal + totalEarned),
-          );
-          const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
-        }
+        const currentTotal = parseInt(
+          localStorage.getItem("totalHeritagePoints") || "0",
+          10,
+        );
+        localStorage.setItem(
+          "totalHeritagePoints",
+          String(currentTotal + totalEarned),
+        );
+        const pointsEl = document.getElementById("header-total-points");
+        if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
 
         playAnnouncer(
           win
@@ -3513,7 +3659,6 @@
         document.body.classList.add("is-playing");
         if (overlay) overlay.classList.add("is-visible");
 
-        await prepareMemoryDeck(CONFIG[difficulty].pairs);
         createBoard();
         updatePairProgress();
         updateStreakUI();
@@ -3539,6 +3684,40 @@
         showDifficultyScreen();
       });
 
+      // Leave game modal logic
+      const gameBackBtn = document.getElementById("game-back-btn");
+      const leaveGameModal = document.getElementById("leave-game-modal");
+      const leaveGameCancel = document.getElementById("leave-game-cancel");
+      const leaveGameConfirm = document.getElementById("leave-game-confirm");
+
+      if (gameBackBtn) {
+        gameBackBtn.addEventListener("click", () => {
+          if (gameActive) {
+            leaveGameModal.classList.remove("hidden");
+            leaveGameModal.setAttribute("aria-hidden", "false");
+          } else {
+            showDifficultyScreen();
+          }
+        });
+      }
+
+      if (leaveGameCancel) {
+        leaveGameCancel.addEventListener("click", () => {
+          leaveGameModal.classList.add("hidden");
+          leaveGameModal.setAttribute("aria-hidden", "true");
+        });
+      }
+
+      if (leaveGameConfirm) {
+        leaveGameConfirm.addEventListener("click", () => {
+          leaveGameModal.classList.add("hidden");
+          leaveGameModal.setAttribute("aria-hidden", "true");
+          clearInterval(timerInterval);
+          gameActive = false;
+          showDifficultyScreen();
+        });
+      }
+
       bindHoverSound([
         document.getElementById("start-btn"),
         document.getElementById("replay-btn"),
@@ -3546,10 +3725,6 @@
         document.querySelector(".game-back-nav a"),
         ...document.querySelectorAll(".quest-tab, .btn-chronicle"),
       ]);
-
-      if (typeof MatiGameExitGuard !== "undefined") {
-        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "chronicle" });
-      }
 
       startKeeperTips();
       initMusic();
@@ -3568,81 +3743,24 @@
         );
       }
 
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const header = doc.querySelector("header");
-          document.getElementById("header-placeholder").replaceWith(header);
+      window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
 
-          const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) document.body.appendChild(settingsModal);
+        if (typeof window.initSiteHeader === "function") {
+          window.initSiteHeader();
+        }
+        if (typeof window.initGlobalSettings === "function") {
+          window.initGlobalSettings();
+        }
 
-          const headerStyle = doc.querySelector("style");
-          if (headerStyle)
-            document.head.appendChild(headerStyle.cloneNode(true));
-
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
-            const script = document.createElement("script");
-            script.textContent = headerScript.textContent;
-            document.body.appendChild(script);
-          }
-
-          document
-            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
-            .forEach((link) => {
-              if (link.getAttribute("data-nav") === "games")
-                link.classList.add("is-active");
-            });
-
-          const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl)
-            pointsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-
-          if (typeof window.initSiteHeader === "function")
-            window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function")
-            window.initGlobalSettings();
-
-          bindHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
-            ),
-          );
-
-          bindHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
-            ),
-          );
-        })
-        .catch((err) => console.error("Error loading header:", err));
-
-      fetch("footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholder = document.getElementById("footer-placeholder");
-          if (footer && placeholder) placeholder.replaceWith(footer);
-
-          const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle);
-
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
-            const s = document.createElement("script");
-            s.textContent = scriptText;
-            document.body.appendChild(s);
-          }
-          if (typeof window.initSiteFooter === "function")
-            window.initSiteFooter("games");
-        })
-        .catch((err) => console.error("Error loading footer:", err));
+        bindHoverSound(
+          document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
+          ),
+        );
+      });
     </script>
   </body>
 </html>

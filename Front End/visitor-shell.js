@@ -11,12 +11,12 @@
 
   async function injectHeader(pageKey) {
     const headerResponse = await fetch("header.html");
-    const headerDoc = new DOMParser().parseFromString(
-      await headerResponse.text(),
-      "text/html",
-    );
+    const headerHtml = await headerResponse.text();
+    const headerDoc = new DOMParser().parseFromString(headerHtml, "text/html");
     const header = headerDoc.querySelector("header");
     const headerStyles = headerDoc.querySelector("style");
+    const settingsModal = headerDoc.getElementById("settings-modal");
+
     if (headerStyles) document.head.appendChild(headerStyles.cloneNode(true));
     if (header) {
       document.getElementById("header-placeholder")?.replaceWith(header);
@@ -53,15 +53,13 @@
         }
       });
 
-    document.getElementById("settings-modal")?.remove();
+    // Move the settings modal from the fetched content to the main document body
+    if (settingsModal) document.body.appendChild(settingsModal);
 
     if (typeof window.initSiteHeader === "function") {
       window.initSiteHeader();
     }
-
-    if (typeof window.MatiVisitorAuth !== "undefined") {
-      await window.MatiVisitorAuth.refresh();
-    }
+    // Note: initGlobalSettings() is called by the individual pages after this runs.
   }
 
   async function injectFooter(pageKey) {
@@ -73,7 +71,8 @@
     const footerStyles = footerDoc.querySelector("style");
     if (footerStyles) document.head.appendChild(footerStyles.cloneNode(true));
     const footer = footerDoc.querySelector("footer");
-    if (footer) document.getElementById("footer-placeholder")?.replaceWith(footer);
+    if (footer)
+      document.getElementById("footer-placeholder")?.replaceWith(footer);
 
     const footerScript = Array.from(footerDoc.scripts).find(
       (s) => !s.src,

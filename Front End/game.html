@@ -38,8 +38,10 @@
       }
 
       .games-hub-page .hero-bg {
-        min-height: calc(135vh - var(--header-h));
-        min-height: calc(135dvh - var(--header-h));
+        height: calc(135vh - var(--header-h));
+        height: calc(135dvh - var(--header-h));
+        /* Add extra space at the bottom to push the footer down */
+        padding-bottom: clamp(8rem, 15vh, 12rem);
       }
 
       .hero-bg {
@@ -618,12 +620,6 @@
         height: var(--header-h);
       }
 
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(2, 5, 18, 0.95);
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
-      }
-
       body.game-page .site-header.is-scrolled .header-scene__svg {
         opacity: 0.78;
       }
@@ -634,11 +630,6 @@
 
       #settings-modal {
         z-index: 7000 !important;
-      }
-
-      /* Add extra space at the bottom of the game lobby to push the footer down */
-      .games-hub-page .hero-bg {
-        padding-bottom: clamp(8rem, 15vh, 12rem);
       }
 
       #settings-modal.flex {
@@ -938,7 +929,10 @@
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
 
-          const settingsModal = document.getElementById("settings-modal");
+          // Find the settings modal in the fetched document
+          const settingsModal = doc.getElementById("settings-modal");
+          // If it exists, remove it from the doc fragment and append to the main body
+          // This makes it available for the initGlobalSettings script to find.
           if (settingsModal) document.body.appendChild(settingsModal);
 
           // Inject the styles from header.html to ensure the Settings design is applied
@@ -953,16 +947,6 @@
             const script = document.createElement("script");
             script.textContent = headerScript.textContent;
             document.body.appendChild(script);
-          }
-
-          // Update header auth + points
-          if (typeof window.MatiVisitorAuth !== "undefined") {
-            await window.MatiVisitorAuth.refresh();
-          } else {
-            const totalPoints =
-              localStorage.getItem("totalHeritagePoints") || "0";
-            const pointsEl = document.getElementById("header-total-points");
-            if (pointsEl) pointsEl.textContent = totalPoints;
           }
 
           if (typeof window.initSiteHeader === "function") {
@@ -1121,10 +1105,10 @@
           updatePreviewLayout(game);
 
           if (prevPreview) {
-            prevPreview.innerHTML = buildSidePreview(games[prevIdx]);
+            prevPreview.innerHTML = buildSidePreview(games[prevIdx], "prev");
           }
           if (nextPreview) {
-            nextPreview.innerHTML = buildSidePreview(games[nextIdx]);
+            nextPreview.innerHTML = buildSidePreview(games[nextIdx], "next");
           }
 
           scheduleFeaturedPreviewFit();

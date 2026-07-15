@@ -56,7 +56,6 @@
         position: fixed;
         inset: 0;
         z-index: 0;
-        overflow: hidden;
         pointer-events: none;
       }
 
@@ -106,22 +105,6 @@
             transparent 70%
           );
         pointer-events: none;
-      }
-
-      .page-bg__mosaic {
-        display: none;
-      }
-
-      .page-bg__orb {
-        display: none;
-      }
-
-      #bg-tiles-container {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        opacity: 1;
-        transition: opacity 0.9s ease;
       }
 
       .page-bg__game-photo {
@@ -304,8 +287,6 @@
 
       .hero-tile-demo {
         position: absolute;
-        width: calc(100vw / 4);
-        height: calc(100vh / 4);
         background-size: 400% 400%;
         border: none;
         transition:
@@ -331,42 +312,6 @@
           rgba(13, 40, 24, 0.28) 100%
         );
         pointer-events: none;
-      }
-
-      /* ── Header overrides (match trivia.html) ── */
-      #header-placeholder,
-      .site-header {
-        z-index: 500;
-      }
-
-      .site-header .header-bg {
-        overflow: visible;
-      }
-
-      .site-header .site-header__bar,
-      .site-header .site-header__end,
-      .site-header .site-header__utilities,
-      .site-header .site-profile {
-        overflow: visible;
-      }
-
-      .site-header .site-profile {
-        position: relative;
-        z-index: 510;
-      }
-
-      .site-header .header-dropdown {
-        z-index: 520;
-      }
-
-      body.game-page .site-header.is-scrolled {
-        height: var(--header-h);
-      }
-
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(10, 28, 18, 0.97);
-        border-bottom-color: rgba(82, 183, 136, 0.15);
-        box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
       }
 
       #settings-modal {
@@ -587,7 +532,7 @@
         z-index: 10;
         min-height: 100vh;
         padding: calc(var(--header-h) + 3.25rem) clamp(0.75rem, 2vw, 1.5rem)
-          3.5rem;
+          14rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1932,7 +1877,7 @@
       }
     </style>
   </head>
-  <body class="game-page">
+  <body class="game-page visitor-module">
     <div id="header-placeholder"></div>
 
     <div class="page-bg">
@@ -1955,7 +1900,6 @@
       </div>
       <div class="page-bg__gradient"></div>
       <div class="page-bg__foliage" aria-hidden="true"></div>
-      <div id="bg-tiles-container"></div>
     </div>
     <div class="bg-overlay" id="bg-overlay"></div>
 
@@ -2276,9 +2220,11 @@
       autoplay
     ></audio>
 
+    <script src="visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
+    <script src="visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -2298,86 +2244,26 @@
         window.initTvExpandReceive();
       }
 
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const header = doc.querySelector("header");
-          document.getElementById("header-placeholder").replaceWith(header);
+      window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
 
-          const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) document.body.appendChild(settingsModal);
+        document
+          .getElementById("music-volume")
+          ?.addEventListener("input", (e) => {
+            musicVol = parseFloat(e.target.value);
+            if (bgMusic) bgMusic.volume = musicVol;
+            syncBgmVolume();
+            updateMusicUI();
+          });
 
-          const headerStyle = doc.querySelector("style");
-          if (headerStyle)
-            document.head.appendChild(headerStyle.cloneNode(true));
-
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
-            const s = document.createElement("script");
-            s.textContent = headerScript.textContent;
-            document.body.appendChild(s);
-          }
-
-          document
-            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
-            .forEach((link) => {
-              if (link.getAttribute("data-nav") === "games")
-                link.classList.add("is-active");
-            });
-
-          const ptsEl = document.getElementById("header-total-points");
-          if (ptsEl)
-            ptsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-
-          if (typeof window.initSiteHeader === "function")
-            window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function")
-            window.initGlobalSettings();
-
-          document
-            .getElementById("music-volume")
-            ?.addEventListener("input", (e) => {
-              musicVol = parseFloat(e.target.value);
-              if (bgMusic) bgMusic.volume = musicVol;
-              syncBgmVolume();
-              updateMusicUI();
-            });
-
-          bindHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-            ),
-          );
-        })
-        .catch((err) => console.error("Error loading header:", err));
-
-      fetch("footer.html")
-        .then((response) => response.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholder = document.getElementById("footer-placeholder");
-          if (footer && placeholder) {
-            placeholder.replaceWith(footer);
-            const footerStyle = doc.querySelector("style");
-            if (footerStyle) document.head.appendChild(footerStyle);
-
-            const scriptText = Array.from(doc.scripts).find(
-              (s) => !s.src,
-            )?.textContent;
-            if (scriptText) {
-              const s = document.createElement("script");
-              s.textContent = scriptText;
-              document.body.appendChild(s);
-            }
-            if (typeof window.initSiteFooter === "function")
-              window.initSiteFooter("games");
-          }
-        })
-        .catch((err) => console.error("Error loading footer:", err));
-
+        bindHoverSound(
+          document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
+          ),
+        );
+      });
       let heritageSites = [
         {
           name: "Pylon Monument",
@@ -2901,128 +2787,22 @@
             }
           }
         } catch (error) {
-          console.warn("Slide puzzle heritage pool failed, using fallback:", error);
+          console.warn(
+            "Slide puzzle heritage pool failed, using fallback:",
+            error,
+          );
         }
         heritageSites = FALLBACK_SLIDE_SITES.slice();
         return heritageSites;
       }
 
       function pickRandomSite() {
-        const pool = heritageSites.length ? heritageSites : FALLBACK_SLIDE_SITES;
+        const pool = heritageSites.length
+          ? heritageSites
+          : FALLBACK_SLIDE_SITES;
         currentSite = pool[Math.floor(Math.random() * pool.length)];
         return imgUrl(currentSite.src);
       }
-
-      const demoPuzzle = (() => {
-        const SIZE = 4;
-        const SCRAMBLE_STEPS = 18;
-        const SOLVE_DURATION = 10000;
-        const container = document.getElementById("bg-tiles-container");
-        const image = imgUrl(
-          (heritageSites[5] || FALLBACK_SLIDE_SITES[5] || FALLBACK_SLIDE_SITES[0])
-            .src,
-        );
-
-        let tiles = [];
-        let currentBoard = [];
-        let emptyPos = SIZE * SIZE - 1;
-        let running = true;
-        let moveHistory = [];
-        let tWidth, tHeight;
-
-        function init() {
-          if (!running || !container) return;
-          container.innerHTML = "";
-          tiles = [];
-          currentBoard = Array.from({ length: SIZE * SIZE }, (_, i) => i);
-          tWidth = window.innerWidth / SIZE;
-          tHeight = window.innerHeight / SIZE;
-
-          for (let i = 0; i < SIZE * SIZE; i++) {
-            const tile = document.createElement("div");
-            tile.className = "hero-tile-demo";
-            if (i === SIZE * SIZE - 1) tile.style.opacity = "0";
-            const row = Math.floor(i / SIZE);
-            const col = i % SIZE;
-            tile.style.backgroundImage = `url("${image}")`;
-            tile.style.backgroundSize = `${SIZE * 100}%`;
-            tile.style.backgroundPosition = `${(col / (SIZE - 1)) * 100}% ${(row / (SIZE - 1)) * 100}%`;
-            container.appendChild(tile);
-            tiles.push(tile);
-          }
-          updateLayout();
-          startSequence();
-        }
-
-        function updateLayout() {
-          tWidth = window.innerWidth / SIZE;
-          tHeight = window.innerHeight / SIZE;
-          currentBoard.forEach((val, pos) => {
-            const r = Math.floor(pos / SIZE);
-            const c = pos % SIZE;
-            tiles[val].style.transform =
-              `translate(${c * tWidth}px, ${r * tHeight}px)`;
-          });
-        }
-
-        function revealCompleteImage() {
-          tiles[SIZE * SIZE - 1].style.opacity = "1";
-          container?.classList.add("is-complete");
-        }
-
-        function hideEmptySlot() {
-          tiles[SIZE * SIZE - 1].style.opacity = "0";
-          container?.classList.remove("is-complete");
-        }
-
-        async function startSequence() {
-          while (running) {
-            hideEmptySlot();
-            moveHistory = [];
-
-            for (let i = 0; i < SCRAMBLE_STEPS; i++) {
-              if (!running) return;
-              const neighbors = getNeighbors(emptyPos, SIZE);
-              const next =
-                neighbors[Math.floor(Math.random() * neighbors.length)];
-              moveHistory.push(emptyPos);
-              const temp = currentBoard[emptyPos];
-              currentBoard[emptyPos] = currentBoard[next];
-              currentBoard[next] = temp;
-              emptyPos = next;
-              updateLayout();
-              await new Promise((r) => setTimeout(r, 420));
-            }
-
-            await new Promise((r) => setTimeout(r, 600));
-
-            const delay = SOLVE_DURATION / moveHistory.length;
-            while (moveHistory.length > 0) {
-              if (!running) return;
-              const prevEmpty = moveHistory.pop();
-              const temp = currentBoard[emptyPos];
-              currentBoard[emptyPos] = currentBoard[prevEmpty];
-              currentBoard[prevEmpty] = temp;
-              emptyPos = prevEmpty;
-              updateLayout();
-              await new Promise((r) => setTimeout(r, delay));
-            }
-
-            revealCompleteImage();
-            await new Promise((r) => setTimeout(r, 1000));
-          }
-        }
-
-        return {
-          init,
-          stop: () => {
-            running = false;
-          },
-        };
-      })();
-
-      demoPuzzle.init();
-      window.addEventListener("resize", () => demoPuzzle.init());
 
       function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
@@ -3374,7 +3154,6 @@
 
         playCuratorSound("start");
         getCuratorAudioCtx();
-        demoPuzzle.stop();
 
         sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
         applyMusicVolume();

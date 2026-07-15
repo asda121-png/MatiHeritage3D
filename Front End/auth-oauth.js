@@ -15,10 +15,21 @@ const MatiAuthOAuth = (() => {
   async function handleRedirectIfNeeded(redirectTarget) {
     if (!MatiSupabaseAuth?.completeOAuthRedirect) return null;
 
-    const user = await MatiSupabaseAuth.completeOAuthRedirect();
-    if (!user) return null;
+    const oauthResult = await MatiSupabaseAuth.completeOAuthRedirect();
+    if (!oauthResult) return null;
+
+    const user = oauthResult.user;
 
     await MatiAuth.restoreSession?.();
+
+    const nextTarget =
+      redirectTarget || oauthResult.redirectTarget || "index.html";
+
+    if (!oauthResult.hasEmailPasswordCredential) {
+      window.location.href =
+        MatiSupabaseAuth.passwordSetupRedirectUrl?.(nextTarget);
+      return user;
+    }
 
     if (
       typeof MatiAdminAuth !== "undefined" &&
@@ -28,7 +39,7 @@ const MatiAuthOAuth = (() => {
       return user;
     }
 
-    if (redirectTarget === "admin.html") {
+    if (nextTarget === "admin.html") {
       if (
         typeof MatiAdminAuth !== "undefined" &&
         (await MatiAdminAuth.isAdmin())
@@ -40,7 +51,7 @@ const MatiAuthOAuth = (() => {
       return user;
     }
 
-    window.location.href = redirectTarget || "index.html";
+    window.location.href = nextTarget;
     return user;
   }
 

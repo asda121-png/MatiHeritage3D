@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    <title>3D Explore — Mati Heritage 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Explore — Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1951,9 +1952,18 @@
                   >3D Preview</span
                 >
                 <div class="explore3d-viewer-lines" aria-hidden="true"></div>
-                <div class="explore3d-loading-overlay" id="model-loading-overlay" hidden>
+                <div
+                  class="explore3d-loading-overlay"
+                  id="model-loading-overlay"
+                  hidden
+                >
                   <div class="explore3d-loading-spinner"></div>
-                  <div class="explore3d-loading-percentage" id="model-loading-percentage">0%</div>
+                  <div
+                    class="explore3d-loading-percentage"
+                    id="model-loading-percentage"
+                  >
+                    0%
+                  </div>
                   <div class="explore3d-loading-text">Loading 3D model...</div>
                 </div>
                 <model-viewer
@@ -2242,6 +2252,11 @@
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="admin-heritage-base.js"></script>
+    <script src="_backend/supabase-auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="heritage-points.js"></script>
+    <script src="visitor-auth.js"></script>
+    <script src="auth-logout.js"></script>
     <script src="heritage-data.js"></script>
     <script>
       const BH = "data/Built Heritage";
@@ -2650,8 +2665,12 @@
       const previewImage = document.getElementById("preview-image");
       const heritageModel = document.getElementById("heritage-model");
       const viewerHint = document.getElementById("viewer-hint");
-      const modelLoadingOverlay = document.getElementById("model-loading-overlay");
-      const modelLoadingPercentage = document.getElementById("model-loading-percentage");
+      const modelLoadingOverlay = document.getElementById(
+        "model-loading-overlay",
+      );
+      const modelLoadingPercentage = document.getElementById(
+        "model-loading-percentage",
+      );
       const explorePhotoGrid = document.getElementById("explore-photo-grid");
       const exploreSiteMap = document.getElementById("explore-site-map");
       const exploreSiteMapImg = document.getElementById("explore-site-map-img");
@@ -3141,7 +3160,7 @@
         if (hasModel) {
           viewerEmpty?.setAttribute("hidden", "");
           heritageModel.hidden = false;
-          
+
           // Show loading overlay and reset percentage
           if (modelLoadingOverlay) {
             modelLoadingOverlay.removeAttribute("hidden");
@@ -3149,13 +3168,13 @@
           if (modelLoadingPercentage) {
             modelLoadingPercentage.textContent = "0%";
           }
-          
+
           if (heritageModel.getAttribute("src") !== site.modelSrc) {
             heritageModel.setAttribute("src", site.modelSrc);
           }
           heritageModel.setAttribute("alt", `${site.name} 3D model`);
           heritageModel.autoRotate = true;
-          
+
           // Track loading progress
           const handleProgress = (event) => {
             if (event.detail && event.detail.totalProgress !== undefined) {
@@ -3165,7 +3184,7 @@
               }
             }
           };
-          
+
           const handleLoad = () => {
             if (modelLoadingOverlay) {
               modelLoadingOverlay.setAttribute("hidden", "");
@@ -3173,7 +3192,7 @@
             heritageModel.removeEventListener("progress", handleProgress);
             heritageModel.removeEventListener("load", handleLoad);
           };
-          
+
           const handleError = () => {
             if (modelLoadingOverlay) {
               modelLoadingOverlay.setAttribute("hidden", "");
@@ -3182,11 +3201,11 @@
             heritageModel.removeEventListener("load", handleLoad);
             heritageModel.removeEventListener("error", handleError);
           };
-          
+
           heritageModel.addEventListener("progress", handleProgress);
           heritageModel.addEventListener("load", handleLoad, { once: true });
           heritageModel.addEventListener("error", handleError, { once: true });
-          
+
           if (viewerHint) {
             viewerHint.hidden = false;
             viewerHint.textContent = "Drag to rotate · Scroll to zoom";
@@ -3622,7 +3641,8 @@
             MatiHeritageData.subscribeCatalog(async () => {
               await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
               // Soft refresh: update idle/site copy without resetting the map view.
-              const active = typeof getActiveSite === "function" ? getActiveSite() : null;
+              const active =
+                typeof getActiveSite === "function" ? getActiveSite() : null;
               if (active && typeof revealSiteFromMap === "function") {
                 revealSiteFromMap(active, { skipScroll: true });
               } else if (typeof showIdleState === "function") {
@@ -3636,13 +3656,14 @@
 
       fetch("header.html")
         .then((res) => res.text())
-        .then((data) => {
+        .then(async (data) => {
           const doc = new DOMParser().parseFromString(data, "text/html");
           const header = doc.querySelector("header");
           document.getElementById("header-placeholder").replaceWith(header);
           const headerStyle = doc.querySelector("style");
-          if (headerStyle)
+          if (headerStyle) {
             document.head.appendChild(headerStyle.cloneNode(true));
+          }
           const scriptText = Array.from(doc.scripts).find(
             (s) => !s.src,
           )?.textContent;

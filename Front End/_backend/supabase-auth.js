@@ -7,7 +7,7 @@ const MatiSupabaseAuth = (() => {
   function enabled() {
     return Boolean(
       MatiSupabase?.isConfigured?.() &&
-        window.MATI_SUPABASE_CONFIG?.useSupabaseAuth,
+      window.MATI_SUPABASE_CONFIG?.useSupabaseAuth,
     );
   }
 
@@ -16,11 +16,15 @@ const MatiSupabaseAuth = (() => {
   }
 
   function normalizeEmail(email) {
-    return String(email || "").trim().toLowerCase();
+    return String(email || "")
+      .trim()
+      .toLowerCase();
   }
 
   function normalizeUsername(username) {
-    return String(username || "").trim().toLowerCase();
+    return String(username || "")
+      .trim()
+      .toLowerCase();
   }
 
   function friendlyAuthError(error) {
@@ -107,8 +111,7 @@ const MatiSupabaseAuth = (() => {
     if (!/^[a-z0-9._-]{3,24}$/.test(cleanUsername)) {
       return {
         ok: false,
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
@@ -234,10 +237,7 @@ const MatiSupabaseAuth = (() => {
       user: {
         username: profile?.username || meta.username || email.split("@")[0],
         displayName:
-          profile?.display_name ||
-          meta.display_name ||
-          meta.username ||
-          email,
+          profile?.display_name || meta.display_name || meta.username || email,
         email: profile?.email || email,
       },
       session: data.session,
@@ -269,10 +269,7 @@ const MatiSupabaseAuth = (() => {
       username:
         profile?.username || meta.username || session.user.email?.split("@")[0],
       displayName:
-        profile?.display_name ||
-        meta.display_name ||
-        meta.username ||
-        "Player",
+        profile?.display_name || meta.display_name || meta.username || "Player",
       email: profile?.email || session.user.email,
       avatarUrl: profile?.avatar_url || null,
       loggedInAt: session.user.last_sign_in_at || new Date().toISOString(),
@@ -308,6 +305,39 @@ const MatiSupabaseAuth = (() => {
   async function storePasswordDigest(password) {
     if (!password || typeof MatiPasswordHash === "undefined") return;
     await MatiPasswordHash.storeDigestForCurrentUser(password);
+  }
+
+  function hasEmailPasswordCredential(user) {
+    if (!user) return false;
+
+    const providerSet = new Set();
+
+    const appProviders = user?.app_metadata?.providers;
+    if (Array.isArray(appProviders)) {
+      appProviders.forEach((provider) => {
+        if (provider) providerSet.add(String(provider).toLowerCase());
+      });
+    }
+
+    if (Array.isArray(user.identities)) {
+      user.identities.forEach((identity) => {
+        if (identity?.provider) {
+          providerSet.add(String(identity.provider).toLowerCase());
+        }
+      });
+    }
+
+    return providerSet.has("email");
+  }
+
+  function passwordSetupRedirectUrl(redirectTarget) {
+    const cfg = window.MATI_SUPABASE_CONFIG || {};
+    const fallbackPath = `${window.location.origin}${String(window.location.pathname).replace(/[^/]*$/, "")}create-password.html`;
+    const base = cfg.passwordSetupRedirect || fallbackPath;
+    const target = redirectTarget || "index.html";
+    const url = new URL(base, window.location.origin);
+    url.searchParams.set("redirect", target);
+    return url.toString();
   }
 
   async function signInWithGoogle(redirectTarget) {
@@ -348,8 +378,7 @@ const MatiSupabaseAuth = (() => {
       return {
         ok: false,
         field: "username",
-        message:
-          "Username must be 3–24 characters (letters, numbers, . _ -).",
+        message: "Username must be 3–24 characters (letters, numbers, . _ -).",
       };
     }
 
@@ -460,7 +489,43 @@ const MatiSupabaseAuth = (() => {
     const { data, error } = await sb.auth.getSession();
     if (error || !data?.session?.user) return null;
 
-    return getSession();
+    const appUser = await getSession();
+    return {
+      user: appUser,
+      email: data.session.user.email || appUser?.email || null,
+      hasEmailPasswordCredential: hasEmailPasswordCredential(data.session.user),
+      redirectTarget: params.get("redirect") || "index.html",
+    };
+  }
+
+  async function getAuthCredentialStatus() {
+    if (!enabled()) {
+      return {
+        ok: false,
+        message: "Supabase Auth is not enabled for this portal.",
+      };
+    }
+
+    const sb = client();
+    if (!sb) {
+      return { ok: false, message: "Could not connect to Supabase." };
+    }
+
+    const { data, error } = await sb.auth.getUser();
+    if (error) {
+      return { ok: false, message: error.message || "Could not read user." };
+    }
+
+    const user = data?.user;
+    if (!user) {
+      return { ok: false, missingSession: true, message: "No active session." };
+    }
+
+    return {
+      ok: true,
+      email: user.email || null,
+      hasEmailPasswordCredential: hasEmailPasswordCredential(user),
+    };
   }
 
   async function requestPasswordReset(email) {
@@ -530,6 +595,95 @@ const MatiSupabaseAuth = (() => {
     };
   }
 
+  async function createPasswordForLinkedAccount(newPassword) {
+    if (!enabled()) {
+      return {
+        ok: false,
+        message: "Supabase Auth is not enabled for this portal.",
+      };
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      return {
+        ok: false,
+        message: "Password must be at least 6 characters.",
+      };
+    }
+
+    const sb = client();
+    const { error } = await sb.auth.updateUser({ password: newPassword });
+    if (error) {
+      return { ok: false, message: error.message };
+    }
+
+    await storePasswordDigest(newPassword);
+
+    return {
+      ok: true,
+      message:
+        "Password created. You can now use both Google and email/password sign-in.",
+    };
+  }
+
+  async function updatePasswordWithCurrent(currentPassword, newPassword) {
+    if (!enabled()) {
+      return {
+        ok: false,
+        message: "Supabase Auth is not enabled for this portal.",
+      };
+    }
+
+    if (!currentPassword) {
+      return {
+        ok: false,
+        message: "Current password is required.",
+      };
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      return {
+        ok: false,
+        message: "Password must be at least 6 characters.",
+      };
+    }
+
+    const sb = client();
+    const { data: userData, error: userError } = await sb.auth.getUser();
+    if (userError || !userData?.user?.email) {
+      return {
+        ok: false,
+        message: "Could not verify your current session.",
+      };
+    }
+
+    const { error: verifyError } = await sb.auth.signInWithPassword({
+      email: userData.user.email,
+      password: currentPassword,
+    });
+
+    if (verifyError) {
+      return {
+        ok: false,
+        message: "Current password is incorrect.",
+      };
+    }
+
+    const { error: updateError } = await sb.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (updateError) {
+      return { ok: false, message: updateError.message };
+    }
+
+    await storePasswordDigest(newPassword);
+
+    return {
+      ok: true,
+      message: "Password updated.",
+    };
+  }
+
   return {
     enabled,
     register,
@@ -544,6 +698,10 @@ const MatiSupabaseAuth = (() => {
     requestPasswordReset,
     hasRecoverySession,
     updatePassword,
+    createPasswordForLinkedAccount,
+    getAuthCredentialStatus,
+    passwordSetupRedirectUrl,
+    updatePasswordWithCurrent,
     passwordResetRedirectUrl,
     googleSignInEnabled,
     signInWithGoogle,

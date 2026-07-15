@@ -31,10 +31,9 @@
       .site-header {
         position: sticky;
         top: 0;
-        z-index: 500;
+        z-index: 1000;
         height: var(--header-h);
         transition: height 0.45s var(--header-ease);
-        isolation: isolate;
       }
 
       .site-header.is-scrolled {
@@ -63,7 +62,7 @@
       .header-bg {
         position: relative;
         height: 100%;
-        overflow: hidden;
+        overflow: visible;
         background: rgba(255, 255, 255, 0.96);
         border-bottom: 1px solid var(--hdr-line);
         backdrop-filter: blur(28px) saturate(1.4);
@@ -848,11 +847,11 @@
         flex-shrink: 0;
       }
 
-      body.visitor-module .site-header__utilities {
+      body:not(.is-logged-in) .site-header__utilities {
         display: none !important;
       }
 
-      body.games-hub-page.is-logged-in .site-header__utilities {
+      body.visitor-module.is-logged-in .site-header__utilities {
         display: flex !important;
       }
 
@@ -961,7 +960,8 @@
         transform: translateY(-1px);
       }
 
-      body:not(.visitor-module) .visitor-auth-actions {
+      body:not(.visitor-module) .visitor-auth-actions,
+      body.is-logged-in .visitor-auth-actions {
         display: none !important;
       }
 
@@ -1037,8 +1037,21 @@
         font-variant-numeric: tabular-nums;
       }
 
+      body.visitor-module.is-logged-in .header-points-badge {
+        border-color: rgba(12, 26, 20, 0.16);
+      }
+
+      body.visitor-module.is-logged-in .header-points-label {
+        color: #334155;
+      }
+
+      body.visitor-module.is-logged-in #header-total-points {
+        color: #0f172a;
+      }
+
       .site-profile {
         position: relative;
+        z-index: 60;
       }
 
       .site-profile__trigger {
@@ -1060,7 +1073,7 @@
       .site-profile__trigger:hover {
         border-color: rgba(4, 120, 87, 0.3);
         box-shadow: 0 6px 20px rgba(4, 120, 87, 0.12);
-        transform: translateY(-1px);
+        transform: translateY(-2px) scale(1.03);
       }
 
       .site-profile__avatar {
@@ -1077,6 +1090,14 @@
         margin-right: 0.15rem;
         color: var(--hdr-muted);
         transition: transform 0.28s var(--header-ease);
+      }
+
+      body.visitor-module.is-logged-in .site-profile__trigger {
+        border-color: rgba(12, 26, 20, 0.16);
+      }
+
+      body.visitor-module.is-logged-in .site-profile__chevron {
+        color: #334155;
       }
 
       .site-profile:hover .site-profile__chevron,
@@ -1099,7 +1120,6 @@
         visibility: hidden;
         transform: translateY(0.5rem) scale(0.97);
         transition: all 0.3s var(--header-ease);
-        z-index: 60;
       }
 
       .site-profile:hover .header-dropdown,

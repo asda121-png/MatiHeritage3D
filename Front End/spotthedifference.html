@@ -903,49 +903,12 @@
         position: relative;
         z-index: 10;
         min-height: 100vh;
-        padding: 6.5rem clamp(0.75rem, 2vw, 1.5rem) 5rem;
+        padding: 6.5rem clamp(0.75rem, 2vw, 1.5rem) 14rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
       }
-
-      /* ── Header + back nav (match slidepuzzle / trivia / memorypairs) ── */
-      #header-placeholder,
-      .site-header {
-        z-index: 500;
-      }
-
-      .site-header .header-bg {
-        overflow: visible;
-      }
-
-      .site-header .site-header__bar,
-      .site-header .site-header__end,
-      .site-header .site-header__utilities,
-      .site-header .site-profile {
-        overflow: visible;
-      }
-
-      .site-header .site-profile {
-        position: relative;
-        z-index: 510;
-      }
-
-      .site-header .header-dropdown {
-        z-index: 520;
-      }
-
-      body.game-page .site-header.is-scrolled {
-        height: var(--header-h);
-      }
-
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(45, 36, 32, 0.96);
-        border-bottom-color: rgba(249, 202, 36, 0.2);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
-      }
-
       #settings-modal {
         z-index: 7000 !important;
       }
@@ -2177,7 +2140,7 @@
   </head>
 
   <body
-    class="festival-page game-page min-h-screen overflow-x-hidden antialiased bg-[#12081f]"
+    class="festival-page game-page visitor-module min-h-screen overflow-x-hidden antialiased bg-[#12081f]"
   >
     <!-- Festive heritage game backdrop -->
     <div
@@ -2473,9 +2436,11 @@
       autoplay
     ></audio>
 
+    <script src="visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
+    <script src="visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -2521,12 +2486,16 @@
             const generated = heritageSession.spotLevels(4);
             if (generated.length) {
               levels = generated;
-              activeLevel = heritageSession.rng.pickOne(generated) || generated[0];
+              activeLevel =
+                heritageSession.rng.pickOne(generated) || generated[0];
               return activeLevel;
             }
           }
         } catch (error) {
-          console.warn("Spot-the-difference heritage level failed, using fallback:", error);
+          console.warn(
+            "Spot-the-difference heritage level failed, using fallback:",
+            error,
+          );
         }
         levels = FALLBACK_SPOT_LEVELS.map((level) => ({
           ...level,
@@ -3170,95 +3139,40 @@
       bindFestivalMusicStart();
 
       if (typeof MatiGameExitGuard !== "undefined") {
-        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "festival" });
+        MatiGameExitGuard.init({
+          isActive: () => gameActive,
+          theme: "festival",
+        });
       }
 
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const header = doc.querySelector("header");
-          document.getElementById("header-placeholder").replaceWith(header);
+      window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
 
-          const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) document.body.appendChild(settingsModal);
+        const musicSlider = document.getElementById("music-volume");
+        if (musicSlider) {
+          musicSlider.addEventListener("input", () => {
+            applyMusicVolume();
+            if (
+              parseFloat(musicSlider.value) > 0 &&
+              musicStarted &&
+              !musicMuted
+            ) {
+              getActiveMusic()
+                .play()
+                .catch(() => {});
+              updateMuteUI();
+            }
+          });
+        }
 
-          const headerStyle = doc.querySelector("style");
-          if (headerStyle)
-            document.head.appendChild(headerStyle.cloneNode(true));
-
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
-            const script = document.createElement("script");
-            script.textContent = headerScript.textContent;
-            document.body.appendChild(script);
-          }
-
-          document
-            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
-            .forEach((link) => {
-              if (link.getAttribute("data-nav") === "games")
-                link.classList.add("is-active");
-            });
-
-          const pointsEl = document.getElementById("header-total-points");
-          if (pointsEl)
-            pointsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-
-          if (typeof window.initSiteHeader === "function")
-            window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function")
-            window.initGlobalSettings();
-
-          const musicSlider = document.getElementById("music-volume");
-          if (musicSlider) {
-            musicSlider.addEventListener("input", () => {
-              applyMusicVolume();
-              if (
-                parseFloat(musicSlider.value) > 0 &&
-                musicStarted &&
-                !musicMuted
-              ) {
-                getActiveMusic()
-                  .play()
-                  .catch(() => {});
-                updateMuteUI();
-              }
-            });
-          }
-
-          bindHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
-            ),
-          );
-        })
-        .catch((err) => console.error("Error loading header:", err));
-
-      fetch("footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholder = document.getElementById("footer-placeholder");
-          if (footer && placeholder) placeholder.replaceWith(footer);
-
-          const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle);
-
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
-            const s = document.createElement("script");
-            s.textContent = scriptText;
-            document.body.appendChild(s);
-          }
-          if (typeof window.initSiteFooter === "function")
-            window.initSiteFooter("games");
-        })
-        .catch((err) => console.error("Error loading footer:", err));
+        bindHoverSound(
+          document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger",
+          ),
+        );
+      });
     </script>
   </body>
 </html>

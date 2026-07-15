@@ -227,21 +227,9 @@
       }
 
       .site-footer__heritage-list li {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
         font-size: 0.9375rem;
         color: rgba(236, 253, 245, 0.72);
         line-height: 1.4;
-      }
-
-      .site-footer__heritage-list li::before {
-        content: "";
-        width: 0.3rem;
-        height: 0.3rem;
-        border-radius: 50%;
-        background: rgba(110, 231, 183, 0.55);
-        flex-shrink: 0;
       }
 
       /* LGU card */
@@ -344,8 +332,12 @@
 
       <div class="site-footer__inner">
         <div class="site-footer__grid">
-          <div class="site-footer__col site-footer__brand">
-            <div class="site-footer__brand-head">
+          <div
+            class="site-footer__col site-footer__brand text-center md:text-left"
+          >
+            <div
+              class="site-footer__brand-head flex-col md:flex-row justify-center md:justify-start"
+            >
               <div class="site-footer__brand-mark" aria-hidden="true">
                 <svg
                   viewBox="0 0 24 24"
@@ -373,19 +365,9 @@
               preservation, accessibility, and promotion of Mati City's heritage
               for present and future generations.
             </p>
-            <div class="site-footer__partner">
-              <p class="site-footer__partner-label">
-                Cultural heritage data provided through an official data sharing
-                agreement with
-              </p>
-              <p class="site-footer__partner-name">
-                Local Government Unit of Mati City
-              </p>
-              <p class="site-footer__partner-name">City Tourism Office</p>
-            </div>
           </div>
 
-          <div class="site-footer__col">
+          <div class="site-footer__col text-center md:text-left">
             <h3 class="site-footer__heading">Quick Links</h3>
             <ul class="site-footer__links">
               <li>
@@ -430,7 +412,7 @@
             </ul>
           </div>
 
-          <div class="site-footer__col">
+          <div class="site-footer__col text-center md:text-left">
             <h3 class="site-footer__heading">Heritage</h3>
             <ul class="site-footer__heritage-list">
               <li>Built Heritage</li>
@@ -439,9 +421,9 @@
             </ul>
           </div>
 
-          <div class="site-footer__col">
+          <div class="site-footer__col text-center md:text-left">
             <h3 class="site-footer__heading">LGU Partner</h3>
-            <div class="site-footer__lgu">
+            <div class="site-footer__lgu text-center md:text-left">
               <span class="site-footer__lgu-badge">Official Partner</span>
               <p class="site-footer__lgu-title">
                 Local Government Unit of Mati City

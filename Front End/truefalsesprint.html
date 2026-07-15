@@ -87,31 +87,6 @@
         --hard-light: #b54545;
       }
 
-      #header-placeholder,
-      .site-header {
-        z-index: 500;
-      }
-      .site-header .header-bg,
-      .site-header .site-header__bar,
-      .site-header .site-header__end,
-      .site-header .site-header__utilities,
-      .site-header .site-profile {
-        overflow: visible;
-      }
-      .site-header .site-profile {
-        position: relative;
-        z-index: 510;
-      }
-      .site-header .header-dropdown {
-        z-index: 520;
-      }
-      body.game-page .site-header.is-scrolled {
-        height: var(--header-h);
-      }
-      body.game-page .site-header.is-scrolled .header-bg {
-        background: rgba(18, 12, 8, 0.97);
-        border-bottom-color: rgba(201, 160, 74, 0.2);
-      }
       #settings-modal {
         z-index: 7000 !important;
       }
@@ -1073,7 +1048,7 @@
   <style></style>
 
   <body
-    class="game-page font-body text-scroll-paper antialiased overflow-x-hidden"
+    class="game-page visitor-module font-body text-scroll-paper antialiased overflow-x-hidden"
   >
     <div
       class="scroll-bg fixed inset-0 -z-10 pointer-events-none"
@@ -1150,7 +1125,7 @@
     </aside>
 
     <main
-      class="relative z-10 min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 pt-[calc(var(--header-h)+2.5rem)] pb-24"
+      class="relative z-10 min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 pt-[calc(var(--header-h)+2.5rem)] pb-64"
     >
       <!-- INTRO -->
       <section
@@ -1528,9 +1503,11 @@
       preload="auto"
     ></audio>
 
+    <script src="visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
+    <script src="visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
     <script src="heritage-map-sites.js"></script>
@@ -1550,70 +1527,17 @@
         window.initTvExpandReceive();
       }
 
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          document
-            .getElementById("header-placeholder")
-            .replaceWith(doc.querySelector("header"));
-          const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) document.body.appendChild(settingsModal);
-          const headerStyle = doc.querySelector("style");
-          if (headerStyle)
-            document.head.appendChild(headerStyle.cloneNode(true));
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
-            const s = document.createElement("script");
-            s.textContent = headerScript.textContent;
-            document.body.appendChild(s);
-          }
-          document
-            .querySelectorAll(".site-nav__link, .site-mobile-nav__link")
-            .forEach((link) => {
-              if (link.getAttribute("data-nav") === "games")
-                link.classList.add("is-active");
-            });
-          const ptsEl = document.getElementById("header-total-points");
-          if (ptsEl)
-            ptsEl.textContent =
-              localStorage.getItem("totalHeritagePoints") || "0";
-          if (typeof window.initSiteHeader === "function")
-            window.initSiteHeader();
-          if (typeof window.initGlobalSettings === "function")
-            window.initGlobalSettings();
-          bindHoverSound(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-            ),
-          );
-        })
-        .catch((err) => console.error("Error loading header:", err));
+      window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
 
-      fetch("footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholder = document.getElementById("footer-placeholder");
-          if (footer && placeholder) placeholder.replaceWith(footer);
-
-          const footerStyle = doc.querySelector("style");
-          if (footerStyle) document.head.appendChild(footerStyle);
-
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
-            const s = document.createElement("script");
-            s.textContent = scriptText;
-            document.body.appendChild(s);
-          }
-          if (typeof window.initSiteFooter === "function")
-            window.initSiteFooter("games");
-        })
-        .catch((err) => console.error("Error loading footer:", err));
-
+        bindHoverSound(
+          document.querySelectorAll(
+            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
+          ),
+        );
+      });
       let facts = [];
       let heritageSession = null;
       let factQueue = [];
@@ -1890,7 +1814,10 @@
       }
 
       async function prepareFactDeck() {
-        const count = Math.max(totalRounds * 2, diffSettings[difficulty]?.rounds || 8);
+        const count = Math.max(
+          totalRounds * 2,
+          diffSettings[difficulty]?.rounds || 8,
+        );
         try {
           if (typeof MatiHeritageGameContent !== "undefined") {
             heritageSession = await MatiHeritageGameContent.createSession();
@@ -1902,7 +1829,10 @@
             }
           }
         } catch (error) {
-          console.warn("True/False heritage deck failed, using fallback:", error);
+          console.warn(
+            "True/False heritage deck failed, using fallback:",
+            error,
+          );
         }
         facts = FALLBACK_FACTS.slice();
         factQueue = heritageSession?.rng
@@ -2108,44 +2038,46 @@
         finishRun(false, reason);
       }
 
-      document.getElementById("start-btn").addEventListener("click", async () => {
-        if (!difficulty) return;
-        playSprintSound("start");
-        getSprintAudioCtx();
-        startSprintMusic();
-        document.body.classList.add("is-game-mode");
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("game-screen").classList.remove("hidden");
-        currentScore = 0;
-        correctCount = 0;
-        clueResults = [];
-        roundNumber = 1;
-        totalRounds = diffSettings[difficulty].rounds;
-        lastFactIndex = -1;
-        document.getElementById("score-val").textContent = "0";
-        const ring = document.getElementById("timer-ring");
-        if (ring) {
-          ring.style.strokeDasharray = String(TIMER_RING_LEN);
-          ring.style.strokeDashoffset = "0";
-        }
+      document
+        .getElementById("start-btn")
+        .addEventListener("click", async () => {
+          if (!difficulty) return;
+          playSprintSound("start");
+          getSprintAudioCtx();
+          startSprintMusic();
+          document.body.classList.add("is-game-mode");
+          document.getElementById("intro-screen").classList.add("hidden");
+          document.getElementById("game-screen").classList.remove("hidden");
+          currentScore = 0;
+          correctCount = 0;
+          clueResults = [];
+          roundNumber = 1;
+          totalRounds = diffSettings[difficulty].rounds;
+          lastFactIndex = -1;
+          document.getElementById("score-val").textContent = "0";
+          const ring = document.getElementById("timer-ring");
+          if (ring) {
+            ring.style.strokeDasharray = String(TIMER_RING_LEN);
+            ring.style.strokeDashoffset = "0";
+          }
 
-        const diffLabel = document.getElementById("game-diff-label");
-        if (diffLabel) diffLabel.textContent = diffSettings[difficulty].label;
+          const diffLabel = document.getElementById("game-diff-label");
+          if (diffLabel) diffLabel.textContent = diffSettings[difficulty].label;
 
-        await prepareFactDeck();
-        if (!facts.length) {
-          playAnnouncer("No heritage facts are available yet.");
-          document.getElementById("game-screen").classList.add("hidden");
-          document.getElementById("intro-screen").classList.remove("hidden");
-          document.body.classList.remove("is-game-mode");
-          return;
-        }
+          await prepareFactDeck();
+          if (!facts.length) {
+            playAnnouncer("No heritage facts are available yet.");
+            document.getElementById("game-screen").classList.add("hidden");
+            document.getElementById("intro-screen").classList.remove("hidden");
+            document.body.classList.remove("is-game-mode");
+            return;
+          }
 
-        gameActive = true;
-        updateRoundDisplay();
-        playAnnouncer(`Ready! ${diffSettings[difficulty].label} difficulty.`);
-        nextFact();
-      });
+          gameActive = true;
+          updateRoundDisplay();
+          playAnnouncer(`Ready! ${diffSettings[difficulty].label} difficulty.`);
+          nextFact();
+        });
 
       document
         .getElementById("true-btn")

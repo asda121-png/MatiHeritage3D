@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    <title>My Account — Mati Heritage 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account — Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,210 +15,193 @@
     <style>
       .account-page {
         min-height: calc(100vh - 6rem);
-        background: linear-gradient(180deg, #f8fafc 0%, #ecfdf5 55%, #f0f9ff 100%);
-        padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 2.5rem) 4rem;
+        background: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 100%);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 200px;
       }
 
       .account-shell {
-        max-width: 42rem;
-        margin: 0 auto;
+        width: 100%;
+        max-width: 1000px;
       }
 
       .account-card {
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(12, 26, 20, 0.08);
-        border-radius: 1.25rem;
-        box-shadow: 0 24px 64px rgba(4, 120, 87, 0.08);
+        background: #ffffff;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 60px rgba(4, 120, 87, 0.12);
         overflow: hidden;
       }
 
       .account-card__hero {
-        padding: 2rem 2rem 1.5rem;
-        background: linear-gradient(135deg, rgba(4, 120, 87, 0.1), rgba(2, 132, 199, 0.08));
-        border-bottom: 1px solid rgba(12, 26, 20, 0.06);
+        padding: 1.25rem 2rem;
+        background: linear-gradient(135deg, var(--forest) 0%, #047857 100%);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .account-card__title {
         font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: clamp(2rem, 4vw, 2.5rem);
-        font-weight: 700;
-        color: #0c1a14;
-        line-height: 1.1;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
       }
 
-      .account-card__subtitle {
-        margin-top: 0.5rem;
-        font-family: "Source Sans 3", sans-serif;
-        color: #5c6b63;
-        font-size: 0.95rem;
+      .account-back-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+      }
+
+      .account-back-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .account-dashboard-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 0;
+      }
+
+      @media (min-width: 768px) {
+        .account-dashboard-layout {
+          grid-template-columns: 280px 1fr;
+        }
+      }
+
+      .account-sidebar {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-right: 1px solid #e2e8f0;
       }
 
       .account-profile {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 1rem;
-        margin-top: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
       }
 
       .account-profile__avatar {
-        width: 4.5rem;
-        height: 4.5rem;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        border: 3px solid rgba(4, 120, 87, 0.2);
+        border: 3px solid var(--forest);
         object-fit: cover;
-      }
-
-      .account-profile__name {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #0c1a14;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
       }
 
       .account-profile__username {
         font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
-        color: #64748b;
-      }
-
-      .account-stats {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
-        padding: 1.5rem 2rem 2rem;
-      }
-
-      .account-stat {
-        padding: 1rem 1.1rem;
-        border-radius: 0.9rem;
-        background: #f8fafc;
-        border: 1px solid rgba(12, 26, 20, 0.06);
-      }
-
-      .account-stat__label {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: #64748b;
-      }
-
-      .account-stat__value {
-        margin-top: 0.35rem;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 1.35rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
         color: #0c1a14;
-        font-variant-numeric: tabular-nums;
       }
 
-      .account-stat--points .account-stat__value {
-        color: #047857;
-      }
-
-      .account-details {
-        padding: 0 2rem 2rem;
-        display: grid;
-        gap: 0.85rem;
+      .account-info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
 
       .account-detail {
         display: flex;
         justify-content: space-between;
-        gap: 1rem;
-        padding: 0.85rem 1rem;
-        border-radius: 0.75rem;
-        background: #fff;
-        border: 1px solid rgba(12, 26, 20, 0.06);
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: #ffffff;
+        border-radius: 0.5rem;
         font-family: "Source Sans 3", sans-serif;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
+        border: 1px solid #e2e8f0;
       }
 
       .account-detail__label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         color: #64748b;
-        font-weight: 600;
+        font-weight: 500;
+      }
+
+      .account-detail__label svg {
+        width: 16px;
+        height: 16px;
+        color: #94a3b8;
       }
 
       .account-detail__value {
         color: #0c1a14;
-        font-weight: 500;
-        text-align: right;
-        word-break: break-word;
-      }
-
-      .account-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        padding: 0 2rem 2rem;
-      }
-
-      .account-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.75rem 1.25rem;
-        border-radius: 9999px;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
         font-weight: 600;
-        text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        font-variant-numeric: tabular-nums;
       }
 
-      .account-btn:hover {
-        transform: translateY(-1px);
+      .account-detail__value--large {
+        font-size: 1.125rem;
+        font-weight: 700;
       }
 
-      .account-btn--primary {
-        color: #fff;
-        background: var(--forest);
-        box-shadow: 0 8px 24px rgba(4, 120, 87, 0.2);
-      }
-
-      .account-btn--ghost {
-        color: #334155;
-        background: #fff;
-        border: 1px solid rgba(12, 26, 20, 0.1);
-      }
-
-      .account-guest {
-        text-align: center;
-        padding: 3rem 2rem;
-      }
-
-      .account-guest p {
-        font-family: "Source Sans 3", sans-serif;
-        color: #64748b;
-        margin-bottom: 1.25rem;
+      .account-detail__value--points {
+        color: var(--forest);
       }
 
       .account-edit {
-        padding: 0 2rem 1.5rem;
-        border-top: 1px solid rgba(12, 26, 20, 0.06);
+        padding: 1.5rem 2rem;
       }
 
       .account-edit__title {
-        margin: 1.5rem 0 0.35rem;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: #0c1a14;
+        margin: 0 0 0.5rem 0;
+        font-family: "Source Sans 3", sans-serif;
       }
 
       .account-edit__hint {
-        margin: 0 0 1rem;
+        margin: 0 0 1.25rem 0;
         font-family: "Source Sans 3", sans-serif;
         font-size: 0.875rem;
         color: #64748b;
-        line-height: 1.5;
+        line-height: 1.4;
+      }
+
+      .account-edit__divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 1rem 0;
+      }
+
+      .account-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      @media (min-width: 640px) {
+        .account-form-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .account-form-grid .account-field.full-width {
+          grid-column: span 2;
+        }
       }
 
       .account-field {
         display: grid;
-        gap: 0.4rem;
-        margin-bottom: 1rem;
+        gap: 0.35rem;
       }
 
       .account-field label {
@@ -229,29 +213,31 @@
 
       .account-field input {
         width: 100%;
-        padding: 0.75rem 0.9rem;
-        border-radius: 0.7rem;
-        border: 1px solid rgba(12, 26, 20, 0.12);
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.9375rem;
+        padding: 0.625rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.875rem;
         color: #0c1a14;
-        background: #fff;
+        background: #ffffff;
+        transition: all 0.2s ease;
       }
 
       .account-field input:focus {
         outline: none;
-        border-color: rgba(4, 120, 87, 0.45);
-        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.12);
+        border-color: var(--forest);
+        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
       }
 
       .account-field input[readonly] {
-        background: #f8fafc;
+        background: #f1f5f9;
         color: #64748b;
+        border-color: #e2e8f0;
       }
 
       .account-field-hint {
         font-family: "Source Sans 3", sans-serif;
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         color: #64748b;
       }
 
@@ -265,8 +251,8 @@
 
       .account-alert {
         margin-bottom: 1rem;
-        padding: 0.75rem 0.9rem;
-        border-radius: 0.7rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
         font-family: "Source Sans 3", sans-serif;
         font-size: 0.875rem;
       }
@@ -289,21 +275,76 @@
 
       .account-edit__actions {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-        margin-top: 0.25rem;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+      }
+
+      .account-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1.25rem;
+        border-radius: 0.5rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: none;
       }
 
       .account-btn--save {
-        color: #fff;
-        background: var(--forest);
-        border: none;
-        cursor: pointer;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--forest) 0%, #047857 100%);
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+      }
+
+      .account-btn--save:hover:not(:disabled) {
+        background: linear-gradient(135deg, #047857 0%, var(--forest) 100%);
+        box-shadow: 0 6px 16px rgba(4, 120, 87, 0.3);
+        transform: translateY(-1px);
       }
 
       .account-btn--save:disabled {
-        opacity: 0.65;
-        cursor: wait;
+        box-shadow: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .account-guest {
+        text-align: center;
+        padding: 3rem 2rem;
+      }
+
+      .account-guest p {
+        font-family: "Source Sans 3", sans-serif;
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .account-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+      }
+
+      .account-btn--primary {
+        color: #ffffff;
+        background: var(--forest);
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+      }
+
+      .account-btn--ghost {
+        color: #334155;
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+      }
+
+      .account-btn--ghost:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
       }
     </style>
   </head>
@@ -314,121 +355,205 @@
       <div class="account-shell">
         <div class="account-card" id="account-card">
           <div class="account-guest" id="account-guest" hidden>
-            <p>Sign in to view your account, heritage points, and leaderboard rank.</p>
-            <div class="account-actions" style="justify-content: center; padding: 0">
-              <a href="login.html" class="account-btn account-btn--primary">Sign in</a>
-              <a href="userregistration.html" class="account-btn account-btn--ghost">Create account</a>
+            <p>
+              Sign in to view your account, heritage points, and leaderboard
+              rank.
+            </p>
+            <div
+              class="account-actions"
+              style="justify-content: center; padding: 0"
+            >
+              <a href="login.html" class="account-btn account-btn--primary"
+                >Sign in</a
+              >
+              <a
+                href="userregistration.html"
+                class="account-btn account-btn--ghost"
+                >Create account</a
+              >
             </div>
           </div>
 
           <div id="account-content" hidden>
-            <div class="account-card__hero">
+            <header class="account-card__hero">
               <h1 class="account-card__title">My Account</h1>
-              <p class="account-card__subtitle">Your player profile and heritage points</p>
-              <div class="account-profile">
-                <img
-                  id="account-avatar"
-                  class="account-profile__avatar"
-                  src="https://i.pravatar.cc/150?u=guest"
-                  alt="Your avatar"
-                />
-                <div>
-                  <p class="account-profile__name" id="account-display-name">Player</p>
-                  <p class="account-profile__username" id="account-username">@player</p>
-                </div>
-              </div>
-            </div>
+              <a
+                href="game.html"
+                class="account-back-btn"
+                >Back to Games</a
+              >
+            </header>
 
-            <div class="account-stats">
-              <div class="account-stat account-stat--points">
-                <p class="account-stat__label">Heritage points</p>
-                <p class="account-stat__value" id="account-points">0</p>
-              </div>
-              <div class="account-stat">
-                <p class="account-stat__label">Leaderboard rank</p>
-                <p class="account-stat__value" id="account-rank">—</p>
-              </div>
-            </div>
-
-            <div class="account-details">
-              <div class="account-detail">
-                <span class="account-detail__label">Email</span>
-                <span class="account-detail__value" id="account-email">—</span>
-              </div>
-              <div class="account-detail">
-                <span class="account-detail__label">Member since</span>
-                <span class="account-detail__value" id="account-since">—</span>
-              </div>
-            </div>
-
-            <section class="account-edit" aria-labelledby="account-edit-title">
-              <h2 class="account-edit__title" id="account-edit-title">
-                Edit player profile
-              </h2>
-              <p class="account-edit__hint">
-                Choose how you appear on the leaderboard. Google players can
-                customize their username and display name here.
-              </p>
-
-              <div
-                id="account-profile-alert"
-                class="account-alert hidden"
-                role="status"
-              ></div>
-
-              <form id="account-profile-form" novalidate>
-                <div class="account-field">
-                  <label for="account-edit-display-name">Display name</label>
-                  <input
-                    id="account-edit-display-name"
-                    type="text"
-                    maxlength="48"
-                    autocomplete="name"
-                    required
+            <div class="account-dashboard-layout">
+              <aside class="account-sidebar">
+                <div class="account-profile">
+                  <img
+                    id="account-avatar"
+                    class="account-profile__avatar"
+                    src="https://i.pravatar.cc/150?u=guest"
+                    alt="Your avatar"
                   />
+                  <span class="account-profile__username" id="account-username-display">—</span>
                 </div>
-
-                <div class="account-field">
-                  <label for="account-edit-username">Username</label>
-                  <input
-                    id="account-edit-username"
-                    type="text"
-                    maxlength="24"
-                    autocomplete="username"
-                    required
-                  />
-                  <p
-                    id="account-username-hint"
-                    class="account-field-hint"
-                    aria-live="polite"
-                  ></p>
+                
+                <div class="account-info-list">
+                  <div class="account-detail">
+                    <span class="account-detail__label">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z"
+                        ></path>
+                      </svg>
+                      Points
+                    </span>
+                    <span
+                      class="account-detail__value account-detail__value--large account-detail__value--points"
+                      id="account-points"
+                      >0</span
+                    >
+                  </div>
+                  <div class="account-detail">
+                    <span class="account-detail__label">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
+                        ></path>
+                      </svg>
+                      Rank
+                    </span>
+                    <span
+                      class="account-detail__value account-detail__value--large"
+                      id="account-rank"
+                      >—</span
+                    >
+                  </div>
+                  <div class="account-detail">
+                    <span class="account-detail__label">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <rect
+                          x="3"
+                          y="4"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      Since
+                    </span>
+                    <span class="account-detail__value" id="account-since"
+                      >—</span
+                    >
+                  </div>
                 </div>
+              </aside>
 
-                <div class="account-field">
-                  <label for="account-edit-email">Email</label>
-                  <input
-                    id="account-edit-email"
-                    type="email"
-                    readonly
-                    tabindex="-1"
-                  />
-                </div>
+              <section
+                class="account-edit"
+                aria-labelledby="account-edit-title"
+              >
+                <h2 class="account-edit__title" id="account-edit-title">
+                  Edit Profile
+                </h2>
+                <p class="account-edit__hint">
+                  Update your username and password settings.
+                </p>
 
-                <div class="account-edit__actions">
-                  <button
-                    type="submit"
-                    id="account-save-profile"
-                    class="account-btn account-btn--save"
-                  >
-                    Save profile
-                  </button>
-                </div>
-              </form>
-            </section>
+                <div
+                  id="account-profile-alert"
+                  class="account-alert hidden"
+                  role="status"
+                ></div>
 
-            <div class="account-actions">
-              <a href="game.html" class="account-btn account-btn--primary">Play games</a>
-              <a href="index.html" class="account-btn account-btn--ghost">Back to portal</a>
+                <form id="account-profile-form" novalidate>
+                  <div class="account-form-grid">
+                    <div class="account-field full-width">
+                      <label for="account-edit-username">Username</label>
+                      <input
+                        id="account-edit-username"
+                        type="text"
+                        maxlength="24"
+                        autocomplete="username"
+                        required
+                      />
+                      <p
+                        id="account-username-hint"
+                        class="account-field-hint"
+                        aria-live="polite"
+                      ></p>
+                    </div>
+
+                    <div class="account-field full-width">
+                      <label for="account-edit-email">Email</label>
+                      <input
+                        id="account-edit-email"
+                        type="email"
+                        readonly
+                        tabindex="-1"
+                      />
+                    </div>
+
+                    <div class="account-field">
+                      <label for="account-edit-current-password"
+                        >Current Password</label
+                      >
+                      <input
+                        id="account-edit-current-password"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="Required to change"
+                      />
+                    </div>
+                    <div class="account-field">
+                      <label for="account-edit-new-password">New Password</label>
+                      <input
+                        id="account-edit-new-password"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Leave blank to keep"
+                      />
+                    </div>
+                    <div class="account-field full-width">
+                      <label for="account-edit-confirm-password"
+                        >Confirm New Password</label
+                      >
+                      <input
+                        id="account-edit-confirm-password"
+                        type="password"
+                        autocomplete="new-password"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="account-edit__actions">
+                    <button
+                      type="submit"
+                      id="account-save-profile"
+                      class="account-btn account-btn--save"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </section>
             </div>
           </div>
         </div>
@@ -450,11 +575,10 @@
     <script src="visitor-shell.js"></script>
     <script>
       (async function () {
-        await loadVisitorHeaderAndFooter("home");
+        await loadVisitorHeaderAndFooter("games");
 
         const guest = document.getElementById("account-guest");
         const content = document.getElementById("account-content");
-
         const session = await MatiVisitorAuth.restoreSession();
         if (!session) {
           guest.hidden = false;
@@ -465,26 +589,25 @@
         guest.hidden = true;
         content.hidden = false;
 
-        document.getElementById("account-display-name").textContent =
-          session.displayName || session.username;
-        document.getElementById("account-username").textContent =
-          `@${session.username}`;
-        document.getElementById("account-email").textContent =
-          session.email || "—";
+        document.getElementById("account-username-display").textContent =
+          session.username || session.displayName || "—";
 
-        const displayNameInput = document.getElementById(
-          "account-edit-display-name",
-        );
         const usernameInput = document.getElementById("account-edit-username");
         const emailInput = document.getElementById("account-edit-email");
         const usernameHint = document.getElementById("account-username-hint");
+        const currentPasswordInput = document.getElementById(
+          "account-edit-current-password",
+        );
+        const newPasswordInput = document.getElementById(
+          "account-edit-new-password",
+        );
+        const confirmPasswordInput = document.getElementById(
+          "account-edit-confirm-password",
+        );
         const profileAlert = document.getElementById("account-profile-alert");
         const profileForm = document.getElementById("account-profile-form");
         const saveBtn = document.getElementById("account-save-profile");
 
-        if (displayNameInput) {
-          displayNameInput.value = session.displayName || session.username || "";
-        }
         if (usernameInput) {
           usernameInput.value = session.username || "";
         }
@@ -505,7 +628,8 @@
           if (!usernameHint) return;
           usernameHint.textContent = message || "";
           usernameHint.classList.remove("is-error", "is-ok");
-          if (type) usernameHint.classList.add(type === "ok" ? "is-ok" : "is-error");
+          if (type)
+            usernameHint.classList.add(type === "ok" ? "is-ok" : "is-error");
         }
 
         let usernameTimer = null;
@@ -537,18 +661,55 @@
           event.preventDefault();
           profileAlert?.classList.add("hidden");
 
-          const displayName = displayNameInput?.value?.trim() || "";
           const username = usernameInput?.value?.trim() || "";
 
-          if (!displayName || !username) {
-            showProfileAlert("Please fill in your display name and username.");
+          const currentPassword = currentPasswordInput?.value || "";
+          const newPassword = newPasswordInput?.value || "";
+          const confirmPassword = confirmPasswordInput?.value || "";
+
+          const isChangingPassword = newPassword || currentPassword;
+          if (!username) {
+            showProfileAlert("Username is required.");
             return;
+          }
+
+          if (isChangingPassword) {
+            if (!currentPassword) {
+              showProfileAlert(
+                "Please enter your current password to set a new one.",
+              );
+              return;
+            }
+            if (newPassword.length < 6) {
+              showProfileAlert("New password must be at least 6 characters.");
+              return;
+            }
+            if (newPassword !== confirmPassword) {
+              showProfileAlert("New passwords do not match.");
+              return;
+            }
           }
 
           if (saveBtn) saveBtn.disabled = true;
 
+          if (isChangingPassword) {
+            const passResult = await MatiAuth.updatePasswordWithCurrent(
+              currentPassword,
+              newPassword,
+            );
+            if (!passResult.ok) {
+              showProfileAlert(
+                passResult.message || "Could not update password.",
+              );
+              if (saveBtn) saveBtn.disabled = false;
+              return;
+            }
+            // Password updated, now update profile.
+            showProfileAlert("Password updated successfully.", "success");
+          }
+
           const result = await MatiAuth.updateProfile({
-            displayName,
+            displayName: username, // Use username as display name
             username,
           });
 
@@ -562,12 +723,12 @@
             return;
           }
 
-          showProfileAlert("Profile updated successfully.", "success");
-
-          document.getElementById("account-display-name").textContent =
-            result.user.displayName;
-          document.getElementById("account-username").textContent =
-            `@${result.user.username}`;
+          showProfileAlert(
+            isChangingPassword
+              ? "Profile and password updated."
+              : "Profile updated successfully.",
+            "success",
+          );
 
           const avatar = document.getElementById("account-avatar");
           if (avatar) {
@@ -576,6 +737,12 @@
 
           if (typeof MatiVisitorAuth !== "undefined") {
             void MatiVisitorAuth.refresh();
+          }
+
+          if (isChangingPassword) {
+            currentPasswordInput.value = "";
+            newPasswordInput.value = "";
+            confirmPasswordInput.value = "";
           }
         });
 
@@ -590,14 +757,15 @@
 
         if (session.loggedInAt) {
           const since = new Date(session.loggedInAt);
-          document.getElementById("account-since").textContent =
-            Number.isNaN(since.getTime())
-              ? "—"
-              : since.toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                });
+          document.getElementById("account-since").textContent = Number.isNaN(
+            since.getTime(),
+          )
+            ? "—"
+            : since.toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
         }
 
         try {
