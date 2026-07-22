@@ -66,7 +66,10 @@ const MatiAdminStore = (() => {
   }
 
   async function importBuiltCatalogToSupabase() {
-    if (!supabaseEnabled() || typeof MatiSupabaseApi.seedBuiltHeritageCatalog !== "function") {
+    if (
+      !supabaseEnabled() ||
+      typeof MatiSupabaseApi.seedBuiltHeritageCatalog !== "function"
+    ) {
       return { ok: false, reason: "not_configured" };
     }
 
@@ -78,7 +81,7 @@ const MatiAdminStore = (() => {
       const message = error?.message || String(error);
       const needsBootstrap =
         /seed_built_heritage_catalog/i.test(message) &&
-        (/does not exist|schema cache|PGRST202/i.test(message));
+        /does not exist|schema cache|PGRST202/i.test(message);
 
       return {
         ok: false,
@@ -195,10 +198,7 @@ const MatiAdminStore = (() => {
       MatiHeritageRealtime.bumpCatalog({ media: true, sites: true });
     } else {
       try {
-        localStorage.setItem(
-          "matiHeritageCatalogBump",
-          String(Date.now()),
-        );
+        localStorage.setItem("matiHeritageCatalogBump", String(Date.now()));
       } catch {
         /* ignore */
       }
@@ -404,7 +404,8 @@ const MatiAdminStore = (() => {
   function getUnmappedSites() {
     return getAllSites().filter((site) => {
       if (isDraftSiteId(site.id)) return false;
-      if (site.category !== "built" && site.category !== "natural") return false;
+      if (site.category !== "built" && site.category !== "natural")
+        return false;
       return !resolveCoords(site);
     });
   }
@@ -431,7 +432,9 @@ const MatiAdminStore = (() => {
     }
 
     store.addedMedia = store.addedMedia.map((item) =>
-      item.siteId === fromId ? { ...item, siteId: toId, siteName: payload.name } : item,
+      item.siteId === fromId
+        ? { ...item, siteId: toId, siteName: payload.name }
+        : item,
     );
 
     if (store.mediaOrder) {
@@ -452,7 +455,9 @@ const MatiAdminStore = (() => {
 
     const movedMedia = getSiteMedia(toId);
     await Promise.all(
-      movedMedia.map((item) => syncMediaToSupabase({ ...item, siteId: toId }, payload)),
+      movedMedia.map((item) =>
+        syncMediaToSupabase({ ...item, siteId: toId }, payload),
+      ),
     );
 
     if (syncNew.ok) clearVisitorHeritageCaches();
@@ -527,13 +532,18 @@ const MatiAdminStore = (() => {
     if (!store.mediaOrder) store.mediaOrder = {};
     const key = mediaOrderKey(siteId, type);
     const current = store.mediaOrder[key] || [];
-    store.mediaOrder[key] = [mediaId, ...current.filter((id) => id !== mediaId)];
+    store.mediaOrder[key] = [
+      mediaId,
+      ...current.filter((id) => id !== mediaId),
+    ];
   }
 
   function removeFromMediaOrders(store, mediaId) {
     if (!store.mediaOrder) return;
     Object.keys(store.mediaOrder).forEach((key) => {
-      store.mediaOrder[key] = store.mediaOrder[key].filter((id) => id !== mediaId);
+      store.mediaOrder[key] = store.mediaOrder[key].filter(
+        (id) => id !== mediaId,
+      );
     });
   }
 
@@ -552,8 +562,7 @@ const MatiAdminStore = (() => {
       .map((item) => Number(item.sortOrder))
       .filter((value) => Number.isFinite(value));
     const hasMeaningfulRemoteOrder =
-      sortValues.some((value) => value > 0) ||
-      new Set(sortValues).size > 1;
+      sortValues.some((value) => value > 0) || new Set(sortValues).size > 1;
 
     // Prefer admin local drag order when present; otherwise use DB sort_order.
     const order =
@@ -573,8 +582,7 @@ const MatiAdminStore = (() => {
 
     if (!order?.length) {
       return [...items].sort((a, b) => {
-        const bySort =
-          (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0);
+        const bySort = (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0);
         if (bySort) return bySort;
         const byUpdated = (b.updatedAt || "").localeCompare(a.updatedAt || "");
         if (byUpdated) return byUpdated;
@@ -698,10 +706,7 @@ const MatiAdminStore = (() => {
           synced += 1;
         } catch (error) {
           lastError = error;
-          console.warn(
-            `Failed syncing media order ${site.id}:${type}:`,
-            error,
-          );
+          console.warn(`Failed syncing media order ${site.id}:${type}:`, error);
         }
       }
     }
@@ -771,7 +776,9 @@ const MatiAdminStore = (() => {
       clearVisitorHeritageCaches();
       // Once the row lives in remoteMedia, drop the local duplicate copy.
       const after = readStore();
-      after.addedMedia = after.addedMedia.filter((item) => item.id !== payload.id);
+      after.addedMedia = after.addedMedia.filter(
+        (item) => item.id !== payload.id,
+      );
       writeStore(after);
 
       // Keep visitor gallery placement in sync with admin order.
@@ -820,7 +827,9 @@ const MatiAdminStore = (() => {
 
     writeStore(store);
 
-    await Promise.all(targets.map((item) => syncDeleteMediaToSupabase(item.id)));
+    await Promise.all(
+      targets.map((item) => syncDeleteMediaToSupabase(item.id)),
+    );
     clearVisitorHeritageCaches();
 
     return unique.length;
@@ -841,8 +850,7 @@ const MatiAdminStore = (() => {
   }
 
   function getLocalCommunityStats() {
-    const users =
-      typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
+    const users = typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
     const registered = getRegisteredUsers();
     return {
       registeredUsers: users.length,
@@ -961,7 +969,8 @@ const MatiAdminStore = (() => {
       typeof MatiHeritagePoints !== "undefined"
         ? MatiHeritagePoints.readLocal()
         : parseInt(localStorage.getItem("totalHeritagePoints") || "0", 10);
-    const session = typeof MatiAuth !== "undefined" ? MatiAuth.getSession() : null;
+    const session =
+      typeof MatiAuth !== "undefined" ? MatiAuth.getSession() : null;
     if (session && sessionPts > 0) {
       const exists = users.some((u) => u.username === session.username);
       if (!exists) {
@@ -1079,7 +1088,8 @@ const MatiAdminStore = (() => {
 
     visitorUnsubscribe = MatiSupabaseApi.subscribeVisitorAnalytics(async () => {
       await refreshVisitorAnalytics();
-      if (typeof onChange === "function") onChange(getDashboardCommunityStats());
+      if (typeof onChange === "function")
+        onChange(getDashboardCommunityStats());
     });
     return visitorUnsubscribe;
   }
@@ -1105,10 +1115,13 @@ const MatiAdminStore = (() => {
     if (typeof MatiHeritageRealtime !== "undefined") {
       MatiHeritageRealtime.ensure();
       return attach(
-        MatiHeritageRealtime.on(MatiHeritageRealtime.TOPIC.catalog, async () => {
-          await initFromSupabase();
-          if (typeof onChange === "function") onChange();
-        }),
+        MatiHeritageRealtime.on(
+          MatiHeritageRealtime.TOPIC.catalog,
+          async () => {
+            await initFromSupabase();
+            if (typeof onChange === "function") onChange();
+          },
+        ),
       );
     }
 
@@ -1132,7 +1145,9 @@ const MatiAdminStore = (() => {
   }
 
   function heritageReportRows(category) {
-    const sites = category ? getSitesByCategory(category) : getAllSites().filter((site) => !isDraftSiteId(site.id));
+    const sites = category
+      ? getSitesByCategory(category)
+      : getAllSites().filter((site) => !isDraftSiteId(site.id));
     return sites.map((site) => {
       const stats = getSiteStats(site.id);
       return {
@@ -1155,17 +1170,28 @@ const MatiAdminStore = (() => {
 
   const LCI_COLUMNS = [
     { key: "no", label: "No." },
-    { key: "name", label: "Name of Cultural Property" },
-    { key: "location", label: "Location" },
-    { key: "propertyType", label: "Type" },
+    { key: "name", label: "NAME OF CULTURAL PROPERTY" },
+    { key: "barangay", label: "BARANGAY" },
+    { key: "coordinates", label: "GEOGRAPHICAL COORDINATES" },
+    {
+      key: "propertyType",
+      label: "Tangible Immovable / Tangible Movable / Intangible / Natural",
+    },
     { key: "category", label: "Category / Classification" },
-    { key: "ownership", label: "Ownership" },
-    { key: "description", label: "Brief Description" },
-    { key: "multimedia", label: "Multimedia" },
-    { key: "areaHa", label: "Area Occupied (ha)" },
-    { key: "yearStarted", label: "Year Constructed / Started" },
-    { key: "declaration", label: "Declaration" },
-    { key: "reference", label: "Reference" },
+    { key: "ownership", label: "OWNERSHIP" },
+    { key: "description", label: "BRIEF DESCRIPTION" },
+    { key: "multimedia", label: "MULTIMEDIA" },
+    { key: "areaHa", label: "AREA OCCUPIED (ha)" },
+    { key: "yearStarted", label: "YEAR CONSTRUCTED/STARTED OR ESTIMATED AGE" },
+    { key: "declarationLocal", label: "LOCAL" },
+    { key: "declarationNational", label: "NATIONAL" },
+    { key: "declarationInternational", label: "INTERNATIONAL" },
+    {
+      key: "declarationDetails",
+      label: "DETAILS (Existing declaration of the cultural property)",
+    },
+    { key: "keyInformants", label: "Key Informant(s)" },
+    { key: "references", label: "References" },
   ];
 
   function lciPropertyType(category) {
@@ -1205,6 +1231,23 @@ const MatiAdminStore = (() => {
     return parts.join("\n");
   }
 
+  function extractBarangay(site) {
+    // Extract barangay from location field - assumes location contains barangay info
+    if (site.location) {
+      const parts = site.location.split(",").map((p) => p.trim());
+      // Barangay is typically the first part
+      return parts[0] || "";
+    }
+    return "";
+  }
+
+  function extractCoordinates(site) {
+    if (site.lat != null && site.lng != null) {
+      return `Latitude: ${decimalToDms(site.lat, true)}\nLongitude: ${decimalToDms(site.lng, false)}`;
+    }
+    return "";
+  }
+
   function formatLciMultimedia(stats, site) {
     const models = stats.models || (site.modelSrc ? 1 : 0);
     const total =
@@ -1221,7 +1264,9 @@ const MatiAdminStore = (() => {
   }
 
   function getLciInventoryNumber(siteId) {
-    const index = getLciInventorySites().findIndex((site) => site.id === siteId);
+    const index = getLciInventorySites().findIndex(
+      (site) => site.id === siteId,
+    );
     return index >= 0 ? index + 1 : "";
   }
 
@@ -1234,10 +1279,15 @@ const MatiAdminStore = (() => {
       ownership = "NA";
     }
 
+    // Parse declaration field if it exists, otherwise leave empty
+    const declaration = site.declaration || "";
+    const declarationParts = declaration.split("\n").map((p) => p.trim());
+
     return {
       no: index + 1,
       name: site.name || "",
-      location: formatLciLocation(site),
+      barangay: extractBarangay(site),
+      coordinates: extractCoordinates(site),
       propertyType: lciPropertyType(site.category),
       category: site.heritageCategory || "",
       ownership,
@@ -1245,8 +1295,12 @@ const MatiAdminStore = (() => {
       multimedia: formatLciMultimedia(stats, site),
       areaHa: site.areaHa || "",
       yearStarted: site.yearStarted || "",
-      declaration: site.declaration || "",
-      reference: site.reference || "",
+      declarationLocal: declarationParts[0] || "",
+      declarationNational: declarationParts[1] || "",
+      declarationInternational: declarationParts[2] || "",
+      declarationDetails: declarationParts[3] || declaration,
+      keyInformants: site.keyInformants || "",
+      references: site.reference || "",
     };
   }
 
@@ -1276,7 +1330,13 @@ const MatiAdminStore = (() => {
     if (value == null) return "";
     if (typeof value === "number") return value;
     const text = String(value).trim();
-    if (!text || text === "—" || text === "-" || text === "N/A" || text === "NA") {
+    if (
+      !text ||
+      text === "—" ||
+      text === "-" ||
+      text === "N/A" ||
+      text === "NA"
+    ) {
       return "";
     }
     return text;
@@ -1286,7 +1346,10 @@ const MatiAdminStore = (() => {
     const cleaned = cleanCsvValue(value);
     if (cleaned === "") return "";
     const s = String(cleaned);
-    return s.includes(",") || s.includes('"') || s.includes("\n") || s.includes("\r")
+    return s.includes(",") ||
+      s.includes('"') ||
+      s.includes("\n") ||
+      s.includes("\r")
       ? `"${s.replace(/"/g, '""')}"`
       : s;
   }
@@ -1355,12 +1418,15 @@ const MatiAdminStore = (() => {
     if (store.siteEdits[siteId]) return true;
     if (store.addedSites.some((site) => site.id === siteId)) return true;
     if (store.addedMedia.some((item) => item.siteId === siteId)) return true;
-    if (Object.values(store.mediaEdits).some((item) => item.siteId === siteId)) {
+    if (
+      Object.values(store.mediaEdits).some((item) => item.siteId === siteId)
+    ) {
       return true;
     }
 
     return baseMedia().some(
-      (item) => item.siteId === siteId && store.deletedMediaIds.includes(item.id),
+      (item) =>
+        item.siteId === siteId && store.deletedMediaIds.includes(item.id),
     );
   }
 

@@ -91,6 +91,7 @@ const MatiAdminUploads = (() => {
         file,
         {
           onProgress: options.onProgress,
+          signal: options.signal,
         },
       );
       if (!publicUrl) {
