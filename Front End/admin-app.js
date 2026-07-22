@@ -13,7 +13,9 @@
   const heritagePreviewUrls = new Set();
   let builtModelObserver = null;
   let logoutInProgress = false;
+  let activeUploadController = null;
 
+  const ADMIN_STYLE_ID = "mati-admin-dynamic-styles";
   const TYPE_LABELS = {
     photo: "Photograph",
     map: "Site map",
@@ -22,6 +24,307 @@
     link: "Link",
     model3d: "3D model",
   };
+
+  const DYNAMIC_STYLES = {
+    photoPile: `
+      .admin-media-pile {
+        --pile-scale: 0.65;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(180px * var(--pile-scale));
+        margin: 0.5rem 0 1.5rem;
+      }
+      .admin-media-pile .gal-pile-stack {
+        transform: scale(var(--pile-scale));
+      }
+      .admin-media-pile .gal-print {
+        cursor: default;
+      }
+    `,
+    modelCard: `
+      .admin-model-card {
+        border-radius: 0.85rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.25s ease;
+      }
+      .admin-model-card--empty {
+        background: #f8fafc;
+        border: 2px dashed #e2e8f0;
+        cursor: pointer;
+      }
+      .admin-model-card--empty:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+        border-color: #cbd5e1;
+      }
+      .admin-model-card--empty:hover .admin-model-card__icon {
+        transform: scale(1.08);
+      }
+      .admin-model-card__icon {
+        display: block;
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: 0 auto 1rem;
+        color: #94a3b8;
+        transition: transform 0.25s ease;
+      }
+      .admin-model-card__title {
+        margin: 0 0 0.35rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .admin-model-card__desc {
+        margin: 0 auto 1.25rem;
+        max-width: 24rem;
+        font-size: 0.9rem;
+        color: #64748b;
+        line-height: 1.5;
+      }
+      .admin-model-card--filled {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        text-align: left;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+      }
+      .admin-model-card__thumb {
+        flex-shrink: 0;
+        width: 5rem;
+        height: 5rem;
+        border-radius: 0.65rem;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+      }
+      .admin-model-card__thumb svg {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+      .admin-model-card__meta {
+        flex-grow: 1;
+      }
+      .admin-model-card__filename {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+      }
+      .admin-model-card__actions {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* Drag & Drop States */
+      .admin-model-card--empty.is-dragover {
+        transform: scale(1.015);
+        border-color: #059669;
+        border-width: 2px;
+        background: #f0fdf4;
+        box-shadow: 0 0 24px rgba(5, 150, 105, 0.2);
+      }
+      .admin-model-card--empty.is-dragover .admin-model-card__icon {
+        animation: admin-icon-float 1.8s ease-in-out infinite;
+        color: #059669;
+      }
+      .admin-model-card--empty.is-dragover .admin-model-card__title {
+        color: #065f46;
+      }
+      .admin-model-card--empty.is-dragover .admin-model-card__desc,
+      .admin-model-card--empty.is-dragover .admin-btn {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .admin-model-card--empty.is-dragover .admin-model-card__drop-label {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .admin-model-card--empty.is-dragover-invalid {
+        border-color: #dc2626;
+        background: #fef2f2;
+        box-shadow: 0 0 20px rgba(220, 38, 38, 0.18);
+        animation: admin-card-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+      }
+      .admin-model-card--empty.is-dragover-invalid .admin-model-card__icon {
+        color: #b91c1c;
+      }
+      .admin-model-card--empty.is-dragover-invalid .admin-model-card__icon svg {
+        display: none;
+      }
+      .admin-model-card--empty.is-dragover-invalid .admin-model-card__icon::before {
+        content: "!";
+        font-family: serif;
+        font-weight: bold;
+        font-size: 2.5rem;
+      }
+      .admin-model-card--empty.is-dragover-invalid .admin-model-card__title {
+        color: #991b1b;
+      }
+      .admin-model-card__drop-label {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        right: 1.5rem;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      @keyframes admin-icon-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      @keyframes admin-card-shake {
+        10%, 90% { transform: translateX(-1px); }
+        20%, 80% { transform: translateX(2px); }
+        30%, 50%, 70% { transform: translateX(-3px); }
+        40%, 60% { transform: translateX(3px); }
+      }
+    `,
+    modelUpload: `
+      .admin-modal--model-upload .admin-modal__body {
+        padding: 0;
+      }
+      .admin-model-upload-area {
+        padding: 2.5rem;
+        text-align: center;
+        border: 2px dashed #e2e8f0;
+        border-radius: 0.85rem;
+        background: #f8fafc;
+        transition: all 0.25s ease-in-out;
+        cursor: pointer;
+      }
+      .admin-model-upload-area:hover {
+        border-color: #cbd5e1;
+        background: #f1f5f9;
+      }
+      .admin-model-upload-area.is-dragover {
+        transform: scale(1.01);
+        border-color: #059669;
+        background: #f0fdf4;
+        box-shadow: 0 0 24px rgba(5, 150, 105, 0.2);
+      }
+      .admin-model-upload-area.is-dragover-invalid {
+        transform: scale(1.01);
+        border-color: #dc2626;
+        background: #fef2f2;
+        box-shadow: 0 0 24px rgba(220, 38, 38, 0.18);
+        animation: admin-card-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+      }
+      .admin-model-upload__icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: 0 auto 1rem;
+        color: #94a3b8;
+        transition: all 0.25s ease;
+      }
+      .admin-model-upload-area:hover .admin-model-upload__icon {
+        color: #64748b;
+      }
+      .admin-model-upload-area.is-dragover .admin-model-upload__icon {
+        color: #059669;
+        transform: scale(1.1);
+      }
+      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__icon {
+        color: #b91c1c;
+        transform: scale(1.1);
+      }
+      .admin-model-upload__title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0 0 0.25rem;
+      }
+      .admin-model-upload__text {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 0;
+      }
+      .admin-model-upload__formats {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-top: 1rem;
+      }
+      .admin-model-upload-area.is-dragover .admin-model-upload__title,
+      .admin-model-upload-area.is-dragover .admin-model-upload__text,
+      .admin-model-upload-area.is-dragover .admin-model-upload__formats {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      .admin-model-upload__drop-label {
+        display: none;
+        color: #065f46;
+      }
+      .admin-model-upload-area.is-dragover .admin-model-upload__drop-label {
+        display: block;
+      }
+      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__title {
+        color: #991b1b;
+      }
+      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__text {
+        color: #b91c1c;
+      }
+
+      .admin-model-preview-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+      }
+      .admin-model-preview-card__icon {
+        flex-shrink: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        color: #059669;
+      }
+      .admin-model-preview-card__meta {
+        flex-grow: 1;
+      }
+      .admin-model-preview-card__name {
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .admin-model-preview-card__size {
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+      .admin-model-preview-card__progress-bar {
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+    `,
+  };
+
+  function injectStyles(keys) {
+    if (!document.head) return;
+    let styleEl = document.getElementById(ADMIN_STYLE_ID);
+    if (!styleEl) {
+      styleEl = document.createElement("style");
+      styleEl.id = ADMIN_STYLE_ID;
+      document.head.appendChild(styleEl);
+    }
+
+    const newStyles = (Array.isArray(keys) ? keys : [keys])
+      .map((key) => DYNAMIC_STYLES[key] || "")
+      .join("\n");
+
+    if (styleEl.textContent.includes(newStyles)) return;
+
+    const currentStyles = styleEl.textContent.split("/* --- */");
+    const newSet = new Set([...currentStyles, newStyles].filter(Boolean));
+    styleEl.textContent = [...newSet].join("\n/* --- */\n");
+  }
 
   function showToast(message) {
     const el = $("#admin-toast");
@@ -49,6 +352,7 @@
       detail: $("#admin-upload-progress-detail"),
       fill: $("#admin-upload-progress-fill"),
       pct: $("#admin-upload-progress-pct"),
+      cancel: $("#admin-upload-progress-cancel"),
       bar: $("#admin-upload-progress-bar"),
     };
   }
@@ -87,12 +391,26 @@
   function showUploadProgress({
     title = "Uploading…",
     detail = "Preparing file…",
+    onCancel = null,
     percent = 0,
   } = {}) {
-    const { root, title: titleEl, detail: detailEl } = uploadProgressEls();
+    const {
+      root,
+      title: titleEl,
+      detail: detailEl,
+      cancel: cancelBtn,
+    } = uploadProgressEls();
     if (!root) return;
     clearTimeout(uploadProgressHideTimer);
     root.hidden = false;
+    if (activeUploadController) {
+      activeUploadController.abort();
+    }
+    activeUploadController = new AbortController();
+    if (cancelBtn) {
+      cancelBtn.onclick = onCancel;
+      cancelBtn.hidden = typeof onCancel !== "function";
+    }
     root.classList.remove("is-done", "is-error", "is-exiting");
     root.setAttribute("aria-busy", "true");
     if (titleEl) titleEl.textContent = title;
@@ -107,6 +425,10 @@
     requestAnimationFrame(() => {
       root.classList.add("is-visible");
     });
+    if (onCancel) {
+      cancelBtn.onclick = () => onCancel(activeUploadController);
+      cancelBtn.hidden = false;
+    }
   }
 
   function setUploadProgress(percent, detail) {
@@ -118,6 +440,10 @@
     }
     if (detail != null) setUploadDetailText(detailEl, detail);
     if (root && value >= 99.5) {
+      const { cancel: cancelBtn } = uploadProgressEls();
+      if (cancelBtn) {
+        cancelBtn.hidden = true;
+      }
       root.classList.add("is-done");
       root.setAttribute("aria-busy", "false");
       const { title } = uploadProgressEls();
@@ -136,7 +462,12 @@
       root.classList.remove("is-visible");
       const finish = () => {
         root.hidden = true;
-        root.classList.remove("is-done", "is-error", "is-exiting", "is-visible");
+        root.classList.remove(
+          "is-done",
+          "is-error",
+          "is-exiting",
+          "is-visible",
+        );
         root.setAttribute("aria-busy", "false");
         document.body.classList.remove("admin-upload-busy");
         if (uploadProgressAnimFrame) {
@@ -151,6 +482,11 @@
           detail.classList.remove("is-swap");
           detail.textContent = "Preparing file…";
         }
+        const { cancel: cancelBtn } = uploadProgressEls();
+        if (cancelBtn) {
+          cancelBtn.hidden = true;
+        }
+        activeUploadController = null;
         if (title) title.textContent = "Uploading…";
       };
       uploadProgressHideTimer = setTimeout(finish, 320);
@@ -166,11 +502,19 @@
     showUploadProgress({
       title: options.title || "Uploading…",
       detail: options.detail || "Starting…",
+      onCancel:
+        options.onCancel ||
+        ((controller) => {
+          controller?.abort();
+          hideUploadProgress();
+          showToast("Upload cancelled.");
+        }),
       percent: options.percent || 0,
     });
     try {
       const result = await task({
-        setProgress: setUploadProgress,
+        setProgress: setUploadProgress, // This is correct
+        hideProgress: hideUploadProgress,
         show: showUploadProgress,
       });
       const { title } = uploadProgressEls();
@@ -273,9 +617,9 @@
   function syncOk(payload) {
     return Boolean(
       payload &&
-        (!payload._sync ||
-          payload._sync.ok ||
-          payload._sync.reason === "not_configured"),
+      (!payload._sync ||
+        payload._sync.ok ||
+        payload._sync.reason === "not_configured"),
     );
   }
 
@@ -353,9 +697,8 @@
   }
 
   function syncBuiltMediaPicker() {
-    const builtForm = isBuiltHeritageForm();
     const builtActions = $("#site-media-actions-built");
-    if (builtActions) builtActions.hidden = !builtForm;
+    if (builtActions) builtActions.remove();
   }
 
   function categoryMediaTypes(cat) {
@@ -408,7 +751,7 @@
     const fullscreenModel = $("#fullscreen-model");
     const fullscreenPhoto = $("#fullscreen-photo");
     const fullscreenLoading = $("#fullscreen-loading");
-    
+
     if (fullscreenLoading) {
       fullscreenLoading.setAttribute("hidden", "");
     }
@@ -444,7 +787,7 @@
     const fullscreenHint = $("#fullscreen-hint");
     const fullscreenLoading = $("#fullscreen-loading");
     const fullscreenLoadingLabel = $("#fullscreen-loading-label");
-    
+
     if (!modal || !fullscreenModel) return;
 
     const src = await resolveModelViewerSrc(modelPath);
@@ -466,7 +809,7 @@
     fullscreenModel.removeAttribute("hidden");
     fullscreenPhoto.hidden = true;
     fullscreenPhoto.setAttribute("hidden", "");
-    
+
     if (fullscreenHint) {
       fullscreenHint.textContent = "Drag to rotate · Scroll to zoom";
       fullscreenHint.hidden = false;
@@ -577,9 +920,9 @@
   }
 
   function getBuiltHeritageTypes(sites) {
-    return [...new Set(sites.map((site) => site.heritageCategory).filter(Boolean))].sort(
-      (a, b) => a.localeCompare(b),
-    );
+    return [
+      ...new Set(sites.map((site) => site.heritageCategory).filter(Boolean)),
+    ].sort((a, b) => a.localeCompare(b));
   }
 
   function populateBuiltHeritageTypeFilter(sites) {
@@ -753,6 +1096,96 @@
       </li>`;
   }
 
+  function renderModelCard(site) {
+    if (site.modelSrc) {
+      const filename = site.modelSrc.split("/").pop();
+      const lastUpdated = site.updatedAt
+        ? new Date(site.updatedAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
+        : "";
+
+      return `
+        <div class="admin-model-card admin-model-card--filled">
+          <div class="admin-model-card__thumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <div class="admin-model-card__meta">
+            <h5 class="admin-model-card__title">3D Model Uploaded</h5>
+            <p class="admin-model-card__filename">${escapeHtml(filename)}</p>
+            <div class="admin-model-card__actions">
+              <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-view-model="${escapeAttr(site.id)}">Preview</button>
+              <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="model3d">Manage</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="admin-model-card admin-model-card--empty" data-add-media-type="model3d" role="button" tabindex="0">
+        <svg class="admin-model-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+        <h5 class="admin-model-card__title">No 3D Model Available</h5>
+        <p class="admin-model-card__desc"> Drag & Drop your 3D Model or click to browse your files.</p>
+        <p class="admin-model-card__desc"> Supports .glb.</p>
+        <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">
+          <svg class="admin-model-card__drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em; display: none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <p class="admin-model-card__drop-label">Drop your 3D model here</p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Upload 3D Model
+        </button>
+      </div>
+    `;
+  }
+
+  function renderBuiltSitePhotoPile(site, photos) {
+    const PILE_PRINT_FILTERS = [
+      "none",
+      "sepia(0.35)",
+      "grayscale(1)",
+      "saturate(1.2)",
+    ];
+
+    const getPilePhotos = () => {
+      const fromMedia = photos.map((item) => item.src);
+      const photoSources = [...new Set([site.cover, ...fromMedia])].filter(
+        Boolean,
+      );
+      while (photoSources.length > 0 && photoSources.length < 4) {
+        photoSources.push(photoSources[0]);
+      }
+      return photoSources.slice(0, 4);
+    };
+
+    const pilePhotos = getPilePhotos();
+    if (!pilePhotos.length) {
+      return `<p class="admin-media-group__empty">No photographs uploaded yet.</p>`;
+    }
+
+    const prints = pilePhotos
+      .map(
+        (src, index) => `
+      <span class="gal-print gal-print--${index + 1}" style="--print-i: ${index}" data-print="${index}">
+        <img src="${escapeHtml(src)}" alt="" loading="lazy" style="filter: ${PILE_PRINT_FILTERS[index]}" />
+      </span>`,
+      )
+      .join("");
+
+    return `<div class="admin-media-pile">
+              <div class="gal-pile-stack">${prints}</div>
+            </div>`;
+  }
+
   function renderBuiltSiteMediaList(site, media, container) {
     const photos = media.filter((m) => m.type === "photo");
     const mapItems = site.cover
@@ -783,13 +1216,10 @@
       : `<p class="admin-media-group__empty">No site map uploaded yet.</p>`;
 
     const photoList = photos.length
-      ? `<ul class="admin-media-list">${photos.map((m) => renderMediaListItem(m)).join("")}</ul>`
+      ? renderBuiltSitePhotoPile(site, photos)
       : `<p class="admin-media-group__empty">No photographs uploaded yet.</p>`;
 
-    const modelList = modelItems.length
-      ? `<ul class="admin-media-list">${modelItems.map((m) => renderMediaListItem(m, { showEdit: false })).join("")}</ul>`
-      : `<p class="admin-media-group__empty">No 3D model uploaded yet.</p>`;
-
+    const modelContent = renderModelCard(site);
     container.innerHTML = `
       <div class="admin-media-groups">
         <section class="admin-media-group">
@@ -801,6 +1231,9 @@
         <section class="admin-media-group">
           <div class="admin-media-group__head">
             <h4 class="admin-media-group__title admin-media-group__title--photo">Photographs</h4>
+            <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="photo">
+              Manage
+            </button>
           </div>
           ${photoList}
         </section>
@@ -808,9 +1241,10 @@
           <div class="admin-media-group__head">
             <h4 class="admin-media-group__title admin-media-group__title--model">3D model</h4>
           </div>
-          ${modelList}
+          ${modelContent}
         </section>
       </div>`;
+    bindModelCardDragDrop(container);
   }
 
   function photoTitleFromFile(file) {
@@ -820,7 +1254,9 @@
   function getSelectedPhotoFiles() {
     const fileInput = $("#media-file");
     if (!fileInput?.files?.length) return [];
-    return [...fileInput.files].filter((file) => file.type.startsWith("image/"));
+    return [...fileInput.files].filter((file) =>
+      file.type.startsWith("image/"),
+    );
   }
 
   function updateMediaFormUi() {
@@ -863,6 +1299,10 @@
     const fileInput = $("#media-file");
     const fileLabel = $("#media-file-label");
     const fileHint = $("#media-file-hint");
+    const captionField = $("#media-caption-field");
+    const mediaModal = $("#media-modal");
+    const saveBtn = $("#btn-save-media");
+
     const previewWrap = $("#media-file-preview-wrap");
     const previewImg = $("#media-file-preview");
     const titleInput = $("#media-title");
@@ -870,6 +1310,13 @@
     const selectedPhotos =
       activeType === "photo" && usesFile ? getSelectedPhotoFiles() : [];
     const bulkPhotos = selectedPhotos.length > 1;
+
+    if (mediaModal) {
+      mediaModal.classList.toggle(
+        "admin-modal--model-upload",
+        activeType === "model3d",
+      );
+    }
 
     if (fileField) fileField.hidden = !usesFile;
     if (urlField) {
@@ -900,14 +1347,16 @@
       if (activeType === "photo" || activeType === "map") {
         fileInput.accept = "image/*";
         fileInput.multiple = activeType === "photo";
-      } else if (activeType === "model3d") {
+      } else if (activeType === "model3d" && fileInput.id === "media-file") {
         fileInput.accept = ".glb,model/gltf-binary";
         fileInput.multiple = false;
       } else if (activeType === "video") {
-        fileInput.accept = "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
+        fileInput.accept =
+          "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
         fileInput.multiple = false;
       } else if (activeType === "audio") {
-        fileInput.accept = "audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a";
+        fileInput.accept =
+          "audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a";
         fileInput.multiple = false;
       }
       if (!usesFile) fileInput.value = "";
@@ -916,7 +1365,7 @@
     if (fileLabel) {
       const labels = {
         photo: "Upload photographs",
-        map: "Upload map image",
+        map: "Upload site map",
         model3d: "Upload 3D model (.glb)",
         video: "Upload video file",
         audio: "Upload audio recording",
@@ -925,11 +1374,7 @@
     }
 
     if (fileHint) {
-      if (activeType === "model3d") {
-        fileHint.textContent = site?.modelSrc
-          ? "A 3D model is linked. Choose a file to replace it."
-          : "No 3D model uploaded yet.";
-      } else if (activeType === "map") {
+      if (activeType === "map") {
         fileHint.textContent = site?.cover
           ? "A site map is linked. Choose a file to replace it."
           : "No site map uploaded yet.";
@@ -949,18 +1394,11 @@
       }
     }
 
-    if (captionHint) {
-      if (activeType === "photo" && usesFile && bulkPhotos) {
-        captionHint.textContent =
-          "Optional — this caption is applied to every photograph in this batch. Use Edit on each photo later for individual captions.";
-        captionHint.hidden = false;
-      } else if (activeType === "photo" && usesFile) {
-        captionHint.textContent = "Optional caption for this photograph.";
-        captionHint.hidden = false;
-      } else {
-        captionHint.textContent = "";
-        captionHint.hidden = true;
-      }
+    if (captionField) {
+      captionField.hidden = activeType === "model3d";
+    }
+    if (saveBtn) {
+      saveBtn.disabled = activeType === "model3d" && !fileInput.files.length;
     }
 
     if (previewWrap && previewImg && activeType !== "map") {
@@ -998,7 +1436,10 @@
     if (view === "reports" && options.report) {
       currentReport = options.report;
       $$("#report-tabs .admin-tabs__btn").forEach((btn) => {
-        btn.classList.toggle("is-active", btn.dataset.report === options.report);
+        btn.classList.toggle(
+          "is-active",
+          btn.dataset.report === options.report,
+        );
       });
     }
 
@@ -1050,7 +1491,11 @@
     $$(".admin-modal").forEach((m) => {
       m.hidden = true;
       m.setAttribute("hidden", "");
-      m.classList.remove("admin-modal--aside", "admin-modal--stacked", "admin-modal--under");
+      m.classList.remove(
+        "admin-modal--aside",
+        "admin-modal--stacked",
+        "admin-modal--under",
+      );
     });
     if (typeof MatiAdminMap !== "undefined") MatiAdminMap.disablePickMode();
     mapPickSession = false;
@@ -1108,7 +1553,10 @@
   }
 
   function formatMediaSrc(src) {
-    if (typeof MatiAdminUploads !== "undefined" && MatiAdminUploads.isUploadUri(src)) {
+    if (
+      typeof MatiAdminUploads !== "undefined" &&
+      MatiAdminUploads.isUploadUri(src)
+    ) {
       return "Uploaded file";
     }
     return truncate(src, 48);
@@ -1122,31 +1570,43 @@
         chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
       }
       if (include3d && (site.modelSrc || stats.models)) chips.push("3D model");
-      if (!chips.length) return '<span class="admin-table__sub">No media</span>';
+      if (!chips.length)
+        return '<span class="admin-table__sub">No media</span>';
       return `<div class="admin-chip-row">${chips.map((c) => `<span class="admin-chip">${c}</span>`).join("")}</div>`;
     }
 
     if (site?.category === "natural") {
-      if (stats.photos) chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
-      if (stats.videos) chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
-      if (stats.links) chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
-      if (!chips.length) return '<span class="admin-table__sub">No media</span>';
+      if (stats.photos)
+        chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
+      if (stats.videos)
+        chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
+      if (stats.links)
+        chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
+      if (!chips.length)
+        return '<span class="admin-table__sub">No media</span>';
       return `<div class="admin-chip-row">${chips.map((c) => `<span class="admin-chip">${c}</span>`).join("")}</div>`;
     }
 
     if (site?.category === "intangible") {
-      if (stats.photos) chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
-      if (stats.videos) chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
+      if (stats.photos)
+        chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
+      if (stats.videos)
+        chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
       if (stats.audio) chips.push(`${stats.audio} audio`);
-      if (stats.links) chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
-      if (!chips.length) return '<span class="admin-table__sub">No media</span>';
+      if (stats.links)
+        chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
+      if (!chips.length)
+        return '<span class="admin-table__sub">No media</span>';
       return `<div class="admin-chip-row">${chips.map((c) => `<span class="admin-chip">${c}</span>`).join("")}</div>`;
     }
 
-    if (stats.photos) chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
-    if (stats.videos) chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
+    if (stats.photos)
+      chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
+    if (stats.videos)
+      chips.push(`${stats.videos} video${stats.videos !== 1 ? "s" : ""}`);
     if (stats.audio) chips.push(`${stats.audio} audio`);
-    if (stats.links) chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
+    if (stats.links)
+      chips.push(`${stats.links} link${stats.links !== 1 ? "s" : ""}`);
     if (include3d && stats.models) chips.push(`${stats.models} 3D`);
     if (!chips.length) return '<span class="admin-table__sub">No media</span>';
     return `<div class="admin-chip-row">${chips.map((c) => `<span class="admin-chip">${c}</span>`).join("")}</div>`;
@@ -1209,7 +1669,7 @@
         </svg>`,
         natural: `<svg class="stat-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>`
+        </svg>`,
       };
 
       heritageCards.innerHTML = collections
@@ -1337,7 +1797,9 @@
         },
       );
       const sites = filterAndSortBuiltSites(allBuilt);
-      renderBuiltHeritageCount(MatiAdminStore.getSitesByCategory("built").length);
+      renderBuiltHeritageCount(
+        MatiAdminStore.getSitesByCategory("built").length,
+      );
       renderBuiltHeritageGrid(sites);
       return;
     }
@@ -1390,7 +1852,7 @@
       const posterHtml = poster
         ? `<img class="admin-heritage-card__cover admin-heritage-card__poster" src="${poster}" alt="" loading="lazy" decoding="async" />`
         : `<div class="admin-heritage-card__placeholder"><span class="admin-heritage-card__placeholder-icon" aria-hidden="true">3D</span><span>Loading preview…</span></div>`;
-      const loadingOverlay = `<div class="admin-card-loading-overlay" id="admin-card-loading-overlay-${modelSrc ? escapeAttr(modelSrc).replace(/[^a-zA-Z0-9]/g, '') : 'default'}" hidden>
+      const loadingOverlay = `<div class="admin-card-loading-overlay" id="admin-card-loading-overlay-${modelSrc ? escapeAttr(modelSrc).replace(/[^a-zA-Z0-9]/g, "") : "default"}" hidden>
         <div class="admin-card-loading-spinner"></div>
         <div class="admin-card-loading-percentage">0%</div>
       </div>`;
@@ -1561,9 +2023,7 @@
   async function hydrateBuiltHeritageCards() {
     if (typeof MatiAdminUploads === "undefined") return;
 
-    const uploadNodes = $$(
-      "#heritage-built-grid img[data-upload-src]",
-    );
+    const uploadNodes = $$("#heritage-built-grid img[data-upload-src]");
     await Promise.all(
       uploadNodes.map(async (node) => {
         const uri = node.dataset.uploadSrc;
@@ -1609,7 +2069,9 @@
   async function loadBuiltModelIntoSlot(slot) {
     let src = slot.dataset.modelSrc || "";
     if (slot.dataset.modelUpload && typeof MatiAdminUploads !== "undefined") {
-      const url = await MatiAdminUploads.createObjectUrl(slot.dataset.modelUpload);
+      const url = await MatiAdminUploads.createObjectUrl(
+        slot.dataset.modelUpload,
+      );
       if (url) {
         heritagePreviewUrls.add(url);
         src = url;
@@ -1618,26 +2080,29 @@
     if (!src) return;
 
     const title =
-      slot.closest(".admin-heritage-card")?.querySelector(
-        ".admin-heritage-card__title",
-      )?.textContent || "3D model";
-    
+      slot
+        .closest(".admin-heritage-card")
+        ?.querySelector(".admin-heritage-card__title")?.textContent ||
+      "3D model";
+
     // Find and show loading overlay
     const loadingOverlay = slot.querySelector(".admin-card-loading-overlay");
-    const loadingPercentage = slot.querySelector(".admin-card-loading-percentage");
+    const loadingPercentage = slot.querySelector(
+      ".admin-card-loading-percentage",
+    );
     if (loadingOverlay) {
       loadingOverlay.removeAttribute("hidden");
     }
     if (loadingPercentage) {
       loadingPercentage.textContent = "0%";
     }
-    
+
     // Remove poster/placeholder but keep loading overlay
     const poster = slot.querySelector(".admin-heritage-card__poster");
     const placeholder = slot.querySelector(".admin-heritage-card__placeholder");
     if (poster) poster.remove();
     if (placeholder) placeholder.remove();
-    
+
     const viewer = document.createElement("model-viewer");
     viewer.className = "admin-heritage-card__model";
     viewer.setAttribute("src", src);
@@ -1650,7 +2115,7 @@
     viewer.setAttribute("interaction-prompt", "none");
     viewer.setAttribute("touch-action", "pan-y");
     viewer.setAttribute("loading", "lazy");
-    
+
     // Track loading progress
     const handleProgress = (event) => {
       if (event.detail && event.detail.totalProgress !== undefined) {
@@ -1681,7 +2146,7 @@
     viewer.addEventListener("progress", handleProgress);
     viewer.addEventListener("load", handleLoad, { once: true });
     viewer.addEventListener("error", handleError, { once: true });
-    
+
     slot.appendChild(viewer);
   }
 
@@ -1747,7 +2212,9 @@
     const rank = row.rank;
     const isRunnerUp = rank > 3;
     const points = Number(row.points) || 0;
-    const sizeClass = isRunnerUp ? "admin-lb-card--runner" : "admin-lb-card--top";
+    const sizeClass = isRunnerUp
+      ? "admin-lb-card--runner"
+      : "admin-lb-card--top";
     const rankHighlight =
       rank === 1
         ? " admin-lb-card--rank-1"
@@ -1798,17 +2265,23 @@
       const start = 0;
       const duration = 1000;
 
-      window.setTimeout(() => {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-          if (!startTimestamp) startTimestamp = timestamp;
-          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-          const val = Math.floor(progress * (end - start) + start);
-          el.innerHTML = `${val.toLocaleString()} <small>Pts</small>`;
-          if (progress < 1) window.requestAnimationFrame(step);
-        };
-        window.requestAnimationFrame(step);
-      }, 500 + index * 100);
+      window.setTimeout(
+        () => {
+          let startTimestamp = null;
+          const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min(
+              (timestamp - startTimestamp) / duration,
+              1,
+            );
+            const val = Math.floor(progress * (end - start) + start);
+            el.innerHTML = `${val.toLocaleString()} <small>Pts</small>`;
+            if (progress < 1) window.requestAnimationFrame(step);
+          };
+          window.requestAnimationFrame(step);
+        },
+        500 + index * 100,
+      );
     });
   }
 
@@ -1849,7 +2322,9 @@
     }
 
     if (columns) columns.hidden = false;
-    list.innerHTML = rows.map((row, i) => renderLeaderboardCard(row, i)).join("");
+    list.innerHTML = rows
+      .map((row, i) => renderLeaderboardCard(row, i))
+      .join("");
     animateAdminLeaderboardPoints(body || list);
   }
 
@@ -1919,43 +2394,7 @@
     const panel = $("#site-built-preview");
     if (!panel) return;
 
-    const built = site?.category === "built" || isBuiltHeritageForm();
-    if (!built || !site) {
-      panel.hidden = true;
-      panel.innerHTML = "";
-      return;
-    }
-
-    panel.hidden = false;
-    panel.innerHTML = `
-      <div class="admin-site-preview__stage">
-        ${builtCardBadges(site)}
-        ${builtCardStage(site)}
-      </div>
-      <div class="admin-site-preview__body">
-        <h3 class="admin-site-preview__title">${escapeHtml(site.name)}</h3>
-        <p class="admin-site-preview__location">${escapeHtml(site.location || "Barangay not set")}</p>
-        ${
-          builtSiteHas3d(site)
-            ? `<div class="admin-site-preview__actions">
-                <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-view-model="${escapeAttr(site.id)}">View 3D model</button>
-              </div>`
-            : ""
-        }
-      </div>`;
-
-    const stageSlot = panel.querySelector(".admin-heritage-card__model-slot");
-    if (stageSlot && stageSlot.dataset.modelLoaded !== "true") {
-      stageSlot.dataset.modelLoaded = "true";
-      loadBuiltModelIntoSlot(stageSlot);
-    }
-
-    const uploadImg = panel.querySelector("img[data-upload-src]");
-    if (uploadImg && typeof MatiAdminUploads !== "undefined") {
-      MatiAdminUploads.createObjectUrl(uploadImg.dataset.uploadSrc).then((url) => {
-        if (url) uploadImg.src = url;
-      });
-    }
+    panel.remove();
   }
 
   function viewBuiltSiteOnMap(siteId) {
@@ -1965,12 +2404,35 @@
       return;
     }
 
+    console.log("viewBuiltSiteOnMap: Starting navigation to site", {
+      siteId,
+      siteName: site.name,
+    });
+
+    // Update URL with query parameter for navigation persistence
+    const url = new URL(window.location);
+    url.searchParams.set("focusSite", siteId);
+    window.history.pushState({}, "", url);
+
     setView("location");
     if (typeof MatiAdminMap !== "undefined") {
       MatiAdminMap.setCategoryFilter("built");
       void MatiAdminMap.refresh().then(() => {
-        MatiAdminMap.focusSite(siteId);
+        // Add longer delay to ensure map and markers are fully loaded
+        setTimeout(() => {
+          console.log(
+            "viewBuiltSiteOnMap: Attempting to focus on site after delay",
+            { siteId },
+          );
+          const success = MatiAdminMap.focusSite(siteId);
+          if (!success) {
+            console.warn("Could not focus on site:", siteId);
+            showToast("Could not locate site on map. Please try again.");
+          }
+        }, 1200);
       });
+    } else {
+      console.error("MatiAdminMap is not available");
     }
   }
 
@@ -2126,7 +2588,11 @@
   }
 
   async function persistSiteFromForm(options = {}) {
-    const { requireName = false, draft = false, siteId: forcedSiteId } = options;
+    const {
+      requireName = false,
+      draft = false,
+      siteId: forcedSiteId,
+    } = options;
     const existingId = $("#site-id").value.trim();
     const name = $("#site-name").value.trim();
     if (requireName && !name) return null;
@@ -2305,20 +2771,36 @@
             ? "Uploading photographs…"
             : `Uploading ${TYPE_LABELS[type] || "file"}…`;
 
+        activeUploadController = new AbortController();
+
         await withUploadProgress(
-          async () => {
+          async ({ setProgress, hideProgress }) => {
             if (type === "map") {
               setUploadProgress(5, `Uploading map: ${files[0].name}`);
-              const cover = await MatiAdminUploads.put(`${siteId}/map`, files[0], {
-                type: "map",
-                siteId,
-                onProgress: (pct) =>
-                  setUploadProgress(Math.round(pct * 0.85), `Uploading map: ${files[0].name}`),
-              });
+              const cover = await MatiAdminUploads.put(
+                `${siteId}/map`,
+                files[0],
+                {
+                  type: "map",
+                  siteId,
+                  onProgress: (pct) =>
+                    setUploadProgress(
+                      Math.round(pct * 0.85),
+                      `Uploading map: ${files[0].name}`,
+                    ),
+                  signal: activeUploadController.signal,
+                },
+              );
+              if (activeUploadController.signal.aborted) return;
               setUploadProgress(90, "Saving map to database…");
-              const savedSite = await MatiAdminStore.saveSite({ ...site, cover });
+              const savedSite = await MatiAdminStore.saveSite({
+                ...site,
+                cover,
+              });
               if (!syncOk(savedSite)) {
-                showToast(syncFailedMessage(savedSite, "Map uploaded locally only."));
+                showToast(
+                  syncFailedMessage(savedSite, "Map uploaded locally only."),
+                );
               } else {
                 showToast("Site map uploaded to database.");
               }
@@ -2335,13 +2817,21 @@
                       Math.round(pct * 0.85),
                       `Uploading 3D model: ${files[0].name}`,
                     ),
+                  signal: activeUploadController.signal,
                 },
               );
+              if (activeUploadController.signal.aborted) return;
               setUploadProgress(90, "Saving 3D model to database…");
-              const savedSite = await MatiAdminStore.saveSite({ ...site, modelSrc });
+              const savedSite = await MatiAdminStore.saveSite({
+                ...site,
+                modelSrc,
+              });
               if (!syncOk(savedSite)) {
                 showToast(
-                  syncFailedMessage(savedSite, "3D model uploaded locally only."),
+                  syncFailedMessage(
+                    savedSite,
+                    "3D model uploaded locally only.",
+                  ),
                 );
               } else {
                 showToast("3D model uploaded to database.");
@@ -2349,7 +2839,10 @@
             } else if (type === "video" || type === "audio") {
               const title = $("#media-title").value.trim() || files[0].name;
               const key = `${siteId}/${type}s/${MatiAdminStore.slugId(files[0].name)}-${Date.now()}`;
-              setUploadProgress(5, `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`);
+              setUploadProgress(
+                5,
+                `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
+              );
               const src = await MatiAdminUploads.put(key, files[0], {
                 type,
                 siteId,
@@ -2358,8 +2851,10 @@
                     Math.round(pct * 0.85),
                     `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
                   ),
+                signal: activeUploadController.signal,
               });
               setUploadProgress(90, "Saving media record…");
+              if (activeUploadController.signal.aborted) return;
               const saved = await MatiAdminStore.saveMedia({
                 siteId,
                 type,
@@ -2399,11 +2894,13 @@
                   type: "photo",
                   siteId,
                   onProgress: (pct) => batch.onFileProgress(pct),
+                  signal: activeUploadController.signal,
                 });
                 setUploadProgress(
                   Math.round(((i + 0.92) / imageFiles.length) * 100),
                   `Saving photograph ${i + 1} of ${imageFiles.length}…`,
                 );
+                if (activeUploadController.signal.aborted) return;
                 const saved = await MatiAdminStore.saveMedia({
                   siteId,
                   type: "photo",
@@ -2451,6 +2948,11 @@
             title: typeTitle,
             detail: "Starting upload…",
             doneDetail: "Upload complete.",
+            onCancel: (controller) => {
+              controller?.abort();
+              hideUploadProgress();
+              showToast("Upload cancelled.");
+            },
           },
         );
       } catch (error) {
@@ -2533,7 +3035,11 @@
       showToast(syncFailedMessage(saved, "Multimedia saved locally only."));
       return;
     }
-    showToast(isNew ? "Multimedia saved to database." : "Multimedia updated in database.");
+    showToast(
+      isNew
+        ? "Multimedia saved to database."
+        : "Multimedia updated in database.",
+    );
   }
 
   const HERITAGE_REPORT_HEADERS_NATURAL = [
@@ -2563,7 +3069,9 @@
   ];
 
   function isHeritageReportKey(report) {
-    return report === "built" || report === "natural" || report === "intangible";
+    return (
+      report === "built" || report === "natural" || report === "intangible"
+    );
   }
 
   function reportAssetUrl(path) {
@@ -2588,7 +3096,7 @@
 
   function getReportPrintStyles() {
     return `
-    @page { size: A4 landscape; margin: 10mm; }
+    @page { size: A4; margin: 10mm; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
       height: 100%;
@@ -2601,44 +3109,6 @@
       background: #f1f5f9;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
-    }
-    .report-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    .report-print-hint {
-      margin: 0;
-      flex: 1 1 16rem;
-      font: 500 0.8125rem "Segoe UI", system-ui, sans-serif;
-      color: #475569;
-    }
-    .report-toolbar__actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-left: auto;
-    }
-    .report-toolbar button {
-      border: 1px solid #cbd5e1;
-      border-radius: 0.375rem;
-      background: #fff;
-      color: #0f172a;
-      font: 600 0.875rem "Segoe UI", system-ui, sans-serif;
-      padding: 0.45rem 0.9rem;
-      cursor: pointer;
-    }
-    .report-toolbar button:first-of-type {
-      background: #047857;
-      border-color: #047857;
-      color: #fff;
     }
     .report-shell {
       display: flex;
@@ -2877,13 +3347,6 @@
   <style>${getReportPrintStyles()}</style>
 </head>
 <body>
-  <div class="report-toolbar no-print">
-    <p class="report-print-hint">Turn off <strong>Headers and footers</strong> in the print dialog to hide the date, URL, and page numbers.</p>
-    <div class="report-toolbar__actions">
-      <button type="button" onclick="window.print()">Print</button>
-      <button type="button" onclick="window.close()">Close</button>
-    </div>
-  </div>
   ${buildSiteReportPageMarkup(site, sealLogo, tourismLogo)}
   <script>
     document.title = "\\u200b";
@@ -2918,42 +3381,105 @@
   }
 
   function buildLciInventoryTableHtml(row) {
-    const cells = [
-      ["col-no", row.no],
-      ["col-name", row.name],
-      ["col-location", row.location],
-      ["col-type", row.propertyType],
-      ["col-category", row.category],
-      ["col-ownership", row.ownership],
-      ["col-description", row.description],
-      ["col-media", row.multimedia],
-      ["col-area", row.areaHa],
-      ["col-year", row.yearStarted],
-      ["col-declaration", row.declaration],
-      ["col-reference", row.reference],
-    ];
-
-    const header = MatiAdminStore.LCI_COLUMNS.map((column, index) => {
-      const className = cells[index]?.[0] || "";
-      return `<th class="${className}">${escapeHtml(column.label)}</th>`;
-    }).join("");
-
-    const body = cells
-      .map(
-        ([className, value]) =>
-          `<td class="${className}">${escapeHtml(value || "").replace(/\n/g, "<br>")}</td>`,
-      )
-      .join("");
-
     return `
-    <table class="lci-inventory-table">
-      <thead><tr>${header}</tr></thead>
-      <tbody><tr>${body}</tr></tbody>
-    </table>
-    <div class="lci-details">
-      <p><strong>Key Informant(s):</strong></p>
-      <p><strong>References:</strong></p>
-      <p class="lci-year">${new Date().getFullYear()}</p>
+    <div class="lci-property-card">
+      <div class="lci-property-header">
+        <div class="lci-property-number">${row.no}</div>
+        <div class="lci-property-name">${escapeHtml(row.name)}</div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">Location</h3>
+        <div class="lci-section-content">
+          <div class="lci-field">
+            <span class="lci-field-label">Barangay:</span>
+            <span class="lci-field-value">${escapeHtml(row.barangay)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">Geographical Coordinates:</span>
+            <span class="lci-field-value lci-field-value--coordinates">${escapeHtml(row.coordinates).replace(/\n/g, "<br>")}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">Classification</h3>
+        <div class="lci-section-content">
+          <div class="lci-field">
+            <span class="lci-field-label">Type:</span>
+            <span class="lci-field-value">${escapeHtml(row.propertyType)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">Category:</span>
+            <span class="lci-field-value">${escapeHtml(row.category)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">Ownership:</span>
+            <span class="lci-field-value">${escapeHtml(row.ownership)}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">Description</h3>
+        <div class="lci-section-content">
+          <p class="lci-description">${escapeHtml(row.description).replace(/\n/g, "<br>")}</p>
+        </div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">Physical Details</h3>
+        <div class="lci-section-content">
+          <div class="lci-field">
+            <span class="lci-field-label">Area Occupied:</span>
+            <span class="lci-field-value">${escapeHtml(row.areaHa)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">Year Constructed/Started:</span>
+            <span class="lci-field-value">${escapeHtml(row.yearStarted)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">Multimedia Items:</span>
+            <span class="lci-field-value">${escapeHtml(row.multimedia)}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">Declaration Status</h3>
+        <div class="lci-section-content">
+          <div class="lci-field">
+            <span class="lci-field-label">Local:</span>
+            <span class="lci-field-value">${escapeHtml(row.declarationLocal)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">National:</span>
+            <span class="lci-field-value">${escapeHtml(row.declarationNational)}</span>
+          </div>
+          <div class="lci-field">
+            <span class="lci-field-label">International:</span>
+            <span class="lci-field-value">${escapeHtml(row.declarationInternational)}</span>
+          </div>
+          <div class="lci-field lci-field--full">
+            <span class="lci-field-label">Details:</span>
+            <span class="lci-field-value">${escapeHtml(row.declarationDetails).replace(/\n/g, "<br>")}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lci-property-section">
+        <h3 class="lci-section-title">References</h3>
+        <div class="lci-section-content">
+          <div class="lci-field lci-field--full">
+            <span class="lci-field-label">Key Informant(s):</span>
+            <span class="lci-field-value">${escapeHtml(row.keyInformants).replace(/\n/g, "<br>")}</span>
+          </div>
+          <div class="lci-field lci-field--full">
+            <span class="lci-field-label">References:</span>
+            <span class="lci-field-value">${escapeHtml(row.references).replace(/\n/g, "<br>")}</span>
+          </div>
+        </div>
+      </div>
     </div>`;
   }
 
@@ -2965,8 +3491,10 @@
     );
 
     return `
-    ${buildLciLetterheadHtml(sealLogo, tourismLogo)}
-    ${buildLciInventoryTableHtml(row)}`;
+    <div class="report-container">
+      ${buildLciLetterheadHtml(sealLogo, tourismLogo)}
+      ${buildLciInventoryTableHtml(row)}
+    </div>`;
   }
 
   async function loadSiteReportLogos() {
@@ -3293,7 +3821,8 @@
       : `<tr>${cfg.headers.map((h) => `<th>${h.label}</th>`).join("")}</tr>`;
 
     if (!rows.length) {
-      const colspan = cfg.headers.length + (isHeritageReportKey(currentReport) ? 1 : 0);
+      const colspan =
+        cfg.headers.length + (isHeritageReportKey(currentReport) ? 1 : 0);
       tbody.innerHTML = `<tr><td colspan="${colspan}" class="admin-empty">No records to display.</td></tr>`;
       return;
     }
@@ -3369,7 +3898,10 @@
     if (!field || !input) return;
 
     field.addEventListener("dragover", (e) => {
-      if ($("#media-type")?.value !== "photo" || $("#media-id")?.value?.trim()) {
+      if (
+        $("#media-type")?.value !== "photo" ||
+        $("#media-id")?.value?.trim()
+      ) {
         return;
       }
       e.preventDefault();
@@ -3384,7 +3916,10 @@
 
     field.addEventListener("drop", (e) => {
       field.classList.remove("is-dragover");
-      if ($("#media-type")?.value !== "photo" || $("#media-id")?.value?.trim()) {
+      if (
+        $("#media-type")?.value !== "photo" ||
+        $("#media-id")?.value?.trim()
+      ) {
         return;
       }
       e.preventDefault();
@@ -3430,13 +3965,17 @@
       }
 
       if (result.ok) {
-        showToast(`Imported ${result.count} built heritage sites into Supabase.`);
+        showToast(
+          `Imported ${result.count} built heritage sites into Supabase.`,
+        );
         await refreshDashboardFromSupabase();
         renderHeritage();
         return;
       }
 
-      showToast(result.message || "Could not import built heritage into Supabase.");
+      showToast(
+        result.message || "Could not import built heritage into Supabase.",
+      );
     });
 
     $("#view-dashboard")?.addEventListener("click", (event) => {
@@ -3481,6 +4020,10 @@
     $("#media-file")?.addEventListener("change", (e) => {
       const type = $("#media-type")?.value;
       const file = e.target.files?.[0];
+      if (type === "model3d") {
+        updateMediaFormUi();
+        return;
+      }
       const wrap = $("#media-file-preview-wrap");
       const img = $("#media-file-preview");
       if (type === "map" && file && wrap && img) {
@@ -3526,7 +4069,9 @@
         return;
       }
 
-      const heritageCard = e.target.closest(".admin-heritage-card[data-edit-site]");
+      const heritageCard = e.target.closest(
+        ".admin-heritage-card[data-edit-site]",
+      );
       if (heritageCard && !e.target.closest("button")) {
         openSiteModal(heritageCard.dataset.editSite);
         return;
@@ -3570,7 +4115,11 @@
         closeMediaModal();
         return;
       }
-      if (e.target.id === "site-modal" && $("#media-modal") && !$("#media-modal").hidden) {
+      if (
+        e.target.id === "site-modal" &&
+        $("#media-modal") &&
+        !$("#media-modal").hidden
+      ) {
         return;
       }
       if (e.target.classList.contains("admin-modal")) {
@@ -3648,8 +4197,160 @@
     });
   }
 
+  function bindModelCardDragDrop(container) {
+    const card = container.querySelector(".admin-model-card--empty");
+    if (!card || card.dataset.dragBound) return;
+    card.dataset.dragBound = "true";
+
+    const titleEl = card.querySelector(".admin-model-card__title");
+    const originalTitle = titleEl?.textContent || "No 3D Model Available";
+    const dropLabel = card.querySelector(".admin-model-card__drop-label");
+    const descEl = card.querySelector(".admin-model-card__desc");
+    const uploadIcon = card.querySelector(".admin-model-card__drop-icon");
+    const defaultBtnIcon = card.querySelector(
+      "button > svg:not(.admin-model-card__drop-icon)",
+    );
+
+    const isValidFile = (file) => file.name.toLowerCase().endsWith(".glb");
+
+    const updateDropState = (isOver, isValid = false) => {
+      card.classList.toggle("is-dragover", isOver && isValid);
+      const isInvalid = isOver && !isValid;
+      card.classList.toggle("is-dragover-invalid", isInvalid);
+      if (isInvalid) {
+        card.classList.remove("is-dragover-invalid");
+        void card.offsetWidth;
+        card.classList.add("is-dragover-invalid");
+      }
+
+      if (titleEl) {
+        titleEl.textContent = isInvalid ? "Invalid file type" : originalTitle;
+      }
+      if (descEl) {
+        descEl.textContent = isInvalid
+          ? "Please drop a valid .glb or .gltf 3D model file."
+          : "Upload a 3D model to preview and manage it here.";
+      }
+      if (dropLabel && descEl) {
+        dropLabel.style.display = isOver && isValid ? "block" : "none";
+      }
+      if (uploadIcon) {
+        uploadIcon.style.display = isOver && isValid ? "inline-block" : "none";
+      }
+      if (defaultBtnIcon) {
+        defaultBtnIcon.style.display =
+          isOver && isValid ? "none" : "inline-block";
+      }
+    };
+
+    card.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const hasFile = e.dataTransfer.types.includes("Files");
+      const file = hasFile ? e.dataTransfer.items[0]?.getAsFile() : null;
+      updateDropState(true, file ? isValidFile(file) : hasFile);
+    });
+
+    card.addEventListener("dragleave", (e) => {
+      if (!card.contains(e.relatedTarget)) {
+        updateDropState(false);
+      }
+    });
+
+    card.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      updateDropState(false);
+
+      const file = e.dataTransfer.files?.[0];
+      if (!file || !isValidFile(file)) {
+        card.classList.add("is-dragover-invalid");
+        if (titleEl) titleEl.textContent = "Invalid file type";
+        if (descEl)
+          descEl.textContent =
+            "Please drop a valid .glb or .gltf 3D model file.";
+        setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
+        return;
+      }
+
+      let siteId =
+        $("#media-site-id").value ||
+        editingSiteId ||
+        $("#site-id")?.value?.trim();
+      if (!siteId) {
+        const saved = await ensureSiteDraft();
+        if (!saved) {
+          showToast("Could not prepare this site for upload.");
+          return;
+        }
+        siteId = saved.id;
+      }
+
+      const site = MatiAdminStore.getSiteById(siteId);
+      if (!site) {
+        showToast("Could not find this site. Save the site and try again.");
+        return;
+      }
+
+      try {
+        await withUploadProgress(
+          async ({ setProgress, hideProgress }) => {
+            if (activeUploadController) {
+              activeUploadController.abort();
+            }
+            activeUploadController = new AbortController();
+            options.onCancel = () => {
+              activeUploadController.abort();
+            };
+            setProgress(5, `Uploading 3D model: ${file.name}`);
+            const modelSrc = await MatiAdminUploads.put(
+              `${siteId}/model`,
+              file,
+              {
+                type: "model3d",
+                siteId,
+                onProgress: (pct) => {
+                  if (uploadController.signal.aborted) return;
+                  setProgress(
+                    5 + pct * 0.8,
+                    `Uploading 3D model: ${file.name}`,
+                  );
+                },
+                signal: activeUploadController.signal,
+              },
+            );
+            if (activeUploadController.signal.aborted) return;
+            setProgress(90, "Saving 3D model to database…");
+            const savedSite = await MatiAdminStore.saveSite({
+              ...site,
+              modelSrc,
+            });
+            if (!syncOk(savedSite)) {
+              showToast(
+                syncFailedMessage(savedSite, "3D model uploaded locally only."),
+              );
+            } else {
+              showToast("3D model uploaded to database.");
+            }
+            refreshSiteViews(siteId);
+          },
+          {
+            title: "Uploading 3D Model...",
+            doneDetail: "Upload complete. Model is now linked.",
+            onCancel: (controller) => {
+              controller?.abort();
+              hideUploadProgress();
+              showToast("Upload cancelled.");
+            },
+          },
+        );
+      } catch (error) {
+        showToast(error?.message || "Could not upload 3D model.");
+      }
+    });
+  }
+
   function init() {
     const mediaModal = $("#media-modal");
+    injectStyles(["photoPile", "modelCard", "modelUpload"]);
     if (mediaModal) document.body.appendChild(mediaModal);
 
     bindEvents();
@@ -3688,7 +4389,30 @@
       ensureCatalogLive();
       ensureLeaderboardLive();
       ensureVisitorLive();
-      setView("dashboard", {}, { skipDashboardRefresh: true });
+
+      // Check for URL query parameters for direct site focus
+      const urlParams = new URLSearchParams(window.location.search);
+      const focusSiteId = urlParams.get("focusSite");
+
+      if (focusSiteId) {
+        // Navigate to map view and focus on the site
+        setView("location");
+        if (typeof MatiAdminMap !== "undefined") {
+          MatiAdminMap.setCategoryFilter("built");
+          void MatiAdminMap.refresh().then(() => {
+            setTimeout(() => {
+              MatiAdminMap.focusSite(focusSiteId);
+            }, 300);
+          });
+        }
+        // Clean up URL parameter
+        urlParams.delete("focusSite");
+        const newUrl = new URL(window.location);
+        newUrl.search = urlParams.toString();
+        window.history.replaceState({}, "", newUrl);
+      } else {
+        setView("dashboard", {}, { skipDashboardRefresh: true });
+      }
     };
 
     void boot();

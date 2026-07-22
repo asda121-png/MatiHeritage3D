@@ -410,6 +410,15 @@ const MatiSupabaseApi = (() => {
         );
       }
 
+      // Support upload cancellation via AbortSignal
+      var signal = options.signal || null;
+      if (signal) {
+        if (signal.aborted) {
+          return reject(new Error("Upload cancelled."));
+        }
+        signal.addEventListener("abort", function() { xhr.abort(); }, { once: true });
+      }
+
       xhr.upload.onprogress = (event) => {
         if (!event.lengthComputable || typeof options.onProgress !== "function") {
           return;

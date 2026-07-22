@@ -13,14 +13,21 @@
     />
     <link rel="stylesheet" href="heritage-palette.css" />
     <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
       .account-page {
-        min-height: calc(100vh - 6rem);
+        flex-grow: 1;
+        min-height: 115vh;
         background: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 100%);
         padding: 1.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 200px;
       }
 
       .account-shell {
@@ -94,14 +101,46 @@
         margin-bottom: 1.5rem;
       }
 
+      .account-profile__avatar-wrapper {
+        position: relative;
+        margin-bottom: 0.75rem;
+      }
+
       .account-profile__avatar {
         width: 80px;
         height: 80px;
         border-radius: 50%;
         border: 3px solid var(--forest);
         object-fit: cover;
-        margin-bottom: 0.75rem;
         box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+      }
+
+      .account-profile__avatar-edit {
+        position: absolute;
+        bottom: -4px;
+        right: -4px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--forest);
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.3);
+      }
+
+      .account-profile__avatar-edit:hover {
+        background: var(--forest-dark);
+        transform: scale(1.1);
+      }
+
+      .account-profile__avatar-edit svg {
+        width: 14px;
+        height: 14px;
       }
 
       .account-profile__username {
@@ -346,6 +385,20 @@
         background: #f8fafc;
         border-color: #94a3b8;
       }
+
+      /* Hide scroll progress bar on account page */
+      .header-scroll-progress {
+        display: none !important;
+      }
+
+      #account-avatar-upload {
+        display: none;
+      }
+
+      .account-actions--center {
+        justify-content: center;
+        padding: 0;
+      }
     </style>
   </head>
   <body class="visitor-module antialiased">
@@ -359,10 +412,7 @@
               Sign in to view your account, heritage points, and leaderboard
               rank.
             </p>
-            <div
-              class="account-actions"
-              style="justify-content: center; padding: 0"
-            >
+            <div class="account-actions account-actions--center">
               <a href="login.html" class="account-btn account-btn--primary"
                 >Sign in</a
               >
@@ -377,25 +427,49 @@
           <div id="account-content" hidden>
             <header class="account-card__hero">
               <h1 class="account-card__title">My Account</h1>
-              <a
-                href="game.html"
-                class="account-back-btn"
-                >Back to Games</a
-              >
+              <a href="game.html" class="account-back-btn">Back to Games</a>
             </header>
 
             <div class="account-dashboard-layout">
               <aside class="account-sidebar">
                 <div class="account-profile">
-                  <img
-                    id="account-avatar"
-                    class="account-profile__avatar"
-                    src="https://i.pravatar.cc/150?u=guest"
-                    alt="Your avatar"
-                  />
-                  <span class="account-profile__username" id="account-username-display">—</span>
+                  <div class="account-profile__avatar-wrapper">
+                    <img
+                      id="account-avatar"
+                      class="account-profile__avatar"
+                      src="https://i.pravatar.cc/150?u=guest"
+                      alt="Your avatar"
+                    />
+                    <label
+                      for="account-avatar-upload"
+                      class="account-profile__avatar-edit"
+                      title="Change avatar"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                        ></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                      </svg>
+                    </label>
+                    <input
+                      type="file"
+                      id="account-avatar-upload"
+                      accept="image/*"
+                    />
+                  </div>
+                  <span
+                    class="account-profile__username"
+                    id="account-username-display"
+                    >—</span
+                  >
                 </div>
-                
+
                 <div class="account-info-list">
                   <div class="account-detail">
                     <span class="account-detail__label">
@@ -523,7 +597,9 @@
                       />
                     </div>
                     <div class="account-field">
-                      <label for="account-edit-new-password">New Password</label>
+                      <label for="account-edit-new-password"
+                        >New Password</label
+                      >
                       <input
                         id="account-edit-new-password"
                         type="password"
@@ -542,7 +618,7 @@
                       />
                     </div>
                   </div>
-                  
+
                   <div class="account-edit__actions">
                     <button
                       type="submit"
@@ -563,10 +639,10 @@
     <div id="footer-placeholder"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="_backend/supabase-config.js"></script>
-    <script src="_backend/supabase-client.js"></script>
-    <script src="_backend/supabase-api.js"></script>
-    <script src="_backend/supabase-auth.js"></script>
+    <script src="../Back End/supabase-config.js"></script>
+    <script src="../Back End/supabase-client.js"></script>
+    <script src="../Back End/supabase-api.js"></script>
+    <script src="../Back End/supabase-auth.js"></script>
     <script src="auth.js"></script>
     <script src="heritage-points.js"></script>
     <script src="visitor-auth.js"></script>
@@ -730,13 +806,41 @@
             "success",
           );
 
+          // Update session with new username to ensure real-time sync across app
+          const currentSession = MatiAuth.getSession();
+          if (currentSession && result.user) {
+            MatiAuth.setSession({
+              ...currentSession,
+              username: result.user.username,
+              displayName: result.user.displayName,
+              email: result.user.email || currentSession.email,
+            });
+          }
+
           const avatar = document.getElementById("account-avatar");
           if (avatar) {
             avatar.src = MatiAuth.getAvatarUrl(result.user.username);
           }
 
+          // Update username display
+          const usernameDisplay = document.getElementById(
+            "account-username-display",
+          );
+          if (usernameDisplay) {
+            usernameDisplay.textContent = result.user.username;
+          }
+
           if (typeof MatiVisitorAuth !== "undefined") {
             void MatiVisitorAuth.refresh();
+          }
+
+          // Trigger leaderboard refresh to sync username change
+          if (
+            typeof MatiSupabaseApi !== "undefined" &&
+            typeof MatiSupabaseApi.getLeaderboard === "function"
+          ) {
+            // The leaderboard will auto-refresh via realtime subscription
+            // This ensures the new username appears without duplication
           }
 
           if (isChangingPassword) {
@@ -750,6 +854,112 @@
         if (avatar) {
           avatar.src = MatiAuth.getAvatarUrl(session.username);
           avatar.alt = `${session.displayName || session.username} avatar`;
+        }
+
+        // Avatar upload functionality
+        const avatarUpload = document.getElementById("account-avatar-upload");
+        if (avatarUpload) {
+          avatarUpload.addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith("image/")) {
+              showProfileAlert("Please select an image file.");
+              return;
+            }
+
+            // Validate file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+              showProfileAlert("Image must be less than 2MB.");
+              return;
+            }
+
+            // Disable upload during processing
+            avatarUpload.disabled = true;
+            showProfileAlert("Uploading avatar...", "success");
+
+            try {
+              if (MatiAuth.usesSupabaseAuth()) {
+                // Upload to Supabase storage
+                const sb = MatiSupabase?.getClient?.();
+                if (!sb) {
+                  throw new Error("Could not connect to storage.");
+                }
+
+                const fileExt = file.name.split(".").pop();
+                const fileName = `${session.username}-${Date.now()}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                const { data: uploadData, error: uploadError } =
+                  await sb.storage.from("avatars").upload(filePath, file);
+
+                if (uploadError) {
+                  throw uploadError;
+                }
+
+                // Get public URL
+                const { data: urlData } = sb.storage
+                  .from("avatars")
+                  .getPublicUrl(filePath);
+
+                const avatarUrl = urlData.publicUrl;
+
+                // Update profile with new avatar URL
+                const { error: updateError } = await sb
+                  .from("profiles")
+                  .update({ avatar_url: avatarUrl })
+                  .eq("id", (await sb.auth.getUser()).data.user.id);
+
+                if (updateError) {
+                  throw updateError;
+                }
+
+                // Update avatar display
+                if (avatar) {
+                  avatar.src = avatarUrl;
+                }
+
+                showProfileAlert("Avatar updated successfully!", "success");
+              } else {
+                // Local storage fallback
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                  const avatarUrl = e.target.result;
+
+                  // Update local user data
+                  const users = MatiAuth.readUsers();
+                  const userIndex = users.findIndex(
+                    (u) => u.username === session.username,
+                  );
+                  if (userIndex >= 0) {
+                    users[userIndex].avatarUrl = avatarUrl;
+                    localStorage.setItem(
+                      "matiHeritageUsers",
+                      JSON.stringify(users),
+                    );
+                  }
+
+                  // Update avatar display
+                  if (avatar) {
+                    avatar.src = avatarUrl;
+                  }
+
+                  showProfileAlert("Avatar updated successfully!", "success");
+                };
+                reader.readAsDataURL(file);
+              }
+            } catch (error) {
+              console.error("Avatar upload error:", error);
+              showProfileAlert(
+                error.message || "Failed to upload avatar. Please try again.",
+                "error",
+              );
+            } finally {
+              avatarUpload.disabled = false;
+              avatarUpload.value = ""; // Reset file input
+            }
+          });
         }
 
         const points = await MatiVisitorAuth.hydratePoints();
