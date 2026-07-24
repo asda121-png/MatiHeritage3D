@@ -2283,7 +2283,7 @@
             <button
               type="button"
               id="btn-medium"
-              class="diff-chip is-active"
+              class="diff-chip"
               data-level="medium"
             >
               MEDIUM
@@ -2301,7 +2301,12 @@
               <span class="diff-chip__dot" aria-hidden="true"></span>
             </button>
           </div>
-          <button type="button" id="start-btn" class="btn-fest btn-fest--start">
+          <button
+            type="button"
+            id="start-btn"
+            class="btn-fest btn-fest--start"
+            disabled
+          >
             ENTER
           </button>
         </aside>
@@ -2515,7 +2520,7 @@
         hard: { time: 45, points: 200, radius: 3 },
       };
 
-      let currentDifficulty = "medium";
+      let currentDifficulty = null;
       let score = 0;
       let found = 0;
       let timeLeft = 60;
@@ -2855,6 +2860,10 @@
         document.querySelectorAll(".diff-chip").forEach((btn) => {
           btn.classList.toggle("is-active", btn.dataset.level === level);
         });
+        const startBtn = document.getElementById("start-btn");
+        if (startBtn) {
+          startBtn.disabled = false;
+        }
       }
 
       document.querySelectorAll(".diff-chip").forEach((btn) => {
@@ -3146,6 +3155,10 @@
       }
 
       window.loadVisitorHeaderAndFooter("games").then(() => {
+        if (typeof window.MatiVisitorAuth !== "undefined") {
+          window.MatiVisitorAuth.refresh();
+        }
+
         if (typeof window.MatiVisitorAuth !== "undefined") {
           window.MatiVisitorAuth.refresh();
         }

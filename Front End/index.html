@@ -3350,9 +3350,6 @@
                 </p>
                 <h2 class="map-intro-overlay__title">
                   <span class="map-intro-overlay__title-main">Mati City</span>
-                  <span class="map-intro-overlay__title-sub"
-                    >Interactive Map</span
-                  >
                 </h2>
                 <p class="map-intro-overlay__desc">
                   Explore built, cultural, and natural heritage landmarks across
@@ -3614,26 +3611,6 @@
           <div class="gallery-preview-light gallery-preview-light--1"></div>
           <div class="gallery-preview-light gallery-preview-light--2"></div>
           <div class="gallery-preview-light gallery-preview-light--3"></div>
-          <div class="gallery-preview-filmstrip gallery-preview-filmstrip--top">
-            <div class="gallery-preview-filmstrip-track">
-              <span></span><span></span><span></span><span></span><span></span
-              ><span></span> <span></span><span></span><span></span><span></span
-              ><span></span><span></span> <span></span><span></span><span></span
-              ><span></span><span></span><span></span>
-            </div>
-          </div>
-          <div
-            class="gallery-preview-filmstrip gallery-preview-filmstrip--bottom"
-          >
-            <div
-              class="gallery-preview-filmstrip-track gallery-preview-filmstrip-track--reverse"
-            >
-              <span></span><span></span><span></span><span></span><span></span
-              ><span></span> <span></span><span></span><span></span><span></span
-              ><span></span><span></span> <span></span><span></span><span></span
-              ><span></span><span></span><span></span>
-            </div>
-          </div>
           <div class="gallery-preview-grain"></div>
         </div>
 
@@ -4492,6 +4469,10 @@
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
+          }
+
+          if (typeof window.MatiVisitorAuth !== "undefined") {
+            await window.MatiVisitorAuth.refresh();
           }
 
           requestAnimationFrame(() => {

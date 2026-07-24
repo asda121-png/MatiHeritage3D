@@ -80,7 +80,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
 
 .game-preview-root.is-switching {
@@ -385,7 +387,6 @@
     inset 0 0 40px rgba(0, 0, 0, 0.55),
     inset 0 0 80px rgba(12, 26, 61, 0.6),
     0 0 18px rgba(255, 248, 235, 0.06);
-  aspect-ratio: 4 / 3;
   min-height: 0;
   display: flex;
   align-items: center;
@@ -808,7 +809,9 @@
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M10 30 Q40 20 70 35 T110 25' fill='none' stroke='%23b8956a' stroke-width='0.6' opacity='0.35'/%3E%3Cpath d='M15 75 Q45 65 75 80 T105 70' fill='none' stroke='%23b8956a' stroke-width='0.5' opacity='0.3'/%3E%3Cpath d='M25 50 Q55 45 85 55' fill='none' stroke='%23c4a574' stroke-width='0.4' opacity='0.25' stroke-dasharray='3 4'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 120px 120px, 64px 64px;
+  background-size:
+    120px 120px,
+    64px 64px;
 }
 
 .game-scroll-panel::after {
@@ -1440,13 +1443,7 @@ body.festival-page #intro-screen .fest-banner {
   border: 3px solid #1a120e;
   background:
     url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.08'/%3E%3C/svg%3E"),
-    linear-gradient(
-      155deg,
-      #5c4033 0%,
-      #3d2817 38%,
-      #2e1f16 72%,
-      #4a3228 100%
-    );
+    linear-gradient(155deg, #5c4033 0%, #3d2817 38%, #2e1f16 72%, #4a3228 100%);
   box-shadow:
     0 32px 64px rgba(0, 0, 0, 0.55),
     inset 0 2px 0 rgba(255, 255, 255, 0.1),
@@ -1579,12 +1576,7 @@ body.festival-page #intro-screen .fest-banner {
   font-weight: 700;
   font-style: italic;
   color: #f8f4ea;
-  background: linear-gradient(
-    180deg,
-    #357a5c 0%,
-    #2d6a4f 45%,
-    #1b4332 100%
-  );
+  background: linear-gradient(180deg, #357a5c 0%, #2d6a4f 45%, #1b4332 100%);
   box-shadow:
     0 4px 16px rgba(27, 67, 50, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -1903,7 +1895,11 @@ body.game-page:has(.puzzle-stage) #intro-screen .parchment-card {
       #dcc8b0 100%
     );
   background-repeat: repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 200px 200px, 300px 300px, auto, auto;
+  background-size:
+    200px 200px,
+    300px 300px,
+    auto,
+    auto;
   box-shadow:
     inset 0 0 60px rgba(92, 64, 51, 0.2),
     inset 0 0 15px rgba(0, 0, 0, 0.1),
@@ -2089,12 +2085,7 @@ body.game-page:has(.puzzle-stage) #intro-screen .parchment-card {
   gap: 0.65rem;
   padding: 0.65rem 1rem;
   border-radius: 4px;
-  background: linear-gradient(
-    180deg,
-    #d4c4a8 0%,
-    #b8a482 45%,
-    #a09070 100%
-  );
+  background: linear-gradient(180deg, #d4c4a8 0%, #b8a482 45%, #a09070 100%);
   border: 2px solid rgba(90, 70, 50, 0.45);
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.35),
@@ -2194,7 +2185,9 @@ body.game-page:has(.puzzle-stage) #intro-screen .parchment-card {
   }
 }
 
-body.game-page:has(.scroll-bg) #intro-screen > .hero-scroll:not(.scroll-sidebar) {
+body.game-page:has(.scroll-bg)
+  #intro-screen
+  > .hero-scroll:not(.scroll-sidebar) {
   view-transition-name: game-truefalse-portal;
 }
 
@@ -2354,7 +2347,11 @@ body.game-page:has(.scroll-bg) #intro-screen > .hero-scroll:not(.scroll-sidebar)
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(12, 26, 61, 0.98), rgba(6, 15, 36, 0.99));
+  background: linear-gradient(
+    180deg,
+    rgba(12, 26, 61, 0.98),
+    rgba(6, 15, 36, 0.99)
+  );
   margin-bottom: 0.4rem;
 }
 
@@ -2631,6 +2628,10 @@ body.game-page:has(.scroll-bg) #intro-screen > .hero-scroll:not(.scroll-sidebar)
   .game-tv-set:not(.game-tv-set--trivia) {
     max-width: min(92vw, 30rem);
   }
+
+  .side-card .game-tv-set--trivia {
+    transform: scale(0.62);
+  }
 }
 
 /* Expand / receive transition */
@@ -2712,8 +2713,12 @@ html.tv-receive-from-carousel
 
 html.tv-receive-from-carousel--ready .intro-tv-wrap .tv-set.tv-receive-focus,
 html.tv-receive-from-carousel--ready #intro-screen.tv-receive-focus,
-html.tv-receive-from-carousel--ready #intro-screen .fest-banner.tv-receive-focus,
-html.tv-receive-from-carousel--ready #intro-screen .parchment-card.tv-receive-focus,
+html.tv-receive-from-carousel--ready
+  #intro-screen
+  .fest-banner.tv-receive-focus,
+html.tv-receive-from-carousel--ready
+  #intro-screen
+  .parchment-card.tv-receive-focus,
 html.tv-receive-from-carousel--ready
   #intro-screen
   > .hero-scroll:not(.scroll-sidebar).tv-receive-focus {
