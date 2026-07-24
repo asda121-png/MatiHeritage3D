@@ -684,30 +684,13 @@
         />
       </filter>
     </svg>
-    <div id="header-placeholder"></div>
+    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
 
     <section
       class="hero-bg min-h-screen flex items-center justify-center relative px-4 sm:px-6 pb-16"
     >
       <!-- CONE PLATFORM EFFECT -->
-      <div class="cone-platform hidden md:block"></div>
-
-      <!-- SECTION TITLE -->
-      <div
-        class="absolute top-16 md:top-20 left-1/2 -translate-x-1/2 z-30 flex flex-col md:flex-row items-center gap-2 md:gap-6 select-none"
-      >
-        <div
-          id="title-word-select"
-          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-        ></div>
-        <div
-          id="title-word-game"
-          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-        ></div>
-      </div>
-
-      <!-- LEADERBOARD -->
-      <div class="absolute top-8 right-8 lg:right-12 z-30 hidden md:block">
+      <div class="absolute top-8 right-8 lg:right-60 z-30 hidden md:block">
         <button
           id="leaderboard-btn"
           class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
@@ -729,6 +712,58 @@
         </button>
       </div>
 
+      <!-- CONE PLATFORM EFFECT -->
+      <div class="cone-platform hidden md:block"></div>
+
+      <!-- Mobile Header: Leaderboard + Title -->
+      <div
+        class="md:hidden absolute top-16 left-4 right-4 z-30 flex flex-col items-center gap-10"
+      >
+        <button
+          id="leaderboard-btn-mobile"
+          class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
+            />
+          </svg>
+          <span class="text-sm font-bold uppercase tracking-wider"
+            >Leaderboard</span
+          >
+        </button>
+        <div class="flex flex-row items-center gap-2 md:gap-6 select-none mt-6">
+          <div
+            id="title-word-select"
+            class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+          ></div>
+          <div
+            id="title-word-game"
+            class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Desktop Title -->
+      <div
+        class="hidden md:flex absolute top-16 md:top-20 left-1/2 -translate-x-1/2 z-30 flex-col md:flex-row items-center gap-2 md:gap-6 select-none"
+      >
+        <div
+          id="title-word-select-desktop"
+          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+        ></div>
+        <div
+          id="title-word-game-desktop"
+          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
+        ></div>
+      </div>
+
+      <!-- LEADERBOARD -->
       <!-- LEFT ARROW -->
       <button
         id="prev-btn"
@@ -747,29 +782,9 @@
 
       <!-- CAROUSEL CONTAINER -->
       <div
-        class="relative flex items-center justify-center gap-2 lg:gap-12 z-10 w-full px-0 sm:px-4 mt-16 md:mt-16 md:flex-row flex-col"
+        class="relative flex items-center justify-center gap-2 lg:gap-12 z-10 w-full px-0 sm:px-4 mt-16 md:mt-16 flex-col md:flex-row"
+        style="padding-top: 1rem"
       >
-        <!-- LEADERBOARD (Mobile) -->
-        <div class="block md:hidden w-full flex justify-center mb-6">
-          <button
-            id="leaderboard-btn-mobile"
-            class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
-              />
-            </svg>
-            <span class="text-sm font-bold uppercase tracking-wider"
-              >Leaderboard</span
-            >
-          </button>
-        </div>
         <!-- PREVIOUS GAME PREVIEW -->
         <div
           id="prev-card-preview"
@@ -793,7 +808,7 @@
       <!-- PAGINATION -->
       <div
         id="pagination-dots"
-        class="absolute bottom-32 left-1/2 -translate-x-1/2 flex gap-3 z-30"
+        class="absolute bottom-48 md:bottom-40 left-1/2 -translate-x-1/2 flex gap-3 z-30"
       >
         <!-- Dots will be generated or styled by JS -->
       </div>
@@ -921,42 +936,44 @@
     <script src="game-auth-gate.js"></script>
     <script src="auth-logout.js"></script>
     <script>
-      fetch("header.html")
-        .then((response) => response.text())
+      fetch("header.html") // Fetches the header content
+        .then((res) => res.text())
         .then(async (data) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, "text/html");
           const header = doc.querySelector("header");
-          document.getElementById("header-placeholder").replaceWith(header);
+          const placeholder = document.getElementById("header-placeholder");
+          if (header && placeholder) placeholder.replaceWith(header);
 
-          // Find the settings modal in the fetched document
-          const settingsModal = doc.getElementById("settings-modal");
-          // If it exists, remove it from the doc fragment and append to the main body
-          // This makes it available for the initGlobalSettings script to find.
-          if (settingsModal) document.body.appendChild(settingsModal);
-
-          // Inject the styles from header.html to ensure the Settings design is applied
           const headerStyle = doc.querySelector("style");
-          if (headerStyle) {
+          if (headerStyle)
             document.head.appendChild(headerStyle.cloneNode(true));
-          }
 
-          // Correctly extract the settings logic script (the one without a src attribute)
-          const headerScript = Array.from(doc.scripts).find((s) => !s.src);
-          if (headerScript) {
+          const scriptText = Array.from(doc.scripts).find(
+            (s) => !s.src,
+          )?.textContent;
+          if (scriptText) {
             const script = document.createElement("script");
-            script.textContent = headerScript.textContent;
+            script.textContent = scriptText;
             document.body.appendChild(script);
           }
 
+          // Set the active navigation link for the 'Games' page
+          document
+            .querySelectorAll('.site-nav__link[data-nav="games"]')
+            .forEach((link) => {
+              link.classList.add("is-active");
+            });
+
+          // Initialize header scripts and check authentication status
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
-
-          if (typeof window.initGlobalSettings === "function") {
-            window.initGlobalSettings();
+          if (typeof window.MatiVisitorAuth !== "undefined") {
+            await window.MatiVisitorAuth.refresh();
           }
 
+          // Bind logout functionality
           if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
             MatiAuthLogout.bind({ redirect: "login.html" });
             document.body.dataset.logoutBound = "1";
@@ -1601,8 +1618,10 @@
       };
 
       // Initialize the animations
-      initTetrisWord("title-word-select", "SELECT");
-      initTetrisWord("title-word-game", "GAME");
+      initTetrisWord("title-word-select-desktop", "SELECT");
+      initTetrisWord("title-word-game-desktop", "GAME");
+      initTetrisWord("title-word-select", "SELECT", false); // No sound for mobile clone
+      initTetrisWord("title-word-game", "GAME", false); // No sound for mobile clone
     </script>
   </body>
 </html>

@@ -668,6 +668,13 @@
   }
 }
 
+@media (max-width: 959px) {
+  .games-portal-layout {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 /* Game rack (selector) */
 .games-portal-rack {
   display: flex;
@@ -3010,6 +3017,7 @@
 @media (max-width: 640px) {
   .games-portal-title-row {
     flex-direction: column;
+    flex-direction: column-reverse;
     align-items: stretch;
   }
 

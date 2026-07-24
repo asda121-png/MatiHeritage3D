@@ -20,6 +20,27 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
+    <style>
+      #view-gallery .admin-gallery-host {
+        zoom: 0.9;
+      }
+
+      /* Increase size of primary gallery action buttons */
+      #view-gallery .gal-actions .gal-btn--manage,
+      #view-gallery .gal-actions .gal-btn--delete,
+      #view-gallery .gal-actions .gal-btn--cancel {
+        min-height: 46px;
+        padding-left: 22px;
+        padding-right: 22px;
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      #view-gallery .gal-actions .gal-btn__icon {
+        width: 18px;
+        height: 18px;
+      }
+    </style>
   </head>
   <body class="admin-body">
     <div id="admin-shell" class="admin-shell">
