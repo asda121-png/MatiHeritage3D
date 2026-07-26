@@ -37,6 +37,7 @@ const MatiAuth = (() => {
       username: user.username,
       displayName: user.displayName,
       email: user.email,
+      avatarUrl: user.avatarUrl,
       loggedInAt: new Date().toISOString(),
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
@@ -279,6 +280,12 @@ const MatiAuth = (() => {
   function getAvatarUrl(username) {
     const key = normalizeUsername(username || "");
     if (!key) return "https://i.pravatar.cc/150?u=guest";
+
+    // Check session first for Supabase users
+    const session = getSession();
+    if (session?.avatarUrl && session.username === key) {
+      return session.avatarUrl;
+    }
 
     const user = readUsers().find((entry) => entry.username === key);
     if (user?.avatarUrl) return user.avatarUrl;

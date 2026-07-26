@@ -221,15 +221,6 @@
         right: 15%;
       }
 
-      .noise-overlay {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 1;
-        opacity: 0.035;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      }
-
       .main-content {
         position: relative;
         z-index: 2;
@@ -3273,6 +3264,82 @@
           transform: rotate(360deg);
         }
       }
+
+      .experience-3d-layout {
+        grid-template-columns: 1fr;
+      }
+
+      /* 3D Explore Section Redesign: Museum Studio Style */
+      .experience-3d {
+        background: linear-gradient(
+          165deg,
+          #212121 0%,
+          #1c1c1e 35%,
+          #0c1424 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .experience-3d-inner {
+        position: relative;
+        z-index: 2;
+      }
+
+      .experience-3d::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 80% 50% at 50% 95%,
+          rgba(180, 210, 255, 0.06) 0%,
+          transparent 50%
+        );
+        opacity: 0.8;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .experience-3d::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 40%,
+          rgba(8, 8, 12, 0.85) 100%
+        );
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      .experience-3d-stage::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80%;
+        height: 80%;
+        transform: translate(-50%, -45%);
+        background: radial-gradient(
+          ellipse at center,
+          rgba(160, 190, 230, 0.1) 0%,
+          transparent 60%
+        );
+        filter: blur(40px);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .experience-3d-copy .experience-eyebrow {
+        color: #a5b4fc;
+      }
+
+      .experience-3d-copy .experience-3d-title,
+      .experience-3d-copy .experience-3d-lead {
+        color: #e0e7ff;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+      }
     </style>
   </head>
   <body class="visitor-module">
@@ -3281,7 +3348,6 @@
       <div class="orb orb-2"></div>
       <div class="orb orb-3"></div>
     </div>
-    <div class="noise-overlay" aria-hidden="true"></div>
 
     <div id="header-placeholder" class="relative z-50"></div>
 
@@ -3886,60 +3952,6 @@
       >
         <div class="experience-3d-inner">
           <div class="experience-3d-layout reveal">
-            <div class="experience-3d-copy">
-              <p class="experience-eyebrow">Interactive 3D Model</p>
-              <h2 class="experience-3d-title display-font">3D Explore</h2>
-              <p class="experience-3d-lead">
-                Orbit, zoom, and inspect Mati&rsquo;s built heritage in
-                photorealistic 3D, starting with the iconic Pylon Monument.
-              </p>
-
-              <aside
-                class="experience-3d-spec-panel"
-                aria-label="Site metadata"
-              >
-                <h3 class="experience-3d-site-name display-font">
-                  Pylon Monument
-                </h3>
-                <ul class="experience-3d-specs">
-                  <li>
-                    <span class="experience-3d-spec-key">Model</span>
-                    <span class="experience-3d-spec-val">Pylon Monument</span>
-                  </li>
-                  <li>
-                    <span class="experience-3d-spec-key">Barangay</span>
-                    <span class="experience-3d-spec-val">Central</span>
-                  </li>
-                  <li>
-                    <span class="experience-3d-spec-key">Category</span>
-                    <span class="experience-3d-spec-val">Monument</span>
-                  </li>
-                  <li>
-                    <span class="experience-3d-spec-key">Ownership</span>
-                    <span class="experience-3d-spec-val"
-                      >Government Property</span
-                    >
-                  </li>
-                  <li>
-                    <span class="experience-3d-spec-key">Longitude</span>
-                    <span class="experience-3d-spec-val"
-                      >126&deg; 13&prime; 0.8004&Prime; E</span
-                    >
-                  </li>
-                  <li>
-                    <span class="experience-3d-spec-key">Latitude</span>
-                    <span class="experience-3d-spec-val"
-                      >6&deg; 57&prime; 8.1288&Prime; N</span
-                    >
-                  </li>
-                </ul>
-                <a href="3dexplore.html" class="experience-3d-launch-btn">
-                  Launch 3D Viewer
-                  <span aria-hidden="true">→</span>
-                </a>
-              </aside>
-            </div>
-
             <div class="experience-3d-stage">
               <div
                 id="portal-model-loading"
@@ -3963,7 +3975,7 @@
               <model-viewer
                 id="portal-pylon-model"
                 class="experience-3d-model"
-                src="https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb"
+                src="data/Built Heritage/Pylon Monument/Models/Pylon.glb"
                 alt="Pylon Monument 3D model"
                 auto-rotate
                 rotation-per-second="30deg"

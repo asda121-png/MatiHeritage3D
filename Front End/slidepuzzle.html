@@ -2361,31 +2361,19 @@
         easy: {
           size: 3,
           time: 300,
-          basePoints: 500,
-          movePenalty: 3,
-          timeBonusRate: 8,
-          comboBonus: 8,
-          multiplier: 1,
+          basePoints: 50,
           label: "EASY",
         },
         medium: {
           size: 4,
           time: 480,
-          basePoints: 1000,
-          movePenalty: 5,
-          timeBonusRate: 12,
-          comboBonus: 12,
-          multiplier: 1.5,
+          basePoints: 120,
           label: "MEDIUM",
         },
         hard: {
-          size: 5,
+          size: 6,
           time: 600,
-          basePoints: 2000,
-          movePenalty: 8,
-          timeBonusRate: 18,
-          comboBonus: 18,
-          multiplier: 2,
+          basePoints: 200,
           label: "HARD",
         },
       };
@@ -2400,11 +2388,6 @@
       let gameActive = false;
       let currentSite = null;
       let emptyPos = 0;
-      let liveScore = 0;
-      let comboStreak = 0;
-      let comboBonusTotal = 0;
-      let lastMoveTime = 0;
-      const COMBO_WINDOW_MS = 1800;
 
       const boardEl = document.getElementById("puzzle-board");
       const bgMusic = document.getElementById("bg-music");
@@ -2811,18 +2794,9 @@
       }
 
       function updateLiveScore() {
-        const cfg = config[difficulty];
-        const timeBonus = timeLeft * cfg.timeBonusRate;
-        const movePenalty = moves * cfg.movePenalty;
-        liveScore = Math.max(
-          0,
-          Math.floor(
-            (cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) *
-              cfg.multiplier,
-          ),
-        );
-        document.getElementById("score-display").textContent =
-          liveScore.toLocaleString();
+        // The score is now only awarded at the end, so this function is simplified.
+        // We can keep the display at 0 during the game.
+        document.getElementById("score-display").textContent = "0";
       }
 
       function updateSiteUI() {
@@ -2925,18 +2899,10 @@
 
       function handleTileClick(index) {
         if (!gameActive) return;
-        const { size, comboBonus } = config[difficulty];
+        const { size } = config[difficulty];
         const neighbors = getNeighbors(index, size);
 
         if (neighbors.includes(emptyPos)) {
-          const now = Date.now();
-          if (lastMoveTime && now - lastMoveTime <= COMBO_WINDOW_MS) {
-            comboStreak++;
-            if (comboStreak >= 2) comboBonusTotal += comboBonus;
-          } else {
-            comboStreak = 1;
-          }
-          lastMoveTime = now;
           swap(index, emptyPos);
           emptyPos = index;
           moves++;
@@ -2961,16 +2927,7 @@
         gameActive = false;
         clearInterval(timerInterval);
 
-        const cfg = config[difficulty];
-        const timeBonus = timeLeft * cfg.timeBonusRate;
-        const movePenalty = moves * cfg.movePenalty;
-        pendingWinScore = Math.max(
-          100,
-          Math.floor(
-            (cfg.basePoints + timeBonus - movePenalty + comboBonusTotal) *
-              cfg.multiplier,
-          ),
-        );
+        pendingWinScore = config[difficulty].basePoints;
 
         const imageUrl = imgUrl(currentSite.src);
         document.getElementById("reveal-image").src = imageUrl;
@@ -3054,21 +3011,7 @@
         const siteName = currentSite?.name || "heritage site";
 
         if (win) {
-          const timeBonus = timeLeft * cfg.timeBonusRate;
-          const movePenalty = moves * cfg.movePenalty;
-          const totalEarned =
-            pendingWinScore > 0
-              ? pendingWinScore
-              : Math.max(
-                  100,
-                  Math.floor(
-                    (cfg.basePoints +
-                      timeBonus -
-                      movePenalty +
-                      comboBonusTotal) *
-                      cfg.multiplier,
-                  ),
-                );
+          const totalEarned = cfg.basePoints;
 
           document.getElementById("victory-title").textContent =
             "Heritage Restored!";
@@ -3079,23 +3022,8 @@
 
           renderScoreBreakdown([
             { label: "Heritage Site", value: siteName },
-            {
-              label: "Base Score",
-              value: `+${cfg.basePoints.toLocaleString()}`,
-            },
-            {
-              label: `Time Bonus (${formatTime(timeLeft)} left)`,
-              value: `+${timeBonus.toLocaleString()}`,
-            },
-            {
-              label: `Move Penalty (${moves} moves)`,
-              value: `−${movePenalty.toLocaleString()}`,
-            },
-            {
-              label: `${cfg.label} Multiplier (×${cfg.multiplier})`,
-              value: "Applied",
-            },
-            { label: "Total Earned", value: totalEarned.toLocaleString() },
+            { label: "Difficulty", value: cfg.label },
+            { label: "Points Earned", value: totalEarned.toLocaleString() },
           ]);
 
           if (typeof MatiHeritagePoints !== "undefined") {

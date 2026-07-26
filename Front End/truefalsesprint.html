@@ -1246,7 +1246,7 @@
               >
                 <span class="diff-bar__name">MEDIUM</span>
                 <span class="diff-bar__meta speed-chip__meta"
-                  >8 Questions • 5 Sec</span
+                  >8 Questions • 8 Sec</span
                 >
               </button>
               <button
@@ -1257,7 +1257,7 @@
               >
                 <span class="diff-bar__name">HARD</span>
                 <span class="diff-bar__meta speed-chip__meta"
-                  >12 Questions • 3 Sec</span
+                  >10 Questions • 5 Sec</span
                 >
               </button>
             </div>
@@ -1594,8 +1594,8 @@
 
       const diffSettings = {
         easy: { baseTime: 10000, rounds: 5, points: 10, label: "Easy" },
-        medium: { baseTime: 5000, rounds: 8, points: 20, label: "Medium" },
-        hard: { baseTime: 3000, rounds: 12, points: 40, label: "Hard" },
+        medium: { baseTime: 8000, rounds: 8, points: 15, label: "Medium" },
+        hard: { baseTime: 5000, rounds: 10, points: 20, label: "Hard" },
       };
 
       const CHIP_ACTIVE = ["is-active"];
@@ -1974,7 +1974,7 @@
           localStorage.setItem("tfSprintBest", String(bestScore));
         }
 
-        const heritagePoints = currentScore * 10;
+        const heritagePoints = currentScore;
         if (typeof MatiHeritagePoints !== "undefined") {
           void MatiHeritagePoints.add(heritagePoints);
         } else {
@@ -2016,11 +2016,7 @@
         renderScoreBreakdown([
           { label: "Difficulty", value: diffSettings[difficulty].label },
           { label: "Correct", value: `${correctCount} / ${totalRounds}` },
-          { label: "Sprint Score", value: currentScore.toLocaleString() },
-          {
-            label: "Heritage Points",
-            value: `+${heritagePoints.toLocaleString()}`,
-          },
+          { label: "Points Earned", value: currentScore.toLocaleString() },
           { label: "All-Time Best", value: bestScore.toLocaleString() },
         ]);
 

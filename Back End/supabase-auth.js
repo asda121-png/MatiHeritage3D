@@ -456,16 +456,32 @@ const MatiSupabaseAuth = (() => {
     const profile = Array.isArray(data) ? data[0] : data;
     const points = Math.max(0, Number(profile?.heritage_points) || 0);
 
-    if (typeof MatiHeritagePoints !== "undefined") {
-      void MatiHeritagePoints.syncToCloud(points);
-    }
-
+    // Update auth metadata BEFORE syncing points to ensure new username is used
     await sb.auth.updateUser({
       data: {
         username: profile?.username || cleanUsername,
         display_name: profile?.display_name || cleanDisplay,
       },
     });
+
+    // Sync points with the NEW username to prevent recreating old entries
+    if (typeof MatiHeritagePoints !== "undefined") {
+      // Use the new username directly instead of relying on session
+      const newUsername = profile?.username || cleanUsername;
+      const newDisplayName = profile?.display_name || cleanDisplay;
+
+      // Call sync with explicit new username to avoid session race condition
+      if (
+        typeof MatiSupabaseApi !== "undefined" &&
+        MatiSupabaseApi.syncHeritagePoints
+      ) {
+        await MatiSupabaseApi.syncHeritagePoints({
+          username: newUsername,
+          displayName: newDisplayName,
+          points: points,
+        });
+      }
+    }
 
     return {
       ok: true,
@@ -548,7 +564,16 @@ const MatiSupabaseAuth = (() => {
     });
 
     if (error) {
-      return { ok: false, message: error.message };
+      // If the error is an empty object, it's likely an SMTP configuration issue.
+      // Provide a more helpful message for debugging.
+      if (error.message) {
+        return { ok: false, message: error.message };
+      }
+      return {
+        ok: false,
+        message:
+          "Could not send reset email. Check SMTP configuration in Supabase (e.g., Brevo sender verification).",
+      };
     }
 
     return {
@@ -583,6 +608,17 @@ const MatiSupabaseAuth = (() => {
     const sb = client();
     const { error } = await sb.auth.updateUser({ password: newPassword });
     if (error) {
+      // Gracefully handle the case where the user "resets" to the same password.
+      // Supabase returns this specific error, but we can treat it as a success.
+      if (
+        error.message.toLowerCase().includes("different from the old password")
+      ) {
+        await sb.auth.signOut();
+        return {
+          ok: true,
+          message: "Password confirmed. You can sign in with your password.",
+        };
+      }
       return { ok: false, message: error.message };
     }
 
@@ -613,6 +649,17 @@ const MatiSupabaseAuth = (() => {
     const sb = client();
     const { error } = await sb.auth.updateUser({ password: newPassword });
     if (error) {
+      // Gracefully handle the case where the user "resets" to the same password.
+      // Supabase returns this specific error, but we can treat it as a success.
+      if (
+        error.message.toLowerCase().includes("different from the old password")
+      ) {
+        await sb.auth.signOut();
+        return {
+          ok: true,
+          message: "Password confirmed. You can sign in with your password.",
+        };
+      }
       return { ok: false, message: error.message };
     }
 
@@ -643,7 +690,7 @@ const MatiSupabaseAuth = (() => {
     if (!newPassword || newPassword.length < 6) {
       return {
         ok: false,
-        message: "Password must be at least 6 characters.",
+        message: "New password must be at least 6 characters.",
       };
     }
 
