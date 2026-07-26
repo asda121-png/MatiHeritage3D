@@ -683,6 +683,8 @@
         const profileAlert = document.getElementById("account-profile-alert");
         const profileForm = document.getElementById("account-profile-form");
         const saveBtn = document.getElementById("account-save-profile");
+        const avatar = document.getElementById("account-avatar");
+        const avatarUpload = document.getElementById("account-avatar-upload");
 
         if (usernameInput) {
           usernameInput.value = session.username || "";
@@ -812,14 +814,7 @@
             MatiAuth.setSession({
               ...currentSession,
               username: result.user.username,
-              displayName: result.user.displayName,
-              email: result.user.email || currentSession.email,
             });
-          }
-
-          const avatar = document.getElementById("account-avatar");
-          if (avatar) {
-            avatar.src = MatiAuth.getAvatarUrl(result.user.username);
           }
 
           // Update username display
@@ -850,14 +845,7 @@
           }
         });
 
-        const avatar = document.getElementById("account-avatar");
-        if (avatar) {
-          avatar.src = MatiAuth.getAvatarUrl(session.username);
-          avatar.alt = `${session.displayName || session.username} avatar`;
-        }
-
         // Avatar upload functionality
-        const avatarUpload = document.getElementById("account-avatar-upload");
         if (avatarUpload) {
           avatarUpload.addEventListener("change", async (event) => {
             const file = event.target.files[0];
@@ -892,7 +880,9 @@
                 const filePath = `${fileName}`;
 
                 const { data: uploadData, error: uploadError } =
-                  await sb.storage.from("avatars").upload(filePath, file);
+                  await sb.storage.from("avatars").upload(filePath, file, {
+                    upsert: true,
+                  });
 
                 if (uploadError) {
                   throw uploadError;
@@ -915,6 +905,15 @@
                   throw updateError;
                 }
 
+                // Update local session
+                const currentSession = MatiAuth.getSession();
+                if (currentSession) {
+                  MatiAuth.setSession({
+                    ...currentSession,
+                    avatarUrl: avatarUrl,
+                  });
+                }
+
                 // Update avatar display
                 if (avatar) {
                   avatar.src = avatarUrl;
@@ -934,10 +933,16 @@
                   );
                   if (userIndex >= 0) {
                     users[userIndex].avatarUrl = avatarUrl;
-                    localStorage.setItem(
-                      "matiHeritageUsers",
-                      JSON.stringify(users),
-                    );
+                    MatiAuth.writeUsers(users);
+                  }
+
+                  // Update local session
+                  const currentSession = MatiAuth.getSession();
+                  if (currentSession) {
+                    MatiAuth.setSession({
+                      ...currentSession,
+                      avatarUrl: avatarUrl,
+                    });
                   }
 
                   // Update avatar display
@@ -960,6 +965,12 @@
               avatarUpload.value = ""; // Reset file input
             }
           });
+        }
+
+        if (avatar) {
+          avatar.src =
+            session.avatarUrl || MatiAuth.getAvatarUrl(session.username);
+          avatar.alt = `${session.displayName || session.username} avatar`;
         }
 
         const points = await MatiVisitorAuth.hydratePoints();

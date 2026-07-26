@@ -2484,11 +2484,13 @@
       let heritageSession = null;
       let activeLevel = levels[0];
 
-      async function prepareSpotLevel() {
+      async function prepareSpotLevel(difficulty) {
         try {
-          if (typeof MatiHeritageGameContent !== "undefined") {
+          if (typeof MatiHeritageGameContent !== "undefined" && difficulty) {
             heritageSession = await MatiHeritageGameContent.createSession();
-            const generated = heritageSession.spotLevels(4);
+            const count =
+              difficulty === "easy" ? 5 : difficulty === "medium" ? 8 : 10;
+            const generated = heritageSession.spotLevels(count);
             if (generated.length) {
               levels = generated;
               activeLevel =
@@ -2515,9 +2517,9 @@
       }
 
       const settings = {
-        easy: { time: 90, points: 50, radius: 8 },
-        medium: { time: 60, points: 100, radius: 5 },
-        hard: { time: 45, points: 200, radius: 3 },
+        easy: { time: 90, points: 10, radius: 5 },
+        medium: { time: 60, points: 15, radius: 5 },
+        hard: { time: 45, points: 20, radius: 5 },
       };
 
       let currentDifficulty = null;
@@ -3075,7 +3077,7 @@
       }
 
       async function startGame() {
-        await prepareSpotLevel();
+        await prepareSpotLevel(currentDifficulty);
         resetDifferences();
         clearMarkers();
         found = 0;

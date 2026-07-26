@@ -2947,19 +2947,19 @@
           cols: 4,
           pairs: 6,
           time: 90,
-          basePoints: 80,
+          basePoints: 10,
         },
         medium: {
           cols: 4,
           pairs: 8,
           time: 60,
-          basePoints: 100,
+          basePoints: 15,
         },
         hard: {
           cols: 6,
           pairs: 12,
           time: 45,
-          basePoints: 120,
+          basePoints: 20,
         },
       };
 
@@ -2969,7 +2969,6 @@
       let matchedPairs = 0;
       let score = 0;
       let moves = 0;
-      let streak = 0;
       let timeLeft = 0;
       let timerInterval = null;
       let gameActive = false;
@@ -3472,10 +3471,8 @@
 
       function handleMatch(c1, c2, item) {
         matchedPairs++;
-        streak++;
         const settings = CONFIG[difficulty];
-        const streakBonus = Math.min(streak - 1, 5) * 15;
-        const pairScore = settings.basePoints + streakBonus;
+        const pairScore = settings.basePoints;
         score += pairScore;
 
         document.getElementById("score-display").textContent = score;
@@ -3490,17 +3487,6 @@
         spawnScoreFloat(pairScore, c1);
         flashGameTable("match");
         showFactScroll(item);
-
-        if (streak >= 3) {
-          const stamp = document.createElement("div");
-          stamp.className = "stamp-burst";
-          stamp.textContent = `${streak}× STREAK!`;
-          stamp.style.left = "50%";
-          stamp.style.top = "40%";
-          stamp.style.transform = "translateX(-50%) rotate(-8deg)";
-          document.body.appendChild(stamp);
-          setTimeout(() => stamp.remove(), 700);
-        }
 
         setTimeout(() => {
           [c1, c2].forEach((card) => {
@@ -3517,8 +3503,6 @@
       }
 
       function handleMismatch(c1, c2) {
-        streak = 0;
-        updateStreakUI();
         playSfx(wrongSfx);
         flashGameTable("miss");
         c1.classList.add("is-shake");
@@ -3586,9 +3570,7 @@
         clearInterval(timerInterval);
 
         const settings = CONFIG[difficulty];
-        const timeBonus = win ? timeLeft * 40 : 0;
-        const movePenalty = Math.max(0, moves - settings.pairs) * 5;
-        const totalEarned = Math.max(0, score + timeBonus - movePenalty);
+        const totalEarned = score;
 
         document.getElementById("game-screen").classList.add("hidden");
         document.body.classList.remove("is-playing");
@@ -3612,9 +3594,8 @@
         document.getElementById("result-msg").textContent = win
           ? "Splendid work, chronicler! Every relic has been matched."
           : "You ran out of time. Explore Mati's heritage and try again!";
-        document.getElementById("result-detail").textContent = win
-          ? `+${timeBonus} time bonus · ${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`
-          : `${matchedPairs}/${settings.pairs} pairs matched before time ran out`;
+        document.getElementById("result-detail").textContent =
+          `${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`;
 
         const currentTotal = parseInt(
           localStorage.getItem("totalHeritagePoints") || "0",
@@ -3640,7 +3621,6 @@
         matchedPairs = 0;
         score = 0;
         moves = 0;
-        streak = 0;
         flippedCards = [];
         showIntroScreen();
       }
@@ -3649,7 +3629,6 @@
         matchedPairs = 0;
         score = 0;
         moves = 0;
-        streak = 0;
         flippedCards = [];
         gameActive = false;
 
