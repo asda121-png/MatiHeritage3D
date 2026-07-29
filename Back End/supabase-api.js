@@ -116,7 +116,7 @@ const MatiSupabaseApi = (() => {
 
     const { error } = await sb
       .from("heritage_sites")
-      .update({ is_deleted: true })
+      .delete()
       .eq("id", siteId);
 
     if (error) throw error;
