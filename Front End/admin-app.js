@@ -1043,11 +1043,6 @@
         `<span class="admin-heritage-card__badge admin-heritage-card__badge--3d">3D</span>`,
       );
     }
-    if (MatiAdminStore.siteHasAdminEdits(site.id)) {
-      badges.push(
-        `<span class="admin-heritage-card__badge admin-heritage-card__badge--edited">Edited</span>`,
-      );
-    }
     if (!badges.length) return "";
     return `<div class="admin-heritage-card__badges">${badges.join("")}</div>`;
   }
@@ -1096,6 +1091,54 @@
       </li>`;
   }
 
+  function renderMapCard(site) {
+    if (builtSiteHasMap(site)) {
+      const filename = site.cover.split("/").pop();
+      const lastUpdated = site.updatedAt
+        ? new Date(site.updatedAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
+        : "";
+
+      return `
+        <div class="admin-model-card admin-model-card--filled">
+          <div class="admin-model-card__thumb">
+            <img src="${escapeAttr(site.cover)}" alt="Site map" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div class="admin-model-card__meta">
+            <h5 class="admin-model-card__title">Site Map Uploaded</h5>
+            <p class="admin-model-card__filename">${escapeHtml(filename)}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="admin-model-card admin-model-card--empty" data-add-media-type="map" role="button" tabindex="0">
+        <svg class="admin-model-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+          <line x1="8" y1="2" x2="8" y2="18" />
+          <line x1="16" y1="6" x2="16" y2="22" />
+        </svg>
+        <h5 class="admin-model-card__title">No Site Map Available</h5>
+        <p class="admin-model-card__desc"> Drag & Drop your site map or click to browse your files.</p>
+        <p class="admin-model-card__desc"> Supports image files.</p>
+        <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">
+          <svg class="admin-model-card__drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em; display: none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <p class="admin-model-card__drop-label">Drop your site map here</p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Upload Site Map
+        </button>
+      </div>
+    `;
+  }
+
   function renderModelCard(site) {
     if (site.modelSrc) {
       const filename = site.modelSrc.split("/").pop();
@@ -1133,7 +1176,7 @@
         </svg>
         <h5 class="admin-model-card__title">No 3D Model Available</h5>
         <p class="admin-model-card__desc"> Drag & Drop your 3D Model or click to browse your files.</p>
-        <p class="admin-model-card__desc"> Supports .glb.</p>
+        <p class="admin-model-card__desc"> Supports .glb file format.</p>
         <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">
           <svg class="admin-model-card__drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em; display: none;">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -1143,6 +1186,31 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
           Upload 3D Model
+        </button>
+      </div>
+    `;
+  }
+
+  function renderPhotoCard(site) {
+    return `
+      <div class="admin-model-card admin-model-card--empty" data-add-media-type="photo" role="button" tabindex="0">
+        <svg class="admin-model-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+        <h5 class="admin-model-card__title">No Photographs Available</h5>
+        <p class="admin-model-card__desc"> Drag & Drop your photographs or click to browse your files.</p>
+        <p class="admin-model-card__desc"> Supports image files.</p>
+        <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">
+          <svg class="admin-model-card__drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em; display: none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <p class="admin-model-card__drop-label">Drop your photographs here</p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Upload Photographs
         </button>
       </div>
     `;
@@ -1188,52 +1256,35 @@
 
   function renderBuiltSiteMediaList(site, media, container) {
     const photos = media.filter((m) => m.type === "photo");
-    const mapItems = site.cover
-      ? [
-          {
-            id: null,
-            title: "Site map",
-            type: "map",
-            src: site.cover,
-            linked: true,
-          },
-        ]
-      : [];
-    const modelItems = site.modelSrc
-      ? [
-          {
-            id: null,
-            title: "3D model",
-            type: "model3d",
-            src: site.modelSrc,
-            linked: true,
-          },
-        ]
-      : [];
-
-    const mapList = mapItems.length
-      ? `<ul class="admin-media-list">${mapItems.map((m) => renderMediaListItem(m, { showEdit: false })).join("")}</ul>`
-      : `<p class="admin-media-group__empty">No site map uploaded yet.</p>`;
+    const mapContent = renderMapCard(site);
 
     const photoList = photos.length
       ? renderBuiltSitePhotoPile(site, photos)
-      : `<p class="admin-media-group__empty">No photographs uploaded yet.</p>`;
+      : renderPhotoCard(site);
 
     const modelContent = renderModelCard(site);
+    const hasMap = builtSiteHasMap(site);
+    const hasPhotos = photos.length > 0;
+
     container.innerHTML = `
       <div class="admin-media-groups">
         <section class="admin-media-group">
           <div class="admin-media-group__head">
             <h4 class="admin-media-group__title admin-media-group__title--map">Site map</h4>
+            <div class="admin-media-group__actions">
+              ${hasMap ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-view-map="${escapeAttr(site.id)}">View Map</button>` : ""}
+              ${hasMap ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="map">Manage</button>` : ""}
+            </div>
           </div>
-          ${mapList}
+          ${mapContent}
         </section>
         <section class="admin-media-group">
           <div class="admin-media-group__head">
             <h4 class="admin-media-group__title admin-media-group__title--photo">Photographs</h4>
-            <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="photo">
-              Manage
-            </button>
+            <div class="admin-media-group__actions">
+              ${hasPhotos ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-view-photos="${escapeAttr(site.id)}">View Photographs</button>` : ""}
+              ${hasPhotos ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="photo">Manage</button>` : ""}
+            </div>
           </div>
           ${photoList}
         </section>
@@ -1376,8 +1427,8 @@
     if (fileHint) {
       if (activeType === "map") {
         fileHint.textContent = site?.cover
-          ? "A site map is linked. Choose a file to replace it."
-          : "No site map uploaded yet.";
+          ? "A site map is linked. Choose a file or drag an image to replace it."
+          : "Choose an image file or drag it into this area to upload a site map.";
       } else if (activeType === "photo") {
         if (bulkPhotos) {
           fileHint.textContent = `${selectedPhotos.length} photographs selected. Each will use its file name as the title.`;
@@ -1385,6 +1436,9 @@
           fileHint.textContent =
             "Choose one or many photographs, or drag images from a folder into this area.";
         }
+      } else if (activeType === "model3d") {
+        fileHint.textContent =
+          "Upload a .glb 3D model file, or drag it into this area.";
       } else if (activeType === "video") {
         fileHint.textContent =
           "Upload an MP4/WebM file (stored in Supabase Storage), or switch to Link for YouTube/Facebook.";
@@ -1399,6 +1453,7 @@
     }
     if (saveBtn) {
       saveBtn.disabled = activeType === "model3d" && !fileInput.files.length;
+      saveBtn.textContent = activeType === "model3d" ? "Upload" : "Save";
     }
 
     if (previewWrap && previewImg && activeType !== "map") {
@@ -1565,7 +1620,7 @@
   function mediaChips(stats, include3d = true, site = null) {
     const chips = [];
     if (site?.category === "built") {
-      if (site.cover) chips.push("1 map");
+      if (builtSiteHasMap(site)) chips.push("1 map");
       if (stats.photos) {
         chips.push(`${stats.photos} photo${stats.photos !== 1 ? "s" : ""}`);
       }
@@ -1674,17 +1729,22 @@
 
       heritageCards.innerHTML = collections
         .map(
-          (collection) => `
+          (collection) => {
+            const bgImages = {
+              built: 'data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg',
+              intangible: 'data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2672.JPG',
+              natural: 'data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg'
+            };
+            const bgImage = bgImages[collection.key] || '';
+            return `
         <article class="stat-card stat-card--${collection.key}">
-          <div class="stat-card__icon-wrapper">
-            ${cardIcons[collection.key] || cardIcons.built}
-          </div>
+          <div class="stat-card__bg-image" style="background-image: url('${bgImage}');"></div>
           <div class="stat-card__content">
             <p class="stat-card__label">${escapeHtml(collection.label)}</p>
             <p class="stat-card__value">${collection.sites}</p>
-            <p class="stat-card__trend">${escapeHtml(collection.type)}</p>
           </div>
-        </article>`,
+        </article>`;
+          }
         )
         .join("");
     }
@@ -1715,7 +1775,6 @@
           return `
           <tr>
             <td class="admin-dashboard-table__name">${escapeHtml(collection.label)}</td>
-            <td class="admin-dashboard-table__type">${escapeHtml(collection.type)}</td>
             <td>${collection.sites}</td>
             <td>${collection.photos}</td>
             <td>${collection.videos}</td>
@@ -1728,7 +1787,6 @@
       tfoot.innerHTML = `
         <tr>
           <td>All collections</td>
-          <td></td>
           <td>${totals.sites}</td>
           <td>${totals.photos}</td>
           <td>${totals.videos}</td>
@@ -1883,7 +1941,7 @@
 
   function siteFormModalTitle(siteId) {
     if (!siteId || MatiAdminStore.isDraftSiteId(siteId)) return "Add site";
-    return "Edit site";
+    return "Manage Site";
   }
 
   function syncSiteFormSubmitLabel(siteId) {
@@ -2362,13 +2420,20 @@
     const list = $("#site-media-list");
     if (!list) return;
 
+    syncSiteMediaControls();
+
+    const category = $("#site-category")?.value || "built";
+
     if (!siteId) {
-      list.innerHTML = "";
-      syncSiteMediaControls();
+      // For new sites, show drag and drop cards for built heritage
+      if (category === "built") {
+        const tempSite = { id: null, category: "built", cover: null, modelSrc: null };
+        renderBuiltSiteMediaList(tempSite, [], list);
+      } else {
+        list.innerHTML = `<p class="admin-empty" style="padding:1rem 0">Save the site to add media files.</p>`;
+      }
       return;
     }
-
-    syncSiteMediaControls();
 
     const site = MatiAdminStore.getSiteById(siteId);
     const media = MatiAdminStore.getSiteMedia(siteId);
@@ -2648,54 +2713,123 @@
       return;
     }
 
+    // Show update modal
+    showUpdateModal("Updating...");
+
+    const startTime = Date.now();
+
     try {
-      await withUploadProgress(
-        async ({ setProgress }) => {
-          setProgress(12, "Preparing site record…");
-          let siteId = $("#site-id").value.trim();
-          const wasDraft = MatiAdminStore.isDraftSiteId(siteId);
-          const nextId = MatiAdminStore.slugId(name);
+      let siteId = $("#site-id").value.trim();
+      const wasDraft = MatiAdminStore.isDraftSiteId(siteId);
+      const nextId = MatiAdminStore.slugId(name);
 
-          if (wasDraft && siteId !== nextId) {
-            setProgress(28, "Finalizing site id…");
-            await MatiAdminStore.migrateSite(siteId, nextId);
-            siteId = nextId;
-            $("#site-id").value = nextId;
-          }
+      if (wasDraft && siteId !== nextId) {
+        await MatiAdminStore.migrateSite(siteId, nextId);
+        siteId = nextId;
+        $("#site-id").value = nextId;
+      }
 
-          setProgress(55, "Saving site to database…");
-          const site = await persistSiteFromForm({ requireName: true, siteId });
-          if (!site) throw new Error("Could not save site.");
+      const site = await persistSiteFromForm({ requireName: true, siteId });
+      if (!site) throw new Error("Could not save site.");
 
-          editingSiteId = site.id;
-          $("#site-id").value = site.id;
-          syncBuiltDeleteUi();
-          setProgress(82, "Refreshing admin views…");
-          refreshSiteViews(site.id);
-          syncSiteFormSubmitLabel(site.id);
+      editingSiteId = site.id;
+      $("#site-id").value = site.id;
+      syncBuiltDeleteUi();
+      refreshSiteViews(site.id);
+      syncSiteFormSubmitLabel(site.id);
 
-          if (!syncOk(site)) {
-            showToast(syncFailedMessage(site, "Site saved locally only."));
-            return site;
-          }
+      if (!syncOk(site)) {
+        hideUpdateModal();
+        showToast(syncFailedMessage(site, "Site saved locally only."));
+        return site;
+      }
 
-          showToast(
-            wasDraft
-              ? "Site saved to database."
-              : MatiAdminStore.siteHasAdminEdits(site.id)
-                ? "Site updated in database."
-                : "Site saved to database.",
-          );
-          return site;
-        },
-        {
-          title: "Saving site…",
-          detail: "Preparing site record…",
-          doneDetail: "Site saved.",
-        },
-      );
+      // Calculate elapsed time and ensure minimum 1.5s display
+      const elapsed = Date.now() - startTime;
+      const minDisplayTime = 1500;
+      const remainingDelay = Math.max(0, minDisplayTime - elapsed);
+
+      // Wait for minimum display time then show success
+      setTimeout(() => {
+        showUpdateModal("SUCCESS");
+        
+        // Hide success after 1 second
+        setTimeout(() => {
+          hideUpdateModal();
+        }, 1000);
+      }, remainingDelay);
+
+      return site;
     } catch (error) {
+      hideUpdateModal();
       showToast(error?.message || "Could not save site.");
+    }
+  }
+
+  function showUpdateModal(message) {
+    let modal = $("#updateModal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.id = "updateModal";
+      modal.className = "admin-modal";
+      modal.innerHTML = `
+        <div class="admin-modal-backdrop" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"></div>
+        <div class="admin-modal-content" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 48px 64px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); text-align: center; min-width: 280px; animation: modalFadeIn 0.3s ease-out;">
+          <div id="updateModalIcon" style="font-size: 48px; margin-bottom: 16px; animation: iconPulse 1.5s ease-in-out infinite;">⏳</div>
+          <div id="updateModalMessage" style="font-family: 'Source Sans 3', sans-serif; font-size: 24px; font-weight: 600; color: white; letter-spacing: 0.5px;"></div>
+          <div id="updateModalSubtext" style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 400; color: rgba(255, 255, 255, 0.8); margin-top: 8px;"></div>
+        </div>
+        <style>
+          @keyframes modalFadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          }
+          @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+          }
+          @keyframes successBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+          }
+        </style>
+      `;
+      document.body.appendChild(modal);
+    }
+    
+    const messageEl = $("#updateModalMessage");
+    const iconEl = $("#updateModalIcon");
+    const subtextEl = $("#updateModalSubtext");
+    
+    if (messageEl) {
+      messageEl.textContent = message;
+    }
+    
+    if (iconEl && subtextEl) {
+      if (message === "SUCCESS") {
+        iconEl.textContent = "✓";
+        iconEl.style.animation = "successBounce 0.5s ease-out forwards";
+        subtextEl.textContent = "Changes saved successfully";
+      } else {
+        iconEl.textContent = "⏳";
+        iconEl.style.animation = "iconPulse 1.5s ease-in-out infinite";
+        subtextEl.textContent = "Please wait...";
+      }
+    }
+    
+    modal.hidden = false;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function hideUpdateModal() {
+    const modal = $("#updateModal");
+    if (modal) {
+      modal.hidden = true;
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+      document.body.style.overflowY = "auto";
     }
   }
 
@@ -3898,8 +4032,9 @@
     if (!field || !input) return;
 
     field.addEventListener("dragover", (e) => {
+      const mediaType = $("#media-type")?.value;
       if (
-        $("#media-type")?.value !== "photo" ||
+        (mediaType !== "photo" && mediaType !== "model3d" && mediaType !== "map") ||
         $("#media-id")?.value?.trim()
       ) {
         return;
@@ -3916,24 +4051,51 @@
 
     field.addEventListener("drop", (e) => {
       field.classList.remove("is-dragover");
+      const mediaType = $("#media-type")?.value;
       if (
-        $("#media-type")?.value !== "photo" ||
+        (mediaType !== "photo" && mediaType !== "model3d" && mediaType !== "map") ||
         $("#media-id")?.value?.trim()
       ) {
         return;
       }
       e.preventDefault();
-      const images = [...(e.dataTransfer?.files || [])].filter((file) =>
-        file.type.startsWith("image/"),
-      );
-      if (!images.length) {
-        showToast("Drop image files only.");
-        return;
+
+      let files = [];
+      if (mediaType === "photo") {
+        files = [...(e.dataTransfer?.files || [])].filter((file) =>
+          file.type.startsWith("image/"),
+        );
+        if (!files.length) {
+          showToast("Drop image files only.");
+          return;
+        }
+      } else if (mediaType === "model3d") {
+        files = [...(e.dataTransfer?.files || [])].filter((file) =>
+          file.name.endsWith(".glb") || file.type === "model/gltf-binary",
+        );
+        if (!files.length) {
+          showToast("Drop .glb 3D model files only.");
+          return;
+        }
+      } else if (mediaType === "map") {
+        files = [...(e.dataTransfer?.files || [])].filter((file) =>
+          file.type.startsWith("image/"),
+        );
+        if (!files.length) {
+          showToast("Drop image files only for site map.");
+          return;
+        }
+        if (files.length > 1) {
+          showToast("Drop only one image file for site map.");
+          return;
+        }
       }
+
       const transfer = new DataTransfer();
-      images.forEach((file) => transfer.items.add(file));
+      files.forEach((file) => transfer.items.add(file));
       input.files = transfer.files;
       input.dispatchEvent(new Event("change", { bubbles: true }));
+      updateMediaFormUi();
     });
   }
 
@@ -4058,6 +4220,111 @@
         e.preventDefault();
         e.stopPropagation();
         viewBuiltSiteOnMap(mapSite.dataset.viewOnMap);
+        return;
+      }
+
+      const viewMap = e.target.closest("[data-view-map]");
+      if (viewMap) {
+        e.preventDefault();
+        e.stopPropagation();
+        const siteId = viewMap.dataset.viewMap;
+        const site = MatiAdminStore.getSiteById(siteId);
+        if (site && site.cover) {
+          // Open the site map image in a new tab
+          window.open(site.cover, '_blank');
+        } else {
+          showToast("No site map to view.");
+        }
+        return;
+      }
+
+      const closeLightbox = e.target.closest("#galLightboxClose, .gal-lightbox-backdrop");
+      if (closeLightbox) {
+        e.preventDefault();
+        e.stopPropagation();
+        const box = $("#galLightbox");
+        const media = $("#galLightboxMedia");
+        if (media) {
+          media.innerHTML = "";
+        }
+        if (box) {
+          box.classList.remove("active");
+          document.body.style.overflow = "";
+          document.body.style.overflowY = "auto";
+        }
+        // Return to photo collection modal if it exists
+        const photoModal = $("#photoCollectionModal");
+        if (photoModal && !photoModal.hidden) {
+          document.body.style.overflow = "hidden";
+        } else {
+          // Clear global lightbox state only if photo modal is not open
+          window.currentLightboxPhotos = null;
+          window.currentLightboxIndex = 0;
+          window.currentLightboxSiteName = null;
+        }
+        return;
+      }
+
+      const closePhotoCollection = e.target.closest("[data-close-photo-collection], .admin-modal-backdrop");
+      if (closePhotoCollection) {
+        e.preventDefault();
+        e.stopPropagation();
+        const modal = $("#photoCollectionModal");
+        if (modal) {
+          modal.hidden = true;
+          modal.classList.remove("active");
+          document.body.style.overflow = "";
+          document.body.style.overflowY = "auto";
+          window.currentLightboxPhotos = null;
+          window.currentLightboxSiteName = null;
+        }
+        return;
+      }
+
+      const photoItem = e.target.closest(".photo-collection-item");
+      if (photoItem && window.currentLightboxPhotos) {
+        e.preventDefault();
+        e.stopPropagation();
+        const index = parseInt(photoItem.dataset.photoIndex, 10);
+        window.currentLightboxIndex = index;
+        showAdminLightbox();
+        return;
+      }
+
+      const viewPhotos = e.target.closest("[data-view-photos]");
+      if (viewPhotos) {
+        e.preventDefault();
+        e.stopPropagation();
+        const siteId = viewPhotos.dataset.viewPhotos;
+        const site = MatiAdminStore.getSiteById(siteId);
+        if (site) {
+          const photos = MatiAdminStore.getSiteMedia(siteId).filter(m => m.type === "photo");
+          if (photos.length > 0) {
+            // Show photo collection modal
+            showPhotoCollectionModal(site, photos);
+          } else {
+            showToast("No photographs to view.");
+          }
+        }
+        return;
+      }
+
+      // Lightbox navigation handlers
+      const lightboxPrev = e.target.closest("#galLightboxPrev");
+      if (lightboxPrev && window.currentLightboxPhotos) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.currentLightboxIndex = (window.currentLightboxIndex - 1 + window.currentLightboxPhotos.length) % window.currentLightboxPhotos.length;
+        showAdminLightbox();
+        return;
+      }
+
+      const lightboxNext = e.target.closest("#galLightboxNext");
+      if (lightboxNext && window.currentLightboxPhotos) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.currentLightboxIndex = (window.currentLightboxIndex + 1) % window.currentLightboxPhotos.length;
+        showAdminLightbox();
         return;
       }
 
@@ -4202,8 +4469,13 @@
     if (!card || card.dataset.dragBound) return;
     card.dataset.dragBound = "true";
 
+    const cardType = card.dataset.addMediaType || "model3d";
+    const isMap = cardType === "map";
+    const isModel = cardType === "model3d";
+    const isPhoto = cardType === "photo";
+
     const titleEl = card.querySelector(".admin-model-card__title");
-    const originalTitle = titleEl?.textContent || "No 3D Model Available";
+    const originalTitle = titleEl?.textContent || (isMap ? "No Site Map Available" : (isPhoto ? "No Photographs Available" : "No 3D Model Available"));
     const dropLabel = card.querySelector(".admin-model-card__drop-label");
     const descEl = card.querySelector(".admin-model-card__desc");
     const uploadIcon = card.querySelector(".admin-model-card__drop-icon");
@@ -4211,7 +4483,18 @@
       "button > svg:not(.admin-model-card__drop-icon)",
     );
 
-    const isValidFile = (file) => file.name.toLowerCase().endsWith(".glb");
+    const isValidFile = (file) => {
+      if (isMap) {
+        return file.type.startsWith("image/");
+      }
+      if (isModel) {
+        return file.name.toLowerCase().endsWith(".glb");
+      }
+      if (isPhoto) {
+        return file.type.startsWith("image/");
+      }
+      return false;
+    };
 
     const updateDropState = (isOver, isValid = false) => {
       card.classList.toggle("is-dragover", isOver && isValid);
@@ -4228,8 +4511,8 @@
       }
       if (descEl) {
         descEl.textContent = isInvalid
-          ? "Please drop a valid .glb or .gltf 3D model file."
-          : "Upload a 3D model to preview and manage it here.";
+          ? (isMap ? "Please drop a valid image file for the site map." : (isPhoto ? "Please drop valid image files for photographs." : "Please drop a valid .glb or .gltf 3D model file."))
+          : (isMap ? "Upload a site map to preview and manage it here." : (isPhoto ? "Upload photographs to preview and manage them here." : "Upload a 3D model to preview and manage it here."));
       }
       if (dropLabel && descEl) {
         dropLabel.style.display = isOver && isValid ? "block" : "none";
@@ -4266,7 +4549,7 @@
         if (titleEl) titleEl.textContent = "Invalid file type";
         if (descEl)
           descEl.textContent =
-            "Please drop a valid .glb or .gltf 3D model file.";
+            isMap ? "Please drop a valid image file for the site map." : (isPhoto ? "Please drop valid image files for photographs." : "Please drop a valid .glb or .gltf 3D model file.");
         setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
         return;
       }
@@ -4297,44 +4580,104 @@
               activeUploadController.abort();
             }
             activeUploadController = new AbortController();
-            options.onCancel = () => {
-              activeUploadController.abort();
-            };
-            setProgress(5, `Uploading 3D model: ${file.name}`);
-            const modelSrc = await MatiAdminUploads.put(
-              `${siteId}/model`,
-              file,
-              {
-                type: "model3d",
-                siteId,
-                onProgress: (pct) => {
-                  if (uploadController.signal.aborted) return;
-                  setProgress(
-                    5 + pct * 0.8,
-                    `Uploading 3D model: ${file.name}`,
-                  );
+
+            if (isMap) {
+              setProgress(5, `Uploading site map: ${file.name}`);
+              const cover = await MatiAdminUploads.put(
+                `${siteId}/map`,
+                file,
+                {
+                  type: "map",
+                  siteId,
+                  onProgress: (pct) => {
+                    if (activeUploadController.signal.aborted) return;
+                    setProgress(
+                      5 + pct * 0.8,
+                      `Uploading site map: ${file.name}`,
+                    );
+                  },
+                  signal: activeUploadController.signal,
                 },
-                signal: activeUploadController.signal,
-              },
-            );
-            if (activeUploadController.signal.aborted) return;
-            setProgress(90, "Saving 3D model to database…");
-            const savedSite = await MatiAdminStore.saveSite({
-              ...site,
-              modelSrc,
-            });
-            if (!syncOk(savedSite)) {
-              showToast(
-                syncFailedMessage(savedSite, "3D model uploaded locally only."),
               );
-            } else {
-              showToast("3D model uploaded to database.");
+              if (activeUploadController.signal.aborted) return;
+              setProgress(90, "Saving site map to database…");
+              const savedSite = await MatiAdminStore.saveSite({
+                ...site,
+                cover,
+              });
+              if (!syncOk(savedSite)) {
+                showToast(
+                  syncFailedMessage(savedSite, "Site map uploaded locally only."),
+                );
+              } else {
+                showToast("Site map uploaded to database.");
+              }
+            } else if (isPhoto) {
+              // For photos, we need to open the media modal with the file
+              const transfer = new DataTransfer();
+              transfer.items.add(file);
+              const fileInput = $("#media-file");
+              if (fileInput) {
+                fileInput.files = transfer.files;
+                // Set media type to photo
+                const mediaTypeSelect = $("#media-type");
+                if (mediaTypeSelect) {
+                  mediaTypeSelect.value = "photo";
+                }
+                // Ensure site exists (create draft if needed)
+                if (!siteId) {
+                  const saved = await ensureSiteDraft();
+                  if (!saved) {
+                    showToast("Could not prepare this site for upload.");
+                    return;
+                  }
+                  siteId = saved.id;
+                }
+                // Open media modal
+                openMediaModal("photo", siteId);
+                // Trigger file input change
+                fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+                updateMediaFormUi();
+              }
+              return;
+            } else if (isModel) {
+              setProgress(5, `Uploading 3D model: ${file.name}`);
+              const modelSrc = await MatiAdminUploads.put(
+                `${siteId}/model`,
+                file,
+                {
+                  type: "model3d",
+                  siteId,
+                  onProgress: (pct) => {
+                    if (activeUploadController.signal.aborted) return;
+                    setProgress(
+                      5 + pct * 0.8,
+                      `Uploading 3D model: ${file.name}`,
+                    );
+                  },
+                  signal: activeUploadController.signal,
+                },
+              );
+              if (activeUploadController.signal.aborted) return;
+              setProgress(90, "Saving 3D model to database…");
+              const savedSite = await MatiAdminStore.saveSite({
+                ...site,
+                modelSrc,
+              });
+              if (!syncOk(savedSite)) {
+                showToast(
+                  syncFailedMessage(savedSite, "3D model uploaded locally only."),
+                );
+              } else {
+                showToast("3D model uploaded to database.");
+              }
             }
+
             refreshSiteViews(siteId);
           },
           {
-            title: "Uploading 3D Model...",
-            doneDetail: "Upload complete. Model is now linked.",
+            title: isMap ? "Uploading Site Map..." : (isPhoto ? "Opening Photo Upload..." : "Uploading 3D Model..."),
+            doneDetail: isMap ? "Upload complete. Site map is now linked." : (isPhoto ? "" : "Upload complete. Model is now linked."),
             onCancel: (controller) => {
               controller?.abort();
               hideUploadProgress();
@@ -4437,6 +4780,110 @@
       if (siteId) renderSiteMediaList(siteId);
     },
   };
+
+  function showPhotoCollectionModal(site, photos) {
+    // Create or get the photo collection modal
+    let modal = $("#photoCollectionModal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.id = "photoCollectionModal";
+      modal.className = "admin-modal";
+      modal.innerHTML = `
+        <div class="admin-modal-backdrop" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);"></div>
+        <div class="admin-modal-content" style="max-width: 1400px; height: 85vh; overflow-y: auto; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative;">
+          <button type="button" class="admin-modal-close" data-close-photo-collection style="position: absolute; top: 16px; right: 16px; z-index: 10; font-size: 28px; line-height: 1; color: #6b7280; transition: color 0.2s; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;">&times;</button>
+          <div class="admin-modal-header" style="border-bottom: 1px solid #e5e7eb; padding: 20px 24px; padding-right: 60px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="admin-modal-title" id="photoCollectionTitle" style="font-family: 'Source Sans 3', sans-serif; font-size: 22px; font-weight: 600; color: #1f2937; margin: 0;"></h2>
+            <span id="photoCollectionCount" style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 500; color: #6b7280; margin-right: 50px;"></span>
+          </div>
+          <div class="admin-modal-body" style="padding: 24px;">
+            <div class="photo-collection-grid" id="photoCollectionGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;"></div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    
+    // Set title and count
+    const titleEl = $("#photoCollectionTitle");
+    const countEl = $("#photoCollectionCount");
+    if (titleEl) {
+      titleEl.textContent = escapeHtml(site.name);
+    }
+    if (countEl) {
+      countEl.textContent = `${photos.length} photograph${photos.length !== 1 ? 's' : ''}`;
+    }
+    
+    // Build photo grid with gallery-style design
+    const gridEl = $("#photoCollectionGrid");
+    if (gridEl) {
+      gridEl.innerHTML = photos.map((photo, index) => `
+        <div class="photo-collection-item" data-photo-index="${index}" style="cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; aspect-ratio: 1; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: transform 0.2s, box-shadow 0.2s; background: #f3f4f6;">
+          <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || 'Photograph')}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" />
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent); color: white; font-size: 12px; font-weight: 500; opacity: 0; transition: opacity 0.2s;">
+            ${escapeHtml(photo.title || `Photo ${index + 1}`)}
+          </div>
+        </div>
+      `).join("");
+      
+      // Add hover effects via inline styles
+      gridEl.querySelectorAll('.photo-collection-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          item.querySelector('img').style.transform = 'scale(1.05)';
+          item.querySelector('div:last-child').style.opacity = '1';
+        });
+        item.addEventListener('mouseleave', () => {
+          item.querySelector('img').style.transform = 'scale(1)';
+          item.querySelector('div:last-child').style.opacity = '0';
+        });
+      });
+    }
+    
+    // Store photos for lightbox navigation
+    window.currentLightboxPhotos = photos;
+    window.currentLightboxSiteName = site.name;
+    
+    // Show modal
+    modal.hidden = false;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function showAdminLightbox() {
+    const photos = window.currentLightboxPhotos;
+    if (!photos || !photos[window.currentLightboxIndex]) return;
+    
+    const photo = photos[window.currentLightboxIndex];
+    const box = $("#galLightbox");
+    const media = $("#galLightboxMedia");
+    const title = $("#galLightboxTitle");
+    const meta = $("#galLightboxMeta");
+    const prevBtn = $("#galLightboxPrev");
+    const nextBtn = $("#galLightboxNext");
+    
+    if (!box || !media) return;
+    
+    // Set lightbox content using gallery-style HTML
+    media.innerHTML = `<div class="gal-lightbox-player-wrap"><img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || 'Photograph')}" decoding="async" /></div>`;
+    
+    if (title) {
+      title.textContent = `${escapeHtml(window.currentLightboxSiteName || 'Site')} - Photograph ${window.currentLightboxIndex + 1} of ${photos.length}`;
+    }
+    
+    if (meta) {
+      meta.textContent = photo.title ? escapeHtml(photo.title) : "";
+      meta.hidden = !photo.title;
+    }
+    
+    // Show/hide navigation buttons
+    const showNav = photos.length > 1;
+    if (prevBtn) prevBtn.classList.toggle("is-hidden", !showNav);
+    if (nextBtn) nextBtn.classList.toggle("is-hidden", !showNav);
+    
+    // Activate lightbox using gallery pattern
+    box.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

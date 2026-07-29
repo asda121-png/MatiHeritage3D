@@ -708,7 +708,7 @@
    ══════════════════════════════════════════════════════════ */
 .experience-3d {
   /* Padding is now handled by .full-screen-section */
-  min-height: 150dvh; /* Give this section a much larger, specific height */
+  min-height: 125dvh;
   padding: clamp(4rem, 8vw, 6rem) 0;
   background: #f7f3ed;
   color: #1c1917;
@@ -716,6 +716,13 @@
 }
 
 #portal-3d.experience-section {
+  overflow: visible;
+}
+
+.experience-3d-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
   overflow: visible;
 }
 
