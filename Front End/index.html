@@ -3272,10 +3272,9 @@
       /* 3D Explore Section Redesign: Museum Studio Style */
       .experience-3d {
         background: linear-gradient(
-          165deg,
-          #212121 0%,
-          #1c1c1e 35%,
-          #0c1424 100%
+          180deg,
+          #0B1118 0%,
+          #1A2433 100%
         );
         position: relative;
         overflow: hidden;
@@ -3286,59 +3285,260 @@
         z-index: 2;
       }
 
+      /* Museum spotlight beneath model */
       .experience-3d::before {
         content: "";
         position: absolute;
         inset: 0;
         background: radial-gradient(
-          ellipse 80% 50% at 50% 95%,
-          rgba(180, 210, 255, 0.06) 0%,
-          transparent 50%
+          ellipse 60% 30% at 50% 85%,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0.02) 40%,
+          transparent 70%
         );
-        opacity: 0.8;
         pointer-events: none;
         z-index: 1;
       }
 
+      /* Subtle vignette around edges */
       .experience-3d::after {
         content: "";
         position: absolute;
         inset: 0;
         background: radial-gradient(
           ellipse at center,
-          transparent 40%,
-          rgba(8, 8, 12, 0.85) 100%
+          transparent 50%,
+          rgba(0, 0, 0, 0.4) 100%
         );
         pointer-events: none;
         z-index: 3;
       }
 
-      .experience-3d-stage::before {
+      /* Floor reflection effect */
+      .experience-3d-layout::before {
         content: "";
         position: absolute;
-        top: 50%;
+        bottom: 0;
         left: 50%;
-        width: 80%;
-        height: 80%;
-        transform: translate(-50%, -45%);
+        width: 70%;
+        height: 20%;
+        transform: translateX(-50%);
         background: radial-gradient(
-          ellipse at center,
-          rgba(160, 190, 230, 0.1) 0%,
-          transparent 60%
+          ellipse 80% 100% at 50% 100%,
+          rgba(255, 255, 255, 0.03) 0%,
+          transparent 70%
         );
-        filter: blur(40px);
-        z-index: 0;
         pointer-events: none;
+        z-index: 1;
       }
 
       .experience-3d-copy .experience-eyebrow {
-        color: #a5b4fc;
+        color: #D4AF37;
       }
 
       .experience-3d-copy .experience-3d-title,
       .experience-3d-copy .experience-3d-lead {
-        color: #e0e7ff;
+        color: #f0fdf4;
         text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Forest green accent for buttons and highlights */
+      .experience-3d .heritage-link {
+        color: #228B22;
+        border-color: #228B22;
+      }
+
+      .experience-3d .heritage-link:hover {
+        background: #228B22;
+        color: #ffffff;
+      }
+
+      /* Clean typography layout for monument data */
+      .experience-3d-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .experience-3d-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .experience-3d-info {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 1rem;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .experience-3d-model-name {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: #D4AF37;
+        margin: 0 0 1.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      .experience-3d-description {
+        font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+        line-height: 1.8;
+        color: rgba(240, 253, 244, 0.9);
+        margin: 0 0 2rem;
+      }
+
+      .experience-3d-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+      }
+
+      .experience-3d-detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .experience-3d-detail-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #D4AF37;
+      }
+
+      .experience-3d-detail-value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: rgba(240, 253, 244, 0.85);
+      }
+
+      /* Button styling */
+      .experience-3d-view-btn {
+        position: absolute;
+        right: clamp(4rem, 6vw, 8rem);
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.85rem 2rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #ffffff;
+        background: #228B22;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 30;
+        pointer-events: auto;
+      }
+
+      .experience-3d-view-btn:hover {
+        background: #1a6b1a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 139, 34, 0.3);
+      }
+
+      .experience-3d-back-btn {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #D4AF37;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        z-index: 20;
+      }
+
+      .experience-3d-back-btn:hover {
+        background: rgba(212, 175, 55, 0.2);
+        border-color: #D4AF37;
+      }
+
+      /* Model container styling */
+      .experience-3d-model-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        min-height: 110dvh;
+        z-index: 1;
+      }
+
+      .experience-3d-model {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .experience-3d-model.loaded {
+        opacity: 1;
+      }
+
+      /* Loading indicator styling */
+      .experience-3d-loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        z-index: 5;
+        transition: opacity 0.5s ease;
+      }
+
+      .experience-3d-loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 3px solid rgba(212, 175, 55, 0.2);
+        border-top-color: #D4AF37;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgba(240, 253, 244, 0.9);
+        letter-spacing: 0.05em;
+      }
+
+      .loading-percentage {
+        margin-top: 0.5rem;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #D4AF37;
+        letter-spacing: 0.05em;
       }
     </style>
   </head>
@@ -3951,31 +4151,46 @@
         class="experience-section experience-3d full-screen-section"
       >
         <div class="experience-3d-inner">
-          <div class="experience-3d-layout reveal">
-            <div class="experience-3d-stage">
-              <div
-                id="portal-model-loading"
-                class="experience-3d-loading"
-                aria-live="polite"
-                aria-busy="true"
-              >
-                <div
-                  class="experience-3d-loading-spinner"
-                  aria-hidden="true"
-                ></div>
-                <p class="experience-3d-loading-text">Loading 3D preview…</p>
-                <p
-                  class="experience-3d-loading-percent"
-                  id="portal-model-percent"
-                  aria-hidden="true"
-                >
-                  0%
-                </p>
+          <button class="experience-3d-view-btn" id="view-heritage-btn">View Heritage</button>
+          <div class="experience-3d-content">
+            <div class="experience-3d-info" id="heritage-details">
+              <h2 class="experience-3d-model-name">Pylon Monument</h2>
+              <p class="experience-3d-description">
+                The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the "Point Zero" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city's historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.
+              </p>
+              <div class="experience-3d-details">
+                <div class="experience-3d-detail-item">
+                  <span class="experience-3d-detail-label">Barangay</span>
+                  <span class="experience-3d-detail-value">Central</span>
+                </div>
+                <div class="experience-3d-detail-item">
+                  <span class="experience-3d-detail-label">Category</span>
+                  <span class="experience-3d-detail-value">Central</span>
+                </div>
+                <div class="experience-3d-detail-item">
+                  <span class="experience-3d-detail-label">Ownership</span>
+                  <span class="experience-3d-detail-value">Government Property</span>
+                </div>
+                <div class="experience-3d-detail-item">
+                  <span class="experience-3d-detail-label">Longitude</span>
+                  <span class="experience-3d-detail-value">126° 13′ 0.8004″ E</span>
+                </div>
+                <div class="experience-3d-detail-item">
+                  <span class="experience-3d-detail-label">Latitude</span>
+                  <span class="experience-3d-detail-value">6° 57′ 8.1288″ N</span>
+                </div>
+              </div>
+            </div>
+            <div class="experience-3d-model-container" id="heritage-model" style="display: none;">
+              <div class="experience-3d-loading" id="model-loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading 3D Model</div>
+                <div class="loading-percentage" id="loading-percentage">0%</div>
               </div>
               <model-viewer
                 id="portal-pylon-model"
                 class="experience-3d-model"
-                src="data/Built Heritage/Pylon Monument/Models/Pylon.glb"
+                src="data/Built Heritage/Pylon Monument/Pylon.glb"
                 alt="Pylon Monument 3D model"
                 auto-rotate
                 rotation-per-second="30deg"
@@ -3992,11 +4207,8 @@
                 interaction-prompt="none"
                 aria-label="Live rotating 3D model of Pylon Monument, Mati City"
               ></model-viewer>
-              <div class="experience-3d-hints" aria-hidden="true">
-                <span>↻ Drag to orbit</span>
-                <span>⊕ Scroll to zoom</span>
-              </div>
             </div>
+            <button class="experience-3d-back-btn" id="back-to-details-btn" style="display: none;">← Back to Details</button>
           </div>
         </div>
       </section>
@@ -4177,11 +4389,6 @@
                       class="games-portal-chip arcade-game-font"
                       id="portal-game-players"
                       >12.4K playing</span
-                    >
-                    <span
-                      class="games-portal-chip games-portal-chip--pts arcade-game-font"
-                      id="portal-game-pts"
-                      >5 PTS</span
                     >
                   </div>
                 </div>
@@ -4423,6 +4630,55 @@
     <script src="game-auth-gate.js"></script>
     <script src="auth-logout.js"></script>
     <script>
+      // Toggle between heritage details and 3D model
+      document.addEventListener('DOMContentLoaded', function() {
+        const viewHeritageBtn = document.getElementById('view-heritage-btn');
+        const backToDetailsBtn = document.getElementById('back-to-details-btn');
+        const heritageDetails = document.getElementById('heritage-details');
+        const heritageModel = document.getElementById('heritage-model');
+        const modelViewer = document.getElementById('portal-pylon-model');
+        const loadingIndicator = document.getElementById('model-loading');
+        const loadingPercentage = document.getElementById('loading-percentage');
+
+        if (viewHeritageBtn && backToDetailsBtn && heritageDetails && heritageModel) {
+          viewHeritageBtn.addEventListener('click', function() {
+            heritageDetails.style.display = 'none';
+            heritageModel.style.display = 'flex';
+            backToDetailsBtn.style.display = 'block';
+            loadingIndicator.classList.remove('hidden');
+            loadingPercentage.textContent = '0%';
+            modelViewer.classList.remove('loaded');
+          });
+
+          backToDetailsBtn.addEventListener('click', function() {
+            heritageModel.style.display = 'none';
+            heritageDetails.style.display = 'block';
+            backToDetailsBtn.style.display = 'none';
+            loadingIndicator.classList.add('hidden');
+            modelViewer.classList.remove('loaded');
+          });
+        }
+
+        // Track model loading progress
+        if (modelViewer && loadingIndicator && loadingPercentage) {
+          modelViewer.addEventListener('progress', function(event) {
+            const progress = event.detail.totalProgress;
+            const percentage = Math.round(progress * 100);
+            loadingPercentage.textContent = percentage + '%';
+          });
+
+          modelViewer.addEventListener('load', function() {
+            loadingIndicator.classList.add('hidden');
+            modelViewer.classList.add('loaded');
+          });
+
+          modelViewer.addEventListener('error', function() {
+            loadingPercentage.textContent = 'Error';
+            loadingIndicator.classList.add('hidden');
+          });
+        }
+      });
+
       fetch("header.html")
         .then((res) => res.text())
         .then(async (data) => {
@@ -5049,7 +5305,6 @@
         const title = document.getElementById("portal-game-title");
         const desc = document.getElementById("portal-game-desc");
         const players = document.getElementById("portal-game-players");
-        const pts = document.getElementById("portal-game-pts");
         const play = document.getElementById("portal-game-play");
         const rack = document.getElementById("portal-game-rack");
         const prevBtn = document.getElementById("portal-game-prev");
@@ -5062,6 +5317,72 @@
           return previewRoot.querySelector("[data-game-launch]");
         }
 
+        function formatPlayCount(count) {
+          if (count >= 1000) {
+            return (count / 1000).toFixed(1) + 'K Plays';
+          }
+          return count.toLocaleString() + ' Plays';
+        }
+
+        async function fetchGamePlayCounts() {
+          try {
+            if (typeof window.supabase === 'undefined') {
+              console.warn('Supabase client not available, using default play counts');
+              return {};
+            }
+            
+            const { data, error } = await window.supabase
+              .from('game_play_counts')
+              .select('game_id, play_count');
+            
+            if (error) {
+              console.error('Error fetching play counts:', error);
+              return {};
+            }
+            
+            const playCounts = {};
+            data.forEach(row => {
+              playCounts[row.game_id] = row.play_count;
+            });
+            return playCounts;
+          } catch (err) {
+            console.error('Error fetching play counts:', err);
+            return {};
+          }
+        }
+
+        async function incrementGamePlayCount(gameId, gameName) {
+          try {
+            if (typeof window.supabase === 'undefined') {
+              console.warn('Supabase client not available, cannot increment play count');
+              return;
+            }
+            
+            const { error } = await window.supabase.rpc('increment_game_play_count', {
+              p_game_id: gameId,
+              p_game_name: gameName
+            });
+            
+            if (error) {
+              console.error('Error incrementing play count:', error);
+            } else {
+              // Update local cache
+              gamePlayCounts[gameId] = (gamePlayCounts[gameId] || 0) + 1;
+              // Refresh display if this game is currently selected
+              const currentGame = games[portalGameIdx];
+              const currentGameId = currentGame.id || getGameIdFromTitle(currentGame.title);
+              if (currentGameId === gameId && players) {
+                players.textContent = formatPlayCount(gamePlayCounts[gameId]);
+              }
+            }
+          } catch (err) {
+            console.error('Error incrementing play count:', err);
+          }
+        }
+
+        // Make increment function globally available for game pages
+        window.incrementGamePlayCount = incrementGamePlayCount;
+
         function bindPortalGameLaunch() {
           const game = games[portalGameIdx];
           const launchEl = getLaunchPreviewElement();
@@ -5073,11 +5394,17 @@
             launchEl.setAttribute("aria-label", `Open ${game.title}`);
             launchEl.onclick = (event) => {
               event.preventDefault();
+              // Increment play count when game is launched
+              const gameId = game.id || getGameIdFromTitle(game.title);
+              incrementGamePlayCount(gameId, game.title);
               launchPortalGame(game, launchEl);
             };
             launchEl.onkeydown = (event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
+                // Increment play count when game is launched
+                const gameId = game.id || getGameIdFromTitle(game.title);
+                incrementGamePlayCount(gameId, game.title);
                 launchPortalGame(game, launchEl);
               }
             };
@@ -5087,10 +5414,15 @@
             play.href = game.url;
             play.onclick = (event) => {
               event.preventDefault();
+              // Increment play count when game is launched
+              const gameId = game.id || getGameIdFromTitle(game.title);
+              incrementGamePlayCount(gameId, game.title);
               launchPortalGame(game, launchEl || previewRoot);
             };
           }
         }
+
+        let gamePlayCounts = {};
 
         function renderPortalFeaturedPreview() {
           const game = games[portalGameIdx];
@@ -5112,14 +5444,31 @@
 
           if (title) title.textContent = game.title;
           if (desc) desc.textContent = game.desc;
-          if (players) players.textContent = game.players;
-          if (pts) pts.textContent = game.pts;
+          
+          // Update play count display
+          if (players) {
+            const gameId = game.id || getGameIdFromTitle(game.title);
+            const playCount = gamePlayCounts[gameId] || 0;
+            players.textContent = formatPlayCount(playCount);
+          }
 
           rack.querySelectorAll(".games-rack-item").forEach((item, i) => {
             const isActive = i === portalGameIdx;
             item.classList.toggle("is-active", isActive);
             item.setAttribute("aria-current", isActive ? "true" : "false");
           });
+        }
+
+        function getGameIdFromTitle(title) {
+          // Map game titles to database IDs
+          const titleMap = {
+            'Mati Heritage Trivia Challenge': 'trivia',
+            'Matching Pairs': 'memory',
+            'Spot the Difference': 'observation',
+            'Slide Puzzle': 'puzzle',
+            'True or False Sprint': 'sprint'
+          };
+          return titleMap[title] || title.toLowerCase().replace(/\s+/g, '_');
         }
 
         function setPortalGameIndex(nextIdx) {
@@ -5137,17 +5486,11 @@
           item.setAttribute("aria-current", i === 0 ? "true" : "false");
           item.innerHTML = `
             <span class="games-rack-num arcade-game-font">${String(i + 1).padStart(2, "0")}</span>
-            <span class="games-rack-thumb"></span>
             <span class="games-rack-copy">
               <span class="games-rack-genre arcade-game-font">${game.cardGenre || game.genre}</span>
-              <span class="games-rack-title genre-game-font">${game.cardTitle || game.title}</span>
+              <span class="games-rack-title genre-game-font">${game.title}</span>
             </span>
             <span class="games-rack-arrow" aria-hidden="true">→</span>`;
-
-          const thumb = item.querySelector(".games-rack-thumb");
-          if (thumb) {
-            thumb.innerHTML = previewApi.buildPortalSidePreview(game);
-          }
 
           item.addEventListener("click", () => setPortalGameIndex(i));
           rack.appendChild(item);
@@ -5182,7 +5525,14 @@
           previewApi.schedulePreviewFit(previewRoot);
         });
 
-        renderPortalFeaturedPreview();
+        // Fetch play counts from database
+        fetchGamePlayCounts().then(counts => {
+          gamePlayCounts = counts;
+          renderPortalFeaturedPreview();
+        }).catch(() => {
+          // Fallback to default display if fetch fails
+          renderPortalFeaturedPreview();
+        });
       }
 
       const gallerySection = document.getElementById("portal-gallery");
