@@ -249,7 +249,7 @@ function heritageBarangayLabel(id) {
 function createHeritagePhotoIcon(site, size = 40, bounceIndex = 0) {
   const imgSrc = site.image ? encodeURI(site.image) : "";
   const half = size / 2;
-  const bounceDelay = ((bounceIndex % 12) * 0.14).toFixed(2);
+  const bounceDelay = 0; // All markers bounce in sync
   const markerInner = imgSrc
     ? `<img src="${imgSrc}" alt="${site.name}" loading="lazy" />`
     : `<span aria-hidden="true" style="font-size:0.62rem;font-weight:800;letter-spacing:0.04em">BH</span>`;

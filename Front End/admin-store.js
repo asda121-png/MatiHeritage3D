@@ -486,6 +486,11 @@ const MatiAdminStore = (() => {
     if (lat !== null) payload.lat = lat;
     if (lng !== null) payload.lng = lng;
 
+    // Remove from deleted list if we're saving this site again
+    if (store.deletedSiteIds.includes(payload.id)) {
+      store.deletedSiteIds = store.deletedSiteIds.filter((id) => id !== payload.id);
+    }
+
     if (isNew && !store.addedSites.some((s) => s.id === payload.id)) {
       store.addedSites.push(payload);
     } else if (isNew) {

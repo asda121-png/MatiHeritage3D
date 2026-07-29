@@ -861,7 +861,7 @@
           class="admin-btn admin-upload-progress__cancel"
           hidden
         >
-          Cancel Upload
+          Cancel
         </button>
       </div>
     </div>
@@ -1019,7 +1019,6 @@
             ></div>
 
             <div class="admin-form-section admin-form-section--card">
-              <h3 class="admin-form-section__title">Site details</h3>
               <div class="admin-field">
                 <label class="admin-label" for="site-name">Site name</label>
                 <input
@@ -1143,18 +1142,19 @@
                 </div>
               </div>
               <div id="site-media-list"></div>
+              <button
+                type="button"
+                id="btn-delete-site"
+                class="admin-btn admin-btn--danger"
+                style="margin-top: 16px; width: 100%;"
+                hidden
+              >
+                Remove Site
+              </button>
             </div>
           </div>
 
           <div class="admin-modal__actions">
-            <button
-              type="button"
-              id="btn-delete-site"
-              class="admin-btn admin-btn--danger"
-              hidden
-            >
-              Delete site
-            </button>
             <button
               type="button"
               class="admin-btn admin-btn--ghost"

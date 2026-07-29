@@ -499,16 +499,18 @@
   }
 
   async function withUploadProgress(task, options = {}) {
-    showUploadProgress({
-      title: options.title || "Uploading…",
-      detail: options.detail || "Starting…",
-      onCancel:
-        options.onCancel ||
-        ((controller) => {
+    const useDefaultCancel = options.onCancel !== undefined && options.onCancel !== null;
+    const cancelHandler = useDefaultCancel 
+      ? options.onCancel 
+      : ((controller) => {
           controller?.abort();
           hideUploadProgress();
           showToast("Upload cancelled.");
-        }),
+        });
+    showUploadProgress({
+      title: options.title || "Uploading…",
+      detail: options.detail || "Starting…",
+      onCancel: useDefaultCancel ? cancelHandler : null,
       percent: options.percent || 0,
     });
     try {
@@ -584,13 +586,14 @@
         return result;
       },
       {
-        title: "Deleting…",
+        title: "Removing…",
         detail: "Processing…",
+        onCancel: null,
         doneTitle: count === 1 ? "Complete deleted" : "Complete deleted",
         doneDetail:
           count === 1
-            ? `${noun.charAt(0).toUpperCase() + noun.slice(1)} removed from the gallery.`
-            : `${count} ${noun} removed from the gallery.`,
+            ? "Heritage site removed successfully."
+            : `${count} heritage sites removed successfully.`,
         doneDelay: 1100,
       },
     );
@@ -1071,7 +1074,7 @@
     const deleteSiteBtn = $("#btn-delete-site");
 
     if (deleteSiteBtn) {
-      deleteSiteBtn.hidden = builtForm || isNewSite;
+      deleteSiteBtn.hidden = isNewSite;
     }
   }
 
@@ -1931,7 +1934,7 @@
   }
 
   function heritageCardActionLabel(site) {
-    return MatiAdminStore.siteHasAdminEdits(site.id) ? "Update" : "Manage";
+    return "Manage";
   }
 
   function siteFormSubmitLabel(siteId) {
@@ -1940,8 +1943,7 @@
   }
 
   function siteFormModalTitle(siteId) {
-    if (!siteId || MatiAdminStore.isDraftSiteId(siteId)) return "Add site";
-    return "Manage Site";
+    return "";
   }
 
   function syncSiteFormSubmitLabel(siteId) {
@@ -2713,10 +2715,12 @@
       return;
     }
 
-    // Show update modal
-    showUpdateModal("Updating...");
-
     const startTime = Date.now();
+    const isNewSite = !$("#site-id")?.value?.trim() || MatiAdminStore.isDraftSiteId($("#site-id").value.trim());
+
+    // Show update modal
+    const progressTitle = isNewSite ? "Adding site…" : "Updating site…";
+    showUpdateModal(progressTitle);
 
     try {
       let siteId = $("#site-id").value.trim();
@@ -2749,13 +2753,43 @@
       const minDisplayTime = 1500;
       const remainingDelay = Math.max(0, minDisplayTime - elapsed);
 
-      // Wait for minimum display time then show success
+      // Wait for minimum display time then show success and close modal
       setTimeout(() => {
         showUpdateModal("SUCCESS");
         
-        // Hide success after 1 second
+        // Show success toast based on action
+        const successMessage = isNewSite 
+          ? "Heritage site added successfully." 
+          : "Heritage site updated successfully.";
+        showToast(successMessage);
+        
+        // Hide success modal and close site modal after 1 second
         setTimeout(() => {
           hideUpdateModal();
+          
+          // Close site modal with smooth animation
+          const siteModal = $("#site-modal");
+          if (siteModal) {
+            siteModal.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            siteModal.style.opacity = "0";
+            siteModal.style.transform = "scale(0.95)";
+            
+            setTimeout(() => {
+              siteModal.hidden = true;
+              siteModal.classList.remove("active");
+              siteModal.style.opacity = "";
+              siteModal.style.transform = "";
+              document.body.style.overflow = "";
+              document.body.style.overflowY = "auto";
+              
+              // Reset form state
+              $("#site-form")?.reset();
+              $("#site-id").value = "";
+              editingSiteId = null;
+              syncBuiltDeleteUi();
+              syncSiteFormSubmitLabel("");
+            }, 300);
+          }
         }, 1000);
       }, remainingDelay);
 
@@ -2831,6 +2865,102 @@
       document.body.style.overflow = "";
       document.body.style.overflowY = "auto";
     }
+  }
+
+  function showRemoveConfirmation(siteName) {
+    return new Promise((resolve) => {
+      let modal = $("#removeConfirmationModal");
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "removeConfirmationModal";
+        modal.className = "admin-modal";
+        modal.innerHTML = `
+          <div class="admin-modal-backdrop" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"></div>
+          <div class="admin-modal-content" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 48px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-width: 480px; width: 90%; animation: modalFadeIn 0.3s ease-out;">
+            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 32px;">
+              <div style="width: 64px; height: 64px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <h3 style="font-family: 'Source Sans 3', sans-serif; font-size: 24px; font-weight: 700; color: #1f2937; margin: 0 0 12px 0; text-align: center;">Remove Heritage Site</h3>
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 400; color: #6b7280; margin: 0; text-align: center; line-height: 1.6; max-width: 400px;">
+                Are you sure you want to remove "<span id="removeSiteName" style="color: #1f2937; font-weight: 600;"></span>"? This action cannot be undone.
+              </p>
+            </div>
+            <div style="display: flex; gap: 16px; justify-content: center;">
+              <button type="button" id="btn-keep-site" style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 500; color: #6b7280; background: white; border: 1px solid #d1d5db; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-width: 180px;">
+                No, Keep it
+              </button>
+              <button type="button" id="btn-confirm-remove" style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 500; color: white; background: #dc2626; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-width: 180px;">
+                Yes, Remove it
+              </button>
+            </div>
+          </div>
+          <style>
+            @keyframes modalFadeIn {
+              from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+              to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+            #btn-keep-site:hover {
+              background: #f9fafb;
+              border-color: #9ca3af;
+            }
+            #btn-confirm-remove:hover {
+              background: #b91c1c;
+            }
+            @media (max-width: 480px) {
+              .admin-modal-content {
+                padding: 32px 24px !important;
+              }
+              #btn-keep-site, #btn-confirm-remove {
+                min-width: 140px !important;
+                padding: 10px 16px !important;
+              }
+            }
+          </style>
+        `;
+        document.body.appendChild(modal);
+      }
+      
+      const siteNameEl = $("#removeSiteName");
+      if (siteNameEl) {
+        siteNameEl.textContent = siteName;
+      }
+      
+      modal.hidden = false;
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+      
+      const keepBtn = $("#btn-keep-site");
+      const removeBtn = $("#btn-confirm-remove");
+      
+      const cleanup = () => {
+        modal.hidden = true;
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        document.body.style.overflowY = "auto";
+        keepBtn.removeEventListener("click", onKeep);
+        removeBtn.removeEventListener("click", onRemove);
+      };
+      
+      const onKeep = (e) => {
+        e?.stopPropagation();
+        cleanup();
+        resolve(false);
+      };
+      
+      const onRemove = (e) => {
+        e?.stopPropagation();
+        cleanup();
+        resolve(true);
+      };
+      
+      keepBtn.addEventListener("click", onKeep);
+      removeBtn.addEventListener("click", onRemove);
+    });
   }
 
   async function saveMediaForm(e) {
@@ -4403,12 +4533,13 @@
     $("#btn-delete-site")?.addEventListener("click", async () => {
       const id = $("#site-id").value.trim();
       if (!id) return;
-      const ok = await confirmAction({
-        title: "Delete this site?",
-        message: "It will be hidden from the catalog for visitors.",
-        confirmLabel: "Delete site",
-      });
-      if (!ok) return;
+      
+      const site = MatiAdminStore.getSiteById(id);
+      const siteName = site?.name || "this site";
+      
+      const confirmed = await showRemoveConfirmation(siteName);
+      if (!confirmed) return;
+      
       try {
         await runDeleteProgress(() => MatiAdminStore.deleteSite(id), {
           noun: "site",
