@@ -1,6 +1,7 @@
 const MatiAuth = (() => {
   const USERS_KEY = "matiHeritageUsers";
   const SESSION_KEY = "matiHeritageSession";
+  const SESSION_KEY_REMEMBER = "matiHeritageSessionRemember";
 
   function readUsers() {
     try {
@@ -25,27 +26,48 @@ const MatiAuth = (() => {
 
   function getSession() {
     try {
+      // First check localStorage (remember me)
       const raw = localStorage.getItem(SESSION_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (raw) {
+        const session = JSON.parse(raw);
+        session.remember = true;
+        return session;
+      }
+      // Then check sessionStorage (don't remember me)
+      const rawSession = sessionStorage.getItem(SESSION_KEY);
+      if (rawSession) {
+        const session = JSON.parse(rawSession);
+        session.remember = false;
+        return session;
+      }
+      return null;
     } catch {
       return null;
     }
   }
 
-  function setSession(user) {
+  function setSession(user, remember = true) {
     const session = {
       username: user.username,
-      displayName: user.displayName,
       email: user.email,
       avatarUrl: user.avatarUrl,
       loggedInAt: new Date().toISOString(),
     };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    const sessionJson = JSON.stringify(session);
+    
+    if (remember) {
+      localStorage.setItem(SESSION_KEY, sessionJson);
+      sessionStorage.removeItem(SESSION_KEY);
+    } else {
+      sessionStorage.setItem(SESSION_KEY, sessionJson);
+      localStorage.removeItem(SESSION_KEY);
+    }
     return session;
   }
 
   function clearSession() {
     localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
   }
 
   function usesSupabaseAuth() {
@@ -89,6 +111,7 @@ const MatiAuth = (() => {
   }
 
   async function register(payload) {
+    const remember = payload.remember !== false; // Default to true
     if (usesSupabaseAuth()) {
       const result = await MatiSupabaseAuth.register(payload);
       if (!result) {
@@ -99,7 +122,7 @@ const MatiAuth = (() => {
         };
       }
       if (result.ok && result.user) {
-        setSession(result.user);
+        setSession(result.user, remember);
         if (localStorage.getItem("totalHeritagePoints") === null) {
           localStorage.setItem("totalHeritagePoints", "0");
         }
@@ -111,11 +134,11 @@ const MatiAuth = (() => {
       return result;
     }
 
-    return registerLocal(payload);
+    return registerLocal(payload, remember);
   }
 
-  async function registerLocal({ displayName, username, email, password }) {
-    if (!displayName || !username || !email || !password) {
+  async function registerLocal({ username, email, password }, remember = true) {
+    if (!username || !email || !password) {
       return { ok: false, message: "Please fill in all fields." };
     }
 
@@ -153,7 +176,6 @@ const MatiAuth = (() => {
     const { salt, hash } = await MatiPasswordHash.createDigest(password);
 
     const newUser = {
-      displayName: displayName.trim(),
       username: cleanUsername,
       email: cleanEmail,
       passwordSalt: salt,
@@ -163,7 +185,7 @@ const MatiAuth = (() => {
 
     users.push(newUser);
     writeUsers(users);
-    setSession(newUser);
+    setSession(newUser, remember);
 
     if (localStorage.getItem("totalHeritagePoints") === null) {
       localStorage.setItem("totalHeritagePoints", "0");
@@ -175,7 +197,7 @@ const MatiAuth = (() => {
     return { ok: true, user: newUser };
   }
 
-  async function login(identifier, password) {
+  async function login(identifier, password, remember = true) {
     if (usesSupabaseAuth()) {
       const result = await MatiSupabaseAuth.login(identifier, password);
       if (!result) {
@@ -185,7 +207,7 @@ const MatiAuth = (() => {
         };
       }
       if (result.ok && result.user) {
-        setSession(result.user);
+        setSession(result.user, remember);
         if (localStorage.getItem("totalHeritagePoints") === null) {
           localStorage.setItem("totalHeritagePoints", "0");
         }
@@ -197,10 +219,10 @@ const MatiAuth = (() => {
       return result;
     }
 
-    return loginLocal(identifier, password);
+    return loginLocal(identifier, password, remember);
   }
 
-  async function loginLocal(identifier, password) {
+  async function loginLocal(identifier, password, remember = true) {
     if (!identifier || !password) {
       return {
         ok: false,
@@ -240,7 +262,7 @@ const MatiAuth = (() => {
       return { ok: false, message: "Invalid email/username or password." };
     }
 
-    setSession(user);
+    setSession(user, remember);
 
     if (localStorage.getItem("totalHeritagePoints") === null) {
       localStorage.setItem("totalHeritagePoints", "0");
@@ -257,7 +279,7 @@ const MatiAuth = (() => {
     if (usesSupabaseAuth()) {
       const cloud = await MatiSupabaseAuth.getSession();
       if (cloud) {
-        setSession(cloud);
+        setSession(cloud, true); // Supabase sessions are always remembered
         return cloud;
       }
       clearSession();

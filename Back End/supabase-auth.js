@@ -90,14 +90,14 @@ const MatiSupabaseAuth = (() => {
     return { ok: true };
   }
 
-  async function register({ displayName, username, email, password }) {
+  async function register({ username, email, password }) {
     if (!enabled()) return null;
 
     const sb = client();
     const cleanUsername = normalizeUsername(username);
     const cleanEmail = normalizeEmail(email);
 
-    if (!displayName?.trim() || !cleanUsername || !cleanEmail || !password) {
+    if (!cleanUsername || !cleanEmail || !password) {
       return { ok: false, message: "Please fill in all fields." };
     }
 
@@ -133,7 +133,6 @@ const MatiSupabaseAuth = (() => {
       options: {
         data: {
           username: cleanUsername,
-          display_name: displayName.trim(),
         },
       },
     });
@@ -165,7 +164,6 @@ const MatiSupabaseAuth = (() => {
     return {
       ok: true,
       user: {
-        displayName: displayName.trim(),
         username: cleanUsername,
         email: cleanEmail,
       },
@@ -182,13 +180,17 @@ const MatiSupabaseAuth = (() => {
       : null;
 
     if (!email) {
+      console.log("Looking up username:", identifier.trim().toLowerCase());
       const { data: profile, error: profileError } = await sb
         .from("profiles")
-        .select("email, username, display_name")
+        .select("email, username")
         .eq("username", identifier.trim().toLowerCase())
         .maybeSingle();
 
+      console.log("Profile lookup result:", { profile, profileError });
+
       if (profileError || !profile?.email) {
+        console.error("Profile lookup failed:", profileError);
         return { ok: false, message: "Invalid email/username or password." };
       }
 
@@ -198,7 +200,8 @@ const MatiSupabaseAuth = (() => {
       });
 
       if (error) {
-        return { ok: false, message: "Invalid email/username or password." };
+        console.error("Supabase login error:", error);
+        return { ok: false, message: friendlyAuthError(error) };
       }
 
       await storePasswordDigest(password);
@@ -207,7 +210,6 @@ const MatiSupabaseAuth = (() => {
         ok: true,
         user: {
           username: profile.username,
-          displayName: profile.display_name,
           email: profile.email,
         },
         session: data.session,
@@ -227,7 +229,7 @@ const MatiSupabaseAuth = (() => {
 
     const { data: profile } = await sb
       .from("profiles")
-      .select("username, display_name, email")
+      .select("username, email")
       .eq("email", email)
       .maybeSingle();
 
@@ -236,8 +238,6 @@ const MatiSupabaseAuth = (() => {
       ok: true,
       user: {
         username: profile?.username || meta.username || email.split("@")[0],
-        displayName:
-          profile?.display_name || meta.display_name || meta.username || email,
         email: profile?.email || email,
       },
       session: data.session,
@@ -260,7 +260,7 @@ const MatiSupabaseAuth = (() => {
 
     const { data: profile } = await sb
       .from("profiles")
-      .select("username, display_name, email, avatar_url")
+      .select("username, email, avatar_url")
       .eq("id", session.user.id)
       .maybeSingle();
 
@@ -268,8 +268,6 @@ const MatiSupabaseAuth = (() => {
     return {
       username:
         profile?.username || meta.username || session.user.email?.split("@")[0],
-      displayName:
-        profile?.display_name || meta.display_name || meta.username || "Player",
       email: profile?.email || session.user.email,
       avatarUrl: profile?.avatar_url || null,
       loggedInAt: session.user.last_sign_in_at || new Date().toISOString(),
@@ -731,6 +729,32 @@ const MatiSupabaseAuth = (() => {
     };
   }
 
+  async function getAllUsers() {
+    if (!enabled()) return null;
+
+    const sb = client();
+    if (!sb) return null;
+
+    const { data, error } = await sb
+      .from("profiles")
+      .select("username, email, created_at, heritage_points, avatar_url")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.warn("Failed to fetch users from Supabase:", error);
+      return null;
+    }
+
+    return (data || []).map((profile) => ({
+      displayName: profile.username || "User",
+      username: profile.username || "",
+      email: profile.email || "",
+      createdAt: profile.created_at || new Date().toISOString(),
+      points: profile.heritage_points || 0,
+      avatarUrl: profile.avatar_url || null,
+    }));
+  }
+
   return {
     enabled,
     register,
@@ -753,5 +777,6 @@ const MatiSupabaseAuth = (() => {
     googleSignInEnabled,
     signInWithGoogle,
     completeOAuthRedirect,
+    getAllUsers,
   };
 })();

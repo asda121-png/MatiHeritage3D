@@ -1508,7 +1508,7 @@
     }
 
     if (view === "dashboard") {
-      if (options.skipDashboardRefresh) renderDashboard();
+      if (options.skipDashboardRefresh) void renderDashboard();
       else void refreshDashboardFromSupabase();
     }
     if (view === "location") renderLocation();
@@ -1522,7 +1522,7 @@
       ensureLeaderboardLive();
       void renderLeaderboard({ force: true });
     }
-    if (view === "reports") renderReport();
+    if (view === "reports") void renderReport();
   }
 
   function openModal(id) {
@@ -1678,12 +1678,12 @@
     if (typeof MatiAdminStore?.initFromSupabase === "function") {
       await MatiAdminStore.initFromSupabase();
     }
-    renderDashboard();
+    await renderDashboard();
   }
 
-  function renderDashboard() {
+  async function renderDashboard() {
     const collections = MatiAdminStore.getDashboardCollectionSummary();
-    const community = MatiAdminStore.getDashboardCommunityStats();
+    const community = await MatiAdminStore.getDashboardCommunityStats();
     const heritageCards = $("#dashboard-heritage-cards");
     const emptyDb = $("#dashboard-supabase-empty");
     const tbody = $("#dashboard-summary-body");
@@ -1715,6 +1715,11 @@
       const active = community.activeSessions ?? 0;
       const sessions = community.uniqueSessions ?? 0;
       pageVisitsTrend.textContent = `${active} active now · ${sessions} unique sessions`;
+    }
+
+    // Refresh analytics dashboard
+    if (typeof MatiAnalytics !== "undefined" && MatiAnalytics.refreshCharts) {
+      MatiAnalytics.refreshCharts();
     }
 
     if (heritageCards) {
@@ -2221,7 +2226,7 @@
 
   function refreshActiveAdminViews() {
     const view = activeAdminView();
-    if (view === "dashboard") renderDashboard();
+    if (view === "dashboard") void renderDashboard();
     if (view === "heritage") renderHeritage();
     if (view === "location" && typeof MatiAdminMap !== "undefined") {
       void MatiAdminMap.refresh?.();
@@ -2248,7 +2253,7 @@
     visitorLiveStarted = true;
     MatiAdminStore.subscribeVisitorAnalytics(() => {
       const view = activeAdminView();
-      if (view === "dashboard") renderDashboard();
+      if (view === "dashboard") void renderDashboard();
     });
   }
 
@@ -2306,6 +2311,7 @@
               height="64"
               loading="lazy"
               decoding="async"
+              onerror="this.src='data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22 fill=%22%23ccc%22%3E%3Cpath d=%22M18 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 4c-5.33 0-16 2.67-16 8v2h32v-2c0-5.33-10.67-8-16-8z%22/%3E%3C/svg%3E'"
             />
           </div>
         </div>
@@ -2361,6 +2367,7 @@
               height="36"
               loading="lazy"
               decoding="async"
+              onerror="this.src='data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22 fill=%22%23ccc%22%3E%3Cpath d=%22M18 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 4c-5.33 0-16 2.67-16 8v2h32v-2c0-5.33-10.67-8-16-8z%22/%3E%3C/svg%3E'"
             />
             <span class="admin-table__name admin-table__name--lb">${escapeHtml(row.username)}</span>
           </div>
@@ -2701,7 +2708,7 @@
   function refreshSiteViews(siteId) {
     renderSiteMediaList(siteId);
     renderHeritage();
-    renderDashboard();
+    void renderDashboard();
     renderLocation();
     window.MatiGalleryEmbed?.refresh?.();
   }
@@ -4021,12 +4028,11 @@
     users: {
       filename: "registered-users.csv",
       headers: [
-        { key: "displayName", label: "Display name" },
         { key: "username", label: "Username" },
         { key: "email", label: "Email" },
         { key: "createdAt", label: "Registered" },
       ],
-      rows: () => MatiAdminStore.getRegisteredUsers(),
+      rows: async () => await MatiAdminStore.getRegisteredUsers(),
     },
     leaderboard: {
       filename: "leaderboard-records.csv",
@@ -4035,11 +4041,12 @@
         { key: "username", label: "Username" },
         { key: "points", label: "Points" },
       ],
-      rows: () =>
-        MatiAdminStore.getLeaderboard().map((row, i) => ({
+      rows: async () =>
+        (await MatiAdminStore.getLeaderboard()).map((row, i) => ({
           rank: i + 1,
           username: row.username,
           points: row.points,
+          avatarUrl: row.avatarUrl,
         })),
     },
   };
@@ -4058,12 +4065,12 @@
     }
 
     syncReportHeader();
-    renderReportSummary();
+    await renderReportSummary();
 
     const thead = $("#report-thead");
     const tbody = $("#report-tbody");
     const meta = $("#report-meta");
-    const rows = cfg.rows();
+    const rows = await cfg.rows();
 
     if (meta) {
       meta.textContent = `${rows.length} record${rows.length !== 1 ? "s" : ""}`;
@@ -4104,11 +4111,11 @@
       .join("");
   }
 
-  function renderReportSummary() {
+  async function renderReportSummary() {
     const summaryEl = $("#report-summary");
     if (!summaryEl) return;
 
-    const summary = MatiAdminStore.buildLciSummary();
+    const summary = await MatiAdminStore.buildLciSummary();
     summaryEl.innerHTML = `
       <div class="admin-reports__stat">
         <span class="admin-reports__stat-value">${summary.built}</span>
@@ -4547,7 +4554,7 @@
         });
         closeAllModals();
         renderHeritage();
-        renderDashboard();
+        void renderDashboard();
         renderLocation();
       } catch (error) {
         showToast(error?.message || "Could not delete site.");
@@ -4906,7 +4913,7 @@
       return runDeleteProgress(task, options);
     },
     onMediaDeleted(siteId) {
-      renderDashboard();
+      void renderDashboard();
       renderHeritage();
       if (siteId) renderSiteMediaList(siteId);
     },

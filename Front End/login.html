@@ -487,7 +487,8 @@
           }
 
           setLoading(true);
-          const result = await MatiAuth.login(identifier, password);
+          const rememberMe = document.getElementById("login-remember")?.checked ?? true;
+          const result = await MatiAuth.login(identifier, password, rememberMe);
           setLoading(false);
 
           if (!result.ok) {
