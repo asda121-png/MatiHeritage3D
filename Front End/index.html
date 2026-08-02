@@ -39,6 +39,8 @@
       *::before,
       *::after {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
       html {
@@ -46,6 +48,8 @@
         font-size: 16px;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
+        margin: 0;
+        padding: 0;
       }
 
       body {
@@ -53,9 +57,20 @@
         color: var(--slate);
         background: var(--bg-site);
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+      }
+
+      /* Reset for gallery section to ensure full height */
+      .gallery-cinematic,
+      .gallery-scene,
+      .gallery-scene--opening {
+        margin: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
       }
 
       /* Performance optimizations */
@@ -224,6 +239,8 @@
       .main-content {
         position: relative;
         z-index: 2;
+        margin: 0;
+        padding: 0;
       }
 
       /* ── Hero — Premium cinematic landing ── */
@@ -1321,6 +1338,7 @@
         );
         padding: 1.05rem 0;
         border-block: 1px solid rgba(255, 255, 255, 0.08);
+        margin: 0;
       }
 
       .marquee-strip::before,
@@ -2443,19 +2461,16 @@
 
       .map-intro-overlay {
         position: absolute;
-        inset: 0;
+        bottom: clamp(1.5rem, 4vw, 2.5rem);
+        left: clamp(1.5rem, 4vw, 2.5rem);
+        right: auto;
+        top: auto;
         z-index: 450;
         display: flex;
         align-items: flex-end;
         justify-content: flex-start;
-        padding: clamp(1.25rem, 3vw, 2rem);
+        padding: 0;
         pointer-events: none;
-        background: linear-gradient(
-          0deg,
-          rgba(12, 26, 20, 0.28) 0%,
-          rgba(12, 26, 20, 0.08) 28%,
-          transparent 55%
-        );
         transition:
           opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -2474,16 +2489,16 @@
       .map-intro-overlay__content {
         position: relative;
         text-align: left;
-        padding: 1.35rem 1.5rem 1.35rem 1.4rem;
-        max-width: min(22rem, calc(100% - 1rem));
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 0.75rem;
-        border: 1px solid rgba(255, 255, 255, 0.65);
+        padding: 1.5rem;
+        max-width: min(24rem, calc(100% - 1rem));
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-radius: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.8);
         box-shadow:
-          0 20px 50px rgba(15, 23, 42, 0.14),
-          inset 0 1px 0 rgba(255, 255, 255, 0.98);
+          0 25px 50px -12px rgba(15, 23, 42, 0.12),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
         transition:
           transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
           opacity 0.5s ease;
@@ -2493,119 +2508,86 @@
         content: "";
         position: absolute;
         left: 0;
-        top: 0.85rem;
-        bottom: 0.85rem;
-        width: 3px;
-        border-radius: 0 2px 2px 0;
-        background: linear-gradient(
-          180deg,
-          var(--forest),
-          var(--amber-dark) 50%,
-          var(--sky)
-        );
+        top: 1rem;
+        bottom: 1rem;
+        width: 4px;
+        border-radius: 0 4px 4px 0;
+        background: linear-gradient(180deg, #047857, #065f46);
       }
 
-      .map-intro-overlay__eyebrow {
+      .map-intro-overlay__label {
         display: flex;
         align-items: center;
-        gap: 0.55rem;
-        font-size: 0.625rem;
+        gap: 0.5rem;
+        font-size: 0.6875rem;
         font-weight: 700;
-        letter-spacing: 0.22em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--forest-dark);
-        margin-bottom: 0.55rem;
-        padding-left: 0.15rem;
+        color: #047857;
+        margin-bottom: 0.75rem;
+        padding-left: 0.5rem;
       }
 
-      .map-intro-overlay__eyebrow-line {
-        width: 1.5rem;
-        height: 2px;
-        background: linear-gradient(90deg, var(--forest), var(--amber));
+      .map-intro-overlay__label-icon {
+        width: 14px;
+        height: 14px;
         flex-shrink: 0;
       }
 
       .map-intro-overlay__title {
-        margin: 0 0 0.35rem;
-        padding-left: 0.15rem;
-        line-height: 1;
-      }
-
-      .map-intro-overlay__title-main {
-        display: block;
+        margin: 0 0 0.5rem;
+        padding-left: 0.5rem;
         font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: clamp(1.85rem, 4.5vw, 2.5rem);
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
         font-weight: 700;
-        letter-spacing: 0.02em;
+        line-height: 1.1;
         color: #0f172a;
       }
 
-      .map-intro-overlay__title-sub {
-        display: block;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: clamp(0.8125rem, 2vw, 0.9375rem);
-        font-weight: 600;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--sky);
-        margin-top: 0.35rem;
-      }
-
       .map-intro-overlay__desc {
+        font-family: "Source Sans 3", sans-serif;
         font-size: 0.875rem;
-        line-height: 1.55;
+        line-height: 1.6;
         color: #64748b;
-        margin: 0.65rem 0 0.85rem;
-        padding-left: 0.15rem;
-        max-width: 18rem;
+        margin: 0 0 1rem;
+        padding-left: 0.5rem;
+        max-width: 20rem;
       }
 
-      .map-intro-overlay__hint {
+      .map-intro-overlay__actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.4rem 0.65rem;
-        margin: 0;
-        padding-left: 0.15rem;
-        list-style: none;
+        gap: 0.5rem;
+        padding-left: 0.5rem;
       }
 
-      .map-intro-overlay__hint li {
+      .map-intro-overlay__action-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
-        font-size: 0.6875rem;
+        gap: 0.4rem;
+        padding: 0.5rem 0.875rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.75rem;
         font-weight: 600;
-        letter-spacing: 0.04em;
-        color: #475569;
-        padding: 0.28rem 0.55rem;
+        color: #047857;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.25);
         border-radius: 9999px;
-        background: rgba(236, 253, 245, 0.85);
-        border: 1px solid rgba(4, 120, 87, 0.12);
-        animation: map-hint-pulse 2.8s ease-in-out infinite;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: auto;
       }
 
-      .map-intro-overlay__hint li:nth-child(2) {
-        animation-delay: -0.9s;
+      .map-intro-overlay__action-btn:hover {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
       }
 
-      .map-intro-overlay__hint li:nth-child(3) {
-        animation-delay: -1.8s;
-      }
-
-      @keyframes map-hint-pulse {
-        0%,
-        100% {
-          opacity: 0.85;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
-
-      .map-intro-overlay__hint svg {
-        width: 0.75rem;
-        height: 0.75rem;
-        color: var(--forest);
+      .map-intro-overlay__action-btn svg {
+        width: 13px;
+        height: 13px;
         flex-shrink: 0;
       }
 
@@ -2675,10 +2657,6 @@
       }
 
       @media (max-width: 480px) {
-        .map-heritage-filter-wrap {
-          /* No change needed, defaults to top-right */
-        }
-
         .map-heritage-filter {
           width: 100%;
           min-width: 0;
@@ -3271,11 +3249,7 @@
 
       /* 3D Explore Section Redesign: Museum Studio Style */
       .experience-3d {
-        background: linear-gradient(
-          180deg,
-          #0B1118 0%,
-          #1A2433 100%
-        );
+        background: linear-gradient(180deg, #0b1118 0%, #1a2433 100%);
         position: relative;
         overflow: hidden;
       }
@@ -3333,7 +3307,7 @@
       }
 
       .experience-3d-copy .experience-eyebrow {
-        color: #D4AF37;
+        color: #d4af37;
       }
 
       .experience-3d-copy .experience-3d-title,
@@ -3344,12 +3318,12 @@
 
       /* Forest green accent for buttons and highlights */
       .experience-3d .heritage-link {
-        color: #228B22;
-        border-color: #228B22;
+        color: #228b22;
+        border-color: #228b22;
       }
 
       .experience-3d .heritage-link:hover {
-        background: #228B22;
+        background: #228b22;
         color: #ffffff;
       }
 
@@ -3379,7 +3353,7 @@
       .experience-3d-model-name {
         font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700;
-        color: #D4AF37;
+        color: #d4af37;
         margin: 0 0 1.5rem;
         letter-spacing: 0.05em;
       }
@@ -3410,7 +3384,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #D4AF37;
+        color: #d4af37;
       }
 
       .experience-3d-detail-value {
@@ -3431,7 +3405,7 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: #ffffff;
-        background: #228B22;
+        background: #228b22;
         border: none;
         border-radius: 0.5rem;
         cursor: pointer;
@@ -3455,7 +3429,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #D4AF37;
+        color: #d4af37;
         background: rgba(15, 23, 42, 0.8);
         border: 1px solid rgba(212, 175, 55, 0.3);
         border-radius: 0.5rem;
@@ -3467,7 +3441,7 @@
 
       .experience-3d-back-btn:hover {
         background: rgba(212, 175, 55, 0.2);
-        border-color: #D4AF37;
+        border-color: #d4af37;
       }
 
       /* Model container styling */
@@ -3514,7 +3488,7 @@
         width: 60px;
         height: 60px;
         border: 3px solid rgba(212, 175, 55, 0.2);
-        border-top-color: #D4AF37;
+        border-top-color: #d4af37;
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
@@ -3537,8 +3511,614 @@
         margin-top: 0.5rem;
         font-size: 2rem;
         font-weight: 700;
-        color: #D4AF37;
+        color: #d4af37;
         letter-spacing: 0.05em;
+      }
+
+      /* ── Gallery Cinematic — Full-Screen Storytelling Experience ── */
+      .gallery-cinematic {
+        position: relative;
+        background: #f4f4f4;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+
+      .gallery-cinematic-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .gallery-cinematic-aurora {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 40% at 50% 30%,
+          rgba(4, 120, 87, 0.08) 0%,
+          transparent 50%
+        );
+        animation: aurora-drift 30s ease-in-out infinite;
+      }
+
+      @keyframes aurora-drift {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          transform: translate(2%, -2%) rotate(2deg);
+        }
+        66% {
+          transform: translate(-2%, 1%) rotate(-1deg);
+        }
+      }
+
+      .gallery-cinematic-grain {
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        opacity: 0.015;
+        pointer-events: none;
+      }
+
+      /* Scene Structure */
+      .gallery-scene {
+        position: relative;
+        z-index: 2;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+
+      .gallery-scene--opening {
+        height: 115vh;
+        min-height: 115vh;
+        max-height: 115vh;
+        padding: 0 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .gallery-scene--photo,
+      .gallery-scene--video {
+        min-height: 110vh;
+        padding: 0;
+        margin: 0;
+      }
+
+      .gallery-scene--text {
+        min-height: 80vh;
+        padding: 6rem 2rem;
+      }
+
+      .gallery-scene--cta {
+        min-height: 90vh;
+        padding: 4rem 2rem;
+      }
+
+      /* Opening Scene */
+      .gallery-scene-content {
+        max-width: 800px;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        overflow: hidden;
+      }
+
+      .gallery-scene-eyebrow {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: rgba(0, 0, 0, 0.5);
+        margin: 0;
+      }
+
+      .gallery-scene-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0;
+        line-height: 1.05;
+      }
+
+      .gallery-scene-lead {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        color: rgba(0, 0, 0, 0.7);
+        line-height: 1.8;
+        margin: 0;
+      }
+
+      /* Hero Masked Video */
+      .gallery-hero-video-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        aspect-ratio: 16/9;
+        margin: 0 auto 1.5rem;
+        overflow: hidden;
+        border-radius: 1rem;
+      }
+
+      .gallery-hero-video-player {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .gallery-hero-video-mask {
+        position: absolute;
+        inset: 0;
+        background: #f4f4f4;
+        clip-path: polygon(
+          10% 0%,
+          90% 0%,
+          100% 10%,
+          100% 90%,
+          90% 100%,
+          10% 100%,
+          0% 90%,
+          0% 10%
+        );
+        z-index: 2;
+      }
+
+      .gallery-scene-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        color: rgba(0, 0, 0, 0.4);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .gallery-scene-indicator svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      /* Full-Width Photographs */
+      .gallery-photo-full {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .gallery-photo-full-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity: 0;
+        transform: scale(1.05);
+      }
+
+      .gallery-scene--photo.is-visible .gallery-photo-full-image {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .gallery-photo-full-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3) 0%,
+          transparent 30%,
+          transparent 70%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+      }
+
+      .gallery-photo-full-caption {
+        position: absolute;
+        bottom: 4rem;
+        left: 4rem;
+        right: 4rem;
+        display: flex;
+        align-items: flex-end;
+        gap: 2rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+      }
+
+      .gallery-scene--photo.is-visible .gallery-photo-full-caption {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gallery-photo-full-number {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.08);
+        line-height: 1;
+      }
+
+      .gallery-photo-full-text {
+        flex: 1;
+      }
+
+      .gallery-photo-full-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(1.75rem, 4vw, 3rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 0.5rem;
+        line-height: 1.2;
+      }
+
+      .gallery-photo-full-desc {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+      }
+
+      /* Editorial Text Blocks */
+      .gallery-text-block {
+        max-width: 700px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .gallery-scene--text.is-visible .gallery-text-block {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gallery-text-block-label {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: rgba(52, 211, 153, 0.9);
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        border-radius: 9999px;
+        margin-bottom: 2rem;
+      }
+
+      .gallery-text-block-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0 0 1.5rem;
+        line-height: 1.2;
+      }
+
+      .gallery-text-block-body {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        color: rgba(0, 0, 0, 0.75);
+        line-height: 1.9;
+        margin: 0;
+      }
+
+      /* Cinematic Videos */
+      .gallery-video-cinematic {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .gallery-video-cinematic-player {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .gallery-scene--video.is-visible .gallery-video-cinematic-player {
+        opacity: 1;
+      }
+
+      .gallery-video-cinematic-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.4) 0%,
+          transparent 30%,
+          transparent 70%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+      }
+
+      .gallery-video-cinematic-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 5rem;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity: 0;
+      }
+
+      .gallery-scene--video.is-visible .gallery-video-cinematic-play {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .gallery-video-cinematic-play:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+
+      .gallery-video-cinematic-play svg {
+        width: 2rem;
+        height: 2rem;
+        margin-left: 0.25rem;
+      }
+
+      .gallery-video-cinematic-caption {
+        position: absolute;
+        bottom: 4rem;
+        left: 4rem;
+        right: 4rem;
+        display: flex;
+        align-items: flex-end;
+        gap: 2rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+      }
+
+      .gallery-scene--video.is-visible .gallery-video-cinematic-caption {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gallery-video-cinematic-number {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.08);
+        line-height: 1;
+      }
+
+      .gallery-video-cinematic-text {
+        flex: 1;
+      }
+
+      .gallery-video-cinematic-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(1.75rem, 4vw, 3rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 0.5rem;
+        line-height: 1.2;
+      }
+
+      .gallery-video-cinematic-desc {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+      }
+
+      /* CTA Scene */
+      .gallery-cta-cinematic {
+        max-width: 800px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .gallery-scene--cta.is-visible .gallery-cta-cinematic {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gallery-cta-cinematic-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0 0 1.5rem;
+        line-height: 1.2;
+      }
+
+      .gallery-cta-cinematic-desc {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        color: rgba(0, 0, 0, 0.7);
+        line-height: 1.7;
+        margin: 0 0 3rem;
+      }
+
+      .gallery-cta-cinematic-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .gallery-cta-cinematic-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 2rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .gallery-cta-cinematic-btn--primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+        border: none;
+      }
+
+      .gallery-cta-cinematic-btn--primary:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(4, 120, 87, 0.4);
+      }
+
+      .gallery-cta-cinematic-btn--secondary {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .gallery-cta-cinematic-btn--secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .gallery-cta-cinematic-btn-icon {
+        font-size: 1.25rem;
+      }
+
+      /* Scroll Reveal */
+      .scroll-reveal {
+        opacity: 0;
+      }
+
+      .scroll-reveal.is-visible {
+        opacity: 1;
+      }
+
+      @media (max-width: 1024px) {
+        .gallery-scene--opening {
+          height: 110vh;
+          min-height: 110vh;
+          max-height: 110vh;
+          padding: 0 1.5rem;
+          overflow: hidden;
+        }
+
+        .gallery-scene-content {
+          gap: 1rem;
+          height: 100%;
+          max-height: 100%;
+          overflow: hidden;
+        }
+
+        .gallery-scene-eyebrow {
+          margin-bottom: 0.5rem;
+        }
+
+        .gallery-scene-title {
+          margin: 0 0 0.75rem;
+        }
+
+        .gallery-scene-lead {
+          margin: 0 0 1rem;
+        }
+
+        .gallery-scene--text {
+          padding: 4rem 1.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .gallery-scene--opening {
+          height: 115vh;
+          min-height: 115vh;
+          max-height: 115vh;
+          padding: 0 1rem;
+          overflow: hidden;
+        }
+
+        .gallery-scene-content {
+          gap: 1rem;
+          height: 100%;
+          max-height: 100%;
+          overflow: hidden;
+        }
+
+        .gallery-scene-eyebrow {
+          font-size: 0.75rem;
+        }
+
+        .gallery-scene-title {
+          margin: 0;
+        }
+
+        .gallery-scene-lead {
+          font-size: 0.9rem;
+          margin: 0;
+        }
+
+        .gallery-scene--text {
+          padding: 4rem 1.5rem;
+        }
+
+        .gallery-photo-full-caption,
+        .gallery-video-cinematic-caption {
+          left: 1.5rem;
+          right: 1.5rem;
+          bottom: 2rem;
+          gap: 1rem;
+        }
+
+        .gallery-photo-full-number,
+        .gallery-video-cinematic-number {
+          font-size: 2.5rem;
+        }
+
+        .gallery-cta-cinematic-actions {
+          flex-direction: column;
+        }
+
+        .gallery-cta-cinematic-btn {
+          width: 100%;
+          justify-content: center;
+        }
       }
     </style>
   </head>
@@ -3607,22 +4187,27 @@
               aria-hidden="false"
             >
               <div class="map-intro-overlay__content">
-                <p class="map-intro-overlay__eyebrow">
-                  <span
-                    class="map-intro-overlay__eyebrow-line"
+                <div class="map-intro-overlay__label">
+                  <svg
+                    class="map-intro-overlay__label-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
                     aria-hidden="true"
-                  ></span>
-                  Official Heritage Sites
-                </p>
-                <h2 class="map-intro-overlay__title">
-                  <span class="map-intro-overlay__title-main">Mati City</span>
-                </h2>
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Official Heritage Sites</span>
+                </div>
+                <h2 class="map-intro-overlay__title">Mati City</h2>
                 <p class="map-intro-overlay__desc">
                   Explore built, cultural, and natural heritage landmarks across
                   every barangay.
                 </p>
-                <ul class="map-intro-overlay__hint" aria-label="Map controls">
-                  <li>
+                <div class="map-intro-overlay__actions">
+                  <button class="map-intro-overlay__action-btn">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -3632,9 +4217,9 @@
                     >
                       <path d="M5 9l7 7 7-7" />
                     </svg>
-                    Drag to pan
-                  </li>
-                  <li>
+                    <span>Drag to pan</span>
+                  </button>
+                  <button class="map-intro-overlay__action-btn">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -3644,9 +4229,9 @@
                     >
                       <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Scroll to zoom
-                  </li>
-                  <li>
+                    <span>Scroll to zoom</span>
+                  </button>
+                  <button class="map-intro-overlay__action-btn">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -3654,14 +4239,12 @@
                       stroke-width="2"
                       aria-hidden="true"
                     >
-                      <path
-                        d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z"
-                      />
-                      <circle cx="12" cy="11" r="2.5" />
+                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="3" />
                     </svg>
-                    Tap markers
-                  </li>
-                </ul>
+                    <span>Tap markers</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -3863,283 +4446,282 @@
         <div class="marquee-track" id="heritage-marquee-track"></div>
       </div>
 
-      <!-- Gallery — interactive preview (full archive on gallery.html) -->
+      <!-- Gallery — Cinematic Storytelling Experience -->
       <section
         id="portal-gallery"
-        class="experience-section gallery-preview full-screen-section"
+        class="gallery-cinematic"
+        style="margin: 0; padding: 0"
       >
-        <div
-          class="gallery-preview-bg"
-          id="gallery-preview-bg"
-          aria-hidden="true"
-        >
-          <div class="gallery-preview-aurora"></div>
-          <div class="gallery-preview-light gallery-preview-light--1"></div>
-          <div class="gallery-preview-light gallery-preview-light--2"></div>
-          <div class="gallery-preview-light gallery-preview-light--3"></div>
-          <div class="gallery-preview-grain"></div>
+        <!-- Cinematic Background -->
+        <div class="gallery-cinematic-bg" aria-hidden="true">
+          <div class="gallery-cinematic-aurora"></div>
+          <div class="gallery-cinematic-grain"></div>
         </div>
 
-        <div class="gallery-preview-inner">
-          <header class="gallery-preview-head reveal">
-            <p class="experience-eyebrow">Heritage Media</p>
-            <h2 class="gallery-preview-title display-font">Gallery</h2>
-            <p class="gallery-preview-lead">
-              Choose a collection, browse sample images, and watch heritage
-              clips. Open the full gallery to explore every photo and film in
-              the archive.
+        <!-- Opening Scene -->
+        <div class="gallery-scene gallery-scene--opening">
+          <div class="gallery-scene-content">
+            <p class="gallery-scene-eyebrow">Heritage Media Archive</p>
+            <h1 class="gallery-scene-title display-font">Gallery</h1>
+            <p class="gallery-scene-lead">
+              Scroll to embark on a visual journey through Mati's cultural and
+              natural heritage. Each image tells a story of tradition,
+              landscape, and identity.
             </p>
-          </header>
+          </div>
+        </div>
 
-          <div class="gallery-preview-stage reveal reveal-delay-1">
-            <div class="gallery-preview-spotlight" id="gallery-spotlight">
-              <div class="gallery-preview-spotlight-media">
-                <img
-                  id="gallery-spotlight-img"
-                  class="gallery-preview-spotlight-img is-active"
-                  src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
-                  alt="Sambuokan Festival"
-                />
-                <video
-                  id="gallery-feature-video"
-                  class="gallery-preview-spotlight-video"
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  poster="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
-                  aria-label="Heritage video preview"
-                >
-                  <source
-                    id="gallery-feature-source"
-                    src="data/Natural Heritage/Pujada Island/Videos/1.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-                <div
-                  class="gallery-preview-spotlight-shade"
-                  aria-hidden="true"
-                ></div>
-                <span
-                  class="gallery-preview-spotlight-mode"
-                  id="gallery-spotlight-mode"
-                  >Photo</span
-                >
-              </div>
-              <div class="gallery-preview-spotlight-meta">
-                <span
-                  class="gallery-preview-spotlight-cat gallery-preview-spotlight-cat--cultural"
-                  id="gallery-spotlight-cat"
-                  >Intangible Cultural Heritage</span
-                >
-                <h3
-                  class="gallery-preview-spotlight-title"
-                  id="gallery-spotlight-title"
-                >
+        <!-- Scene 1: Sambuokan Festival (Full-width Photograph) -->
+        <div class="gallery-scene gallery-scene--photo scroll-reveal">
+          <div class="gallery-photo-full">
+            <img
+              src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
+              alt="Sambuokan Festival"
+              loading="lazy"
+              class="gallery-photo-full-image"
+            />
+            <div class="gallery-photo-full-overlay"></div>
+            <div class="gallery-photo-full-caption">
+              <span class="gallery-photo-full-number">01</span>
+              <div class="gallery-photo-full-text">
+                <h2 class="gallery-photo-full-title display-font">
                   Sambuokan Festival
-                </h3>
-                <p
-                  class="gallery-preview-spotlight-desc"
-                  id="gallery-spotlight-desc"
-                >
-                  A sample of living traditions and celebrations from
-                  Mati&rsquo;s cultural collection.
+                </h2>
+                <p class="gallery-photo-full-desc">
+                  A celebration of living traditions and cultural heritage
                 </p>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="gallery-preview-controls">
-              <div
-                class="gallery-preview-cats"
-                role="tablist"
-                aria-label="Heritage collections"
-              >
-                <button
-                  type="button"
-                  class="gallery-preview-cat is-active"
-                  data-category="cultural"
-                  role="tab"
-                  aria-selected="true"
-                >
-                  <span class="gallery-preview-cat-icon" aria-hidden="true"
-                    >✦</span
-                  >
-                  Cultural
-                </button>
-                <button
-                  type="button"
-                  class="gallery-preview-cat"
-                  data-category="built"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  <span class="gallery-preview-cat-icon" aria-hidden="true"
-                    >◈</span
-                  >
-                  Built
-                </button>
-                <button
-                  type="button"
-                  class="gallery-preview-cat"
-                  data-category="natural"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  <span class="gallery-preview-cat-icon" aria-hidden="true"
-                    >◎</span
-                  >
-                  Natural
-                </button>
-              </div>
+        <!-- Scene 2: Editorial Text Block -->
+        <div class="gallery-scene gallery-scene--text scroll-reveal">
+          <div class="gallery-text-block">
+            <span class="gallery-text-block-label">Heritage</span>
+            <h2 class="gallery-text-block-title display-font">
+              Living Traditions
+            </h2>
+            <p class="gallery-text-block-body">
+              The Sambuokan Festival represents the heart of Mati's cultural
+              identity. Through vibrant colors, traditional dances, and
+              community gatherings, it preserves the stories passed down through
+              generations. Each photograph captures a moment of celebration,
+              unity, and the enduring spirit of our people.
+            </p>
+          </div>
+        </div>
 
-              <p class="gallery-preview-hint" id="gallery-preview-hint">
-                Select a sample below to preview
-              </p>
-
-              <div
-                class="gallery-preview-samples"
-                id="gallery-preview-samples"
-                aria-label="Gallery preview samples"
-              >
-                <button
-                  type="button"
-                  class="gallery-preview-sample is-active"
-                  data-category="cultural"
-                  data-index="0"
-                >
-                  <span class="gallery-preview-sample-thumb">
-                    <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </span>
-                  <span class="gallery-preview-sample-label"
-                    >Sambuokan Festival</span
-                  >
-                </button>
-                <button
-                  type="button"
-                  class="gallery-preview-sample"
-                  data-category="built"
-                  data-index="0"
-                >
-                  <span class="gallery-preview-sample-thumb">
-                    <img
-                      src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </span>
-                  <span class="gallery-preview-sample-label"
-                    >Pylon Monument</span
-                  >
-                </button>
-                <button
-                  type="button"
-                  class="gallery-preview-sample"
-                  data-category="natural"
-                  data-index="0"
-                >
-                  <span class="gallery-preview-sample-thumb">
-                    <img
-                      src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </span>
-                  <span class="gallery-preview-sample-label"
-                    >Pujada Island</span
-                  >
-                </button>
-              </div>
-
-              <div class="gallery-preview-clips">
-                <span class="gallery-preview-clips-label">Heritage clips</span>
-                <div
-                  class="gallery-preview-clips-list"
-                  role="tablist"
-                  aria-label="Preview video clips"
-                >
-                  <button
-                    type="button"
-                    class="gallery-preview-clip"
-                    role="tab"
-                    data-video="data/Natural Heritage/Pujada Island/Videos/1.mp4"
-                    data-poster="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
-                    data-cat="Natural Heritage"
-                    data-cat-class="natural"
-                    data-title="Pujada Island"
-                    data-desc="Crystal waters and white sand shores of Mati&rsquo;s island paradise."
-                  >
-                    <span class="gallery-preview-clip-thumb">
-                      <img
-                        src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
-                        alt=""
-                        loading="lazy"
-                      />
-                      <span aria-hidden="true">▶</span>
-                    </span>
-                    Pujada Island
-                  </button>
-                  <button
-                    type="button"
-                    class="gallery-preview-clip"
-                    role="tab"
-                    data-video="data/Natural Heritage/Oak Island/Videos/OAK ISLAND.mp4"
-                    data-poster="data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG"
-                    data-cat="Natural Heritage"
-                    data-cat-class="natural"
-                    data-title="Oak Island"
-                    data-desc="A secluded coastal gem along Mati&rsquo;s dramatic shoreline."
-                  >
-                    <span class="gallery-preview-clip-thumb">
-                      <img
-                        src="data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG"
-                        alt=""
-                        loading="lazy"
-                      />
-                      <span aria-hidden="true">▶</span>
-                    </span>
-                    Oak Island
-                  </button>
-                  <button
-                    type="button"
-                    class="gallery-preview-clip"
-                    role="tab"
-                    data-video="data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Videos/Banwa na Madayaw.mp4"
-                    data-poster="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
-                    data-cat="Intangible Cultural Heritage"
-                    data-cat-class="cultural"
-                    data-title="Banwa na Madayaw"
-                    data-desc="A celebration of Mati&rsquo;s living traditions and creative spirit."
-                  >
-                    <span class="gallery-preview-clip-thumb">
-                      <img
-                        src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
-                        alt=""
-                        loading="lazy"
-                      />
-                      <span aria-hidden="true">▶</span>
-                    </span>
-                    Banwa na Madayaw
-                  </button>
-                </div>
-              </div>
-
-              <div class="gallery-preview-controls-foot">
-                <p class="gallery-preview-archive-note">
-                  Open the full archive for every photo and film across all
-                  heritage collections.
+        <!-- Scene 3: Pylon Monument (Full-width Photograph) -->
+        <div class="gallery-scene gallery-scene--photo scroll-reveal">
+          <div class="gallery-photo-full">
+            <img
+              src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+              alt="Pylon Monument"
+              loading="lazy"
+              class="gallery-photo-full-image"
+            />
+            <div class="gallery-photo-full-overlay"></div>
+            <div class="gallery-photo-full-caption">
+              <span class="gallery-photo-full-number">02</span>
+              <div class="gallery-photo-full-text">
+                <h2 class="gallery-photo-full-title display-font">
+                  Pylon Monument
+                </h2>
+                <p class="gallery-photo-full-desc">
+                  An iconic landmark of built heritage
                 </p>
-                <a
-                  href="gallery.html"
-                  class="gallery-preview-cta gallery-preview-cta--panel"
-                >
-                  Explore Full Gallery
-                  <span aria-hidden="true">→</span>
-                </a>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 4: Pujada Island Video (Immersive Video) -->
+        <div class="gallery-scene gallery-scene--video scroll-reveal">
+          <div class="gallery-video-cinematic">
+            <video
+              class="gallery-video-cinematic-player"
+              poster="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
+              muted
+              loop
+              playsinline
+              preload="metadata"
+            >
+              <source
+                src="data/Natural Heritage/Pujada Island/Videos/1.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div class="gallery-video-cinematic-overlay"></div>
+            <div class="gallery-video-cinematic-play">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <div class="gallery-video-cinematic-caption">
+              <span class="gallery-video-cinematic-number">03</span>
+              <div class="gallery-video-cinematic-text">
+                <h2 class="gallery-video-cinematic-title display-font">
+                  Pujada Island
+                </h2>
+                <p class="gallery-video-cinematic-desc">
+                  Crystal waters and pristine shores
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 5: Editorial Text Block -->
+        <div class="gallery-scene gallery-scene--text scroll-reveal">
+          <div class="gallery-text-block">
+            <span class="gallery-text-block-label">Natural Heritage</span>
+            <h2 class="gallery-text-block-title display-font">
+              Island Paradise
+            </h2>
+            <p class="gallery-text-block-body">
+              Pujada Island stands as a testament to Mati's natural beauty. Its
+              crystal-clear waters, white sand beaches, and diverse marine life
+              create a sanctuary that must be preserved. Through our visual
+              documentation, we capture not just landscapes, but the delicate
+              balance between nature and community that defines our coastal
+              heritage.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scene 6: Dahican Beach (Full-width Photograph) -->
+        <div class="gallery-scene gallery-scene--photo scroll-reveal">
+          <div class="gallery-photo-full">
+            <img
+              src="data/Natural Heritage/Dahican Beach/Photographs/dahican1.jpg"
+              alt="Dahican Beach"
+              loading="lazy"
+              class="gallery-photo-full-image"
+            />
+            <div class="gallery-photo-full-overlay"></div>
+            <div class="gallery-photo-full-caption">
+              <span class="gallery-photo-full-number">04</span>
+              <div class="gallery-photo-full-text">
+                <h2 class="gallery-photo-full-title display-font">
+                  Dahican Beach
+                </h2>
+                <p class="gallery-photo-full-desc">
+                  Golden sands and rolling waves
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 7: City Hall (Full-width Photograph) -->
+        <div class="gallery-scene gallery-scene--photo scroll-reveal">
+          <div class="gallery-photo-full">
+            <img
+              src="data/Built Heritage/City Hall/Photographs/City Hall.jpg"
+              alt="City Hall"
+              loading="lazy"
+              class="gallery-photo-full-image"
+            />
+            <div class="gallery-photo-full-overlay"></div>
+            <div class="gallery-photo-full-caption">
+              <span class="gallery-photo-full-number">05</span>
+              <div class="gallery-photo-full-text">
+                <h2 class="gallery-photo-full-title display-font">City Hall</h2>
+                <p class="gallery-photo-full-desc">
+                  Architectural and civic significance
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 8: Oak Island Video (Immersive Video) -->
+        <div class="gallery-scene gallery-scene--video scroll-reveal">
+          <div class="gallery-video-cinematic">
+            <video
+              class="gallery-video-cinematic-player"
+              poster="data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG"
+              muted
+              loop
+              playsinline
+              preload="metadata"
+            >
+              <source
+                src="data/Natural Heritage/Oak Island/Videos/OAK ISLAND.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div class="gallery-video-cinematic-overlay"></div>
+            <div class="gallery-video-cinematic-play">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <div class="gallery-video-cinematic-caption">
+              <span class="gallery-video-cinematic-number">06</span>
+              <div class="gallery-video-cinematic-text">
+                <h2 class="gallery-video-cinematic-title display-font">
+                  Oak Island
+                </h2>
+                <p class="gallery-video-cinematic-desc">
+                  A secluded coastal gem
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 9: Editorial Text Block -->
+        <div class="gallery-scene gallery-scene--text scroll-reveal">
+          <div class="gallery-text-block">
+            <span class="gallery-text-block-label">Preservation</span>
+            <h2 class="gallery-text-block-title display-font">
+              Our Digital Archive
+            </h2>
+            <p class="gallery-text-block-body">
+              Every photograph and video in our collection serves as a digital
+              testament to Mati's heritage. Through careful documentation and
+              preservation, we ensure that future generations can experience the
+              beauty, culture, and stories that define our identity. This
+              archive is not just a gallery—it's a living museum of our
+              collective memory.
+            </p>
+          </div>
+        </div>
+
+        <!-- Closing CTA Scene -->
+        <div class="gallery-scene gallery-scene--cta scroll-reveal">
+          <div class="gallery-cta-cinematic">
+            <h2 class="gallery-cta-cinematic-title display-font">
+              Continue Your Journey
+            </h2>
+            <p class="gallery-cta-cinematic-desc">
+              Explore more of Mati's heritage through our interactive
+              experiences
+            </p>
+            <div class="gallery-cta-cinematic-actions">
+              <a
+                href="#mati-map-section"
+                class="gallery-cta-cinematic-btn gallery-cta-cinematic-btn--primary"
+              >
+                <span class="gallery-cta-cinematic-btn-icon">🗺️</span>
+                <span>Heritage Map</span>
+              </a>
+              <a
+                href="#portal-3d"
+                class="gallery-cta-cinematic-btn gallery-cta-cinematic-btn--secondary"
+              >
+                <span class="gallery-cta-cinematic-btn-icon">🎮</span>
+                <span>3D Explore</span>
+              </a>
+              <a
+                href="#portal-games"
+                class="gallery-cta-cinematic-btn gallery-cta-cinematic-btn--secondary"
+              >
+                <span class="gallery-cta-cinematic-btn-icon">🎯</span>
+                <span>Games</span>
+              </a>
             </div>
           </div>
         </div>
@@ -4151,12 +4733,31 @@
         class="experience-section experience-3d full-screen-section"
       >
         <div class="experience-3d-inner">
-          <button class="experience-3d-view-btn" id="view-heritage-btn">View Heritage</button>
+          <button class="experience-3d-view-btn" id="view-heritage-btn">
+            View Heritage
+          </button>
           <div class="experience-3d-content">
             <div class="experience-3d-info" id="heritage-details">
               <h2 class="experience-3d-model-name">Pylon Monument</h2>
               <p class="experience-3d-description">
-                The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the "Point Zero" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city's historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.
+                The Pylon Monument, located at JP Rizal Street, Barangay
+                Central, City of Mati, Davao Oriental, stands as a premier
+                cultural landmark and the "Point Zero" geographic reference for
+                the province. Originally commissioned in 1979 during the
+                administration of Governor Francisco G. Rabat, the structure was
+                designed by the first Filipino National Artist for Architecture,
+                Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The
+                monument features a 30-foot reinforced concrete and brick tower
+                distinguished by a central glass sphere—crafted from recycled
+                San Miguel Beer bottles—and a steel halo with a crowning
+                luminaire. In 2019, the site underwent a comprehensive aesthetic
+                renovation designed by Architect Cesar Gamalong, which
+                introduced culturally themed ornamentation, a koi pond, and
+                integrated landscaping with a waterfall feature. Formally
+                recognized under Resolution No. 61, Series of 2019, the Pylon
+                remains a testament to the city's historical heritage and serves
+                as a vital public space symbolizing the faith and resilience of
+                the people of Mati.
               </p>
               <div class="experience-3d-details">
                 <div class="experience-3d-detail-item">
@@ -4169,19 +4770,29 @@
                 </div>
                 <div class="experience-3d-detail-item">
                   <span class="experience-3d-detail-label">Ownership</span>
-                  <span class="experience-3d-detail-value">Government Property</span>
+                  <span class="experience-3d-detail-value"
+                    >Government Property</span
+                  >
                 </div>
                 <div class="experience-3d-detail-item">
                   <span class="experience-3d-detail-label">Longitude</span>
-                  <span class="experience-3d-detail-value">126° 13′ 0.8004″ E</span>
+                  <span class="experience-3d-detail-value"
+                    >126° 13′ 0.8004″ E</span
+                  >
                 </div>
                 <div class="experience-3d-detail-item">
                   <span class="experience-3d-detail-label">Latitude</span>
-                  <span class="experience-3d-detail-value">6° 57′ 8.1288″ N</span>
+                  <span class="experience-3d-detail-value"
+                    >6° 57′ 8.1288″ N</span
+                  >
                 </div>
               </div>
             </div>
-            <div class="experience-3d-model-container" id="heritage-model" style="display: none;">
+            <div
+              class="experience-3d-model-container"
+              id="heritage-model"
+              style="display: none"
+            >
               <div class="experience-3d-loading" id="model-loading">
                 <div class="loading-spinner"></div>
                 <div class="loading-text">Loading 3D Model</div>
@@ -4208,7 +4819,13 @@
                 aria-label="Live rotating 3D model of Pylon Monument, Mati City"
               ></model-viewer>
             </div>
-            <button class="experience-3d-back-btn" id="back-to-details-btn" style="display: none;">← Back to Details</button>
+            <button
+              class="experience-3d-back-btn"
+              id="back-to-details-btn"
+              style="display: none"
+            >
+              ← Back to Details
+            </button>
           </div>
         </div>
       </section>
@@ -4631,50 +5248,55 @@
     <script src="auth-logout.js"></script>
     <script>
       // Toggle between heritage details and 3D model
-      document.addEventListener('DOMContentLoaded', function() {
-        const viewHeritageBtn = document.getElementById('view-heritage-btn');
-        const backToDetailsBtn = document.getElementById('back-to-details-btn');
-        const heritageDetails = document.getElementById('heritage-details');
-        const heritageModel = document.getElementById('heritage-model');
-        const modelViewer = document.getElementById('portal-pylon-model');
-        const loadingIndicator = document.getElementById('model-loading');
-        const loadingPercentage = document.getElementById('loading-percentage');
+      document.addEventListener("DOMContentLoaded", function () {
+        const viewHeritageBtn = document.getElementById("view-heritage-btn");
+        const backToDetailsBtn = document.getElementById("back-to-details-btn");
+        const heritageDetails = document.getElementById("heritage-details");
+        const heritageModel = document.getElementById("heritage-model");
+        const modelViewer = document.getElementById("portal-pylon-model");
+        const loadingIndicator = document.getElementById("model-loading");
+        const loadingPercentage = document.getElementById("loading-percentage");
 
-        if (viewHeritageBtn && backToDetailsBtn && heritageDetails && heritageModel) {
-          viewHeritageBtn.addEventListener('click', function() {
-            heritageDetails.style.display = 'none';
-            heritageModel.style.display = 'flex';
-            backToDetailsBtn.style.display = 'block';
-            loadingIndicator.classList.remove('hidden');
-            loadingPercentage.textContent = '0%';
-            modelViewer.classList.remove('loaded');
+        if (
+          viewHeritageBtn &&
+          backToDetailsBtn &&
+          heritageDetails &&
+          heritageModel
+        ) {
+          viewHeritageBtn.addEventListener("click", function () {
+            heritageDetails.style.display = "none";
+            heritageModel.style.display = "flex";
+            backToDetailsBtn.style.display = "block";
+            loadingIndicator.classList.remove("hidden");
+            loadingPercentage.textContent = "0%";
+            modelViewer.classList.remove("loaded");
           });
 
-          backToDetailsBtn.addEventListener('click', function() {
-            heritageModel.style.display = 'none';
-            heritageDetails.style.display = 'block';
-            backToDetailsBtn.style.display = 'none';
-            loadingIndicator.classList.add('hidden');
-            modelViewer.classList.remove('loaded');
+          backToDetailsBtn.addEventListener("click", function () {
+            heritageModel.style.display = "none";
+            heritageDetails.style.display = "block";
+            backToDetailsBtn.style.display = "none";
+            loadingIndicator.classList.add("hidden");
+            modelViewer.classList.remove("loaded");
           });
         }
 
         // Track model loading progress
         if (modelViewer && loadingIndicator && loadingPercentage) {
-          modelViewer.addEventListener('progress', function(event) {
+          modelViewer.addEventListener("progress", function (event) {
             const progress = event.detail.totalProgress;
             const percentage = Math.round(progress * 100);
-            loadingPercentage.textContent = percentage + '%';
+            loadingPercentage.textContent = percentage + "%";
           });
 
-          modelViewer.addEventListener('load', function() {
-            loadingIndicator.classList.add('hidden');
-            modelViewer.classList.add('loaded');
+          modelViewer.addEventListener("load", function () {
+            loadingIndicator.classList.add("hidden");
+            modelViewer.classList.add("loaded");
           });
 
-          modelViewer.addEventListener('error', function() {
-            loadingPercentage.textContent = 'Error';
-            loadingIndicator.classList.add('hidden');
+          modelViewer.addEventListener("error", function () {
+            loadingPercentage.textContent = "Error";
+            loadingIndicator.classList.add("hidden");
           });
         }
       });
@@ -5319,64 +5941,72 @@
 
         function formatPlayCount(count) {
           if (count >= 1000) {
-            return (count / 1000).toFixed(1) + 'K Plays';
+            return (count / 1000).toFixed(1) + "K Plays";
           }
-          return count.toLocaleString() + ' Plays';
+          return count.toLocaleString() + " Plays";
         }
 
         async function fetchGamePlayCounts() {
           try {
-            if (typeof window.supabase === 'undefined') {
-              console.warn('Supabase client not available, using default play counts');
+            if (typeof window.supabase === "undefined") {
+              console.warn(
+                "Supabase client not available, using default play counts",
+              );
               return {};
             }
-            
+
             const { data, error } = await window.supabase
-              .from('game_play_counts')
-              .select('game_id, play_count');
-            
+              .from("game_play_counts")
+              .select("game_id, play_count");
+
             if (error) {
-              console.error('Error fetching play counts:', error);
+              console.error("Error fetching play counts:", error);
               return {};
             }
-            
+
             const playCounts = {};
-            data.forEach(row => {
+            data.forEach((row) => {
               playCounts[row.game_id] = row.play_count;
             });
             return playCounts;
           } catch (err) {
-            console.error('Error fetching play counts:', err);
+            console.error("Error fetching play counts:", err);
             return {};
           }
         }
 
         async function incrementGamePlayCount(gameId, gameName) {
           try {
-            if (typeof window.supabase === 'undefined') {
-              console.warn('Supabase client not available, cannot increment play count');
+            if (typeof window.supabase === "undefined") {
+              console.warn(
+                "Supabase client not available, cannot increment play count",
+              );
               return;
             }
-            
-            const { error } = await window.supabase.rpc('increment_game_play_count', {
-              p_game_id: gameId,
-              p_game_name: gameName
-            });
-            
+
+            const { error } = await window.supabase.rpc(
+              "increment_game_play_count",
+              {
+                p_game_id: gameId,
+                p_game_name: gameName,
+              },
+            );
+
             if (error) {
-              console.error('Error incrementing play count:', error);
+              console.error("Error incrementing play count:", error);
             } else {
               // Update local cache
               gamePlayCounts[gameId] = (gamePlayCounts[gameId] || 0) + 1;
               // Refresh display if this game is currently selected
               const currentGame = games[portalGameIdx];
-              const currentGameId = currentGame.id || getGameIdFromTitle(currentGame.title);
+              const currentGameId =
+                currentGame.id || getGameIdFromTitle(currentGame.title);
               if (currentGameId === gameId && players) {
                 players.textContent = formatPlayCount(gamePlayCounts[gameId]);
               }
             }
           } catch (err) {
-            console.error('Error incrementing play count:', err);
+            console.error("Error incrementing play count:", err);
           }
         }
 
@@ -5444,7 +6074,7 @@
 
           if (title) title.textContent = game.title;
           if (desc) desc.textContent = game.desc;
-          
+
           // Update play count display
           if (players) {
             const gameId = game.id || getGameIdFromTitle(game.title);
@@ -5462,13 +6092,13 @@
         function getGameIdFromTitle(title) {
           // Map game titles to database IDs
           const titleMap = {
-            'Mati Heritage Trivia Challenge': 'trivia',
-            'Matching Pairs': 'memory',
-            'Spot the Difference': 'observation',
-            'Slide Puzzle': 'puzzle',
-            'True or False Sprint': 'sprint'
+            "Mati Heritage Trivia Challenge": "trivia",
+            "Matching Pairs": "memory",
+            "Spot the Difference": "observation",
+            "Slide Puzzle": "puzzle",
+            "True or False Sprint": "sprint",
           };
-          return titleMap[title] || title.toLowerCase().replace(/\s+/g, '_');
+          return titleMap[title] || title.toLowerCase().replace(/\s+/g, "_");
         }
 
         function setPortalGameIndex(nextIdx) {
@@ -5526,218 +6156,143 @@
         });
 
         // Fetch play counts from database
-        fetchGamePlayCounts().then(counts => {
-          gamePlayCounts = counts;
-          renderPortalFeaturedPreview();
-        }).catch(() => {
-          // Fallback to default display if fetch fails
-          renderPortalFeaturedPreview();
-        });
+        fetchGamePlayCounts()
+          .then((counts) => {
+            gamePlayCounts = counts;
+            renderPortalFeaturedPreview();
+          })
+          .catch(() => {
+            // Fallback to default display if fetch fails
+            renderPortalFeaturedPreview();
+          });
       }
 
       const gallerySection = document.getElementById("portal-gallery");
-      const galleryVideo = document.getElementById("gallery-feature-video");
-      const galleryVideoSource = document.getElementById(
-        "gallery-feature-source",
-      );
-      const gallerySpotlight = document.getElementById("gallery-spotlight");
-      const gallerySpotlightImg = document.getElementById(
-        "gallery-spotlight-img",
-      );
-      const gallerySpotlightCat = document.getElementById(
-        "gallery-spotlight-cat",
-      );
-      const gallerySpotlightTitle = document.getElementById(
-        "gallery-spotlight-title",
-      );
-      const gallerySpotlightDesc = document.getElementById(
-        "gallery-spotlight-desc",
-      );
-      const gallerySpotlightMode = document.getElementById(
-        "gallery-spotlight-mode",
-      );
-
-      const gallerySamples = {
-        cultural: {
-          cat: "Intangible Cultural Heritage",
-          catClass: "cultural",
-          title: "Sambuokan Festival",
-          desc: "A sample of living traditions and celebrations from Mati's cultural collection.",
-          img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
-          alt: "Sambuokan Festival",
-        },
-        built: {
-          cat: "Built Heritage",
-          catClass: "built",
-          title: "Pylon Monument",
-          desc: "A sample of Mati's iconic landmark from the built heritage collection.",
-          img: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
-          alt: "Pylon Monument",
-        },
-        natural: {
-          cat: "Natural Heritage",
-          catClass: "natural",
-          title: "Pujada Island",
-          desc: "A sample of Mati's coastal paradise from the natural heritage collection.",
-          img: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
-          alt: "Pujada Island",
-        },
-      };
 
       if (gallerySection) {
-        const prefersReducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        ).matches;
+        // Scroll-triggered animations for scenes
+        const scenes = gallerySection.querySelectorAll(".gallery-scene");
+        const videoPlayers = gallerySection.querySelectorAll(
+          ".gallery-video-cinematic-player",
+        );
 
-        const catButtons = [
-          ...gallerySection.querySelectorAll(".gallery-preview-cat"),
-        ];
-        const sampleButtons = [
-          ...gallerySection.querySelectorAll(".gallery-preview-sample"),
-        ];
-        const clipButtons = [
-          ...gallerySection.querySelectorAll(".gallery-preview-clip"),
-        ];
-
-        let activeCategory = "cultural";
-        let activeMode = "photo";
-
-        const playGalleryVideo = () => {
-          if (!galleryVideo || prefersReducedMotion) return;
-          if (activeMode === "video") {
-            galleryVideo.muted = false;
-            galleryVideo.volume = 1;
-          }
-          galleryVideo.play().catch(() => {});
-        };
-
-        const setPhotoMode = (category) => {
-          const data = gallerySamples[category];
-          if (!data || !gallerySpotlightImg) return;
-
-          activeMode = "photo";
-          activeCategory = category;
-
-          if (galleryVideo) {
-            galleryVideo.pause();
-            galleryVideo.classList.remove("is-active");
-          }
-
-          if (gallerySpotlight) {
-            gallerySpotlight.classList.add("is-transitioning");
-          }
-
-          gallerySpotlightImg.classList.add("is-active");
-
-          gallerySpotlightImg.src = data.img;
-          gallerySpotlightImg.alt = data.alt;
-          if (gallerySpotlightCat) {
-            gallerySpotlightCat.textContent = data.cat;
-            gallerySpotlightCat.className = `gallery-preview-spotlight-cat gallery-preview-spotlight-cat--${data.catClass}`;
-          }
-          if (gallerySpotlightTitle)
-            gallerySpotlightTitle.textContent = data.title;
-          if (gallerySpotlightDesc)
-            gallerySpotlightDesc.textContent = data.desc;
-          if (gallerySpotlightMode) gallerySpotlightMode.textContent = "Photo";
-
-          catButtons.forEach((btn) => {
-            const isActive = btn.dataset.category === category;
-            btn.classList.toggle("is-active", isActive);
-            btn.setAttribute("aria-selected", isActive ? "true" : "false");
-          });
-
-          sampleButtons.forEach((btn) => {
-            const isActive = btn.dataset.category === category;
-            btn.classList.toggle("is-active", isActive);
-          });
-
-          clipButtons.forEach((btn) => btn.classList.remove("is-active"));
-
-          window.setTimeout(() => {
-            gallerySpotlight?.classList.remove("is-transitioning");
-          }, 350);
-        };
-
-        const setVideoMode = (clip) => {
-          const nextSrc = clip.dataset.video;
-          if (!nextSrc || !galleryVideo || !galleryVideoSource) return;
-
-          activeMode = "video";
-
-          if (gallerySpotlight) {
-            gallerySpotlight.classList.add("is-transitioning");
-          }
-
-          gallerySpotlightImg?.classList.remove("is-active");
-          galleryVideo.classList.add("is-active");
-
-          galleryVideoSource.setAttribute("src", nextSrc);
-          galleryVideo.setAttribute("poster", clip.dataset.poster || "");
-          if (gallerySpotlightCat) {
-            gallerySpotlightCat.textContent = clip.dataset.cat || "";
-            gallerySpotlightCat.className = `gallery-preview-spotlight-cat gallery-preview-spotlight-cat--${clip.dataset.catClass || "natural"}`;
-          }
-          if (gallerySpotlightTitle)
-            gallerySpotlightTitle.textContent = clip.dataset.title || "";
-          if (gallerySpotlightDesc)
-            gallerySpotlightDesc.textContent = clip.dataset.desc || "";
-          if (gallerySpotlightMode) gallerySpotlightMode.textContent = "Video";
-
-          clipButtons.forEach((btn) => {
-            btn.classList.toggle("is-active", btn === clip);
-            btn.setAttribute("aria-selected", btn === clip ? "true" : "false");
-          });
-
-          sampleButtons.forEach((btn) => btn.classList.remove("is-active"));
-          catButtons.forEach((btn) => {
-            btn.classList.remove("is-active");
-            btn.setAttribute("aria-selected", "false");
-          });
-
-          galleryVideo.load();
-          galleryVideo.muted = false;
-          galleryVideo.volume = 1;
-          playGalleryVideo();
-
-          window.setTimeout(() => {
-            gallerySpotlight?.classList.remove("is-transitioning");
-          }, 350);
-        };
-
-        catButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const category = btn.dataset.category;
-            if (category) setPhotoMode(category);
-          });
-        });
-
-        sampleButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const category = btn.dataset.category;
-            if (category) setPhotoMode(category);
-          });
-        });
-
-        clipButtons.forEach((clip) => {
-          clip.addEventListener("click", () => setVideoMode(clip));
-        });
-
-        const galleryObserver = new IntersectionObserver(
+        // Intersection Observer for scene visibility
+        const sceneObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                if (activeMode === "video") playGalleryVideo();
-              } else if (galleryVideo) {
-                galleryVideo.pause();
+                entry.target.classList.add("is-visible");
+
+                // Handle video autoplay
+                const videoPlayer = entry.target.querySelector(
+                  ".gallery-video-cinematic-player",
+                );
+                if (videoPlayer) {
+                  videoPlayer.play().catch(() => {
+                    // Autoplay failed, video will play on click
+                  });
+                }
+              } else {
+                // Pause video when not in view
+                const videoPlayer = entry.target.querySelector(
+                  ".gallery-video-cinematic-player",
+                );
+                if (videoPlayer) {
+                  videoPlayer.pause();
+                }
               }
             });
           },
-          { threshold: 0.25, rootMargin: "40px 0px 40px 0px" },
+          {
+            threshold: 0.3,
+            rootMargin: "-10% 0px -10% 0px",
+          },
         );
-        galleryObserver.observe(gallerySection);
 
-        setPhotoMode("cultural");
+        scenes.forEach((scene) => sceneObserver.observe(scene));
+
+        // Parallax effect for images
+        const photoImages = gallerySection.querySelectorAll(
+          ".gallery-photo-full-image",
+        );
+
+        const parallaxObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                const handleScroll = () => {
+                  const rect = img.getBoundingClientRect();
+                  const scrollPercent =
+                    (window.innerHeight - rect.top) /
+                    (window.innerHeight + rect.height);
+                  const translateY = (scrollPercent - 0.5) * 30;
+                  img.style.transform = `scale(1) translateY(${translateY}px)`;
+                };
+
+                window.addEventListener("scroll", handleScroll, {
+                  passive: true,
+                });
+                handleScroll();
+
+                // Cleanup when not intersecting
+                entry.target._parallaxHandler = handleScroll;
+              } else {
+                if (entry.target._parallaxHandler) {
+                  window.removeEventListener(
+                    "scroll",
+                    entry.target._parallaxHandler,
+                  );
+                }
+              }
+            });
+          },
+          { threshold: 0 },
+        );
+
+        photoImages.forEach((img) => parallaxObserver.observe(img));
+
+        // Video play button interaction
+        const videoPlayButtons = gallerySection.querySelectorAll(
+          ".gallery-video-cinematic-play",
+        );
+
+        videoPlayButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const scene = btn.closest(".gallery-scene--video");
+            const video = scene.querySelector(
+              ".gallery-video-cinematic-player",
+            );
+
+            if (video) {
+              if (video.paused) {
+                video.play();
+                video.muted = false;
+                btn.style.opacity = "0";
+              } else {
+                video.pause();
+                btn.style.opacity = "1";
+              }
+            }
+          });
+        });
+
+        // Smooth scroll behavior for internal links
+        const ctaButtons = gallerySection.querySelectorAll(
+          ".gallery-cta-cinematic-btn",
+        );
+        ctaButtons.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const href = btn.getAttribute("href");
+            if (href && href.startsWith("#")) {
+              e.preventDefault();
+              const target = document.querySelector(href);
+              if (target) {
+                target.scrollIntoView({ behavior: "smooth" });
+              }
+            }
+          });
+        });
       }
 
       const portal3dSection = document.getElementById("portal-3d");

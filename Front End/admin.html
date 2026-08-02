@@ -266,10 +266,15 @@
             <div class="dashboard-container">
               <!-- Welcome Section -->
               <div class="dashboard-welcome">
-                <h1 class="dashboard-welcome__title">Dashboard Overview</h1>
-                <p class="dashboard-welcome__subtitle">
-                  Monitor heritage sites, user engagement, and multimedia assets
-                </p>
+                <div class="dashboard-welcome__header">
+                  <div class="dashboard-welcome__main">
+                    <h1 class="dashboard-welcome__title">Dashboard Overview</h1>
+                  </div>
+                  <div class="dashboard-welcome__greeting">
+                    <span class="greeting-date" id="greeting-date">Friday, July 31, 2026</span>
+                    <span class="greeting-time" id="greeting-time">11:27 AM</span>
+                  </div>
+                </div>
               </div>
 
               <!-- Heritage Statistics Cards -->
@@ -289,33 +294,102 @@
                 ></div>
               </section>
 
-              <!-- User Engagement Statistics -->
-              <section
-                class="dashboard-section"
-                aria-labelledby="engagement-stats-heading"
-              >
-                <h2
-                  id="engagement-stats-heading"
-                  class="dashboard-section__title"
-                >
-                  User Engagement
-                </h2>
-                <div class="stats-grid stats-grid--engagement">
-                  <article class="stat-card stat-card--users">
-                    <div class="stat-card__content">
-                      <p class="stat-card__label">Total Users</p>
-                      <p class="stat-card__value" id="total-users-stat">0</p>
-                      <p class="stat-card__trend">Registered accounts</p>
+              <!-- KPI Summary Cards -->
+              <section class="dashboard-section" aria-labelledby="kpi-heading">
+                <h2 id="kpi-heading" class="dashboard-section__title">Key Performance Indicators</h2>
+                <div class="analytics-kpi-grid">
+                  <article class="kpi-card kpi-card--users">
+                    <div class="kpi-card__icon-wrapper">
+                      <svg class="kpi-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div class="kpi-card__content">
+                      <p class="kpi-card__label">Total Users</p>
+                      <p class="kpi-card__value" id="kpi-total-users">0</p>
+                      <p class="kpi-card__trend">Registered accounts</p>
                     </div>
                   </article>
 
-                  <article class="stat-card stat-card--visits">
-                    <div class="stat-card__content">
-                      <p class="stat-card__label">Page Visits</p>
-                      <p class="stat-card__value" id="page-visits-stat">0</p>
-                      <p class="stat-card__trend" id="page-visits-trend">
-                        Live visitor sessions
-                      </p>
+                  <article class="kpi-card kpi-card--today">
+                    <div class="kpi-card__icon-wrapper">
+                      <svg class="kpi-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                    </div>
+                    <div class="kpi-card__content">
+                      <p class="kpi-card__label">Today's Visitors</p>
+                      <p class="kpi-card__value" id="kpi-today-visitors">0</p>
+                      <p class="kpi-card__trend">Daily page views</p>
+                    </div>
+                  </article>
+
+                  <article class="kpi-card kpi-card--active">
+                    <div class="kpi-card__icon-wrapper">
+                      <svg class="kpi-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div class="kpi-card__content">
+                      <p class="kpi-card__label">Active Users</p>
+                      <p class="kpi-card__value" id="kpi-active-users">0</p>
+                      <p class="kpi-card__trend">Currently online</p>
+                    </div>
+                  </article>
+
+                  <article class="kpi-card kpi-card--total-views">
+                    <div class="kpi-card__icon-wrapper">
+                      <svg class="kpi-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    </div>
+                    <div class="kpi-card__content">
+                      <p class="kpi-card__label">Total Page Views</p>
+                      <p class="kpi-card__value" id="kpi-total-views">0</p>
+                      <p class="kpi-card__trend">All time visits</p>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <!-- Analytics Charts -->
+              <section class="dashboard-section" aria-labelledby="analytics-heading">
+                <h2 id="analytics-heading" class="dashboard-section__title">Analytics Overview</h2>
+                <div class="analytics-charts-grid">
+                  <!-- Visitor Trends Line Chart -->
+                  <article class="chart-card chart-card--line">
+                    <div class="chart-card__header">
+                      <h3 class="chart-card__title">Visitor Trends</h3>
+                      <div class="chart-card__controls">
+                        <select class="chart-period-select" id="visitor-period-select">
+                          <option value="7">7 Days</option>
+                          <option value="30">30 Days</option>
+                          <option value="90">3 Months</option>
+                          <option value="180">6 Months</option>
+                          <option value="365">1 Year</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="chart-card__body">
+                      <canvas id="visitor-trends-chart"></canvas>
+                    </div>
+                  </article>
+
+                  <!-- Most Visited Pages Bar Chart -->
+                  <article class="chart-card chart-card--bar">
+                    <div class="chart-card__header">
+                      <h3 class="chart-card__title">Most Visited Pages</h3>
+                    </div>
+                    <div class="chart-card__body">
+                      <canvas id="page-visits-chart"></canvas>
                     </div>
                   </article>
                 </div>
@@ -1331,6 +1405,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
       type="module"
@@ -1356,6 +1431,7 @@
     <script src="heritage-points.js"></script>
     <script src="admin-auth.js"></script>
     <script src="admin-store.js"></script>
+    <script src="admin-analytics.js"></script>
     <script src="admin-lci-export.js"></script>
     <script src="admin-uploads.js"></script>
     <script src="admin-map.js"></script>

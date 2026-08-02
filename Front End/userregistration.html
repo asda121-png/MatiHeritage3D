@@ -154,32 +154,6 @@
             ></div>
 
             <form id="register-form" class="auth-portal-fields" novalidate>
-              <div class="auth-portal-field">
-                <label for="register-display-name">Display name</label>
-                <div class="auth-portal-input">
-                  <svg
-                    class="auth-portal-input__icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.75"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                  <input
-                    id="register-display-name"
-                    type="text"
-                    autocomplete="name"
-                    placeholder="How we greet you"
-                  />
-                </div>
-              </div>
-
               <div class="auth-portal-field-grid auth-portal-field-grid--2">
                 <div class="auth-portal-field">
                   <label for="register-username">Username</label>
@@ -487,13 +461,9 @@
         const form = document.getElementById("register-form");
         const alertEl = document.getElementById("register-alert");
         const submitBtn = document.getElementById("register-submit");
-        const displayNameInput = document.getElementById(
-          "register-display-name",
-        );
-
-        displayNameInput?.focus();
 
         const usernameInput = document.getElementById("register-username");
+        usernameInput?.focus();
         const emailInput = document.getElementById("register-email");
         const usernameHint = document.getElementById("register-username-hint");
         const emailHint = document.getElementById("register-email-hint");
@@ -615,7 +585,6 @@
 
           setLoading(true);
           const result = await MatiAuth.register({
-            displayName: displayNameInput?.value || "",
             username: document.getElementById("register-username")?.value || "",
             email: document.getElementById("register-email")?.value || "",
             password,

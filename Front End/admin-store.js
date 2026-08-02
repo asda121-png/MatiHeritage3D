@@ -854,25 +854,29 @@ const MatiAdminStore = (() => {
     };
   }
 
-  function getLocalCommunityStats() {
-    const users = typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
-    const registered = getRegisteredUsers();
+  async function getLocalCommunityStats() {
+    const localUsers = typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
+    const registered = await getRegisteredUsers();
+    
+    // Use registered users count from Supabase if available, otherwise localStorage
+    const userCount = registered.length > 0 ? registered.length : localUsers.length;
+    
     return {
-      registeredUsers: users.length,
+      registeredUsers: userCount,
       gamePlayers: registered.filter((user) => Number(user.points) > 0).length,
     };
   }
 
-  function getDashboardCommunityStats() {
+  async function getDashboardCommunityStats() {
     if (remoteCommunityStats) return remoteCommunityStats;
-    return getLocalCommunityStats();
+    return await getLocalCommunityStats();
   }
 
-  function getDashboardStats() {
+  async function getDashboardStats() {
     const sites = getAllSites().filter((site) => !isDraftSiteId(site.id));
     const media = getAllMedia();
     const builtSites = sites.filter((site) => site.category === "built");
-    const community = getDashboardCommunityStats();
+    const community = await getDashboardCommunityStats();
     return {
       built: builtSites.length,
       intangible: sites.filter((s) => s.category === "intangible").length,
@@ -938,14 +942,25 @@ const MatiAdminStore = (() => {
     });
   }
 
-  function getRegisteredUsers() {
+  async function getRegisteredUsers() {
     if (typeof MatiAuth === "undefined") return [];
+    
+    // Try to fetch from Supabase if enabled
+    if (typeof MatiSupabaseAuth !== "undefined" && MatiSupabaseAuth.enabled?.()) {
+      const supabaseUsers = await MatiSupabaseAuth.getAllUsers?.();
+      if (supabaseUsers) {
+        return supabaseUsers;
+      }
+    }
+    
+    // Fall back to localStorage
     return MatiAuth.readUsers().map((u) => ({
-      displayName: u.displayName,
+      displayName: u.username || "User",
       username: u.username,
       email: u.email,
       createdAt: u.createdAt,
       points: u.heritagePoints ?? 0,
+      avatarUrl: u.avatarUrl || null,
     }));
   }
 
@@ -953,7 +968,11 @@ const MatiAdminStore = (() => {
     if (typeof MatiAuth !== "undefined" && MatiAuth.getAvatarUrl) {
       return MatiAuth.getAvatarUrl(username);
     }
-    return `https://i.pravatar.cc/150?u=${encodeURIComponent(username || "guest")}`;
+    // Facebook-style silhouette avatar
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="#ccc">
+      <path d="M18 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 4c-5.33 0-16 2.67-16 8v2h32v-2c0-5.33-10.67-8-16-8z"/>
+    </svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   }
 
   let leaderboardCache = [];
@@ -961,12 +980,12 @@ const MatiAdminStore = (() => {
   let leaderboardUnsubscribe = null;
   let visitorUnsubscribe = null;
 
-  function getLeaderboardLocal() {
-    const users = getRegisteredUsers()
+  async function getLeaderboardLocal() {
+    const users = (await getRegisteredUsers())
       .map((u) => ({
         username: u.username,
         points: Number(u.points) || 0,
-        avatarUrl: playerAvatarUrl(u.username),
+        avatarUrl: u.avatarUrl || playerAvatarUrl(u.username),
       }))
       .filter((u) => u.points > 0);
 
@@ -982,7 +1001,7 @@ const MatiAdminStore = (() => {
         users.push({
           username: session.username,
           points: sessionPts,
-          avatarUrl: playerAvatarUrl(session.username),
+          avatarUrl: session.avatarUrl || playerAvatarUrl(session.username),
         });
       }
     }
@@ -990,9 +1009,9 @@ const MatiAdminStore = (() => {
     return users.sort((a, b) => b.points - a.points).slice(0, 50);
   }
 
-  function getLeaderboard() {
+  async function getLeaderboard() {
     if (leaderboardCache.length) return leaderboardCache.slice(0, 50);
-    return getLeaderboardLocal();
+    return await getLeaderboardLocal();
   }
 
   async function refreshLeaderboard({ force = false } = {}) {
@@ -1012,7 +1031,7 @@ const MatiAdminStore = (() => {
             username: row.username,
             displayName: row.displayName || row.username,
             points: Number(row.points) || 0,
-            avatarUrl: row.avatarUrl || playerAvatarUrl(row.username),
+            avatarUrl: row.avatarUrl,
           }));
           leaderboardLoadedAt = Date.now();
           return leaderboardCache;
@@ -1315,8 +1334,8 @@ const MatiAdminStore = (() => {
     );
   }
 
-  function buildLciSummary() {
-    const stats = getDashboardStats();
+  async function buildLciSummary() {
+    const stats = await getDashboardStats();
     return {
       built: stats.built,
       natural: stats.natural,
