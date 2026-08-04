@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" href="heritage-palette.css" />
     <link rel="stylesheet" href="auth.css" />
+    <link rel="stylesheet" href="model-viewer-loading.css" />
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
@@ -58,19 +59,19 @@
           <div class="auth-portal-visual__media">
             <div
               id="login-model-loading"
-              class="auth-portal-visual__loading"
+              class="model-viewer-loading model-viewer-loading--dark model-viewer-loading--compact"
               aria-live="polite"
               aria-busy="true"
             >
               <div
-                class="auth-portal-visual__loading-spinner"
+                class="model-viewer-loading__spinner"
                 aria-hidden="true"
               ></div>
-              <p class="auth-portal-visual__loading-text">
+              <p class="model-viewer-loading__text">
                 Loading 3D preview…
               </p>
               <p
-                class="auth-portal-visual__loading-percent"
+                class="model-viewer-loading__percent"
                 id="login-model-percent"
                 aria-hidden="true"
               >
@@ -335,6 +336,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="../Back End/supabase-config.js"></script>
     <script src="heritage-pylon-model.js"></script>
+    <script src="model-viewer-loading.js"></script>
     <script src="../Back End/supabase-client.js"></script>
     <script src="auth-password-hash.js"></script>
     <script src="../Back End/supabase-auth.js"></script>
@@ -351,65 +353,7 @@
         "eye-closed",
       );
 
-      (function bindLoginModelLoading() {
-        const viewer = document.getElementById("login-pylon-model");
-        const loading = document.getElementById("login-model-loading");
-        const progressPercent = document.getElementById("login-model-percent");
-        const loadingText = loading?.querySelector(
-          ".auth-portal-visual__loading-text",
-        );
-        if (!viewer || !loading) return;
-
-        if (typeof MatiHeritagePylonModel !== "undefined") {
-          MatiHeritagePylonModel.applyToModelViewer(viewer);
-        }
-
-        function setProgress(ratio) {
-          if (!progressPercent) return;
-          const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
-          progressPercent.textContent = `${pct}%`;
-        }
-
-        function hideLoading() {
-          loading.classList.add("is-hidden");
-          loading.setAttribute("aria-busy", "false");
-          window.setTimeout(() => {
-            loading.hidden = true;
-            loading.setAttribute("hidden", "");
-          }, 380);
-        }
-
-        if (viewer.loaded) {
-          setProgress(1);
-          hideLoading();
-          return;
-        }
-
-        viewer.addEventListener("progress", (event) => {
-          setProgress(event.detail.totalProgress);
-        });
-
-        viewer.addEventListener(
-          "load",
-          () => {
-            setProgress(1);
-            hideLoading();
-          },
-          { once: true },
-        );
-
-        viewer.addEventListener(
-          "error",
-          () => {
-            if (loadingText) {
-              loadingText.textContent = "3D preview unavailable";
-            }
-            setProgress(0);
-            window.setTimeout(hideLoading, 1400);
-          },
-          { once: true },
-        );
-      })();
+      // Model loading is now handled by model-viewer-loading.js
 
       (function () {
         const form = document.getElementById("login-form");

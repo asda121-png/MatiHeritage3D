@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="gallery-page.css" />
     <link rel="stylesheet" href="heritage-map-markers.css" />
     <link rel="stylesheet" href="heritage-map-ui.css" />
+    <link rel="stylesheet" href="model-viewer-loading.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -1016,15 +1017,16 @@
       </div>
       <div class="heritage-fullscreen__stage">
         <div
-          class="heritage-fullscreen__loading"
+          class="model-viewer-loading model-viewer-loading--dark"
           id="fullscreen-loading"
           hidden
         >
-          <spanthe 
-            class="heritage-fullscreen__loading-spinner"
+          <div 
+            class="model-viewer-loading__spinner"
             aria-hidden="true"
-          ></span>
-          <p id="fullscreen-loading-label">Loading 3D model…</p>
+          ></div>
+          <p id="fullscreen-loading-label" class="model-viewer-loading__text">Loading 3D model…</p>
+          <p id="fullscreen-loading-percent" class="model-viewer-loading__percent">0%</p>
         </div>
         <model-viewer
           id="fullscreen-model"
@@ -1410,6 +1412,7 @@
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
       type="module"
     ></script>
+    <script src="model-viewer-loading.js"></script>
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
