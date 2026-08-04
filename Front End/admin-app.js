@@ -853,6 +853,19 @@
     const fullscreenLoading = $("#fullscreen-loading");
     if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
     if (fullscreenLoading) fullscreenLoading.removeAttribute("hidden");
+    
+    // Initialize percentage tracking if ModelViewerLoading is available
+    if (typeof ModelViewerLoading !== "undefined") {
+      ModelViewerLoading.initializeFullscreen(
+        'fullscreen-model',
+        'fullscreen-loading',
+        'fullscreen-loading-label',
+        'fullscreen-loading-percent',
+        {
+          loadingTextSelector: '.model-viewer-loading__text'
+        }
+      );
+    }
   }
 
   function hideFullscreenLoading() {
