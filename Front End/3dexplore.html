@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>3D Explore — Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,8 +31,8 @@
         theme: {
           extend: {
             fontFamily: {
-              sans: ['"Source Sans 3"', "system-ui", "sans-serif"],
-              display: ['"Cormorant Garamond"', "Georgia", "serif"],
+              sans: ['"Inter"', "system-ui", "sans-serif"],
+              display: ['"Inter"', "system-ui", "sans-serif"],
             },
           },
         },
@@ -51,12 +54,12 @@
       }
 
       body {
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         color: var(--slate);
-        background: var(--bg-site);
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        background: transparent;
       }
 
       ::selection {
@@ -72,7 +75,7 @@
       }
 
       body.visitor-module {
-        font-family: "Source Sans 3", sans-serif !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
         --header-h: 5.625rem;
         --header-h-scrolled: 4.875rem;
       }
@@ -82,12 +85,12 @@
       body.visitor-module .visitor-auth-btn,
       body.visitor-module .site-footer,
       body.visitor-module .site-footer a {
-        font-family: "Source Sans 3", sans-serif !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
       }
 
       body.visitor-module .display-font,
       body.visitor-module header .site-brand__title {
-        font-family: "Cormorant Garamond", Georgia, serif !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
       }
 
       body.visitor-module .visitor-auth-actions {
@@ -105,7 +108,7 @@
         justify-content: center;
         gap: 0.45rem;
         padding: 0.58rem 1.15rem;
-        font-family: "Source Sans 3", sans-serif !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
         font-size: 0.875rem !important;
         font-weight: 600 !important;
         letter-spacing: 0.02em !important;
@@ -159,7 +162,7 @@
       }
 
       .display-font {
-        font-family: "Cormorant Garamond", Georgia, serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-weight: 600;
         letter-spacing: 0.01em;
       }
@@ -167,19 +170,12 @@
       .explore3d-page {
         position: relative;
         z-index: 1;
-        background: var(--bg-site);
       }
 
       .map-hero-bridge {
         position: relative;
         padding: clamp(2.75rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem)
           clamp(3rem, 7vw, 5rem);
-        background: linear-gradient(
-          180deg,
-          var(--bg-site) 0%,
-          var(--mint-deep) 42%,
-          rgba(209, 250, 229, 0.65) 100%
-        );
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -220,7 +216,7 @@
       .map-hero-bridge__label {
         position: relative;
         z-index: 1;
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: 0.625rem;
         font-weight: 700;
         letter-spacing: 0.24em;
@@ -231,11 +227,10 @@
 
       .explore3d-workspace {
         position: relative;
-        max-width: 92rem;
-        margin: 0 auto;
-        padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem)
-          clamp(3.5rem, 7vw, 5rem);
+        width: 100%;
+        padding: 0;
         overflow: hidden;
+        background: transparent;
       }
 
       .explore3d-workspace__bg {
@@ -266,7 +261,6 @@
         padding: clamp(2rem, 4vw, 2.75rem);
         text-align: center;
         border-radius: 1.35rem;
-        background: rgba(255, 255, 255, 0.88);
         border: 1px dashed rgba(4, 120, 87, 0.22);
         box-shadow: 0 20px 50px rgba(15, 23, 42, 0.04);
       }
@@ -317,8 +311,45 @@
       .explore3d-stage-layout {
         position: relative;
         z-index: 1;
-        display: grid;
-        gap: clamp(1.25rem, 2.5vw, 1.75rem);
+        display: block;
+        background: linear-gradient(
+          180deg,
+          #0B1118 0%,
+          #1A2433 100%
+        );
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 85vh;
+        min-height: 85dvh;
+      }
+
+      .explore3d-stage-layout::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 30% at 50% 85%,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0.02) 40%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .explore3d-stage-layout::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 50%,
+          rgba(0, 0, 0, 0.4) 100%
+        );
+        pointer-events: none;
+        z-index: 3;
       }
 
       .explore3d-stage-head {
@@ -365,24 +396,42 @@
         display: grid;
         gap: clamp(1.25rem, 3vw, 1.75rem);
         align-items: stretch;
+        width: 100%;
+        padding: 3.5rem 3rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: museumFadeIn 0.8s ease forwards;
+        z-index: 2;
+      }
+
+      @keyframes museumFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       @media (min-width: 1024px) {
         .explore3d-stage-grid {
-          grid-template-columns: minmax(0, 1.15fr) minmax(300px, 400px);
+          grid-template-columns: 38% 62%;
+          gap: 2.5rem;
         }
       }
 
       .explore3d-stage-media {
-        display: grid;
-        gap: 0.85rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-left: 3rem;
         min-width: 0;
       }
 
       .explore3d-photo-gallery {
         padding: 0.85rem 1rem 1rem;
         border-radius: 1.15rem;
-        background: rgba(255, 255, 255, 0.94);
         border: 1px solid rgba(4, 120, 87, 0.1);
         box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
       }
@@ -433,7 +482,11 @@
         width: min(1120px, 100%);
         max-height: calc(100vh - clamp(1.5rem, 4vw, 3rem));
         border-radius: 1.25rem;
-        background: #fff;
+        background: linear-gradient(
+          180deg,
+          #0B1118 0%,
+          #1A2433 100%
+        );
         border: 1px solid rgba(4, 120, 87, 0.12);
         box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
         overflow: hidden;
@@ -481,20 +534,10 @@
         gap: 1rem;
         flex-shrink: 0;
         padding: 0.95rem 1.2rem;
-        background: linear-gradient(
-          90deg,
-          rgba(236, 253, 245, 0.92),
-          rgba(255, 255, 255, 0.98)
-        );
         border-bottom: 1px solid rgba(4, 120, 87, 0.08);
       }
 
       .explore3d-media-overlay.is-map .explore3d-media-overlay__bar {
-        background: linear-gradient(
-          90deg,
-          rgba(224, 242, 254, 0.95),
-          rgba(255, 255, 255, 0.98)
-        );
         border-bottom-color: rgba(2, 132, 199, 0.1);
       }
 
@@ -527,7 +570,6 @@
         padding: 0;
         border: 1px solid rgba(4, 120, 87, 0.14);
         border-radius: 9999px;
-        background: #fff;
         font-size: 1.35rem;
         line-height: 1;
         color: #64748b;
@@ -541,7 +583,6 @@
       .explore3d-media-overlay__close:hover {
         color: var(--forest-dark);
         border-color: rgba(4, 120, 87, 0.28);
-        background: #f8fafc;
       }
 
       .explore3d-media-overlay__content {
@@ -600,7 +641,6 @@
         padding: 0;
         border: 2px solid rgba(4, 120, 87, 0.12);
         border-radius: 0.65rem;
-        background: #f8fafc;
         overflow: hidden;
         cursor: pointer;
         scroll-snap-align: start;
@@ -646,14 +686,14 @@
       .explore3d-details-tab {
         padding: 0.48rem 0.9rem;
         border: 1px solid rgba(4, 120, 87, 0.14);
-        border-radius: 9999px;
-        background: #fff;
+        border-radius: 0.375rem;
         font-family: inherit;
-        font-size: 0.72rem;
+        font-size: 0.85rem;
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        color: #64748b;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
         cursor: pointer;
         transition:
           background 0.22s ease,
@@ -663,8 +703,9 @@
       }
 
       .explore3d-details-tab:hover {
-        color: var(--forest-dark);
+        color: #ffffff;
         border-color: rgba(4, 120, 87, 0.28);
+        background: rgba(255, 255, 255, 0.2);
       }
 
       .explore3d-details-tab.is-active {
@@ -691,7 +732,6 @@
         border-radius: 0.85rem;
         overflow: hidden;
         border: 1px solid rgba(4, 120, 87, 0.12);
-        background: #f8fafc;
         cursor: zoom-in;
       }
 
@@ -708,7 +748,6 @@
         padding: 0;
         border: 1px solid rgba(2, 132, 199, 0.16);
         border-radius: 0.85rem;
-        background: #f0f9ff;
         overflow: hidden;
         cursor: zoom-in;
         transition:
@@ -739,7 +778,6 @@
         line-height: 1.6;
         color: #64748b;
         border-radius: 0.85rem;
-        background: #f8fafc;
         border: 1px dashed rgba(4, 120, 87, 0.16);
       }
 
@@ -831,6 +869,7 @@
         font-weight: 600;
         letter-spacing: 0.04em;
         color: var(--forest-dark);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       @keyframes explore3d-spin {
@@ -879,37 +918,17 @@
         display: grid;
         gap: 0.85rem;
         padding: 1.15rem 1.5rem 1.5rem;
-        border-top: 1px solid rgba(15, 23, 42, 0.06);
-        background: linear-gradient(
-          180deg,
-          rgba(248, 250, 252, 0.4),
-          rgba(255, 255, 255, 0.95)
-        );
       }
 
-      .explore3d-viewer {
+      .heritage-model-container {
         position: relative;
-        min-height: clamp(340px, 48vh, 560px);
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+        max-height: 750px;
         overflow: hidden;
-        background:
-          radial-gradient(
-            ellipse at 50% 0%,
-            rgba(16, 185, 129, 0.12) 0%,
-            transparent 52%
-          ),
-          linear-gradient(165deg, #101820 0%, #0a0f14 48%, #121a22 100%);
         border-color: rgba(255, 255, 255, 0.08);
-      }
-
-      .explore3d-viewer.is-photo {
-        background:
-          radial-gradient(
-            ellipse at 50% 30%,
-            rgba(4, 120, 87, 0.08) 0%,
-            transparent 55%
-          ),
-          linear-gradient(165deg, #faf7f2 0%, #f0ebe3 48%, #ebe4d9 100%);
-        border-color: rgba(4, 120, 87, 0.1);
+        border-radius: 1rem;
       }
 
       .explore3d-viewer-badge {
@@ -928,6 +947,7 @@
         border: 1px solid rgba(110, 231, 183, 0.22);
         backdrop-filter: blur(8px);
         pointer-events: none;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-viewer.is-photo .explore3d-viewer-badge {
@@ -946,7 +966,7 @@
 
       .explore3d-model {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         width: 100%;
         height: 100%;
         min-height: inherit;
@@ -992,7 +1012,7 @@
         font-size: 1.5rem;
         font-weight: 700;
         color: #6ee7b7;
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         letter-spacing: 0.02em;
       }
 
@@ -1000,7 +1020,7 @@
         font-size: 0.875rem;
         font-weight: 500;
         color: #cbd5e1;
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         letter-spacing: 0.04em;
       }
 
@@ -1096,12 +1116,14 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: #6ee7b7;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .heritage-fullscreen__title {
         margin: 0;
         font-size: clamp(1.25rem, 2.5vw, 1.65rem);
         color: #fff;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .heritage-fullscreen__close {
@@ -1207,39 +1229,171 @@
 
       .explore3d-panel {
         border-radius: 1.35rem;
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(4, 120, 87, 0.1);
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(212, 175, 55, 0.15);
         box-shadow: 0 24px 56px rgba(15, 23, 42, 0.06);
         overflow: hidden;
       }
 
-      .explore3d-viewer.explore3d-panel {
+      .heritage-model-container.explore3d-panel {
         background: transparent;
         box-shadow: 0 28px 60px rgba(10, 15, 20, 0.18);
       }
 
-      .explore3d-details {
-        position: relative;
+      /* Left Panel: Information */
+      .heritage-info-panel {
         display: flex;
         flex-direction: column;
-        min-height: 0;
+        gap: 1.75rem;
+        padding-right: 1rem;
+        margin-left: 6rem;
+        position: relative;
+        z-index: 2;
       }
 
-      .explore3d-details::before {
+      .heritage-info-header {
+        border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .heritage-title {
+        font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      /* Description */
+      .heritage-description-container {
+        position: relative;
+      }
+
+      .heritage-description-wrapper {
+        padding-right: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .heritage-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: rgba(240, 253, 244, 0.9);
+        margin: 0;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      /* Quick Information Grid */
+      .heritage-quick-info {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+      }
+
+      .quick-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+
+      .quick-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(240, 253, 244, 0.08);
+      }
+
+      .quick-info-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: rgba(212, 175, 55, 0.7);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.4;
+      }
+
+      .quick-info-value {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(240, 253, 244, 0.95);
+        letter-spacing: 0.02em;
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.5;
+      }
+
+      .explore3d-facts {
+        list-style: none;
+        padding: 1rem 0 0;
+        margin: 0;
+        display: grid;
+        gap: 0.65rem;
+        border-top: 1px solid rgba(240, 253, 244, 0.08);
+      }
+
+      .explore3d-facts[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-facts li {
+        position: relative;
+        padding-left: 1rem;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: rgba(240, 253, 244, 0.9);
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .explore3d-facts li::before {
         content: "";
         position: absolute;
         left: 0;
-        top: 1.25rem;
-        bottom: 1.25rem;
-        width: 3px;
-        border-radius: 0 2px 2px 0;
-        background: linear-gradient(
-          180deg,
-          var(--forest),
-          var(--amber-dark) 55%,
-          var(--sky)
-        );
-        pointer-events: none;
+        top: 0.55em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(212, 175, 55, 0.7);
+      }
+
+      /* Right Panel: 3D Model */
+      .heritage-model-panel {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-left: 0.1rem;
+        z-index: 2;
+      }
+
+      .heritage-model-container {
+        position: relative;
+        width: 90%;
+        height: 100%;
+        min-height: 600px;
+        max-height: 750px;
+        overflow: visible;
+        border-radius: 1rem;
+        background: transparent;
+      }
+
+      .experience-3d-model {
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+        max-height: 750px;
+        border-radius: 1rem;
+        display: block !important;
+        position: relative;
+        z-index: 2;
+        opacity: 1 !important;
+        visibility: visible !important;
+        background: rgba(0, 0, 0, 0.3);
       }
 
       /* ── Mati City Map (built heritage) ── */
@@ -1436,7 +1590,7 @@
 
       .map-intro-overlay__title-main {
         display: block;
-        font-family: "Cormorant Garamond", Georgia, serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700;
         letter-spacing: 0.02em;
@@ -1445,7 +1599,7 @@
 
       .map-intro-overlay__title-sub {
         display: block;
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 0.18em;
@@ -1525,7 +1679,7 @@
         justify-content: center;
         background: linear-gradient(145deg, #ecfdf5, #d1fae5);
         color: var(--forest);
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: 0.62rem;
         font-weight: 800;
         letter-spacing: 0.04em;
@@ -1558,12 +1712,12 @@
 
       .leaflet-popup-content {
         margin: 0.75rem 1rem !important;
-        font-family: "Source Sans 3", sans-serif !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
         line-height: 1.45 !important;
       }
 
       .map-popup-title {
-        font-family: "Cormorant Garamond", Georgia, serif;
+        font-family: 'Inter', system-ui, sans-serif;
         font-weight: 700;
         font-size: 0.95rem;
         color: #0f172a;
@@ -1581,6 +1735,7 @@
         margin-bottom: 0.35rem;
         background: rgba(4, 120, 87, 0.12);
         color: var(--forest-dark);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .map-popup-desc {
@@ -1623,7 +1778,7 @@
         padding: 0.85rem 1.35rem;
         border: none;
         border-radius: 9999px;
-        font-family: inherit;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: 0.8125rem;
         font-weight: 700;
         letter-spacing: 0.05em;
@@ -1652,10 +1807,38 @@
 
       .explore3d-details-body {
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
         padding: clamp(1.35rem, 2.5vw, 1.85rem) clamp(1.25rem, 2.5vw, 1.75rem)
           clamp(1.25rem, 2.5vw, 1.5rem);
         padding-left: clamp(1.5rem, 2.5vw, 2rem);
         overflow-y: auto;
+      }
+
+      .explore3d-details-header {
+        border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .explore3d-details-title {
+        font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .heritage-description-container {
+        position: relative;
+      }
+
+      .heritage-description-wrapper {
+        padding-right: 1rem;
+        margin-bottom: 1.5rem;
       }
 
       .explore3d-details-label {
@@ -1664,7 +1847,8 @@
         font-weight: 700;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: #94a3b8;
+        color: rgba(212, 175, 55, 0.7);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-details-type {
@@ -1675,9 +1859,10 @@
         font-weight: 800;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--forest-dark);
-        background: rgba(4, 120, 87, 0.08);
-        border: 1px solid rgba(4, 120, 87, 0.12);
+        color: rgba(212, 175, 55, 0.9);
+        background: rgba(212, 175, 55, 0.15);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-details-type.built {
@@ -1689,10 +1874,11 @@
       }
 
       .explore3d-details-desc {
-        font-size: 0.9375rem;
-        line-height: 1.8;
-        color: #475569;
-        margin: 0 0 1.5rem;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: rgba(240, 253, 244, 0.9);
+        margin: 0;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-specs-heading {
@@ -1701,7 +1887,8 @@
         font-weight: 700;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        color: var(--forest-dark);
+        color: rgba(212, 175, 55, 0.7);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-specs {
@@ -1728,23 +1915,30 @@
         gap: 0.25rem;
         padding: 0.7rem 0.8rem;
         border-radius: 0.75rem;
-        background: linear-gradient(145deg, #f8fafc, #fff);
-        border: 1px solid rgba(15, 23, 42, 0.06);
+        background: transparent;
+        border-bottom: 1px solid rgba(240, 253, 244, 0.08);
+      }
+
+      .explore3d-specs li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
       }
 
       .explore3d-spec-key {
         font-weight: 700;
-        color: #94a3b8;
+        color: rgba(212, 175, 55, 0.7);
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-size: 0.62rem;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-spec-val {
         font-weight: 600;
-        color: var(--ink);
+        color: rgba(240, 253, 244, 0.95);
         font-size: 0.875rem;
         line-height: 1.4;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-facts {
@@ -1766,6 +1960,7 @@
         font-size: 0.875rem;
         line-height: 1.6;
         color: var(--slate);
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-facts li::before {
@@ -1790,6 +1985,7 @@
         text-decoration: none;
         color: var(--forest-dark);
         transition: color 0.2s ease;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
       .explore3d-map-link:hover {
@@ -1801,12 +1997,74 @@
           font-size: clamp(1.55rem, 5vw, 2rem);
         }
 
-        .explore3d-details {
-          min-height: auto;
+        .explore3d-stage-grid {
+          grid-template-columns: 42% 58%;
+          gap: 2rem;
+          padding: 2.5rem 2rem;
         }
 
-        .explore3d-viewer {
-          min-height: clamp(300px, 42vh, 420px);
+        .heritage-info-panel {
+          padding-right: 0.5rem;
+          margin-left: 0;
+        }
+
+        .heritage-model-panel {
+          margin-left: 0;
+        }
+
+        .heritage-model-container {
+          min-height: 450px;
+          max-height: 550px;
+        }
+
+        .explore3d-details-foot {
+          margin-top: 0.75rem;
+          padding: 0.6rem 1rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .explore3d-stage-grid {
+          grid-template-columns: 1fr;
+          gap: 1.75rem;
+          padding: 2rem 1.25rem;
+        }
+
+        .heritage-info-panel {
+          padding-right: 0;
+          margin-left: 0;
+        }
+
+        .heritage-info-header {
+          padding-bottom: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .heritage-title {
+          font-size: 1.5rem;
+        }
+
+        .heritage-description {
+          font-size: 0.9rem;
+        }
+
+        .quick-info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .heritage-model-panel {
+          margin-left: 0;
+        }
+
+        .heritage-model-container {
+          min-height: 350px;
+          max-height: 450px;
+          order: 2;
+        }
+
+        .explore3d-details-foot {
+          margin-top: 0.5rem;
+          padding: 0.5rem 0.875rem;
         }
       }
     </style>
@@ -1853,82 +2111,11 @@
         </div>
       </section>
 
-      <div class="map-hero-bridge" aria-hidden="true">
-        <span class="map-hero-bridge__line"></span>
-        <span class="map-hero-bridge__label"
-          >Scroll to explore built heritage</span
-        >
-      </div>
-
       <div id="explore3d-viewer" class="explore3d-workspace">
         <div class="explore3d-workspace__bg" aria-hidden="true"></div>
 
-        <div class="explore3d-idle" id="explore-idle-panel">
-          <div class="explore3d-idle__card">
-            <span class="explore3d-idle__icon" aria-hidden="true">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 22s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z" />
-                <circle cx="12" cy="11" r="2.5" />
-              </svg>
-            </span>
-            <span class="explore3d-idle__eyebrow">Built Heritage</span>
-            <h2 class="explore3d-idle__title display-font">
-              Select a site on the map
-            </h2>
-            <p class="explore3d-idle__desc">
-              Tap any built heritage marker above to load its description,
-              specifications, and 3D model below.
-            </p>
-          </div>
-        </div>
-
         <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
-          <header class="explore3d-stage-head">
-            <div class="explore3d-stage-head__meta">
-              <span class="explore3d-details-type built" id="detail-type"
-                >Built Heritage</span
-              >
-            </div>
-            <div class="explore3d-stage-head__row">
-              <h2
-                class="explore3d-stage-head__title display-font"
-                id="stage-title"
-              ></h2>
-              <div
-                class="explore3d-stage-head__actions"
-                role="navigation"
-                aria-label="Jump to site sections"
-              >
-                <button
-                  type="button"
-                  class="explore3d-details-tab"
-                  data-detail-view="map"
-                  aria-selected="false"
-                  id="detail-tab-map"
-                  hidden
-                >
-                  Map
-                </button>
-                <button
-                  type="button"
-                  class="explore3d-details-tab"
-                  data-detail-view="photos"
-                  aria-selected="false"
-                  id="detail-tab-photos"
-                  hidden
-                >
-                  Photographs
-                </button>
-              </div>
-            </div>
-          </header>
+
 
           <div
             class="explore3d-reveal-loader"
@@ -1942,15 +2129,57 @@
           </div>
 
           <div class="explore3d-stage-grid">
-            <div class="explore3d-stage-media">
-              <section
-                class="explore3d-panel explore3d-viewer"
-                id="heritage-viewer-panel"
-                aria-label="3D model viewer"
-              >
-                <span class="explore3d-viewer-badge" id="viewer-badge"
-                  >3D Preview</span
+            <!-- Left Panel: Information -->
+            <div class="heritage-info-panel">
+              <div class="heritage-info-header">
+                <h1 class="heritage-title" id="detail-title"></h1>
+              </div>
+              
+              <div class="heritage-description-container">
+                <div class="heritage-description-wrapper">
+                  <p class="heritage-description" id="detail-desc"></p>
+                </div>
+              </div>
+              
+              <div class="heritage-quick-info">
+                <div class="quick-info-grid" id="detail-specs"></div>
+              </div>
+
+              <ul class="explore3d-facts" id="detail-facts" hidden></ul>
+
+              <div style="display: flex; margin-bottom: 1rem;">
+                <div
+                  class="explore3d-stage-head__actions"
+                  role="navigation"
+                  aria-label="Jump to site sections"
                 >
+                  <button
+                    type="button"
+                    class="explore3d-details-tab"
+                    data-detail-view="map"
+                    aria-selected="false"
+                    id="detail-tab-map"
+                    hidden
+                  >
+                    Map
+                  </button>
+                  <button
+                    type="button"
+                    class="explore3d-details-tab"
+                    data-detail-view="photos"
+                    aria-selected="false"
+                    id="detail-tab-photos"
+                    hidden
+                  >
+                    Photographs
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right Panel: 3D Model Viewer -->
+            <div class="heritage-model-panel">
+              <div class="heritage-model-container" id="heritage-viewer-panel">
                 <div class="explore3d-viewer-lines" aria-hidden="true"></div>
                 <div
                   class="explore3d-loading-overlay"
@@ -1968,8 +2197,8 @@
                 </div>
                 <model-viewer
                   id="heritage-model"
-                  class="explore3d-model"
-                  src=""
+                  class="experience-3d-model"
+                  src="data/Built Heritage/Pylon Monument/Pylon.glb"
                   alt="Built heritage 3D model"
                   auto-rotate
                   rotation-per-second="14deg"
@@ -1984,7 +2213,6 @@
                   loading="eager"
                   reveal="auto"
                   interaction-prompt="auto"
-                  hidden
                 ></model-viewer>
                 <img
                   id="preview-image"
@@ -1997,45 +2225,8 @@
                   No 3D model for this site — use Map or Photographs beside the
                   title.
                 </p>
-                <p class="explore3d-viewer-hint" id="viewer-hint" hidden>
-                  Drag to rotate · Scroll to zoom
-                </p>
-              </section>
+              </div>
             </div>
-
-            <aside
-              class="explore3d-panel explore3d-details"
-              aria-label="Site information"
-            >
-              <div class="explore3d-details-body" id="explore-details-body">
-                <section
-                  class="explore3d-details-section"
-                  id="detail-section-about"
-                >
-                  <p class="explore3d-details-label">About this site</p>
-                  <h3
-                    class="explore3d-details-title display-font"
-                    id="detail-title"
-                  ></h3>
-                  <p class="explore3d-details-desc" id="detail-desc"></p>
-                  <p class="explore3d-specs-heading">Site details</p>
-                  <ul class="explore3d-specs" id="detail-specs"></ul>
-                  <ul class="explore3d-facts" id="detail-facts"></ul>
-                </section>
-              </div>
-              <div class="explore3d-details-foot">
-                <button
-                  type="button"
-                  class="explore3d-view-btn"
-                  id="view-heritage-btn"
-                >
-                  View Heritage
-                </button>
-                <a href="#mati-map-section" class="explore3d-map-link">
-                  Back to map →
-                </a>
-              </div>
-            </aside>
           </div>
         </div>
       </div>
@@ -2232,9 +2423,6 @@
           hidden
         />
       </div>
-      <p class="heritage-fullscreen__hint" id="fullscreen-hint">
-        Drag to rotate · Scroll to zoom
-      </p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -2588,9 +2776,7 @@
           lat: 6.952258,
           lng: 126.216889,
           official: true,
-          modelSrc:
-            window.MATI_SUPABASE_CONFIG?.pylonModelUrl ||
-            "https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb",
+          modelSrc: "data/Built Heritage/Pylon Monument/Pylon.glb",
           image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           photos: [
             "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
@@ -2715,7 +2901,6 @@
       const detailTitle = document.getElementById("detail-title");
       const detailDesc = document.getElementById("detail-desc");
       const detailSpecs = document.getElementById("detail-specs");
-      const detailFacts = document.getElementById("detail-facts");
       const viewHeritageBtn = document.getElementById("view-heritage-btn");
       const heritageFullscreen = document.getElementById("heritage-fullscreen");
       const fullscreenModel = document.getElementById("fullscreen-model");
@@ -3099,9 +3284,6 @@
           fullscreenModel.hidden = false;
           fullscreenModel.setAttribute("alt", `${site.name} 3D model`);
           fullscreenModel.autoRotate = true;
-          if (fullscreenHint) {
-            fullscreenHint.textContent = "Drag to rotate · Scroll to zoom";
-          }
           waitForFullscreenModel(site);
         } else if (fullscreenModel) {
           hideFullscreenLoading();
@@ -3147,6 +3329,11 @@
       }
 
       function updateViewer(site) {
+        // Force local path for Pylon Monument
+        if (site.id === 'pylon') {
+          site.modelSrc = "data/Built Heritage/Pylon Monument/Pylon.glb";
+        }
+        
         const hasModel = site.available && site.modelSrc && heritageModel;
 
         heritageViewerPanel?.classList.remove("is-photo");
@@ -3174,6 +3361,19 @@
           }
           heritageModel.setAttribute("alt", `${site.name} 3D model`);
           heritageModel.autoRotate = true;
+
+          // Add error handling
+          heritageModel.addEventListener('error', (e) => {
+            if (modelLoadingOverlay) {
+              modelLoadingOverlay.setAttribute("hidden", "");
+            }
+          });
+
+          heritageModel.addEventListener('load', (e) => {
+            if (modelLoadingOverlay) {
+              modelLoadingOverlay.setAttribute("hidden", "");
+            }
+          });
 
           // Track loading progress
           const handleProgress = (event) => {
@@ -3208,7 +3408,6 @@
 
           if (viewerHint) {
             viewerHint.hidden = false;
-            viewerHint.textContent = "Drag to rotate · Scroll to zoom";
           }
         } else {
           if (heritageModel) {
@@ -3323,8 +3522,6 @@
       }
 
       function updateDetails(site) {
-        detailType.textContent = "Built Heritage";
-        detailType.className = "explore3d-details-type built";
         if (stageTitle) stageTitle.textContent = site.name;
         if (detailTitle) detailTitle.textContent = site.name;
         detailDesc.textContent = site.desc;
@@ -3333,18 +3530,19 @@
           .filter((s) => s.key !== "Status")
           .map(
             (s) => `
-          <li>
-            <span class="explore3d-spec-key">${s.key}</span>
-            <span class="explore3d-spec-val">${s.val}</span>
-          </li>
+          <div class="quick-info-item">
+            <span class="quick-info-label">${s.key}</span>
+            <span class="quick-info-value">${s.val}</span>
+          </div>
         `,
           )
           .join("");
 
         const facts = site.facts || [];
-        if (detailFacts) {
-          detailFacts.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
-          detailFacts.hidden = facts.length === 0;
+        const factsElement = document.getElementById("detail-facts");
+        if (factsElement) {
+          factsElement.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
+          factsElement.hidden = facts.length === 0;
         }
       }
 
