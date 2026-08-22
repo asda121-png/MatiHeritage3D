@@ -56,8 +56,8 @@ const HERITAGE_MAP_SITES = [
     name: "MFGR Park & Baywalk",
     category: "built",
     barangay: "central",
-    lat: 6.949853,
-    lng: 126.216161,
+    lat: 6.950356,
+    lng: 126.216866,
     official: true,
     desc: "Mayor Francisco G. Rabat Park and Baywalk overlooking Pujada Bay.",
     image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
@@ -246,24 +246,14 @@ function heritageBarangayLabel(id) {
   return HERITAGE_BARANGAY_NAMES[id] || id;
 }
 
-function createHeritagePhotoIcon(site, size = 40, bounceIndex = 0) {
-  const imgSrc = site.image ? encodeURI(site.image) : "";
-  const half = size / 2;
-  const bounceDelay = 0; // All markers bounce in sync
-  const markerInner = imgSrc
-    ? `<img src="${imgSrc}" alt="${site.name}" loading="lazy" />`
-    : `<span aria-hidden="true" style="font-size:0.62rem;font-weight:800;letter-spacing:0.04em">BH</span>`;
-  const placeholderStyle = imgSrc
-    ? ""
-    : "display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#ecfdf5,#d1fae5);color:#047857;";
+function createHeritagePhotoIcon(site, size = 40) {
   return L.divIcon({
     className: "heritage-marker-wrap",
-    html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size}px;animation-delay:${bounceDelay}s;${placeholderStyle}" title="${site.name}">
-            ${markerInner}
+    html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size * 1.25}px" title="${site.name}">
           </div>`,
-    iconSize: [size, size],
-    iconAnchor: [half, half],
-    popupAnchor: [0, -Math.round(size * 0.55)],
+    iconSize: [size, size * 1.25],
+    iconAnchor: [size / 2, size * 1.25],
+    popupAnchor: [0, -size * 1.25],
   });
 }
 

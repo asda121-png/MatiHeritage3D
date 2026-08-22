@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>3D Explore — Mati Heritage 3D</title>
@@ -15,6 +18,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="heritage-palette.css" />
+    <link rel="stylesheet" href="heritage-map-markers.css" />
     <link rel="stylesheet" href="gallery-page.css" />
     <link
       rel="stylesheet"
@@ -54,7 +58,7 @@
       }
 
       body {
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         color: var(--slate);
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
@@ -75,7 +79,7 @@
       }
 
       body.visitor-module {
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: "Inter", system-ui, sans-serif !important;
         --header-h: 5.625rem;
         --header-h-scrolled: 4.875rem;
       }
@@ -85,12 +89,12 @@
       body.visitor-module .visitor-auth-btn,
       body.visitor-module .site-footer,
       body.visitor-module .site-footer a {
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: "Inter", system-ui, sans-serif !important;
       }
 
       body.visitor-module .display-font,
       body.visitor-module header .site-brand__title {
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: "Inter", system-ui, sans-serif !important;
       }
 
       body.visitor-module .visitor-auth-actions {
@@ -108,7 +112,7 @@
         justify-content: center;
         gap: 0.45rem;
         padding: 0.58rem 1.15rem;
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: "Inter", system-ui, sans-serif !important;
         font-size: 0.875rem !important;
         font-weight: 600 !important;
         letter-spacing: 0.02em !important;
@@ -162,7 +166,7 @@
       }
 
       .display-font {
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-weight: 600;
         letter-spacing: 0.01em;
       }
@@ -216,7 +220,7 @@
       .map-hero-bridge__label {
         position: relative;
         z-index: 1;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-size: 0.625rem;
         font-weight: 700;
         letter-spacing: 0.24em;
@@ -312,11 +316,7 @@
         position: relative;
         z-index: 1;
         display: block;
-        background: linear-gradient(
-          180deg,
-          #0B1118 0%,
-          #1A2433 100%
-        );
+        background: linear-gradient(180deg, #0b1118 0%, #1a2433 100%);
         overflow: hidden;
         margin: 0;
         padding: 0;
@@ -469,6 +469,7 @@
         padding: 0;
         border: none;
         background: rgba(15, 23, 42, 0.66);
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         cursor: pointer;
         animation: explore3d-overlay-fade 0.32s ease both;
@@ -482,11 +483,7 @@
         width: min(1120px, 100%);
         max-height: calc(100vh - clamp(1.5rem, 4vw, 3rem));
         border-radius: 1.25rem;
-        background: linear-gradient(
-          180deg,
-          #0B1118 0%,
-          #1A2433 100%
-        );
+        background: linear-gradient(180deg, #0b1118 0%, #1a2433 100%);
         border: 1px solid rgba(4, 120, 87, 0.12);
         box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
         overflow: hidden;
@@ -819,6 +816,42 @@
         animation-delay: 0.12s;
       }
 
+      .explore3d-stage-layout.is-revealed .heritage-info-header {
+        animation: explore3d-title-fade 0.4s cubic-bezier(0.22, 1, 0.36, 1)
+          both;
+      }
+
+      .explore3d-stage-layout.is-revealed .heritage-description-container,
+      .explore3d-stage-layout.is-revealed .heritage-quick-info,
+      .explore3d-stage-layout.is-revealed .explore3d-facts {
+        opacity: 0;
+        animation: explore3d-content-fade 0.5s cubic-bezier(0.22, 1, 0.36, 1)
+          both;
+        animation-delay: 0.3s;
+      }
+
+      @keyframes explore3d-title-fade {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes explore3d-content-fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @keyframes explore3d-panel-rise {
         from {
           opacity: 0;
@@ -840,6 +873,7 @@
         justify-content: center;
         border-radius: 1.35rem;
         background: rgba(236, 253, 245, 0.88);
+        -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
       }
 
@@ -869,49 +903,13 @@
         font-weight: 600;
         letter-spacing: 0.04em;
         color: var(--forest-dark);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       @keyframes explore3d-spin {
         to {
           transform: rotate(360deg);
         }
-      }
-
-      @keyframes heritage-marker-bounce {
-        0%,
-        100% {
-          transform: translate3d(0, 0, 0);
-        }
-        50% {
-          transform: translate3d(0, -8px, 0);
-        }
-      }
-
-      @keyframes heritage-marker-bounce-active {
-        0%,
-        100% {
-          transform: scale(1.08) translate3d(0, 0, 0);
-        }
-        50% {
-          transform: scale(1.08) translate3d(0, -8px, 0);
-        }
-      }
-
-      @keyframes heritage-marker-pulse {
-        0% {
-          transform: scale(1);
-        }
-        45% {
-          transform: scale(1.22);
-        }
-        100% {
-          transform: scale(1.08);
-        }
-      }
-
-      .heritage-photo-marker.is-pulsing {
-        animation: heritage-marker-pulse 0.65s ease;
       }
 
       .explore3d-details-foot {
@@ -945,9 +943,10 @@
         color: #6ee7b7;
         background: rgba(10, 15, 20, 0.72);
         border: 1px solid rgba(110, 231, 183, 0.22);
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         pointer-events: none;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-viewer.is-photo .explore3d-viewer-badge {
@@ -992,6 +991,7 @@
         justify-content: center;
         gap: 1rem;
         background: rgba(10, 15, 20, 0.85);
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
       }
 
@@ -1012,7 +1012,7 @@
         font-size: 1.5rem;
         font-weight: 700;
         color: #6ee7b7;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         letter-spacing: 0.02em;
       }
 
@@ -1020,7 +1020,7 @@
         font-size: 0.875rem;
         font-weight: 500;
         color: #cbd5e1;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         letter-spacing: 0.04em;
       }
 
@@ -1109,6 +1109,12 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
+      .heritage-fullscreen__actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
       .heritage-fullscreen__eyebrow {
         margin: 0 0 0.2rem;
         font-size: 0.62rem;
@@ -1116,14 +1122,14 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: #6ee7b7;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .heritage-fullscreen__title {
         margin: 0;
         font-size: clamp(1.25rem, 2.5vw, 1.65rem);
         color: #fff;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .heritage-fullscreen__close {
@@ -1264,7 +1270,7 @@
         margin: 0;
         letter-spacing: -0.02em;
         line-height: 1.15;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       /* Description */
@@ -1282,7 +1288,7 @@
         line-height: 1.7;
         color: rgba(240, 253, 244, 0.9);
         margin: 0;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       /* Quick Information Grid */
@@ -1313,7 +1319,7 @@
         color: rgba(212, 175, 55, 0.7);
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         line-height: 1.4;
       }
 
@@ -1322,7 +1328,7 @@
         font-weight: 500;
         color: rgba(240, 253, 244, 0.95);
         letter-spacing: 0.02em;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         line-height: 1.5;
       }
 
@@ -1345,7 +1351,7 @@
         font-size: 0.875rem;
         line-height: 1.6;
         color: rgba(240, 253, 244, 0.9);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-facts li::before {
@@ -1394,6 +1400,577 @@
         opacity: 1 !important;
         visibility: visible !important;
         background: rgba(0, 0, 0, 0.3);
+      }
+
+      .fullscreen-toggle-btn {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      @media (max-width: 768px) {
+        .fullscreen-toggle-btn {
+          left: 0.5rem;
+        }
+      }
+
+      .fullscreen-toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .fullscreen-toggle-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .auto-rotate-btn {
+        position: absolute;
+        top: calc(50% - 2.65rem);
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .auto-rotate-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .auto-rotate-btn.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .auto-rotate-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .zoom-controls-group {
+        position: absolute;
+        top: calc(50% + 0.3rem);
+        right: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        z-index: 10;
+      }
+
+      .zoom-control-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .zoom-control-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .zoom-control-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      @media (max-width: 768px) {
+        .auto-rotate-btn {
+          right: 0.5rem;
+          top: calc(50% - 2.4rem);
+        }
+
+        .zoom-controls-group {
+          top: calc(50% + 0.25rem);
+          right: 0.5rem;
+          gap: 0.25rem;
+        }
+
+        .zoom-control-btn {
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .zoom-control-btn svg {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+
+      .controls-help-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: "Inter", system-ui, sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      .controls-help-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .controls-help-btn.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      @media (max-width: 768px) {
+        .controls-help-btn {
+          right: 0.5rem;
+          width: 2.25rem;
+          height: 2.25rem;
+          font-size: 0.9rem;
+        }
+
+        .controls-help-overlay {
+          top: 3.25rem;
+          right: 0.5rem;
+          width: calc(100% - 1rem);
+          max-width: none;
+        }
+
+        .controls-help-overlay::before {
+          right: 2rem;
+        }
+
+        .controls-help-title {
+          font-size: 0.8rem;
+        }
+
+        .controls-help-item {
+          font-size: 0.75rem;
+          gap: 0.5rem;
+          padding: 0.5rem 0;
+        }
+
+        .controls-help-icon {
+          font-size: 1rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        .fullscreen-toggle-btn {
+          left: 0.5rem;
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .fullscreen-toggle-btn svg {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .controls-help-btn {
+          right: 0.5rem;
+          width: 2rem;
+          height: 2rem;
+          font-size: 0.85rem;
+        }
+
+        .controls-help-overlay {
+          top: 3rem;
+          right: 0.25rem;
+          width: calc(100% - 0.5rem);
+          padding: 1rem;
+          border-radius: 0.75rem;
+        }
+
+        .controls-help-overlay::before {
+          right: 1.75rem;
+        }
+
+        .controls-help-title {
+          font-size: 0.75rem;
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .controls-help-item {
+          font-size: 0.7rem;
+          gap: 0.4rem;
+          padding: 0.4rem 0;
+        }
+
+        .controls-help-icon {
+          font-size: 0.9rem;
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+
+        .fullscreen-toggle-btn {
+          left: 0.25rem;
+          width: 2rem;
+          height: 2rem;
+        }
+
+        .fullscreen-toggle-btn svg {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+
+      .controls-help-overlay {
+        position: absolute;
+        top: 3.5rem;
+        right: 1rem;
+        width: min(280px, calc(100% - 2rem));
+        background: rgba(15, 23, 42, 0.75);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        color: rgba(240, 253, 244, 0.95);
+        font-family: "Inter", system-ui, sans-serif;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.95);
+        transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .controls-help-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .controls-help-overlay::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 2.5rem;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid rgba(15, 23, 42, 0.75);
+        filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.1));
+      }
+
+      @media (max-width: 768px) {
+        .controls-help-overlay {
+          top: 3.25rem;
+          right: 0.5rem;
+          width: calc(100% - 1rem);
+        }
+
+        .controls-help-overlay::before {
+          right: 2rem;
+        }
+      }
+
+      .controls-help-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: rgba(212, 175, 55, 0.9);
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .controls-help-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        color: rgba(240, 253, 244, 0.85);
+      }
+
+      .controls-help-icon {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(4, 120, 87, 0.2);
+        border-radius: 0.375rem;
+        color: rgba(74, 222, 128, 0.9);
+      }
+
+      .controls-help-text {
+        flex: 1;
+        font-weight: 500;
+      }
+
+      .fullscreen-controls-help {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: "Inter", system-ui, sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      .fullscreen-controls-help:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .fullscreen-controls-help.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .fullscreen-controls-help-overlay {
+        position: absolute;
+        top: 3.5rem;
+        right: clamp(1rem, 3vw, 1.75rem);
+        width: min(280px, calc(100% - 2rem));
+        background: rgba(15, 23, 42, 0.75);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        color: rgba(240, 253, 244, 0.95);
+        font-family: "Inter", system-ui, sans-serif;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.95);
+        transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .fullscreen-controls-help-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .fullscreen-controls-help-overlay::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 2.5rem;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid rgba(15, 23, 42, 0.75);
+        filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.1));
+      }
+
+      @media (max-width: 768px) {
+        .fullscreen-controls-help {
+          width: 2.25rem;
+          height: 2.25rem;
+          font-size: 0.9rem;
+        }
+
+        .fullscreen-controls-help-overlay {
+          top: 3.25rem;
+          right: 0.5rem;
+          width: calc(100% - 1rem);
+          max-width: none;
+        }
+
+        .fullscreen-controls-help-overlay::before {
+          right: 1rem;
+        }
+
+        .heritage-fullscreen__actions {
+          gap: 0.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .fullscreen-controls-help {
+          width: 2rem;
+          height: 2rem;
+          font-size: 0.85rem;
+        }
+
+        .fullscreen-controls-help-overlay {
+          top: 3rem;
+          right: 0.25rem;
+          width: calc(100% - 0.5rem);
+          padding: 1rem;
+          border-radius: 0.75rem;
+        }
+
+        .fullscreen-controls-help-overlay::before {
+          right: 0.75rem;
+        }
+
+        .heritage-fullscreen__actions {
+          gap: 0.4rem;
+        }
+
+        .heritage-fullscreen__close {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.75rem;
+        }
+      }
+
+      .model-controls-group {
+        position: absolute;
+        bottom: 1rem;
+        right: 4rem;
+        display: grid;
+        grid-template-columns: 2.5rem 2.5rem 2.5rem;
+        grid-template-rows: 2.5rem 2.5rem 2.5rem;
+        gap: 0.3rem;
+        z-index: 10;
+      }
+
+      .model-control-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .model-control-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .model-control-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      #model-pan-up {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      #model-rotate-left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #model-rotate-right {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      #model-pan-down {
+        grid-column: 2;
+        grid-row: 3;
+      }
+
+      @media (max-width: 768px) {
+        .model-controls-group {
+          right: 3.5rem;
+          grid-template-columns: 2.25rem 2.25rem 2.25rem;
+          grid-template-rows: 2.25rem 2.25rem 2.25rem;
+          gap: 0.25rem;
+        }
+
+        .model-control-btn {
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .model-control-btn svg {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+
+        .fullscreen-toggle-btn {
+          left: 0.5rem;
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .fullscreen-toggle-btn svg {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
       }
 
       /* ── Mati City Map (built heritage) ── */
@@ -1479,11 +2056,13 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        max-width: 92rem;
+        max-width: 94rem;
         width: 100%;
         margin: 0 auto;
-        min-height: calc(100vh - var(--header-h, 5.625rem));
-        padding: clamp(1.25rem, 3vw, 2rem) clamp(1.15rem, 3.5vw, 2.25rem);
+        min-height: calc(
+          (100svh - var(--header-h, 5.625rem)) / var(--visitor-ui-scale, 1)
+        );
+        padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1.25rem, 3vw, 2.5rem);
         box-sizing: border-box;
       }
 
@@ -1539,8 +2118,8 @@
         padding: 1.15rem 1.3rem 1.15rem 1.35rem;
         max-width: min(18rem, calc(100% - 1rem));
         background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
         border-radius: 1rem;
         border: 1px solid rgba(255, 255, 255, 0.92);
         box-shadow:
@@ -1590,7 +2169,7 @@
 
       .map-intro-overlay__title-main {
         display: block;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700;
         letter-spacing: 0.02em;
@@ -1599,7 +2178,7 @@
 
       .map-intro-overlay__title-sub {
         display: block;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 0.18em;
@@ -1629,70 +2208,53 @@
       .heritage-photo-marker {
         position: relative;
         width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: 2px solid #fff;
-        box-shadow:
-          0 4px 14px rgba(2, 132, 199, 0.28),
-          0 0 0 2px var(--forest);
-        overflow: hidden;
+        height: 50px;
+        border-radius: 50% 50% 50% 0;
         background: #e2e8f0;
-        animation: heritage-marker-bounce 2.2s
-          cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-        will-change: transform;
+        box-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.3),
+          0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: rotate(-45deg);
         transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease;
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .heritage-photo-marker::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+
+
+      .heritage-marker-wrap:hover .heritage-photo-marker {
+        transform: rotate(-45deg) scale(1.15);
+        box-shadow:
+          0 4px 16px rgba(0, 0, 0, 0.4),
+          0 8px 24px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
+
+      .heritage-photo-marker.built {
+        background: var(--forest);
+      }
+
+      .heritage-photo-marker.natural {
+        background: var(--sky);
       }
 
       .heritage-photo-marker.is-active {
-        animation: heritage-marker-bounce-active 2.2s
-          cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         box-shadow:
-          0 8px 24px rgba(2, 132, 199, 0.35),
-          0 0 0 2px var(--forest),
-          0 0 0 4px rgba(56, 189, 248, 0.45);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .heritage-photo-marker,
-        .heritage-photo-marker.is-active {
-          animation: none;
-        }
-      }
-
-      .heritage-marker-wrap .heritage-photo-marker img {
-        position: absolute;
-        inset: 0;
-        width: 100% !important;
-        height: 100% !important;
-        max-width: none !important;
-        max-height: none !important;
-        object-fit: cover;
-        object-position: center;
-        display: block;
-      }
-
-      .heritage-photo-marker--placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(145deg, #ecfdf5, #d1fae5);
-        color: var(--forest);
-        font-family: 'Inter', system-ui, sans-serif;
-        font-size: 0.62rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .heritage-photo-marker--placeholder span {
-        line-height: 1;
-      }
-
-      .heritage-marker-wrap:hover .heritage-photo-marker {
-        animation-play-state: paused;
-        transform: scale(1.12) translate3d(0, 0, 0);
+          0 4px 16px rgba(0, 0, 0, 0.5),
+          0 8px 28px rgba(0, 0, 0, 0.4);
       }
 
       .map-popup-photo {
@@ -1712,12 +2274,12 @@
 
       .leaflet-popup-content {
         margin: 0.75rem 1rem !important;
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: "Inter", system-ui, sans-serif !important;
         line-height: 1.45 !important;
       }
 
       .map-popup-title {
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-weight: 700;
         font-size: 0.95rem;
         color: #0f172a;
@@ -1735,7 +2297,7 @@
         margin-bottom: 0.35rem;
         background: rgba(4, 120, 87, 0.12);
         color: var(--forest-dark);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .map-popup-desc {
@@ -1778,7 +2340,7 @@
         padding: 0.85rem 1.35rem;
         border: none;
         border-radius: 9999px;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-size: 0.8125rem;
         font-weight: 700;
         letter-spacing: 0.05em;
@@ -1829,7 +2391,7 @@
         margin: 0;
         letter-spacing: -0.02em;
         line-height: 1.15;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .heritage-description-container {
@@ -1848,7 +2410,7 @@
         letter-spacing: 0.18em;
         text-transform: uppercase;
         color: rgba(212, 175, 55, 0.7);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-details-type {
@@ -1862,7 +2424,7 @@
         color: rgba(212, 175, 55, 0.9);
         background: rgba(212, 175, 55, 0.15);
         border: 1px solid rgba(212, 175, 55, 0.3);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-details-type.built {
@@ -1878,7 +2440,7 @@
         line-height: 1.7;
         color: rgba(240, 253, 244, 0.9);
         margin: 0;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-specs-heading {
@@ -1888,7 +2450,7 @@
         letter-spacing: 0.16em;
         text-transform: uppercase;
         color: rgba(212, 175, 55, 0.7);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-specs {
@@ -1930,7 +2492,7 @@
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-size: 0.62rem;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-spec-val {
@@ -1938,7 +2500,7 @@
         color: rgba(240, 253, 244, 0.95);
         font-size: 0.875rem;
         line-height: 1.4;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-facts {
@@ -1960,7 +2522,7 @@
         font-size: 0.875rem;
         line-height: 1.6;
         color: var(--slate);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-facts li::before {
@@ -1985,7 +2547,7 @@
         text-decoration: none;
         color: var(--forest-dark);
         transition: color 0.2s ease;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .explore3d-map-link:hover {
@@ -2115,8 +2677,6 @@
         <div class="explore3d-workspace__bg" aria-hidden="true"></div>
 
         <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
-
-
           <div
             class="explore3d-reveal-loader"
             id="explore-reveal-loader"
@@ -2134,20 +2694,20 @@
               <div class="heritage-info-header">
                 <h1 class="heritage-title" id="detail-title"></h1>
               </div>
-              
+
               <div class="heritage-description-container">
                 <div class="heritage-description-wrapper">
                   <p class="heritage-description" id="detail-desc"></p>
                 </div>
               </div>
-              
+
               <div class="heritage-quick-info">
                 <div class="quick-info-grid" id="detail-specs"></div>
               </div>
 
               <ul class="explore3d-facts" id="detail-facts" hidden></ul>
 
-              <div style="display: flex; margin-bottom: 1rem;">
+              <div style="display: flex; margin-bottom: 1rem">
                 <div
                   class="explore3d-stage-head__actions"
                   role="navigation"
@@ -2176,7 +2736,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Right Panel: 3D Model Viewer -->
             <div class="heritage-model-panel">
               <div class="heritage-model-container" id="heritage-viewer-panel">
@@ -2212,8 +2772,229 @@
                   environment-image="neutral"
                   loading="eager"
                   reveal="auto"
-                  interaction-prompt="auto"
+                  interaction-prompt="none"
                 ></model-viewer>
+                <button
+                  type="button"
+                  class="auto-rotate-btn"
+                  id="auto-rotate-btn"
+                  aria-label="Toggle auto rotate"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                    ></path>
+                    <path d="M21 3v5h-5"></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="controls-help-btn"
+                  id="controls-help-btn"
+                  aria-label="Show controls help"
+                >
+                  ⓘ
+                </button>
+                <div
+                  class="controls-help-overlay"
+                  id="controls-help-overlay"
+                  role="dialog"
+                  aria-label="3D model controls help"
+                >
+                  <div class="controls-help-title">3D Model Controls</div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">🖱️</span>
+                    <span class="controls-help-text"
+                      >Drag — Rotate the model</span
+                    >
+                  </div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">🔍</span>
+                    <span class="controls-help-text"
+                      >Scroll/Buttons — Zoom in or out</span
+                    >
+                  </div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">🖱️🖱️</span>
+                    <span class="controls-help-text"
+                      >Double Click — Reset camera view</span
+                    >
+                  </div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">⬅️➡️</span>
+                    <span class="controls-help-text"
+                      >Arrow Buttons — Pan camera left/right</span
+                    >
+                  </div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">↑↓</span>
+                    <span class="controls-help-text"
+                      >Arrow Buttons — Pan camera up/down</span
+                    >
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="fullscreen-toggle-btn"
+                  id="fullscreen-toggle-btn"
+                  aria-label="View in fullscreen"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                    <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+                    <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+                    <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                  </svg>
+                </button>
+                <div class="model-controls-group">
+                  <button
+                    type="button"
+                    class="model-control-btn"
+                    id="model-pan-up"
+                    aria-label="Pan up"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M18 15l-6-6-6 6"></path>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="model-control-btn"
+                    id="model-rotate-left"
+                    aria-label="Rotate left"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="model-control-btn"
+                    id="model-rotate-right"
+                    aria-label="Rotate right"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="model-control-btn"
+                    id="model-pan-down"
+                    aria-label="Pan down"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="zoom-controls-group">
+                  <button
+                    type="button"
+                    class="zoom-control-btn"
+                    id="model-zoom-in"
+                    aria-label="Zoom in"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      <line x1="11" y1="8" x2="11" y2="14"></line>
+                      <line x1="8" y1="11" x2="14" y2="11"></line>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="zoom-control-btn"
+                    id="model-zoom-out"
+                    aria-label="Zoom out"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      <line x1="8" y1="11" x2="14" y2="11"></line>
+                    </svg>
+                  </button>
+                </div>
                 <img
                   id="preview-image"
                   class="explore3d-preview-img"
@@ -2376,13 +3157,23 @@
             id="fullscreen-title"
           ></h2>
         </div>
-        <button
-          type="button"
-          class="heritage-fullscreen__close"
-          id="fullscreen-close"
-        >
-          Close
-        </button>
+        <div class="heritage-fullscreen__actions">
+          <button
+            type="button"
+            class="fullscreen-controls-help"
+            id="fullscreen-controls-help-btn"
+            aria-label="Show controls help"
+          >
+            ⓘ
+          </button>
+          <button
+            type="button"
+            class="heritage-fullscreen__close"
+            id="fullscreen-close"
+          >
+            Close
+          </button>
+        </div>
       </div>
       <div class="heritage-fullscreen__stage">
         <div
@@ -2412,9 +3203,45 @@
           environment-image="neutral"
           loading="eager"
           reveal="auto"
-          interaction-prompt="auto"
+          interaction-prompt="none"
           hidden
         ></model-viewer>
+        <div
+          class="controls-help-overlay fullscreen-controls-help-overlay"
+          id="fullscreen-controls-help-overlay"
+          role="dialog"
+          aria-label="3D model controls help"
+        >
+          <div class="controls-help-title">3D Model Controls</div>
+          <div class="controls-help-item">
+            <span class="controls-help-icon">🖱️</span>
+            <span class="controls-help-text">Drag — Rotate the model</span>
+          </div>
+          <div class="controls-help-item">
+            <span class="controls-help-icon">🔍</span>
+            <span class="controls-help-text"
+              >Scroll/Buttons — Zoom in or out</span
+            >
+          </div>
+          <div class="controls-help-item">
+            <span class="controls-help-icon">🖱️🖱️</span>
+            <span class="controls-help-text"
+              >Double Click — Reset camera view</span
+            >
+          </div>
+          <div class="controls-help-item">
+            <span class="controls-help-icon">⬅️➡️</span>
+            <span class="controls-help-text"
+              >Arrow Buttons — Pan camera left/right</span
+            >
+          </div>
+          <div class="controls-help-item">
+            <span class="controls-help-icon">↑↓</span>
+            <span class="controls-help-text"
+              >Arrow Buttons — Pan camera up/down</span
+            >
+          </div>
+        </div>
         <img
           id="fullscreen-photo"
           class="heritage-fullscreen__photo"
@@ -2436,6 +3263,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="../Back End/supabase-config.js"></script>
     <script src="heritage-pylon-model.js"></script>
+    <script src="heritage-map-sites.js"></script>
     <script src="../Back End/supabase-client.js"></script>
     <script src="../Back End/supabase-api.js"></script>
     <script src="heritage-realtime.js"></script>
@@ -2487,7 +3315,7 @@
         latitudeRaw,
       ) {
         const specs = [
-          { key: "Model", val: name },
+          { key: "3D Model", val: name },
           { key: "Barangay", val: barangay },
           { key: "Category", val: category },
         ];
@@ -2505,6 +3333,7 @@
           name: "Centennial Clock and Pathway of Leaders",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.9521319,
           lng: 126.2167824,
           official: true,
@@ -2538,6 +3367,7 @@
           name: "City Hall",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.9519495,
           lng: 126.2162107,
           official: true,
@@ -2564,8 +3394,9 @@
           name: "MFGR Park & Baywalk",
           barangay: "Central",
           barangayKey: "central",
-          lat: 6.949853,
-          lng: 126.216161,
+          category: "built",
+          lat: 6.950356,
+          lng: 126.216866,
           official: true,
           image:
             "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
@@ -2588,6 +3419,7 @@
           name: "Gabaldon Structure (RRMCES-1)",
           barangay: "Sainz",
           barangayKey: "sainz",
+          category: "built",
           lat: 6.955,
           lng: 126.219444,
           official: true,
@@ -2620,6 +3452,7 @@
           name: "Menzi Visitors Information Center",
           barangay: "Dahican",
           barangayKey: "dahican",
+          category: "built",
           lat: 6.927318,
           lng: 126.281047,
           official: true,
@@ -2649,6 +3482,7 @@
           name: "Noventa Ancestral House",
           barangay: "Bobon",
           barangayKey: "bobon",
+          category: "built",
           lat: 6.866667,
           lng: 126.325,
           official: true,
@@ -2689,6 +3523,7 @@
           name: "OMPO sa Tampat sa Baguidan",
           barangay: "Bobon",
           barangayKey: "bobon",
+          category: "built",
           lat: 6.84,
           lng: 126.33,
           official: true,
@@ -2720,6 +3555,7 @@
           name: "Provincial Capitol of Davao Oriental",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.9483186,
           lng: 126.2271687,
           official: false,
@@ -2747,6 +3583,7 @@
           name: "Provincial Capitol Old Mansion",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.9472,
           lng: 126.2268,
           official: false,
@@ -2773,6 +3610,7 @@
           name: "Pylon Monument",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.952258,
           lng: 126.216889,
           official: true,
@@ -2804,6 +3642,7 @@
           name: "Subangan Museum",
           barangay: "Central",
           barangayKey: "central",
+          category: "built",
           lat: 6.94425,
           lng: 126.248333,
           official: true,
@@ -2901,6 +3740,7 @@
       const detailTitle = document.getElementById("detail-title");
       const detailDesc = document.getElementById("detail-desc");
       const detailSpecs = document.getElementById("detail-specs");
+      const detailFacts = document.getElementById("detail-facts");
       const viewHeritageBtn = document.getElementById("view-heritage-btn");
       const heritageFullscreen = document.getElementById("heritage-fullscreen");
       const fullscreenModel = document.getElementById("fullscreen-model");
@@ -2908,6 +3748,26 @@
       const fullscreenTitle = document.getElementById("fullscreen-title");
       const fullscreenHint = document.getElementById("fullscreen-hint");
       const fullscreenClose = document.getElementById("fullscreen-close");
+      const fullscreenToggleBtn = document.getElementById(
+        "fullscreen-toggle-btn",
+      );
+      const modelRotateLeft = document.getElementById("model-rotate-left");
+      const modelRotateRight = document.getElementById("model-rotate-right");
+      const modelPanUp = document.getElementById("model-pan-up");
+      const modelPanDown = document.getElementById("model-pan-down");
+      const modelZoomIn = document.getElementById("model-zoom-in");
+      const modelZoomOut = document.getElementById("model-zoom-out");
+      const autoRotateBtn = document.getElementById("auto-rotate-btn");
+      const controlsHelpBtn = document.getElementById("controls-help-btn");
+      const controlsHelpOverlay = document.getElementById(
+        "controls-help-overlay",
+      );
+      const fullscreenControlsHelpBtn = document.getElementById(
+        "fullscreen-controls-help-btn",
+      );
+      const fullscreenControlsHelpOverlay = document.getElementById(
+        "fullscreen-controls-help-overlay",
+      );
       const fullscreenLoading = document.getElementById("fullscreen-loading");
       const fullscreenLoadingLabel = document.getElementById(
         "fullscreen-loading-label",
@@ -3086,10 +3946,23 @@
           window.setTimeout(resolve, options.skipDelay ? 0 : 720);
         });
 
-        updateDetails(site);
-        updateViewer(site);
-        closeMediaDisplay();
-
+        // Phase 1: Show site name first
+        if (stageTitle) stageTitle.textContent = site.name;
+        if (detailTitle) detailTitle.textContent = site.name;
+        
+        // Hide other content initially
+        detailDesc.textContent = "";
+        detailSpecs.innerHTML = "";
+        detailFacts.innerHTML = "";
+        
+        // Hide footer temporarily during reveal
+        const footer = document.querySelector('.site-footer');
+        if (footer) {
+          footer.style.visibility = 'hidden';
+          window.tempFooter = footer;
+        }
+        
+        // Reveal just the title first
         exploreRevealLoader?.setAttribute("hidden", "");
         exploreStageLayout?.classList.remove("is-loading");
         exploreStageLayout?.classList.remove("is-revealed");
@@ -3101,10 +3974,34 @@
         history.replaceState(null, "", url);
 
         if (!options.skipScroll) {
-          (exploreWorkspace || exploreStageLayout)?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
+          // Scroll to the workspace with offset to ensure title is fully visible
+          const element = exploreWorkspace || exploreStageLayout;
+          if (element) {
+            const headerOffset = 60;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+          }
+        }
+
+        // Phase 2: After a delay, reveal the rest of the content
+        await new Promise((resolve) => {
+          window.setTimeout(resolve, 800);
+        });
+
+        // Now update the rest of the details and 3D model
+        updateDetails(site);
+        updateViewer(site);
+        closeMediaDisplay();
+        
+        // Restore footer visibility
+        if (window.tempFooter) {
+          window.tempFooter.style.visibility = 'visible';
+          window.tempFooter = null;
         }
 
         revealInProgress = false;
@@ -3317,6 +4214,7 @@
         document.body.classList.remove("heritage-fullscreen-open");
         hideFullscreenLoading();
         if (fullscreenModel) fullscreenModel.autoRotate = false;
+        closeFullscreenControlsHelp();
       }
 
       function highlightMapMarker(siteId) {
@@ -3330,10 +4228,10 @@
 
       function updateViewer(site) {
         // Force local path for Pylon Monument
-        if (site.id === 'pylon') {
+        if (site.id === "pylon") {
           site.modelSrc = "data/Built Heritage/Pylon Monument/Pylon.glb";
         }
-        
+
         const hasModel = site.available && site.modelSrc && heritageModel;
 
         heritageViewerPanel?.classList.remove("is-photo");
@@ -3363,13 +4261,13 @@
           heritageModel.autoRotate = true;
 
           // Add error handling
-          heritageModel.addEventListener('error', (e) => {
+          heritageModel.addEventListener("error", (e) => {
             if (modelLoadingOverlay) {
               modelLoadingOverlay.setAttribute("hidden", "");
             }
           });
 
-          heritageModel.addEventListener('load', (e) => {
+          heritageModel.addEventListener("load", (e) => {
             if (modelLoadingOverlay) {
               modelLoadingOverlay.setAttribute("hidden", "");
             }
@@ -3495,6 +4393,369 @@
       });
 
       fullscreenClose?.addEventListener("click", closeFullscreenHeritage);
+
+      fullscreenToggleBtn?.addEventListener("click", () => {
+        const site = getActiveSite();
+        if (site) openFullscreenHeritage(site);
+      });
+
+      // Auto-rotate toggle
+      autoRotateBtn?.addEventListener("click", () => {
+        const model = document.getElementById("heritage-model");
+        if (model) {
+          model.autoRotate = !model.autoRotate;
+          autoRotateBtn.classList.toggle("active", model.autoRotate);
+        }
+      });
+
+      // Controls help overlay
+      function toggleControlsHelp() {
+        if (!controlsHelpOverlay || !controlsHelpBtn) return;
+
+        const isVisible = controlsHelpOverlay.classList.contains("visible");
+
+        if (isVisible) {
+          controlsHelpOverlay.classList.remove("visible");
+          controlsHelpBtn.classList.remove("active");
+        } else {
+          controlsHelpOverlay.classList.add("visible");
+          controlsHelpBtn.classList.add("active");
+        }
+      }
+
+      function closeControlsHelp() {
+        if (!controlsHelpOverlay || !controlsHelpBtn) return;
+
+        controlsHelpOverlay.classList.remove("visible");
+        controlsHelpBtn.classList.remove("active");
+      }
+
+      controlsHelpBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleControlsHelp();
+      });
+
+      // Fullscreen controls help overlay
+      function toggleFullscreenControlsHelp() {
+        if (!fullscreenControlsHelpOverlay || !fullscreenControlsHelpBtn)
+          return;
+
+        const isVisible =
+          fullscreenControlsHelpOverlay.classList.contains("visible");
+
+        if (isVisible) {
+          fullscreenControlsHelpOverlay.classList.remove("visible");
+          fullscreenControlsHelpBtn.classList.remove("active");
+        } else {
+          fullscreenControlsHelpOverlay.classList.add("visible");
+          fullscreenControlsHelpBtn.classList.add("active");
+        }
+      }
+
+      function closeFullscreenControlsHelp() {
+        if (!fullscreenControlsHelpOverlay || !fullscreenControlsHelpBtn)
+          return;
+
+        fullscreenControlsHelpOverlay.classList.remove("visible");
+        fullscreenControlsHelpBtn.classList.remove("active");
+      }
+
+      fullscreenControlsHelpBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleFullscreenControlsHelp();
+      });
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (controlsHelpOverlay?.classList.contains("visible")) {
+          if (
+            !controlsHelpOverlay.contains(e.target) &&
+            !controlsHelpBtn?.contains(e.target)
+          ) {
+            closeControlsHelp();
+          }
+        }
+        if (fullscreenControlsHelpOverlay?.classList.contains("visible")) {
+          if (
+            !fullscreenControlsHelpOverlay.contains(e.target) &&
+            !fullscreenControlsHelpBtn?.contains(e.target)
+          ) {
+            closeFullscreenControlsHelp();
+          }
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (controlsHelpOverlay?.classList.contains("visible")) {
+            closeControlsHelp();
+          }
+          if (fullscreenControlsHelpOverlay?.classList.contains("visible")) {
+            closeFullscreenControlsHelp();
+          }
+        }
+      });
+
+      // Set initial state for auto-rotate button when model is loaded
+      const model = document.getElementById("heritage-model");
+      if (model && autoRotateBtn) {
+        // Set initial state
+        autoRotateBtn.classList.toggle("active", model.autoRotate);
+
+        // Update button state when auto-rotate changes (e.g., after user interaction)
+        model.addEventListener("change", () => {
+          autoRotateBtn.classList.toggle("active", model.autoRotate);
+        });
+      }
+
+      // Model panning controls
+      let isPanning = false;
+
+      // Debug: Check if all control buttons are found
+      console.log("Control buttons status:", {
+        modelRotateLeft: !!modelRotateLeft,
+        modelRotateRight: !!modelRotateRight,
+        modelPanUp: !!modelPanUp,
+        modelPanDown: !!modelPanDown,
+        modelZoomIn: !!modelZoomIn,
+        modelZoomOut: !!modelZoomOut,
+        autoRotateBtn: !!autoRotateBtn,
+        controlsHelpBtn: !!controlsHelpBtn,
+      });
+
+      modelRotateLeft?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const panAmount = 0.3; // Radians for panning
+            const newTheta = currentOrbit.theta - panAmount;
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startTheta = currentOrbit.theta;
+
+            function animatePan(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedTheta =
+                startTheta + (newTheta - startTheta) * easeProgress;
+              model.cameraOrbit = `${animatedTheta}rad ${currentOrbit.phi}rad ${currentOrbit.radius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animatePan);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animatePan);
+          } catch (error) {
+            console.error("Error rotating left:", error);
+            isPanning = false;
+          }
+        }
+      });
+
+      modelRotateRight?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const panAmount = 0.3; // Radians for panning
+            const newTheta = currentOrbit.theta + panAmount;
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startTheta = currentOrbit.theta;
+
+            function animatePan(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedTheta =
+                startTheta + (newTheta - startTheta) * easeProgress;
+              model.cameraOrbit = `${animatedTheta}rad ${currentOrbit.phi}rad ${currentOrbit.radius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animatePan);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animatePan);
+          } catch (error) {
+            console.error("Error rotating right:", error);
+            isPanning = false;
+          }
+        }
+      });
+
+      modelPanUp?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const panAmount = 0.2; // Radians for vertical panning
+            const newPhi = Math.min(currentOrbit.phi + panAmount, 1.5); // Limit vertical movement
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startPhi = currentOrbit.phi;
+
+            function animatePan(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedPhi = startPhi + (newPhi - startPhi) * easeProgress;
+              model.cameraOrbit = `${currentOrbit.theta}rad ${animatedPhi}rad ${currentOrbit.radius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animatePan);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animatePan);
+          } catch (error) {
+            console.error("Error panning up:", error);
+            isPanning = false;
+          }
+        }
+      });
+
+      modelPanDown?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const panAmount = 0.2; // Radians for vertical panning
+            const newPhi = Math.max(currentOrbit.phi - panAmount, 0.3); // Limit vertical movement
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startPhi = currentOrbit.phi;
+
+            function animatePan(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedPhi = startPhi + (newPhi - startPhi) * easeProgress;
+              model.cameraOrbit = `${currentOrbit.theta}rad ${animatedPhi}rad ${currentOrbit.radius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animatePan);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animatePan);
+          } catch (error) {
+            console.error("Error panning down:", error);
+            isPanning = false;
+          }
+        }
+      });
+
+      modelZoomIn?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const zoomAmount = 2; // Meters for zooming
+            const newRadius = Math.max(currentOrbit.radius - zoomAmount, 1); // Limit minimum zoom
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startRadius = currentOrbit.radius;
+
+            function animateZoom(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedRadius =
+                startRadius + (newRadius - startRadius) * easeProgress;
+              model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${animatedRadius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animateZoom);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animateZoom);
+          } catch (error) {
+            console.error("Error zooming in:", error);
+            isPanning = false;
+          }
+        }
+      });
+
+      modelZoomOut?.addEventListener("click", () => {
+        if (isPanning) return;
+        const model = document.getElementById("heritage-model");
+        if (model && model.loaded) {
+          isPanning = true;
+          try {
+            const currentOrbit = model.getCameraOrbit();
+            const zoomAmount = 2; // Meters for zooming
+            const newRadius = Math.min(currentOrbit.radius + zoomAmount, 20); // Limit maximum zoom
+
+            // Smooth animation
+            const duration = 300; // ms
+            const startTime = performance.now();
+            const startRadius = currentOrbit.radius;
+
+            function animateZoom(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+              const animatedRadius =
+                startRadius + (newRadius - startRadius) * easeProgress;
+              model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${animatedRadius}m`;
+
+              if (progress < 1) {
+                requestAnimationFrame(animateZoom);
+              } else {
+                isPanning = false;
+              }
+            }
+
+            requestAnimationFrame(animateZoom);
+          } catch (error) {
+            console.error("Error zooming out:", error);
+            isPanning = false;
+          }
+        }
+      });
+
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
         if (galLightbox?.classList.contains("active")) {
@@ -3522,8 +4783,7 @@
       }
 
       function updateDetails(site) {
-        if (stageTitle) stageTitle.textContent = site.name;
-        if (detailTitle) detailTitle.textContent = site.name;
+        // Don't update title here since it's already set in revealSiteFromMap
         detailDesc.textContent = site.desc;
 
         detailSpecs.innerHTML = site.specs
@@ -3539,34 +4799,12 @@
           .join("");
 
         const facts = site.facts || [];
-        const factsElement = document.getElementById("detail-facts");
-        if (factsElement) {
-          factsElement.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
-          factsElement.hidden = facts.length === 0;
+        if (detailFacts) {
+          detailFacts.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
+          detailFacts.hidden = facts.length === 0;
         }
       }
 
-      function createHeritagePhotoIcon(site, size = 40, bounceIndex = 0) {
-        const imgSrc = getSiteMarkerImage(site);
-        const half = size / 2;
-        const isActive = site.id === activeSiteId;
-        const bounceDelay = ((bounceIndex % 12) * 0.14).toFixed(2);
-        const markerInner = imgSrc
-          ? `<img src="${encodeURI(imgSrc)}" alt="${escapeHtml(site.name)}" loading="lazy" />`
-          : `<span aria-hidden="true">BH</span>`;
-        const placeholderClass = imgSrc
-          ? ""
-          : " heritage-photo-marker--placeholder";
-        return L.divIcon({
-          className: "heritage-marker-wrap",
-          html: `<div class="heritage-photo-marker${placeholderClass} ${isActive ? "is-active" : ""}" style="width:${size}px;height:${size}px;animation-delay:${bounceDelay}s" title="${escapeHtml(site.name)}">
-            ${markerInner}
-          </div>`,
-          iconSize: [size, size],
-          iconAnchor: [half, half],
-          popupAnchor: [0, -Math.round(size * 0.55)],
-        });
-      }
 
       const MATI_CITY_BOUNDARY_FALLBACK = [
         [6.99547, 126.09071],
@@ -3794,12 +5032,21 @@
         addOutsideMask(map, mainRing);
         applyCityClip(map, mainRing);
         map.fitBounds(viewBounds, { padding: [24, 24] });
+        console.log("3dexplore - Current map center:", map.getCenter());
+        console.log("3dexplore - Current map zoom:", map.getZoom());
         map.setMinZoom(map.getZoom());
+        console.log("3dexplore - Set min zoom to:", map.getZoom());
 
-        HERITAGE_3D_SITES.forEach((site, index) => {
+        console.log("3dexplore - Creating markers for", HERITAGE_3D_SITES.length, "sites");
+        HERITAGE_3D_SITES.forEach((site) => {
+          console.log(`3dexplore - Creating marker for ${site.id} at [${site.lat}, ${site.lng}]`);
           const marker = L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site, 40, index),
+            icon: createHeritagePhotoIcon(site, 40),
           }).addTo(map);
+
+          if (site.id === "mfgr") {
+            console.log(`3dexplore - Baywalk marker placed at:`, marker.getLatLng());
+          }
 
           marker.on("click", () => {
             revealSiteFromMap(site);
@@ -3849,6 +5096,21 @@
             });
           }
         }
+
+        // Sync coordinates from shared heritage-map-sites.js AFTER hydrate
+        if (typeof HERITAGE_MAP_SITES !== "undefined") {
+          HERITAGE_3D_SITES.forEach((site3d) => {
+            const mapSite = HERITAGE_MAP_SITES.find((s) => s.id === site3d.id);
+            if (mapSite) {
+              console.log(`3dexplore - Final sync ${site3d.id}:`);
+              console.log(`  Before: lat=${site3d.lat}, lng=${site3d.lng}`);
+              console.log(`  After:  lat=${mapSite.lat}, lng=${mapSite.lng}`);
+              site3d.lat = mapSite.lat;
+              site3d.lng = mapSite.lng;
+            }
+          });
+        }
+
         await initBuiltHeritageMap();
       })();
 

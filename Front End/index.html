@@ -1094,12 +1094,6 @@
           align-items: flex-start;
           justify-content: center;
           padding: 0.85rem clamp(1rem, 3vw, 1.25rem);
-          background: linear-gradient(
-            180deg,
-            rgba(12, 26, 20, 0.42) 0%,
-            rgba(12, 26, 20, 0.12) 45%,
-            transparent 70%
-          );
         }
 
         .map-intro-overlay__content {
@@ -1970,16 +1964,18 @@
         cursor: ew-resize;
         transform: translateX(-50%);
         transition: left 0.1s ease-out;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                    0 0 40px rgba(255, 255, 255, 0.3),
-                    0 0 60px rgba(255, 255, 255, 0.2);
+        box-shadow:
+          0 0 20px rgba(255, 255, 255, 0.5),
+          0 0 40px rgba(255, 255, 255, 0.3),
+          0 0 60px rgba(255, 255, 255, 0.2);
       }
 
       .before-after-handle:hover {
         background: white;
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.7),
-                    0 0 50px rgba(255, 255, 255, 0.5),
-                    0 0 75px rgba(255, 255, 255, 0.3);
+        box-shadow:
+          0 0 25px rgba(255, 255, 255, 0.7),
+          0 0 50px rgba(255, 255, 255, 0.5),
+          0 0 75px rgba(255, 255, 255, 0.3);
       }
 
       .before-after-handle-line {
@@ -1989,11 +1985,13 @@
         transform: translateX(-50%);
         width: 2px;
         height: 100%;
-        background: linear-gradient(180deg, 
-          transparent 0%, 
-          rgba(255, 255, 255, 0.8) 10%, 
-          rgba(255, 255, 255, 0.8) 90%, 
-          transparent 100%);
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.8) 10%,
+          rgba(255, 255, 255, 0.8) 90%,
+          transparent 100%
+        );
       }
 
       .before-after-handle-button {
@@ -2008,9 +2006,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
-                    0 4px 12px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 1);
+        box-shadow:
+          0 0 20px rgba(255, 255, 255, 0.6),
+          0 4px 12px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
         transition: all 0.3s ease;
       }
 
@@ -2022,9 +2021,10 @@
 
       .before-after-handle:hover .before-after-handle-button {
         transform: translate(-50%, -50%) scale(1.1);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
-                    0 6px 16px rgba(0, 0, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 1);
+        box-shadow:
+          0 0 30px rgba(255, 255, 255, 0.8),
+          0 6px 16px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
       }
 
       /* Touch-friendly handle for mobile */
@@ -2051,15 +2051,18 @@
 
       /* Smooth animations for premium museum feel */
       @keyframes handlePulse {
-        0%, 100% {
-          box-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                      0 0 40px rgba(255, 255, 255, 0.3),
-                      0 0 60px rgba(255, 255, 255, 0.2);
+        0%,
+        100% {
+          box-shadow:
+            0 0 20px rgba(255, 255, 255, 0.5),
+            0 0 40px rgba(255, 255, 255, 0.3),
+            0 0 60px rgba(255, 255, 255, 0.2);
         }
         50% {
-          box-shadow: 0 0 25px rgba(255, 255, 255, 0.6),
-                      0 0 50px rgba(255, 255, 255, 0.4),
-                      0 0 75px rgba(255, 255, 255, 0.3);
+          box-shadow:
+            0 0 25px rgba(255, 255, 255, 0.6),
+            0 0 50px rgba(255, 255, 255, 0.4),
+            0 0 75px rgba(255, 255, 255, 0.3);
         }
       }
 
@@ -2112,7 +2115,8 @@
       }
 
       @keyframes dragArrows {
-        0%, 100% {
+        0%,
+        100% {
           transform: translateX(0);
         }
         50% {
@@ -2180,9 +2184,10 @@
         height: 100%;
         object-fit: cover;
         border-radius: 8px;
-        transition: transform 0.6s var(--ease-spring), 
-                    opacity 0.5s ease,
-                    box-shadow 0.5s ease;
+        transition:
+          transform 0.6s var(--ease-spring),
+          opacity 0.5s ease,
+          box-shadow 0.5s ease;
         will-change: transform, opacity;
         pointer-events: none;
       }
@@ -2191,39 +2196,48 @@
       .photo-stack-photo:nth-child(1) {
         z-index: 5;
         transform: translateZ(0) rotate(0deg);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
-                    0 1px 3px rgba(0, 0, 0, 0.2);
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.3),
+          0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       .photo-stack-photo:nth-child(2) {
         z-index: 4;
-        transform: translateZ(-20px) rotate(-2deg) translateX(-8px) translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
-                    0 1px 2px rgba(0, 0, 0, 0.15);
+        transform: translateZ(-20px) rotate(-2deg) translateX(-8px)
+          translateY(-4px);
+        box-shadow:
+          0 8px 25px rgba(0, 0, 0, 0.25),
+          0 1px 2px rgba(0, 0, 0, 0.15);
         opacity: 0.95;
       }
 
       .photo-stack-photo:nth-child(3) {
         z-index: 3;
-        transform: translateZ(-40px) rotate(1deg) translateX(6px) translateY(-8px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2),
-                    0 1px 2px rgba(0, 0, 0, 0.1);
+        transform: translateZ(-40px) rotate(1deg) translateX(6px)
+          translateY(-8px);
+        box-shadow:
+          0 6px 20px rgba(0, 0, 0, 0.2),
+          0 1px 2px rgba(0, 0, 0, 0.1);
         opacity: 0.9;
       }
 
       .photo-stack-photo:nth-child(4) {
         z-index: 2;
-        transform: translateZ(-60px) rotate(-1deg) translateX(-4px) translateY(-12px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15),
-                    0 1px 2px rgba(0, 0, 0, 0.1);
+        transform: translateZ(-60px) rotate(-1deg) translateX(-4px)
+          translateY(-12px);
+        box-shadow:
+          0 4px 15px rgba(0, 0, 0, 0.15),
+          0 1px 2px rgba(0, 0, 0, 0.1);
         opacity: 0.85;
       }
 
       .photo-stack-photo:nth-child(5) {
         z-index: 1;
-        transform: translateZ(-80px) rotate(2deg) translateX(8px) translateY(-16px);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-                    0 1px 2px rgba(0, 0, 0, 0.05);
+        transform: translateZ(-80px) rotate(2deg) translateX(8px)
+          translateY(-16px);
+        box-shadow:
+          0 2px 10px rgba(0, 0, 0, 0.1),
+          0 1px 2px rgba(0, 0, 0, 0.05);
         opacity: 0.8;
       }
 
@@ -2235,17 +2249,19 @@
 
       /* Photo being animated away */
       .photo-stack-photo.swiping-away {
-        transition: transform 0.8s var(--ease-spring), 
-                    opacity 0.6s ease;
+        transition:
+          transform 0.8s var(--ease-spring),
+          opacity 0.6s ease;
         transform: translateX(120%) rotate(15deg) scale(0.9);
         opacity: 0;
       }
 
       /* Photo coming to front */
       .photo-stack-photo.coming-front {
-        transition: transform 0.6s var(--ease-spring), 
-                    opacity 0.5s ease,
-                    box-shadow 0.5s ease;
+        transition:
+          transform 0.6s var(--ease-spring),
+          opacity 0.5s ease,
+          box-shadow 0.5s ease;
       }
 
       /* Realistic paper texture effect */
@@ -2281,19 +2297,23 @@
         }
 
         .photo-stack-photo:nth-child(2) {
-          transform: translateZ(-15px) rotate(-1deg) translateX(-6px) translateY(-3px);
+          transform: translateZ(-15px) rotate(-1deg) translateX(-6px)
+            translateY(-3px);
         }
 
         .photo-stack-photo:nth-child(3) {
-          transform: translateZ(-30px) rotate(0.5deg) translateX(4px) translateY(-6px);
+          transform: translateZ(-30px) rotate(0.5deg) translateX(4px)
+            translateY(-6px);
         }
 
         .photo-stack-photo:nth-child(4) {
-          transform: translateZ(-45px) rotate(-0.5deg) translateX(-3px) translateY(-9px);
+          transform: translateZ(-45px) rotate(-0.5deg) translateX(-3px)
+            translateY(-9px);
         }
 
         .photo-stack-photo:nth-child(5) {
-          transform: translateZ(-60px) rotate(1deg) translateX(6px) translateY(-12px);
+          transform: translateZ(-60px) rotate(1deg) translateX(6px)
+            translateY(-12px);
         }
 
         .photo-stack-photo.swiping-away {
@@ -2316,8 +2336,9 @@
       @media (min-width: 769px) {
         .photo-stack-gallery:hover .photo-stack-photo:nth-child(1) {
           transform: translateZ(5px) rotate(0deg) scale(1.02);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35),
-                      0 2px 5px rgba(0, 0, 0, 0.25);
+          box-shadow:
+            0 15px 40px rgba(0, 0, 0, 0.35),
+            0 2px 5px rgba(0, 0, 0, 0.25);
         }
       }
 
@@ -2362,7 +2383,8 @@
       }
 
       @keyframes hintPulse {
-        0%, 100% {
+        0%,
+        100% {
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         50% {
@@ -2371,7 +2393,8 @@
       }
 
       @keyframes swipeArrow {
-        0%, 100% {
+        0%,
+        100% {
           transform: translateX(0);
         }
         50% {
@@ -2723,7 +2746,7 @@
         transition:
           gap 0.3s cubic-bezier(0.4, 0, 0.2, 1),
           color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       .heritage-link:hover {
@@ -3241,11 +3264,7 @@
         bottom: 1rem;
         width: 4px;
         border-radius: 0 4px 4px 0;
-        background: linear-gradient(
-          180deg,
-          #047857,
-          #065f46
-        );
+        background: linear-gradient(180deg, #047857, #065f46);
       }
 
       .map-intro-overlay__label {
@@ -3926,13 +3945,11 @@
 
       /* 3D Explore Section Redesign: Museum Studio Style */
       .experience-3d {
-        background: linear-gradient(
-          180deg,
-          #0B1118 0%,
-          #1A2433 100%
-        );
+        background: linear-gradient(180deg, #0b1118 0%, #1a2433 100%);
         position: relative;
         overflow: hidden;
+        min-height: 85vh;
+        min-height: 85dvh;
       }
 
       .experience-3d-inner {
@@ -3988,7 +4005,7 @@
       }
 
       .experience-3d-copy .experience-eyebrow {
-        color: #D4AF37;
+        color: #d4af37;
       }
 
       .experience-3d-copy .experience-3d-title,
@@ -3999,12 +4016,12 @@
 
       /* Forest green accent for buttons and highlights */
       .experience-3d .heritage-link {
-        color: #228B22;
-        border-color: #228B22;
+        color: #228b22;
+        border-color: #228b22;
       }
 
       .experience-3d .heritage-link:hover {
-        background: #228B22;
+        background: #228b22;
         color: #ffffff;
         box-shadow: 0 4px 12px rgba(34, 139, 34, 0.2);
       }
@@ -4027,16 +4044,24 @@
 
       /* Premium Museum Layout */
       .heritage-museum-layout {
+        position: relative;
         display: grid;
-        grid-template-columns: 38% 62%;
-        gap: 2.5rem;
-        max-width: 1600px;
+        gap: clamp(1.25rem, 3vw, 1.75rem);
+        align-items: stretch;
         margin: 0 auto;
         padding: 3.5rem 3rem;
         width: 100%;
         opacity: 0;
         transform: translateY(20px);
         animation: museumFadeIn 0.8s ease forwards;
+        z-index: 2;
+      }
+
+      @media (min-width: 1024px) {
+        .heritage-museum-layout {
+          grid-template-columns: 38% 62%;
+          gap: 2.5rem;
+        }
       }
 
       @keyframes museumFadeIn {
@@ -4052,7 +4077,9 @@
         flex-direction: column;
         gap: 1.75rem;
         padding-right: 1rem;
-        margin-left: -1.5rem;
+        margin-left: 6rem;
+        position: relative;
+        z-index: 2;
       }
 
       .heritage-info-header {
@@ -4062,13 +4089,13 @@
       }
 
       .heritage-title {
-        font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+        font-size: clamp(1.85rem, 3.5vw, 2.65rem);
         font-weight: 700;
         color: #ffffff;
         margin: 0;
         letter-spacing: -0.02em;
-        line-height: 1.15;
-        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.05;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       /* Description */
@@ -4082,11 +4109,11 @@
       }
 
       .heritage-description {
-        font-size: 1rem;
+        font-size: 0.9375rem;
         line-height: 1.7;
         color: rgba(240, 253, 244, 0.9);
         margin: 0;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       /* Quick Information Grid */
@@ -4111,28 +4138,56 @@
         border-bottom: 1px solid rgba(240, 253, 244, 0.08);
       }
 
-      .quick-info-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-      }
-
       .quick-info-label {
-        font-size: 0.65rem;
-        font-weight: 600;
+        font-size: 0.62rem;
+        font-weight: 700;
         color: rgba(212, 175, 55, 0.7);
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         line-height: 1.4;
       }
 
       .quick-info-value {
-        font-size: 0.85rem;
-        font-weight: 500;
+        font-size: 0.875rem;
+        font-weight: 600;
         color: rgba(240, 253, 244, 0.95);
         letter-spacing: 0.02em;
-        font-family: 'Inter', system-ui, sans-serif;
-        line-height: 1.5;
+        font-family: "Inter", system-ui, sans-serif;
+        line-height: 1.4;
+      }
+
+      .explore3d-facts {
+        list-style: none;
+        padding: 1rem 0 0;
+        margin: 0;
+        display: grid;
+        gap: 0.65rem;
+        border-top: 1px solid rgba(240, 253, 244, 0.08);
+      }
+
+      .explore3d-facts[hidden] {
+        display: none !important;
+      }
+
+      .explore3d-facts li {
+        position: relative;
+        padding-left: 1rem;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: rgba(240, 253, 244, 0.9);
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      .explore3d-facts li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(212, 175, 55, 0.7);
       }
 
       /* Right Panel: 3D Model */
@@ -4143,21 +4198,25 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        margin-left: 3rem;
+        margin-left: 6rem;
+        z-index: 2;
       }
 
       /* Left Panel: Information */
       .heritage-info-panel {
-        margin-left: -2rem;
+        margin-left: -9.5rem;
       }
 
       .heritage-model-container {
         position: relative;
-        width: 100%;
+        width: 115%;
         height: 100%;
-        min-height: 600px;
-        max-height: 750px;
+        min-height: 750px;
+        max-height: 900px;
         overflow: hidden;
+        border-color: rgba(255, 255, 255, 0.08);
+        border-radius: 0;
+        background: transparent;
       }
 
       .experience-3d-model {
@@ -4165,12 +4224,27 @@
         height: 100%;
         min-height: 600px;
         max-height: 750px;
-        border-radius: 1rem;
-        display: block;
+        border-radius: 0;
+        display: block !important;
         position: relative;
         z-index: 2;
         opacity: 1 !important;
         visibility: visible !important;
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      .explore3d-viewer-lines {
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+          -18deg,
+          transparent 0,
+          transparent 48px,
+          rgba(120, 90, 60, 0.04) 48px,
+          rgba(120, 90, 60, 0.04) 49px
+        );
+        pointer-events: none;
+        opacity: 0.12;
       }
 
       /* Floating Controls */
@@ -4194,21 +4268,20 @@
         backdrop-filter: blur(10px);
         border: 1.5px solid rgba(212, 175, 55, 0.4);
         border-radius: 0.625rem;
-        color: #D4AF37;
+        color: #d4af37;
         font-size: 0.9rem;
         font-weight: 600;
         text-decoration: none;
-        margin-top: 2rem;
-        align-self: flex-end;
+        margin: 2rem auto 0;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         letter-spacing: 0.02em;
       }
 
       .explore-3d-link:hover {
         background: rgba(15, 23, 42, 0.85);
         border-color: rgba(212, 175, 55, 0.6);
-        color: #FFD700;
+        color: #ffd700;
         transform: translateY(-3px);
         box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
       }
@@ -4241,7 +4314,7 @@
       .model-control-btn:hover {
         background: rgba(212, 175, 55, 0.15);
         border-color: rgba(212, 175, 55, 0.3);
-        color: #D4AF37;
+        color: #d4af37;
         transform: translateY(-1px);
       }
 
@@ -4252,7 +4325,7 @@
       .model-control-btn[aria-pressed="true"] {
         background: rgba(212, 175, 55, 0.25);
         border-color: rgba(212, 175, 55, 0.4);
-        color: #D4AF37;
+        color: #d4af37;
       }
 
       /* Responsive Design */
@@ -4273,6 +4346,12 @@
         }
 
         .heritage-model-container {
+          width: 100%;
+          min-height: 450px;
+          max-height: 550px;
+        }
+
+        .experience-3d-model {
           min-height: 450px;
           max-height: 550px;
         }
@@ -4298,6 +4377,7 @@
 
         .heritage-info-header {
           padding-bottom: 1rem;
+          margin-bottom: 1rem;
         }
 
         .heritage-title {
@@ -4314,12 +4394,22 @@
 
         .heritage-model-panel {
           margin-left: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .heritage-model-container {
+          width: 100%;
           min-height: 350px;
           max-height: 450px;
           order: 2;
+          overflow: visible;
+        }
+
+        .experience-3d-model {
+          min-height: 350px;
+          max-height: 450px;
         }
 
         .heritage-model-controls {
@@ -4339,6 +4429,53 @@
         }
       }
 
+      @media (max-width: 480px) {
+        .heritage-museum-layout {
+          padding: 1.5rem 1rem;
+          gap: 1.5rem;
+        }
+
+        .heritage-title {
+          font-size: 1.25rem;
+        }
+
+        .heritage-description {
+          font-size: 0.875rem;
+        }
+
+        .heritage-model-panel {
+          margin-left: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .heritage-model-container {
+          width: 100%;
+          min-height: 300px;
+          max-height: 400px;
+          overflow: visible;
+        }
+
+        .experience-3d-model {
+          min-height: 300px;
+          max-height: 400px;
+        }
+
+        .quick-info-label {
+          font-size: 0.58rem;
+        }
+
+        .quick-info-value {
+          font-size: 0.8125rem;
+        }
+
+        .model-control-btn {
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+      }
+
       /* Button styling */
       .experience-3d-view-btn {
         position: absolute;
@@ -4351,7 +4488,7 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: #ffffff;
-        background: #228B22;
+        background: #228b22;
         border: none;
         border-radius: 0.5rem;
         cursor: pointer;
@@ -4375,7 +4512,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #D4AF37;
+        color: #d4af37;
         background: rgba(15, 23, 42, 0.8);
         border: 1px solid rgba(212, 175, 55, 0.3);
         border-radius: 0.5rem;
@@ -4387,7 +4524,7 @@
 
       .experience-3d-back-btn:hover {
         background: rgba(212, 175, 55, 0.2);
-        border-color: #D4AF37;
+        border-color: #d4af37;
       }
 
       /* Model container styling */
@@ -4558,7 +4695,12 @@
       .gallery-green-background {
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(4, 120, 87, 0.08) 50%, rgba(0, 0, 0, 0.12) 100%);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.05) 0%,
+          rgba(4, 120, 87, 0.08) 50%,
+          rgba(0, 0, 0, 0.12) 100%
+        );
         z-index: 5;
       }
 
@@ -4567,7 +4709,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+        background: radial-gradient(
+          ellipse 80% 60% at 50% 40%,
+          rgba(255, 255, 255, 0.03) 0%,
+          transparent 70%
+        );
         pointer-events: none;
       }
 
@@ -4576,7 +4722,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
+        background: radial-gradient(
+          ellipse 70% 70% at 50% 50%,
+          transparent 0%,
+          rgba(0, 0, 0, 0.15) 100%
+        );
         pointer-events: none;
       }
 
@@ -4694,7 +4844,7 @@
         letter-spacing: 0.35em;
         color: rgba(255, 255, 255, 0.95);
         margin: 0 0 1rem;
-        text-shadow: 
+        text-shadow:
           0 2px 6px rgba(0, 0, 0, 0.5),
           0 0 15px rgba(0, 0, 0, 0.3);
       }
@@ -4706,7 +4856,7 @@
         color: #ffffff;
         margin: 0 0 1.5rem;
         line-height: 1.02;
-        text-shadow: 
+        text-shadow:
           0 4px 16px rgba(0, 0, 0, 0.6),
           0 0 30px rgba(0, 0, 0, 0.4);
         letter-spacing: -0.02em;
@@ -4719,7 +4869,7 @@
         line-height: 1.7;
         margin: 0;
         max-width: 680px;
-        text-shadow: 
+        text-shadow:
           0 2px 8px rgba(0, 0, 0, 0.6),
           0 0 20px rgba(0, 0, 0, 0.4);
         letter-spacing: 0.01em;
@@ -4737,7 +4887,12 @@
         left: 5%;
         width: clamp(300px, 50vw, 500px);
         height: clamp(200px, 35vw, 350px);
-        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, rgba(144, 217, 176, 0.08) 40%, transparent 70%);
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255, 255, 255, 0.15) 0%,
+          rgba(144, 217, 176, 0.08) 40%,
+          transparent 70%
+        );
         filter: blur(60px);
         opacity: 0.8;
         pointer-events: none;
@@ -4751,7 +4906,12 @@
         left: 5%;
         width: clamp(350px, 60vw, 600px);
         height: clamp(120px, 25vw, 250px);
-        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, rgba(4, 120, 87, 0.04) 50%, transparent 70%);
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255, 255, 255, 0.06) 0%,
+          rgba(4, 120, 87, 0.04) 50%,
+          transparent 70%
+        );
         filter: blur(80px);
         opacity: 0.6;
         pointer-events: none;
@@ -4780,8 +4940,14 @@
         inset: 0;
         background: #f4f4f4;
         clip-path: polygon(
-          10% 0%, 90% 0%, 100% 10%, 100% 90%, 
-          90% 100%, 10% 100%, 0% 90%, 0% 10%
+          10% 0%,
+          90% 0%,
+          100% 10%,
+          100% 90%,
+          90% 100%,
+          10% 100%,
+          0% 90%,
+          0% 10%
         );
         z-index: 2;
       }
@@ -5308,9 +5474,16 @@
             >
               <div class="map-intro-overlay__content">
                 <div class="map-intro-overlay__label">
-                  <svg class="map-intro-overlay__label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
+                  <svg
+                    class="map-intro-overlay__label-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Official Heritage Sites</span>
                 </div>
@@ -5321,21 +5494,39 @@
                 </p>
                 <div class="map-intro-overlay__actions">
                   <button class="map-intro-overlay__action-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M5 9l7 7 7-7"/>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 9l7 7 7-7" />
                     </svg>
                     <span>Drag to pan</span>
                   </button>
                   <button class="map-intro-overlay__action-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M12 5v14M5 12h14"/>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 5v14M5 12h14" />
                     </svg>
                     <span>Scroll to zoom</span>
                   </button>
                   <button class="map-intro-overlay__action-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10"/>
-                      <circle cx="12" cy="12" r="3"/>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="3" />
                     </svg>
                     <span>Tap markers</span>
                   </button>
@@ -5545,13 +5736,20 @@
       <section
         id="portal-gallery"
         class="gallery-cinematic"
-        style="margin: 0; padding: 0;"
+        style="margin: 0; padding: 0"
       >
         <!-- Opening Scene -->
         <div class="gallery-scene gallery-scene--opening">
           <!-- Video Background -->
           <div class="gallery-video-background">
-            <video autoplay muted loop playsinline class="gallery-video" src="data/Natural Heritage/Pujada Island/Videos/1.mp4"></video>
+            <video
+              autoplay
+              muted
+              loop
+              playsinline
+              class="gallery-video"
+              src="data/Natural Heritage/Pujada Island/Videos/1.mp4"
+            ></video>
             <div class="gallery-video-overlay"></div>
           </div>
 
@@ -5559,27 +5757,37 @@
           <div class="gallery-green-background"></div>
 
           <!-- Pause Button -->
-          <button class="gallery-video-pause-btn" id="galleryVideoPauseBtn" aria-label="Pause video">
-            <svg class="gallery-video-pause-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+          <button
+            class="gallery-video-pause-btn"
+            id="galleryVideoPauseBtn"
+            aria-label="Pause video"
+          >
+            <svg
+              class="gallery-video-pause-icon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
             </svg>
-            <svg class="gallery-video-play-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <path d="M8 5v14l11-7z"/>
+            <svg
+              class="gallery-video-play-icon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style="display: none"
+            >
+              <path d="M8 5v14l11-7z" />
             </svg>
           </button>
-          
+
           <div class="gallery-scene-content">
             <!-- Title Glow Effect -->
             <div class="gallery-title-glow"></div>
-            
+
             <!-- Description Glow Effect -->
             <div class="gallery-description-glow"></div>
-            
+
             <p class="gallery-scene-eyebrow">Heritage Media Archive</p>
             <h1 class="gallery-scene-title display-font">Gallery</h1>
-            <p class="gallery-scene-lead">
-              Scroll to embark on a visual journey through Mati's cultural and natural heritage. Each image tells a story of tradition, landscape, and identity.
-            </p>
           </div>
         </div>
       </section>
@@ -5589,46 +5797,65 @@
         <div class="max-w-7xl mx-auto">
           <div class="section-header reveal">
             <p class="section-subtitle">
-             View authentic photographs and videos documenting the cultural, historical, and natural treasures of Mati City.
+              View authentic photographs and videos documenting the cultural,
+              historical, and natural treasures of Mati City.
             </p>
           </div>
 
           <div class="heritage-media-grid">
             <!-- Built Heritage - Image Right, Text Left -->
-            <article class="heritage-media-item image-right reveal reveal-delay-1">
+            <article
+              class="heritage-media-item image-right reveal reveal-delay-1"
+            >
               <div class="heritage-media-image">
                 <div class="before-after-slider" id="pylon-slider">
                   <div class="before-after-container">
-                    <img 
-                      src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg" 
-                      alt="Pylon Monument - Historical Photo" 
+                    <img
+                      src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                      alt="Pylon Monument - Historical Photo"
                       class="before-after-image before-image"
                       loading="lazy"
                     />
-                    <img 
-                      src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg" 
-                      alt="Pylon Monument - Present Day Photo" 
+                    <img
+                      src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
+                      alt="Pylon Monument - Present Day Photo"
                       class="before-after-image after-image"
                       loading="lazy"
                     />
                     <div class="before-after-overlay">
-                      <div class="before-after-label before-label">Historical</div>
-                      <div class="before-after-label after-label">Present Day</div>
+                      <div class="before-after-label before-label">
+                        Historical
+                      </div>
+                      <div class="before-after-label after-label">
+                        Present Day
+                      </div>
                     </div>
                     <div class="before-after-handle" id="pylon-slider-handle">
                       <div class="before-after-handle-line"></div>
                       <div class="before-after-handle-button">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M15 18l-6-6 6-6"/>
-                          <path d="M9 18l6-6-6-6"/>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path d="M15 18l-6-6 6-6" />
+                          <path d="M9 18l6-6-6-6" />
                         </svg>
                       </div>
                     </div>
                   </div>
                   <div class="before-after-instruction">
                     <div class="before-after-hint">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
+                        />
                       </svg>
                       <span>Drag to compare</span>
                     </div>
@@ -5637,9 +5864,16 @@
               </div>
               <div class="heritage-media-content">
                 <span class="heritage-media-tag built">Built Heritage</span>
-                <h3 class="heritage-media-title display-font">Pylon Monument</h3>
+                <h3 class="heritage-media-title display-font">
+                  Pylon Monument
+                </h3>
                 <p class="heritage-media-description">
-                  The Pylon Monument stands as Mati's premier cultural landmark and the "Point Zero" geographic reference for Davao Oriental. Designed by National Artist Juan F. Nakpil, this 30-foot reinforced concrete tower features a central glass sphere crafted from recycled San Miguel Beer bottles and a steel halo with a crowning luminaire.
+                  The Pylon Monument stands as Mati's premier cultural landmark
+                  and the "Point Zero" geographic reference for Davao Oriental.
+                  Designed by National Artist Juan F. Nakpil, this 30-foot
+                  reinforced concrete tower features a central glass sphere
+                  crafted from recycled San Miguel Beer bottles and a steel halo
+                  with a crowning luminaire.
                 </p>
                 <a href="3dexplore.html" class="heritage-media-link">
                   Explore Built Heritage
@@ -5649,23 +5883,57 @@
             </article>
 
             <!-- Intangible Cultural Heritage - Image Left, Text Right -->
-            <article class="heritage-media-item image-left reveal reveal-delay-2">
+            <article
+              class="heritage-media-item image-left reveal reveal-delay-2"
+            >
               <div class="heritage-media-image">
                 <div class="photo-stack-gallery" id="sambuokan-gallery">
                   <div class="photo-stack-container">
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg" alt="Sambuokan Festival 1" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg" alt="Sambuokan Festival 2" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg" alt="Sambuokan Festival 3" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG" alt="Sambuokan Festival 4" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg" alt="Sambuokan Festival 5" class="photo-stack-photo" loading="lazy" />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                      alt="Sambuokan Festival 1"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
+                      alt="Sambuokan Festival 2"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
+                      alt="Sambuokan Festival 3"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG"
+                      alt="Sambuokan Festival 4"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
+                      alt="Sambuokan Festival 5"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
                   </div>
                   <div class="photo-stack-instruction">
                     <div class="photo-stack-hint">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-                        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
-                        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
-                        <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
+                        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
+                        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+                        <path
+                          d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
+                        />
                       </svg>
                       <span>Swipe or drag to explore</span>
                     </div>
@@ -5673,10 +5941,18 @@
                 </div>
               </div>
               <div class="heritage-media-content">
-                <span class="heritage-media-tag intangible">Intangible Cultural Heritage</span>
-                <h3 class="heritage-media-title display-font">Sambuokan Festival</h3>
+                <span class="heritage-media-tag intangible"
+                  >Intangible Cultural Heritage</span
+                >
+                <h3 class="heritage-media-title display-font">
+                  Sambuokan Festival
+                </h3>
                 <p class="heritage-media-description">
-                  Sambuokan Festival is Mati's premier cultural celebration that showcases the city's rich traditions, unity, and thanksgiving. This vibrant festival features colorful street dancing, cultural performances, and community activities that highlight the unique identity and spirit of the Matinians.
+                  Sambuokan Festival is Mati's premier cultural celebration that
+                  showcases the city's rich traditions, unity, and thanksgiving.
+                  This vibrant festival features colorful street dancing,
+                  cultural performances, and community activities that highlight
+                  the unique identity and spirit of the Matinians.
                 </p>
                 <a href="gallery.html" class="heritage-media-link">
                   View Cultural Heritage
@@ -5686,23 +5962,57 @@
             </article>
 
             <!-- Natural Heritage - Image Right, Text Left -->
-            <article class="heritage-media-item image-right reveal reveal-delay-3">
+            <article
+              class="heritage-media-item image-right reveal reveal-delay-3"
+            >
               <div class="heritage-media-image">
                 <div class="photo-stack-gallery" id="taytay-daga-gallery">
                   <div class="photo-stack-container">
-                    <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg" alt="Sleeping Dinosaur 1" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg" alt="Sleeping Dinosaur 2" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg" alt="Sleeping Dinosaur 3" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg" alt="Sleeping Dinosaur 4" class="photo-stack-photo" loading="lazy" />
-                    <img src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0786.jpg" alt="Sleeping Dinosaur 5" class="photo-stack-photo" loading="lazy" />
+                    <img
+                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                      alt="Sleeping Dinosaur 1"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg"
+                      alt="Sleeping Dinosaur 2"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg"
+                      alt="Sleeping Dinosaur 3"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg"
+                      alt="Sleeping Dinosaur 4"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
+                    <img
+                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0786.jpg"
+                      alt="Sleeping Dinosaur 5"
+                      class="photo-stack-photo"
+                      loading="lazy"
+                    />
                   </div>
                   <div class="photo-stack-instruction">
                     <div class="photo-stack-hint">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
-                        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
-                        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
-                        <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
+                        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
+                        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+                        <path
+                          d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
+                        />
                       </svg>
                       <span>Swipe or drag to explore</span>
                     </div>
@@ -5711,9 +6021,16 @@
               </div>
               <div class="heritage-media-content">
                 <span class="heritage-media-tag natural">Natural Heritage</span>
-                <h3 class="heritage-media-title display-font">Sleeping Dinosaur</h3>
+                <h3 class="heritage-media-title display-font">
+                  Sleeping Dinosaur
+                </h3>
                 <p class="heritage-media-description">
-                  The Tay-Tay Daga, popularly known as the Sleeping Dinosaur, is a majestic natural landmark spanning approximately 579 hectares. This mountain features a rare formation that naturally resembles a dinosaur resting upon the waters of Pujada Bay, holding profound historical and spiritual significance as a protected heritage landscape.
+                  The Tay-Tay Daga, popularly known as the Sleeping Dinosaur, is
+                  a majestic natural landmark spanning approximately 579
+                  hectares. This mountain features a rare formation that
+                  naturally resembles a dinosaur resting upon the waters of
+                  Pujada Bay, holding profound historical and spiritual
+                  significance as a protected heritage landscape.
                 </p>
                 <a href="3dexplore.html" class="heritage-media-link">
                   View Natural Heritage
@@ -5732,56 +6049,95 @@
       >
         <div class="experience-3d-inner">
           <div class="experience-3d-content heritage-museum-layout">
-            
             <!-- Left Panel: Information -->
             <div class="heritage-info-panel">
               <div class="heritage-info-header">
                 <h1 class="heritage-title">Pylon Monument</h1>
               </div>
-              
+
               <div class="heritage-description-container">
                 <div class="heritage-description-wrapper">
                   <p class="heritage-description">
-                    The Pylon Monument, located at JP Rizal Street, Barangay Central, City of Mati, Davao Oriental, stands as a premier cultural landmark and the "Point Zero" geographic reference for the province. Originally commissioned in 1979 during the administration of Governor Francisco G. Rabat, the structure was designed by the first Filipino National Artist for Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito G. Rabat. The monument features a 30-foot reinforced concrete and brick tower distinguished by a central glass sphere—crafted from recycled San Miguel Beer bottles—and a steel halo with a crowning luminaire. In 2019, the site underwent a comprehensive aesthetic renovation designed by Architect Cesar Gamalong, which introduced culturally themed ornamentation, a koi pond, and integrated landscaping with a waterfall feature. Formally recognized under Resolution No. 61, Series of 2019, the Pylon remains a testament to the city's historical heritage and serves as a vital public space symbolizing the faith and resilience of the people of Mati.
+                    The Pylon Monument, located at JP Rizal Street, Barangay
+                    Central, City of Mati, Davao Oriental, stands as a premier
+                    cultural landmark and the "Point Zero" geographic reference
+                    for the province. Originally commissioned in 1979 during the
+                    administration of Governor Francisco G. Rabat, the structure
+                    was designed by the first Filipino National Artist for
+                    Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito
+                    G. Rabat. The monument features a 30-foot reinforced
+                    concrete and brick tower distinguished by a central glass
+                    sphere—crafted from recycled San Miguel Beer bottles—and a
+                    steel halo with a crowning luminaire. In 2019, the site
+                    underwent a comprehensive aesthetic renovation designed by
+                    Architect Cesar Gamalong, which introduced culturally themed
+                    ornamentation, a koi pond, and integrated landscaping with a
+                    waterfall feature. Formally recognized under Resolution No.
+                    61, Series of 2019, the Pylon remains a testament to the
+                    city's historical heritage and serves as a vital public
+                    space symbolizing the faith and resilience of the people of
+                    Mati.
                   </p>
                 </div>
               </div>
-              
+
               <div class="heritage-quick-info">
                 <div class="quick-info-grid">
                   <div class="quick-info-item">
-                    <span class="quick-info-label">Category</span>
-                    <span class="quick-info-value">Monument</span>
+                    <span class="quick-info-label">3D Model</span>
+                    <span class="quick-info-value">Pylon Monument</span>
                   </div>
                   <div class="quick-info-item">
                     <span class="quick-info-label">Barangay</span>
                     <span class="quick-info-value">Central</span>
                   </div>
                   <div class="quick-info-item">
-                    <span class="quick-info-label">Ownership</span>
-                    <span class="quick-info-value">Government Property</span>
+                    <span class="quick-info-label">Category</span>
+                    <span class="quick-info-value">Monument</span>
                   </div>
                   <div class="quick-info-item">
-                    <span class="quick-info-label">Latitude</span>
-                    <span class="quick-info-value">6° 57' 8.1288'' N</span>
+                    <span class="quick-info-label">Ownership</span>
+                    <span class="quick-info-value">Government Property</span>
                   </div>
                   <div class="quick-info-item">
                     <span class="quick-info-label">Longitude</span>
                     <span class="quick-info-value">126° 13' 0.8004'' E</span>
                   </div>
+                  <div class="quick-info-item">
+                    <span class="quick-info-label">Latitude</span>
+                    <span class="quick-info-value">6° 57' 8.1288'' N</span>
+                  </div>
                 </div>
               </div>
             </div>
-            
+
             <!-- Right Panel: 3D Model Viewer -->
             <div class="heritage-model-panel">
               <div class="heritage-model-container" id="heritage-model">
-                <div class="model-viewer-loading model-viewer-loading--dark" id="model-loading" style="display: none; position: absolute; inset: 0; z-index: 10;">
-                  <div class="model-viewer-loading__spinner" aria-hidden="true"></div>
+                <div class="explore3d-viewer-lines" aria-hidden="true"></div>
+                <div
+                  class="model-viewer-loading model-viewer-loading--dark"
+                  id="model-loading"
+                  style="
+                    display: none;
+                    position: absolute;
+                    inset: 0;
+                    z-index: 10;
+                  "
+                >
+                  <div
+                    class="model-viewer-loading__spinner"
+                    aria-hidden="true"
+                  ></div>
                   <p class="model-viewer-loading__text">Loading 3D model…</p>
-                  <p class="model-viewer-loading__percent" id="loading-percentage">0%</p>
+                  <p
+                    class="model-viewer-loading__percent"
+                    id="loading-percentage"
+                  >
+                    0%
+                  </p>
                 </div>
-                
+
                 <model-viewer
                   id="portal-pylon-model"
                   class="experience-3d-model"
@@ -5797,30 +6153,31 @@
                   exposure="1.1"
                   aria-label="Live rotating 3D model of Pylon Monument, Mati City"
                 ></model-viewer>
-                
+
                 <!-- Fallback image for when WebGL is not available -->
-                <div class="experience-3d-fallback" id="model-fallback" style="display: none;">
-                  <img 
-                    src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg" 
-                    alt="Pylon Monument" 
+                <div
+                  class="experience-3d-fallback"
+                  id="model-fallback"
+                  style="display: none"
+                >
+                  <img
+                    src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
+                    alt="Pylon Monument"
                     class="fallback-image"
                   />
                   <div class="fallback-message">
-                    <p>3D model requires WebGL, which is currently disabled in your browser.</p>
-                    <p>Please enable hardware acceleration in your browser settings to view the 3D model.</p>
+                    <p>
+                      3D model requires WebGL, which is currently disabled in
+                      your browser.
+                    </p>
+                    <p>
+                      Please enable hardware acceleration in your browser
+                      settings to view the 3D model.
+                    </p>
                   </div>
                 </div>
               </div>
-
-              <!-- Explore 3D Link - Outside Container -->
-              <a href="3dexplore.html" class="explore-3d-link">
-                <span>Explore in 3D</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 8h10M9 4l4 4-4 4"/>
-                </svg>
-              </a>
             </div>
-            
           </div>
         </div>
       </section>
@@ -6586,9 +6943,9 @@
         layerGroup.clearLayers();
         const visibleSites = getFilteredHeritageSites(category);
 
-        visibleSites.forEach((site, index) => {
+        visibleSites.forEach((site) => {
           L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site, 40, index),
+            icon: createHeritagePhotoIcon(site, 40),
           })
             .bindPopup(buildPopup(site), { maxWidth: 260, minWidth: 200 })
             .addTo(layerGroup);
@@ -6673,15 +7030,27 @@
         const rings = await loadMatiCityRings();
         const mainRing = getMainRing(rings);
         const cityBounds = L.latLngBounds(mainRing);
+
+        // Focus on central cluster of sites like 3dexplore.html
+        const centralSites = HERITAGE_SITES.filter(
+          (site) =>
+            site.barangay === "central" ||
+            (site.lat >= 6.94 &&
+              site.lat <= 6.96 &&
+              site.lng >= 126.21 &&
+              site.lng <= 126.23),
+        );
         const viewBounds =
-          getMatiViewBounds(getFilteredHeritageSites("all")) || cityBounds;
+          centralSites.length > 0
+            ? getMatiViewBounds(centralSites)
+            : cityBounds;
 
         const map = L.map("mati-map", {
           maxBounds: cityBounds,
           maxBoundsViscosity: 1.0,
           maxZoom: 17,
           zoomControl: true,
-          attributionControl: true,
+          attributionControl: false,
           scrollWheelZoom: false,
         });
 
@@ -6698,12 +7067,19 @@
         addOutsideMask(map, mainRing);
         applyCityClip(map, mainRing);
 
-        map.fitBounds(viewBounds, { padding: [24, 24] });
-        map.setMinZoom(map.getZoom());
-
         const heritageMarkersLayer = L.layerGroup().addTo(map);
         syncHeritageMapMarkers(map, heritageMarkersLayer, "all");
         bindMapHeritageFilter(map, heritageMarkersLayer);
+
+        // Use exact coordinates from 3dexplore.html
+        console.log(
+          "Setting map view to [6.8975057184388415, 126.27308050000003] zoom 12",
+        );
+        map.setView([6.8975057184388415, 126.27308050000003], 12);
+        console.log("Current map center:", map.getCenter());
+        console.log("Current map zoom:", map.getZoom());
+        map.setMinZoom(12);
+        console.log("Set min zoom to 12");
 
         map.on("drag", () =>
           map.panInsideBounds(cityBounds, { animate: false }),
@@ -6884,64 +7260,72 @@
 
         function formatPlayCount(count) {
           if (count >= 1000) {
-            return (count / 1000).toFixed(1) + 'K Plays';
+            return (count / 1000).toFixed(1) + "K Plays";
           }
-          return count.toLocaleString() + ' Plays';
+          return count.toLocaleString() + " Plays";
         }
 
         async function fetchGamePlayCounts() {
           try {
-            if (typeof window.supabase === 'undefined') {
-              console.warn('Supabase client not available, using default play counts');
+            if (typeof window.supabase === "undefined") {
+              console.warn(
+                "Supabase client not available, using default play counts",
+              );
               return {};
             }
-            
+
             const { data, error } = await window.supabase
-              .from('game_play_counts')
-              .select('game_id, play_count');
-            
+              .from("game_play_counts")
+              .select("game_id, play_count");
+
             if (error) {
-              console.error('Error fetching play counts:', error);
+              console.error("Error fetching play counts:", error);
               return {};
             }
-            
+
             const playCounts = {};
-            data.forEach(row => {
+            data.forEach((row) => {
               playCounts[row.game_id] = row.play_count;
             });
             return playCounts;
           } catch (err) {
-            console.error('Error fetching play counts:', err);
+            console.error("Error fetching play counts:", err);
             return {};
           }
         }
 
         async function incrementGamePlayCount(gameId, gameName) {
           try {
-            if (typeof window.supabase === 'undefined') {
-              console.warn('Supabase client not available, cannot increment play count');
+            if (typeof window.supabase === "undefined") {
+              console.warn(
+                "Supabase client not available, cannot increment play count",
+              );
               return;
             }
-            
-            const { error } = await window.supabase.rpc('increment_game_play_count', {
-              p_game_id: gameId,
-              p_game_name: gameName
-            });
-            
+
+            const { error } = await window.supabase.rpc(
+              "increment_game_play_count",
+              {
+                p_game_id: gameId,
+                p_game_name: gameName,
+              },
+            );
+
             if (error) {
-              console.error('Error incrementing play count:', error);
+              console.error("Error incrementing play count:", error);
             } else {
               // Update local cache
               gamePlayCounts[gameId] = (gamePlayCounts[gameId] || 0) + 1;
               // Refresh display if this game is currently selected
               const currentGame = games[portalGameIdx];
-              const currentGameId = currentGame.id || getGameIdFromTitle(currentGame.title);
+              const currentGameId =
+                currentGame.id || getGameIdFromTitle(currentGame.title);
               if (currentGameId === gameId && players) {
                 players.textContent = formatPlayCount(gamePlayCounts[gameId]);
               }
             }
           } catch (err) {
-            console.error('Error incrementing play count:', err);
+            console.error("Error incrementing play count:", err);
           }
         }
 
@@ -7009,7 +7393,7 @@
 
           if (title) title.textContent = game.title;
           if (desc) desc.textContent = game.desc;
-          
+
           // Update play count display
           if (players) {
             const gameId = game.id || getGameIdFromTitle(game.title);
@@ -7027,13 +7411,13 @@
         function getGameIdFromTitle(title) {
           // Map game titles to database IDs
           const titleMap = {
-            'Mati Heritage Trivia Challenge': 'trivia',
-            'Matching Pairs': 'memory',
-            'Spot the Difference': 'observation',
-            'Slide Puzzle': 'puzzle',
-            'True or False Sprint': 'sprint'
+            "Mati Heritage Trivia Challenge": "trivia",
+            "Matching Pairs": "memory",
+            "Spot the Difference": "observation",
+            "Slide Puzzle": "puzzle",
+            "True or False Sprint": "sprint",
           };
-          return titleMap[title] || title.toLowerCase().replace(/\s+/g, '_');
+          return titleMap[title] || title.toLowerCase().replace(/\s+/g, "_");
         }
 
         function setPortalGameIndex(nextIdx) {
@@ -7091,88 +7475,114 @@
         });
 
         // Fetch play counts from database
-        fetchGamePlayCounts().then(counts => {
-          gamePlayCounts = counts;
-          renderPortalFeaturedPreview();
-        }).catch(() => {
-          // Fallback to default display if fetch fails
-          renderPortalFeaturedPreview();
-        });
+        fetchGamePlayCounts()
+          .then((counts) => {
+            gamePlayCounts = counts;
+            renderPortalFeaturedPreview();
+          })
+          .catch(() => {
+            // Fallback to default display if fetch fails
+            renderPortalFeaturedPreview();
+          });
       }
 
       const gallerySection = document.getElementById("portal-gallery");
 
       if (gallerySection) {
-
         // Scroll-triggered animations for scenes
         const scenes = gallerySection.querySelectorAll(".gallery-scene");
-        const videoPlayers = gallerySection.querySelectorAll(".gallery-video-cinematic-player");
-        
-        // Intersection Observer for scene visibility
-        const sceneObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              
-              // Handle video autoplay
-              const videoPlayer = entry.target.querySelector(".gallery-video-cinematic-player");
-              if (videoPlayer) {
-                videoPlayer.play().catch(() => {
-                  // Autoplay failed, video will play on click
-                });
-              }
-            } else {
-              // Pause video when not in view
-              const videoPlayer = entry.target.querySelector(".gallery-video-cinematic-player");
-              if (videoPlayer) {
-                videoPlayer.pause();
-              }
-            }
-          });
-        }, {
-          threshold: 0.3,
-          rootMargin: "-10% 0px -10% 0px"
-        });
+        const videoPlayers = gallerySection.querySelectorAll(
+          ".gallery-video-cinematic-player",
+        );
 
-        scenes.forEach(scene => sceneObserver.observe(scene));
+        // Intersection Observer for scene visibility
+        const sceneObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+
+                // Handle video autoplay
+                const videoPlayer = entry.target.querySelector(
+                  ".gallery-video-cinematic-player",
+                );
+                if (videoPlayer) {
+                  videoPlayer.play().catch(() => {
+                    // Autoplay failed, video will play on click
+                  });
+                }
+              } else {
+                // Pause video when not in view
+                const videoPlayer = entry.target.querySelector(
+                  ".gallery-video-cinematic-player",
+                );
+                if (videoPlayer) {
+                  videoPlayer.pause();
+                }
+              }
+            });
+          },
+          {
+            threshold: 0.3,
+            rootMargin: "-10% 0px -10% 0px",
+          },
+        );
+
+        scenes.forEach((scene) => sceneObserver.observe(scene));
 
         // Parallax effect for images
-        const photoImages = gallerySection.querySelectorAll(".gallery-photo-full-image");
-        
-        const parallaxObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              const handleScroll = () => {
-                const rect = img.getBoundingClientRect();
-                const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-                const translateY = (scrollPercent - 0.5) * 30;
-                img.style.transform = `scale(1) translateY(${translateY}px)`;
-              };
-              
-              window.addEventListener("scroll", handleScroll, { passive: true });
-              handleScroll();
-              
-              // Cleanup when not intersecting
-              entry.target._parallaxHandler = handleScroll;
-            } else {
-              if (entry.target._parallaxHandler) {
-                window.removeEventListener("scroll", entry.target._parallaxHandler);
-              }
-            }
-          });
-        }, { threshold: 0 });
+        const photoImages = gallerySection.querySelectorAll(
+          ".gallery-photo-full-image",
+        );
 
-        photoImages.forEach(img => parallaxObserver.observe(img));
+        const parallaxObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                const handleScroll = () => {
+                  const rect = img.getBoundingClientRect();
+                  const scrollPercent =
+                    (window.innerHeight - rect.top) /
+                    (window.innerHeight + rect.height);
+                  const translateY = (scrollPercent - 0.5) * 30;
+                  img.style.transform = `scale(1) translateY(${translateY}px)`;
+                };
+
+                window.addEventListener("scroll", handleScroll, {
+                  passive: true,
+                });
+                handleScroll();
+
+                // Cleanup when not intersecting
+                entry.target._parallaxHandler = handleScroll;
+              } else {
+                if (entry.target._parallaxHandler) {
+                  window.removeEventListener(
+                    "scroll",
+                    entry.target._parallaxHandler,
+                  );
+                }
+              }
+            });
+          },
+          { threshold: 0 },
+        );
+
+        photoImages.forEach((img) => parallaxObserver.observe(img));
 
         // Video play button interaction
-        const videoPlayButtons = gallerySection.querySelectorAll(".gallery-video-cinematic-play");
-        
-        videoPlayButtons.forEach(btn => {
+        const videoPlayButtons = gallerySection.querySelectorAll(
+          ".gallery-video-cinematic-play",
+        );
+
+        videoPlayButtons.forEach((btn) => {
           btn.addEventListener("click", () => {
             const scene = btn.closest(".gallery-scene--video");
-            const video = scene.querySelector(".gallery-video-cinematic-player");
-            
+            const video = scene.querySelector(
+              ".gallery-video-cinematic-player",
+            );
+
             if (video) {
               if (video.paused) {
                 video.play();
@@ -7187,8 +7597,10 @@
         });
 
         // Smooth scroll behavior for internal links
-        const ctaButtons = gallerySection.querySelectorAll(".gallery-cta-cinematic-btn");
-        ctaButtons.forEach(btn => {
+        const ctaButtons = gallerySection.querySelectorAll(
+          ".gallery-cta-cinematic-btn",
+        );
+        ctaButtons.forEach((btn) => {
           btn.addEventListener("click", (e) => {
             const href = btn.getAttribute("href");
             if (href && href.startsWith("#")) {
@@ -7208,14 +7620,11 @@
           ? MatiHeritagePylonModel.resolve()
           : "";
 
-
-
       if (portal3dSection) {
         const portalPylonModel = document.getElementById("portal-pylon-model");
         const prefersReducedMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
         ).matches;
-
 
         const centerPortalModel = () => {
           if (!portalPylonModel) return;
@@ -7242,77 +7651,87 @@
               if (entry.isIntersecting && !modelLoaded) {
                 // Only trigger loading once
                 modelLoaded = true;
-                
+
                 // Show loading indicator first
-                const loadingIndicator = document.getElementById('model-loading');
-                const loadingPercent = document.getElementById('loading-percentage');
+                const loadingIndicator =
+                  document.getElementById("model-loading");
+                const loadingPercent =
+                  document.getElementById("loading-percentage");
                 if (loadingIndicator) {
-                  loadingIndicator.style.display = 'flex';
+                  loadingIndicator.style.display = "flex";
                 }
-                
+
                 // Always set the direct path to avoid any path resolution issues
-                const directPath = 'data/Built Heritage/Pylon Monument/Pylon.glb';
+                const directPath =
+                  "data/Built Heritage/Pylon Monument/Pylon.glb";
                 portalPylonModel.setAttribute("src", directPath);
-                
+
                 // Manual progress tracking instead of ModelViewerLoading
-                portalPylonModel.addEventListener('progress', (event) => {
+                portalPylonModel.addEventListener("progress", (event) => {
                   if (loadingPercent) {
                     const progress = event.detail.totalProgress;
                     const percentage = Math.round(progress * 100);
-                    loadingPercent.textContent = percentage + '%';
+                    loadingPercent.textContent = percentage + "%";
                   }
                 });
-                
-                portalPylonModel.addEventListener('load', () => {
-                  console.log('Model loaded successfully');
+
+                portalPylonModel.addEventListener("load", () => {
+                  console.log("Model loaded successfully");
                   if (loadingPercent) {
-                    loadingPercent.textContent = '100%';
+                    loadingPercent.textContent = "100%";
                   }
                   if (loadingIndicator) {
-                    loadingIndicator.style.display = 'none';
+                    loadingIndicator.style.display = "none";
                   }
-                  
+
+                  // Change border-radius to match 3dexplore.html when model is 100% loaded
+                  const modelContainer = document.querySelector(".heritage-model-container");
+                  if (modelContainer) {
+                    modelContainer.style.borderRadius = "1rem";
+                  }
+
                   // Start model animation sequence
-                  console.log('Starting model animation sequence');
+                  console.log("Starting model animation sequence");
                   startModelAnimationSequence();
                 });
-                
-                portalPylonModel.addEventListener('error', (error) => {
-                  console.error('Model failed to load:', error);
+
+                portalPylonModel.addEventListener("error", (error) => {
+                  console.error("Model failed to load:", error);
                 });
 
                 // Model animation sequence function
                 function startModelAnimationSequence() {
-                  console.log('startModelAnimationSequence called');
-                  const modelContainer = document.getElementById('heritage-model');
+                  console.log("startModelAnimationSequence called");
+                  const modelContainer =
+                    document.getElementById("heritage-model");
                   if (!modelContainer) {
-                    console.error('Model container not found');
+                    console.error("Model container not found");
                     return;
                   }
-                  
-                  console.log('Model container found, starting animation');
-                  let animationPhase = 'rotate';
+
+                  console.log("Model container found, starting animation");
+                  let animationPhase = "rotate";
                   let animationTimeout;
                   let hasInteracted = false;
-                  
+
                   const stopAnimation = () => {
-                    console.log('Animation stopped by user interaction');
+                    console.log("Animation stopped by user interaction");
                     clearTimeout(animationTimeout);
                     hasInteracted = true;
                     // Reset auto-rotate
                     portalPylonModel.autoRotate = true;
-                    portalPylonModel.setAttribute('auto-rotate', '');
+                    portalPylonModel.setAttribute("auto-rotate", "");
                   };
-                  
+
                   const animateRotation = () => {
                     if (hasInteracted) return;
-                    
-                    console.log('Starting rotation animation');
-                    
+
+                    console.log("Starting rotation animation");
+
                     // Disable auto-rotate for manual animation
                     portalPylonModel.autoRotate = false;
-                    portalPylonModel.removeAttribute('auto-rotate');
-                    
+                    portalPylonModel.removeAttribute("auto-rotate");
+
                     // Animate rotation
                     let currentOrbit = 0;
                     const rotationInterval = setInterval(() => {
@@ -7323,11 +7742,13 @@
                       currentOrbit += 2;
                       portalPylonModel.cameraOrbit = `${currentOrbit}deg 75deg 18%`;
                     }, 50);
-                    
+
                     // Stop rotation and pause before zoom
                     animationTimeout = setTimeout(() => {
                       clearInterval(rotationInterval);
-                      console.log('Rotation animation ended, pausing before zoom');
+                      console.log(
+                        "Rotation animation ended, pausing before zoom",
+                      );
                       if (!hasInteracted) {
                         // Pause for 1 second then start zoom
                         setTimeout(() => {
@@ -7338,12 +7759,12 @@
                       }
                     }, 3000);
                   };
-                  
+
                   const animateZoom = () => {
                     if (hasInteracted) return;
-                    
-                    console.log('Starting zoom animation');
-                    
+
+                    console.log("Starting zoom animation");
+
                     // Try using field of view for more dramatic zoom effect - slower and closer
                     let currentFov = 45;
                     let zoomingIn = true;
@@ -7352,31 +7773,38 @@
                         clearInterval(zoomInterval);
                         return;
                       }
-                      
+
                       if (zoomingIn) {
                         currentFov -= 0.3; // Slower zoom in
-                        if (currentFov <= 15) { // Much closer zoom
+                        if (currentFov <= 15) {
+                          // Much closer zoom
                           zoomingIn = false;
-                          console.log('Reached closest zoom (FOV 15), now zooming out');
+                          console.log(
+                            "Reached closest zoom (FOV 15), now zooming out",
+                          );
                         }
                       } else {
                         currentFov += 0.3; // Slower zoom out
                         if (currentFov >= 45) {
                           zoomingIn = true;
-                          console.log('Reached furthest zoom (FOV 45), now zooming in');
+                          console.log(
+                            "Reached furthest zoom (FOV 45), now zooming in",
+                          );
                         }
                       }
-                      
-                      console.log('Current FOV:', currentFov);
-                      portalPylonModel.fieldOfView = currentFov + 'deg';
+
+                      console.log("Current FOV:", currentFov);
+                      portalPylonModel.fieldOfView = currentFov + "deg";
                     }, 80); // Slower interval (80ms instead of 50ms)
-                    
+
                     // Stop zoom and pause before rotation
                     animationTimeout = setTimeout(() => {
                       clearInterval(zoomInterval);
-                      console.log('Zoom animation ended, pausing before rotation');
+                      console.log(
+                        "Zoom animation ended, pausing before rotation",
+                      );
                       // Reset FOV
-                      portalPylonModel.fieldOfView = '45deg';
+                      portalPylonModel.fieldOfView = "45deg";
                       if (!hasInteracted) {
                         // Pause for 1 second then start rotation
                         setTimeout(() => {
@@ -7387,25 +7815,32 @@
                       }
                     }, 8000); // Longer animation (8 seconds) for slower, smoother zoom
                   };
-                  
+
                   // Start with rotation immediately
-                  console.log('Starting rotation animation immediately');
+                  console.log("Starting rotation animation immediately");
                   animateRotation();
-                  
+
                   // Stop animation only on actual user interaction (mouse/touch), not camera changes
-                  console.log('Setting up interaction listeners');
-                  modelContainer.addEventListener('mousedown', stopAnimation, { once: true });
-                  modelContainer.addEventListener('touchstart', stopAnimation, { once: true }, { passive: true });
-                  
-                  console.log('Animation sequence setup complete');
+                  console.log("Setting up interaction listeners");
+                  modelContainer.addEventListener("mousedown", stopAnimation, {
+                    once: true,
+                  });
+                  modelContainer.addEventListener(
+                    "touchstart",
+                    stopAnimation,
+                    { once: true },
+                    { passive: true },
+                  );
+
+                  console.log("Animation sequence setup complete");
                 }
-                
-                portalPylonModel.addEventListener('error', (event) => {
+
+                portalPylonModel.addEventListener("error", (event) => {
                   if (loadingPercent) {
-                    loadingPercent.textContent = '0%';
+                    loadingPercent.textContent = "0%";
                   }
                   if (loadingIndicator) {
-                    loadingIndicator.style.display = 'none';
+                    loadingIndicator.style.display = "none";
                   }
                 });
               } else if (!entry.isIntersecting) {
@@ -7414,7 +7849,7 @@
               } else if (entry.isIntersecting && modelLoaded) {
                 // Model already loaded, just resume auto-rotate
                 portalPylonModel.autoRotate = true;
-                portalPylonModel.setAttribute('auto-rotate', '');
+                portalPylonModel.setAttribute("auto-rotate", "");
               }
             });
           },
@@ -7423,28 +7858,26 @@
         portal3dObserver.observe(portal3dSection);
 
         // Model loading setup
-        const modelContainer = document.getElementById('heritage-model');
-        const loadingIndicator = document.getElementById('model-loading');
+        const modelContainer = document.getElementById("heritage-model");
+        const loadingIndicator = document.getElementById("model-loading");
 
         // Hide loading when model loads
         if (portalPylonModel) {
-          portalPylonModel.addEventListener('load', () => {
+          portalPylonModel.addEventListener("load", () => {
             if (loadingIndicator) {
-              loadingIndicator.style.display = 'none';
+              loadingIndicator.style.display = "none";
             }
             // Set optimal camera distance on load for 85-90% fill
-            portalPylonModel.cameraOrbit = '0deg 75deg 18%';
-            portalPylonModel.cameraTarget = 'auto auto auto';
+            portalPylonModel.cameraOrbit = "0deg 75deg 18%";
+            portalPylonModel.cameraTarget = "auto auto auto";
           });
 
-          portalPylonModel.addEventListener('error', () => {
+          portalPylonModel.addEventListener("error", () => {
             if (loadingIndicator) {
-              loadingIndicator.style.display = 'none';
+              loadingIndicator.style.display = "none";
             }
           });
         }
-
-
       }
 
       const portalGamesSection = document.getElementById("portal-games");
@@ -7464,12 +7897,12 @@
       }
 
       // Gallery Video Background - Alternate between Pujada Island and Oak Island videos
-      document.addEventListener('DOMContentLoaded', function() {
-        const galleryVideo = document.querySelector('.gallery-video');
+      document.addEventListener("DOMContentLoaded", function () {
+        const galleryVideo = document.querySelector(".gallery-video");
         if (galleryVideo) {
           const videos = [
-            'data/Natural Heritage/Pujada Island/Videos/1.mp4',
-            'data/Natural Heritage/Oak Island/Videos/OAK ISLAND.mp4'
+            "data/Natural Heritage/Pujada Island/Videos/1.mp4",
+            "data/Natural Heritage/Oak Island/Videos/OAK ISLAND.mp4",
           ];
           let currentVideoIndex = 0;
           const videoSwitchInterval = 20000; // Switch every 20 seconds
@@ -7477,22 +7910,22 @@
           function switchVideo() {
             currentVideoIndex = (currentVideoIndex + 1) % videos.length;
             const newSrc = videos[currentVideoIndex];
-            
+
             // Create a fade effect
-            galleryVideo.style.opacity = '0';
-            
+            galleryVideo.style.opacity = "0";
+
             setTimeout(() => {
               galleryVideo.src = newSrc;
               galleryVideo.load();
-              galleryVideo.play().catch(e => {
+              galleryVideo.play().catch((e) => {
                 // Error handling for autoplay
               });
-              galleryVideo.style.opacity = '1';
+              galleryVideo.style.opacity = "1";
             }, 500); // Wait for fade out
           }
 
           // Handle video end event to switch to next video
-          galleryVideo.addEventListener('ended', function() {
+          galleryVideo.addEventListener("ended", function () {
             switchVideo();
           });
 
@@ -7502,18 +7935,21 @@
       });
 
       // Premium Custom Cursor for Heritage Media Archive Gallery
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Check if device supports hover (desktop) and has GSAP
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const isTouchDevice =
+          "ontouchstart" in window || navigator.maxTouchPoints > 0;
         const isMobile = window.innerWidth <= 1024;
-        
-        if (isTouchDevice || isMobile || typeof gsap === 'undefined') {
+
+        if (isTouchDevice || isMobile || typeof gsap === "undefined") {
           return; // Skip on mobile/touch devices or if GSAP not available
         }
 
-        const gallerySection = document.querySelector('.gallery-scene--opening');
-        const customCursor = document.getElementById('galleryCursor');
-        
+        const gallerySection = document.querySelector(
+          ".gallery-scene--opening",
+        );
+        const customCursor = document.getElementById("galleryCursor");
+
         if (!gallerySection || !customCursor) return;
 
         let mouseX = window.innerWidth / 2;
@@ -7527,12 +7963,12 @@
 
         // Mouse move handler with throttling for 60fps performance
         let ticking = false;
-        document.addEventListener('mousemove', function(e) {
+        document.addEventListener("mousemove", function (e) {
           mouseX = e.clientX;
           mouseY = e.clientY;
-          
+
           if (!ticking) {
-            requestAnimationFrame(function() {
+            requestAnimationFrame(function () {
               updateCursorPosition();
               ticking = false;
             });
@@ -7547,21 +7983,23 @@
             y: mouseY,
             duration: 0.3,
             ease: "power3.out",
-            overwrite: "auto"
+            overwrite: "auto",
           });
         }
 
         // Initialize cursor position
         gsap.set(customCursor, {
           x: mouseX,
-          y: mouseY
+          y: mouseY,
         });
 
         // Show/hide cursor based on section visibility
         function handleCursorVisibility() {
           const rect = gallerySection.getBoundingClientRect();
-          const isInSection = rect.top <= window.innerHeight * 0.8 && rect.bottom >= window.innerHeight * 0.2;
-          
+          const isInSection =
+            rect.top <= window.innerHeight * 0.8 &&
+            rect.bottom >= window.innerHeight * 0.2;
+
           if (isInSection && !scrollAnimationInProgress) {
             if (!isCursorVisible) {
               showCursor();
@@ -7576,50 +8014,54 @@
         function showCursor() {
           if (isCursorVisible) return;
           isCursorVisible = true;
-          
+
           // Use CSS class for smooth transitions
-          customCursor.classList.add('is-visible');
+          customCursor.classList.add("is-visible");
         }
 
         function hideCursor() {
           if (!isCursorVisible) return;
           isCursorVisible = false;
-          
+
           // Use CSS class for smooth transitions
-          customCursor.classList.remove('is-visible');
+          customCursor.classList.remove("is-visible");
         }
 
         // Scroll detection for animation timing
         let lastScrollY = window.scrollY;
-        
-        window.addEventListener('scroll', function() {
-          const currentScrollY = window.scrollY;
-          const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-          
-          // Detect if user is actively scrolling
-          clearTimeout(scrollTimeout);
-          clearTimeout(animationTimeout);
-          
-          // Keep cursor visible during scroll animation
-          if (scrollDelta > 2) {
-            scrollAnimationInProgress = true;
-            
-            // Reset after animation completes
-            animationTimeout = setTimeout(() => {
-              scrollAnimationInProgress = false;
-              handleCursorVisibility();
-            }, 1000);
-          }
 
-          lastScrollY = currentScrollY;
-          handleCursorVisibility();
-        }, { passive: true });
+        window.addEventListener(
+          "scroll",
+          function () {
+            const currentScrollY = window.scrollY;
+            const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+
+            // Detect if user is actively scrolling
+            clearTimeout(scrollTimeout);
+            clearTimeout(animationTimeout);
+
+            // Keep cursor visible during scroll animation
+            if (scrollDelta > 2) {
+              scrollAnimationInProgress = true;
+
+              // Reset after animation completes
+              animationTimeout = setTimeout(() => {
+                scrollAnimationInProgress = false;
+                handleCursorVisibility();
+              }, 1000);
+            }
+
+            lastScrollY = currentScrollY;
+            handleCursorVisibility();
+          },
+          { passive: true },
+        );
 
         // Initial check
         setTimeout(handleCursorVisibility, 100);
 
         // Handle window resize
-        window.addEventListener('resize', function() {
+        window.addEventListener("resize", function () {
           if (window.innerWidth <= 1024) {
             hideCursor();
           } else {
@@ -7628,41 +8070,44 @@
         });
 
         // Premium cursor dot animation - subtle breathing effect
-        gsap.to('.cursor-dot', {
+        gsap.to(".cursor-dot", {
           scale: 1.15,
           duration: 2,
           repeat: -1,
           yoyo: true,
-          ease: "sine.inOut"
+          ease: "sine.inOut",
         });
       });
 
       // Gallery Video Pause/Play Functionality
-      document.addEventListener('DOMContentLoaded', function() {
-        const pauseBtn = document.getElementById('galleryVideoPauseBtn');
-        const galleryVideo = document.querySelector('.gallery-video');
+      document.addEventListener("DOMContentLoaded", function () {
+        const pauseBtn = document.getElementById("galleryVideoPauseBtn");
+        const galleryVideo = document.querySelector(".gallery-video");
 
         if (pauseBtn && galleryVideo) {
-          pauseBtn.addEventListener('click', function(e) {
+          pauseBtn.addEventListener("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
 
-            const pauseIcon = pauseBtn.querySelector('.gallery-video-pause-icon');
-            const playIcon = pauseBtn.querySelector('.gallery-video-play-icon');
-
-
+            const pauseIcon = pauseBtn.querySelector(
+              ".gallery-video-pause-icon",
+            );
+            const playIcon = pauseBtn.querySelector(".gallery-video-play-icon");
 
             if (galleryVideo.paused) {
-              galleryVideo.play().then(() => {
-                pauseIcon.style.display = 'block';
-                playIcon.style.display = 'none';
-              }).catch(err => {
-                // Error handling for video play
-              });
+              galleryVideo
+                .play()
+                .then(() => {
+                  pauseIcon.style.display = "block";
+                  playIcon.style.display = "none";
+                })
+                .catch((err) => {
+                  // Error handling for video play
+                });
             } else {
               galleryVideo.pause();
-              pauseIcon.style.display = 'none';
-              playIcon.style.display = 'block';
+              pauseIcon.style.display = "none";
+              playIcon.style.display = "block";
             }
           });
         } else {
@@ -7671,24 +8116,24 @@
       });
 
       // Before-After Comparison Slider Functionality
-      document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('pylon-slider');
-        const handle = document.getElementById('pylon-slider-handle');
-        const afterImage = slider.querySelector('.after-image');
-        
+      document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("pylon-slider");
+        const handle = document.getElementById("pylon-slider-handle");
+        const afterImage = slider.querySelector(".after-image");
+
         if (!slider || !handle || !afterImage) return;
-        
+
         let isDragging = false;
         let sliderRect = slider.getBoundingClientRect();
         let hasInteracted = false;
         let inactivityTimer = null;
         const INACTIVITY_DELAY = 3000; // Reappear hint after 3 seconds of inactivity
-        
+
         // Hide instruction hint after first interaction
         function hideHint() {
           if (!hasInteracted) {
             hasInteracted = true;
-            slider.classList.add('interacted');
+            slider.classList.add("interacted");
           }
           // Clear any existing timer and start new one
           if (inactivityTimer) {
@@ -7696,9 +8141,9 @@
           }
           resetInactivityTimer();
         }
-        
+
         // Reset timer on hover (user is still engaged)
-        slider.addEventListener('mouseenter', () => {
+        slider.addEventListener("mouseenter", () => {
           if (hasInteracted) {
             if (inactivityTimer) {
               clearTimeout(inactivityTimer);
@@ -7706,17 +8151,17 @@
             resetInactivityTimer();
           }
         });
-        
+
         // Show instruction hint
         function showHint() {
-          slider.classList.remove('interacted');
+          slider.classList.remove("interacted");
           // Clear the timer when hint shows so it stays visible
           if (inactivityTimer) {
             clearTimeout(inactivityTimer);
             inactivityTimer = null;
           }
         }
-        
+
         // Reset inactivity timer
         function resetInactivityTimer() {
           if (inactivityTimer) {
@@ -7726,125 +8171,129 @@
             showHint();
           }, INACTIVITY_DELAY);
         }
-        
+
         // Update slider dimensions on resize
         function updateSliderDimensions() {
           sliderRect = slider.getBoundingClientRect();
         }
-        
-        window.addEventListener('resize', updateSliderDimensions);
+
+        window.addEventListener("resize", updateSliderDimensions);
         updateSliderDimensions();
-        
+
         // Handle mouse/touch events
         function startDrag(e) {
           isDragging = true;
-          handle.style.transition = 'none';
-          afterImage.style.transition = 'none';
+          handle.style.transition = "none";
+          afterImage.style.transition = "none";
           hideHint(); // Hide hint on first interaction
           e.preventDefault();
         }
-        
+
         function endDrag() {
           isDragging = false;
-          handle.style.transition = 'left 0.1s ease-out';
-          afterImage.style.transition = 'clip-path 0.1s ease-out';
+          handle.style.transition = "left 0.1s ease-out";
+          afterImage.style.transition = "clip-path 0.1s ease-out";
         }
-        
+
         function moveDrag(e) {
           if (!isDragging) return;
-          
-          const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+
+          const clientX = e.type.includes("touch")
+            ? e.touches[0].clientX
+            : e.clientX;
           const sliderLeft = sliderRect.left;
           const sliderWidth = sliderRect.width;
-          
+
           // Calculate position as percentage (0-100)
           let position = ((clientX - sliderLeft) / sliderWidth) * 100;
-          
+
           // Clamp between 0 and 100
           position = Math.max(0, Math.min(100, position));
-          
+
           // Update handle position and image clip
-          handle.style.left = position + '%';
+          handle.style.left = position + "%";
           afterImage.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
         }
-        
+
         // Mouse events
-        handle.addEventListener('mousedown', startDrag);
-        document.addEventListener('mouseup', endDrag);
-        document.addEventListener('mousemove', moveDrag);
-        
+        handle.addEventListener("mousedown", startDrag);
+        document.addEventListener("mouseup", endDrag);
+        document.addEventListener("mousemove", moveDrag);
+
         // Touch events
-        handle.addEventListener('touchstart', startDrag, { passive: false });
-        document.addEventListener('touchend', endDrag);
-        document.addEventListener('touchmove', moveDrag, { passive: false });
-        
+        handle.addEventListener("touchstart", startDrag, { passive: false });
+        document.addEventListener("touchend", endDrag);
+        document.addEventListener("touchmove", moveDrag, { passive: false });
+
         // Click on slider to jump to position
-        slider.addEventListener('click', function(e) {
+        slider.addEventListener("click", function (e) {
           hideHint(); // Hide hint on click
           if (e.target !== handle && !handle.contains(e.target)) {
             const clientX = e.clientX;
             const sliderLeft = sliderRect.left;
             const sliderWidth = sliderRect.width;
-            
+
             let position = ((clientX - sliderLeft) / sliderWidth) * 100;
             position = Math.max(0, Math.min(100, position));
-            
-            handle.style.left = position + '%';
+
+            handle.style.left = position + "%";
             afterImage.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
           }
         });
-        
+
         // Keyboard accessibility
-        handle.setAttribute('tabindex', '0');
-        handle.setAttribute('role', 'slider');
-        handle.setAttribute('aria-label', 'Before and after comparison slider');
-        handle.setAttribute('aria-valuemin', '0');
-        handle.setAttribute('aria-valuemax', '100');
-        handle.setAttribute('aria-valuenow', '50');
-        
-        handle.addEventListener('keydown', function(e) {
+        handle.setAttribute("tabindex", "0");
+        handle.setAttribute("role", "slider");
+        handle.setAttribute("aria-label", "Before and after comparison slider");
+        handle.setAttribute("aria-valuemin", "0");
+        handle.setAttribute("aria-valuemax", "100");
+        handle.setAttribute("aria-valuenow", "50");
+
+        handle.addEventListener("keydown", function (e) {
           hideHint(); // Hide hint on keyboard interaction
           const currentLeft = parseFloat(handle.style.left) || 50;
           let newPosition = currentLeft;
-          
-          switch(e.key) {
-            case 'ArrowLeft':
+
+          switch (e.key) {
+            case "ArrowLeft":
               newPosition = Math.max(0, currentLeft - 5);
               e.preventDefault();
               break;
-            case 'ArrowRight':
+            case "ArrowRight":
               newPosition = Math.min(100, currentLeft + 5);
               e.preventDefault();
               break;
-            case 'Home':
+            case "Home":
               newPosition = 0;
               e.preventDefault();
               break;
-            case 'End':
+            case "End":
               newPosition = 100;
               e.preventDefault();
               break;
             default:
               return;
           }
-          
-          handle.style.left = newPosition + '%';
+
+          handle.style.left = newPosition + "%";
           afterImage.style.clipPath = `inset(0 ${100 - newPosition}% 0 0)`;
-          handle.setAttribute('aria-valuenow', Math.round(newPosition));
+          handle.setAttribute("aria-valuenow", Math.round(newPosition));
         });
       });
 
       // Photo Stack Gallery Functionality - Premium Museum Archival Experience
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         function initPhotoStackGallery(galleryId) {
           const gallery = document.getElementById(galleryId);
           if (!gallery) return;
-          
-          const container = gallery.querySelector('.photo-stack-container');
-          const photos = Array.from(container.querySelectorAll('.photo-stack-photo'));
-          
+
+          const container = gallery.querySelector(".photo-stack-container");
+          const photos = Array.from(
+            container.querySelectorAll(".photo-stack-photo"),
+          );
+
           if (photos.length < 2) return;
-          
+
           let currentIndex = 0;
           let isDragging = false;
           let startX = 0;
@@ -7853,12 +8302,12 @@
           let hasInteracted = false; // Track if user has interacted
           let inactivityTimer = null;
           const INACTIVITY_DELAY = 3000; // Reappear hint after 3 seconds of inactivity
-          
+
           // Hide instruction hint after first interaction
           function hideHint() {
             if (!hasInteracted) {
               hasInteracted = true;
-              gallery.classList.add('interacted');
+              gallery.classList.add("interacted");
             }
             // Clear any existing timer and start new one
             if (inactivityTimer) {
@@ -7866,9 +8315,9 @@
             }
             resetInactivityTimer();
           }
-          
+
           // Reset timer on hover (user is still engaged)
-          gallery.addEventListener('mouseenter', () => {
+          gallery.addEventListener("mouseenter", () => {
             if (hasInteracted) {
               if (inactivityTimer) {
                 clearTimeout(inactivityTimer);
@@ -7876,17 +8325,17 @@
               resetInactivityTimer();
             }
           });
-          
+
           // Show instruction hint
           function showHint() {
-            gallery.classList.remove('interacted');
+            gallery.classList.remove("interacted");
             // Clear the timer when hint shows so it stays visible
             if (inactivityTimer) {
               clearTimeout(inactivityTimer);
               inactivityTimer = null;
             }
           }
-          
+
           // Reset inactivity timer
           function resetInactivityTimer() {
             if (inactivityTimer) {
@@ -7896,89 +8345,102 @@
               showHint();
             }, INACTIVITY_DELAY);
           }
-          
+
           // Initialize stack positions
           function updateStackPositions() {
             photos.forEach((photo, index) => {
               // Reset classes
-              photo.classList.remove('dragging', 'swiping-away', 'coming-front');
-              
+              photo.classList.remove(
+                "dragging",
+                "swiping-away",
+                "coming-front",
+              );
+
               // Calculate visual index based on current index
-              const visualIndex = (index - currentIndex + photos.length) % photos.length;
-              
+              const visualIndex =
+                (index - currentIndex + photos.length) % photos.length;
+
               // Apply transform based on visual index
               const transforms = [
-                'translateZ(0) rotate(0deg)',
-                'translateZ(-20px) rotate(-2deg) translateX(-8px) translateY(-4px)',
-                'translateZ(-40px) rotate(1deg) translateX(6px) translateY(-8px)',
-                'translateZ(-60px) rotate(-1deg) translateX(-4px) translateY(-12px)',
-                'translateZ(-80px) rotate(2deg) translateX(8px) translateY(-16px)'
+                "translateZ(0) rotate(0deg)",
+                "translateZ(-20px) rotate(-2deg) translateX(-8px) translateY(-4px)",
+                "translateZ(-40px) rotate(1deg) translateX(6px) translateY(-8px)",
+                "translateZ(-60px) rotate(-1deg) translateX(-4px) translateY(-12px)",
+                "translateZ(-80px) rotate(2deg) translateX(8px) translateY(-16px)",
               ];
-              
+
               const shadows = [
-                '0 10px 30px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)',
-                '0 8px 25px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15)',
-                '0 6px 20px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1)',
-                '0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1)',
-                '0 2px 10px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05)'
+                "0 10px 30px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)",
+                "0 8px 25px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15)",
+                "0 6px 20px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1)",
+                "0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1)",
+                "0 2px 10px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05)",
               ];
-              
+
               const opacities = [1, 0.95, 0.9, 0.85, 0.8];
-              
-              const transform = transforms[visualIndex] || transforms[transforms.length - 1];
-              const shadow = shadows[visualIndex] || shadows[shadows.length - 1];
-              const opacity = opacities[visualIndex] || opacities[opacities.length - 1];
-              
+
+              const transform =
+                transforms[visualIndex] || transforms[transforms.length - 1];
+              const shadow =
+                shadows[visualIndex] || shadows[shadows.length - 1];
+              const opacity =
+                opacities[visualIndex] || opacities[opacities.length - 1];
+
               photo.style.transform = transform;
               photo.style.boxShadow = shadow;
               photo.style.opacity = opacity;
               photo.style.zIndex = photos.length - visualIndex;
             });
           }
-          
+
           // Initialize positions
           updateStackPositions();
-          
+
           // Handle drag start
           function handleStart(e) {
             if (isAnimating) return;
             isDragging = true;
-            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            startX = e.type.includes("touch")
+              ? e.touches[0].clientX
+              : e.clientX;
             currentX = startX;
             hideHint(); // Hide hint on first interaction
-            
+
             const topPhoto = photos[currentIndex];
-            topPhoto.classList.add('dragging');
-            topPhoto.style.transition = 'none';
+            topPhoto.classList.add("dragging");
+            topPhoto.style.transition = "none";
           }
-          
+
           // Handle drag move
           function handleMove(e) {
             if (!isDragging) return;
-            
-            currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+
+            currentX = e.type.includes("touch")
+              ? e.touches[0].clientX
+              : e.clientX;
             const deltaX = currentX - startX;
-            
+
             const topPhoto = photos[currentIndex];
-            
+
             // Apply drag with subtle rotation
             const rotation = deltaX * 0.02;
             const translateY = Math.abs(deltaX) * 0.01;
-            
+
             topPhoto.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg) translateY(${translateY}px)`;
           }
-          
+
           // Handle drag end
           function handleEnd() {
             if (!isDragging) return;
             isDragging = false;
-            
+
             const deltaX = currentX - startX;
             const topPhoto = photos[currentIndex];
-            
-            topPhoto.classList.remove('dragging');
-            topPhoto.style.transition = 'transform 0.6s var(--ease-spring), opacity 0.5s ease';
-            
+
+            topPhoto.classList.remove("dragging");
+            topPhoto.style.transition =
+              "transform 0.6s var(--ease-spring), opacity 0.5s ease";
+
             if (Math.abs(deltaX) > dragThreshold) {
               // Swipe complete - animate away
               swipePhoto(deltaX > 0 ? 1 : -1);
@@ -7987,100 +8449,107 @@
               updateStackPositions();
             }
           }
-          
+
           // Animate photo swipe
           let isAnimating = false;
           function swipePhoto(direction) {
             if (isAnimating) return;
             isAnimating = true;
-            
+
             const topPhoto = photos[currentIndex];
-            topPhoto.classList.add('swiping-away');
-            
+            topPhoto.classList.add("swiping-away");
+
             // Animate away
             const swipeDirection = direction > 0 ? 120 : -120;
             topPhoto.style.transform = `translateX(${swipeDirection}%) rotate(${direction * 15}deg) scale(0.9)`;
-            topPhoto.style.opacity = '0';
-            
+            topPhoto.style.opacity = "0";
+
             // After animation, move to back and update
             setTimeout(() => {
               currentIndex = (currentIndex + 1) % photos.length;
               updateStackPositions();
-              
+
               // Reset the swiped photo
               setTimeout(() => {
-                topPhoto.classList.remove('swiping-away');
+                topPhoto.classList.remove("swiping-away");
                 isAnimating = false;
               }, 100);
             }, 600);
           }
-          
+
           // Click to advance
           function handleClick(e) {
             if (isDragging || isAnimating) return;
             hideHint(); // Hide hint on click
-            
+
             // Check if this was a drag or a click
             const timeDiff = Date.now() - lastStartTime;
             if (timeDiff < 200) {
               swipePhoto(1);
             }
           }
-          
+
           let lastStartTime = 0;
-          
+
           // Event listeners
-          gallery.addEventListener('mousedown', (e) => {
+          gallery.addEventListener("mousedown", (e) => {
             lastStartTime = Date.now();
             handleStart(e);
           });
-          gallery.addEventListener('touchstart', (e) => {
-            lastStartTime = Date.now();
-            handleStart(e);
-          }, { passive: true });
-          
-          document.addEventListener('mousemove', handleMove);
-          document.addEventListener('touchmove', handleMove, { passive: true });
-          
-          document.addEventListener('mouseup', handleEnd);
-          document.addEventListener('touchend', handleEnd);
-          
-          gallery.addEventListener('click', handleClick);
-          
+          gallery.addEventListener(
+            "touchstart",
+            (e) => {
+              lastStartTime = Date.now();
+              handleStart(e);
+            },
+            { passive: true },
+          );
+
+          document.addEventListener("mousemove", handleMove);
+          document.addEventListener("touchmove", handleMove, { passive: true });
+
+          document.addEventListener("mouseup", handleEnd);
+          document.addEventListener("touchend", handleEnd);
+
+          gallery.addEventListener("click", handleClick);
+
           // Handle window resize
-          window.addEventListener('resize', () => {
+          window.addEventListener("resize", () => {
             updateStackPositions();
           });
-          
+
           // Keyboard accessibility
-          gallery.setAttribute('tabindex', '0');
-          gallery.setAttribute('role', 'region');
-          gallery.setAttribute('aria-label', 'Photo stack gallery - use arrow keys to navigate');
-          
-          gallery.addEventListener('keydown', (e) => {
+          gallery.setAttribute("tabindex", "0");
+          gallery.setAttribute("role", "region");
+          gallery.setAttribute(
+            "aria-label",
+            "Photo stack gallery - use arrow keys to navigate",
+          );
+
+          gallery.addEventListener("keydown", (e) => {
             if (isAnimating) return;
             hideHint(); // Hide hint on keyboard interaction
-            
-            switch(e.key) {
-              case 'ArrowRight':
-              case 'ArrowDown':
-              case ' ':
-              case 'Enter':
+
+            switch (e.key) {
+              case "ArrowRight":
+              case "ArrowDown":
+              case " ":
+              case "Enter":
                 e.preventDefault();
                 swipePhoto(1);
                 break;
-              case 'ArrowLeft':
-              case 'ArrowUp':
+              case "ArrowLeft":
+              case "ArrowUp":
                 e.preventDefault();
                 swipePhoto(-1);
                 break;
             }
           });
         }
-        
+
         // Initialize all photo stack galleries
-        initPhotoStackGallery('sambuokan-gallery');
-        initPhotoStackGallery('taytay-daga-gallery');
+        initPhotoStackGallery("sambuokan-gallery");
+        initPhotoStackGallery("taytay-daga-gallery");
       });
     </script>
   </body>

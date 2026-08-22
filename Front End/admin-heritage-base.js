@@ -38,8 +38,8 @@ const BUILT_HERITAGE_SITES = [
     description:
       "The Mayor Francisco G. Rabat Park and Baywalk, officially declared as a significant cultural property of the City of Mati under Resolution No. 61, Series of 2019, serves as a premier 3-hectare landmark of historical and socio-economic importance. Situated on a reclaimed area in Barangay Central that once served as the city's original shoreline, the park was envisioned in 2003 by Mayor Francisco G. Rabat to provide a dedicated venue for public festivities and community engagement. The site features a concrete seawall bench, the iconic \"I Love Mati\" signage, and an events stage, all set against the aesthetic backdrop of Pujada Bay. As a center for local heritage, the Baywalk continues to function as a vital space for cultural expression, tourism, and economic activity, symbolizing the city's growth and its deep-rooted connection to the sea.",
     location: "Barangay Central",
-    lat: 6.949853,
-    lng: 126.216161,
+    lat: 6.9500,
+    lng: 126.2170,
     heritageCategory: "Sites/Park",
     ownership: "Government Property",
   },

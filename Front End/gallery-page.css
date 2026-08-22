@@ -1563,8 +1563,26 @@ html[data-gallery-category] .gal-panel::after {
   scroll-margin-top: var(--header-h, 5.625rem);
 }
 
+/* Responsive adjustments for category stage */
+@media (max-width: 768px) {
+  .gal-category-stage {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .gal-category-stage {
+    padding: clamp(1rem, 3vw, 2rem);
+  }
+}
+
 #heritage-collections {
   scroll-margin-top: var(--header-h, 5.625rem);
+}
+
+.gal-category-stage {
+  --gal-bg-intangible: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg");
+  --gal-bg-natural: url("data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg");
 }
 
 .gal-category-stage::before {
@@ -1572,13 +1590,109 @@ html[data-gallery-category] .gal-panel::after {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url("data/GALLERY/pattern1.jpg");
-  background-repeat: repeat;
-  background-position: center top;
-  background-size: clamp(300px, 42vw, 520px) auto;
-  opacity: 0.16;
+  background-image: 
+    var(--gal-bg-intangible),
+    var(--gal-bg-natural);
+  background-repeat: no-repeat;
+  background-position: left center, right center;
+  background-size: 50% 100%, 50% 100%;
+  opacity: 0.65;
   mix-blend-mode: multiply;
   pointer-events: none;
+  transition: opacity 0.8s ease-in-out, background-image 0.8s ease-in-out;
+  will-change: opacity, background-image;
+}
+
+/* Responsive background for tablets */
+@media (max-width: 1024px) {
+  .gal-category-stage::before {
+    background-position: left center, right center;
+    background-size: 52% 100%, 48% 100%;
+    opacity: 0.6;
+  }
+}
+
+/* Responsive background for mobile landscape */
+@media (max-width: 768px) {
+  .gal-category-stage::before {
+    background-position: left center, right center;
+    background-size: 55% 100%, 45% 100%;
+    opacity: 0.55;
+  }
+}
+
+/* On mobile portrait, use individual card backgrounds instead of global background */
+@media (max-width: 640px) {
+  .gal-category-stage::before {
+    display: none;
+  }
+  
+  .gal-category-card--intangible {
+    position: relative;
+    --gal-card-bg-intangible: var(--gal-bg-intangible);
+  }
+  
+  .gal-category-card--intangible::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--gal-card-bg-intangible);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    border-radius: 1.25rem;
+    pointer-events: none;
+    transition: background-image 0.8s ease-in-out;
+  }
+  
+  .gal-category-card--natural {
+    position: relative;
+    --gal-card-bg-natural: var(--gal-bg-natural);
+  }
+  
+  .gal-category-card--natural::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--gal-card-bg-natural);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    border-radius: 1.25rem;
+    pointer-events: none;
+    transition: background-image 0.8s ease-in-out;
+  }
+}
+  
+  /* Reduce transition duration on mobile for better performance */
+  .gal-category-stage::before {
+    transition: opacity 0.4s ease-in-out, background-image 0.4s ease-in-out;
+  }
+}
+
+/* Optimize for high-DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .gal-category-stage::before {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Handle reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .gal-category-stage::before {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+.gal-category-stage--transitioning::before {
+  opacity: 0;
 }
 
 .gal-category-stage::after {
@@ -1588,9 +1702,9 @@ html[data-gallery-category] .gal-panel::after {
   z-index: 0;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.82) 38%,
-    rgba(255, 255, 255, 0.94) 100%
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.75) 38%,
+    rgba(255, 255, 255, 0.9) 100%
   );
   pointer-events: none;
 }
@@ -1628,7 +1742,8 @@ html[data-gallery-category] .gal-panel::after {
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--amber-dark);
+  color: var(--amber-light);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .gal-category-prompt {
@@ -1638,16 +1753,8 @@ html[data-gallery-category] .gal-panel::after {
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: -0.01em;
-  background: linear-gradient(
-    168deg,
-    var(--amber-dark) 0%,
-    var(--amber) 52%,
-    var(--amber-light) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: var(--amber-dark);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .gal-category-hint {
@@ -1655,6 +1762,8 @@ html[data-gallery-category] .gal-panel::after {
   font-size: clamp(0.92rem, 2vw, 1.02rem);
   line-height: 1.65;
   color: var(--gal-muted);
+  font-weight: 400;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .gal-category-hint strong {
