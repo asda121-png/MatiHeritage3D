@@ -1686,7 +1686,7 @@
 .auth-portal-header__welcome {
   margin: 1.35rem 0 0;
   font-family: "Oswald", "Source Sans 3", system-ui, sans-serif;
-  font-size: clamp(1.05rem, 4.55cqi, 1.82rem);
+  font-size: clamp(1.25rem, 5cqi, 2rem);
   font-weight: 600;
   letter-spacing: 0.05em;
   line-height: 1.2;
@@ -2410,7 +2410,7 @@
 .auth-portal-header__recover-title {
   margin: 1rem 0 0;
   font-family: "Oswald", "Source Sans 3", system-ui, sans-serif;
-  font-size: clamp(1.05rem, 4.2cqi, 1.45rem);
+  font-size: clamp(1.5rem, 4.5cqi, 1.75rem);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;

@@ -67,9 +67,7 @@
                 class="model-viewer-loading__spinner"
                 aria-hidden="true"
               ></div>
-              <p class="model-viewer-loading__text">
-                Loading 3D preview…
-              </p>
+              <p class="model-viewer-loading__text">Loading 3D preview…</p>
               <p
                 class="model-viewer-loading__percent"
                 id="login-model-percent"
@@ -154,9 +152,12 @@
           <div class="auth-portal-form__inner">
             <header class="auth-portal-header">
               <div class="auth-portal-logo">
-                <p class="auth-portal-logo__eyebrow">Mati Heritage</p>
-                <h1 class="auth-portal-logo__title">Portal</h1>
-                <span class="auth-portal-logo__line" aria-hidden="true"></span>
+                <img
+                  src="logo/MatiHeritage logo.png"
+                  alt="Mati Heritage 3D"
+                  class="auth-portal-logo__image"
+                  style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
+                />
               </div>
               <p class="auth-portal-header__welcome">MADAYAW NA PAG-ABOT</p>
             </header>
@@ -431,7 +432,8 @@
           }
 
           setLoading(true);
-          const rememberMe = document.getElementById("login-remember")?.checked ?? true;
+          const rememberMe =
+            document.getElementById("login-remember")?.checked ?? true;
           const result = await MatiAuth.login(identifier, password, rememberMe);
           setLoading(false);
 

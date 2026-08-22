@@ -242,9 +242,9 @@ const MatiAdminMap = (() => {
     markerBySiteId.clear();
     const sites = getMapSites();
 
-    sites.forEach((site, index) => {
+    sites.forEach((site) => {
       const marker = L.marker([site.lat, site.lng], {
-        icon: createHeritagePhotoIcon(site, 40, index),
+        icon: createHeritagePhotoIcon(site, 40),
         title: site.name,
       });
 
