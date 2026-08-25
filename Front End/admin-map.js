@@ -67,8 +67,13 @@ const MatiAdminMap = (() => {
   }
 
   function getAllMapSites() {
+    // Prioritize dynamic data source that includes admin-added sites
     if (typeof getHeritageMapDisplaySites === "function") {
       return getHeritageMapDisplaySites();
+    }
+    // Fallback to static HERITAGE_SITES if dynamic function not available
+    if (typeof HERITAGE_SITES !== "undefined") {
+      return [...HERITAGE_SITES];
     }
     return typeof HERITAGE_MAP_SITES !== "undefined" ? [...HERITAGE_MAP_SITES] : [];
   }
@@ -128,55 +133,6 @@ const MatiAdminMap = (() => {
       fillOpacity: 1,
       interactive: false,
     }).addTo(leafletMap);
-  }
-
-  function bindMapIntroDismiss(leafletMap, idleMs = 4000) {
-    const overlay = document.getElementById("map-intro-overlay");
-    if (!overlay || !leafletMap) return;
-
-    let idleTimer = null;
-
-    const showOverlay = () => {
-      overlay.classList.remove("is-dismissed");
-      overlay.setAttribute("aria-hidden", "false");
-    };
-
-    const hideOverlay = () => {
-      overlay.classList.add("is-dismissed");
-      overlay.setAttribute("aria-hidden", "true");
-    };
-
-    const scheduleReshow = () => {
-      clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(showOverlay, idleMs);
-    };
-
-    const onMapActivity = () => {
-      if (!overlay.classList.contains("is-dismissed")) {
-        hideOverlay();
-      }
-      scheduleReshow();
-    };
-
-    const container = leafletMap.getContainer();
-    const activityEvents = [
-      "dragstart",
-      "zoomstart",
-      "zoom",
-      "movestart",
-      "move",
-      "click",
-    ];
-
-    activityEvents.forEach((eventName) => {
-      leafletMap.on(eventName, onMapActivity);
-    });
-
-    if (container) {
-      container.addEventListener("mousedown", onMapActivity);
-      container.addEventListener("touchstart", onMapActivity, { passive: true });
-      container.addEventListener("wheel", onMapActivity, { passive: true });
-    }
   }
 
   let filterBound = false;
@@ -245,10 +201,9 @@ const MatiAdminMap = (() => {
     sites.forEach((site) => {
       const marker = L.marker([site.lat, site.lng], {
         icon: createHeritagePhotoIcon(site, 40),
-        title: site.name,
       });
 
-      marker.bindPopup(buildHeritageMapPopup(site, { admin: true }), {
+      marker.bindPopup(buildHeritageMapPopup(site), {
         maxWidth: 260,
         minWidth: 200,
       });
@@ -257,18 +212,16 @@ const MatiAdminMap = (() => {
       if (site.id) markerBySiteId.set(site.id, marker);
     });
 
-    if (!options.skipFit && sites.length) {
+    // Match index.html behavior - always fit bounds to visible sites
+    if (sites.length) {
       const bounds = getMatiViewBounds(sites);
       if (bounds) {
         map.fitBounds(bounds, {
           padding: [32, 32],
           animate: true,
           duration: 0.65,
-          maxZoom: 13,
         });
       }
-    } else if (!options.skipFit && mainRing.length) {
-      map.fitBounds(L.latLngBounds(mainRing), { padding: [24, 24] });
     }
   }
 
@@ -327,18 +280,58 @@ const MatiAdminMap = (() => {
     if (!container || map || typeof L === "undefined") return;
     if (!isMapContainerReady()) return;
 
+    // Load heritage sites data with priority for dynamic data including admin-added sites
+    if (typeof getHeritageMapDisplaySites === "function") {
+      try {
+        const dynamicSites = getHeritageMapDisplaySites();
+        if (dynamicSites && dynamicSites.length > 0) {
+          window.HERITAGE_SITES = dynamicSites;
+        }
+      } catch (error) {
+        console.warn("Failed to load dynamic heritage sites:", error);
+        // Fallback to other methods
+      }
+    }
+    
+    // Fallback to MatiHeritageData if dynamic function failed or isn't available
+    if (typeof HERITAGE_SITES === "undefined" && typeof MatiHeritageData !== "undefined") {
+      try {
+        window.HERITAGE_SITES = await MatiHeritageData.getMapSites();
+      } catch (error) {
+        console.warn("Using static heritage map data", error);
+        if (typeof HERITAGE_MAP_SITES !== "undefined") {
+          window.HERITAGE_SITES = [...HERITAGE_MAP_SITES];
+        }
+      }
+    } else if (typeof HERITAGE_SITES === "undefined" && typeof HERITAGE_MAP_SITES !== "undefined") {
+      window.HERITAGE_SITES = [...HERITAGE_MAP_SITES];
+    }
+
     const rings = await loadMatiCityRings();
     mainRing = getMainRing(rings);
     const cityBounds = L.latLngBounds(mainRing);
+
+    // Focus on central cluster of sites like index.html
+    const allSites = getMapSites();
+    const centralSites = allSites.filter(
+      (site) =>
+        site.barangay === "central" ||
+        (site.lat >= 6.94 &&
+          site.lat <= 6.96 &&
+          site.lng >= 126.21 &&
+          site.lng <= 126.23),
+    );
     const viewBounds =
-      getMatiViewBounds(getMapSites()) || cityBounds;
+      centralSites.length > 0
+        ? getMatiViewBounds(centralSites)
+        : cityBounds;
 
     map = L.map(container, {
       maxBounds: cityBounds,
       maxBoundsViscosity: 1.0,
       maxZoom: 17,
       zoomControl: true,
-      attributionControl: true,
+      attributionControl: false,
       scrollWheelZoom: false,
     });
 
@@ -355,8 +348,19 @@ const MatiAdminMap = (() => {
     addOutsideMask(map, mainRing);
     applyCityClip(map, mainRing);
 
-    map.fitBounds(viewBounds, { padding: [24, 24] });
-    map.setMinZoom(map.getZoom());
+    // Use exact coordinates from index.html
+    console.log(
+      "Setting map view to [6.8975057184388415, 126.27308050000003] zoom 12",
+    );
+    map.setView([6.8975057184388415, 126.27308050000003], 12);
+    console.log("Current map center:", map.getCenter());
+    console.log("Current map zoom:", map.getZoom());
+    map.setMinZoom(12);
+    console.log("Set min zoom to 12");
+
+    map.on("drag", () =>
+      map.panInsideBounds(cityBounds, { animate: false }),
+    );
 
     markersLayer = L.layerGroup().addTo(map);
 
@@ -379,9 +383,30 @@ const MatiAdminMap = (() => {
     });
 
     bindMapHeritageFilter();
-    bindMapIntroDismiss(map);
-    syncMarkers();
+    syncMarkers({ skipFit: true }); // Skip fit since we set exact view
     scheduleRelayout();
+
+    // Subscribe to data changes like index.html
+    if (typeof MatiHeritageData?.subscribeCatalog === "function") {
+      MatiHeritageData.subscribeCatalog(async () => {
+        try {
+          // Use dynamic data source that includes admin-added sites
+          if (typeof getHeritageMapDisplaySites === "function") {
+            const dynamicSites = getHeritageMapDisplaySites();
+            if (dynamicSites && dynamicSites.length > 0) {
+              window.HERITAGE_SITES = dynamicSites;
+            }
+          } else if (typeof HERITAGE_SITES !== "undefined") {
+            window.HERITAGE_SITES = await MatiHeritageData.getMapSites();
+          }
+        } catch (error) {
+          console.warn("Live map refresh failed:", error);
+          return;
+        }
+        const filter = document.getElementById("map-heritage-filter")?.value || "all";
+        setCategoryFilter(filter);
+      });
+    }
   }
 
   async function refresh() {
@@ -408,8 +433,23 @@ const MatiAdminMap = (() => {
       destroyMap();
     }
 
+    // Update HERITAGE_SITES with latest data including admin-added sites
+    if (typeof getHeritageMapDisplaySites === "function") {
+      try {
+        const latestSites = getHeritageMapDisplaySites();
+        if (latestSites && latestSites.length > 0) {
+          window.HERITAGE_SITES = latestSites;
+        }
+      } catch (error) {
+        console.warn("Failed to update heritage sites for map:", error);
+      }
+    }
+
     if (!map) {
       await init();
+    } else {
+      // Force sync markers to include newly added sites
+      syncMarkers();
     }
     scheduleRelayout();
   }

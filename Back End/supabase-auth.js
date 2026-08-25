@@ -183,7 +183,7 @@ const MatiSupabaseAuth = (() => {
       console.log("Looking up username:", identifier.trim().toLowerCase());
       const { data: profile, error: profileError } = await sb
         .from("profiles")
-        .select("email, username")
+        .select("email, username, role")
         .eq("username", identifier.trim().toLowerCase())
         .maybeSingle();
 
@@ -211,6 +211,7 @@ const MatiSupabaseAuth = (() => {
         user: {
           username: profile.username,
           email: profile.email,
+          role: profile.role,
         },
         session: data.session,
       };
@@ -229,7 +230,7 @@ const MatiSupabaseAuth = (() => {
 
     const { data: profile } = await sb
       .from("profiles")
-      .select("username, email")
+      .select("username, email, role")
       .eq("email", email)
       .maybeSingle();
 
@@ -239,6 +240,7 @@ const MatiSupabaseAuth = (() => {
       user: {
         username: profile?.username || meta.username || email.split("@")[0],
         email: profile?.email || email,
+        role: profile?.role || null,
       },
       session: data.session,
     };
@@ -260,7 +262,7 @@ const MatiSupabaseAuth = (() => {
 
     const { data: profile } = await sb
       .from("profiles")
-      .select("username, email, avatar_url")
+      .select("username, email, avatar_url, role")
       .eq("id", session.user.id)
       .maybeSingle();
 
@@ -270,6 +272,7 @@ const MatiSupabaseAuth = (() => {
         profile?.username || meta.username || session.user.email?.split("@")[0],
       email: profile?.email || session.user.email,
       avatarUrl: profile?.avatar_url || null,
+      role: profile?.role || null,
       loggedInAt: session.user.last_sign_in_at || new Date().toISOString(),
     };
   }

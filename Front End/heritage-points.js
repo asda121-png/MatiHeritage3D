@@ -6,7 +6,10 @@ const MatiHeritagePoints = (() => {
   const STORAGE_KEY = "totalHeritagePoints";
 
   function readLocal() {
-    return Math.max(0, parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0);
+    return Math.max(
+      0,
+      parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0,
+    );
   }
 
   function writeLocal(total) {
@@ -20,7 +23,7 @@ const MatiHeritagePoints = (() => {
   function currentPlayer() {
     const session =
       typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() : null;
-    if (!session?.username) return null;
+    if (!session?.username || session.role === "admin") return null;
     return {
       username: String(session.username).trim().toLowerCase(),
       displayName: session.displayName || session.username,
@@ -30,7 +33,10 @@ const MatiHeritagePoints = (() => {
   async function syncToCloud(total = readLocal()) {
     const player = currentPlayer();
     if (!player) return null;
-    if (typeof MatiSupabaseApi === "undefined" || !MatiSupabaseApi.syncHeritagePoints) {
+    if (
+      typeof MatiSupabaseApi === "undefined" ||
+      !MatiSupabaseApi.syncHeritagePoints
+    ) {
       return null;
     }
 
@@ -50,7 +56,8 @@ const MatiHeritagePoints = (() => {
     const player = currentPlayer();
     if (!player) return readLocal();
 
-    const sb = typeof MatiSupabase !== "undefined" ? MatiSupabase.getClient?.() : null;
+    const sb =
+      typeof MatiSupabase !== "undefined" ? MatiSupabase.getClient?.() : null;
     if (!sb) return readLocal();
 
     try {

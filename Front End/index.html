@@ -6591,6 +6591,20 @@
     <script src="heritage-realtime.js"></script>
     <script src="admin-heritage-base.js"></script>
     <script src="heritage-map-sites.js"></script>
+    <script src="admin-store.js"></script>
+    <script>
+      // Initialize admin store for visitor portal to access dynamic heritage data
+      (async function initVisitorAdminStore() {
+        try {
+          if (typeof MatiAdminStore !== "undefined" && typeof MatiAdminStore.initFromSupabase === "function") {
+            await MatiAdminStore.initFromSupabase();
+            console.log("Visitor portal: Admin store initialized with Supabase data");
+          }
+        } catch (error) {
+          console.warn("Visitor portal: Failed to initialize admin store from Supabase:", error);
+        }
+      })();
+    </script>
     <script src="heritage-data.js"></script>
     <script src="game-previews.js"></script>
     <script src="game-tv-transition.js"></script>
@@ -6926,8 +6940,13 @@
       }
 
       function getFilteredHeritageSites(category = "all") {
-        if (category === "all") return HERITAGE_SITES;
-        return HERITAGE_SITES.filter((site) => site.category === category);
+        // Use dynamic data source that includes admin-added sites
+        const sites = typeof getHeritageMapDisplaySites === "function" 
+          ? getHeritageMapDisplaySites() 
+          : HERITAGE_SITES;
+        
+        if (category === "all") return sites;
+        return sites.filter((site) => site.category === category);
       }
 
       function updateMapFilterWrapState(category) {
@@ -7018,7 +7037,16 @@
       async function initMatiMap() {
         if (window.matiMapInstance) return;
 
-        if (typeof MatiHeritageData !== "undefined") {
+        // Use dynamic data source that includes admin-added sites
+        if (typeof getHeritageMapDisplaySites === "function") {
+          try {
+            HERITAGE_SITES = getHeritageMapDisplaySites();
+            console.log("Visitor portal: Using dynamic heritage data with admin-added sites");
+          } catch (error) {
+            console.warn("Using static heritage map data", error);
+            HERITAGE_SITES = HERITAGE_MAP_SITES;
+          }
+        } else if (typeof MatiHeritageData !== "undefined") {
           try {
             HERITAGE_SITES = await MatiHeritageData.getMapSites();
           } catch (error) {
@@ -7098,7 +7126,13 @@
         if (typeof MatiHeritageData?.subscribeCatalog === "function") {
           MatiHeritageData.subscribeCatalog(async () => {
             try {
-              HERITAGE_SITES = await MatiHeritageData.getMapSites();
+              // Use dynamic data source that includes admin-added sites
+              if (typeof getHeritageMapDisplaySites === "function") {
+                HERITAGE_SITES = getHeritageMapDisplaySites();
+                console.log("Visitor portal: Heritage data refreshed via subscription");
+              } else {
+                HERITAGE_SITES = await MatiHeritageData.getMapSites();
+              }
             } catch (error) {
               console.warn("Live map refresh failed:", error);
               return;
@@ -7112,7 +7146,102 @@
             );
           });
         }
+        
+        // Periodic refresh for visitor portal to get admin-added sites
+        setInterval(async () => {
+          try {
+            if (typeof getHeritageMapDisplaySites === "function") {
+              const latestSites = getHeritageMapDisplaySites();
+              if (latestSites && latestSites.length > 0) {
+                const currentCount = HERITAGE_SITES.length;
+                HERITAGE_SITES = latestSites;
+                if (latestSites.length !== currentCount) {
+                  console.log("Visitor portal: Heritage sites updated via periodic refresh");
+                  const filter =
+                    document.getElementById("map-heritage-filter")?.value || "all";
+                  syncHeritageMapMarkers(
+                    window.matiMapInstance,
+                    window.matiHeritageMarkersLayer,
+                    filter,
+                  );
+                }
+              }
+            }
+          } catch (error) {
+            console.warn("Periodic heritage data refresh failed:", error);
+          }
+        }, 30000); // Refresh every 30 seconds
+        
+        // Refresh map when user returns to the tab (picks up admin changes)
+        document.addEventListener("visibilitychange", async () => {
+          if (!document.hidden && window.matiMapInstance) {
+            try {
+              if (typeof getHeritageMapDisplaySites === "function") {
+                const latestSites = getHeritageMapDisplaySites();
+                if (latestSites && latestSites.length > 0) {
+                  HERITAGE_SITES = latestSites;
+                  console.log("Visitor portal: Heritage sites refreshed on tab visibility change");
+                  const filter =
+                    document.getElementById("map-heritage-filter")?.value || "all";
+                  syncHeritageMapMarkers(
+                    window.matiMapInstance,
+                    window.matiHeritageMarkersLayer,
+                    filter,
+                  );
+                }
+              }
+            } catch (error) {
+              console.warn("Tab visibility refresh failed:", error);
+            }
+          }
+        });
+        
+        // Refresh map when window gains focus (picks up admin changes)
+        window.addEventListener("focus", async () => {
+          if (window.matiMapInstance) {
+            try {
+              if (typeof getHeritageMapDisplaySites === "function") {
+                const latestSites = getHeritageMapDisplaySites();
+                if (latestSites && latestSites.length > 0) {
+                  HERITAGE_SITES = latestSites;
+                  console.log("Visitor portal: Heritage sites refreshed on window focus");
+                  const filter =
+                    document.getElementById("map-heritage-filter")?.value || "all";
+                  syncHeritageMapMarkers(
+                    window.matiMapInstance,
+                    window.matiHeritageMarkersLayer,
+                    filter,
+                  );
+                }
+              }
+            } catch (error) {
+              console.warn("Window focus refresh failed:", error);
+            }
+          }
+        });
       }
+
+      // Add global refresh function that can be called from admin panel
+      window.refreshVisitorMap = async function() {
+        if (window.matiMapInstance && typeof getHeritageMapDisplaySites === "function") {
+          try {
+            const latestSites = getHeritageMapDisplaySites();
+            if (latestSites && latestSites.length > 0) {
+              HERITAGE_SITES = latestSites;
+              console.log("Visitor portal: Heritage sites refreshed via global function");
+              const filter =
+                document.getElementById("map-heritage-filter")?.value || "all";
+              syncHeritageMapMarkers(
+                window.matiMapInstance,
+                window.matiHeritageMarkersLayer,
+                filter,
+              );
+            }
+          } catch (error) {
+            console.warn("Global map refresh failed:", error);
+          }
+        }
+      };
 
       function bindMapScrollWheel(map) {
         const container = map?.getContainer();
