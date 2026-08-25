@@ -51,10 +51,11 @@ const MatiAuth = (() => {
       username: user.username,
       email: user.email,
       avatarUrl: user.avatarUrl,
+      role: user.role || null,
       loggedInAt: new Date().toISOString(),
     };
     const sessionJson = JSON.stringify(session);
-    
+
     if (remember) {
       localStorage.setItem(SESSION_KEY, sessionJson);
       sessionStorage.removeItem(SESSION_KEY);

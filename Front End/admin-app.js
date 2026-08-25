@@ -499,14 +499,15 @@
   }
 
   async function withUploadProgress(task, options = {}) {
-    const useDefaultCancel = options.onCancel !== undefined && options.onCancel !== null;
-    const cancelHandler = useDefaultCancel 
-      ? options.onCancel 
-      : ((controller) => {
+    const useDefaultCancel =
+      options.onCancel !== undefined && options.onCancel !== null;
+    const cancelHandler = useDefaultCancel
+      ? options.onCancel
+      : (controller) => {
           controller?.abort();
           hideUploadProgress();
           showToast("Upload cancelled.");
-        });
+        };
     showUploadProgress({
       title: options.title || "Uploading…",
       detail: options.detail || "Starting…",
@@ -687,6 +688,19 @@
     if (heritageType) heritageType.hidden = !builtForm;
     if (ownershipField) ownershipField.hidden = !builtForm;
 
+    [
+      "#site-name",
+      "#site-heritage-type",
+      "#site-ownership",
+      "#site-location",
+      "#site-lat",
+      "#site-lng",
+      "#site-desc",
+    ].forEach((selector) => {
+      const field = $(selector);
+      if (field) field.required = builtForm;
+    });
+
     const siteId = $("#site-id")?.value?.trim();
     const catSelect = $("#site-category-select");
     if (catSelect) catSelect.disabled = Boolean(siteId);
@@ -853,17 +867,17 @@
     const fullscreenLoading = $("#fullscreen-loading");
     if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
     if (fullscreenLoading) fullscreenLoading.removeAttribute("hidden");
-    
+
     // Initialize percentage tracking if ModelViewerLoading is available
     if (typeof ModelViewerLoading !== "undefined") {
       ModelViewerLoading.initializeFullscreen(
-        'fullscreen-model',
-        'fullscreen-loading',
-        'fullscreen-loading-label',
-        'fullscreen-loading-percent',
+        "fullscreen-model",
+        "fullscreen-loading",
+        "fullscreen-loading-label",
+        "fullscreen-loading-percent",
         {
-          loadingTextSelector: '.model-viewer-loading__text'
-        }
+          loadingTextSelector: ".model-viewer-loading__text",
+        },
       );
     }
   }
@@ -1085,9 +1099,13 @@
     const builtForm = isBuiltHeritageForm();
     const isNewSite = !$("#site-id")?.value?.trim();
     const deleteSiteBtn = $("#btn-delete-site");
+    const dangerZone = $("#site-danger-zone");
 
+    if (dangerZone) {
+      dangerZone.hidden = isNewSite || !builtForm;
+    }
     if (deleteSiteBtn) {
-      deleteSiteBtn.hidden = isNewSite;
+      deleteSiteBtn.disabled = isNewSite || !builtForm;
     }
   }
 
@@ -1599,6 +1617,7 @@
   }
 
   function syncMapPickMode() {
+    updateCoordinatePreviews();
     if (typeof MatiAdminMap === "undefined") return;
     const modal = $("#site-modal");
     const cat = $("#site-category")?.value;
@@ -1620,7 +1639,46 @@
     MatiAdminMap.enablePickMode((lat, lng) => {
       if ($("#site-lat")) $("#site-lat").value = lat.toFixed(6);
       if ($("#site-lng")) $("#site-lng").value = lng.toFixed(6);
+      updateCoordinatePreviews();
     }, current);
+  }
+
+  function formatCoordinateDms(value, isLatitude) {
+    const rawValue = String(value ?? "").trim();
+    if (!rawValue) return "";
+    const coordinate = Number(rawValue);
+    if (!Number.isFinite(coordinate)) return "";
+
+    const absolute = Math.abs(coordinate);
+    const degrees = Math.floor(absolute);
+    const minutesFloat = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesFloat);
+    const seconds = ((minutesFloat - minutes) * 60)
+      .toFixed(4)
+      .replace(/\.?0+$/, "");
+    const hemisphere = isLatitude
+      ? coordinate < 0
+        ? "S"
+        : "N"
+      : coordinate < 0
+        ? "W"
+        : "E";
+
+    return `${degrees}\u00b0 ${minutes}' ${seconds}'' ${hemisphere}`;
+  }
+
+  function updateCoordinatePreviews() {
+    const latitudePreview = $("#site-lat-dms");
+    const longitudePreview = $("#site-lng-dms");
+    const latitude = formatCoordinateDms($("#site-lat")?.value, true);
+    const longitude = formatCoordinateDms($("#site-lng")?.value, false);
+
+    if (latitudePreview) {
+      latitudePreview.textContent = latitude ? `DMS: ${latitude}` : "";
+    }
+    if (longitudePreview) {
+      longitudePreview.textContent = longitude ? `DMS: ${longitude}` : "";
+    }
   }
 
   function formatMediaSrc(src) {
@@ -1749,15 +1807,17 @@
       };
 
       heritageCards.innerHTML = collections
-        .map(
-          (collection) => {
-            const bgImages = {
-              built: 'data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg',
-              intangible: 'data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2672.JPG',
-              natural: 'data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg'
-            };
-            const bgImage = bgImages[collection.key] || '';
-            return `
+        .map((collection) => {
+          const bgImages = {
+            built:
+              "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
+            intangible:
+              "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2672.JPG",
+            natural:
+              "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg",
+          };
+          const bgImage = bgImages[collection.key] || "";
+          return `
         <article class="stat-card stat-card--${collection.key}">
           <div class="stat-card__bg-image" style="background-image: url('${bgImage}');"></div>
           <div class="stat-card__content">
@@ -1765,8 +1825,7 @@
             <p class="stat-card__value">${collection.sites}</p>
           </div>
         </article>`;
-          }
-        )
+        })
         .join("");
     }
 
@@ -2449,7 +2508,12 @@
     if (!siteId) {
       // For new sites, show drag and drop cards for built heritage
       if (category === "built") {
-        const tempSite = { id: null, category: "built", cover: null, modelSrc: null };
+        const tempSite = {
+          id: null,
+          category: "built",
+          cover: null,
+          modelSrc: null,
+        };
         renderBuiltSiteMediaList(tempSite, [], list);
       } else {
         list.innerHTML = `<p class="admin-empty" style="padding:1rem 0">Save the site to add media files.</p>`;
@@ -2724,19 +2788,47 @@
     void renderDashboard();
     renderLocation();
     window.MatiGalleryEmbed?.refresh?.();
+
+    // Force map data refresh to include newly added sites
+    if (typeof getHeritageMapDisplaySites === "function") {
+      try {
+        const latestSites = getHeritageMapDisplaySites();
+        if (latestSites && latestSites.length > 0) {
+          window.HERITAGE_SITES = latestSites;
+        }
+      } catch (error) {
+        console.warn("Failed to update heritage sites:", error);
+      }
+    }
   }
 
   async function saveSiteForm(e) {
     e.preventDefault();
     const name = $("#site-name").value.trim();
-    if (!name) {
-      showToast("Enter a site name before saving.");
-      $("#site-name")?.focus();
-      return;
+    if (isBuiltHeritageForm()) {
+      const requiredFields = [
+        ["#site-name", "heritage name"],
+        ["#site-heritage-type", "heritage type"],
+        ["#site-ownership", "ownership"],
+        ["#site-location", "location"],
+        ["#site-lat", "latitude"],
+        ["#site-lng", "longitude"],
+        ["#site-desc", "description"],
+      ];
+      const missingField = requiredFields.find(
+        ([selector]) => !$(selector)?.value?.trim(),
+      );
+      if (missingField) {
+        showToast(`Enter the ${missingField[1]} before saving.`);
+        $(missingField[0])?.focus();
+        return;
+      }
     }
 
     const startTime = Date.now();
-    const isNewSite = !$("#site-id")?.value?.trim() || MatiAdminStore.isDraftSiteId($("#site-id").value.trim());
+    const isNewSite =
+      !$("#site-id")?.value?.trim() ||
+      MatiAdminStore.isDraftSiteId($("#site-id").value.trim());
 
     // Show update modal
     const progressTitle = isNewSite ? "Adding site…" : "Updating site…";
@@ -2776,24 +2868,25 @@
       // Wait for minimum display time then show success and close modal
       setTimeout(() => {
         showUpdateModal("SUCCESS");
-        
+
         // Show success toast based on action
-        const successMessage = isNewSite 
-          ? "Heritage site added successfully." 
+        const successMessage = isNewSite
+          ? "Heritage site added successfully."
           : "Heritage site updated successfully.";
         showToast(successMessage);
-        
+
         // Hide success modal and close site modal after 1 second
         setTimeout(() => {
           hideUpdateModal();
-          
+
           // Close site modal with smooth animation
           const siteModal = $("#site-modal");
           if (siteModal) {
-            siteModal.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            siteModal.style.transition =
+              "opacity 0.3s ease, transform 0.3s ease";
             siteModal.style.opacity = "0";
             siteModal.style.transform = "scale(0.95)";
-            
+
             setTimeout(() => {
               siteModal.hidden = true;
               siteModal.classList.remove("active");
@@ -2801,7 +2894,7 @@
               siteModal.style.transform = "";
               document.body.style.overflow = "";
               document.body.style.overflowY = "auto";
-              
+
               // Reset form state
               $("#site-form")?.reset();
               $("#site-id").value = "";
@@ -2825,53 +2918,41 @@
     if (!modal) {
       modal = document.createElement("div");
       modal.id = "updateModal";
-      modal.className = "admin-modal";
+      modal.className = "admin-modal admin-save-modal";
       modal.innerHTML = `
-        <div class="admin-modal-backdrop" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"></div>
-        <div class="admin-modal-content" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 48px 64px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); text-align: center; min-width: 280px; animation: modalFadeIn 0.3s ease-out;">
-          <div id="updateModalIcon" style="font-size: 48px; margin-bottom: 16px; animation: iconPulse 1.5s ease-in-out infinite;">⏳</div>
-          <div id="updateModalMessage" style="font-family: 'Source Sans 3', sans-serif; font-size: 24px; font-weight: 600; color: white; letter-spacing: 0.5px;"></div>
-          <div id="updateModalSubtext" style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 400; color: rgba(255, 255, 255, 0.8); margin-top: 8px;"></div>
+        <div class="admin-save-modal__backdrop"></div>
+        <div class="admin-save-modal__content">
+          <div id="updateModalIcon" class="admin-save-modal__icon" aria-hidden="true"></div>
+          <div id="updateModalMessage" class="admin-save-modal__message"></div>
+          <div id="updateModalSubtext" class="admin-save-modal__subtext"></div>
         </div>
-        <style>
-          @keyframes modalFadeIn {
-            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-          }
-          @keyframes iconPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-          }
-          @keyframes successBounce {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-          }
-        </style>
       `;
       document.body.appendChild(modal);
     }
-    
+
     const messageEl = $("#updateModalMessage");
     const iconEl = $("#updateModalIcon");
     const subtextEl = $("#updateModalSubtext");
-    
+
     if (messageEl) {
-      messageEl.textContent = message;
+      messageEl.textContent =
+        message === "SUCCESS" ? "Saved successfully" : message;
     }
-    
+
     if (iconEl && subtextEl) {
       if (message === "SUCCESS") {
-        iconEl.textContent = "✓";
-        iconEl.style.animation = "successBounce 0.5s ease-out forwards";
+        iconEl.textContent = "";
+        iconEl.classList.remove("is-loading");
+        iconEl.classList.add("is-success");
         subtextEl.textContent = "Changes saved successfully";
       } else {
-        iconEl.textContent = "⏳";
-        iconEl.style.animation = "iconPulse 1.5s ease-in-out infinite";
+        iconEl.textContent = "";
+        iconEl.classList.remove("is-success");
+        iconEl.classList.add("is-loading");
         subtextEl.textContent = "Please wait...";
       }
     }
-    
+
     modal.hidden = false;
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -2893,70 +2974,48 @@
       if (!modal) {
         modal = document.createElement("div");
         modal.id = "removeConfirmationModal";
-        modal.className = "admin-modal";
+        modal.className = "admin-modal admin-remove-modal";
         modal.innerHTML = `
-          <div class="admin-modal-backdrop" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"></div>
-          <div class="admin-modal-content" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 48px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-width: 480px; width: 90%; animation: modalFadeIn 0.3s ease-out;">
-            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 32px;">
-              <div style="width: 64px; height: 64px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                  <line x1="12" y1="9" x2="12" y2="13"></line>
-                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-              </div>
-              <h3 style="font-family: 'Source Sans 3', sans-serif; font-size: 24px; font-weight: 700; color: #1f2937; margin: 0 0 12px 0; text-align: center;">Remove Heritage Site</h3>
-              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 400; color: #6b7280; margin: 0; text-align: center; line-height: 1.6; max-width: 400px;">
-                Are you sure you want to remove "<span id="removeSiteName" style="color: #1f2937; font-weight: 600;"></span>"? This action cannot be undone.
-              </p>
+          <div class="admin-remove-modal__content">
+            <div class="admin-remove-modal__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
             </div>
-            <div style="display: flex; gap: 16px; justify-content: center;">
-              <button type="button" id="btn-keep-site" style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 500; color: #6b7280; background: white; border: 1px solid #d1d5db; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-width: 180px;">
+            <div class="admin-remove-modal__copy">
+              <h3 class="admin-remove-modal__title">Remove Heritage Site</h3>
+              <p class="admin-remove-modal__message">
+                Are you sure you want to remove <strong id="removeSiteName"></strong>?
+              </p>
+              <p class="admin-remove-modal__note">This action cannot be undone.</p>
+            </div>
+            <div class="admin-remove-modal__actions">
+              <button type="button" id="btn-keep-site" class="admin-btn admin-btn--ghost">
                 No, Keep it
               </button>
-              <button type="button" id="btn-confirm-remove" style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 500; color: white; background: #dc2626; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-width: 180px;">
+              <button type="button" id="btn-confirm-remove" class="admin-btn admin-btn--danger">
                 Yes, Remove it
               </button>
             </div>
           </div>
-          <style>
-            @keyframes modalFadeIn {
-              from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
-              to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            }
-            #btn-keep-site:hover {
-              background: #f9fafb;
-              border-color: #9ca3af;
-            }
-            #btn-confirm-remove:hover {
-              background: #b91c1c;
-            }
-            @media (max-width: 480px) {
-              .admin-modal-content {
-                padding: 32px 24px !important;
-              }
-              #btn-keep-site, #btn-confirm-remove {
-                min-width: 140px !important;
-                padding: 10px 16px !important;
-              }
-            }
-          </style>
         `;
         document.body.appendChild(modal);
       }
-      
+
       const siteNameEl = $("#removeSiteName");
       if (siteNameEl) {
         siteNameEl.textContent = siteName;
       }
-      
+
       modal.hidden = false;
       modal.classList.add("active");
       document.body.style.overflow = "hidden";
-      
+
       const keepBtn = $("#btn-keep-site");
       const removeBtn = $("#btn-confirm-remove");
-      
+
       const cleanup = () => {
         modal.hidden = true;
         modal.classList.remove("active");
@@ -2965,19 +3024,19 @@
         keepBtn.removeEventListener("click", onKeep);
         removeBtn.removeEventListener("click", onRemove);
       };
-      
+
       const onKeep = (e) => {
         e?.stopPropagation();
         cleanup();
         resolve(false);
       };
-      
+
       const onRemove = (e) => {
         e?.stopPropagation();
         cleanup();
         resolve(true);
       };
-      
+
       keepBtn.addEventListener("click", onKeep);
       removeBtn.addEventListener("click", onRemove);
     });
@@ -4184,7 +4243,9 @@
     field.addEventListener("dragover", (e) => {
       const mediaType = $("#media-type")?.value;
       if (
-        (mediaType !== "photo" && mediaType !== "model3d" && mediaType !== "map") ||
+        (mediaType !== "photo" &&
+          mediaType !== "model3d" &&
+          mediaType !== "map") ||
         $("#media-id")?.value?.trim()
       ) {
         return;
@@ -4203,7 +4264,9 @@
       field.classList.remove("is-dragover");
       const mediaType = $("#media-type")?.value;
       if (
-        (mediaType !== "photo" && mediaType !== "model3d" && mediaType !== "map") ||
+        (mediaType !== "photo" &&
+          mediaType !== "model3d" &&
+          mediaType !== "map") ||
         $("#media-id")?.value?.trim()
       ) {
         return;
@@ -4220,8 +4283,9 @@
           return;
         }
       } else if (mediaType === "model3d") {
-        files = [...(e.dataTransfer?.files || [])].filter((file) =>
-          file.name.endsWith(".glb") || file.type === "model/gltf-binary",
+        files = [...(e.dataTransfer?.files || [])].filter(
+          (file) =>
+            file.name.endsWith(".glb") || file.type === "model/gltf-binary",
         );
         if (!files.length) {
           showToast("Drop .glb 3D model files only.");
@@ -4381,14 +4445,16 @@
         const site = MatiAdminStore.getSiteById(siteId);
         if (site && site.cover) {
           // Open the site map image in a new tab
-          window.open(site.cover, '_blank');
+          window.open(site.cover, "_blank");
         } else {
           showToast("No site map to view.");
         }
         return;
       }
 
-      const closeLightbox = e.target.closest("#galLightboxClose, .gal-lightbox-backdrop");
+      const closeLightbox = e.target.closest(
+        "#galLightboxClose, .gal-lightbox-backdrop",
+      );
       if (closeLightbox) {
         e.preventDefault();
         e.stopPropagation();
@@ -4415,7 +4481,9 @@
         return;
       }
 
-      const closePhotoCollection = e.target.closest("[data-close-photo-collection], .admin-modal-backdrop");
+      const closePhotoCollection = e.target.closest(
+        "[data-close-photo-collection], .admin-modal-backdrop",
+      );
       if (closePhotoCollection) {
         e.preventDefault();
         e.stopPropagation();
@@ -4448,7 +4516,9 @@
         const siteId = viewPhotos.dataset.viewPhotos;
         const site = MatiAdminStore.getSiteById(siteId);
         if (site) {
-          const photos = MatiAdminStore.getSiteMedia(siteId).filter(m => m.type === "photo");
+          const photos = MatiAdminStore.getSiteMedia(siteId).filter(
+            (m) => m.type === "photo",
+          );
           if (photos.length > 0) {
             // Show photo collection modal
             showPhotoCollectionModal(site, photos);
@@ -4464,7 +4534,11 @@
       if (lightboxPrev && window.currentLightboxPhotos) {
         e.preventDefault();
         e.stopPropagation();
-        window.currentLightboxIndex = (window.currentLightboxIndex - 1 + window.currentLightboxPhotos.length) % window.currentLightboxPhotos.length;
+        window.currentLightboxIndex =
+          (window.currentLightboxIndex -
+            1 +
+            window.currentLightboxPhotos.length) %
+          window.currentLightboxPhotos.length;
         showAdminLightbox();
         return;
       }
@@ -4473,7 +4547,9 @@
       if (lightboxNext && window.currentLightboxPhotos) {
         e.preventDefault();
         e.stopPropagation();
-        window.currentLightboxIndex = (window.currentLightboxIndex + 1) % window.currentLightboxPhotos.length;
+        window.currentLightboxIndex =
+          (window.currentLightboxIndex + 1) %
+          window.currentLightboxPhotos.length;
         showAdminLightbox();
         return;
       }
@@ -4553,13 +4629,13 @@
     $("#btn-delete-site")?.addEventListener("click", async () => {
       const id = $("#site-id").value.trim();
       if (!id) return;
-      
+
       const site = MatiAdminStore.getSiteById(id);
       const siteName = site?.name || "this site";
-      
+
       const confirmed = await showRemoveConfirmation(siteName);
       if (!confirmed) return;
-      
+
       try {
         await runDeleteProgress(() => MatiAdminStore.deleteSite(id), {
           noun: "site",
@@ -4626,7 +4702,13 @@
     const isPhoto = cardType === "photo";
 
     const titleEl = card.querySelector(".admin-model-card__title");
-    const originalTitle = titleEl?.textContent || (isMap ? "No Site Map Available" : (isPhoto ? "No Photographs Available" : "No 3D Model Available"));
+    const originalTitle =
+      titleEl?.textContent ||
+      (isMap
+        ? "No Site Map Available"
+        : isPhoto
+          ? "No Photographs Available"
+          : "No 3D Model Available");
     const dropLabel = card.querySelector(".admin-model-card__drop-label");
     const descEl = card.querySelector(".admin-model-card__desc");
     const uploadIcon = card.querySelector(".admin-model-card__drop-icon");
@@ -4662,8 +4744,16 @@
       }
       if (descEl) {
         descEl.textContent = isInvalid
-          ? (isMap ? "Please drop a valid image file for the site map." : (isPhoto ? "Please drop valid image files for photographs." : "Please drop a valid .glb or .gltf 3D model file."))
-          : (isMap ? "Upload a site map to preview and manage it here." : (isPhoto ? "Upload photographs to preview and manage them here." : "Upload a 3D model to preview and manage it here."));
+          ? isMap
+            ? "Please drop a valid image file for the site map."
+            : isPhoto
+              ? "Please drop valid image files for photographs."
+              : "Please drop a valid .glb or .gltf 3D model file."
+          : isMap
+            ? "Upload a site map to preview and manage it here."
+            : isPhoto
+              ? "Upload photographs to preview and manage them here."
+              : "Upload a 3D model to preview and manage it here.";
       }
       if (dropLabel && descEl) {
         dropLabel.style.display = isOver && isValid ? "block" : "none";
@@ -4699,8 +4789,11 @@
         card.classList.add("is-dragover-invalid");
         if (titleEl) titleEl.textContent = "Invalid file type";
         if (descEl)
-          descEl.textContent =
-            isMap ? "Please drop a valid image file for the site map." : (isPhoto ? "Please drop valid image files for photographs." : "Please drop a valid .glb or .gltf 3D model file.");
+          descEl.textContent = isMap
+            ? "Please drop a valid image file for the site map."
+            : isPhoto
+              ? "Please drop valid image files for photographs."
+              : "Please drop a valid .glb or .gltf 3D model file.";
         setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
         return;
       }
@@ -4734,22 +4827,18 @@
 
             if (isMap) {
               setProgress(5, `Uploading site map: ${file.name}`);
-              const cover = await MatiAdminUploads.put(
-                `${siteId}/map`,
-                file,
-                {
-                  type: "map",
-                  siteId,
-                  onProgress: (pct) => {
-                    if (activeUploadController.signal.aborted) return;
-                    setProgress(
-                      5 + pct * 0.8,
-                      `Uploading site map: ${file.name}`,
-                    );
-                  },
-                  signal: activeUploadController.signal,
+              const cover = await MatiAdminUploads.put(`${siteId}/map`, file, {
+                type: "map",
+                siteId,
+                onProgress: (pct) => {
+                  if (activeUploadController.signal.aborted) return;
+                  setProgress(
+                    5 + pct * 0.8,
+                    `Uploading site map: ${file.name}`,
+                  );
                 },
-              );
+                signal: activeUploadController.signal,
+              });
               if (activeUploadController.signal.aborted) return;
               setProgress(90, "Saving site map to database…");
               const savedSite = await MatiAdminStore.saveSite({
@@ -4758,7 +4847,10 @@
               });
               if (!syncOk(savedSite)) {
                 showToast(
-                  syncFailedMessage(savedSite, "Site map uploaded locally only."),
+                  syncFailedMessage(
+                    savedSite,
+                    "Site map uploaded locally only.",
+                  ),
                 );
               } else {
                 showToast("Site map uploaded to database.");
@@ -4817,7 +4909,10 @@
               });
               if (!syncOk(savedSite)) {
                 showToast(
-                  syncFailedMessage(savedSite, "3D model uploaded locally only."),
+                  syncFailedMessage(
+                    savedSite,
+                    "3D model uploaded locally only.",
+                  ),
                 );
               } else {
                 showToast("3D model uploaded to database.");
@@ -4827,8 +4922,16 @@
             refreshSiteViews(siteId);
           },
           {
-            title: isMap ? "Uploading Site Map..." : (isPhoto ? "Opening Photo Upload..." : "Uploading 3D Model..."),
-            doneDetail: isMap ? "Upload complete. Site map is now linked." : (isPhoto ? "" : "Upload complete. Model is now linked."),
+            title: isMap
+              ? "Uploading Site Map..."
+              : isPhoto
+                ? "Opening Photo Upload..."
+                : "Uploading 3D Model...",
+            doneDetail: isMap
+              ? "Upload complete. Site map is now linked."
+              : isPhoto
+                ? ""
+                : "Upload complete. Model is now linked.",
             onCancel: (controller) => {
               controller?.abort();
               hideUploadProgress();
@@ -4954,7 +5057,7 @@
       `;
       document.body.appendChild(modal);
     }
-    
+
     // Set title and count
     const titleEl = $("#photoCollectionTitle");
     const countEl = $("#photoCollectionCount");
@@ -4962,38 +5065,42 @@
       titleEl.textContent = escapeHtml(site.name);
     }
     if (countEl) {
-      countEl.textContent = `${photos.length} photograph${photos.length !== 1 ? 's' : ''}`;
+      countEl.textContent = `${photos.length} photograph${photos.length !== 1 ? "s" : ""}`;
     }
-    
+
     // Build photo grid with gallery-style design
     const gridEl = $("#photoCollectionGrid");
     if (gridEl) {
-      gridEl.innerHTML = photos.map((photo, index) => `
+      gridEl.innerHTML = photos
+        .map(
+          (photo, index) => `
         <div class="photo-collection-item" data-photo-index="${index}" style="cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; aspect-ratio: 1; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: transform 0.2s, box-shadow 0.2s; background: #f3f4f6;">
-          <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || 'Photograph')}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" />
+          <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || "Photograph")}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" />
           <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent); color: white; font-size: 12px; font-weight: 500; opacity: 0; transition: opacity 0.2s;">
             ${escapeHtml(photo.title || `Photo ${index + 1}`)}
           </div>
         </div>
-      `).join("");
-      
+      `,
+        )
+        .join("");
+
       // Add hover effects via inline styles
-      gridEl.querySelectorAll('.photo-collection-item').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-          item.querySelector('img').style.transform = 'scale(1.05)';
-          item.querySelector('div:last-child').style.opacity = '1';
+      gridEl.querySelectorAll(".photo-collection-item").forEach((item) => {
+        item.addEventListener("mouseenter", () => {
+          item.querySelector("img").style.transform = "scale(1.05)";
+          item.querySelector("div:last-child").style.opacity = "1";
         });
-        item.addEventListener('mouseleave', () => {
-          item.querySelector('img').style.transform = 'scale(1)';
-          item.querySelector('div:last-child').style.opacity = '0';
+        item.addEventListener("mouseleave", () => {
+          item.querySelector("img").style.transform = "scale(1)";
+          item.querySelector("div:last-child").style.opacity = "0";
         });
       });
     }
-    
+
     // Store photos for lightbox navigation
     window.currentLightboxPhotos = photos;
     window.currentLightboxSiteName = site.name;
-    
+
     // Show modal
     modal.hidden = false;
     modal.classList.add("active");
@@ -5003,7 +5110,7 @@
   function showAdminLightbox() {
     const photos = window.currentLightboxPhotos;
     if (!photos || !photos[window.currentLightboxIndex]) return;
-    
+
     const photo = photos[window.currentLightboxIndex];
     const box = $("#galLightbox");
     const media = $("#galLightboxMedia");
@@ -5011,26 +5118,26 @@
     const meta = $("#galLightboxMeta");
     const prevBtn = $("#galLightboxPrev");
     const nextBtn = $("#galLightboxNext");
-    
+
     if (!box || !media) return;
-    
+
     // Set lightbox content using gallery-style HTML
-    media.innerHTML = `<div class="gal-lightbox-player-wrap"><img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || 'Photograph')}" decoding="async" /></div>`;
-    
+    media.innerHTML = `<div class="gal-lightbox-player-wrap"><img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title || "Photograph")}" decoding="async" /></div>`;
+
     if (title) {
-      title.textContent = `${escapeHtml(window.currentLightboxSiteName || 'Site')} - Photograph ${window.currentLightboxIndex + 1} of ${photos.length}`;
+      title.textContent = `${escapeHtml(window.currentLightboxSiteName || "Site")} - Photograph ${window.currentLightboxIndex + 1} of ${photos.length}`;
     }
-    
+
     if (meta) {
       meta.textContent = photo.title ? escapeHtml(photo.title) : "";
       meta.hidden = !photo.title;
     }
-    
+
     // Show/hide navigation buttons
     const showNav = photos.length > 1;
     if (prevBtn) prevBtn.classList.toggle("is-hidden", !showNav);
     if (nextBtn) nextBtn.classList.toggle("is-hidden", !showNav);
-    
+
     // Activate lightbox using gallery pattern
     box.classList.add("active");
     document.body.style.overflow = "hidden";

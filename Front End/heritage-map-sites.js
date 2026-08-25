@@ -179,7 +179,8 @@ const HERITAGE_MAP_SITES = [
     lng: 126.3227778,
     official: true,
     desc: "Living heritage tree (Dracontomelon dao) in Purok Mamacaw, Barangay Bobon — a resilient symbol of Mati's natural and cultural history.",
-    image: "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+    image:
+      "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
   },
   {
     id: "oak-island",
@@ -201,7 +202,8 @@ const HERITAGE_MAP_SITES = [
     lng: 126.22722,
     official: false,
     desc: "Majestic cove with turquoise waters, coral reefs, seagrass beds, and mangrove forests linking Mount Hamiguitan to the Pacific.",
-    image: "data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
+    image:
+      "data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
   },
   {
     id: "pujada-island",
@@ -212,7 +214,8 @@ const HERITAGE_MAP_SITES = [
     lng: 126.183611,
     official: false,
     desc: "157-hectare protected island at the mouth of Pujada Bay with lush forests, white-sand coves, and vibrant coral reefs.",
-    image: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+    image:
+      "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
   },
   {
     id: "taytay-daga",
@@ -223,7 +226,8 @@ const HERITAGE_MAP_SITES = [
     lng: 126.184072,
     official: true,
     desc: "579-hectare landform in Sitio Baso, Barangay Badas, resembling a dinosaur resting on Pujada Bay — protected under Resolution No. 61, Series of 2019.",
-    image: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+    image:
+      "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
   },
   {
     id: "waniban",
@@ -292,6 +296,10 @@ function adminSiteToMapSite(site) {
     id: site.id,
     name: site.name,
     category: site.category,
+    categoryLabel: site.categoryLabel || "",
+    heritageCategory: site.heritageCategory || "",
+    ownership: site.ownership || "",
+    location: site.location || "",
     barangay: site.barangay || "central",
     lat,
     lng,
@@ -304,17 +312,17 @@ function adminSiteToMapSite(site) {
 function mergeMapSite(base, admin) {
   if (!isMapCategory(admin.category) && admin.category) return null;
   const lat =
-    admin.lat != null && admin.lat !== ""
-      ? Number(admin.lat)
-      : base.lat;
+    admin.lat != null && admin.lat !== "" ? Number(admin.lat) : base.lat;
   const lng =
-    admin.lng != null && admin.lng !== ""
-      ? Number(admin.lng)
-      : base.lng;
+    admin.lng != null && admin.lng !== "" ? Number(admin.lng) : base.lng;
   return {
     ...base,
     name: admin.name || base.name,
     category: isMapCategory(admin.category) ? admin.category : base.category,
+    categoryLabel: admin.categoryLabel || base.categoryLabel || "",
+    heritageCategory: admin.heritageCategory || base.heritageCategory || "",
+    ownership: admin.ownership || base.ownership || "",
+    location: admin.location || base.location || "",
     lat,
     lng,
     desc: admin.description || base.desc,
@@ -323,13 +331,19 @@ function mergeMapSite(base, admin) {
 }
 
 function getHeritageMapDisplaySites() {
-  const byId = new Map(HERITAGE_MAP_SITES.map((site) => [site.id, { ...site }]));
+  const byId = new Map(
+    HERITAGE_MAP_SITES.map((site) => [site.id, { ...site }]),
+  );
 
   if (typeof MatiAdminStore !== "undefined") {
     const activeIds = new Set(MatiAdminStore.getAllSites().map((s) => s.id));
 
     HERITAGE_MAP_SITES.forEach((base) => {
-      if (!activeIds.has(base.id)) byId.delete(base.id);
+      // The visitor portal loads the built admin catalog, but not GALLERY_SITES.
+      // Keep static natural map records when that catalog is unavailable.
+      if (!activeIds.has(base.id) && base.category === "built") {
+        byId.delete(base.id);
+      }
     });
 
     MatiAdminStore.getAllSites().forEach((adminSite) => {
@@ -347,6 +361,7 @@ function getHeritageMapDisplaySites() {
 
   return [...byId.values()].filter(
     (site) =>
+      !String(site.id || "").startsWith("draft-") &&
       isMapCategory(site.category) &&
       Number.isFinite(site.lat) &&
       Number.isFinite(site.lng),
