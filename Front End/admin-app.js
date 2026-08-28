@@ -684,10 +684,33 @@
     const ownershipField = $("#site-ownership-field");
 
     if (builtWrap) builtWrap.hidden = true;
-    if (selectWrap) selectWrap.hidden = builtForm;
-    if (heritageType) heritageType.hidden = !builtForm;
+    if (selectWrap) selectWrap.hidden = builtForm || cat === "natural";
+    if (heritageType)
+      heritageType.hidden = builtForm ? false : cat !== "natural";
     if (ownershipField) ownershipField.hidden = !builtForm;
 
+    const requiredFields = new Set(
+      builtForm
+        ? [
+            "#site-name",
+            "#site-heritage-type",
+            "#site-ownership",
+            "#site-location",
+            "#site-lat",
+            "#site-lng",
+            "#site-desc",
+          ]
+        : cat === "natural"
+          ? [
+              "#site-name",
+              "#site-heritage-type",
+              "#site-location",
+              "#site-lat",
+              "#site-lng",
+              "#site-desc",
+            ]
+          : ["#site-name", "#site-location", "#site-desc"],
+    );
     [
       "#site-name",
       "#site-heritage-type",
@@ -698,8 +721,21 @@
       "#site-desc",
     ].forEach((selector) => {
       const field = $(selector);
-      if (field) field.required = builtForm;
+      if (field) field.required = requiredFields.has(selector);
     });
+
+    const nameLabel = $("#site-name-label");
+    if (nameLabel) {
+      nameLabel.textContent =
+        cat === "natural" ? "Natural heritage name" : "Heritage name";
+    }
+    const heritageTypeInput = $("#site-heritage-type");
+    if (heritageTypeInput) {
+      heritageTypeInput.placeholder =
+        cat === "natural"
+          ? "e.g. Island, Mangrove Reserve, Shoreline, Tree"
+          : "e.g. Monument, Sites/Park, Museum";
+    }
 
     const siteId = $("#site-id")?.value?.trim();
     const catSelect = $("#site-category-select");
@@ -718,6 +754,15 @@
     if (builtActions) builtActions.remove();
   }
 
+  function syncBuiltDeleteUi() {
+    const isBuilt = isBuiltHeritageForm();
+    const siteId = $("#site-id")?.value?.trim();
+    const hasSavedSite =
+      Boolean(siteId) && !MatiAdminStore.isDraftSiteId?.(siteId);
+    const dangerZone = $("#site-danger-zone");
+    if (dangerZone) dangerZone.hidden = !isBuilt || !hasSavedSite;
+  }
+
   function categoryMediaTypes(cat) {
     if (typeof getScopeMediaTypes === "function") {
       return getScopeMediaTypes(cat);
@@ -729,13 +774,6 @@
 
   function categoryShows3d(cat) {
     return cat === "built";
-  }
-
-  function syncHeritageToolbar() {
-    const addBtn = $("#btn-add-site");
-    if (addBtn) {
-      addBtn.hidden = currentView !== "heritage" || currentCategory !== "built";
-    }
   }
 
   function builtSiteHas3d(site) {
@@ -1095,20 +1133,6 @@
     return Boolean(siteId);
   }
 
-  function syncBuiltDeleteUi() {
-    const builtForm = isBuiltHeritageForm();
-    const isNewSite = !$("#site-id")?.value?.trim();
-    const deleteSiteBtn = $("#btn-delete-site");
-    const dangerZone = $("#site-danger-zone");
-
-    if (dangerZone) {
-      dangerZone.hidden = isNewSite || !builtForm;
-    }
-    if (deleteSiteBtn) {
-      deleteSiteBtn.disabled = isNewSite || !builtForm;
-    }
-  }
-
   function renderMediaListItem(m, options = {}) {
     const { showEdit = true } = options;
     const editBtn =
@@ -1250,6 +1274,84 @@
     `;
   }
 
+  function renderVideoCard() {
+    return `
+      <div class="admin-model-card admin-model-card--empty" data-add-media-type="video" role="button" tabindex="0">
+        <svg class="admin-model-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="3" y="5" width="13" height="14" rx="2" />
+          <path d="m16 10 5-3v10l-5-3z" />
+        </svg>
+        <h5 class="admin-model-card__title">No Videos Available</h5>
+        <p class="admin-model-card__desc">Drag & Drop your videos or click to browse your files.</p>
+        <p class="admin-model-card__desc">Supports MP4, WebM, or MOV files.</p>
+        <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="width:1.1em;height:1.1em;margin-right:0.4em;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Upload Videos
+        </button>
+      </div>
+    `;
+  }
+
+  function renderAudioCard() {
+    return `
+      <div class="admin-model-card admin-model-card--empty" data-add-media-type="audio" role="button" tabindex="0">
+        <svg class="admin-model-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M9 18V5l11-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="17" cy="16" r="3" />
+        </svg>
+        <h5 class="admin-model-card__title">No Audio Recordings Available</h5>
+        <p class="admin-model-card__desc">Drag & Drop your audio recordings or click to browse your files.</p>
+        <p class="admin-model-card__desc">Supports MP3, WAV, OGG, or M4A files.</p>
+        <button type="button" class="admin-btn admin-btn--secondary admin-btn--sm" tabindex="-1">Upload Audio Recordings</button>
+      </div>
+    `;
+  }
+
+  function renderNaturalSiteMediaList(site, media, container) {
+    const photos = media.filter((item) => item.type === "photo");
+    const videos = media.filter((item) => item.type === "video");
+    const photoContent = photos.length
+      ? `<ul class="admin-media-list">${photos.map((item) => renderMediaListItem(item)).join("")}</ul>`
+      : renderPhotoCard(site);
+    const videoContent = videos.length
+      ? `<ul class="admin-media-list">${videos.map((item) => renderMediaListItem(item)).join("")}</ul>`
+      : renderVideoCard();
+
+    container.innerHTML = `
+      <div class="admin-media-groups">
+        <section class="admin-media-group">
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--photo">Photographs</h4></div>
+          ${photoContent}
+        </section>
+        <section class="admin-media-group">
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--video">Videos</h4></div>
+          ${videoContent}
+        </section>
+      </div>`;
+    bindModelCardDragDrop(container);
+  }
+
+  function renderIntangibleSiteMediaList(media, container) {
+    const groups = [
+      ["Photographs", "photo", renderPhotoCard({})],
+      ["Videos", "video", renderVideoCard()],
+      ["Audio Recordings", "audio", renderAudioCard()],
+    ];
+    container.innerHTML = `<div class="admin-media-groups">${groups
+      .map(([title, type, empty]) => {
+        const items = media.filter((item) => item.type === type);
+        return `<section class="admin-media-group">
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--${type === "audio" ? "video" : type}">${title}</h4></div>
+          ${items.length ? `<ul class="admin-media-list">${items.map((item) => renderMediaListItem(item)).join("")}</ul>` : empty}
+        </section>`;
+      })
+      .join("")}</div>`;
+    bindModelCardDragDrop(container);
+  }
+
   function renderBuiltSitePhotoPile(site, photos) {
     const PILE_PRINT_FILTERS = [
       "none",
@@ -1260,9 +1362,14 @@
 
     const getPilePhotos = () => {
       const fromMedia = photos.map((item) => item.src);
-      const photoSources = [...new Set([site.cover, ...fromMedia])].filter(
-        Boolean,
-      );
+      const cover = site.cover;
+      const isCoverMap =
+        cover &&
+        (cover.toLowerCase().includes("/map/") ||
+          /map[._-]/.test(cover.toLowerCase()));
+      const photoSources = [
+        ...new Set(isCoverMap ? fromMedia : [cover, ...fromMedia]),
+      ].filter(Boolean);
       while (photoSources.length > 0 && photoSources.length < 4) {
         photoSources.push(photoSources[0]);
       }
@@ -1460,9 +1567,8 @@
 
     if (fileHint) {
       if (activeType === "map") {
-        fileHint.textContent = site?.cover
-          ? "A site map is linked. Choose a file or drag an image to replace it."
-          : "Choose an image file or drag it into this area to upload a site map.";
+        fileHint.textContent =
+          "Choose an image file or drag it into this area to upload a site map.";
       } else if (activeType === "photo") {
         if (bulkPhotos) {
           fileHint.textContent = `${selectedPhotos.length} photographs selected. Each will use its file name as the title.`;
@@ -1483,7 +1589,7 @@
     }
 
     if (captionField) {
-      captionField.hidden = activeType === "model3d";
+      captionField.hidden = activeType === "model3d" || activeType === "map";
     }
     if (saveBtn) {
       saveBtn.disabled = activeType === "model3d" && !fileInput.files.length;
@@ -1544,7 +1650,6 @@
     }
     if (view === "location") renderLocation();
     if (view === "heritage") {
-      syncHeritageToolbar();
       renderHeritage();
     } else {
       teardownBuiltHeritageGrid();
@@ -2515,6 +2620,10 @@
           modelSrc: null,
         };
         renderBuiltSiteMediaList(tempSite, [], list);
+      } else if (category === "natural") {
+        renderNaturalSiteMediaList({ category }, [], list);
+      } else if (category === "intangible") {
+        renderIntangibleSiteMediaList([], list);
       } else {
         list.innerHTML = `<p class="admin-empty" style="padding:1rem 0">Save the site to add media files.</p>`;
       }
@@ -2526,6 +2635,16 @@
 
     if (site?.category === "built") {
       renderBuiltSiteMediaList(site, media, list);
+      return;
+    }
+
+    if (site?.category === "natural") {
+      renderNaturalSiteMediaList(site, media, list);
+      return;
+    }
+
+    if (site?.category === "intangible") {
+      renderIntangibleSiteMediaList(media, list);
       return;
     }
 
@@ -2590,7 +2709,6 @@
   function openSiteModal(siteId) {
     editingSiteId = siteId || null;
     const isNew = !siteId;
-    syncBuiltDeleteUi();
 
     if (isNew) {
       $("#site-id").value = "";
@@ -2697,7 +2815,6 @@
     if (siteModal && !siteModal.hidden) {
       siteModal.classList.add("admin-modal--under");
     }
-    syncBuiltDeleteUi();
     updateMediaFormUi();
 
     requestAnimationFrame(() => {
@@ -2726,7 +2843,6 @@
 
     editingSiteId = site.id;
     $("#site-id").value = site.id;
-    syncBuiltDeleteUi();
     renderSiteMediaList(site.id);
     return site;
   }
@@ -2766,7 +2882,7 @@
       category,
       categoryLabel: MatiAdminStore.categoryLabel(category),
       heritageCategory:
-        category === "built"
+        category === "built" || category === "natural"
           ? $("#site-heritage-type").value.trim()
           : existing?.heritageCategory || "",
       ownership:
@@ -2805,24 +2921,34 @@
   async function saveSiteForm(e) {
     e.preventDefault();
     const name = $("#site-name").value.trim();
-    if (isBuiltHeritageForm()) {
-      const requiredFields = [
-        ["#site-name", "heritage name"],
-        ["#site-heritage-type", "heritage type"],
-        ["#site-ownership", "ownership"],
-        ["#site-location", "location"],
-        ["#site-lat", "latitude"],
-        ["#site-lng", "longitude"],
-        ["#site-desc", "description"],
-      ];
-      const missingField = requiredFields.find(
-        ([selector]) => !$(selector)?.value?.trim(),
-      );
-      if (missingField) {
-        showToast(`Enter the ${missingField[1]} before saving.`);
-        $(missingField[0])?.focus();
-        return;
-      }
+    const category = $("#site-category")?.value || currentCategory;
+    const requiredFields = [
+      ["#site-name", "heritage name"],
+      ...(category === "built"
+        ? [
+            ["#site-heritage-type", "heritage type"],
+            ["#site-ownership", "ownership"],
+          ]
+        : []),
+      ...(category === "natural"
+        ? [["#site-heritage-type", "heritage type"]]
+        : []),
+      ["#site-location", "location"],
+      ...(category === "natural"
+        ? [
+            ["#site-lat", "latitude"],
+            ["#site-lng", "longitude"],
+          ]
+        : []),
+      ["#site-desc", "description"],
+    ];
+    const missingField = requiredFields.find(
+      ([selector]) => !$(selector)?.value?.trim(),
+    );
+    if (missingField) {
+      showToast(`Enter the ${missingField[1]} before saving.`);
+      $(missingField[0])?.focus();
+      return;
     }
 
     const startTime = Date.now();
@@ -2850,7 +2976,6 @@
 
       editingSiteId = site.id;
       $("#site-id").value = site.id;
-      syncBuiltDeleteUi();
       refreshSiteViews(site.id);
       syncSiteFormSubmitLabel(site.id);
 
@@ -2899,7 +3024,6 @@
               $("#site-form")?.reset();
               $("#site-id").value = "";
               editingSiteId = null;
-              syncBuiltDeleteUi();
               syncSiteFormSubmitLabel("");
             }, 300);
           }
@@ -4369,6 +4493,13 @@
       setView(view, report ? { report } : {});
     });
 
+    $("#view-gallery")?.addEventListener("click", (event) => {
+      const addButton = event.target.closest("[data-admin-add-site-category]");
+      if (!addButton) return;
+      currentCategory = addButton.dataset.adminAddSiteCategory || "natural";
+      openSiteModal(null);
+    });
+
     $("#heritage-search")?.addEventListener("input", (e) => {
       const other = $("#heritage-search-other");
       if (other) other.value = e.target.value;
@@ -4627,13 +4758,11 @@
     $("#media-form")?.addEventListener("submit", saveMediaForm);
 
     $("#btn-delete-site")?.addEventListener("click", async () => {
-      const id = $("#site-id").value.trim();
-      if (!id) return;
+      const id = $("#site-id")?.value?.trim();
+      if (!id || !isBuiltHeritageForm()) return;
 
       const site = MatiAdminStore.getSiteById(id);
-      const siteName = site?.name || "this site";
-
-      const confirmed = await showRemoveConfirmation(siteName);
+      const confirmed = await showRemoveConfirmation(site?.name || "this site");
       if (!confirmed) return;
 
       try {
@@ -4692,256 +4821,308 @@
   }
 
   function bindModelCardDragDrop(container) {
-    const card = container.querySelector(".admin-model-card--empty");
-    if (!card || card.dataset.dragBound) return;
-    card.dataset.dragBound = "true";
+    const cards = container.querySelectorAll(".admin-model-card--empty");
+    if (!cards.length) return;
 
-    const cardType = card.dataset.addMediaType || "model3d";
-    const isMap = cardType === "map";
-    const isModel = cardType === "model3d";
-    const isPhoto = cardType === "photo";
+    cards.forEach((card) => {
+      if (card.dataset.dragBound) return;
+      card.dataset.dragBound = "true";
 
-    const titleEl = card.querySelector(".admin-model-card__title");
-    const originalTitle =
-      titleEl?.textContent ||
-      (isMap
-        ? "No Site Map Available"
-        : isPhoto
-          ? "No Photographs Available"
-          : "No 3D Model Available");
-    const dropLabel = card.querySelector(".admin-model-card__drop-label");
-    const descEl = card.querySelector(".admin-model-card__desc");
-    const uploadIcon = card.querySelector(".admin-model-card__drop-icon");
-    const defaultBtnIcon = card.querySelector(
-      "button > svg:not(.admin-model-card__drop-icon)",
-    );
+      const cardType = card.dataset.addMediaType || "model3d";
+      const isMap = cardType === "map";
+      const isModel = cardType === "model3d";
+      const isPhoto = cardType === "photo";
+      const isVideo = cardType === "video";
+      const isAudio = cardType === "audio";
 
-    const isValidFile = (file) => {
-      if (isMap) {
-        return file.type.startsWith("image/");
-      }
-      if (isModel) {
-        return file.name.toLowerCase().endsWith(".glb");
-      }
-      if (isPhoto) {
-        return file.type.startsWith("image/");
-      }
-      return false;
-    };
+      const titleEl = card.querySelector(".admin-model-card__title");
+      const originalTitle =
+        titleEl?.textContent ||
+        (isMap
+          ? "No Site Map Available"
+          : isPhoto
+            ? "No Photographs Available"
+            : isVideo
+              ? "No Videos Available"
+              : isAudio
+                ? "No Audio Recordings Available"
+                : "No 3D Model Available");
+      const dropLabel = card.querySelector(".admin-model-card__drop-label");
+      const descEl = card.querySelector(".admin-model-card__desc");
+      const uploadIcon = card.querySelector(".admin-model-card__drop-icon");
+      const defaultBtnIcon = card.querySelector(
+        "button > svg:not(.admin-model-card__drop-icon)",
+      );
 
-    const updateDropState = (isOver, isValid = false) => {
-      card.classList.toggle("is-dragover", isOver && isValid);
-      const isInvalid = isOver && !isValid;
-      card.classList.toggle("is-dragover-invalid", isInvalid);
-      if (isInvalid) {
-        card.classList.remove("is-dragover-invalid");
-        void card.offsetWidth;
-        card.classList.add("is-dragover-invalid");
-      }
+      const isValidFile = (file) => {
+        if (isMap) {
+          return file.type.startsWith("image/");
+        }
+        if (isModel) {
+          return file.name.toLowerCase().endsWith(".glb");
+        }
+        if (isPhoto) {
+          return file.type.startsWith("image/");
+        }
+        if (isVideo) {
+          return (
+            file.type.startsWith("video/") ||
+            /\.(mp4|webm|mov)$/i.test(file.name)
+          );
+        }
+        if (isAudio) {
+          return (
+            file.type.startsWith("audio/") ||
+            /\.(mp3|wav|ogg|m4a)$/i.test(file.name)
+          );
+        }
+        return false;
+      };
 
-      if (titleEl) {
-        titleEl.textContent = isInvalid ? "Invalid file type" : originalTitle;
-      }
-      if (descEl) {
-        descEl.textContent = isInvalid
-          ? isMap
-            ? "Please drop a valid image file for the site map."
-            : isPhoto
-              ? "Please drop valid image files for photographs."
-              : "Please drop a valid .glb or .gltf 3D model file."
-          : isMap
-            ? "Upload a site map to preview and manage it here."
-            : isPhoto
-              ? "Upload photographs to preview and manage them here."
-              : "Upload a 3D model to preview and manage it here.";
-      }
-      if (dropLabel && descEl) {
-        dropLabel.style.display = isOver && isValid ? "block" : "none";
-      }
-      if (uploadIcon) {
-        uploadIcon.style.display = isOver && isValid ? "inline-block" : "none";
-      }
-      if (defaultBtnIcon) {
-        defaultBtnIcon.style.display =
-          isOver && isValid ? "none" : "inline-block";
-      }
-    };
+      const updateDropState = (isOver, isValid = false) => {
+        card.classList.toggle("is-dragover", isOver && isValid);
+        const isInvalid = isOver && !isValid;
+        card.classList.toggle("is-dragover-invalid", isInvalid);
+        if (isInvalid) {
+          card.classList.remove("is-dragover-invalid");
+          void card.offsetWidth;
+          card.classList.add("is-dragover-invalid");
+        }
 
-    card.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      const hasFile = e.dataTransfer.types.includes("Files");
-      const file = hasFile ? e.dataTransfer.items[0]?.getAsFile() : null;
-      updateDropState(true, file ? isValidFile(file) : hasFile);
-    });
+        if (titleEl) {
+          titleEl.textContent = isInvalid ? "Invalid file type" : originalTitle;
+        }
+        if (descEl) {
+          descEl.textContent = isInvalid
+            ? isMap
+              ? "Please drop a valid image file for the site map."
+              : isPhoto
+                ? "Please drop valid image files for photographs."
+                : isVideo
+                  ? "Please drop a valid video file."
+                  : isAudio
+                    ? "Please drop a valid audio file."
+                    : "Please drop a valid .glb or .gltf 3D model file."
+            : isMap
+              ? "Upload a site map to preview and manage it here."
+              : isPhoto
+                ? "Upload photographs to preview and manage them here."
+                : isVideo
+                  ? "Upload videos to preview and manage them here."
+                  : isAudio
+                    ? "Upload audio recordings to preview and manage them here."
+                    : "Upload a 3D model to preview and manage it here.";
+        }
+        if (dropLabel && descEl) {
+          dropLabel.style.display = isOver && isValid ? "block" : "none";
+        }
+        if (uploadIcon) {
+          uploadIcon.style.display =
+            isOver && isValid ? "inline-block" : "none";
+        }
+        if (defaultBtnIcon) {
+          defaultBtnIcon.style.display =
+            isOver && isValid ? "none" : "inline-block";
+        }
+      };
 
-    card.addEventListener("dragleave", (e) => {
-      if (!card.contains(e.relatedTarget)) {
+      card.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const hasFile = e.dataTransfer.types.includes("Files");
+        const file = hasFile ? e.dataTransfer.items[0]?.getAsFile() : null;
+        updateDropState(true, file ? isValidFile(file) : hasFile);
+      });
+
+      card.addEventListener("dragleave", (e) => {
+        if (!card.contains(e.relatedTarget)) {
+          updateDropState(false);
+        }
+      });
+
+      card.addEventListener("drop", async (e) => {
+        e.preventDefault();
         updateDropState(false);
-      }
-    });
 
-    card.addEventListener("drop", async (e) => {
-      e.preventDefault();
-      updateDropState(false);
-
-      const file = e.dataTransfer.files?.[0];
-      if (!file || !isValidFile(file)) {
-        card.classList.add("is-dragover-invalid");
-        if (titleEl) titleEl.textContent = "Invalid file type";
-        if (descEl)
-          descEl.textContent = isMap
-            ? "Please drop a valid image file for the site map."
-            : isPhoto
-              ? "Please drop valid image files for photographs."
-              : "Please drop a valid .glb or .gltf 3D model file.";
-        setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
-        return;
-      }
-
-      let siteId =
-        $("#media-site-id").value ||
-        editingSiteId ||
-        $("#site-id")?.value?.trim();
-      if (!siteId) {
-        const saved = await ensureSiteDraft();
-        if (!saved) {
-          showToast("Could not prepare this site for upload.");
+        const file = e.dataTransfer.files?.[0];
+        if (!file || !isValidFile(file)) {
+          card.classList.add("is-dragover-invalid");
+          if (titleEl) titleEl.textContent = "Invalid file type";
+          if (descEl)
+            descEl.textContent = isMap
+              ? "Please drop a valid image file for the site map."
+              : isPhoto
+                ? "Please drop valid image files for photographs."
+                : isVideo
+                  ? "Please drop a valid video file."
+                  : isAudio
+                    ? "Please drop a valid audio file."
+                    : "Please drop a valid .glb or .gltf 3D model file.";
+          setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
           return;
         }
-        siteId = saved.id;
-      }
 
-      const site = MatiAdminStore.getSiteById(siteId);
-      if (!site) {
-        showToast("Could not find this site. Save the site and try again.");
-        return;
-      }
+        let siteId =
+          $("#media-site-id").value ||
+          editingSiteId ||
+          $("#site-id")?.value?.trim();
+        if (!siteId) {
+          const saved = await ensureSiteDraft();
+          if (!saved) {
+            showToast("Could not prepare this site for upload.");
+            return;
+          }
+          siteId = saved.id;
+        }
 
-      try {
-        await withUploadProgress(
-          async ({ setProgress, hideProgress }) => {
-            if (activeUploadController) {
-              activeUploadController.abort();
-            }
-            activeUploadController = new AbortController();
+        const site = MatiAdminStore.getSiteById(siteId);
+        if (!site) {
+          showToast("Could not find this site. Save the site and try again.");
+          return;
+        }
 
-            if (isMap) {
-              setProgress(5, `Uploading site map: ${file.name}`);
-              const cover = await MatiAdminUploads.put(`${siteId}/map`, file, {
-                type: "map",
-                siteId,
-                onProgress: (pct) => {
-                  if (activeUploadController.signal.aborted) return;
-                  setProgress(
-                    5 + pct * 0.8,
-                    `Uploading site map: ${file.name}`,
-                  );
-                },
-                signal: activeUploadController.signal,
-              });
-              if (activeUploadController.signal.aborted) return;
-              setProgress(90, "Saving site map to database…");
-              const savedSite = await MatiAdminStore.saveSite({
-                ...site,
-                cover,
-              });
-              if (!syncOk(savedSite)) {
-                showToast(
-                  syncFailedMessage(
-                    savedSite,
-                    "Site map uploaded locally only.",
-                  ),
-                );
-              } else {
-                showToast("Site map uploaded to database.");
+        try {
+          await withUploadProgress(
+            async ({ setProgress, hideProgress }) => {
+              if (activeUploadController) {
+                activeUploadController.abort();
               }
-            } else if (isPhoto) {
-              // For photos, we need to open the media modal with the file
-              const transfer = new DataTransfer();
-              transfer.items.add(file);
-              const fileInput = $("#media-file");
-              if (fileInput) {
-                fileInput.files = transfer.files;
-                // Set media type to photo
-                const mediaTypeSelect = $("#media-type");
-                if (mediaTypeSelect) {
-                  mediaTypeSelect.value = "photo";
-                }
-                // Ensure site exists (create draft if needed)
-                if (!siteId) {
-                  const saved = await ensureSiteDraft();
-                  if (!saved) {
-                    showToast("Could not prepare this site for upload.");
-                    return;
-                  }
-                  siteId = saved.id;
-                }
-                // Open media modal
-                openMediaModal("photo", siteId);
-                // Trigger file input change
-                fileInput.dispatchEvent(new Event("change", { bubbles: true }));
-                updateMediaFormUi();
-              }
-              return;
-            } else if (isModel) {
-              setProgress(5, `Uploading 3D model: ${file.name}`);
-              const modelSrc = await MatiAdminUploads.put(
-                `${siteId}/model`,
-                file,
-                {
-                  type: "model3d",
-                  siteId,
-                  onProgress: (pct) => {
-                    if (activeUploadController.signal.aborted) return;
-                    setProgress(
-                      5 + pct * 0.8,
-                      `Uploading 3D model: ${file.name}`,
-                    );
+              activeUploadController = new AbortController();
+
+              if (isMap) {
+                setProgress(5, `Uploading site map: ${file.name}`);
+                const cover = await MatiAdminUploads.put(
+                  `${siteId}/map`,
+                  file,
+                  {
+                    type: "map",
+                    siteId,
+                    onProgress: (pct) => {
+                      if (activeUploadController.signal.aborted) return;
+                      setProgress(
+                        5 + pct * 0.8,
+                        `Uploading site map: ${file.name}`,
+                      );
+                    },
+                    signal: activeUploadController.signal,
                   },
-                  signal: activeUploadController.signal,
-                },
-              );
-              if (activeUploadController.signal.aborted) return;
-              setProgress(90, "Saving 3D model to database…");
-              const savedSite = await MatiAdminStore.saveSite({
-                ...site,
-                modelSrc,
-              });
-              if (!syncOk(savedSite)) {
-                showToast(
-                  syncFailedMessage(
-                    savedSite,
-                    "3D model uploaded locally only.",
-                  ),
                 );
-              } else {
-                showToast("3D model uploaded to database.");
+                if (activeUploadController.signal.aborted) return;
+                setProgress(90, "Saving site map to database…");
+                const savedSite = await MatiAdminStore.saveSite({
+                  ...site,
+                  cover,
+                });
+                if (!syncOk(savedSite)) {
+                  showToast(
+                    syncFailedMessage(
+                      savedSite,
+                      "Site map uploaded locally only.",
+                    ),
+                  );
+                } else {
+                  showToast("Site map uploaded to database.");
+                }
+              } else if (isPhoto || isVideo || isAudio) {
+                // For photos, we need to open the media modal with the file
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                const fileInput = $("#media-file");
+                if (fileInput) {
+                  fileInput.files = transfer.files;
+                  // Set media type to photo
+                  const mediaTypeSelect = $("#media-type");
+                  if (mediaTypeSelect) {
+                    mediaTypeSelect.value = isPhoto
+                      ? "photo"
+                      : isVideo
+                        ? "video"
+                        : "audio";
+                  }
+                  // Ensure site exists (create draft if needed)
+                  if (!siteId) {
+                    const saved = await ensureSiteDraft();
+                    if (!saved) {
+                      showToast("Could not prepare this site for upload.");
+                      return;
+                    }
+                    siteId = saved.id;
+                  }
+                  // Open media modal
+                  openMediaModal(
+                    isPhoto ? "photo" : isVideo ? "video" : "audio",
+                    siteId,
+                  );
+                  // Trigger file input change
+                  fileInput.dispatchEvent(
+                    new Event("change", { bubbles: true }),
+                  );
+                  updateMediaFormUi();
+                }
+                return;
+              } else if (isModel) {
+                setProgress(5, `Uploading 3D model: ${file.name}`);
+                const modelSrc = await MatiAdminUploads.put(
+                  `${siteId}/model`,
+                  file,
+                  {
+                    type: "model3d",
+                    siteId,
+                    onProgress: (pct) => {
+                      if (activeUploadController.signal.aborted) return;
+                      setProgress(
+                        5 + pct * 0.8,
+                        `Uploading 3D model: ${file.name}`,
+                      );
+                    },
+                    signal: activeUploadController.signal,
+                  },
+                );
+                if (activeUploadController.signal.aborted) return;
+                setProgress(90, "Saving 3D model to database…");
+                const savedSite = await MatiAdminStore.saveSite({
+                  ...site,
+                  modelSrc,
+                });
+                if (!syncOk(savedSite)) {
+                  showToast(
+                    syncFailedMessage(
+                      savedSite,
+                      "3D model uploaded locally only.",
+                    ),
+                  );
+                } else {
+                  showToast("3D model uploaded to database.");
+                }
               }
-            }
 
-            refreshSiteViews(siteId);
-          },
-          {
-            title: isMap
-              ? "Uploading Site Map..."
-              : isPhoto
-                ? "Opening Photo Upload..."
-                : "Uploading 3D Model...",
-            doneDetail: isMap
-              ? "Upload complete. Site map is now linked."
-              : isPhoto
-                ? ""
-                : "Upload complete. Model is now linked.",
-            onCancel: (controller) => {
-              controller?.abort();
-              hideUploadProgress();
-              showToast("Upload cancelled.");
+              refreshSiteViews(siteId);
             },
-          },
-        );
-      } catch (error) {
-        showToast(error?.message || "Could not upload 3D model.");
-      }
+            {
+              title: isMap
+                ? "Uploading Site Map..."
+                : isPhoto
+                  ? "Opening Photo Upload..."
+                  : isVideo
+                    ? "Opening Video Upload..."
+                    : isAudio
+                      ? "Opening Audio Upload..."
+                      : "Uploading 3D Model...",
+              doneDetail: isMap
+                ? "Upload complete. Site map is now linked."
+                : isPhoto || isVideo || isAudio
+                  ? ""
+                  : "Upload complete. Model is now linked.",
+              onCancel: (controller) => {
+                controller?.abort();
+                hideUploadProgress();
+                showToast("Upload cancelled.");
+              },
+            },
+          );
+        } catch (error) {
+          showToast(error?.message || "Could not upload 3D model.");
+        }
+      });
     });
   }
 

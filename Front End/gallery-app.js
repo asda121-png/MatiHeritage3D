@@ -5,7 +5,8 @@
   const GALLERY_HOME = GALLERY_EMBED
     ? null
     : document.documentElement.dataset.galleryHome || null;
-  const INITIAL_CATEGORY = document.documentElement.dataset.galleryCategory || null;
+  const INITIAL_CATEGORY =
+    document.documentElement.dataset.galleryCategory || null;
   const MEDIA_BATCH_SIZE = 12;
 
   function getInitialState() {
@@ -113,8 +114,7 @@
       .map((item) => Number(item.sortOrder))
       .filter((value) => Number.isFinite(value));
     const hasMeaningfulSort =
-      sortValues.some((value) => value > 0) ||
-      new Set(sortValues).size > 1;
+      sortValues.some((value) => value > 0) || new Set(sortValues).size > 1;
 
     if (!hasMeaningfulSort) return items;
 
@@ -312,7 +312,10 @@
   function isFacebookUrl(url) {
     try {
       const parsed = new URL(url);
-      return parsed.hostname.includes("facebook.com") || parsed.hostname.includes("fb.watch");
+      return (
+        parsed.hostname.includes("facebook.com") ||
+        parsed.hostname.includes("fb.watch")
+      );
     } catch {
       return false;
     }
@@ -361,7 +364,9 @@
 
   function getYouTubeThumbnail(url) {
     const youtubeId = parseYouTubeId(url);
-    return youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : null;
+    return youtubeId
+      ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+      : null;
   }
 
   const embedMetaCache = new Map();
@@ -382,7 +387,12 @@
         authorUrl: data.author_url || data.provider_url || null,
         title: data.title || null,
       }))
-      .catch(() => ({ thumbnail: null, author: null, authorUrl: null, title: null }))
+      .catch(() => ({
+        thumbnail: null,
+        author: null,
+        authorUrl: null,
+        title: null,
+      }))
       .then((meta) => {
         embedMetaCache.set(url, meta);
         return meta;
@@ -392,14 +402,20 @@
     return promise;
   }
 
-  const PILE_PRINT_FILTERS = ["none", "sepia(0.35)", "grayscale(1)", "saturate(1.2)"];
+  const PILE_PRINT_FILTERS = [
+    "none",
+    "sepia(0.35)",
+    "grayscale(1)",
+    "saturate(1.2)",
+  ];
 
   function getPilePhotos(siteId, cover) {
     const fromMedia = resolveSiteMedia(siteId)
       .filter((item) => item.type === "photo")
       .map((item) => item.src);
-    const photos = [...new Set([cover, ...fromMedia])];
-    while (photos.length < 4) photos.push(cover);
+    const photos = [...new Set([cover, ...fromMedia].filter(Boolean))];
+    if (!photos.length) return [];
+    while (photos.length < 4) photos.push(photos[0]);
     return photos.slice(0, 4);
   }
 
@@ -425,10 +441,7 @@
 
   function setState(patch) {
     if (patch.step && patch.step !== "site") clearSiteEditState();
-    if (
-      patch.siteId !== undefined &&
-      patch.siteId !== state.siteId
-    ) {
+    if (patch.siteId !== undefined && patch.siteId !== state.siteId) {
       clearSiteEditState();
       clearMediaSelection();
     }
@@ -505,9 +518,19 @@
     if (state.step === "category") return "";
 
     if (GALLERY_EMBED) {
+      const addCategory =
+        state.category === "intangible" ? "intangible" : "natural";
+      const addLabel =
+        addCategory === "intangible"
+          ? "Add intangible cultural heritage"
+          : "Add natural heritage";
       return `
         <div class="gal-category-nav gal-category-nav--admin">
           <button type="button" class="gal-category-back" data-crumb="home">← Choose a Heritage Collection</button>
+          <button type="button" class="admin-btn admin-btn--primary" data-admin-add-site-category="${addCategory}">
+            <span aria-hidden="true">+</span>
+            ${addLabel}
+          </button>
         </div>`;
     }
 
@@ -642,7 +665,11 @@
   }
 
   function renderSitesView() {
-    const sites = resolveSitesByCategory(state.category);
+    const sites = [...resolveSitesByCategory(state.category)].sort((a, b) =>
+      String(a.name || "").localeCompare(String(b.name || ""), undefined, {
+        sensitivity: "base",
+      }),
+    );
     const isShowcase =
       state.category === "intangible" || state.category === "natural";
 
@@ -686,7 +713,13 @@
         </div>`;
     }
 
-    const folders = sites
+    // Filter out sites that have no media for built heritage as well
+    const sitesWithMedia = sites.filter((site) => {
+      const media = resolveSiteMedia(site.id);
+      return media && media.length > 0;
+    });
+
+    const folders = sitesWithMedia
       .map((site) => {
         return `
           <button type="button" class="gal-heritage-folder" data-site="${site.id}">
@@ -755,6 +788,13 @@
         </div>`;
     }
 
+    const latitude = Number(site.lat);
+    const longitude = Number(site.lng);
+    const coordinates =
+      Number.isFinite(latitude) && Number.isFinite(longitude)
+        ? `<span class="gal-site-coordinates">Latitude ${latitude} · Longitude ${longitude}</span>`
+        : "";
+
     return `
       <div class="gal-site-header__copy">
         <div class="gal-site-header__topbar">
@@ -763,7 +803,7 @@
         </div>
         <h2 class="gal-site-name">${escapeHtml(site.name)}</h2>
         <p class="gal-site-desc">${escapeHtml(site.description)}</p>
-        ${site.location ? `<p class="gal-site-location">📍 ${escapeHtml(site.location)}</p>` : ""}
+        ${site.location || coordinates ? `<p class="gal-site-location"><span>📍 ${escapeHtml(site.location || "")}</span>${coordinates}</p>` : ""}
       </div>`;
   }
 
@@ -787,7 +827,7 @@
     const festival = getFestivalForSite(site.id);
     const subfolders = [];
 
-    if (stats.photos > 0) {
+    if (stats.photos > 0 || site.category === "natural") {
       subfolders.push(`
         <button type="button" class="gal-subfolder gal-subfolder--photos" data-folder="photos">
           <span class="gal-subfolder-icon">📷</span>
@@ -919,7 +959,7 @@
     if (item.type === "audio") {
       const hasLyrics = Boolean(
         item.lyrics?.sections?.length ||
-          (typeof getAudioLyrics === "function" && getAudioLyrics(item)),
+        (typeof getAudioLyrics === "function" && getAudioLyrics(item)),
       );
       return `
         ${adminWrapStart}
@@ -966,7 +1006,12 @@
       return renderTimelineView(site);
     }
 
-    const typeMap = { photos: "photo", videos: "video", links: "link", recordings: "audio" };
+    const typeMap = {
+      photos: "photo",
+      videos: "video",
+      links: "link",
+      recordings: "audio",
+    };
     const type = typeMap[state.folder];
     const items = resolveOrderedSiteMedia(site.id, type);
 
@@ -1169,15 +1214,19 @@
         });
       });
 
-      pile.querySelector(".gal-pile-title")?.addEventListener("click", (event) => {
-        event.stopPropagation();
-        goSite(siteId);
-      });
+      pile
+        .querySelector(".gal-pile-title")
+        ?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          goSite(siteId);
+        });
 
-      pile.querySelector(".gal-pile-cta")?.addEventListener("click", (event) => {
-        event.stopPropagation();
-        goSite(siteId);
-      });
+      pile
+        .querySelector(".gal-pile-cta")
+        ?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          goSite(siteId);
+        });
 
       pile.addEventListener("dblclick", (event) => {
         if (!event.target.closest(".gal-print")) goSite(siteId);
@@ -1238,7 +1287,11 @@
 
     const startObserving = () => {
       images.forEach((img) => {
-        if (img.dataset.loaded === "true" || img.classList.contains("is-loaded")) return;
+        if (
+          img.dataset.loaded === "true" ||
+          img.classList.contains("is-loaded")
+        )
+          return;
         observer.observe(img);
         const rect = img.getBoundingClientRect();
         if (rect.bottom >= -120 && rect.top <= window.innerHeight + 480) {
@@ -1436,8 +1489,13 @@
         e.preventDefault();
         const target = e.currentTarget;
         target.classList.remove("is-drag-over");
-        const dragId = mediaReorderDragId || e.dataTransfer?.getData("text/plain");
-        if (!dragId || !target.dataset.mediaId || dragId === target.dataset.mediaId) {
+        const dragId =
+          mediaReorderDragId || e.dataTransfer?.getData("text/plain");
+        if (
+          !dragId ||
+          !target.dataset.mediaId ||
+          dragId === target.dataset.mediaId
+        ) {
           return;
         }
 
@@ -1532,9 +1590,11 @@
     const btn = container.querySelector("#gal-site-manage-btn");
     if (!btn) return;
 
-    container.querySelector("#gal-site-heritage-type")?.addEventListener("input", () => {
-      syncSiteDraftFromForm(container);
-    });
+    container
+      .querySelector("#gal-site-heritage-type")
+      ?.addEventListener("input", () => {
+        syncSiteDraftFromForm(container);
+      });
     container.querySelector("#gal-site-name")?.addEventListener("input", () => {
       syncSiteDraftFromForm(container);
     });
@@ -1577,7 +1637,11 @@
         }).then((saved) => {
           clearSiteEditState();
           render();
-          if (saved?._sync && !saved._sync.ok && saved._sync.reason !== "not_configured") {
+          if (
+            saved?._sync &&
+            !saved._sync.ok &&
+            saved._sync.reason !== "not_configured"
+          ) {
             window.MatiAdminUi?.showToast?.(
               "Site saved locally, but cloud sync failed. Run the deployment heritage writes SQL.",
             );
@@ -1603,13 +1667,15 @@
     const presetType = folderToPresetType(state.folder);
     if (!presetType) return;
 
-    container.querySelector("[data-manage-media]")?.addEventListener("click", () => {
-      window.MatiAdminUi?.openGalleryMediaModal?.(
-        null,
-        state.siteId,
-        presetType,
-      );
-    });
+    container
+      .querySelector("[data-manage-media]")
+      ?.addEventListener("click", () => {
+        window.MatiAdminUi?.openGalleryMediaModal?.(
+          null,
+          state.siteId,
+          presetType,
+        );
+      });
 
     container.querySelectorAll("[data-edit-media]").forEach((btn) => {
       btn.addEventListener("click", (event) => {
@@ -1624,62 +1690,70 @@
 
     if (!folderSupportsBulkSelect(state.folder)) return;
 
-    container.querySelector("[data-media-select-toggle]")?.addEventListener("click", () => {
-      state.mediaSelectMode = true;
-      state.selectedMediaIds = [];
-      render();
-    });
-
-    container.querySelector("[data-media-select-cancel]")?.addEventListener("click", () => {
-      clearMediaSelection();
-      render();
-    });
-
-    container.querySelector("[data-media-delete-selected]")?.addEventListener("click", async () => {
-      const ids = [...state.selectedMediaIds];
-      if (!ids.length) return;
-
-      const noun = mediaDeleteNoun(state.folder, ids.length);
-      const title =
-        ids.length === 1 ? `Delete this ${noun}?` : `Delete ${ids.length} ${noun}?`;
-      const message =
-        ids.length === 1
-          ? `It will be removed from the gallery.`
-          : `They will be removed from the gallery.`;
-
-      const confirmed = await (window.MatiAdminUi?.confirmAction?.({
-        title,
-        message,
-        confirmLabel: ids.length === 1 ? "Delete" : `Delete (${ids.length})`,
-      }) ?? Promise.resolve(window.confirm(`${title} ${message}`)));
-      if (!confirmed) return;
-
-      try {
-        const deleted = await (window.MatiAdminUi?.runDeleteProgress
-          ? window.MatiAdminUi.runDeleteProgress(
-              () => MatiAdminStore.deleteMediaMany(ids),
-              { noun, count: ids.length },
-            )
-          : MatiAdminStore.deleteMediaMany(ids));
-        clearMediaSelection();
-        window.MatiAdminUi?.onMediaDeleted?.(state.siteId);
+    container
+      .querySelector("[data-media-select-toggle]")
+      ?.addEventListener("click", () => {
+        state.mediaSelectMode = true;
+        state.selectedMediaIds = [];
         render();
-        if (deleted && !window.MatiAdminUi?.runDeleteProgress) {
-          const toastNoun = mediaDeleteNoun(state.folder, deleted);
-          const capitalized =
-            toastNoun.charAt(0).toUpperCase() + toastNoun.slice(1);
+      });
+
+    container
+      .querySelector("[data-media-select-cancel]")
+      ?.addEventListener("click", () => {
+        clearMediaSelection();
+        render();
+      });
+
+    container
+      .querySelector("[data-media-delete-selected]")
+      ?.addEventListener("click", async () => {
+        const ids = [...state.selectedMediaIds];
+        if (!ids.length) return;
+
+        const noun = mediaDeleteNoun(state.folder, ids.length);
+        const title =
+          ids.length === 1
+            ? `Delete this ${noun}?`
+            : `Delete ${ids.length} ${noun}?`;
+        const message =
+          ids.length === 1
+            ? `It will be removed from the gallery.`
+            : `They will be removed from the gallery.`;
+
+        const confirmed = await (window.MatiAdminUi?.confirmAction?.({
+          title,
+          message,
+          confirmLabel: ids.length === 1 ? "Delete" : `Delete (${ids.length})`,
+        }) ?? Promise.resolve(window.confirm(`${title} ${message}`)));
+        if (!confirmed) return;
+
+        try {
+          const deleted = await (window.MatiAdminUi?.runDeleteProgress
+            ? window.MatiAdminUi.runDeleteProgress(
+                () => MatiAdminStore.deleteMediaMany(ids),
+                { noun, count: ids.length },
+              )
+            : MatiAdminStore.deleteMediaMany(ids));
+          clearMediaSelection();
+          window.MatiAdminUi?.onMediaDeleted?.(state.siteId);
+          render();
+          if (deleted && !window.MatiAdminUi?.runDeleteProgress) {
+            const toastNoun = mediaDeleteNoun(state.folder, deleted);
+            const capitalized =
+              toastNoun.charAt(0).toUpperCase() + toastNoun.slice(1);
+            window.MatiAdminUi?.showToast?.(
+              deleted === 1
+                ? `${capitalized} deleted.`
+                : `${deleted} ${toastNoun} deleted.`,
+            );
+          }
+        } catch (error) {
           window.MatiAdminUi?.showToast?.(
-            deleted === 1
-              ? `${capitalized} deleted.`
-              : `${deleted} ${toastNoun} deleted.`,
+            error?.message || "Could not delete media.",
           );
         }
-      } catch (error) {
-        window.MatiAdminUi?.showToast?.(
-          error?.message || "Could not delete media.",
-        );
-      }
-    });
+      });
 
     container.querySelectorAll("[data-media-select]").forEach((input) => {
       input.addEventListener("click", (event) => {
@@ -1698,7 +1772,12 @@
   }
 
   function openMediaItem(index) {
-    const typeMap = { photos: "photo", videos: "video", links: "link", recordings: "audio" };
+    const typeMap = {
+      photos: "photo",
+      videos: "video",
+      links: "link",
+      recordings: "audio",
+    };
     const type = typeMap[state.folder];
     const items = resolveOrderedSiteMedia(state.siteId, type);
     const item = items[index];
@@ -1726,12 +1805,11 @@
     }
 
     const parts = [];
-    const creditOnPlayer =
-      item.type === "video" || isEmbeddableLink(item);
+    const creditOnPlayer = item.type === "video" || isEmbeddableLink(item);
     const hasLyricsPanel = Boolean(
       item.type === "audio" &&
-        (item.lyrics?.sections?.length ||
-          (typeof getAudioLyrics === "function" && getAudioLyrics(item))),
+      (item.lyrics?.sections?.length ||
+        (typeof getAudioLyrics === "function" && getAudioLyrics(item))),
     );
 
     if (item.type === "link") {
@@ -1741,7 +1819,9 @@
         );
       }
       if (item.year) {
-        parts.push(`<p class="gal-lightbox-citation__event">${escapeHtml(item.year)}.</p>`);
+        parts.push(
+          `<p class="gal-lightbox-citation__event">${escapeHtml(item.year)}.</p>`,
+        );
       }
       return parts.join("");
     }
@@ -1753,7 +1833,9 @@
     }
     if (item.event || item.date) {
       const eventLine = [item.event, item.date].filter(Boolean).join(", ");
-      parts.push(`<p class="gal-lightbox-citation__event">${escapeHtml(eventLine)}.</p>`);
+      parts.push(
+        `<p class="gal-lightbox-citation__event">${escapeHtml(eventLine)}.</p>`,
+      );
     }
 
     // Audio with lyrics shows source in the lyrics panel; other types keep citation.
@@ -2014,7 +2096,10 @@
       }
 
       const footerPlaceholder = $("footer-placeholder");
-      if (!footerPlaceholder || document.body.classList.contains("gal-page--fullscreen")) {
+      if (
+        !footerPlaceholder ||
+        document.body.classList.contains("gal-page--fullscreen")
+      ) {
         return;
       }
 
@@ -2153,7 +2238,10 @@
     try {
       await MatiHeritageData.hydrateGalleryCatalog({ force: true });
     } catch (error) {
-      console.warn("Gallery: Supabase hydrate failed, using static catalog", error);
+      console.warn(
+        "Gallery: Supabase hydrate failed, using static catalog",
+        error,
+      );
     }
   }
 

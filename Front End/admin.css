@@ -3141,6 +3141,10 @@
   background: #f8fafc;
 }
 
+.admin-danger-zone[hidden] {
+  display: none !important;
+}
+
 .admin-danger-zone__copy {
   min-width: 0;
 }
@@ -5235,7 +5239,15 @@ body.admin-upload-busy {
 }
 
 .admin-gallery-host .gal-category-nav--admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   padding: clamp(0.6rem, 1.6vw, 1rem) clamp(0.8rem, 2.4vw, 1.2rem) 0;
+}
+
+.admin-gallery-host [data-admin-add-natural-site] {
+  flex-shrink: 0;
 }
 
 .admin-gallery-host button.gal-category-back {

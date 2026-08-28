@@ -1086,8 +1086,8 @@
 
             <div class="admin-form-section admin-form-section--card">
               <div class="admin-field">
-                <label class="admin-label" for="site-name"
-                  >Built heritage name</label
+                <label class="admin-label" id="site-name-label" for="site-name"
+                  >Heritage name</label
                 >
                 <input
                   id="site-name"
@@ -1138,7 +1138,12 @@
                 </div>
               </div>
               <div class="admin-field">
-                <label class="admin-label" for="site-location">Location</label>
+                <label
+                  class="admin-label"
+                  id="site-location-label"
+                  for="site-location"
+                  >Location</label
+                >
                 <input
                   id="site-location"
                   class="admin-input"
@@ -1231,7 +1236,8 @@
                 <div class="admin-danger-zone__copy">
                   <h3 class="admin-danger-zone__title">Remove site</h3>
                   <p class="admin-danger-zone__description">
-                    Permanently remove this heritage site from the inventory.
+                    Permanently remove this built heritage site from the
+                    inventory.
                   </p>
                 </div>
                 <button
@@ -1445,8 +1451,8 @@
     <script src="heritage-realtime.js"></script>
     <script src="data/mati-city-boundary.js"></script>
     <script src="gallery-data.js"></script>
-    <script src="admin-heritage-base.js"></script>
-    <script src="admin-built-media.js"></script>
+    <!-- <script src="admin-heritage-base.js"></script> -->
+    <!-- <script src="admin-built-media.js"></script> -->
     <script src="admin-heritage-scope.js"></script>
     <script src="heritage-map-sites.js"></script>
     <script src="auth.js"></script>

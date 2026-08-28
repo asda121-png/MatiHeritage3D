@@ -352,7 +352,7 @@ const GALLERY_SITES = [
     name: "Dahican Shoreline",
     category: "natural",
     categoryLabel: "Natural Heritage",
-    cover: "data/GALLERY/c.jpg",
+    cover: "",
     description:
       "The Dahican Shoreline is a seven-kilometer stretch of white sand and turquoise waters in Dahican. Known as a sanctuary for sea turtles and a hub for professional skimboarding and surfing, this coastal area offers a raw, tropical escape. Experience the natural beauty of the Pacific-facing shores, from watching local surfers master the waves to enjoying the scenic, palm-lined, white sand beach of Mati.",
     location: "Barangay Dahican",
@@ -856,10 +856,6 @@ const GALLERY_MEDIA = [
     galleryPhoto("taytay-daga", "Taytay Daga (Sleeping Dinosaur)", "natural", `${TAYTAY_DAGA_BASE}/Photographs/${file}`, `Taytay Daga — ${file.replace(/\.[^.]+$/, "")}`),
   ),
   galleryPhoto("guang-guang", "Guang-guang Mangrove Nature Reserve Park", "natural", `${GUANG_GUANG_BASE}/Photographs/d.jpg`, "Guang-guang Mangrove Nature Reserve Park"),
-  galleryPhoto("dahican-shoreline", "Dahican Shoreline", "natural", "data/GALLERY/c.jpg", "Dahican Shoreline"),
-  galleryPhoto("dahican-shoreline", "Dahican Shoreline", "natural", "data/GALLERY/z.jpg", "Dahican Coast"),
-  galleryPhoto("dahican-shoreline", "Dahican Shoreline", "natural", "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A3597.JPG", "Skimboarding at Dahican"),
-  galleryPhoto("dahican-shoreline", "Dahican Shoreline", "natural", "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/DJI_0172.JPG", "Dahican from above"),
   ...["Oak island1.JPG", "Oak island.JPG", "Oak-Island.jpg", "Oak & Pujada island.JPG"].map((file) =>
     galleryPhoto("oak-island", "Oak Island", "natural", `${OAK_ISLAND_BASE}/Photographs/${file}`, `Oak Island — ${file.replace(/\.[^.]+$/, "")}`),
   ),

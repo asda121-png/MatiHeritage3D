@@ -15,7 +15,7 @@
     "supabase:create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.8",
+    "@supabase/supabase-js": "^2.112.4",
     "dotenv": "^16.4.7"
   },
   "devDependencies": {

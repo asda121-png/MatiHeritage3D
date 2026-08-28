@@ -56,8 +56,7 @@ const MatiSupabaseApi = (() => {
       // Gallery UI reads author; seed/credit both land in credit column.
       author: credit,
       date: row.year || "",
-      sortOrder:
-        row.sort_order == null ? null : Number(row.sort_order),
+      sortOrder: row.sort_order == null ? null : Number(row.sort_order),
     };
   }
 
@@ -87,6 +86,7 @@ const MatiSupabaseApi = (() => {
       .from("heritage_sites")
       .select("*")
       .eq("is_deleted", false)
+      .not("id", "like", "draft-%")
       .order("name", { ascending: true });
 
     if (category) query = query.eq("category", category);
@@ -114,10 +114,7 @@ const MatiSupabaseApi = (() => {
     const sb = client();
     if (!sb) return null;
 
-    const { error } = await sb
-      .from("heritage_sites")
-      .delete()
-      .eq("id", siteId);
+    const { error } = await sb.from("heritage_sites").delete().eq("id", siteId);
 
     if (error) throw error;
     return true;
@@ -186,15 +183,12 @@ const MatiSupabaseApi = (() => {
     const username = row.username;
     // Facebook-style silhouette avatar
     const defaultAvatar = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="#ccc"><path d="M18 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 4c-5.33 0-16 2.67-16 8v2h32v-2c0-5.33-10.67-8-16-8z"/></svg>`)}`;
-    
+
     return {
       username,
       displayName: row.display_name || row.displayName || username,
       points: Number(row.heritage_points ?? row.points) || 0,
-      avatarUrl:
-        row.avatar_url ||
-        row.avatarUrl ||
-        defaultAvatar,
+      avatarUrl: row.avatar_url || row.avatarUrl || defaultAvatar,
       updatedAt: row.updated_at || row.updatedAt || null,
     };
   }
@@ -242,7 +236,9 @@ const MatiSupabaseApi = (() => {
     });
 
     if (error) throw error;
-    return mapLeaderboardRow(data || { username: cleanUsername, heritage_points: points });
+    return mapLeaderboardRow(
+      data || { username: cleanUsername, heritage_points: points },
+    );
   }
 
   function subscribeLeaderboard(onChange) {
@@ -312,7 +308,7 @@ const MatiSupabaseApi = (() => {
         ? boardPlayers.count
         : profilePlayers.error
           ? 0
-          : profilePlayers.count ?? 0;
+          : (profilePlayers.count ?? 0);
 
     const analytics = await getVisitorAnalytics().catch(() => null);
 
@@ -407,10 +403,7 @@ const MatiSupabaseApi = (() => {
         options.upsert === false ? "false" : "true",
       );
       if (file.type || options.contentType) {
-        xhr.setRequestHeader(
-          "Content-Type",
-          file.type || options.contentType,
-        );
+        xhr.setRequestHeader("Content-Type", file.type || options.contentType);
       }
 
       // Support upload cancellation via AbortSignal
@@ -419,11 +412,20 @@ const MatiSupabaseApi = (() => {
         if (signal.aborted) {
           return reject(new Error("Upload cancelled."));
         }
-        signal.addEventListener("abort", function() { xhr.abort(); }, { once: true });
+        signal.addEventListener(
+          "abort",
+          function () {
+            xhr.abort();
+          },
+          { once: true },
+        );
       }
 
       xhr.upload.onprogress = (event) => {
-        if (!event.lengthComputable || typeof options.onProgress !== "function") {
+        if (
+          !event.lengthComputable ||
+          typeof options.onProgress !== "function"
+        ) {
           return;
         }
         const pct = Math.max(
