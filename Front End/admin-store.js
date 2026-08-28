@@ -231,14 +231,8 @@ const MatiAdminStore = (() => {
   }
 
   function staticSitesForCategory(category) {
-    if (category === "built") {
-      return typeof BUILT_HERITAGE_SITES !== "undefined"
-        ? [...BUILT_HERITAGE_SITES]
-        : [];
-    }
-    return (typeof GALLERY_SITES !== "undefined" ? GALLERY_SITES : []).filter(
-      (site) => site.category === category,
-    );
+    // All categories now use Supabase database only
+    return [];
   }
 
   function baseSites() {
@@ -253,14 +247,12 @@ const MatiAdminStore = (() => {
   }
 
   function staticBuiltMedia() {
-    return typeof BUILT_HERITAGE_MEDIA !== "undefined"
-      ? [...BUILT_HERITAGE_MEDIA]
-      : [];
+    return [];
   }
 
   function baseMedia() {
-    const staticGallery =
-      typeof GALLERY_MEDIA !== "undefined" ? [...GALLERY_MEDIA] : [];
+    // All media now uses Supabase database only
+    const staticGallery = [];
     const staticBuilt = staticBuiltMedia();
     const staticAll = [...staticBuilt, ...staticGallery];
 

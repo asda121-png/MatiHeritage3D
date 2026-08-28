@@ -107,7 +107,7 @@ body.gal-page .site-brand__locale {
     ),
     radial-gradient(
       ellipse 50% 40% at 100% 80%,
-      rgba(186, 230, 253, 0.25) 0%,
+      rgba(186, 230, 253, 0.14) 0%,
       transparent 50%
     ),
     linear-gradient(180deg, #e8f5e9 0%, var(--gal-bg) 35%, #f8fafc 100%);
@@ -145,7 +145,7 @@ body.gal-page .site-brand__locale {
   height: 280px;
   top: 45%;
   right: -8%;
-  background: rgba(56, 189, 248, 0.18);
+  background: rgba(56, 189, 248, 0.1);
 }
 
 .gal-ambient-orbs span:nth-child(3) {
@@ -1596,7 +1596,9 @@ html[data-gallery-category] .gal-panel::after {
   background-repeat: no-repeat;
   background-position: left center, right center;
   background-size: 50% 100%, 50% 100%;
-  opacity: 0.65;
+  opacity: 1;
+  filter: blur(2px);
+  transform: scale(1.02);
   mix-blend-mode: multiply;
   pointer-events: none;
   transition: opacity 0.8s ease-in-out, background-image 0.8s ease-in-out;
@@ -1608,7 +1610,7 @@ html[data-gallery-category] .gal-panel::after {
   .gal-category-stage::before {
     background-position: left center, right center;
     background-size: 52% 100%, 48% 100%;
-    opacity: 0.6;
+    opacity: 1;
   }
 }
 
@@ -1617,7 +1619,7 @@ html[data-gallery-category] .gal-panel::after {
   .gal-category-stage::before {
     background-position: left center, right center;
     background-size: 55% 100%, 45% 100%;
-    opacity: 0.55;
+    opacity: 1;
   }
 }
 
@@ -1641,7 +1643,9 @@ html[data-gallery-category] .gal-panel::after {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    opacity: 0.35;
+    opacity: 1;
+    filter: blur(2px);
+    transform: scale(1.02);
     mix-blend-mode: multiply;
     border-radius: 1.25rem;
     pointer-events: none;
@@ -1662,7 +1666,9 @@ html[data-gallery-category] .gal-panel::after {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    opacity: 0.35;
+    opacity: 1;
+    filter: blur(2px);
+    transform: scale(1.02);
     mix-blend-mode: multiply;
     border-radius: 1.25rem;
     pointer-events: none;
@@ -1753,8 +1759,10 @@ html[data-gallery-category] .gal-panel::after {
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: -0.01em;
-  color: var(--amber-dark);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: #172033;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(255, 255, 255, 0.7);
 }
 
 .gal-category-hint {
@@ -1954,6 +1962,7 @@ a.gal-category-card {
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 1;
   transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -2827,9 +2836,18 @@ a.gal-category-card {
 }
 
 .gal-site-location {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--gal-forest);
+}
+
+.gal-site-coordinates {
+  color: var(--gal-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .gal-subfolder-grid {
