@@ -78,35 +78,49 @@ const MatiAdminUploads = (() => {
   /**
    * @param {string} key storage key (also used for IndexedDB fallback)
    * @param {File|Blob} file
-   * @param {{ type?: string, siteId?: string, onProgress?: (pct:number)=>void }} [options]
+   * @param {{ type?: string, siteId?: string, onProgress?: (pct:number, loadedBytes?:number)=>void }} [options]
    */
   async function put(key, file, options = {}) {
     const type = options.type || inferTypeFromKey(key);
     const siteId = options.siteId || siteIdFromKey(key);
+    const fileSize = file.size || 0;
 
     if (supabaseUploadsEnabled()) {
-      const publicUrl = await MatiSupabaseApi.uploadSiteMedia(
-        siteId,
-        type,
-        file,
-        {
-          onProgress: options.onProgress,
-          signal: options.signal,
-        },
-      );
-      if (!publicUrl) {
-        throw new Error("Supabase Storage did not return a public URL.");
+      console.log('Uploading to Supabase:', { siteId, type, key, fileSize });
+      try {
+        const publicUrl = await MatiSupabaseApi.uploadSiteMedia(
+          siteId,
+          type,
+          file,
+          {
+            onProgress: options.onProgress,
+            signal: options.signal,
+          },
+        );
+        if (!publicUrl) {
+          throw new Error("Supabase Storage did not return a public URL.");
+        }
+        console.log('Supabase upload successful:', publicUrl);
+        return publicUrl;
+      } catch (error) {
+        console.error('Supabase upload failed, falling back to IndexedDB:', error);
+        // Fall through to IndexedDB fallback
       }
-      return publicUrl;
+    } else {
+      console.log('Supabase uploads not enabled, using IndexedDB fallback');
     }
 
+    // IndexedDB fallback with simulated progress
     if (typeof options.onProgress === "function") {
-      options.onProgress(15);
+      const loaded15 = Math.round(fileSize * 0.15);
+      options.onProgress(15, loaded15);
       await new Promise((resolve) => setTimeout(resolve, 80));
-      options.onProgress(55);
+      const loaded55 = Math.round(fileSize * 0.55);
+      options.onProgress(55, loaded55);
     }
     const uri = await putLocal(key, file);
-    if (typeof options.onProgress === "function") options.onProgress(100);
+    if (typeof options.onProgress === "function") options.onProgress(100, fileSize);
+    console.log('IndexedDB upload successful:', uri);
     return uri;
   }
 

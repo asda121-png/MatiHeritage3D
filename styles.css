@@ -1,0 +1,7 @@
+/* Tailwind CSS input file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import existing custom CSS files for hybrid approach */
+@import url("./Front End/css/heritage-palette.css");

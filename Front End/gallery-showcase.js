@@ -19,10 +19,14 @@
 
     const chapters = [...walk.querySelectorAll(".gal-timeline-chapter")];
     const hero = container.querySelector(".gal-timeline-hero");
-    const highlights = [...container.querySelectorAll(".gal-timeline-highlight-card")];
+    const highlights = [
+      ...container.querySelectorAll(".gal-timeline-highlight-card"),
+    ];
 
     if (prefersReducedMotion()) {
-      chapters.forEach((chapter) => chapter.classList.add("is-inview", "has-been-inview"));
+      chapters.forEach((chapter) =>
+        chapter.classList.add("is-inview", "has-been-inview"),
+      );
       hero?.classList.add("is-inview");
       highlights.forEach((card) => card.classList.add("is-inview"));
       walk.style.setProperty("--timeline-progress", "100%");
@@ -110,7 +114,8 @@
             ".gal-heritage-folder, .gal-subfolder, .gal-media-item, .gal-category-card, .gal-timeline-highlight-card",
           )
           .forEach((el, i) => {
-            el.style.setProperty("--gal-i", i);
+            const isCollectionCard = el.classList.contains("gal-category-card");
+            el.style.setProperty("--gal-i", isCollectionCard ? 0 : i);
             el.classList.remove("gal-reveal");
             void el.offsetWidth;
             el.classList.add("gal-reveal");

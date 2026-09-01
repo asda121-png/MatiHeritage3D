@@ -10,11 +10,11 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="admin.css" />
-    <link rel="stylesheet" href="gallery-page.css" />
-    <link rel="stylesheet" href="heritage-map-markers.css" />
-    <link rel="stylesheet" href="heritage-map-ui.css" />
-    <link rel="stylesheet" href="model-viewer-loading.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/gallery-page.css" />
+    <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link rel="stylesheet" href="css/heritage-map-ui.css" />
+    <link rel="stylesheet" href="css/model-viewer-loading.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -278,7 +278,21 @@
             </header>
 
             <!-- Dashboard Content -->
-            <div class="dashboard-container">
+            <div
+              id="dashboard-shell"
+              class="dashboard-container is-loading"
+              aria-busy="true"
+            >
+              <div
+                class="dashboard-loader"
+                id="dashboard-loader"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <div class="dashboard-loader__spinner" aria-hidden="true"></div>
+                <span class="dashboard-loader__text">Loading dashboard...</span>
+              </div>
+
               <!-- Welcome Section -->
               <div class="dashboard-welcome">
                 <div class="dashboard-welcome__header">
@@ -572,7 +586,7 @@
                     >
                       <path stroke-linecap="round" d="M12 5v14M5 12h14" />
                     </svg>
-                    Add site
+                    Add Built heritage
                   </button>
                 </div>
 
@@ -887,19 +901,29 @@
       aria-busy="true"
     >
       <div class="admin-upload-progress__panel">
-        <div class="admin-upload-progress__spinner" aria-hidden="true"></div>
+        <div class="admin-upload-progress__icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="presentation" aria-hidden="true">
+            <path d="M18 42.5h28a8 8 0 0 0 2.8-15.4A12.5 12.5 0 0 0 30.5 11a13.3 13.3 0 0 0-18.7 15.2A9.2 9.2 0 0 0 18 42.5Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 23v14m-6-6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <h2
           id="admin-upload-progress-title"
           class="admin-upload-progress__title"
         >
-          Uploading…
+          Uploading...
         </h2>
-        <p
-          id="admin-upload-progress-detail"
-          class="admin-upload-progress__detail"
-        >
-          Preparing file…
+        <p id="admin-upload-progress-file" class="admin-upload-progress__file">
+          Pylon.glb
         </p>
+        <div class="admin-upload-progress__stats" aria-live="polite">
+          <span id="admin-upload-progress-pct" class="admin-upload-progress__pct"
+            >0%</span
+          >
+          <span id="admin-upload-progress-size" class="admin-upload-progress__size"
+            >0 MB of 0 MB</span
+          >
+        </div>
         <div
           class="admin-upload-progress__bar"
           role="progressbar"
@@ -911,16 +935,19 @@
           <span
             class="admin-upload-progress__fill"
             id="admin-upload-progress-fill"
+            style="width: 0%"
           ></span>
         </div>
-        <p class="admin-upload-progress__pct">
-          <span id="admin-upload-progress-pct">0</span>%
-        </p>
+        <div class="admin-upload-progress__eta-row">
+          <span class="admin-upload-progress__eta-icon" aria-hidden="true">◔</span>
+          <p id="admin-upload-progress-eta" class="admin-upload-progress__eta">
+            Calculating time remaining...
+          </p>
+        </div>
         <button
           type="button"
           id="admin-upload-progress-cancel"
           class="admin-btn admin-upload-progress__cancel"
-          hidden
         >
           Cancel
         </button>
@@ -1102,15 +1129,13 @@
               </div>
               <div class="admin-field" id="site-category-select-wrap">
                 <label class="admin-label" for="site-category-select"
-                  >Category</label
+                  >Classification</label
                 >
-                <select id="site-category-select" class="admin-select">
-                  <option value="built">Built Heritage</option>
-                  <option value="intangible">
-                    Intangible Cultural Heritage
-                  </option>
-                  <option value="natural">Natural Heritage</option>
-                </select>
+                <input
+                  id="site-category-select"
+                  class="admin-input"
+                  placeholder="Enter classification"
+                />
               </div>
               <input type="hidden" id="site-category" value="built" />
               <div class="admin-split admin-split--2">
@@ -1151,8 +1176,11 @@
                   required
                 />
               </div>
-              <div class="admin-split admin-split--2">
-                <div class="admin-field">
+              <div
+                class="admin-split admin-split--2"
+                id="site-coordinates-wrap"
+              >
+                <div class="admin-field" id="site-lat-field">
                   <label class="admin-label" for="site-lat">Latitude</label>
                   <input
                     id="site-lat"
@@ -1168,7 +1196,7 @@
                     aria-live="polite"
                   ></p>
                 </div>
-                <div class="admin-field">
+                <div class="admin-field" id="site-lng-field">
                   <label class="admin-label" for="site-lng">Longitude</label>
                   <input
                     id="site-lng"
