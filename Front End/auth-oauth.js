@@ -66,14 +66,30 @@ const MatiAuthOAuth = (() => {
 
     section?.classList.remove("hidden");
 
+    // Reset button state in case user navigated back from OAuth
+    if (button) {
+      button.disabled = false;
+      button.classList.remove("is-loading");
+    }
+
     button?.addEventListener("click", async () => {
       button.disabled = true;
+      button.classList.add("is-loading");
       const result = await MatiSupabaseAuth.signInWithGoogle(redirectTarget);
       if (!result?.ok) {
         button.disabled = false;
+        button.classList.remove("is-loading");
         return result;
       }
       return result;
+    });
+
+    // Also reset button state on page visibility change (handles browser back button)
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && button) {
+        button.disabled = false;
+        button.classList.remove("is-loading");
+      }
     });
   }
 

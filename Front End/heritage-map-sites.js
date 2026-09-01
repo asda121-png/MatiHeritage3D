@@ -277,7 +277,6 @@ function buildHeritageMapPopup(site, options = {}) {
       <span class="map-popup-cat" style="background:${color}22;color:${color}">${label}</span>
       <div class="map-popup-title">${site.name}</div>
       <div class="map-popup-desc" style="font-size:0.7rem;color:#94a3b8;margin-bottom:0.35rem">Brgy. ${heritageBarangayLabel(site.barangay)} · Mati City</div>
-      <div class="map-popup-desc">${site.desc}</div>
       ${adminBtn}
     </div>
   `;
@@ -336,27 +335,32 @@ function getHeritageMapDisplaySites() {
   );
 
   if (typeof MatiAdminStore !== "undefined") {
-    const activeIds = new Set(MatiAdminStore.getAllSites().map((s) => s.id));
+    const adminSites = MatiAdminStore.getAllSites();
 
-    HERITAGE_MAP_SITES.forEach((base) => {
-      // The visitor portal loads the built admin catalog, but not GALLERY_SITES.
-      // Keep static natural map records when that catalog is unavailable.
-      if (!activeIds.has(base.id) && base.category === "built") {
-        byId.delete(base.id);
-      }
-    });
+    // Only apply admin store logic if it has data loaded
+    if (adminSites && adminSites.length > 0) {
+      const activeIds = new Set(adminSites.map((s) => s.id));
 
-    MatiAdminStore.getAllSites().forEach((adminSite) => {
-      if (!isMapCategory(adminSite.category)) return;
+      HERITAGE_MAP_SITES.forEach((base) => {
+        // The visitor portal loads the built admin catalog, but not GALLERY_SITES.
+        // Keep static natural map records when that catalog is unavailable.
+        if (!activeIds.has(base.id) && base.category === "built") {
+          byId.delete(base.id);
+        }
+      });
 
-      if (byId.has(adminSite.id)) {
-        const merged = mergeMapSite(byId.get(adminSite.id), adminSite);
-        if (merged) byId.set(adminSite.id, merged);
-      } else {
-        const added = adminSiteToMapSite(adminSite);
-        if (added) byId.set(adminSite.id, added);
-      }
-    });
+      adminSites.forEach((adminSite) => {
+        if (!isMapCategory(adminSite.category)) return;
+
+        if (byId.has(adminSite.id)) {
+          const merged = mergeMapSite(byId.get(adminSite.id), adminSite);
+          if (merged) byId.set(adminSite.id, merged);
+        } else {
+          const added = adminSiteToMapSite(adminSite);
+          if (added) byId.set(adminSite.id, added);
+        }
+      });
+    }
   }
 
   return [...byId.values()].filter(

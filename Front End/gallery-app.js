@@ -228,7 +228,6 @@
   function renderGalleryMediaToolbar(site, folder, countHtml) {
     return `
       <div class="gal-media-toolbar${GALLERY_EMBED ? " gal-media-toolbar--admin" : ""}">
-        <button type="button" class="gal-back-btn" data-back>← Back to folders</button>
         <div class="gal-media-toolbar__actions">
           ${countHtml}
           ${renderGalleryMediaSelectActions(folder)}
@@ -344,6 +343,18 @@
         provider: "facebook",
         embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=1280&height=720`,
       };
+    }
+    // Sketchfab 3D model embed
+    if (url.includes("sketchfab.com")) {
+      const sketchfabMatch = url.match(
+        /sketchfab\.com\/models\/([a-zA-Z0-9\-]+)/,
+      );
+      if (sketchfabMatch) {
+        return {
+          provider: "sketchfab",
+          embedUrl: `https://sketchfab.com/models/${sketchfabMatch[1]}/embed?autostart=1&ui_controls=1&ui_infos=1&ui_inspector=0&ui_help=0&ui_watermark=1`,
+        };
+      }
     }
     return null;
   }
@@ -704,10 +715,6 @@
       return `
         <div class="gal-view gal-view--sites gal-view--album">
           <div class="gal-album-stage">
-            <p class="gal-album-hint">
-              <span class="gal-album-hint-chip">Drag prints to sift</span>
-              <span class="gal-album-hint-chip">Double-click to open</span>
-            </p>
             <div class="gal-album-grid">${piles}</div>
           </div>
         </div>`;
@@ -790,10 +797,13 @@
 
     const latitude = Number(site.lat);
     const longitude = Number(site.lng);
-    const coordinates =
-      Number.isFinite(latitude) && Number.isFinite(longitude)
-        ? `<span class="gal-site-coordinates">Latitude ${latitude} · Longitude ${longitude}</span>`
-        : "";
+    const hasRealCoordinates =
+      Number.isFinite(latitude) &&
+      Number.isFinite(longitude) &&
+      !(latitude === 0 && longitude === 0);
+    const coordinates = hasRealCoordinates
+      ? `<span class="gal-site-coordinates">Latitude ${latitude} · Longitude ${longitude}</span>`
+      : "";
 
     return `
       <div class="gal-site-header__copy">
@@ -1127,10 +1137,6 @@
 
     return `
       <div class="gal-view gal-view--timeline" style="--timeline-accent: ${festival.accent}">
-        <div class="gal-media-toolbar">
-          <button type="button" class="gal-back-btn" data-back>← Back to folders</button>
-        </div>
-
         <header class="gal-timeline-hero" id="gal-timeline-top">
           <p class="gal-timeline-eyebrow">Festival Timeline</p>
           <h2 class="gal-timeline-hero-title">A Walk through Time</h2>

@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="heritage-palette.css" />
-    <link rel="stylesheet" href="gallery-page.css" />
+    <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="stylesheet" href="css/gallery-page.css" />
     <style>
       /* Fix for gallery layout to ensure full viewport height hero section */
       .gal-hero {
@@ -32,7 +33,7 @@
     </style>
   </head>
   <body
-    class="gal-page gal-page--fullscreen visitor-module antialiased overflow-x-hidden"
+    class="gal-page gal-page--fullscreen visitor-module antialiased overflow-x-hidden gallery-hero-disabled"
   >
     <div id="header-placeholder" class="relative z-50"></div>
 
@@ -44,7 +45,16 @@
       </div>
     </div>
 
-    <!-- Gallery header -->
+    <section class="gal-visual-banner" aria-label="Gallery feature banner">
+      <img
+        src="data/GALLERY/1%20section.png"
+        alt="Featured Mati Heritage gallery image"
+        loading="eager"
+        decoding="async"
+      />
+    </section>
+
+    <!-- Gallery header (kept in the DOM but disabled for this layout) -->
     <header class="gal-hero gal-hero--loading">
       <div class="gal-hero-stage">
         <div class="gal-hero-media gal-hero-media--tl" aria-hidden="true">
@@ -305,6 +315,32 @@
     <script src="gallery-background-rotator.js"></script>
 
     <script>
+      // Explicitly initialize background rotator after gallery content loads
+      document.addEventListener("DOMContentLoaded", function () {
+        // Wait for gallery content to be fully loaded and rendered
+        const checkGalleryContent = setInterval(function () {
+          const categoryStage = document.querySelector(".gal-category-stage");
+          if (categoryStage) {
+            clearInterval(checkGalleryContent);
+
+            // Initialize background rotator for the heritage collection section
+            if (
+              typeof window.GalleryBackgroundRotator !== "undefined" &&
+              typeof window.GalleryBackgroundRotator.reinitialize === "function"
+            ) {
+              window.GalleryBackgroundRotator.reinitialize();
+              console.log(
+                "Gallery background rotator initialized for heritage collection section",
+              );
+            }
+          }
+        }, 200);
+
+        // Stop checking after 10 seconds to prevent infinite loop
+        setTimeout(function () {
+          clearInterval(checkGalleryContent);
+        }, 10000);
+      });
       fetch("header.html")
         .then((res) => res.text())
         .then(async (data) => {

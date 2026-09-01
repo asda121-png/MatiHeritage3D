@@ -21,12 +21,12 @@
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
-    <link rel="stylesheet" href="heritage-map-markers.css" />
-    <link rel="stylesheet" href="heritage-palette.css" />
-    <link rel="stylesheet" href="visitor-portal-showcase.css" />
-    <link rel="stylesheet" href="game-tv-preview.css" />
-    <link rel="stylesheet" href="games-portal.css" />
-    <link rel="stylesheet" href="model-viewer-loading.css" />
+    <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="stylesheet" href="css/visitor-portal-showcase.css" />
+    <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="stylesheet" href="css/games-portal.css" />
+    <link rel="stylesheet" href="css/model-viewer-loading.css" />
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
@@ -1815,12 +1815,34 @@
       .heritage-media-image {
         position: relative;
         width: 100%;
-        min-height: 350px;
+        min-height: 250px;
         overflow: visible;
         border-radius: 0;
         box-shadow:
           0 25px 50px rgba(0, 0, 0, 0.25),
           0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      /* Mobile-specific fix for image container */
+      @media (max-width: 768px) {
+        .heritage-media-image {
+          min-height: 200px;
+        }
+
+        /* Ensure images display properly on mobile */
+        .heritage-media-image img {
+          display: block !important;
+          width: 100% !important;
+          height: auto !important;
+          max-width: 100% !important;
+        }
+
+        .before-after-slider,
+        .photo-stack-gallery {
+          width: 100% !important;
+          height: 100% !important;
+          min-height: 200px !important;
+        }
       }
 
       /* Lifted photograph shadow effect - exact implementation from gallery timeline */
@@ -1890,6 +1912,7 @@
         height: 100%;
         overflow: hidden;
         border-radius: 8px;
+        touch-action: none; /* Prevent default touch behavior */
       }
 
       .before-after-container {
@@ -1907,6 +1930,9 @@
         height: 100%;
         object-fit: cover;
         pointer-events: none;
+        /* Mobile fix: ensure images have intrinsic dimensions */
+        min-width: 100%;
+        min-height: 100%;
       }
 
       .before-image {
@@ -2047,6 +2073,22 @@
           font-size: 0.65rem;
           padding: 0.4rem 0.8rem;
         }
+
+        /* Mobile-specific fixes for image loading */
+        .before-after-image {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+
+        .before-after-container {
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        .before-after-slider {
+          touch-action: none !important;
+        }
       }
 
       /* Smooth animations for premium museum feel */
@@ -2106,6 +2148,7 @@
         text-transform: uppercase;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         animation: hintPulse 2s ease-in-out infinite;
+        white-space: nowrap; /* Ensure text stays on one line */
       }
 
       .before-after-hint svg {
@@ -2145,6 +2188,7 @@
         .before-after-hint {
           padding: 0.6rem 1rem;
           font-size: 0.65rem;
+          white-space: nowrap; /* Ensure text stays on one line on mobile */
         }
 
         .before-after-hint svg {
@@ -2190,6 +2234,9 @@
           box-shadow 0.5s ease;
         will-change: transform, opacity;
         pointer-events: none;
+        /* Mobile fix: ensure images have intrinsic dimensions */
+        min-width: 100%;
+        min-height: 100%;
       }
 
       /* Stacked effect - each photo slightly offset */
@@ -2325,10 +2372,23 @@
       @media (max-width: 768px) {
         .photo-stack-gallery {
           cursor: grab;
+          touch-action: none; /* Prevent default touch behavior */
         }
 
         .photo-stack-gallery:active {
           cursor: grabbing;
+        }
+
+        /* Mobile-specific fixes for photo stack images */
+        .photo-stack-photo {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+
+        .photo-stack-container {
+          width: 100% !important;
+          height: 100% !important;
         }
       }
 
@@ -2374,6 +2434,7 @@
         text-transform: uppercase;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         animation: hintPulse 2s ease-in-out infinite;
+        white-space: nowrap; /* Ensure text stays on one line */
       }
 
       .photo-stack-hint svg {
@@ -2423,6 +2484,7 @@
         .photo-stack-hint {
           padding: 0.6rem 1rem;
           font-size: 0.65rem;
+          white-space: nowrap; /* Ensure text stays on one line on mobile */
         }
 
         .photo-stack-hint svg {
@@ -2765,7 +2827,7 @@
         position: relative;
         max-width: 80rem;
         margin: 0 auto;
-        border-radius: 2rem;
+        border-radius: 0;
         overflow: hidden;
         box-shadow:
           0 40px 100px rgba(4, 120, 87, 0.2),
@@ -2961,12 +3023,7 @@
         padding: 0;
         margin: 0;
         position: relative;
-        background: linear-gradient(
-          135deg,
-          #f8f5ee 0%,
-          #f3e8d2 50%,
-          #f0e4c8 100%
-        );
+        background: #f4f4f4;
         overflow: hidden;
       }
 
@@ -3343,6 +3400,44 @@
         flex-shrink: 0;
       }
 
+      .map-next-section-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 0.7rem 0.9rem;
+        border: 1px solid rgba(4, 120, 87, 0.18);
+        border-radius: 9999px;
+        background: linear-gradient(
+          135deg,
+          rgba(4, 120, 87, 0.08),
+          rgba(14, 116, 144, 0.08)
+        );
+        color: #065f46;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        pointer-events: auto;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .map-next-section-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(4, 120, 87, 0.12);
+      }
+
+      .map-next-section-btn svg {
+        width: 0.9rem;
+        height: 0.9rem;
+      }
+
       .map-heritage-filter-wrap {
         position: absolute;
         top: clamp(1rem, 2.5vw, 1.35rem);
@@ -3408,6 +3503,12 @@
         border-color: rgba(2, 132, 199, 0.28);
       }
 
+      @media (max-width: 768px) {
+        .map-section-first {
+          min-height: 86svh;
+        }
+      }
+
       @media (max-width: 480px) {
         .map-heritage-filter {
           width: 100%;
@@ -3423,12 +3524,67 @@
           width: 100%;
           max-width: none;
         }
+
+        .map-next-section-btn {
+          display: inline-flex;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
         .map-intro-overlay__hint li {
           animation: none;
         }
+      }
+
+      /* Map loading indicator */
+      .map-loading-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.5rem 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+      }
+
+      .map-loading-indicator.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .map-loading-spinner {
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 3px solid #e2e8f0;
+        border-top-color: var(--forest);
+        border-radius: 50%;
+        animation: map-spin 0.8s linear infinite;
+      }
+
+      @keyframes map-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .map-loading-text {
+        margin: 0;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--forest-dark);
       }
 
       .map-layout {
@@ -5450,6 +5606,15 @@
               role="region"
               aria-label="Map of Mati City heritage sites"
             ></div>
+            <div
+              id="map-loading-indicator"
+              class="map-loading-indicator"
+              aria-live="polite"
+              aria-busy="true"
+            >
+              <div class="map-loading-spinner"></div>
+              <p class="map-loading-text">Loading heritage sites...</p>
+            </div>
             <div class="map-heritage-filter-wrap" id="map-heritage-filter-wrap">
               <label
                 class="map-heritage-filter-label"
@@ -5531,6 +5696,23 @@
                     <span>Tap markers</span>
                   </button>
                 </div>
+                <button
+                  type="button"
+                  class="map-next-section-btn"
+                  data-scroll-target="#hero"
+                  aria-label="Scroll to next section"
+                >
+                  <span>Next</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M7 10l5 5 5-5" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -5616,7 +5798,10 @@
                     role="listitem"
                   >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="11"
+                      <span
+                        class="hero-dock-stat-num stat-num"
+                        id="built-heritage-count"
+                        data-count="11"
                         >0</span
                       >
                       <span class="hero-dock-stat-label">Built Heritage</span>
@@ -5627,7 +5812,10 @@
                     role="listitem"
                   >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="3"
+                      <span
+                        class="hero-dock-stat-num stat-num"
+                        id="intangible-heritage-count"
+                        data-count="3"
                         >0</span
                       >
                       <span class="hero-dock-stat-label"
@@ -5640,7 +5828,10 @@
                     role="listitem"
                   >
                     <div class="hero-dock-stat-body">
-                      <span class="hero-dock-stat-num stat-num" data-count="8"
+                      <span
+                        class="hero-dock-stat-num stat-num"
+                        id="natural-heritage-count"
+                        data-count="8"
                         >0</span
                       >
                       <span class="hero-dock-stat-label">Natural Heritage</span>
@@ -5814,13 +6005,15 @@
                       src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
                       alt="Pylon Monument - Historical Photo"
                       class="before-after-image before-image"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
                       alt="Pylon Monument - Present Day Photo"
                       class="before-after-image after-image"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <div class="before-after-overlay">
                       <div class="before-after-label before-label">
@@ -5893,31 +6086,36 @@
                       src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
                       alt="Sambuokan Festival 1"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
                       alt="Sambuokan Festival 2"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
                       alt="Sambuokan Festival 3"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG"
                       alt="Sambuokan Festival 4"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
                       alt="Sambuokan Festival 5"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                   </div>
                   <div class="photo-stack-instruction">
@@ -5972,31 +6170,36 @@
                       src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
                       alt="Sleeping Dinosaur 1"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg"
                       alt="Sleeping Dinosaur 2"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg"
                       alt="Sleeping Dinosaur 3"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg"
                       alt="Sleeping Dinosaur 4"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                     <img
                       src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0786.jpg"
                       alt="Sleeping Dinosaur 5"
                       class="photo-stack-photo"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                   </div>
                   <div class="photo-stack-instruction">
@@ -6596,16 +6799,119 @@
       // Initialize admin store for visitor portal to access dynamic heritage data
       (async function initVisitorAdminStore() {
         try {
-          if (typeof MatiAdminStore !== "undefined" && typeof MatiAdminStore.initFromSupabase === "function") {
+          if (
+            typeof MatiAdminStore !== "undefined" &&
+            typeof MatiAdminStore.initFromSupabase === "function"
+          ) {
             await MatiAdminStore.initFromSupabase();
-            console.log("Visitor portal: Admin store initialized with Supabase data");
+            console.log(
+              "Visitor portal: Admin store initialized with Supabase data",
+            );
           }
         } catch (error) {
-          console.warn("Visitor portal: Failed to initialize admin store from Supabase:", error);
+          console.warn(
+            "Visitor portal: Failed to initialize admin store from Supabase:",
+            error,
+          );
         }
       })();
     </script>
     <script src="heritage-data.js"></script>
+    <script>
+      // Dynamic heritage count updates for hero section
+      (async function initHeritageCounts() {
+        try {
+          // Wait for heritage data to be available
+          if (typeof MatiHeritageData !== "undefined") {
+            await MatiHeritageData.init();
+
+            // Load actual counts from data
+            const [builtSites, intangibleSites, naturalSites] =
+              await Promise.all([
+                MatiHeritageData.loadSitesByCategory("built"),
+                MatiHeritageData.loadSitesByCategory("intangible"),
+                MatiHeritageData.loadSitesByCategory("natural"),
+              ]);
+
+            // Update DOM elements with actual counts
+            const builtCount = document.getElementById("built-heritage-count");
+            const intangibleCount = document.getElementById(
+              "intangible-heritage-count",
+            );
+            const naturalCount = document.getElementById(
+              "natural-heritage-count",
+            );
+
+            if (builtCount) {
+              builtCount.textContent = builtSites.length;
+              builtCount.setAttribute("data-count", builtSites.length);
+            }
+            if (intangibleCount) {
+              intangibleCount.textContent = intangibleSites.length;
+              intangibleCount.setAttribute(
+                "data-count",
+                intangibleSites.length,
+              );
+            }
+            if (naturalCount) {
+              naturalCount.textContent = naturalSites.length;
+              naturalCount.setAttribute("data-count", naturalSites.length);
+            }
+
+            console.log("Heritage counts updated:", {
+              built: builtSites.length,
+              intangible: intangibleSites.length,
+              natural: naturalSites.length,
+            });
+
+            // Subscribe to real-time updates if available
+            if (typeof MatiHeritageData.subscribeCatalog === "function") {
+              MatiHeritageData.subscribeCatalog(async () => {
+                console.log("Heritage data changed, updating counts...");
+                const [newBuilt, newIntangible, newNatural] = await Promise.all(
+                  [
+                    MatiHeritageData.loadSitesByCategory("built", {
+                      force: true,
+                    }),
+                    MatiHeritageData.loadSitesByCategory("intangible", {
+                      force: true,
+                    }),
+                    MatiHeritageData.loadSitesByCategory("natural", {
+                      force: true,
+                    }),
+                  ],
+                );
+
+                if (builtCount) {
+                  builtCount.textContent = newBuilt.length;
+                  builtCount.setAttribute("data-count", newBuilt.length);
+                }
+                if (intangibleCount) {
+                  intangibleCount.textContent = newIntangible.length;
+                  intangibleCount.setAttribute(
+                    "data-count",
+                    newIntangible.length,
+                  );
+                }
+                if (naturalCount) {
+                  naturalCount.textContent = newNatural.length;
+                  naturalCount.setAttribute("data-count", newNatural.length);
+                }
+
+                console.log("Heritage counts updated after change:", {
+                  built: newBuilt.length,
+                  intangible: newIntangible.length,
+                  natural: newNatural.length,
+                });
+              });
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to initialize dynamic heritage counts:", error);
+          // Keep fallback static counts if dynamic loading fails
+        }
+      })();
+    </script>
     <script src="game-previews.js"></script>
     <script src="game-tv-transition.js"></script>
     <script src="auth.js"></script>
@@ -6941,10 +7247,11 @@
 
       function getFilteredHeritageSites(category = "all") {
         // Use dynamic data source that includes admin-added sites
-        const sites = typeof getHeritageMapDisplaySites === "function" 
-          ? getHeritageMapDisplaySites() 
-          : HERITAGE_SITES;
-        
+        const sites =
+          typeof getHeritageMapDisplaySites === "function"
+            ? getHeritageMapDisplaySites()
+            : HERITAGE_SITES;
+
         if (category === "all") return sites;
         return sites.filter((site) => site.category === category);
       }
@@ -6956,7 +7263,12 @@
         wrap.classList.toggle("is-natural", category === "natural");
       }
 
-      function syncHeritageMapMarkers(map, layerGroup, category = "all") {
+      function syncHeritageMapMarkers(
+        map,
+        layerGroup,
+        category = "all",
+        onComplete = null,
+      ) {
         if (!map || !layerGroup) return;
 
         layerGroup.clearLayers();
@@ -6980,6 +7292,18 @@
             });
           }
         }
+
+        // Hide loading indicator and call completion callback
+        const loadingIndicator = document.getElementById(
+          "map-loading-indicator",
+        );
+        if (loadingIndicator) {
+          loadingIndicator.classList.add("hidden");
+        }
+
+        if (typeof onComplete === "function") {
+          onComplete();
+        }
       }
 
       function bindMapHeritageFilter(map, layerGroup) {
@@ -6989,6 +7313,13 @@
         filter.addEventListener("change", () => {
           const category = filter.value;
           updateMapFilterWrapState(category);
+          // Show loading indicator briefly during filter change
+          const loadingIndicator = document.getElementById(
+            "map-loading-indicator",
+          );
+          if (loadingIndicator) {
+            loadingIndicator.classList.remove("hidden");
+          }
           syncHeritageMapMarkers(map, layerGroup, category);
         });
 
@@ -7037,11 +7368,21 @@
       async function initMatiMap() {
         if (window.matiMapInstance) return;
 
+        // Show loading indicator
+        const loadingIndicator = document.getElementById(
+          "map-loading-indicator",
+        );
+        if (loadingIndicator) {
+          loadingIndicator.classList.remove("hidden");
+        }
+
         // Use dynamic data source that includes admin-added sites
         if (typeof getHeritageMapDisplaySites === "function") {
           try {
             HERITAGE_SITES = getHeritageMapDisplaySites();
-            console.log("Visitor portal: Using dynamic heritage data with admin-added sites");
+            console.log(
+              "Visitor portal: Using dynamic heritage data with admin-added sites",
+            );
           } catch (error) {
             console.warn("Using static heritage map data", error);
             HERITAGE_SITES = HERITAGE_MAP_SITES;
@@ -7096,7 +7437,9 @@
         applyCityClip(map, mainRing);
 
         const heritageMarkersLayer = L.layerGroup().addTo(map);
-        syncHeritageMapMarkers(map, heritageMarkersLayer, "all");
+        syncHeritageMapMarkers(map, heritageMarkersLayer, "all", () => {
+          console.log("All heritage markers loaded together");
+        });
         bindMapHeritageFilter(map, heritageMarkersLayer);
 
         // Use exact coordinates from 3dexplore.html
@@ -7129,7 +7472,9 @@
               // Use dynamic data source that includes admin-added sites
               if (typeof getHeritageMapDisplaySites === "function") {
                 HERITAGE_SITES = getHeritageMapDisplaySites();
-                console.log("Visitor portal: Heritage data refreshed via subscription");
+                console.log(
+                  "Visitor portal: Heritage data refreshed via subscription",
+                );
               } else {
                 HERITAGE_SITES = await MatiHeritageData.getMapSites();
               }
@@ -7139,6 +7484,13 @@
             }
             const filter =
               document.getElementById("map-heritage-filter")?.value || "all";
+            // Show loading indicator during live refresh
+            const loadingIndicator = document.getElementById(
+              "map-loading-indicator",
+            );
+            if (loadingIndicator) {
+              loadingIndicator.classList.remove("hidden");
+            }
             syncHeritageMapMarkers(
               window.matiMapInstance,
               window.matiHeritageMarkersLayer,
@@ -7146,7 +7498,7 @@
             );
           });
         }
-        
+
         // Periodic refresh for visitor portal to get admin-added sites
         setInterval(async () => {
           try {
@@ -7156,9 +7508,18 @@
                 const currentCount = HERITAGE_SITES.length;
                 HERITAGE_SITES = latestSites;
                 if (latestSites.length !== currentCount) {
-                  console.log("Visitor portal: Heritage sites updated via periodic refresh");
+                  console.log(
+                    "Visitor portal: Heritage sites updated via periodic refresh",
+                  );
                   const filter =
-                    document.getElementById("map-heritage-filter")?.value || "all";
+                    document.getElementById("map-heritage-filter")?.value ||
+                    "all";
+                  const loadingIndicator = document.getElementById(
+                    "map-loading-indicator",
+                  );
+                  if (loadingIndicator) {
+                    loadingIndicator.classList.remove("hidden");
+                  }
                   syncHeritageMapMarkers(
                     window.matiMapInstance,
                     window.matiHeritageMarkersLayer,
@@ -7171,7 +7532,7 @@
             console.warn("Periodic heritage data refresh failed:", error);
           }
         }, 30000); // Refresh every 30 seconds
-        
+
         // Refresh map when user returns to the tab (picks up admin changes)
         document.addEventListener("visibilitychange", async () => {
           if (!document.hidden && window.matiMapInstance) {
@@ -7180,9 +7541,18 @@
                 const latestSites = getHeritageMapDisplaySites();
                 if (latestSites && latestSites.length > 0) {
                   HERITAGE_SITES = latestSites;
-                  console.log("Visitor portal: Heritage sites refreshed on tab visibility change");
+                  console.log(
+                    "Visitor portal: Heritage sites refreshed on tab visibility change",
+                  );
                   const filter =
-                    document.getElementById("map-heritage-filter")?.value || "all";
+                    document.getElementById("map-heritage-filter")?.value ||
+                    "all";
+                  const loadingIndicator = document.getElementById(
+                    "map-loading-indicator",
+                  );
+                  if (loadingIndicator) {
+                    loadingIndicator.classList.remove("hidden");
+                  }
                   syncHeritageMapMarkers(
                     window.matiMapInstance,
                     window.matiHeritageMarkersLayer,
@@ -7195,7 +7565,7 @@
             }
           }
         });
-        
+
         // Refresh map when window gains focus (picks up admin changes)
         window.addEventListener("focus", async () => {
           if (window.matiMapInstance) {
@@ -7204,9 +7574,18 @@
                 const latestSites = getHeritageMapDisplaySites();
                 if (latestSites && latestSites.length > 0) {
                   HERITAGE_SITES = latestSites;
-                  console.log("Visitor portal: Heritage sites refreshed on window focus");
+                  console.log(
+                    "Visitor portal: Heritage sites refreshed on window focus",
+                  );
                   const filter =
-                    document.getElementById("map-heritage-filter")?.value || "all";
+                    document.getElementById("map-heritage-filter")?.value ||
+                    "all";
+                  const loadingIndicator = document.getElementById(
+                    "map-loading-indicator",
+                  );
+                  if (loadingIndicator) {
+                    loadingIndicator.classList.remove("hidden");
+                  }
                   syncHeritageMapMarkers(
                     window.matiMapInstance,
                     window.matiHeritageMarkersLayer,
@@ -7222,15 +7601,26 @@
       }
 
       // Add global refresh function that can be called from admin panel
-      window.refreshVisitorMap = async function() {
-        if (window.matiMapInstance && typeof getHeritageMapDisplaySites === "function") {
+      window.refreshVisitorMap = async function () {
+        if (
+          window.matiMapInstance &&
+          typeof getHeritageMapDisplaySites === "function"
+        ) {
           try {
             const latestSites = getHeritageMapDisplaySites();
             if (latestSites && latestSites.length > 0) {
               HERITAGE_SITES = latestSites;
-              console.log("Visitor portal: Heritage sites refreshed via global function");
+              console.log(
+                "Visitor portal: Heritage sites refreshed via global function",
+              );
               const filter =
                 document.getElementById("map-heritage-filter")?.value || "all";
+              const loadingIndicator = document.getElementById(
+                "map-loading-indicator",
+              );
+              if (loadingIndicator) {
+                loadingIndicator.classList.remove("hidden");
+              }
               syncHeritageMapMarkers(
                 window.matiMapInstance,
                 window.matiHeritageMarkersLayer,
@@ -7814,7 +8204,9 @@
                   }
 
                   // Change border-radius to match 3dexplore.html when model is 100% loaded
-                  const modelContainer = document.querySelector(".heritage-model-container");
+                  const modelContainer = document.querySelector(
+                    ".heritage-model-container",
+                  );
                   if (modelContainer) {
                     modelContainer.style.borderRadius = "1rem";
                   }
@@ -8065,6 +8457,23 @@
 
       // Premium Custom Cursor for Heritage Media Archive Gallery
       document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("click", function (event) {
+          const nextSectionBtn = event.target.closest(".map-next-section-btn");
+          if (!nextSectionBtn) return;
+
+          const targetSelector = nextSectionBtn.dataset.scrollTarget;
+          if (!targetSelector) return;
+
+          const target = document.querySelector(targetSelector);
+          if (!target) return;
+
+          event.preventDefault();
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        });
+
         // Check if device supports hover (desktop) and has GSAP
         const isTouchDevice =
           "ontouchstart" in window || navigator.maxTouchPoints > 0;
@@ -8309,6 +8718,21 @@
         window.addEventListener("resize", updateSliderDimensions);
         updateSliderDimensions();
 
+        // Force dimension recalculation for mobile after page load
+        setTimeout(() => {
+          updateSliderDimensions();
+          // Ensure images are properly sized on mobile
+          const images = slider.querySelectorAll("img");
+          images.forEach((img) => {
+            if (img.naturalWidth === 0) {
+              // Force image reload if not loaded
+              const src = img.src;
+              img.src = "";
+              img.src = src;
+            }
+          });
+        }, 100);
+
         // Handle mouse/touch events
         function startDrag(e) {
           isDragging = true;
@@ -8316,6 +8740,8 @@
           afterImage.style.transition = "none";
           hideHint(); // Hide hint on first interaction
           e.preventDefault();
+          // Force dimension update on mobile
+          updateSliderDimensions();
         }
 
         function endDrag() {
@@ -8353,6 +8779,17 @@
         handle.addEventListener("touchstart", startDrag, { passive: false });
         document.addEventListener("touchend", endDrag);
         document.addEventListener("touchmove", moveDrag, { passive: false });
+
+        // Mobile-specific: prevent default touch behavior to avoid page scrolling
+        slider.addEventListener(
+          "touchmove",
+          function (e) {
+            if (isDragging) {
+              e.preventDefault();
+            }
+          },
+          { passive: false },
+        );
 
         // Click on slider to jump to position
         slider.addEventListener("click", function (e) {
@@ -8525,6 +8962,20 @@
           // Initialize positions
           updateStackPositions();
 
+          // Force dimension recalculation for mobile
+          setTimeout(() => {
+            updateStackPositions();
+            // Ensure images are properly sized on mobile
+            photos.forEach((photo) => {
+              if (photo.naturalWidth === 0) {
+                // Force image reload if not loaded
+                const src = photo.src;
+                photo.src = "";
+                photo.src = src;
+              }
+            });
+          }, 100);
+
           // Handle drag start
           function handleStart(e) {
             if (isAnimating) return;
@@ -8631,11 +9082,20 @@
               lastStartTime = Date.now();
               handleStart(e);
             },
-            { passive: true },
+            { passive: false },
           );
 
           document.addEventListener("mousemove", handleMove);
-          document.addEventListener("touchmove", handleMove, { passive: true });
+          document.addEventListener(
+            "touchmove",
+            (e) => {
+              if (isDragging) {
+                e.preventDefault();
+              }
+              handleMove(e);
+            },
+            { passive: false },
+          );
 
           document.addEventListener("mouseup", handleEnd);
           document.addEventListener("touchend", handleEnd);
