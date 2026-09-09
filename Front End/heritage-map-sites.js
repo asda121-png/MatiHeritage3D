@@ -25,7 +25,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.952258,
     lng: 126.216889,
     official: true,
-    desc: "Gateway monument erected in memory of Mayor Luis G. Rabat.",
+    desc: "The Pylon Monument serves as a prominent gateway structure erected in memory of Mayor Luis G. Rabat, one of Mati's influential leaders. Standing as a symbolic entrance to the city, this monument commemorates the legacy of public service and dedication to community development that Mayor Rabat exemplified during his tenure. The monument represents the city's respect for its leaders and serves as a reminder of the values of governance and civic responsibility that continue to guide Mati's progress.",
     image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
   },
   {
@@ -36,7 +36,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.9521319,
     lng: 126.2167824,
     official: true,
-    desc: "Centennial Park and Pathway of Leaders in the poblacion.",
+    desc: "The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year \"1903\" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city's historical journey, preserved in excellent condition for the inspiration and education of its citizens.",
     image:
       "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
   },
@@ -48,7 +48,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.9519495,
     lng: 126.2162107,
     official: true,
-    desc: "Seat of the City Government of Mati on Nazareno Street.",
+    desc: "The City Hall of Mati serves as the seat of the City Government of Mati, located on Nazareno Street in Barangay Central. This administrative building houses the various departments and offices that manage the city's governance, public services, and development initiatives. As the center of local government operations, it represents the institutional foundation of Mati's civic administration and serves as the primary venue for official functions, public hearings, and governmental proceedings that shape the city's policies and programs.",
     image: "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
   },
   {
@@ -59,7 +59,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.950356,
     lng: 126.216866,
     official: true,
-    desc: "Mayor Francisco G. Rabat Park and Baywalk overlooking Pujada Bay.",
+    desc: "Mayor Francisco G. Rabat Park and Baywalk is a scenic waterfront destination overlooking Pujada Bay, named in honor of the late mayor who contributed significantly to Mati's development. The features a beautifully landscaped park area with walking paths, benches, and viewing areas where visitors can enjoy panoramic views of the bay, especially during sunset. The baywalk provides a leisurely promenade along the shoreline, making it a popular spot for exercise, relaxation, and community gatherings. This recreational space exemplifies the city's commitment to providing public amenities that enhance quality of life while showcasing the natural beauty of Mati's coastal environment.",
     image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
   },
   {
@@ -70,7 +70,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.94425,
     lng: 126.248333,
     official: true,
-    desc: "Provincial museum featuring Davor the whale and Mandaya heritage.",
+    desc: "Subangan Museum is the provincial museum of Davao Oriental, serving as a cultural repository that showcases the rich heritage and natural history of the province. The museum features the famous skeletal remains of Davor, a 43-foot whale that became an iconic symbol of marine conservation in the region. Beyond its natural history exhibits, Subangan Museum houses extensive collections highlighting Mandaya indigenous culture, traditional artifacts, and the historical narrative of Davao Oriental. The museum serves as an educational institution and tourist attraction, providing visitors with insights into the province's diverse cultural tapestry and ecological treasures.",
     image:
       "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
   },
@@ -82,7 +82,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.9483186,
     lng: 126.2271687,
     official: false,
-    desc: "Provincial government center within Mati City.",
+    desc: "The Provincial Capitol of Davao Oriental serves as the administrative center of the provincial government, located within Mati City. This government complex houses the offices of the provincial governor, provincial board members, and various department heads who oversee the governance and development of Davao Oriental. The capitol building represents the seat of provincial power and is where important policy decisions, legislative sessions, and administrative functions take place. As a government center, it plays a crucial role in delivering public services and implementing programs that benefit the province's constituents across its municipalities.",
     image:
       "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
   },
@@ -94,7 +94,7 @@ const HERITAGE_MAP_SITES = [
     lat: 6.9472,
     lng: 126.2268,
     official: false,
-    desc: "Historic mansion linked to Davao Oriental governance.",
+    desc: "The Provincial Capitol Old Mansion is a historic structure linked to the governance history of Davao Oriental. This heritage building represents an earlier era of provincial administration and stands as an architectural reminder of the region's political evolution. The mansion's historical significance lies in its connection to the early governance structures that shaped Davao Oriental before the construction of the modern capitol complex. As a preserved heritage structure, it offers insights into the architectural styles and administrative practices of the past, contributing to the understanding of the province's institutional development.",
     image:
       "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
   },
