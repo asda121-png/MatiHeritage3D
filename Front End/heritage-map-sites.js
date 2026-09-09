@@ -324,7 +324,7 @@ function mergeMapSite(base, admin) {
     location: admin.location || base.location || "",
     lat,
     lng,
-    desc: admin.description || base.desc,
+    desc: (admin.description && admin.description.trim() !== "") ? admin.description : base.desc,
     image: admin.cover || base.image,
   };
 }

@@ -42,6 +42,9 @@ function getScopeMediaTypes(category) {
   return ADMIN_HERITAGE_SCOPE[category]?.mediaTypes || ["photo"];
 }
 
+// Expose to global scope for gallery-app.js
+window.getScopeMediaTypes = getScopeMediaTypes;
+
 function getScopeSiteOrder(category) {
   return ADMIN_HERITAGE_SCOPE[category]?.siteIds || [];
 }

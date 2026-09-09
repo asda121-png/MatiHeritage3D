@@ -42,6 +42,9 @@ const MatiGameAuthGate = (() => {
     style.id = STYLE_ID;
     style.textContent = `
       .game-auth-gate {
+        --portal-navy: #0c2340;
+        --portal-navy-soft: #163a5f;
+        --portal-forest: #047857;
         position: fixed;
         inset: 0;
         z-index: 12000;
@@ -86,67 +89,122 @@ const MatiGameAuthGate = (() => {
       }
 
       .game-auth-gate__dialog .auth-portal-form {
-        padding: clamp(2.5rem, 5.5vw, 3.5rem);
-        border-radius: 1.15rem;
+        padding: clamp(2rem, 4.5vw, 3.25rem);
+      }
+
+      .game-auth-gate__dialog .auth-portal-back {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 0.95rem;
+        border-radius: 999px;
+        font-family: "Source Sans 3", system-ui, sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        text-decoration: none;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+
+      .game-auth-gate__dialog .auth-portal-back svg {
+        width: 0.95rem;
+        height: 0.95rem;
+      }
+
+      .game-auth-gate__dialog .auth-portal-back:hover {
+        color: var(--portal-navy);
+        border-color: #cbd5e1;
+        background: #fff;
+        transform: translateX(-2px);
       }
 
       .game-auth-gate__dialog .auth-portal-header {
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
       }
 
-      .game-auth-gate__dialog .auth-portal-logo__title {
-        font-size: clamp(3.2rem, 7vw, 4.25rem);
+      .game-auth-gate__dialog .auth-portal-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .game-auth-gate__dialog .auth-portal-logo__image {
+        height: 96px;
+        margin-top: 0.25rem;
+        margin-bottom: 0rem;
       }
 
       .game-auth-gate__dialog .auth-portal-header__welcome {
-        margin-top: 1.25rem;
-        font-size: 1.25rem;
-        letter-spacing: 0.14em;
+        margin: 1.35rem 0 0;
+        font-family: "Oswald", "Source Sans 3", system-ui, sans-serif;
+        font-size: clamp(1.25rem, 5cqi, 2rem);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        line-height: 1.2;
+        white-space: nowrap;
+        text-transform: uppercase;
+        color: var(--portal-forest);
       }
 
       .game-auth-gate__dialog .auth-portal-actions {
-        margin-top: 0.75rem;
-        gap: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-top: 0.6rem;
       }
 
       .game-auth-gate__dialog .auth-portal-btn {
-        height: 3.75rem;
-        padding: 0 2rem;
-        font-size: 1.1rem;
-        border-radius: 0.75rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 3.25rem;
+        padding: 0 1.15rem;
+        border-radius: 0.6rem;
+        font-family: "Source Sans 3", system-ui, sans-serif;
+        font-size: 1.08rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
       }
 
       .game-auth-gate__dialog .auth-portal-btn--primary {
-        border: 1px solid #0c2340;
+        border: 1px solid var(--portal-navy);
         color: #fff;
-        background: linear-gradient(180deg, #163a5f 0%, #0c2340 100%);
+        background: linear-gradient(180deg, var(--portal-navy-soft) 0%, var(--portal-navy) 100%);
         box-shadow: 0 10px 24px rgba(12, 35, 64, 0.22);
       }
 
-      .game-auth-gate__dialog .auth-portal-btn--primary .auth-portal-btn__label {
-        color: #fff;
-        opacity: 1;
-      }
-
-      .game-auth-gate__dialog .auth-portal-btn--primary:hover {
+      .game-auth-gate__dialog .auth-portal-btn--primary:hover:not(:disabled) {
         transform: translateY(-1px);
         box-shadow: 0 14px 28px rgba(12, 35, 64, 0.28);
       }
 
-      .game-auth-gate__dialog .auth-portal-btn--outline {
-        border: 1.5px solid #0c2340;
-        color: #0c2340;
-        background: #fff;
+      .game-auth-gate__dialog .auth-portal-btn--primary:active:not(:disabled) {
+        transform: translateY(0);
       }
 
-      .game-auth-gate__dialog .auth-portal-btn--outline .auth-portal-btn__label {
-        color: #0c2340;
-        opacity: 1;
+      .game-auth-gate__dialog .auth-portal-btn--outline {
+        border: 1px solid var(--portal-navy);
+        color: var(--portal-navy);
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(12, 35, 64, 0.08);
       }
 
       .game-auth-gate__dialog .auth-portal-btn--outline:hover {
         background: #f8fafc;
-        border-color: #163a5f;
+        border-color: var(--portal-navy-soft);
+        box-shadow: 0 4px 12px rgba(12, 35, 64, 0.12);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -165,21 +223,7 @@ const MatiGameAuthGate = (() => {
         }
 
         .game-auth-gate__dialog .auth-portal-form {
-          padding: clamp(1.75rem, 4vw, 2.35rem);
-        }
-
-        .game-auth-gate__dialog .auth-portal-logo__title {
-          font-size: clamp(2.35rem, 5.5vw, 3rem);
-        }
-
-        .game-auth-gate__dialog .auth-portal-header__welcome {
-          font-size: 0.92rem;
-        }
-
-        .game-auth-gate__dialog .auth-portal-btn {
-          height: 3rem;
-          padding: 0 1.25rem;
-          font-size: 0.9rem;
+          padding: 2rem;
         }
       }
 
@@ -193,21 +237,17 @@ const MatiGameAuthGate = (() => {
         }
 
         .game-auth-gate__dialog .auth-portal-header {
-          margin-bottom: 1.5rem;
+          text-align: center;
         }
 
-        .game-auth-gate__dialog .auth-portal-logo__title {
-          font-size: 2rem;
+        .game-auth-gate__dialog .auth-portal-logo {
+          display: flex;
+          justify-content: center;
         }
 
-        .game-auth-gate__dialog .auth-portal-header__welcome {
-          font-size: 0.85rem;
-        }
-
-        .game-auth-gate__dialog .auth-portal-btn {
-          height: 2.75rem;
-          padding: 0 1rem;
-          font-size: 0.85rem;
+        .game-auth-gate__dialog .auth-portal-logo__image {
+          margin-left: auto;
+          margin-right: auto;
         }
       }
 
@@ -274,7 +314,7 @@ const MatiGameAuthGate = (() => {
     root.innerHTML = `
       <div class="auth-portal-card game-auth-gate__dialog">
         <main class="auth-portal-form">
-          <a href="index.html" class="auth-portal-back" data-gate-close>
+          <a href="index.html" class="auth-portal-back" data-gate-close aria-label="Back to visitor portal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -284,9 +324,12 @@ const MatiGameAuthGate = (() => {
           <div class="auth-portal-form__inner">
             <header class="auth-portal-header">
               <div class="auth-portal-logo">
-                <p class="auth-portal-logo__eyebrow">Mati Heritage</p>
-                <h2 class="auth-portal-logo__title" id="game-auth-gate-title">Games</h2>
-                <span class="auth-portal-logo__line" aria-hidden="true"></span>
+                <img
+                  src="logo/MatiHeritage logo.png"
+                  alt="Mati Heritage 3D"
+                  class="auth-portal-logo__image"
+                  style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
+                />
               </div>
               <p class="auth-portal-header__welcome">Register to play</p>
             </header>

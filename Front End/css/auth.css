@@ -1704,7 +1704,7 @@
 .auth-portal-field label {
   display: block;
   margin-bottom: 0.5rem;
-  font-size: 0.92rem;
+  font-size: 1.08rem;
   font-weight: 600;
   color: #475569;
 }
@@ -1732,7 +1732,7 @@
   border: 1px solid #dbe2ea;
   border-radius: 0.6rem;
   font: inherit;
-  font-size: 1rem;
+  font-size: 1.12rem;
   color: var(--ink);
   background: #f8fafc;
   transition:
@@ -1853,7 +1853,7 @@
 }
 
 .auth-portal-check span:last-child {
-  font-size: 0.92rem;
+  font-size: 1.08rem;
   color: #64748b;
 }
 
@@ -1874,7 +1874,7 @@
   padding: 0 1.15rem;
   border-radius: 0.6rem;
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 1.08rem;
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -2010,7 +2010,7 @@
 .auth-portal-foot {
   margin: 1.5rem 0 0;
   text-align: center;
-  font-size: 0.92rem;
+  font-size: 1.08rem;
   color: #64748b;
 }
 
@@ -2081,7 +2081,7 @@
 }
 
 .auth-portal-check--terms span:last-child {
-  font-size: 0.84rem;
+  font-size: 1rem;
   line-height: 1.45;
 }
 
@@ -2427,4 +2427,40 @@
 
 .auth-portal-actions--single {
   grid-template-columns: 1fr;
+}
+
+@media (max-width: 1024px) {
+  .auth-body--recover .auth-portal-visual {
+    display: none;
+  }
+
+  .auth-body--recover .auth-portal-card {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+  }
+
+  .auth-body--recover .auth-portal-form {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-body--recover .auth-portal-form {
+    padding: 1.5rem;
+  }
+
+  .auth-body--recover .auth-portal-header {
+    text-align: center;
+  }
+
+  .auth-body--recover .auth-portal-logo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .auth-body--recover .auth-portal-logo__image {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

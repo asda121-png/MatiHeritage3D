@@ -51,12 +51,18 @@ const MatiAdminUploads = (() => {
 
   function inferTypeFromKey(key) {
     const lower = String(key || "").toLowerCase();
-    if (lower.includes("/map") || lower.endsWith("/map") || /\/map(\/|$)/.test(lower)) {
+    if (
+      lower.includes("/map") ||
+      lower.endsWith("/map") ||
+      /\/map(\/|$)/.test(lower)
+    ) {
       return "map";
     }
     if (lower.includes("/model") || lower.endsWith(".glb")) return "model3d";
-    if (lower.includes("/video") || /\.(mp4|webm|mov)$/i.test(lower)) return "video";
-    if (lower.includes("/audio") || /\.(mp3|wav|ogg|m4a)$/i.test(lower)) return "audio";
+    if (lower.includes("/video") || /\.(mp4|webm|mov)$/i.test(lower))
+      return "video";
+    if (lower.includes("/audio") || /\.(mp3|wav|ogg|m4a)$/i.test(lower))
+      return "audio";
     return "photo";
   }
 
@@ -86,7 +92,7 @@ const MatiAdminUploads = (() => {
     const fileSize = file.size || 0;
 
     if (supabaseUploadsEnabled()) {
-      console.log('Uploading to Supabase:', { siteId, type, key, fileSize });
+      console.log("Uploading to Supabase:", { siteId, type, key, fileSize });
       try {
         const publicUrl = await MatiSupabaseApi.uploadSiteMedia(
           siteId,
@@ -100,14 +106,14 @@ const MatiAdminUploads = (() => {
         if (!publicUrl) {
           throw new Error("Supabase Storage did not return a public URL.");
         }
-        console.log('Supabase upload successful:', publicUrl);
+        console.log("Supabase upload successful:", publicUrl);
         return publicUrl;
       } catch (error) {
-        console.error('Supabase upload failed, falling back to IndexedDB:', error);
-        // Fall through to IndexedDB fallback
+        console.error("Supabase resumable upload failed:", error);
+        throw error;
       }
     } else {
-      console.log('Supabase uploads not enabled, using IndexedDB fallback');
+      console.log("Supabase uploads not enabled, using IndexedDB fallback");
     }
 
     // IndexedDB fallback with simulated progress
@@ -119,8 +125,9 @@ const MatiAdminUploads = (() => {
       options.onProgress(55, loaded55);
     }
     const uri = await putLocal(key, file);
-    if (typeof options.onProgress === "function") options.onProgress(100, fileSize);
-    console.log('IndexedDB upload successful:', uri);
+    if (typeof options.onProgress === "function")
+      options.onProgress(100, fileSize);
+    console.log("IndexedDB upload successful:", uri);
     return uri;
   }
 

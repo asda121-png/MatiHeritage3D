@@ -388,78 +388,130 @@ const MatiSupabaseApi = (() => {
       return Promise.reject(new Error("Supabase is not configured."));
     }
 
-    const endpoint = `${String(cfg.url).replace(/\/$/, "")}/storage/v1/object/${encodeURIComponent(bucket)}/${path
-      .split("/")
-      .map((part) => encodeURIComponent(part))
-      .join("/")}`;
-
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", endpoint, true);
-      xhr.setRequestHeader("Authorization", `Bearer ${cfg.anonKey}`);
-      xhr.setRequestHeader("apikey", cfg.anonKey);
-      xhr.setRequestHeader(
-        "x-upsert",
-        options.upsert === false ? "false" : "true",
-      );
-      if (file.type || options.contentType) {
-        xhr.setRequestHeader("Content-Type", file.type || options.contentType);
+    const baseUrl = String(cfg.url).replace(/\/$/, "");
+    const endpoint = `${baseUrl}/storage/v1/upload/resumable`;
+    const sessionKey = `matiTusUpload:${bucket}:${path}`;
+    const storedUrl = (() => {
+      try {
+        return sessionStorage.getItem(sessionKey);
+      } catch {
+        return null;
       }
+    })();
+    const metadata = [
+      `bucketName ${btoa(bucket)}`,
+      `objectName ${btoa(path)}`,
+      `contentType ${btoa(file.type || options.contentType || "application/octet-stream")}`,
+      "cacheControl " + btoa("3600"),
+    ].join(",");
 
-      // Support upload cancellation via AbortSignal
-      var signal = options.signal || null;
-      if (signal) {
-        if (signal.aborted) {
-          return reject(new Error("Upload cancelled."));
-        }
-        signal.addEventListener(
-          "abort",
-          function () {
-            xhr.abort();
-          },
-          { once: true },
+    const request = (method, url, headers = {}, body = null) =>
+      new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader("Authorization", `Bearer ${cfg.anonKey}`);
+        xhr.setRequestHeader("apikey", cfg.anonKey);
+        Object.entries(headers).forEach(([key, value]) =>
+          xhr.setRequestHeader(key, value),
         );
+        xhr.onload = () => resolve(xhr);
+        xhr.onerror = () => reject(new Error("Network error while uploading."));
+        xhr.onabort = () => reject(new Error("Upload cancelled."));
+        if (options.signal) {
+          if (options.signal.aborted) return xhr.abort();
+          options.signal.addEventListener("abort", () => xhr.abort(), {
+            once: true,
+          });
+        }
+        xhr.send(body);
+      });
+
+    const readOffset = async (url) => {
+      const response = await request("HEAD", url, {
+        "Tus-Resumable": "1.0.0",
+      });
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(`Could not resume upload (${response.status}).`);
       }
+      return Number(response.getResponseHeader("Upload-Offset") || 0);
+    };
 
-      xhr.upload.onprogress = (event) => {
-        if (
-          !event.lengthComputable ||
-          typeof options.onProgress !== "function"
-        ) {
-          return;
-        }
-        const pct = Math.max(
-          0,
-          Math.min(100, Math.round((event.loaded / event.total) * 100)),
-        );
-        options.onProgress(pct, {
-          loaded: event.loaded,
-          total: event.total,
+    return (async () => {
+      let uploadUrl = storedUrl;
+      if (!uploadUrl) {
+        const created = await request("POST", endpoint, {
+          "Tus-Resumable": "1.0.0",
+          "Upload-Length": String(file.size),
+          "Upload-Metadata": metadata,
+          "x-upsert": options.upsert === false ? "false" : "true",
+          "Content-Type": "application/offset+octet-stream",
         });
-      };
-
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          if (typeof options.onProgress === "function") {
-            options.onProgress(100, { loaded: file.size, total: file.size });
-          }
-          resolve(path);
-          return;
+        if (created.status < 200 || created.status >= 300) {
+          const error = new Error(
+            created.status === 413
+              ? "This file exceeds the Supabase Storage file-size limit."
+              : `Could not start resumable upload (${created.status}).`,
+          );
+          error.status = created.status;
+          error.resumeAvailable = false;
+          error.fileTooLarge = created.status === 413;
+          throw error;
         }
-
-        let message = `Upload failed (${xhr.status})`;
+        uploadUrl = created.getResponseHeader("Location");
+        if (!uploadUrl)
+          throw new Error("Supabase did not return an upload session.");
+        if (uploadUrl.startsWith("/")) uploadUrl = `${baseUrl}${uploadUrl}`;
         try {
-          const body = JSON.parse(xhr.responseText || "{}");
-          message = body.error || body.message || message;
+          sessionStorage.setItem(sessionKey, uploadUrl);
         } catch {
-          /* keep default */
+          /* Session persistence is best effort. */
         }
-        reject(new Error(message));
-      };
+      }
 
-      xhr.onerror = () => reject(new Error("Network error while uploading."));
-      xhr.onabort = () => reject(new Error("Upload cancelled."));
-      xhr.send(file);
+      let offset = await readOffset(uploadUrl);
+      const chunkSize = 6 * 1024 * 1024;
+      while (offset < file.size) {
+        const end = Math.min(offset + chunkSize, file.size);
+        const response = await request(
+          "PATCH",
+          uploadUrl,
+          {
+            "Tus-Resumable": "1.0.0",
+            "Upload-Offset": String(offset),
+            "Content-Type": "application/offset+octet-stream",
+          },
+          file.slice(offset, end),
+        );
+        if (response.status < 200 || response.status >= 300) {
+          const error = new Error(
+            `Resumable upload failed (${response.status}).`,
+          );
+          error.resumeAvailable = true;
+          throw error;
+        }
+        offset = Number(response.getResponseHeader("Upload-Offset") || end);
+        if (typeof options.onProgress === "function") {
+          options.onProgress(Math.round((offset / file.size) * 100), {
+            loaded: offset,
+            total: file.size,
+          });
+        }
+      }
+
+      try {
+        sessionStorage.removeItem(sessionKey);
+      } catch {
+        /* ignore */
+      }
+      if (typeof options.onProgress === "function") {
+        options.onProgress(100, { loaded: file.size, total: file.size });
+      }
+      return path;
+    })().catch((error) => {
+      if (!/cancelled/i.test(error?.message || "") && !error.fileTooLarge) {
+        error.resumeAvailable = true;
+      }
+      throw error;
     });
   }
 
@@ -485,7 +537,8 @@ const MatiSupabaseApi = (() => {
   async function uploadSiteMedia(siteId, type, file, options = {}) {
     const bucket = bucketForMediaType(type);
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `${siteId}/${Date.now()}-${safeName}`;
+    const fileVersion = Number(file.lastModified) || 0;
+    const path = `${siteId}/${fileVersion}-${safeName}`;
     return uploadFile(bucket, path, file, options);
   }
 
