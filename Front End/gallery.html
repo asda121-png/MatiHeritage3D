@@ -312,35 +312,8 @@
     <script src="heritage-data.js"></script>
     <script src="gallery-app.js"></script>
     <script src="gallery-showcase.js"></script>
-    <script src="gallery-background-rotator.js"></script>
 
     <script>
-      // Explicitly initialize background rotator after gallery content loads
-      document.addEventListener("DOMContentLoaded", function () {
-        // Wait for gallery content to be fully loaded and rendered
-        const checkGalleryContent = setInterval(function () {
-          const categoryStage = document.querySelector(".gal-category-stage");
-          if (categoryStage) {
-            clearInterval(checkGalleryContent);
-
-            // Initialize background rotator for the heritage collection section
-            if (
-              typeof window.GalleryBackgroundRotator !== "undefined" &&
-              typeof window.GalleryBackgroundRotator.reinitialize === "function"
-            ) {
-              window.GalleryBackgroundRotator.reinitialize();
-              console.log(
-                "Gallery background rotator initialized for heritage collection section",
-              );
-            }
-          }
-        }, 200);
-
-        // Stop checking after 10 seconds to prevent infinite loop
-        setTimeout(function () {
-          clearInterval(checkGalleryContent);
-        }, 10000);
-      });
       fetch("header.html")
         .then((res) => res.text())
         .then(async (data) => {

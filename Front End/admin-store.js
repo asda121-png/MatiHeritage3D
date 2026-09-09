@@ -352,7 +352,10 @@ const MatiAdminStore = (() => {
   }
 
   function isUserAddedSite(siteId) {
-    return readStore().addedSites.some((site) => site.id === siteId);
+    return (
+      readStore().addedSites.some((site) => site.id === siteId) ||
+      remoteSiteIds().has(siteId)
+    );
   }
 
   function parseCoord(value) {
@@ -457,7 +460,17 @@ const MatiAdminStore = (() => {
   }
 
   async function saveSite(site) {
-    const store = readStore();
+    if (!supabaseEnabled()) {
+      return {
+        ...(site || {}),
+        _sync: {
+          ok: false,
+          reason: "not_configured",
+          error: new Error("Supabase is not configured."),
+        },
+      };
+    }
+
     const isNew = !baseSites().some((s) => s.id === site.id);
     const lat = parseCoord(site.lat);
     const lng = parseCoord(site.lng);
@@ -478,24 +491,6 @@ const MatiAdminStore = (() => {
     if (lat !== null) payload.lat = lat;
     if (lng !== null) payload.lng = lng;
 
-    // Remove from deleted list if we're saving this site again
-    if (store.deletedSiteIds.includes(payload.id)) {
-      store.deletedSiteIds = store.deletedSiteIds.filter((id) => id !== payload.id);
-    }
-
-    if (isNew && !store.addedSites.some((s) => s.id === payload.id)) {
-      store.addedSites.push(payload);
-    } else if (isNew) {
-      const idx = store.addedSites.findIndex((s) => s.id === payload.id);
-      store.addedSites[idx] = payload;
-    } else {
-      store.siteEdits[payload.id] = {
-        ...store.siteEdits[payload.id],
-        ...payload,
-      };
-    }
-
-    writeStore(store);
     const sync = await syncSiteToSupabase(payload);
     if (sync.ok) clearVisitorHeritageCaches();
     payload._sync = sync;
@@ -503,15 +498,34 @@ const MatiAdminStore = (() => {
   }
 
   async function deleteSite(siteId) {
-    const store = readStore();
-    if (!store.deletedSiteIds.includes(siteId)) {
-      store.deletedSiteIds.push(siteId);
+    const cleanupLocalSite = () => {
+      const store = readStore();
+      store.addedSites = store.addedSites.filter((site) => site.id !== siteId);
+      delete store.siteEdits[siteId];
+      store.addedMedia = store.addedMedia.filter(
+        (item) => item.siteId !== siteId,
+      );
+      Object.keys(store.mediaEdits).forEach((mediaId) => {
+        if (store.mediaEdits[mediaId]?.siteId === siteId) {
+          delete store.mediaEdits[mediaId];
+        }
+      });
+      Object.keys(store.mediaOrder || {}).forEach((key) => {
+        if (key.startsWith(`${siteId}:`)) delete store.mediaOrder[key];
+      });
+      writeStore(store);
+    };
+
+    if (!supabaseEnabled()) {
+      cleanupLocalSite();
+      return { ok: true, localOnly: true };
     }
-    store.addedSites = store.addedSites.filter((s) => s.id !== siteId);
-    delete store.siteEdits[siteId];
-    writeStore(store);
+
     const sync = await syncDeleteSiteToSupabase(siteId);
-    if (sync.ok) clearVisitorHeritageCaches();
+    if (sync.ok) {
+      cleanupLocalSite();
+      clearVisitorHeritageCaches();
+    }
     return sync;
   }
 
@@ -725,6 +739,8 @@ const MatiAdminStore = (() => {
   }
 
   async function saveMedia(item) {
+    if (!supabaseEnabled()) return null;
+
     const store = readStore();
     const site = getSiteById(item.siteId);
     if (!site) return null;
@@ -753,29 +769,18 @@ const MatiAdminStore = (() => {
       updatedAt: new Date().toISOString(),
     };
 
-    if (!inBase) {
-      if (addedIdx >= 0) store.addedMedia[addedIdx] = payload;
-      else store.addedMedia.push(payload);
-    } else {
-      store.mediaEdits[payload.id] = {
-        ...store.mediaEdits[payload.id],
-        ...payload,
-      };
-    }
-
-    if (isNew) {
-      prependToMediaOrder(store, payload.siteId, payload.type, payload.id);
-    }
-
-    writeStore(store);
     const sync = await syncMediaToSupabase(payload, site);
     if (sync.ok) {
       clearVisitorHeritageCaches();
-      // Once the row lives in remoteMedia, drop the local duplicate copy.
+
       const after = readStore();
       after.addedMedia = after.addedMedia.filter(
-        (item) => item.id !== payload.id,
+        (entry) => entry.id !== payload.id,
       );
+      delete after.mediaEdits[payload.id];
+      if (isNew) {
+        prependToMediaOrder(after, payload.siteId, payload.type, payload.id);
+      }
       writeStore(after);
 
       // Keep visitor gallery placement in sync with admin order.
@@ -847,12 +852,14 @@ const MatiAdminStore = (() => {
   }
 
   async function getLocalCommunityStats() {
-    const localUsers = typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
+    const localUsers =
+      typeof MatiAuth !== "undefined" ? MatiAuth.readUsers() : [];
     const registered = await getRegisteredUsers();
-    
+
     // Use registered users count from Supabase if available, otherwise localStorage
-    const userCount = registered.length > 0 ? registered.length : localUsers.length;
-    
+    const userCount =
+      registered.length > 0 ? registered.length : localUsers.length;
+
     return {
       registeredUsers: userCount,
       gamePlayers: registered.filter((user) => Number(user.points) > 0).length,
@@ -936,15 +943,18 @@ const MatiAdminStore = (() => {
 
   async function getRegisteredUsers() {
     if (typeof MatiAuth === "undefined") return [];
-    
+
     // Try to fetch from Supabase if enabled
-    if (typeof MatiSupabaseAuth !== "undefined" && MatiSupabaseAuth.enabled?.()) {
+    if (
+      typeof MatiSupabaseAuth !== "undefined" &&
+      MatiSupabaseAuth.enabled?.()
+    ) {
       const supabaseUsers = await MatiSupabaseAuth.getAllUsers?.();
       if (supabaseUsers) {
         return supabaseUsers;
       }
     }
-    
+
     // Fall back to localStorage
     return MatiAuth.readUsers().map((u) => ({
       displayName: u.username || "User",

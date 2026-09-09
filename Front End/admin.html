@@ -903,8 +903,22 @@
       <div class="admin-upload-progress__panel">
         <div class="admin-upload-progress__icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" role="presentation" aria-hidden="true">
-            <path d="M18 42.5h28a8 8 0 0 0 2.8-15.4A12.5 12.5 0 0 0 30.5 11a13.3 13.3 0 0 0-18.7 15.2A9.2 9.2 0 0 0 18 42.5Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M32 23v14m-6-6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M18 42.5h28a8 8 0 0 0 2.8-15.4A12.5 12.5 0 0 0 30.5 11a13.3 13.3 0 0 0-18.7 15.2A9.2 9.2 0 0 0 18 42.5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M32 23v14m-6-6 6-6 6 6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
         <h2
@@ -917,10 +931,14 @@
           Pylon.glb
         </p>
         <div class="admin-upload-progress__stats" aria-live="polite">
-          <span id="admin-upload-progress-pct" class="admin-upload-progress__pct"
+          <span
+            id="admin-upload-progress-pct"
+            class="admin-upload-progress__pct"
             >0%</span
           >
-          <span id="admin-upload-progress-size" class="admin-upload-progress__size"
+          <span
+            id="admin-upload-progress-size"
+            class="admin-upload-progress__size"
             >0 MB of 0 MB</span
           >
         </div>
@@ -939,7 +957,9 @@
           ></span>
         </div>
         <div class="admin-upload-progress__eta-row">
-          <span class="admin-upload-progress__eta-icon" aria-hidden="true">◔</span>
+          <span class="admin-upload-progress__eta-icon" aria-hidden="true"
+            >◔</span
+          >
           <p id="admin-upload-progress-eta" class="admin-upload-progress__eta">
             Calculating time remaining...
           </p>
@@ -950,6 +970,14 @@
           class="admin-btn admin-upload-progress__cancel"
         >
           Cancel
+        </button>
+        <button
+          type="button"
+          id="admin-upload-progress-resume"
+          class="admin-btn admin-upload-progress__resume"
+          hidden
+        >
+          Resume upload
         </button>
       </div>
     </div>
@@ -1286,6 +1314,14 @@
               data-close-modal
             >
               Cancel
+            </button>
+            <button
+              type="button"
+              id="btn-retry-site"
+              class="admin-btn admin-btn--ghost"
+              hidden
+            >
+              Retry save
             </button>
             <button
               type="submit"

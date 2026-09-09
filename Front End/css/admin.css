@@ -2952,6 +2952,11 @@
   font-size: 0.7rem;
 }
 
+.admin-gallery-host [data-media-select-toggle] {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+}
+
 /* ── Modal ── */
 .admin-modal {
   position: fixed;
@@ -3031,7 +3036,7 @@
   height: 0.4rem;
   border: solid #fff;
   border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-0.08rem, -0.08rem);
+  transform: scaleX(-1) rotate(45deg) translate(-0.08rem, -0.08rem);
 }
 
 .admin-save-modal__message {
@@ -3045,6 +3050,75 @@
   margin-top: 0.32rem;
   font-size: 0.72rem;
   color: #64748b;
+}
+
+.admin-site-removal-modal {
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(4px);
+}
+
+.admin-site-removal-modal__dialog {
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 1.35rem 1.2rem 1.2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+  text-align: center;
+  animation: admin-save-modal-in 0.22s ease-out;
+}
+
+.admin-site-removal-modal__icon {
+  width: 2rem;
+  height: 2rem;
+  margin: 0 auto 0.75rem;
+  border: 3px solid #cbd5e1;
+  border-top-color: #b91c1c;
+  border-radius: 50%;
+}
+
+.admin-site-removal-modal__icon.is-loading {
+  animation: admin-save-modal-spin 0.8s linear infinite;
+}
+
+.admin-site-removal-modal__icon.is-success {
+  position: relative;
+  border: 0;
+  background: #dcfce7;
+  animation: admin-save-modal-success 0.3s ease-out;
+}
+
+.admin-site-removal-modal__icon.is-success::after {
+  content: "";
+  position: absolute;
+  top: 0.52rem;
+  left: 0.68rem;
+  width: 0.58rem;
+  height: 0.34rem;
+  border: solid #15803d;
+  border-width: 0 2px 2px 0;
+  transform: scaleX(-1) rotate(45deg);
+}
+
+.admin-site-removal-modal__title {
+  margin: 0;
+  color: #0f172a;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 1.05rem;
+}
+
+.admin-site-removal-modal__name {
+  margin: 0.3rem 0 0;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.admin-site-removal-modal__detail {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  font-size: 0.72rem;
 }
 
 @keyframes admin-save-modal-in {
@@ -3527,11 +3601,16 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.68rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.admin-built[hidden],
+#heritage-other-shell[hidden] {
+  display: none !important;
 }
 
 .admin-built__hero {
@@ -3637,10 +3716,10 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.68rem 0.8rem;
-  padding: 0.8rem 1rem;
+  padding: 0.8rem 0;
   border-bottom: 1px solid #eef2f7;
   background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
-  border-radius: 0.68rem 0.68rem 0 0;
+  border-radius: 0;
 }
 
 .admin-built__count {
@@ -4974,6 +5053,28 @@
   display: none !important;
 }
 
+.admin-upload-progress__resume {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  margin: 0.5rem auto 0;
+  padding: 0.5rem 1rem;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 0.6rem;
+}
+
+.admin-upload-progress__resume:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+.admin-upload-progress__resume[hidden] {
+  display: none !important;
+}
+
 .admin-upload-progress.is-done .admin-upload-progress__cancel {
   display: none !important;
 }
@@ -5471,6 +5572,7 @@ html[data-gallery-category]
 
 .admin-gallery-host .gal-media-item-wrap {
   position: relative;
+  transition: none;
 }
 
 .admin-gallery-host .gal-media-item-wrap--draggable {
@@ -5495,8 +5597,7 @@ html[data-gallery-category]
   top: 0.44rem;
   right: 0.44rem;
   z-index: 2;
-  border: none;
-  border-radius: 999px;
+  display: inline-block;
   padding: 0.224rem 0.52rem;
   font-size: 0.544rem;
   font-weight: 700;
@@ -5507,26 +5608,18 @@ html[data-gallery-category]
   cursor: pointer;
   opacity: 0;
   transform: translateY(-4px);
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease,
-    background 0.18s ease;
+  transition: none;
 }
 
 .admin-gallery-host .gal-media-item-wrap:hover .gal-media-edit-btn,
 .admin-gallery-host .gal-media-item-wrap:focus-within .gal-media-edit-btn {
   opacity: 1;
   transform: translateY(0);
+  transition: none;
 }
 
 .admin-gallery-host .gal-media-edit-btn:hover {
   background: #047857;
-}
-
-.admin-gallery-host .gal-media-item-wrap.is-selected {
-  outline: 3px solid #047857;
-  outline-offset: 1.6px;
-  border-radius: 0.52rem;
 }
 
 .admin-gallery-host .gal-media-select-check {
@@ -5540,6 +5633,13 @@ html[data-gallery-category]
   width: 1.08rem;
   height: 1.08rem;
   cursor: pointer;
+  transition: none;
+}
+
+.admin-gallery-host .gal-media-select-check--hidden {
+  visibility: hidden;
+  pointer-events: none;
+  transition: none;
 }
 
 .admin-gallery-host .gal-media-select-input {
@@ -5548,6 +5648,7 @@ html[data-gallery-category]
   width: 1px;
   height: 1px;
   pointer-events: none;
+  transition: none;
 }
 
 .admin-gallery-host .gal-media-select-mark {
@@ -5558,33 +5659,34 @@ html[data-gallery-category]
   border-radius: 0.24rem;
   background: rgba(15, 23, 42, 0.45);
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
+  transition: none;
 }
 
-.admin-gallery-host .gal-media-select-input:checked + .gal-media-select-mark {
-  background: #047857;
-  border-color: #047857;
-}
-
-.admin-gallery-host
-  .gal-media-select-input:checked
-  + .gal-media-select-mark::after {
+.admin-gallery-host .gal-media-select-mark::after {
   content: "";
   display: block;
   width: 0.256rem;
   height: 0.464rem;
   margin: 0.064rem auto 0;
-  border: solid #fff;
+  border: solid transparent;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+  transition: none;
 }
 
-.admin-gallery-host .gal-media-item-wrap.is-selected .gal-media-item--photo,
-.admin-gallery-host .gal-media-item-wrap.is-selected .gal-media-item--video,
-.admin-gallery-host .gal-media-item-wrap.is-selected .gal-media-item--embed {
-  opacity: 0.92;
+.admin-gallery-host
+  .gal-media-select-input[data-checked]
+  + .gal-media-select-mark {
+  background: #047857;
+  border-color: #047857;
+  transition: none;
+}
+
+.admin-gallery-host
+  .gal-media-select-input[data-checked]
+  + .gal-media-select-mark::after {
+  border-color: #fff;
+  transition: none;
 }
 
 @media (max-width: 640px) {

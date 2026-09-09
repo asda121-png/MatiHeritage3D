@@ -344,6 +344,7 @@
   let uploadProgressDisplay = 0;
   let uploadProgressTarget = 0;
   let uploadDetailSwapTimer = null;
+  let resumeUploadHandler = null;
 
   function formatBytes(bytes) {
     if (!Number.isFinite(bytes) || bytes <= 0) return "0 MB";
@@ -359,7 +360,8 @@
   }
 
   function formatEta(seconds) {
-    if (!Number.isFinite(seconds) || seconds <= 0) return "Estimated time remaining: --";
+    if (!Number.isFinite(seconds) || seconds <= 0)
+      return "Estimated time remaining: --";
     const totalSeconds = Math.max(0, Math.round(seconds));
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
@@ -379,6 +381,7 @@
       size: $("#admin-upload-progress-size"),
       eta: $("#admin-upload-progress-eta"),
       cancel: $("#admin-upload-progress-cancel"),
+      resume: $("#admin-upload-progress-resume"),
       fill: $("#admin-upload-progress-fill"),
       bar: $("#admin-upload-progress-bar"),
     };
@@ -394,25 +397,30 @@
 
     const totalBytes = Number(meta.totalBytes || 0);
     // Handle loadedBytes being an object or number
-    const loadedBytesValue = typeof meta.loadedBytes === 'object' ? 0 : Number(meta.loadedBytes || 0);
-    
+    const loadedBytesValue =
+      typeof meta.loadedBytes === "object" ? 0 : Number(meta.loadedBytes || 0);
+
     if (totalBytes > 0) {
-      const actualLoaded = loadedBytesValue > 0 ? loadedBytesValue : Math.max(0, Math.min(totalBytes, totalBytes * (rounded / 100)));
+      const actualLoaded =
+        loadedBytesValue > 0
+          ? loadedBytesValue
+          : Math.max(0, Math.min(totalBytes, totalBytes * (rounded / 100)));
       if (size) {
         size.textContent = `${formatBytes(actualLoaded)} of ${formatBytes(totalBytes)}`;
       }
-      
+
       const startedAt = Number(meta.startedAt || Date.now());
       const elapsed = Math.max(0, (Date.now() - startedAt) / 1000);
-      
+
       if (rounded >= 100) {
         if (eta) eta.textContent = "Upload complete";
       } else if (actualLoaded > 0 && elapsed > 0.5) {
         const uploadSpeed = actualLoaded / elapsed;
         const remainingBytes = Math.max(0, totalBytes - actualLoaded);
         const remainingSeconds = remainingBytes / uploadSpeed;
-        
-        if (eta) eta.textContent = `Estimated time remaining: ${formatEta(remainingSeconds)}`;
+
+        if (eta)
+          eta.textContent = `Estimated time remaining: ${formatEta(remainingSeconds)}`;
       } else {
         if (eta) eta.textContent = "Calculating time remaining...";
       }
@@ -457,6 +465,7 @@
       title: titleEl,
       detail: detailEl,
       cancel: cancelBtn,
+      resume: resumeBtn,
       size,
       eta,
     } = uploadProgressEls();
@@ -470,6 +479,10 @@
     if (cancelBtn) {
       cancelBtn.onclick = onCancel;
       cancelBtn.hidden = typeof onCancel !== "function";
+    }
+    if (resumeBtn) {
+      resumeBtn.hidden = true;
+      resumeBtn.onclick = null;
     }
     root.classList.remove("is-done", "is-error", "is-exiting");
     root.setAttribute("aria-busy", "true");
@@ -508,7 +521,10 @@
         file.textContent = meta.fileName;
       }
     }
-    paintUploadProgress(value, { ...meta, fileName: meta.fileName || file?.textContent || "Pylon.glb" });
+    paintUploadProgress(value, {
+      ...meta,
+      fileName: meta.fileName || file?.textContent || "Pylon.glb",
+    });
     if (root && value >= 99.5) {
       const { cancel: cancelBtn } = uploadProgressEls();
       if (cancelBtn) {
@@ -557,6 +573,12 @@
         if (cancelBtn) {
           cancelBtn.hidden = true;
         }
+        const { resume: resumeBtn } = uploadProgressEls();
+        if (resumeBtn) {
+          resumeBtn.hidden = true;
+          resumeBtn.onclick = null;
+        }
+        resumeUploadHandler = null;
         activeUploadController = null;
         if (title) title.textContent = "Uploading…";
       };
@@ -579,6 +601,8 @@
           hideUploadProgress();
           showToast("Upload cancelled.");
         };
+    let lastProgress = Number(options.percent) || 0;
+    let lastMeta = { ...(options.meta || {}) };
     showUploadProgress({
       title: options.title || "Uploading…",
       detail: options.detail || "Starting…",
@@ -588,7 +612,11 @@
     });
     try {
       const result = await task({
-        setProgress: setUploadProgress, // This is correct
+        setProgress: (percent, detail, meta = {}) => {
+          lastProgress = Number(percent) || 0;
+          lastMeta = { ...lastMeta, ...meta };
+          setUploadProgress(percent, detail, meta);
+        },
         hideProgress: hideUploadProgress,
         show: showUploadProgress,
       });
@@ -598,7 +626,62 @@
       hideUploadProgress({ delay: options.doneDelay ?? 900 });
       return result;
     } catch (error) {
-      hideUploadProgress();
+      if (error?.fileTooLarge) {
+        const { root, title, detail, cancel, resume } = uploadProgressEls();
+        if (root) {
+          root.hidden = false;
+          root.classList.add("is-visible", "is-error");
+          root.setAttribute("aria-busy", "false");
+          if (title) title.textContent = "Upload not started";
+          if (detail) {
+            detail.textContent =
+              "This file exceeds the Supabase Storage limit. Reduce the file size or increase the bucket limit, then upload again.";
+          }
+          paintUploadProgress(lastProgress, lastMeta);
+          if (cancel) cancel.hidden = false;
+          if (resume) {
+            resume.hidden = true;
+            resume.onclick = null;
+          }
+        }
+      } else if (error?.resumeAvailable) {
+        const { root, title, detail, cancel, resume } = uploadProgressEls();
+        if (root) {
+          root.hidden = false;
+          root.classList.add("is-visible", "is-error");
+          root.setAttribute("aria-busy", "false");
+          if (title)
+            title.textContent = options.retrying
+              ? "Resume failed"
+              : "Upload paused";
+          if (detail) {
+            detail.textContent = options.retrying
+              ? `The partial upload is preserved. ${error.message || "Check your connection and try Resume again."}`
+              : "The partial upload is saved. Resume when your connection returns.";
+          }
+          paintUploadProgress(lastProgress, lastMeta);
+          if (cancel) cancel.hidden = true;
+          if (resume) {
+            resume.hidden = false;
+            resume.onclick = async () => {
+              resume.hidden = true;
+              resumeUploadHandler = null;
+              try {
+                await withUploadProgress(task, {
+                  ...options,
+                  retrying: true,
+                  percent: lastProgress,
+                  meta: lastMeta,
+                });
+              } catch {
+                /* The next failure keeps the Resume button available. */
+              }
+            };
+          }
+        }
+      } else {
+        hideUploadProgress();
+      }
       throw error;
     }
   }
@@ -648,6 +731,7 @@
   async function runDeleteProgress(task, options = {}) {
     const count = Math.max(1, Number(options.count) || 1);
     const noun = options.noun || (count === 1 ? "item" : "items");
+    const label = options.label || (count === 1 ? noun : `${count} ${noun}`);
     return withUploadProgress(
       async ({ setProgress }) => {
         setProgress(18, "Processing…");
@@ -661,12 +745,10 @@
       {
         title: "Removing…",
         detail: "Processing…",
+        meta: { fileName: label },
         onCancel: null,
-        doneTitle: count === 1 ? "Complete deleted" : "Complete deleted",
-        doneDetail:
-          count === 1
-            ? "Heritage site removed successfully."
-            : `${count} heritage sites removed successfully.`,
+        doneTitle: "Removal complete",
+        doneDetail: options.doneDetail || `${label} removed successfully.`,
         doneDelay: 1100,
       },
     );
@@ -703,11 +785,13 @@
     const err = payload?._sync?.error;
     const message = err?.message || err?.error_description || "";
     if (/row-level security|RLS|policy/i.test(message)) {
-      return "Saved locally, but Supabase blocked the write. Run the deployment heritage writes SQL in Supabase.";
+      return "Could not save to Supabase. Your entries are still in the form; fix the database access and click Save again.";
     }
     return message
-      ? `Saved locally, but cloud sync failed: ${message}`
-      : fallback || "Saved locally, but cloud sync failed.";
+      ? `Could not save to Supabase: ${message}`
+      : /locally only|saved locally|uploaded locally/i.test(fallback || "")
+        ? "Could not save to Supabase. Your entries are still in the form; reconnect and click Save again."
+        : `${fallback || "Could not save to Supabase."} Your entries are still in the form; reconnect and click Save again.`;
   }
 
   function autoGrowTextarea(textarea) {
@@ -2864,6 +2948,8 @@
   function openSiteModal(siteId) {
     editingSiteId = siteId || null;
     const isNew = !siteId;
+    const retryButton = $("#btn-retry-site");
+    if (retryButton) retryButton.hidden = true;
 
     if (isNew) {
       $("#site-id").value = "";
@@ -3159,7 +3245,6 @@
       const nextId = MatiAdminStore.slugId(name);
 
       if (wasDraft && siteId !== nextId) {
-        await MatiAdminStore.migrateSite(siteId, nextId);
         siteId = nextId;
         $("#site-id").value = nextId;
       }
@@ -3167,16 +3252,23 @@
       const site = await persistSiteFromForm({ requireName: true, siteId });
       if (!site) throw new Error("Could not save site.");
 
-      editingSiteId = site.id;
-      $("#site-id").value = site.id;
-      refreshSiteViews(site.id);
-      syncSiteFormSubmitLabel(site.id);
-
       if (!syncOk(site)) {
         hideUpdateModal();
-        showToast(syncFailedMessage(site, "Site saved locally only."));
+        const retryButton = $("#btn-retry-site");
+        if (retryButton) retryButton.hidden = false;
+        showToast(syncFailedMessage(site, "Could not save site to Supabase."));
         return site;
       }
+
+      const retryButton = $("#btn-retry-site");
+      if (retryButton) retryButton.hidden = true;
+      editingSiteId = site.id;
+      $("#site-id").value = site.id;
+      if (currentView === "heritage") {
+        setView("heritage", { category: site.category });
+      }
+      refreshSiteViews(site.id);
+      syncSiteFormSubmitLabel(site.id);
 
       // Calculate elapsed time and ensure minimum 1.5s display
       const elapsed = Date.now() - startTime;
@@ -3226,6 +3318,8 @@
       return site;
     } catch (error) {
       hideUpdateModal();
+      const retryButton = $("#btn-retry-site");
+      if (retryButton) retryButton.hidden = false;
       showToast(error?.message || "Could not save site.");
     }
   }
@@ -3359,6 +3453,77 @@
     });
   }
 
+  async function removeSiteFromGallery(siteId) {
+    const site = MatiAdminStore.getSiteById(siteId);
+    if (!site) return false;
+
+    const confirmed = await showRemoveConfirmation(site.name);
+    if (!confirmed) return false;
+
+    try {
+      const result = await runSiteRemovalStatus(site.name, () =>
+        MatiAdminStore.deleteSite(siteId),
+      );
+      if (!result?.ok) {
+        showToast("Could not remove the heritage record from Supabase.");
+        return false;
+      }
+      renderHeritage();
+      void renderDashboard();
+      renderLocation();
+      window.MatiGalleryEmbed?.refresh?.();
+      return true;
+    } catch (error) {
+      showToast(error?.message || "Could not remove the heritage record.");
+      return false;
+    }
+  }
+
+  async function runSiteRemovalStatus(siteName, task) {
+    let modal = $("#site-removal-status-modal");
+    if (!modal) {
+      modal = document.createElement("div");
+      modal.id = "site-removal-status-modal";
+      modal.className = "admin-modal admin-site-removal-modal";
+      modal.innerHTML = `
+        <div class="admin-site-removal-modal__dialog" role="status" aria-live="polite">
+          <div class="admin-site-removal-modal__icon" data-removal-icon aria-hidden="true"></div>
+          <h3 class="admin-site-removal-modal__title" data-removal-title>Removing heritage</h3>
+          <p class="admin-site-removal-modal__name" data-removal-name></p>
+          <p class="admin-site-removal-modal__detail" data-removal-detail>Removing from Supabase...</p>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    const icon = modal.querySelector("[data-removal-icon]");
+    const title = modal.querySelector("[data-removal-title]");
+    const name = modal.querySelector("[data-removal-name]");
+    const detail = modal.querySelector("[data-removal-detail]");
+    icon.className = "admin-site-removal-modal__icon is-loading";
+    title.textContent = "Removing heritage";
+    name.textContent = siteName;
+    detail.textContent = "Removing from Supabase...";
+    modal.hidden = false;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+
+    try {
+      const result = await task();
+      if (!result?.ok) return result;
+      icon.className = "admin-site-removal-modal__icon is-success";
+      title.textContent = "Removal complete";
+      detail.textContent = "The heritage record was removed successfully.";
+      await new Promise((resolve) => setTimeout(resolve, 700));
+      return result;
+    } finally {
+      modal.hidden = true;
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+      document.body.style.overflowY = "auto";
+    }
+  }
+
   async function uploadSiteModelFile({
     siteId,
     site,
@@ -3382,13 +3547,23 @@
         setProgress(
           Math.round(pct * 0.85),
           `Uploading 3D model: ${file.name}`,
-          { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: actualLoaded }
+          {
+            fileName: fileMeta.fileName,
+            totalBytes: fileMeta.totalBytes,
+            startedAt: fileMeta.startedAt,
+            loadedBytes: actualLoaded,
+          },
         );
       },
       signal,
     });
 
-    setProgress(100, `Upload complete`, { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: file.size });
+    setProgress(100, `Upload complete`, {
+      fileName: fileMeta.fileName,
+      totalBytes: fileMeta.totalBytes,
+      startedAt: fileMeta.startedAt,
+      loadedBytes: file.size,
+    });
     return modelSrc;
   }
 
@@ -3482,18 +3657,29 @@
                   type: "map",
                   siteId,
                   onProgress: (pct, loadedBytes) => {
-                    const actualLoaded = loadedBytes || Math.round((pct / 100) * files[0].size);
+                    const actualLoaded =
+                      loadedBytes || Math.round((pct / 100) * files[0].size);
                     setUploadProgress(
                       Math.round(pct * 0.85),
                       `Uploading map: ${files[0].name}`,
-                      { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: actualLoaded }
+                      {
+                        fileName: fileMeta.fileName,
+                        totalBytes: fileMeta.totalBytes,
+                        startedAt: fileMeta.startedAt,
+                        loadedBytes: actualLoaded,
+                      },
                     );
                   },
                   signal: activeUploadController.signal,
                 },
               );
               if (activeUploadController.signal.aborted) return;
-              setUploadProgress(90, "Saving map to database…", { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: files[0].size });
+              setUploadProgress(90, "Saving map to database…", {
+                fileName: fileMeta.fileName,
+                totalBytes: fileMeta.totalBytes,
+                startedAt: fileMeta.startedAt,
+                loadedBytes: files[0].size,
+              });
               const savedSite = await MatiAdminStore.saveSite({
                 ...site,
                 cover,
@@ -3511,7 +3697,11 @@
                 totalBytes: files[0].size,
                 startedAt: Date.now(),
               };
-              setUploadProgress(5, `Uploading 3D model: ${files[0].name}`, fileMeta);
+              setUploadProgress(
+                5,
+                `Uploading 3D model: ${files[0].name}`,
+                fileMeta,
+              );
 
               const modelSrc = await uploadSiteModelFile({
                 siteId,
@@ -3522,7 +3712,12 @@
               });
 
               if (activeUploadController.signal.aborted) return;
-              setUploadProgress(90, "Saving 3D model to database…", { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: files[0].size });
+              setUploadProgress(90, "Saving 3D model to database…", {
+                fileName: fileMeta.fileName,
+                totalBytes: fileMeta.totalBytes,
+                startedAt: fileMeta.startedAt,
+                loadedBytes: files[0].size,
+              });
               const savedSite = await MatiAdminStore.saveSite({
                 ...site,
                 modelSrc,
@@ -3554,16 +3749,27 @@
                 type,
                 siteId,
                 onProgress: (pct, loadedBytes) => {
-                  const actualLoaded = loadedBytes || Math.round((pct / 100) * files[0].size);
+                  const actualLoaded =
+                    loadedBytes || Math.round((pct / 100) * files[0].size);
                   setUploadProgress(
                     Math.round(pct * 0.85),
                     `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
-                    { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: actualLoaded }
+                    {
+                      fileName: fileMeta.fileName,
+                      totalBytes: fileMeta.totalBytes,
+                      startedAt: fileMeta.startedAt,
+                      loadedBytes: actualLoaded,
+                    },
                   );
                 },
                 signal: activeUploadController.signal,
               });
-              setUploadProgress(90, "Saving media record…", { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: files[0].size });
+              setUploadProgress(90, "Saving media record…", {
+                fileName: fileMeta.fileName,
+                totalBytes: fileMeta.totalBytes,
+                startedAt: fileMeta.startedAt,
+                loadedBytes: files[0].size,
+              });
               if (activeUploadController.signal.aborted) return;
               const saved = await MatiAdminStore.saveMedia({
                 siteId,
@@ -3599,27 +3805,37 @@
               let lastSaved = null;
               let totalBytes = imageFiles.reduce((sum, f) => sum + f.size, 0);
               let uploadedBytes = 0;
-              
+
               for (const [i, file] of imageFiles.entries()) {
                 const fileMeta = {
-                  fileName: imageFiles.length > 1 ? `${file.name} (${i + 1}/${imageFiles.length})` : file.name,
+                  fileName:
+                    imageFiles.length > 1
+                      ? `${file.name} (${i + 1}/${imageFiles.length})`
+                      : file.name,
                   totalBytes: totalBytes,
                   startedAt: Date.now(),
                 };
-                
+
                 batch.startFile(i, file.name);
                 const key = `${siteId}/photos/${MatiAdminStore.slugId(file.name)}-${Date.now()}-${i}`;
                 const src = await MatiAdminUploads.put(key, file, {
                   type: "photo",
                   siteId,
                   onProgress: (pct, loadedBytes) => {
-                    const currentFileLoaded = loadedBytes || Math.round((pct / 100) * file.size);
-                    const totalUploadedSoFar = uploadedBytes + currentFileLoaded;
+                    const currentFileLoaded =
+                      loadedBytes || Math.round((pct / 100) * file.size);
+                    const totalUploadedSoFar =
+                      uploadedBytes + currentFileLoaded;
                     batch.onFileProgress(pct);
                     setUploadProgress(
                       Math.round(((i + pct / 100) / imageFiles.length) * 100),
                       `Uploading photograph ${i + 1} of ${imageFiles.length}: ${file.name}`,
-                      { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: totalUploadedSoFar }
+                      {
+                        fileName: fileMeta.fileName,
+                        totalBytes: fileMeta.totalBytes,
+                        startedAt: fileMeta.startedAt,
+                        loadedBytes: totalUploadedSoFar,
+                      },
                     );
                   },
                   signal: activeUploadController.signal,
@@ -3628,7 +3844,12 @@
                 setUploadProgress(
                   Math.round(((i + 0.92) / imageFiles.length) * 100),
                   `Saving photograph ${i + 1} of ${imageFiles.length}…`,
-                  { fileName: fileMeta.fileName, totalBytes: fileMeta.totalBytes, startedAt: fileMeta.startedAt, loadedBytes: uploadedBytes }
+                  {
+                    fileName: fileMeta.fileName,
+                    totalBytes: fileMeta.totalBytes,
+                    startedAt: fileMeta.startedAt,
+                    loadedBytes: uploadedBytes,
+                  },
                 );
                 if (activeUploadController.signal.aborted) return;
                 const saved = await MatiAdminStore.saveMedia({
@@ -5018,6 +5239,10 @@
 
     $("#site-form")?.addEventListener("submit", saveSiteForm);
 
+    $("#btn-retry-site")?.addEventListener("click", () => {
+      $("#site-form")?.requestSubmit();
+    });
+
     $("#media-form")?.addEventListener("submit", saveMediaForm);
 
     $("#btn-delete-site")?.addEventListener("click", async () => {
@@ -5029,10 +5254,14 @@
       if (!confirmed) return;
 
       try {
-        await runDeleteProgress(() => MatiAdminStore.deleteSite(id), {
-          noun: "site",
-          count: 1,
-        });
+        const result = await runSiteRemovalStatus(
+          site?.name || "Heritage site",
+          () => MatiAdminStore.deleteSite(id),
+        );
+        if (!result?.ok) {
+          showToast("Could not remove the heritage record from Supabase.");
+          return;
+        }
         closeAllModals();
         renderHeritage();
         void renderDashboard();
@@ -5246,11 +5475,6 @@
         try {
           await withUploadProgress(
             async ({ setProgress, hideProgress }) => {
-              if (activeUploadController) {
-                activeUploadController.abort();
-              }
-              activeUploadController = new AbortController();
-
               if (isMap) {
                 setProgress(5, `Uploading site map: ${file.name}`);
                 const cover = await MatiAdminUploads.put(
@@ -5487,6 +5711,9 @@
       void renderDashboard();
       renderHeritage();
       if (siteId) renderSiteMediaList(siteId);
+    },
+    removeSite(siteId) {
+      return removeSiteFromGallery(siteId);
     },
   };
 

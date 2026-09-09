@@ -191,7 +191,7 @@
     if (ids.has(mediaId)) ids.delete(mediaId);
     else ids.add(mediaId);
     state.selectedMediaIds = [...ids];
-    render();
+    // No render() call - use CSS class toggling instead to prevent blinking
   }
 
   function renderGalleryMediaSelectActions(folder) {
@@ -213,16 +213,8 @@
   }
 
   function renderGalleryMediaManageBtn(site, folder) {
-    if (!GALLERY_EMBED || typeof MatiAdminStore === "undefined") return "";
-    const mediaType = folderToMediaType(folder);
-    if (!mediaType) return "";
-
-    return `
-      <button
-        type="button"
-        class="admin-btn admin-btn--primary admin-btn--sm gal-media-manage-btn"
-        data-manage-media="${mediaType}"
-      >${galleryMediaActionLabel(site.id, folder)}</button>`;
+    // Media management is now in the + New dropdown
+    return "";
   }
 
   function renderGalleryMediaToolbar(site, folder, countHtml) {
@@ -254,15 +246,15 @@
 
   function gallerySiteActionLabel(siteId) {
     if (state.siteEditing && state.siteId === siteId) {
-      return isSiteDraftDirty() ? "Update" : "Manage";
+      return isSiteDraftDirty() ? "Update" : "Edit";
     }
     if (
       typeof MatiAdminStore !== "undefined" &&
-      MatiAdminStore.siteHasAdminEdits(siteId)
+      MatiAdminStore.isSiteAddedByUser?.(siteId)
     ) {
       return "Update";
     }
-    return "Manage";
+    return "Edit";
   }
 
   function escapeHtml(str) {
@@ -531,17 +523,121 @@
     if (GALLERY_EMBED) {
       const addCategory =
         state.category === "intangible" ? "intangible" : "natural";
+
+      // Get allowed media types from scope if available
+      const mediaTypes =
+        typeof window.getScopeMediaTypes === "function"
+          ? window.getScopeMediaTypes(state.category)
+          : ["photo", "video", "audio"];
+
+      // Media type icons
+      const mediaIcons = {
+        photo: `<svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>`,
+        video: `<svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>`,
+        audio: `<svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>`,
+        link: `<svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>`,
+      };
+
+      const mediaLabels = {
+        photo: "Photographs",
+        video: "Videos",
+        audio: "Audio Recordings",
+        link: "Links",
+      };
+
+      // Generate dropdown items based on current view
+      let dropdownItems = "";
+
+      // Always show heritage add option
       const addLabel =
         addCategory === "intangible"
           ? "Add intangible cultural heritage"
           : "Add natural heritage";
+      dropdownItems = `
+        <button type="button" class="gal-dropdown-item" data-admin-add-site-category="${addCategory}">
+          <svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span class="gal-dropdown-item__label">${addLabel}</span>
+        </button>`;
+
+      // Add separator and media types when viewing a site
+      if (state.step === "site" && state.siteId) {
+        if (state.siteEditing) {
+          // Show Update and Cancel when in edit mode
+          dropdownItems += `
+            <div class="gal-dropdown-separator" role="separator"></div>
+            <button type="button" class="gal-dropdown-item" data-update-site="true">
+              <svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="gal-dropdown-item__label">Update</span>
+            </button>
+            <button type="button" class="gal-dropdown-item" data-cancel-edit="true">
+              <svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span class="gal-dropdown-item__label">Cancel</span>
+            </button>
+            <div class="gal-dropdown-separator" role="separator"></div>`;
+        } else {
+          // Show Edit Site when not in edit mode
+          dropdownItems += `
+            <div class="gal-dropdown-separator" role="separator"></div>
+            <button type="button" class="gal-dropdown-item" data-edit-site="true">
+              <svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <span class="gal-dropdown-item__label">Edit Site</span>
+            </button>
+            <div class="gal-dropdown-separator" role="separator"></div>`;
+        }
+
+        mediaTypes.forEach((type) => {
+          // Skip link type
+          if (type === "link") return;
+
+          if (mediaIcons[type] && mediaLabels[type]) {
+            dropdownItems += `
+              <button type="button" class="gal-dropdown-item" data-add-media-type="${type}">
+                ${mediaIcons[type]}
+                <span class="gal-dropdown-item__label">${mediaLabels[type]}</span>
+              </button>`;
+          }
+        });
+
+        if (state.siteId) {
+          dropdownItems += `
+            <div class="gal-dropdown-separator" role="separator"></div>
+            <button type="button" class="gal-dropdown-item gal-dropdown-item--danger" data-remove-site="true">
+              <svg class="gal-dropdown-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12m-9 0V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v12a1 1 0 01-1 1H7a1 1 0 01-1-1V7m3 4v6m4-6v6" />
+              </svg>
+              <span class="gal-dropdown-item__label">Remove</span>
+            </button>`;
+        }
+      }
+
       return `
         <div class="gal-category-nav gal-category-nav--admin">
           <button type="button" class="gal-category-back" data-crumb="home">← Choose a Heritage Collection</button>
-          <button type="button" class="admin-btn admin-btn--primary" data-admin-add-site-category="${addCategory}">
-            <span aria-hidden="true">+</span>
-            ${addLabel}
-          </button>
+          <div class="gal-dropdown-wrapper">
+            <button type="button" class="admin-btn admin-btn--primary gal-dropdown-trigger" data-dropdown-toggle="add-heritage">
+              <span aria-hidden="true">+</span>
+              New
+            </button>
+            <div class="gal-dropdown-menu" id="add-heritage-dropdown">
+              ${dropdownItems}
+            </div>
+          </div>
         </div>`;
     }
 
@@ -612,7 +708,157 @@
           setState({ step: "site", folder: null });
       });
     });
+
+    // Dropdown toggle functionality
+    container.querySelectorAll("[data-dropdown-toggle]").forEach((trigger) => {
+      const dropdownId = trigger.dataset.dropdownToggle;
+      const dropdown = container.querySelector(`#${dropdownId}-dropdown`);
+
+      if (!dropdown) {
+        console.warn(`Dropdown not found: #${dropdownId}-dropdown`);
+        return;
+      }
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const isVisible = dropdown.classList.contains("is-visible");
+        // Close all other dropdowns first
+        document
+          .querySelectorAll(".gal-dropdown-menu")
+          .forEach((d) => d.classList.remove("is-visible"));
+        // Toggle current dropdown
+        if (!isVisible) {
+          dropdown.classList.add("is-visible");
+        }
+        console.log(
+          "Dropdown toggled:",
+          dropdown.classList.contains("is-visible"),
+        );
+      });
+
+      // Handle dropdown item clicks
+      dropdown.querySelectorAll(".gal-dropdown-item").forEach((item) => {
+        item.addEventListener("click", async () => {
+          dropdown.classList.remove("is-visible");
+
+          // Handle update site selection
+          if (item.dataset.updateSite && state.siteId && state.siteEditing) {
+            console.log("Update site:", state.siteId);
+            const site = resolveSiteById(state.siteId);
+            if (!site) return;
+
+            // Sync draft from form and save
+            const container = document.querySelector("#galPanel");
+            if (container) {
+              syncSiteDraftFromForm(container);
+              const name = state.siteDraft?.name?.trim();
+              if (!name) return;
+
+              void MatiAdminStore.saveSite({
+                ...site,
+                heritageCategory: state.siteDraft.heritageCategory.trim(),
+                name,
+                description: state.siteDraft.description.trim(),
+              }).then((saved) => {
+                clearSiteEditState();
+                render();
+                if (
+                  saved?._sync &&
+                  !saved._sync.ok &&
+                  saved._sync.reason !== "not_configured"
+                ) {
+                  window.MatiAdminUi?.showToast?.(
+                    "Could not save the site to Supabase.",
+                  );
+                }
+              });
+            }
+            return;
+          }
+
+          // Handle cancel edit selection
+          if (item.dataset.cancelEdit) {
+            console.log("Cancel edit");
+            clearSiteEditState();
+            render();
+            return;
+          }
+
+          // Handle edit site selection
+          if (item.dataset.editSite && state.siteId) {
+            console.log("Edit site:", state.siteId);
+            // Trigger edit mode for the current site
+            state.siteEditing = true;
+            const site = resolveSiteById(state.siteId);
+            if (site) {
+              state.siteDraft = {
+                heritageCategory: site.heritageCategory || "",
+                name: site.name || "",
+                description: site.description || "",
+              };
+              render();
+            }
+            return;
+          }
+
+          if (item.dataset.removeSite && state.siteId) {
+            const removed = await window.MatiAdminUi?.removeSite?.(
+              state.siteId,
+            );
+            if (removed) {
+              state.siteId = null;
+              state.step = "sites";
+              state.siteEditing = false;
+              render();
+            }
+            return;
+          }
+
+          // Handle media type selection
+          if (item.dataset.addMediaType && state.siteId) {
+            const mediaType = item.dataset.addMediaType;
+            console.log(
+              "Add media type:",
+              mediaType,
+              "for site:",
+              state.siteId,
+            );
+            // Trigger the existing media modal with the selected type
+            window.MatiAdminUi?.openGalleryMediaModal?.(
+              null,
+              state.siteId,
+              mediaType,
+            );
+          }
+        });
+      });
+    });
   }
+
+  // Initialize document-level dropdown event listeners once
+  (function initGlobalDropdownListeners() {
+    if (window.galDropdownListenersInitialized) return;
+    window.galDropdownListenersInitialized = true;
+
+    // Click outside to close dropdowns
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".gal-dropdown-wrapper")) {
+        document
+          .querySelectorAll(".gal-dropdown-menu")
+          .forEach((d) => d.classList.remove("is-visible"));
+      }
+    });
+
+    // Close dropdowns on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document
+          .querySelectorAll(".gal-dropdown-menu")
+          .forEach((d) => d.classList.remove("is-visible"));
+      }
+    });
+  })();
 
   function renderCategoryView() {
     function categoryCard(key, desc, image, reverse, href) {
@@ -818,15 +1064,8 @@
   }
 
   function renderSiteAdminActions(site) {
-    if (!GALLERY_EMBED || typeof MatiAdminStore === "undefined") return "";
-    return `
-      <div class="gal-site-admin-actions">
-        <button
-          type="button"
-          class="admin-btn admin-btn--primary admin-btn--sm"
-          id="gal-site-manage-btn"
-        >${gallerySiteActionLabel(site.id)}</button>
-      </div>`;
+    // All site actions are now in the + New dropdown
+    return "";
   }
 
   function renderSiteView() {
@@ -934,11 +1173,11 @@
       GALLERY_EMBED && !inSelectMode
         ? `<button type="button" class="gal-media-edit-btn" data-edit-media="${escapeHtml(item.id)}" aria-label="Edit ${escapeHtml(item.title)}">Edit</button>`
         : "";
-    const adminSelectCheck = inSelectMode
-      ? `<label class="gal-media-select-check" aria-label="Select ${escapeHtml(item.title)}"><input type="checkbox" class="gal-media-select-input" data-media-select="${escapeHtml(item.id)}"${
-          itemSelected ? " checked" : ""
-        } /><span class="gal-media-select-mark" aria-hidden="true"></span></label>`
-      : "";
+    // Always render checkboxes, hide via CSS when not in select mode
+    const adminSelectCheck =
+      GALLERY_EMBED && folderSupportsBulkSelect(state.folder)
+        ? `<label class="gal-media-select-check${inSelectMode ? "" : " gal-media-select-check--hidden"}" aria-label="Select ${escapeHtml(item.title)}"><div class="gal-media-select-input" data-media-select="${escapeHtml(item.id)}"${itemSelected ? " data-checked" : ""}></div><span class="gal-media-select-mark" aria-hidden="true"></span></label>`
+        : "";
 
     if (item.type === "photo") {
       const photoSrc = escapeHtml(mediaUrl(item.src));
@@ -1543,16 +1782,30 @@
     });
 
     container.querySelectorAll(".gal-media-item").forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (event) => {
         if (mediaReorderMoved) return;
         if (
           GALLERY_EMBED &&
           state.mediaSelectMode &&
           folderSupportsBulkSelect(state.folder)
         ) {
+          event.stopPropagation();
           const wrap = btn.closest("[data-media-id]");
           const mediaId = wrap?.dataset.mediaId;
-          if (mediaId) toggleMediaSelection(mediaId);
+          if (mediaId) {
+            toggleMediaSelection(mediaId);
+            // Toggle checkbox state visually without re-rendering
+            const checkbox = wrap.querySelector(
+              `[data-media-select="${mediaId}"]`,
+            );
+            if (checkbox) {
+              if (checkbox.hasAttribute("data-checked")) {
+                checkbox.removeAttribute("data-checked");
+              } else {
+                checkbox.setAttribute("data-checked", "");
+              }
+            }
+          }
           return;
         }
         openMediaItem(parseInt(btn.dataset.index, 10));
@@ -1701,7 +1954,21 @@
       ?.addEventListener("click", () => {
         state.mediaSelectMode = true;
         state.selectedMediaIds = [];
-        render();
+        // Toggle visibility via CSS instead of re-rendering to prevent blinking
+        container
+          .querySelectorAll(".gal-media-select-check--hidden")
+          .forEach((el) => {
+            el.classList.remove("gal-media-select-check--hidden");
+          });
+        container.querySelectorAll(".gal-media-edit-btn").forEach((el) => {
+          el.style.display = "none";
+        });
+        container
+          .querySelector("[data-media-select-cancel]")
+          ?.classList.remove("hidden");
+        container
+          .querySelector("[data-media-select-toggle]")
+          ?.classList.add("hidden");
       });
 
     container
@@ -1738,7 +2005,11 @@
           const deleted = await (window.MatiAdminUi?.runDeleteProgress
             ? window.MatiAdminUi.runDeleteProgress(
                 () => MatiAdminStore.deleteMediaMany(ids),
-                { noun, count: ids.length },
+                {
+                  noun,
+                  count: ids.length,
+                  label: ids.length === 1 ? noun : `${ids.length} ${noun}`,
+                },
               )
             : MatiAdminStore.deleteMediaMany(ids));
           clearMediaSelection();
@@ -1761,20 +2032,8 @@
         }
       });
 
-    container.querySelectorAll("[data-media-select]").forEach((input) => {
-      input.addEventListener("click", (event) => {
-        event.stopPropagation();
-      });
-      input.addEventListener("change", () => {
-        const mediaId = input.dataset.mediaSelect;
-        if (!mediaId) return;
-        const ids = new Set(state.selectedMediaIds);
-        if (input.checked) ids.add(mediaId);
-        else ids.delete(mediaId);
-        state.selectedMediaIds = [...ids];
-        render();
-      });
-    });
+    // Checkbox click handling removed - handled by media item click instead
+    // to prevent duplicate event handling and blinking
   }
 
   function openMediaItem(index) {
