@@ -5,7 +5,7 @@
   publish = "Front End"
 
 [build.processing.html]
-  pretty_urls = false
+  pretty_urls = true
 
 # Short URLs on the deployed site root
 [[redirects]]

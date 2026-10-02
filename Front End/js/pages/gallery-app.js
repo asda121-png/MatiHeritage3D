@@ -905,14 +905,14 @@
             ${categoryCard(
               "intangible",
               "Festivals, music, and creative works passed down through generations.",
-              "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
+              "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
               false,
               GALLERY_EMBED ? null : "galleryintangibleculturalheritage.html",
             )}
             ${categoryCard(
               "natural",
               "Islands, coastlines, and landscapes that define Mati's natural legacy.",
-              "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+              "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
               true,
               GALLERY_EMBED ? null : "gallerynaturalheritage.html",
             )}
@@ -2312,7 +2312,7 @@
 
   async function loadHeaderAndFooter() {
     try {
-      const headerResponse = await fetch("header.html");
+      const headerResponse = await fetch("components/header.html");
       const headerDoc = new DOMParser().parseFromString(
         await headerResponse.text(),
         "text/html",
@@ -2368,7 +2368,7 @@
         return;
       }
 
-      const footerResponse = await fetch("footer.html");
+      const footerResponse = await fetch("components/footer.html");
       const footerDoc = new DOMParser().parseFromString(
         await footerResponse.text(),
         "text/html",

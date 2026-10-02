@@ -571,7 +571,7 @@ const MatiSupabaseApi = (() => {
   if (/admin\.html/i.test(location.pathname)) return;
 
   const script = document.createElement("script");
-  script.src = "visitor-analytics.js";
+  script.src = "js/utils/visitor-analytics.js";
   script.defer = true;
   document.head.appendChild(script);
 })();

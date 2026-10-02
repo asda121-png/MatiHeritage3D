@@ -6,7 +6,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Provincial Capitol of Davao Oriental",
     "type": "photo",
     "title": "Provincial Capitol of Davao Oriental — Capitol White House1",
-    "src": "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+    "src": "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -17,7 +17,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Provincial Capitol of Davao Oriental",
     "type": "photo",
     "title": "Provincial Capitol of Davao Oriental — Capitol White House.1",
-    "src": "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+    "src": "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -28,7 +28,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Provincial Capitol of Davao Oriental",
     "type": "photo",
     "title": "Provincial Capitol of Davao Oriental — Capitol White House",
-    "src": "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+    "src": "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -39,7 +39,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "map",
     "title": "Centennial Clock and Pathway of Leaders — map pathwayofleaders",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Map/map_pathwayofleaders.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -50,7 +50,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — 1000067853",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -61,7 +61,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — 1000068051",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -72,7 +72,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J1728x1296 00192",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/J1728x1296-00192.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/J1728x1296-00192.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -83,7 +83,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — 2008 12 08 22 44",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/2008-12-08 22-44.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/2008-12-08 22-44.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -94,7 +94,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J1000x522 00297",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1000x522-00297.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1000x522-00297.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -105,7 +105,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J1000x562 00298",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1000x562-00298.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1000x562-00298.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -116,7 +116,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J1200x675 00299",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1200x675-00299.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1200x675-00299.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -127,7 +127,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J1728x1296 00192",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1728x1296-00192.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J1728x1296-00192.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -138,7 +138,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J2000x1333 00244",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J2000x1333-00244.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J2000x1333-00244.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -149,7 +149,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J6000x4000 00290",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00290.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00290.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -160,7 +160,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Centennial Clock and Pathway of Leaders",
     "type": "photo",
     "title": "Centennial Clock and Pathway of Leaders — J6000x4000 00291",
-    "src": "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00291.jpg",
+    "src": "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/Old/J6000x4000-00291.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -171,7 +171,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "City Hall",
     "type": "photo",
     "title": "City Hall — 2008 10 07 08 37",
-    "src": "data/Built Heritage/City Hall/Photographs/Old/2008-10-07 08-37.jpg",
+    "src": "assets/data/Built Heritage/City Hall/Photographs/Old/2008-10-07 08-37.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -182,7 +182,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "City Hall",
     "type": "photo",
     "title": "City Hall — City Hall",
-    "src": "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
+    "src": "assets/data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -193,7 +193,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "City Hall",
     "type": "photo",
     "title": "City Hall — IMG 2282 COY",
-    "src": "data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg",
+    "src": "assets/data/Built Heritage/City Hall/Photographs/Old/IMG_2282 COY.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -204,7 +204,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00474",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -215,7 +215,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00489",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00489.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00489.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -226,7 +226,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00500",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00500.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00500.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -237,7 +237,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00504",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00504.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00504.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -248,7 +248,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00505",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00505.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00505.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -259,7 +259,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00525",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00525.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00525.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -270,7 +270,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00529",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00529.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00529.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -281,7 +281,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00531",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00531.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00531.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -292,7 +292,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J2048x1536 00532",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00532.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00532.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -303,7 +303,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — Central Gabaldon",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -314,7 +314,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Gabaldon Structure of RRMCES-1",
     "type": "photo",
     "title": "Gabaldon Structure of RRMCES-1 — J960x720 00477",
-    "src": "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/J960x720-00477.jpg",
+    "src": "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/J960x720-00477.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -325,7 +325,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Menzi Visitors Information Center",
     "type": "map",
     "title": "Menzi Visitors Information Center — map mvic",
-    "src": "data/Built Heritage/Menzi Visitors Information Center/Map/map_mvic.jpg",
+    "src": "assets/data/Built Heritage/Menzi Visitors Information Center/Map/map_mvic.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -336,7 +336,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Menzi Visitors Information Center",
     "type": "photo",
     "title": "Menzi Visitors Information Center — J6000x4000 00289",
-    "src": "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
+    "src": "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -347,7 +347,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Menzi Visitors Information Center",
     "type": "photo",
     "title": "Menzi Visitors Information Center — J6000x4000 00292",
-    "src": "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00292.jpg",
+    "src": "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00292.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -358,7 +358,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Menzi Visitors Information Center",
     "type": "photo",
     "title": "Menzi Visitors Information Center — J6000x4000 00293",
-    "src": "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+    "src": "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -369,7 +369,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Menzi Visitors Information Center",
     "type": "photo",
     "title": "Menzi Visitors Information Center — 2016 05 18 07 50",
-    "src": "data/Built Heritage/Menzi Visitors Information Center/Photographs/Old/2016-05-18 07-50.jpg",
+    "src": "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/Old/2016-05-18 07-50.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -380,7 +380,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "MFGR Park and Baywalk",
     "type": "map",
     "title": "MFGR Park and Baywalk — map baywalk",
-    "src": "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+    "src": "assets/data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -391,7 +391,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017443 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017443-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017443-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -402,7 +402,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017445 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017445-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017445-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -413,7 +413,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017447 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017447-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017447-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -424,7 +424,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017448 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017448-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017448-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -435,7 +435,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017455 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017455-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017455-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -446,7 +446,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017456 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017456-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017456-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -457,7 +457,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017457 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017457-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017457-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -468,7 +468,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017458 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017458-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017458-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -479,7 +479,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017460 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017460-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017460-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -490,7 +490,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017462 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017462-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017462-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -501,7 +501,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 1000017463 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/1000017463-01.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/1000017463-01.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -512,7 +512,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 2023 09 12 11 22 01",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22-01.jpg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22-01.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -523,7 +523,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 2023 09 12 11 22",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -534,7 +534,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — 2023 09 12 11 23",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-23.jpg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-23.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -545,7 +545,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — received 810998714366344",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/received_810998714366344.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/received_810998714366344.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -556,7 +556,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Noventa Ancestral House",
     "type": "photo",
     "title": "Noventa Ancestral House — received 976616420095066",
-    "src": "data/Built Heritage/Noventa Ancestral House/Photographs/received_976616420095066.jpeg",
+    "src": "assets/data/Built Heritage/Noventa Ancestral House/Photographs/received_976616420095066.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -567,7 +567,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Provincial Capitol Old Mansion",
     "type": "photo",
     "title": "Provincial Capitol Old Mansion — old masion1",
-    "src": "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
+    "src": "assets/data/Built Heritage/Provincial Capitol Old Mansion/Photographs/New/old masion1.jpeg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -578,7 +578,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Provincial Capitol Old Mansion",
     "type": "photo",
     "title": "Provincial Capitol Old Mansion — Capitol Old Mansion",
-    "src": "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+    "src": "assets/data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -589,7 +589,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J1627x2328 00618",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1627x2328-00618.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1627x2328-00618.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -600,7 +600,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J1745x2432 00617",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -611,7 +611,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J1920x2740 00616",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1920x2740-00616.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1920x2740-00616.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -622,7 +622,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J2048x1536 00628",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00628.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00628.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -633,7 +633,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J2048x1536 00652",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00652.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -644,7 +644,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J2048x1536 00654",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -655,7 +655,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "OMPO sa Tampat sa Baguidan",
     "type": "photo",
     "title": "OMPO sa Tampat sa Baguidan — J2143x3040 00624",
-    "src": "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2143x3040-00624.jpg",
+    "src": "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2143x3040-00624.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -666,7 +666,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "map",
     "title": "Pylon Monument — map pylon",
-    "src": "data/Built Heritage/Pylon Monument/Map/map_pylon.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Map/map_pylon.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -677,7 +677,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — 1000068055",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -688,7 +688,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — 2020 05 07 19 20",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/New/2020-05-07 19-20.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/New/2020-05-07 19-20.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -699,7 +699,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — J6000x4000 00255",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -710,7 +710,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — J1600x1200 00287",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/Old/J1600x1200-00287.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/Old/J1600x1200-00287.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -721,7 +721,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — J380x566 00301",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/Old/J380x566-00301.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/Old/J380x566-00301.jpg",
     "caption": "",
     "credit": "",
     "year": ""
@@ -732,7 +732,7 @@ const BUILT_HERITAGE_MEDIA = [
     "siteName": "Pylon Monument",
     "type": "photo",
     "title": "Pylon Monument — Pylon",
-    "src": "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+    "src": "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
     "caption": "",
     "credit": "",
     "year": ""

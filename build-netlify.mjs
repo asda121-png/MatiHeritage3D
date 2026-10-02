@@ -1,6 +1,4 @@
-/**
- * Netlify build: compile Tailwind CSS and copy Back End browser scripts
- */
+/** Netlify build: compile Tailwind CSS for the frontend. */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,24 +24,3 @@ try {
 } catch (error) {
   console.error("Error building Tailwind CSS:", error.message);
 }
-
-// Copy Back End browser scripts
-const backendSrc = path.join(root, "Back End");
-const backendDest = path.join(root, "Front End", "_backend");
-
-const files = [
-  "supabase-config.js",
-  "supabase-client.js",
-  "supabase-api.js",
-  "supabase-auth.js",
-];
-
-fs.mkdirSync(backendDest, { recursive: true });
-
-for (const file of files) {
-  fs.copyFileSync(path.join(backendSrc, file), path.join(backendDest, file));
-}
-
-console.log(
-  `Netlify build: copied ${files.length} backend scripts to Front End/_backend/`,
-);

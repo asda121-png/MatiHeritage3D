@@ -80,7 +80,7 @@
               id="login-pylon-model"
               class="auth-portal-visual__model"
               src="https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb"
-              poster="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+              poster="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
               alt="Pylon Monument 3D model"
               auto-rotate
               rotation-per-second="24deg"
@@ -104,7 +104,7 @@
             <div class="auth-portal-visual__brand">
               <img
                 class="auth-portal-visual__seal"
-                src="logo/Flag_of_Mati,_Davao_Oriental.png"
+                src="assets/logos/Flag_of_Mati,_Davao_Oriental.png"
                 alt="City of Mati seal"
                 width="68"
                 height="68"
@@ -118,7 +118,7 @@
               </div>
               <img
                 class="auth-portal-visual__tourism"
-                src="logo/City of Mati Tourism and Promotions Office.png"
+                src="assets/logos/City of Mati Tourism and Promotions Office.png"
                 alt="City Tourism and Promotions Office"
                 width="86"
                 height="48"
@@ -153,7 +153,7 @@
             <header class="auth-portal-header">
               <div class="auth-portal-logo">
                 <img
-                  src="logo/MatiHeritage logo.png"
+                  src="assets/logos/MatiHeritage logo.png"
                   alt="Mati Heritage 3D"
                   class="auth-portal-logo__image"
                   style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
@@ -336,16 +336,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
-    <script src="heritage-pylon-model.js"></script>
-    <script src="model-viewer-loading.js"></script>
+    <script src="js/utils/heritage/heritage-pylon-model.js"></script>
+    <script src="js/utils/model-viewer-loading.js"></script>
     <script src="_backend/supabase-client.js"></script>
-    <script src="auth-password-hash.js"></script>
+    <script src="js/utils/auth-password-hash.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="auth.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="admin-auth.js"></script>
-    <script src="auth-oauth.js"></script>
-    <script src="auth-ui.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/admin-auth.js"></script>
+    <script src="js/utils/auth-oauth.js"></script>
+    <script src="js/utils/auth-ui.js"></script>
     <script>
       MatiAuthUI.bindPasswordToggle(
         "login-password",

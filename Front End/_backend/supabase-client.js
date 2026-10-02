@@ -11,10 +11,10 @@ const MatiSupabase = (() => {
     const cfg = config();
     return Boolean(
       cfg?.enabled &&
-        cfg?.url &&
-        cfg?.url !== "https://YOUR_PROJECT_REF.supabase.co" &&
-        cfg?.anonKey &&
-        cfg?.anonKey !== "YOUR_ANON_KEY",
+      cfg?.url &&
+      cfg?.url !== "https://YOUR_PROJECT_REF.supabase.co" &&
+      cfg?.anonKey &&
+      cfg?.anonKey !== "YOUR_ANON_KEY",
     );
   }
 
@@ -48,7 +48,7 @@ const MatiSupabase = (() => {
       return {
         ok: false,
         message:
-          "Supabase is not configured. Edit Back End/supabase-config.js with your project keys.",
+          "Supabase is not configured. Edit Front End/_backend/supabase-config.js with your project keys.",
       };
     }
 
@@ -65,7 +65,7 @@ const MatiSupabase = (() => {
       const msg = error.message || "Unknown Supabase error.";
       const needsSchema =
         /heritage_sites/i.test(msg) &&
-        (/does not exist|schema cache|PGRST/i.test(msg));
+        /does not exist|schema cache|PGRST/i.test(msg);
 
       return {
         ok: false,

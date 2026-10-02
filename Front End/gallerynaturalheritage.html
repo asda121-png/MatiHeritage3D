@@ -90,14 +90,14 @@
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="gallery-data.js"></script>
-    <script src="heritage-data.js"></script>
-    <script src="gallery-app.js"></script>
-    <script src="gallery-showcase.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="js/pages/gallery-data.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
+    <script src="js/pages/gallery-app.js"></script>
+    <script src="js/pages/gallery-showcase.js"></script>
 
     <script>
-      fetch("header.html")
+      fetch("components/header.html")
         .then((res) => res.text())
         .then(async (data) => {
           const doc = new DOMParser().parseFromString(data, "text/html");
@@ -132,7 +132,7 @@
         .catch((err) => console.error("Error loading header:", err));
 
       // Load footer
-      fetch("footer.html")
+      fetch("components/footer.html")
         .then((res) => res.text())
         .then((data) => {
           const doc = new DOMParser().parseFromString(data, "text/html");

@@ -829,7 +829,7 @@
       }
 
       .polaroid__tile {
-        background-image: url("data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
+        background-image: url("assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
         background-size: 300% 300%;
         border-radius: 1px;
       }
@@ -2005,7 +2005,7 @@
                 <span class="polaroid__tape"></span>
                 <img
                   class="polaroid__photo"
-                  src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                  src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
                   alt=""
                 />
               </div>
@@ -2215,30 +2215,30 @@
 
     <audio
       id="bg-music"
-      src="game bgmusic/slidepuzzle.mp3"
+      src="assets/bgmusic/slidepuzzle.mp3"
       loop
       preload="auto"
       autoplay
     ></audio>
 
-    <script src="visitor-shell.js"></script>
+    <script src="js/visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
-    <script src="visitor-auth.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="heritage-map-sites.js"></script>
-    <script src="admin-heritage-base.js"></script>
-    <script src="gallery-data.js"></script>
-    <script src="heritage-data.js"></script>
-    <script src="heritage-game-content.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/pages/admin/admin-heritage-base.js"></script>
+    <script src="js/pages/gallery-data.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
+    <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="auth.js"></script>
-    <script src="game-auth-gate.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="game-tv-transition.js"></script>
-    <script src="game-exit-guard.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/games/game-tv-transition.js"></script>
+    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "slidepuzzle.html" });
       if (typeof window.initTvExpandReceive === "function") {
@@ -2269,84 +2269,84 @@
         {
           name: "Pylon Monument",
           category: "Built Heritage",
-          src: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          src: "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           description:
             'Mati\'s "Point Zero" landmark — a 30-foot tower with a glass sphere and steel halo, redesigned in 2019 with koi ponds and a waterfall. A symbol of faith and resilience for the people of Mati.',
         },
         {
           name: "Centennial Clock & Pathway of Leaders",
           category: "Built Heritage",
-          src: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+          src: "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
           description:
             "A civic landmark in Mati featuring a centennial clock tower, fountains, and the Pathway of Leaders — a landscaped walk lined with statues honoring the city's past and present leaders.",
         },
         {
           name: "Gabaldon Structure of RRMCES-1",
           category: "Built Heritage",
-          src: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
+          src: "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/New/J2048x1536-00474.jpg",
           description:
             "A two-story Gabaldon school building from 1920, blending American-era architecture with bahay kubo elements. Still an active school, it preserves over a century of Mati's educational heritage.",
         },
         {
           name: "Menzi Visitors Information Center",
           category: "Built Heritage",
-          src: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+          src: "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
           description:
             "A 1.5-hectare coastal park on Mayo Bay with white sand, crystal waters, and Narra trees. A Significant Cultural Property serving tourism and heritage preservation in Dahican.",
         },
         {
           name: "Provincial Capitol of Davao Oriental",
           category: "Built Heritage",
-          src: "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
+          src: "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
           description:
             "The historic seat of provincial government in Davao Oriental, recognized for its architectural heritage and its role as a center of governance in Eastern Mindanao.",
         },
         {
           name: "Taytay Daga (Sleeping Dinosaur)",
           category: "Natural Heritage",
-          src: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+          src: "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
           description:
             "A 579-hectare mountain in Badas whose silhouette resembles a dinosaur resting on Pujada Bay. Steeped in Mandaya legend and formally protected as a heritage landscape.",
         },
         {
           name: "Pujada Island",
           category: "Natural Heritage",
-          src: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+          src: "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
           description:
             "A 157-hectare sanctuary — the largest islet in Pujada Bay — with lush forests, white-sand coves, and coral reefs where the Pacific meets Davao Oriental's biodiversity.",
         },
         {
           name: "Oak Island",
           category: "Natural Heritage",
-          src: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+          src: "assets/data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
           description:
             "Also called Vanishing Island, this white-sand bar emerges at low tide in Pujada Bay. Famous for crystal turquoise waters and premier snorkeling in the City of Mati.",
         },
         {
           name: "Mamacao Tree",
           category: "Natural Heritage",
-          src: "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+          src: "assets/data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
           description:
             "A massive Dracontomelon dao tree in Bobon, planted during the American period and rooted in local legend. A living landmark that survived war and remains a symbol of Mati's heritage.",
         },
         {
           name: "Sambuokan Festival",
           category: "Intangible Cultural Heritage",
-          src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
+          src: "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
           description:
             "Mati's premier festival — from the Mandaya word for unity — celebrating Mandaya, Muslim-Kagan, and local communities through dance, trade fairs, and the Indak-Indak competition every October.",
         },
         {
           name: "Sambuokan Festival Dance",
           category: "Intangible Cultural Heritage",
-          src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2696.jpg",
+          src: "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2696.jpg",
           description:
             'Vibrant street-dancing at the Sambuokan Festival — tribal-inspired choreography that honors Mati\'s living traditions and the spirit of "Magsambuokan Kita" (Let us unite).',
         },
         {
           name: "OMPO sa Tampat sa Baguidan",
           category: "Built Heritage",
-          src: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
+          src: "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J1745x2432-00617.jpg",
           description:
             "An ancestral burial site of a pre-Hispanic Kalagan chieftain in Bobon. A Significant Cultural Property preserving Mati's pre-colonial history and indigenous identity.",
         },
@@ -2653,7 +2653,7 @@
         const bgMusic = getActiveBgm();
         if (!bgMusic) return;
 
-        const newSrc = "data/audio/slidepuzzle.mp3";
+        const newSrc = "assets/data/audio/slidepuzzle.mp3";
 
         updateNowPlayingTitle();
         const wasPlaying = musicStarted && !musicMuted && musicVol > 0;

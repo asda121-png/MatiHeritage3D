@@ -1647,8 +1647,8 @@ html[data-gallery-category] .gal-panel::after {
 }
 
 .gal-category-stage {
-  --gal-bg-intangible: url("../data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg");
-  --gal-bg-natural: url("../data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg");
+  --gal-bg-intangible: url("../assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg");
+  --gal-bg-natural: url("../assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg");
 }
 
 .gal-category-stage::before {
@@ -4510,6 +4510,9 @@ a.gal-category-card {
     min-width: 44px;
     min-height: 44px;
     padding: 0.55rem;
+    background: rgba(255, 255, 255, 0.35);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .gal-lightbox-nav.prev {
