@@ -89,7 +89,7 @@
         <div class="admin-sidebar__brand">
           <img
             class="admin-sidebar__logo"
-            src="data/GALLERY/logo.jpg"
+            src="assets/data/GALLERY/logo.jpg"
             alt="City of Mati seal"
             width="40"
             height="40"
@@ -141,23 +141,6 @@
             Built Heritage
           </button>
 
-          <button type="button" class="admin-nav__btn" data-view="location">
-            <svg
-              class="admin-nav__icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-              <line x1="8" y1="2" x2="8" y2="18" />
-              <line x1="16" y1="6" x2="16" y2="22" />
-            </svg>
-            Heritage Map
-          </button>
           <button type="button" class="admin-nav__btn" data-view="gallery">
             <svg
               class="admin-nav__icon"
@@ -173,20 +156,6 @@
               />
             </svg>
             Gallery
-          </button>
-
-          <button type="button" class="admin-nav__btn" data-view="leaderboard">
-            <svg
-              class="admin-nav__icon admin-nav__icon--trophy"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
-              />
-            </svg>
-            Leaderboard
           </button>
 
           <button type="button" class="admin-nav__btn" data-view="reports">
@@ -225,9 +194,9 @@
         </nav>
 
         <div class="admin-sidebar__foot">
-          <button type="button" id="admin-logout" class="admin-sidebar__logout">
+          <button type="button" id="admin-logout" class="admin-nav__btn">
             <svg
-              class="admin-sidebar__link-icon"
+              class="admin-nav__icon"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -254,7 +223,7 @@
               <div class="letterhead-container">
                 <div class="letterhead__logo letterhead__logo--left">
                   <img
-                    src="logo/Flag_of_Mati,_Davao_Oriental.png"
+                    src="assets/logos/Flag_of_Mati,_Davao_Oriental.png"
                     alt="Flag of Mati, Davao Oriental"
                     height="120"
                   />
@@ -269,7 +238,7 @@
                 </div>
                 <div class="letterhead__logo letterhead__logo--right">
                   <img
-                    src="logo/City of Mati Tourism and Promotions Office.png"
+                    src="assets/logos/City of Mati Tourism and Promotions Office.png"
                     alt="City of Mati Tourism and Promotions Office Logo"
                     height="120"
                   />
@@ -298,14 +267,6 @@
                 <div class="dashboard-welcome__header">
                   <div class="dashboard-welcome__main">
                     <h1 class="dashboard-welcome__title">Dashboard Overview</h1>
-                  </div>
-                  <div class="dashboard-welcome__greeting">
-                    <span class="greeting-date" id="greeting-date"
-                      >Friday, July 31, 2026</span
-                    >
-                    <span class="greeting-time" id="greeting-time"
-                      >11:27 AM</span
-                    >
                   </div>
                 </div>
               </div>
@@ -716,21 +677,13 @@
             <div class="admin-reports">
               <header class="admin-reports__head">
                 <div class="admin-reports__intro">
-                  <h2 class="admin-reports__title" id="report-title">
-                    Built Heritage
-                  </h2>
-                  <p class="admin-reports__desc" id="report-desc">
-                    Local Cultural Inventory records aligned with the official
-                    LCI document. Download Excel for a formatted report with
-                    summary counts and all properties.
+                  <h2 class="admin-reports__title">System Report</h2>
+                  <p class="admin-reports__desc">
+                    Overall system report showing total record counts for heritage
+                    collections, registered users, and leaderboard records.
                   </p>
                 </div>
                 <div class="admin-reports__actions">
-                  <span
-                    id="report-meta"
-                    class="admin-reports__count"
-                    aria-live="polite"
-                  ></span>
                   <button
                     type="button"
                     id="btn-export-csv"
@@ -749,76 +702,40 @@
                         d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14"
                       />
                     </svg>
-                    Download Excel
+                    Export CSV
                   </button>
                 </div>
               </header>
 
-              <div
-                class="admin-reports__summary"
-                id="report-summary"
-                aria-label="Inventory summary"
-              ></div>
-
-              <div class="admin-reports__tabs">
-                <div
-                  class="admin-tabs admin-tabs--reports"
-                  id="report-tabs"
-                  role="tablist"
-                  aria-label="Report categories"
-                >
-                  <button
-                    type="button"
-                    class="admin-tabs__btn is-active"
-                    data-report="built"
-                    role="tab"
-                  >
-                    Built Heritage
-                  </button>
-                  <button
-                    type="button"
-                    class="admin-tabs__btn"
-                    data-report="natural"
-                    role="tab"
-                  >
-                    Natural Heritage
-                  </button>
-                  <button
-                    type="button"
-                    class="admin-tabs__btn"
-                    data-report="intangible"
-                    role="tab"
-                  >
-                    Intangible Heritage
-                  </button>
-                  <button
-                    type="button"
-                    class="admin-tabs__btn"
-                    data-report="users"
-                    role="tab"
-                  >
-                    Registered Users
-                  </button>
-                  <button
-                    type="button"
-                    class="admin-tabs__btn"
-                    data-report="leaderboard"
-                    role="tab"
-                  >
-                    Leaderboard
-                  </button>
+              <div class="admin-reports__summary" id="report-summary" aria-label="Record counts summary">
+                <div class="report-stats-grid">
+                  <div class="report-stat-card">
+                    <div class="report-stat-card__label">Built Heritage</div>
+                    <div class="report-stat-card__value" id="stat-built">0</div>
+                  </div>
+                  <div class="report-stat-card">
+                    <div class="report-stat-card__label">Intangible Cultural Heritage</div>
+                    <div class="report-stat-card__value" id="stat-intangible">0</div>
+                  </div>
+                  <div class="report-stat-card">
+                    <div class="report-stat-card__label">Natural Heritage</div>
+                    <div class="report-stat-card__value" id="stat-natural">0</div>
+                  </div>
+                  <div class="report-stat-card">
+                    <div class="report-stat-card__label">Registered Users</div>
+                    <div class="report-stat-card__value" id="stat-users">0</div>
+                  </div>
+                  <div class="report-stat-card">
+                    <div class="report-stat-card__label">Leaderboard Records</div>
+                    <div class="report-stat-card__value" id="stat-leaderboard">0</div>
+                  </div>
                 </div>
               </div>
 
-              <div class="admin-reports__panel" id="report-panel">
-                <div class="admin-table-wrap admin-table-wrap--reports">
-                  <table
-                    class="admin-table admin-table--reports"
-                    id="report-table"
-                  >
-                    <thead id="report-thead"></thead>
-                    <tbody id="report-tbody"></tbody>
-                  </table>
+              <div class="admin-reports__chart">
+                <h3 class="admin-reports__chart-title">Record Counts Overview</h3>
+                <div class="admin-reports__chart-container">
+                  <canvas id="report-chart"></canvas>
                 </div>
               </div>
             </div>
@@ -826,12 +743,48 @@
 
           <!-- Settings -->
           <section id="view-settings" class="admin-view" hidden>
-            <div class="admin-panel admin-panel--flat">
-              <div class="admin-placeholder">
-                <p>
-                  Staff roles, RBAC via portal sign-in, and system preferences
-                  will be configured here.
-                </p>
+            <div class="admin-settings-page">
+              <div class="admin-settings__header">
+                <div>
+                  <p class="admin-settings__eyebrow">Workspace</p>
+                  <h1 class="admin-settings__title">Settings</h1>
+                  <p class="admin-settings__lead">
+                    Review administrator access and system connection details.
+                  </p>
+                </div>
+              </div>
+
+              <div class="admin-settings__grid">
+                <section
+                  class="admin-settings-card"
+                  aria-labelledby="admin-account-heading"
+                >
+                  <div class="admin-settings-card__heading">
+                    <div class="admin-settings-card__icon" aria-hidden="true">
+                      ◉
+                    </div>
+                    <div>
+                      <h2 id="admin-account-heading">Account</h2>
+                      <p>Your current administrator session.</p>
+                    </div>
+                  </div>
+                  <dl class="admin-settings__details">
+                    <div>
+                      <dt>Name</dt>
+                      <dd id="admin-settings-name">Administrator</dd>
+                    </div>
+                    <div>
+                      <dt>Email</dt>
+                      <dd id="admin-settings-email">Not available</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd id="admin-settings-role">Administrator</dd>
+                    </div>
+                  </dl>
+                </section>
+
+
               </div>
             </div>
           </section>
@@ -1309,21 +1262,6 @@
 
           <div class="admin-modal__actions">
             <button
-              type="button"
-              class="admin-btn admin-btn--ghost"
-              data-close-modal
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              id="btn-retry-site"
-              class="admin-btn admin-btn--ghost"
-              hidden
-            >
-              Retry save
-            </button>
-            <button
               type="submit"
               id="btn-save-site"
               class="admin-btn admin-btn--primary"
@@ -1407,7 +1345,7 @@
             <input
               id="media-src"
               class="admin-input"
-              placeholder="data/… or https://…"
+              placeholder="assets/data/… or https://…"
             />
           </div>
           <div class="admin-field" id="media-title-field">
@@ -1501,7 +1439,7 @@
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
       type="module"
     ></script>
-    <script src="model-viewer-loading.js"></script>
+    <script src="js/utils/model-viewer-loading.js"></script>
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -1512,23 +1450,23 @@
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="data/mati-city-boundary.js"></script>
-    <script src="gallery-data.js"></script>
-    <!-- <script src="admin-heritage-base.js"></script> -->
-    <!-- <script src="admin-built-media.js"></script> -->
-    <script src="admin-heritage-scope.js"></script>
-    <script src="heritage-map-sites.js"></script>
-    <script src="auth.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="admin-auth.js"></script>
-    <script src="admin-store.js"></script>
-    <script src="admin-analytics.js"></script>
-    <script src="admin-lci-export.js"></script>
-    <script src="admin-uploads.js"></script>
-    <script src="admin-map.js"></script>
-    <script src="gallery-app.js"></script>
-    <script src="gallery-showcase.js"></script>
-    <script src="admin-app.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="assets/data/mati-city-boundary.js"></script>
+    <script src="js/pages/gallery-data.js"></script>
+    <!-- <script src="js/pages/admin/admin-heritage-base.js"></script> -->
+    <!-- <script src="js/pages/admin/admin-built-media.js"></script> -->
+    <script src="js/pages/admin/admin-heritage-scope.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/admin-auth.js"></script>
+    <script src="js/pages/admin/admin-store.js"></script>
+    <script src="js/pages/admin/admin-analytics.js"></script>
+    <script src="js/pages/admin/admin-lci-export.js"></script>
+    <script src="js/pages/admin/admin-uploads.js"></script>
+    <script src="js/pages/admin/admin-map.js"></script>
+    <script src="js/pages/gallery-app.js"></script>
+    <script src="js/pages/gallery-showcase.js"></script>
+    <script src="js/pages/admin/admin-app.js"></script>
   </body>
 </html>

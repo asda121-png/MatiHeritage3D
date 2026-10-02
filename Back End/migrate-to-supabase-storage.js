@@ -1,44 +1,50 @@
 /**
  * Migration script: Upload local media files to Supabase Storage
  * Run: node migrate-to-supabase-storage.js
- * 
+ *
  * This script:
  * 1. Reads all media records from the database
  * 2. Uploads local files to Supabase Storage
  * 3. Updates database records with new Supabase URLs
  */
 
-import { createClient } from '@supabase/supabase-js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { createClient } from "@supabase/supabase-js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function loadSupabaseConfig() {
-  const configPath = path.join(__dirname, 'supabase-config.js');
+  const configPath = path.join(
+    __dirname,
+    "..",
+    "Front End",
+    "_backend",
+    "supabase-config.js",
+  );
   let supabaseUrl, supabaseKey;
 
   try {
     // Read the config file and extract URL and key
-    const configContent = fs.readFileSync(configPath, 'utf-8');
+    const configContent = fs.readFileSync(configPath, "utf-8");
     const urlMatch = configContent.match(/url:\s*['"`]([^'"`]+)['"`]/);
     const keyMatch = configContent.match(/anonKey:\s*['"`]([^'"`]+)['"`]/);
-    
+
     if (urlMatch && keyMatch) {
       supabaseUrl = urlMatch[1];
       supabaseKey = keyMatch[1];
     } else {
-      throw new Error('Could not extract Supabase config from file');
+      throw new Error("Could not extract Supabase config from file");
     }
   } catch (error) {
-    console.error('Error loading Supabase config:', error.message);
+    console.error("Error loading Supabase config:", error.message);
     process.exit(1);
   }
 
   if (!supabaseUrl || !supabaseKey) {
-    console.error('Supabase URL and key are required in supabase-config.js');
+    console.error("Supabase URL and key are required in supabase-config.js");
     process.exit(1);
   }
 
@@ -46,12 +52,12 @@ async function loadSupabaseConfig() {
 }
 
 function bucketForMediaType(type) {
-  if (type === 'photo') return 'heritage-photos';
-  if (type === 'map') return 'heritage-maps';
-  if (type === 'model3d') return 'heritage-models';
-  if (type === 'video') return 'heritage-videos';
-  if (type === 'audio') return 'heritage-audio';
-  return 'heritage-photos';
+  if (type === "photo") return "heritage-photos";
+  if (type === "map") return "heritage-maps";
+  if (type === "model3d") return "heritage-models";
+  if (type === "video") return "heritage-videos";
+  if (type === "audio") return "heritage-audio";
+  return "heritage-photos";
 }
 
 async function uploadFileToSupabase(supabase, bucket, storagePath, localPath) {
@@ -64,14 +70,14 @@ async function uploadFileToSupabase(supabase, bucket, storagePath, localPath) {
 
     const fileBuffer = fs.readFileSync(localPath);
     const fileName = path.basename(localPath);
-    
+
     console.log(`  Uploading ${fileName} to ${bucket}/${storagePath}`);
-    
+
     const { data, error } = await supabase.storage
       .from(bucket)
       .upload(storagePath, fileBuffer, {
         upsert: true,
-        contentType: getContentType(fileName)
+        contentType: getContentType(fileName),
       });
 
     if (error) {
@@ -95,44 +101,44 @@ async function uploadFileToSupabase(supabase, bucket, storagePath, localPath) {
 function getContentType(fileName) {
   const ext = path.extname(fileName).toLowerCase();
   const types = {
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.png': 'image/png',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.mp4': 'video/mp4',
-    '.webm': 'video/webm',
-    '.mov': 'video/quicktime',
-    '.mp3': 'audio/mpeg',
-    '.wav': 'audio/wav',
-    '.ogg': 'audio/ogg',
-    '.m4a': 'audio/mp4',
-    '.glb': 'model/gltf-binary',
-    '.gltf': 'model/gltf+json'
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".mp4": "video/mp4",
+    ".webm": "video/webm",
+    ".mov": "video/quicktime",
+    ".mp3": "audio/mpeg",
+    ".wav": "audio/wav",
+    ".ogg": "audio/ogg",
+    ".m4a": "audio/mp4",
+    ".glb": "model/gltf-binary",
+    ".gltf": "model/gltf+json",
   };
-  return types[ext] || 'application/octet-stream';
+  return types[ext] || "application/octet-stream";
 }
 
 function isLocalPath(src) {
   if (!src) return false;
   // Check if it's a local path (starts with 'data/' or is relative)
-  return src.startsWith('data/') || !src.startsWith('http');
+  return src.startsWith("data/") || !src.startsWith("http");
 }
 
 async function migrateMedia() {
-  console.log('Starting migration to Supabase Storage...\n');
+  console.log("Starting migration to Supabase Storage...\n");
 
   const supabase = await loadSupabaseConfig();
 
   try {
     // Fetch all media records
     const { data: mediaRecords, error: fetchError } = await supabase
-      .from('heritage_media')
-      .select('*')
-      .eq('is_deleted', false);
+      .from("heritage_media")
+      .select("*")
+      .eq("is_deleted", false);
 
     if (fetchError) {
-      console.error('Error fetching media records:', fetchError.message);
+      console.error("Error fetching media records:", fetchError.message);
       process.exit(1);
     }
 
@@ -153,21 +159,26 @@ async function migrateMedia() {
       }
 
       // Construct local file path
-      const localPath = path.join(__dirname, '..', 'Front End', src);
+      const localPath = path.join(__dirname, "..", "Front End", src);
       const bucket = bucketForMediaType(type);
       const storagePath = `${site_id}/${id}-${path.basename(src)}`;
 
       console.log(`[${id}] Processing ${type}: ${src}`);
 
       // Upload to Supabase Storage
-      const publicUrl = await uploadFileToSupabase(supabase, bucket, storagePath, localPath);
+      const publicUrl = await uploadFileToSupabase(
+        supabase,
+        bucket,
+        storagePath,
+        localPath,
+      );
 
       if (publicUrl) {
         // Update database record
         const { error: updateError } = await supabase
-          .from('heritage_media')
+          .from("heritage_media")
           .update({ src: publicUrl })
-          .eq('id', id);
+          .eq("id", id);
 
         if (updateError) {
           console.error(`  Database update error: ${updateError.message}`);
@@ -180,26 +191,27 @@ async function migrateMedia() {
         errorCount++;
       }
 
-      console.log('');
+      console.log("");
     }
 
-    console.log('\n=== Migration Summary ===');
+    console.log("\n=== Migration Summary ===");
     console.log(`Total records: ${mediaRecords.length}`);
     console.log(`Successfully migrated: ${successCount}`);
     console.log(`Skipped (already HTTP): ${skipCount}`);
     console.log(`Errors: ${errorCount}`);
-
   } catch (error) {
-    console.error('Migration failed:', error.message);
+    console.error("Migration failed:", error.message);
     process.exit(1);
   }
 }
 
 // Run migration
-migrateMedia().then(() => {
-  console.log('\nMigration completed!');
-  process.exit(0);
-}).catch((error) => {
-  console.error('Migration error:', error);
-  process.exit(1);
-});
+migrateMedia()
+  .then(() => {
+    console.log("\nMigration completed!");
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error("Migration error:", error);
+    process.exit(1);
+  });

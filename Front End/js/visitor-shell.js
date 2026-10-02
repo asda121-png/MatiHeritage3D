@@ -10,7 +10,7 @@
   };
 
   async function injectHeader(pageKey) {
-    const headerResponse = await fetch("header.html");
+    const headerResponse = await fetch("components/header.html");
     const headerHtml = await headerResponse.text();
     const headerDoc = new DOMParser().parseFromString(headerHtml, "text/html");
     const header = headerDoc.querySelector("header");
@@ -63,7 +63,7 @@
   }
 
   async function injectFooter(pageKey) {
-    const footerResponse = await fetch("footer.html");
+    const footerResponse = await fetch("components/footer.html");
     const footerDoc = new DOMParser().parseFromString(
       await footerResponse.text(),
       "text/html",

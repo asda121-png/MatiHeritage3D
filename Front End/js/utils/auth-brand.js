@@ -9,22 +9,22 @@
 
   const slides = [
     {
-      src: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+      src: "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
       tag: "Built Heritage",
       title: "Pylon Monument",
     },
     {
-      src: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+      src: "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
       tag: "Natural Heritage",
       title: "Pujada Island",
     },
     {
-      src: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/1.jpg",
+      src: "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/1.jpg",
       tag: "Intangible Cultural Heritage",
       title: "Sambuokan Festival",
     },
     {
-      src: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+      src: "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
       tag: "Built Heritage",
       title: "Gabaldon Structure",
     },

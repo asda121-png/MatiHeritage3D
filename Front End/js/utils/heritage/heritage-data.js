@@ -92,6 +92,16 @@ const MatiHeritageData = (() => {
     return match ? Boolean(match.official) : true;
   }
 
+  function normalizeMediaSource(src) {
+    const replacements = {
+      "assets/data/Natural Heritage/Oak Island/Photographs/Oak island.JPG":
+        "assets/data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+      "assets/data/Natural Heritage/Pujada Island/Photographs/Pujada Isalnd.JPG":
+        "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+    };
+    return replacements[src] || src;
+  }
+
   function siteToMapMarker(site, category = site.category || "built") {
     const staticMatch =
       typeof HERITAGE_MAP_SITES !== "undefined"
@@ -123,6 +133,7 @@ const MatiHeritageData = (() => {
     const credit = item.credit || "";
     return {
       ...item,
+      src: normalizeMediaSource(item.src),
       siteName: item.siteName || site?.name || "",
       category: item.category || site?.category || "",
       author: item.author || credit,

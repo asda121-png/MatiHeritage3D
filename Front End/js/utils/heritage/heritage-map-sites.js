@@ -4,6 +4,17 @@ const HERITAGE_MAP_COLORS = {
   natural: "#0284c7",
 };
 
+const HERITAGE_GEOFENCE_DEFAULTS = {
+  built: 50,
+  natural: 100,
+};
+
+function heritageGeofenceRadius(site) {
+  const configured = Number(site?.geofenceRadiusMeters);
+  if (Number.isFinite(configured) && configured > 0) return configured;
+  return HERITAGE_GEOFENCE_DEFAULTS[site?.category] || 50;
+}
+
 const HERITAGE_BARANGAY_NAMES = {
   central: "Central",
   dahican: "Dahican",
@@ -26,7 +37,8 @@ const HERITAGE_MAP_SITES = [
     lng: 126.216889,
     official: true,
     desc: "The Pylon Monument serves as a prominent gateway structure erected in memory of Mayor Luis G. Rabat, one of Mati's influential leaders. Standing as a symbolic entrance to the city, this monument commemorates the legacy of public service and dedication to community development that Mayor Rabat exemplified during his tenure. The monument represents the city's respect for its leaders and serves as a reminder of the values of governance and civic responsibility that continue to guide Mati's progress.",
-    image: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+    image:
+      "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
   },
   {
     id: "centennial",
@@ -36,9 +48,9 @@ const HERITAGE_MAP_SITES = [
     lat: 6.9521319,
     lng: 126.2167824,
     official: true,
-    desc: "The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year \"1903\" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city's historical journey, preserved in excellent condition for the inspiration and education of its citizens.",
+    desc: 'The Centennial Park and Pathway of Leaders, located within the City Hall Compound of Mati on Nazareno Street, Barangay Central, is a significant cultural landmark officially recognized under Resolution No. 61, Series of 2019. Conceptualized by the late Mayor Francisco G. Rabat and completed in 2003, the site serves to commemorate the 110th founding anniversary of the City of Mati while honoring the lineage of leadership that has shaped the community. The architectural centerpiece is a 25-foot clock tower featuring an arched entranceway inscribed with the year "1903" and flanked by full-bodied statues of city founders Hon. Juan Nazareno and Hon. Prudencio Garcia. The Pathway of Leaders is a concrete promenade lined with the bust statues of former elected and appointed mayors, integrated into a landscaped environment that also features a monument to the national hero, Jose Rizal. As a public heritage site, it stands as a testament to the city\'s historical journey, preserved in excellent condition for the inspiration and education of its citizens.',
     image:
-      "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+      "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
   },
   {
     id: "city-hall",
@@ -49,18 +61,20 @@ const HERITAGE_MAP_SITES = [
     lng: 126.2162107,
     official: true,
     desc: "The City Hall of Mati serves as the seat of the City Government of Mati, located on Nazareno Street in Barangay Central. This administrative building houses the various departments and offices that manage the city's governance, public services, and development initiatives. As the center of local government operations, it represents the institutional foundation of Mati's civic administration and serves as the primary venue for official functions, public hearings, and governmental proceedings that shape the city's policies and programs.",
-    image: "data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
+    image: "assets/data/Built Heritage/City Hall/Photographs/Old/City Hall.jpg",
   },
   {
     id: "mfgr",
     name: "MFGR Park & Baywalk",
     category: "built",
     barangay: "central",
-    lat: 6.950356,
-    lng: 126.216866,
+    lat: 6.95,
+    lng: 126.217,
+    geofenceRadiusMeters: 150,
     official: true,
     desc: "Mayor Francisco G. Rabat Park and Baywalk is a scenic waterfront destination overlooking Pujada Bay, named in honor of the late mayor who contributed significantly to Mati's development. The features a beautifully landscaped park area with walking paths, benches, and viewing areas where visitors can enjoy panoramic views of the bay, especially during sunset. The baywalk provides a leisurely promenade along the shoreline, making it a popular spot for exercise, relaxation, and community gatherings. This recreational space exemplifies the city's commitment to providing public amenities that enhance quality of life while showcasing the natural beauty of Mati's coastal environment.",
-    image: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+    image:
+      "assets/data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
   },
   {
     id: "subangan",
@@ -72,7 +86,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Subangan Museum is the provincial museum of Davao Oriental, serving as a cultural repository that showcases the rich heritage and natural history of the province. The museum features the famous skeletal remains of Davor, a 43-foot whale that became an iconic symbol of marine conservation in the region. Beyond its natural history exhibits, Subangan Museum houses extensive collections highlighting Mandaya indigenous culture, traditional artifacts, and the historical narrative of Davao Oriental. The museum serves as an educational institution and tourist attraction, providing visitors with insights into the province's diverse cultural tapestry and ecological treasures.",
     image:
-      "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
+      "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
   },
   {
     id: "capitol",
@@ -84,7 +98,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "The Provincial Capitol of Davao Oriental serves as the administrative center of the provincial government, located within Mati City. This government complex houses the offices of the provincial governor, provincial board members, and various department heads who oversee the governance and development of Davao Oriental. The capitol building represents the seat of provincial power and is where important policy decisions, legislative sessions, and administrative functions take place. As a government center, it plays a crucial role in delivering public services and implementing programs that benefit the province's constituents across its municipalities.",
     image:
-      "data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
+      "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
   },
   {
     id: "old-mansion",
@@ -96,7 +110,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "The Provincial Capitol Old Mansion is a historic structure linked to the governance history of Davao Oriental. This heritage building represents an earlier era of provincial administration and stands as an architectural reminder of the region's political evolution. The mansion's historical significance lies in its connection to the early governance structures that shaped Davao Oriental before the construction of the modern capitol complex. As a preserved heritage structure, it offers insights into the architectural styles and administrative practices of the past, contributing to the understanding of the province's institutional development.",
     image:
-      "data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
+      "assets/data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
   },
   {
     id: "gabaldon",
@@ -108,7 +122,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Heritage Gabaldon school building of Roxas Memorial Colleges.",
     image:
-      "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+      "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
   },
   {
     id: "noventa",
@@ -120,7 +134,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Preserved ancestral house in Barangay Bobon.",
     image:
-      "data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
+      "assets/data/Built Heritage/Noventa Ancestral House/Photographs/2023-09-12 11-22.jpg",
   },
   {
     id: "ompo",
@@ -132,7 +146,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Indigenous graveyard and cultural landmark in Barangay Bobon.",
     image:
-      "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+      "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
   },
   {
     id: "menzi",
@@ -144,7 +158,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Visitor center and campsite along Dahican shoreline.",
     image:
-      "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+      "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
   },
   {
     id: "dahican-shoreline",
@@ -156,7 +170,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "Seven-kilometer stretch of white sand and turquoise waters — sea turtle sanctuary and hub for skimboarding and surfing.",
     image:
-      "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
+      "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00289.jpg",
   },
   {
     id: "guang-guang",
@@ -168,7 +182,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "201-hectare mangrove sanctuary in Barangay Dahican with boardwalks and an Environmental and Ecotourism Center.",
     image:
-      "data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park/Photographs/d.jpg",
+      "assets/data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park/Photographs/d.jpg",
   },
   {
     id: "mamacao",
@@ -180,7 +194,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "Living heritage tree (Dracontomelon dao) in Purok Mamacaw, Barangay Bobon — a resilient symbol of Mati's natural and cultural history.",
     image:
-      "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+      "assets/data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
   },
   {
     id: "oak-island",
@@ -191,7 +205,7 @@ const HERITAGE_MAP_SITES = [
     lng: 126.1913,
     official: false,
     desc: "Vanishing white-sand bar in Pujada Bay that emerges at low tide — a premier snorkeling and island-hopping destination.",
-    image: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+    image: "assets/data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
   },
   {
     id: "pujada-bay",
@@ -203,7 +217,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "Majestic cove with turquoise waters, coral reefs, seagrass beds, and mangrove forests linking Mount Hamiguitan to the Pacific.",
     image:
-      "data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
+      "assets/data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
   },
   {
     id: "pujada-island",
@@ -215,7 +229,7 @@ const HERITAGE_MAP_SITES = [
     official: false,
     desc: "157-hectare protected island at the mouth of Pujada Bay with lush forests, white-sand coves, and vibrant coral reefs.",
     image:
-      "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+      "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
   },
   {
     id: "taytay-daga",
@@ -227,7 +241,7 @@ const HERITAGE_MAP_SITES = [
     official: true,
     desc: "579-hectare landform in Sitio Baso, Barangay Badas, resembling a dinosaur resting on Pujada Bay — protected under Resolution No. 61, Series of 2019.",
     image:
-      "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+      "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
   },
   {
     id: "waniban",
@@ -238,7 +252,7 @@ const HERITAGE_MAP_SITES = [
     lng: 126.273253,
     official: false,
     desc: "Four-hectare white-sand islet in Pujada Bay — part of Mati's Tri-Island hopping circuit, a short boat ride from Barangay Tamisan.",
-    image: "data/GALLERY/Waniban-island.jpg",
+    image: "assets/data/GALLERY/Waniban-island.jpg",
   },
 ];
 
@@ -324,7 +338,10 @@ function mergeMapSite(base, admin) {
     location: admin.location || base.location || "",
     lat,
     lng,
-    desc: (admin.description && admin.description.trim() !== "") ? admin.description : base.desc,
+    desc:
+      admin.description && admin.description.trim() !== ""
+        ? admin.description
+        : base.desc,
     image: admin.cover || base.image,
   };
 }

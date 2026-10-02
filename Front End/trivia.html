@@ -2059,7 +2059,7 @@
 
     <audio
       id="bg-music"
-      src="game bgmusic/trivia.mp3"
+      src="assets/bgmusic/trivia.mp3"
       loop
       preload="auto"
       autoplay
@@ -2116,24 +2116,24 @@
       </span>
     </aside>
 
-    <script src="visitor-shell.js"></script>
+    <script src="js/visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
-    <script src="visitor-auth.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="heritage-map-sites.js"></script>
-    <script src="admin-heritage-base.js"></script>
-    <script src="gallery-data.js"></script>
-    <script src="heritage-data.js"></script>
-    <script src="heritage-game-content.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/pages/admin/admin-heritage-base.js"></script>
+    <script src="js/pages/gallery-data.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
+    <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="auth.js"></script>
-    <script src="game-auth-gate.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="game-tv-transition.js"></script>
-    <script src="game-exit-guard.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/games/game-tv-transition.js"></script>
+    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "trivia.html" });
       if (typeof window.initTvExpandReceive === "function") {

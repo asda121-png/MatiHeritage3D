@@ -1298,7 +1298,7 @@ body.chronicle-page #intro-screen {
 .game-fest-frames__panel {
   aspect-ratio: 4 / 3;
   border-radius: 0.2rem;
-  background: url("data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg")
+  background: url("assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg")
     center/cover no-repeat;
 }
 
@@ -1683,7 +1683,7 @@ body.festival-page #intro-screen .fest-banner {
 }
 
 .game-polaroid__tile {
-  background-image: url("data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
+  background-image: url("assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
   background-size: 300% 300%;
   border-radius: 1px;
 }

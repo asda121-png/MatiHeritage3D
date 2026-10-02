@@ -2805,24 +2805,24 @@
       preload="auto"
     ></audio>
 
-    <script src="visitor-shell.js"></script>
+    <script src="js/visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
-    <script src="visitor-auth.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
     <script src="_backend/supabase-api.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="heritage-map-sites.js"></script>
-    <script src="admin-heritage-base.js"></script>
-    <script src="gallery-data.js"></script>
-    <script src="heritage-data.js"></script>
-    <script src="heritage-game-content.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/pages/admin/admin-heritage-base.js"></script>
+    <script src="js/pages/gallery-data.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
+    <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="auth.js"></script>
-    <script src="game-auth-gate.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="game-tv-transition.js"></script>
-    <script src="game-exit-guard.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/games/game-tv-transition.js"></script>
+    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "memorypairs.html" });
     </script>
@@ -2837,7 +2837,7 @@
           name: "Pylon Monument",
           category: "built",
           emoji: "🏛",
-          img: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+          img: "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           fact: "Gateway monument erected in memory of Mayor Luis G. Rabat — a proud landmark of Mati City.",
         },
         {
@@ -2845,7 +2845,7 @@
           name: "Centennial Clock & Pathway of Leaders",
           category: "built",
           emoji: "⏳",
-          img: "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
+          img: "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000067853.jpg",
           fact: "Centennial Park honors civic leaders who shaped Mati's poblacion through the decades.",
         },
         {
@@ -2853,7 +2853,7 @@
           name: "MFGR Park & Baywalk",
           category: "built",
           emoji: "🌊",
-          img: "data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
+          img: "assets/data/Built Heritage/MFGR Park and Baywalk/Map/map_baywalk.jpg",
           fact: "Mayor Francisco G. Rabat Park overlooks Pujada Bay — a favorite sunset promenade.",
         },
         {
@@ -2861,7 +2861,7 @@
           name: "Gabaldon Structure (RRMCES-1)",
           category: "built",
           emoji: "🏫",
-          img: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+          img: "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
           fact: "A heritage Gabaldon school building preserving American-era educational architecture.",
         },
         {
@@ -2869,7 +2869,7 @@
           name: "Menzi Visitors Information Center",
           category: "built",
           emoji: "🏕",
-          img: "data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
+          img: "assets/data/Built Heritage/Menzi Visitors Information Center/Photographs/New/J6000x4000-00293.jpg",
           fact: "Visitor center along Dahican — the gateway for travelers discovering Mati's coast.",
         },
         {
@@ -2877,7 +2877,7 @@
           name: "OMPO sa Tampat sa Baguidan",
           category: "built",
           emoji: "🪨",
-          img: "data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
+          img: "assets/data/Built Heritage/OMPO sa Tampat sa Baguidan/Photographs/Old/J2048x1536-00654.jpg",
           fact: "Sacred indigenous graveyard reflecting Mandaya heritage in Barangay Bobon.",
         },
         {
@@ -2885,7 +2885,7 @@
           name: "Taytay Daga (Sleeping Dinosaur)",
           category: "natural",
           emoji: "🦕",
-          img: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+          img: "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
           fact: "A legendary land formation resembling a sleeping dinosaur — Mati's most iconic view.",
         },
         {
@@ -2893,7 +2893,7 @@
           name: "Pujada Island",
           category: "natural",
           emoji: "🏝",
-          img: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+          img: "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
           fact: "156-hectare island gem at the mouth of Pujada Bay with crystal-clear waters.",
         },
         {
@@ -2901,7 +2901,7 @@
           name: "Oak Island",
           category: "natural",
           emoji: "⛱",
-          img: "data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+          img: "assets/data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
           fact: "A vanishing sandbar beloved by island-hoppers near Pujada Island.",
         },
         {
@@ -2909,7 +2909,7 @@
           name: "Waniban Island",
           category: "natural",
           emoji: "🐚",
-          img: "data/Natural Heritage/Waniban Island/Photographs/Waniban-island.jpg",
+          img: "assets/data/Natural Heritage/Waniban Island/Photographs/Waniban-island.jpg",
           fact: "Pristine island in Pujada Bay — snorkeling paradise with quiet white-sand shores.",
         },
         {
@@ -2917,7 +2917,7 @@
           name: "Mamacao Heritage Tree",
           category: "natural",
           emoji: "🌳",
-          img: "data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+          img: "assets/data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
           fact: "Heritage tree landmark in Bobon — a living monument of Mati's natural legacy.",
         },
         {
@@ -2925,7 +2925,7 @@
           name: "Sambuokan Festival",
           category: "intangible",
           emoji: "🎭",
-          img: "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/DJI_0160.JPG",
+          img: "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/DJI_0160.JPG",
           fact: "Annual founding celebration — music, dance, and the vibrant spirit of Mati City.",
         },
       ];

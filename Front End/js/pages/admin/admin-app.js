@@ -5,7 +5,6 @@
 
   let currentView = "dashboard";
   let currentCategory = "built";
-  let currentReport = "built";
   let editingSiteId = null;
   let mapPickSession = false;
   let mediaModalPresetType = null;
@@ -1850,14 +1849,8 @@
       section.hidden = id !== view;
     });
 
-    if (view === "reports" && options.report) {
-      currentReport = options.report;
-      $$("#report-tabs .admin-tabs__btn").forEach((btn) => {
-        btn.classList.toggle(
-          "is-active",
-          btn.dataset.report === options.report,
-        );
-      });
+    if (view === "reports") {
+      renderReport();
     }
 
     if (view === "gallery" && prevView !== "gallery") {
@@ -1881,6 +1874,19 @@
       void renderLeaderboard({ force: true });
     }
     if (view === "reports") void renderReport();
+    if (view === "settings") syncSettings();
+  }
+
+  function syncSettings() {
+    const session =
+      typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() || {} : {};
+    const name = $("#admin-settings-name");
+    const email = $("#admin-settings-email");
+    const role = $("#admin-settings-role");
+
+    if (name) name.textContent = session.username || "Administrator";
+    if (email) email.textContent = session.email || "Not available";
+    if (role) role.textContent = session.role || "Administrator";
   }
 
   function openModal(id) {
@@ -2153,11 +2159,11 @@
           .map((collection) => {
             const bgImages = {
               built:
-                "data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
+                "assets/data/Built Heritage/Centennial Clock and Pathway of Leaders/Photographs/New/1000068051.jpg",
               intangible:
-                "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2672.JPG",
+                "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2672.JPG",
               natural:
-                "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg",
+                "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg",
             };
             const bgImage = bgImages[collection.key] || "";
             return `
@@ -2683,7 +2689,7 @@
         void renderLeaderboard({ force: true });
       }
       if (view === "dashboard") renderDashboard();
-      if (currentReport === "leaderboard") {
+      if (view === "reports") {
         void renderReport();
       }
     });
@@ -4449,16 +4455,20 @@
   }
 
   async function loadSiteReportLogos() {
-    let sealLogo = reportAssetUrl("logo/Flag_of_Mati,_Davao_Oriental.png");
+    let sealLogo = reportAssetUrl(
+      "assets/logos/Flag_of_Mati,_Davao_Oriental.png",
+    );
     let tourismLogo = reportAssetUrl(
-      "logo/City of Mati Tourism and Promotions Office.png",
+      "assets/logos/City of Mati Tourism and Promotions Office.png",
     );
 
     try {
       [sealLogo, tourismLogo] = await Promise.all([
-        fetchReportImageDataUrl("logo/Flag_of_Mati,_Davao_Oriental.png"),
         fetchReportImageDataUrl(
-          "logo/City of Mati Tourism and Promotions Office.png",
+          "assets/logos/Flag_of_Mati,_Davao_Oriental.png",
+        ),
+        fetchReportImageDataUrl(
+          "assets/logos/City of Mati Tourism and Promotions Office.png",
         ),
       ]);
     } catch {
@@ -4621,28 +4631,13 @@
     }
   }
 
-  const REPORT_META = {
-    built: {
-      title: "Built Heritage",
-      desc: "Official built heritage records with print and PDF export for each site.",
-    },
-    natural: {
-      title: "Natural Heritage",
-      desc: "Natural landmark records with location, media counts, and export options.",
-    },
-    intangible: {
-      title: "Intangible Cultural Heritage",
-      desc: "Festival, music, and cultural heritage records with media and export tools.",
-    },
-    users: {
-      title: "Registered Users",
-      desc: "Portal accounts registered through the Mati Heritage visitor system.",
-    },
-    leaderboard: {
-      title: "Leaderboard",
-      desc: "Top game scores and player rankings across heritage activities.",
-    },
-  };
+  const REPORT_CATEGORIES = [
+    { key: "built", label: "Built Heritage" },
+    { key: "intangible", label: "Intangible Cultural Heritage" },
+    { key: "natural", label: "Natural Heritage" },
+    { key: "users", label: "Registered Users" },
+    { key: "leaderboard", label: "Leaderboard Records" },
+  ];
 
   const HERITAGE_STAT_KEYS = new Set([
     "photos",
@@ -4680,150 +4675,137 @@
     return `<tr class="admin-report-row">${cells}<td class="admin-report-actions-cell">${renderSiteReportActions(row.id)}</td></tr>`;
   }
 
-  function syncReportHeader() {
-    const meta = REPORT_META[currentReport];
-    const titleEl = $("#report-title");
-    const descEl = $("#report-desc");
+  async function fetchReportCounts() {
+    const counts = {
+      built: 0,
+      intangible: 0,
+      natural: 0,
+      users: 0,
+      leaderboard: 0,
+    };
 
-    if (titleEl && meta) titleEl.textContent = meta.title;
-    if (descEl && meta) descEl.textContent = meta.desc;
+    try {
+      counts.built = (await MatiAdminStore.heritageReportRows("built")).length;
+      counts.intangible = (await MatiAdminStore.heritageReportRows("intangible")).length;
+      counts.natural = (await MatiAdminStore.heritageReportRows("natural")).length;
+      counts.users = (await MatiAdminStore.getRegisteredUsers()).length;
+      counts.leaderboard = (await MatiAdminStore.getLeaderboard()).length;
+    } catch (error) {
+      console.error("Error fetching report counts:", error);
+    }
+
+    return counts;
   }
-
-  const REPORT_CONFIG = {
-    built: {
-      filename: "built-heritage-records.csv",
-      headers: HERITAGE_REPORT_HEADERS_BUILT,
-      rows: () => MatiAdminStore.heritageReportRows("built"),
-    },
-    natural: {
-      filename: "natural-heritage-records.csv",
-      headers: HERITAGE_REPORT_HEADERS_NATURAL,
-      rows: () => MatiAdminStore.heritageReportRows("natural"),
-    },
-    intangible: {
-      filename: "intangible-heritage-records.csv",
-      headers: HERITAGE_REPORT_HEADERS_INTANGIBLE,
-      rows: () => MatiAdminStore.heritageReportRows("intangible"),
-    },
-    users: {
-      filename: "registered-users.csv",
-      headers: [
-        { key: "username", label: "Username" },
-        { key: "email", label: "Email" },
-        { key: "createdAt", label: "Registered" },
-      ],
-      rows: async () => await MatiAdminStore.getRegisteredUsers(),
-    },
-    leaderboard: {
-      filename: "leaderboard-records.csv",
-      headers: [
-        { key: "rank", label: "Rank" },
-        { key: "username", label: "Username" },
-        { key: "points", label: "Points" },
-      ],
-      rows: async () =>
-        (await MatiAdminStore.getLeaderboard()).map((row, i) => ({
-          rank: i + 1,
-          username: row.username,
-          points: row.points,
-          avatarUrl: row.avatarUrl,
-        })),
-    },
-  };
 
   async function renderReport() {
-    const cfg = REPORT_CONFIG[currentReport];
-    if (!cfg) return;
+    const counts = await fetchReportCounts();
 
-    if (currentReport === "leaderboard") {
-      ensureLeaderboardLive();
-      try {
-        await MatiAdminStore.refreshLeaderboard({ force: true });
-      } catch {
-        /* keep cache / local fallback */
-      }
-    }
+    // Update stat cards
+    $("#stat-built").textContent = counts.built;
+    $("#stat-intangible").textContent = counts.intangible;
+    $("#stat-natural").textContent = counts.natural;
+    $("#stat-users").textContent = counts.users;
+    $("#stat-leaderboard").textContent = counts.leaderboard;
 
-    syncReportHeader();
-    await renderReportSummary();
-
-    const thead = $("#report-thead");
-    const tbody = $("#report-tbody");
-    const meta = $("#report-meta");
-    const rows = await cfg.rows();
-
-    if (meta) {
-      meta.textContent = `${rows.length} record${rows.length !== 1 ? "s" : ""}`;
-    }
-
-    if (currentReport === "leaderboard") {
-      thead.innerHTML = `<tr><th>Rank</th><th>Player</th><th>Points</th></tr>`;
-      if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="3" class="admin-empty">No records to display.</td></tr>`;
-        return;
-      }
-      const ranked = rows.map((row, i) => ({ ...row, rank: i + 1 }));
-      tbody.innerHTML = ranked.map(renderLeaderboardRow).join("");
-      return;
-    }
-
-    thead.innerHTML = isHeritageReportKey(currentReport)
-      ? `<tr>${cfg.headers.map((h) => `<th>${h.label}</th>`).join("")}<th class="admin-report-actions-cell" aria-label="Actions"></th></tr>`
-      : `<tr>${cfg.headers.map((h) => `<th>${h.label}</th>`).join("")}</tr>`;
-
-    if (!rows.length) {
-      const colspan =
-        cfg.headers.length + (isHeritageReportKey(currentReport) ? 1 : 0);
-      tbody.innerHTML = `<tr><td colspan="${colspan}" class="admin-empty">No records to display.</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = rows
-      .map((row) => {
-        if (isHeritageReportKey(currentReport)) {
-          return renderHeritageReportRow(row, cfg.headers);
-        }
-        const cells = cfg.headers
-          .map((h) => `<td>${escapeHtml(row[h.key] ?? "—")}</td>`)
-          .join("");
-        return `<tr>${cells}</tr>`;
-      })
-      .join("");
+    // Render chart
+    renderReportChart(counts);
   }
 
-  async function renderReportSummary() {
-    const summaryEl = $("#report-summary");
-    if (!summaryEl) return;
+  function renderReportChart(counts) {
+    const canvas = document.getElementById("report-chart");
+    if (!canvas) return;
 
-    const summary = await MatiAdminStore.buildLciSummary();
-    summaryEl.innerHTML = `
-      <div class="admin-reports__stat">
-        <span class="admin-reports__stat-value">${summary.built}</span>
-        <span class="admin-reports__stat-label">Built Heritage</span>
-      </div>
-      <div class="admin-reports__stat">
-        <span class="admin-reports__stat-value">${summary.natural}</span>
-        <span class="admin-reports__stat-label">Natural Heritage</span>
-      </div>
-      <div class="admin-reports__stat">
-        <span class="admin-reports__stat-value">${summary.intangible}</span>
-        <span class="admin-reports__stat-label">Intangible Heritage</span>
-      </div>`;
+    const ctx = canvas.getContext("2d");
+    if (window.reportChartInstance) {
+      window.reportChartInstance.destroy();
+    }
+
+    const data = {
+      labels: REPORT_CATEGORIES.map((cat) => cat.label),
+      datasets: [
+        {
+          label: "Total Records",
+          data: [
+            counts.built,
+            counts.intangible,
+            counts.natural,
+            counts.users,
+            counts.leaderboard,
+          ],
+          backgroundColor: [
+            "rgba(54, 162, 235, 0.8)",
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(75, 192, 192, 0.8)",
+            "rgba(153, 102, 255, 0.8)",
+            "rgba(255, 99, 132, 0.8)",
+          ],
+          borderColor: [
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 99, 132, 1)",
+          ],
+          borderWidth: 2,
+        },
+      ],
+    };
+
+    window.reportChartInstance = new Chart(ctx, {
+      type: "bar",
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: false,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+            },
+          },
+          x: {
+            ticks: {
+              maxRotation: 45,
+              minRotation: 45,
+            },
+          },
+        },
+      },
+    });
   }
 
   async function exportCurrentReport() {
-    if (typeof MatiLciExport !== "undefined") {
-      const format = await MatiLciExport.exportInventory();
-      showToast(
-        format === "xlsx"
-          ? "Formatted Excel inventory downloaded."
-          : "CSV inventory downloaded.",
-      );
-      return;
-    }
+    const counts = await fetchReportCounts();
 
-    MatiAdminStore.exportLciInventoryCsv();
-    showToast("Inventory downloaded.");
+    const csvContent = [
+      "Category,Total Records",
+      `Built Heritage,${counts.built}`,
+      `Intangible Cultural Heritage,${counts.intangible}`,
+      `Natural Heritage,${counts.natural}`,
+      `Registered Users,${counts.users}`,
+      `Leaderboard Records,${counts.leaderboard}`,
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "system-report.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast("CSV exported successfully.");
   }
 
   function escapeHtml(str) {
@@ -5284,16 +5266,6 @@
         e.preventDefault();
         closeConfirmModal(false);
       }
-    });
-
-    $$("#report-tabs .admin-tabs__btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        currentReport = btn.dataset.report;
-        $$("#report-tabs .admin-tabs__btn").forEach((b) =>
-          b.classList.toggle("is-active", b === btn),
-        );
-        renderReport();
-      });
     });
 
     $("#btn-export-csv")?.addEventListener("click", exportCurrentReport);

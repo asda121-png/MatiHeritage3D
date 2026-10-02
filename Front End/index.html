@@ -25,12 +25,6 @@
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/visitor-portal-showcase.css" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
-    <link rel="stylesheet" href="css/games-portal.css" />
-    <link rel="stylesheet" href="css/model-viewer-loading.css" />
-    <script
-      type="module"
-      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
-    ></script>
     <style>
       :root {
         --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
@@ -92,12 +86,8 @@
 
       .hero-cinematic-stage,
       .map-section__frame,
-      .experience-3d-stage,
       .hero-section,
-      .map-section,
-      .experience-section,
-      .heritage-section,
-      .games-section {
+      .map-section {
         contain: style;
       }
 
@@ -1481,266 +1471,6 @@
         letter-spacing: -0.025em;
       }
 
-      /* Feature cards — bento glow */
-      .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.25rem;
-      }
-
-      @media (min-width: 1024px) {
-        .feature-grid {
-          grid-template-columns: 1.12fr 1fr;
-          grid-template-rows: minmax(280px, 1fr) minmax(280px, 1fr);
-        }
-      }
-
-      @media (max-width: 768px) {
-        .feature-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .feature-card {
-        position: relative;
-        padding: 2rem;
-        border-radius: 1.35rem;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.98);
-        box-shadow:
-          0 4px 24px rgba(15, 23, 42, 0.05),
-          0 1px 0 rgba(255, 255, 255, 0.9) inset;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition:
-          transform 0.45s var(--ease-spring),
-          box-shadow 0.45s ease,
-          border-color 0.35s ease;
-      }
-
-      .feature-card-accent {
-        position: absolute;
-        top: 0;
-        left: 2rem;
-        right: 2rem;
-        height: 3px;
-        border-radius: 0 0 6px 6px;
-        opacity: 0.9;
-      }
-
-      .feature-card-map .feature-card-accent {
-        background: linear-gradient(90deg, var(--sky), var(--sky-light));
-      }
-
-      .feature-card-gallery .feature-card-accent {
-        background: linear-gradient(90deg, var(--forest), #34d399);
-      }
-
-      .feature-card-3d .feature-card-accent {
-        background: linear-gradient(
-          90deg,
-          var(--amber-dark),
-          var(--amber-light)
-        );
-      }
-
-      .feature-card-glow {
-        position: absolute;
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
-        filter: blur(48px);
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
-      }
-
-      .feature-card-map .feature-card-glow {
-        background: rgba(2, 132, 199, 0.2);
-        top: -60px;
-        right: -40px;
-      }
-
-      .feature-card-gallery .feature-card-glow {
-        background: rgba(16, 185, 129, 0.18);
-        top: -50px;
-        left: -30px;
-      }
-
-      .feature-card-3d .feature-card-glow {
-        background: rgba(245, 158, 11, 0.18);
-        bottom: -40px;
-        right: -20px;
-      }
-
-      .feature-card:hover .feature-card-glow {
-        opacity: 1;
-      }
-
-      .feature-card-shine {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background: linear-gradient(
-          105deg,
-          transparent 42%,
-          rgba(255, 255, 255, 0.45) 50%,
-          transparent 58%
-        );
-        transform: translateX(-120%) skewX(-10deg);
-        transition: transform 0.8s var(--ease-out-expo);
-        pointer-events: none;
-      }
-
-      .feature-card:hover .feature-card-shine {
-        transform: translateX(120%) skewX(-10deg);
-      }
-
-      .feature-card
-        > *:not(.feature-card-accent):not(.feature-card-glow):not(
-          .feature-card-shine
-        ):not(.feature-num) {
-        position: relative;
-        z-index: 2;
-      }
-
-      .feature-card::before {
-        content: "";
-        position: absolute;
-        inset: -1px;
-        border-radius: inherit;
-        padding: 1px;
-        background: linear-gradient(
-          135deg,
-          rgba(4, 120, 87, 0.4),
-          rgba(245, 158, 11, 0.35) 50%,
-          rgba(2, 132, 199, 0.4)
-        );
-        -webkit-mask:
-          linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        mask:
-          linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-
-      .feature-card-map:hover {
-        box-shadow:
-          0 28px 56px rgba(2, 132, 199, 0.14),
-          0 0 0 1px rgba(2, 132, 199, 0.12);
-      }
-
-      .feature-card-gallery:hover {
-        box-shadow:
-          0 28px 56px rgba(4, 120, 87, 0.12),
-          0 0 0 1px rgba(16, 185, 129, 0.15);
-      }
-
-      .feature-card-3d:hover {
-        box-shadow:
-          0 28px 56px rgba(245, 158, 11, 0.12),
-          0 0 0 1px rgba(245, 158, 11, 0.15);
-      }
-
-      .feature-card:hover {
-        transform: translateY(-10px) scale(1.015);
-      }
-
-      .feature-card:hover::before {
-        opacity: 1;
-      }
-
-      .feature-icon {
-        width: 4.5rem;
-        height: 4.5rem;
-        border-radius: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1.5rem;
-        transition:
-          transform 0.4s ease,
-          box-shadow 0.4s ease;
-      }
-
-      .feature-icon-map {
-        background: linear-gradient(145deg, #eff6ff 0%, #dbeafe 100%);
-        border: 1px solid rgba(2, 132, 199, 0.18);
-        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.1);
-      }
-
-      .feature-icon-gallery {
-        background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 1px solid rgba(4, 120, 87, 0.18);
-        box-shadow: 0 8px 24px rgba(4, 120, 87, 0.1);
-      }
-
-      .feature-icon-3d {
-        background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
-        border: 1px solid rgba(245, 158, 11, 0.22);
-        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.1);
-      }
-
-      .feature-card:hover .feature-icon {
-        transform: scale(1.1) rotate(-4deg);
-        box-shadow: 0 12px 32px rgba(2, 132, 199, 0.2);
-      }
-
-      .feature-num {
-        position: absolute;
-        top: 1rem;
-        right: 1.25rem;
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: 4.5rem;
-        font-weight: 800;
-        line-height: 1;
-        color: rgba(15, 23, 42, 0.04);
-        pointer-events: none;
-        z-index: 0;
-        transition: color 0.4s ease;
-      }
-
-      .feature-card:hover .feature-num {
-        color: rgba(15, 23, 42, 0.07);
-      }
-
-      .feature-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        margin-top: auto;
-        padding-top: 1rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        transition:
-          gap 0.3s ease,
-          color 0.3s ease;
-      }
-
-      .feature-link-map {
-        color: var(--sky);
-      }
-
-      .feature-link-gallery {
-        color: var(--forest);
-      }
-
-      .feature-link-3d {
-        color: var(--amber-dark);
-      }
-
-      .feature-link:hover {
-        gap: 0.65rem;
-      }
-
       /* Heritage editorial cards */
       .heritage-grid {
         display: grid;
@@ -1840,8 +1570,12 @@
         .before-after-slider,
         .photo-stack-gallery {
           width: 100% !important;
+          height: clamp(240px, 72vw, 360px) !important;
+          min-height: 240px !important;
+        }
+
+        .before-after-container {
           height: 100% !important;
-          min-height: 200px !important;
         }
       }
 
@@ -2845,7 +2579,7 @@
       .plan-bg-image {
         position: absolute;
         inset: -10%;
-        background: url("data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg")
+        background: url("assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg")
           center / cover no-repeat;
         transform: scale(1.08);
       }
@@ -3027,54 +2761,9 @@
         overflow: hidden;
       }
 
-      /* Heritage-inspired pattern overlay */
-      .map-section::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        opacity: 0.04;
-        background-image:
-          repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 8px,
-            rgba(4, 120, 87, 0.3) 8px,
-            rgba(4, 120, 87, 0.3) 9px
-          ),
-          repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 8px,
-            rgba(245, 158, 11, 0.2) 8px,
-            rgba(245, 158, 11, 0.2) 9px
-          );
-        pointer-events: none;
-      }
-
-      /* Soft vignette around edges */
-      .map-section::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-        background: radial-gradient(
-          ellipse 70% 60% at 50% 50%,
-          transparent 0%,
-          transparent 40%,
-          rgba(15, 23, 42, 0.03) 70%,
-          rgba(15, 23, 42, 0.08) 100%
-        );
-      }
-
       /* Floating particles */
       .map-particles {
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        pointer-events: none;
-        overflow: hidden;
+        display: none;
       }
 
       .map-particle {
@@ -3148,10 +2837,7 @@
 
       /* Organic decorative elements in corners */
       .map-decoration {
-        position: absolute;
-        z-index: 3;
-        pointer-events: none;
-        opacity: 0.08;
+        display: none;
       }
 
       .map-decoration--top-left {
@@ -3221,7 +2907,7 @@
         height: 100%;
         z-index: 1;
         font-family: "Source Sans 3", sans-serif;
-        background: var(--bg-site);
+        background: #f4f4f4;
       }
 
       .map-section__inner {
@@ -3251,21 +2937,12 @@
           0 25px 60px rgba(15, 23, 42, 0.08),
           0 0 0 1px rgba(255, 255, 255, 0.4) inset;
         z-index: 10;
+        background: #f4f4f4;
       }
 
       /* Radial glow behind map */
       .map-section__frame::before {
-        content: "";
-        position: absolute;
-        inset: -40px;
-        z-index: -1;
-        background: radial-gradient(
-          ellipse 80% 70% at 50% 50%,
-          rgba(4, 120, 87, 0.08) 0%,
-          rgba(245, 158, 11, 0.05) 40%,
-          transparent 70%
-        );
-        pointer-events: none;
+        display: none;
       }
 
       .map-intro-overlay {
@@ -3963,15 +3640,10 @@
 
         .explore-orb,
         .explore-light-beam,
-        .feature-card-shine,
         .portal-3d-model,
         .experience-3d-model,
         body.visitor-module .header-accent-line {
           animation: none !important;
-        }
-
-        .feature-card-shine {
-          display: none;
         }
       }
 
@@ -5632,6 +5304,7 @@
                 <option value="natural">Natural Heritage</option>
               </select>
             </div>
+
             <div
               class="map-intro-overlay"
               id="map-intro-overlay"
@@ -5725,7 +5398,7 @@
           <img
             class="hero-cinematic-bg-img"
             id="hero-parallax-bg"
-            src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+            src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
             alt=""
           />
           <div class="hero-cinematic-overlay"></div>
@@ -5857,8 +5530,9 @@
               >
                 <article class="hero-float-card">
                   <img
-                    src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                    src="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
                     alt="Pylon Monument"
+                    loading="lazy"
                   />
                   <div class="hero-float-card-body">
                     <strong>Pylon Monument</strong>
@@ -5873,7 +5547,7 @@
               >
                 <article class="hero-float-card">
                   <img
-                    src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                    src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
                     alt="Taytay Daga - Sleeping Dinosaur"
                     loading="lazy"
                   />
@@ -5890,7 +5564,7 @@
               >
                 <article class="hero-float-card">
                   <img
-                    src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                    src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
                     alt="Sambuokan Festival"
                     loading="lazy"
                   />
@@ -5938,8 +5612,9 @@
               muted
               loop
               playsinline
+              preload="none"
               class="gallery-video"
-              src="data/Natural Heritage/Pujada Island/Videos/1.mp4"
+              src="assets/data/Natural Heritage/Pujada Island/Videos/1.mp4"
             ></video>
             <div class="gallery-video-overlay"></div>
           </div>
@@ -6002,25 +5677,25 @@
                 <div class="before-after-slider" id="pylon-slider">
                   <div class="before-after-container">
                     <img
-                      src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                      src="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
                       alt="Pylon Monument - Historical Photo"
                       class="before-after-image before-image"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
+                      src="assets/data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
                       alt="Pylon Monument - Present Day Photo"
                       class="before-after-image after-image"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <div class="before-after-overlay">
                       <div class="before-after-label before-label">
-                        Historical
+                        Present Day
                       </div>
                       <div class="before-after-label after-label">
-                        Present Day
+                        Historical
                       </div>
                     </div>
                     <div class="before-after-handle" id="pylon-slider-handle">
@@ -6083,38 +5758,38 @@
                 <div class="photo-stack-gallery" id="sambuokan-gallery">
                   <div class="photo-stack-container">
                     <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                      src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
                       alt="Sambuokan Festival 1"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
+                      src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg"
                       alt="Sambuokan Festival 2"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
+                      src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg"
                       alt="Sambuokan Festival 3"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG"
+                      src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG"
                       alt="Sambuokan Festival 4"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
+                      src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
                       alt="Sambuokan Festival 5"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                   </div>
@@ -6167,38 +5842,38 @@
                 <div class="photo-stack-gallery" id="taytay-daga-gallery">
                   <div class="photo-stack-container">
                     <img
-                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                      src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
                       alt="Sleeping Dinosaur 1"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg"
+                      src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg"
                       alt="Sleeping Dinosaur 2"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg"
+                      src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg"
                       alt="Sleeping Dinosaur 3"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg"
+                      src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg"
                       alt="Sleeping Dinosaur 4"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                     <img
-                      src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0786.jpg"
+                      src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0786.jpg"
                       alt="Sleeping Dinosaur 5"
                       class="photo-stack-photo"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                     />
                   </div>
@@ -6241,338 +5916,22 @@
                 </a>
               </div>
             </article>
-          </div>
-        </div>
-      </section>
 
-      <!-- 3D Explore — heritage monument viewer -->
-      <section
-        id="portal-3d"
-        class="experience-section experience-3d full-screen-section"
-      >
-        <div class="experience-3d-inner">
-          <div class="experience-3d-content heritage-museum-layout">
-            <!-- Left Panel: Information -->
-            <div class="heritage-info-panel">
-              <div class="heritage-info-header">
-                <h1 class="heritage-title">Pylon Monument</h1>
-              </div>
-
-              <div class="heritage-description-container">
-                <div class="heritage-description-wrapper">
-                  <p class="heritage-description">
-                    The Pylon Monument, located at JP Rizal Street, Barangay
-                    Central, City of Mati, Davao Oriental, stands as a premier
-                    cultural landmark and the "Point Zero" geographic reference
-                    for the province. Originally commissioned in 1979 during the
-                    administration of Governor Francisco G. Rabat, the structure
-                    was designed by the first Filipino National Artist for
-                    Architecture, Juan F. Nakpil, as a tribute to Mayor Luisito
-                    G. Rabat. The monument features a 30-foot reinforced
-                    concrete and brick tower distinguished by a central glass
-                    sphere—crafted from recycled San Miguel Beer bottles—and a
-                    steel halo with a crowning luminaire. In 2019, the site
-                    underwent a comprehensive aesthetic renovation designed by
-                    Architect Cesar Gamalong, which introduced culturally themed
-                    ornamentation, a koi pond, and integrated landscaping with a
-                    waterfall feature. Formally recognized under Resolution No.
-                    61, Series of 2019, the Pylon remains a testament to the
-                    city's historical heritage and serves as a vital public
-                    space symbolizing the faith and resilience of the people of
-                    Mati.
-                  </p>
-                </div>
-              </div>
-
-              <div class="heritage-quick-info">
-                <div class="quick-info-grid">
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">3D Model</span>
-                    <span class="quick-info-value">Pylon Monument</span>
-                  </div>
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">Barangay</span>
-                    <span class="quick-info-value">Central</span>
-                  </div>
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">Category</span>
-                    <span class="quick-info-value">Monument</span>
-                  </div>
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">Ownership</span>
-                    <span class="quick-info-value">Government Property</span>
-                  </div>
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">Longitude</span>
-                    <span class="quick-info-value">126° 13' 0.8004'' E</span>
-                  </div>
-                  <div class="quick-info-item">
-                    <span class="quick-info-label">Latitude</span>
-                    <span class="quick-info-value">6° 57' 8.1288'' N</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Panel: 3D Model Viewer -->
-            <div class="heritage-model-panel">
-              <div class="heritage-model-container" id="heritage-model">
-                <div class="explore3d-viewer-lines" aria-hidden="true"></div>
-                <div
-                  class="model-viewer-loading model-viewer-loading--dark"
-                  id="model-loading"
-                  style="
-                    display: none;
-                    position: absolute;
-                    inset: 0;
-                    z-index: 10;
-                  "
-                >
-                  <div
-                    class="model-viewer-loading__spinner"
-                    aria-hidden="true"
-                  ></div>
-                  <p class="model-viewer-loading__text">Loading 3D model…</p>
-                  <p
-                    class="model-viewer-loading__percent"
-                    id="loading-percentage"
-                  >
-                    0%
-                  </p>
-                </div>
-
-                <model-viewer
-                  id="portal-pylon-model"
-                  class="experience-3d-model"
-                  src="data/Built Heritage/Pylon Monument/Pylon.glb"
-                  alt="Pylon Monument 3D model"
-                  camera-controls
-                  interaction-prompt="auto"
-                  camera-orbit="0deg 75deg 18%"
-                  camera-target="auto auto auto"
-                  min-camera-orbit="auto auto auto 3%"
-                  max-camera-orbit="auto auto auto 100%"
-                  shadow-intensity="1"
-                  exposure="1.1"
-                  aria-label="Live rotating 3D model of Pylon Monument, Mati City"
-                ></model-viewer>
-
-                <!-- Fallback image for when WebGL is not available -->
-                <div
-                  class="experience-3d-fallback"
-                  id="model-fallback"
-                  style="display: none"
-                >
-                  <img
-                    src="data/Built Heritage/Pylon Monument/Photographs/New/1000068055.jpg"
-                    alt="Pylon Monument"
-                    class="fallback-image"
-                  />
-                  <div class="fallback-message">
-                    <p>
-                      3D model requires WebGL, which is currently disabled in
-                      your browser.
-                    </p>
-                    <p>
-                      Please enable hardware acceleration in your browser
-                      settings to view the 3D model.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Heritage Games — interactive game hall -->
-      <section
-        id="portal-games"
-        class="experience-section experience-games full-screen-section"
-      >
-        <div class="experience-games-bg" aria-hidden="true">
-          <div class="games-bg-base"></div>
-          <div class="games-aurora games-aurora--1"></div>
-          <div class="games-aurora games-aurora--2"></div>
-          <div class="games-aurora games-aurora--3"></div>
-          <div class="games-perspective-floor"></div>
-          <div class="games-grid-floor"></div>
-          <div class="games-pixel-field">
-            <span class="games-pixel games-pixel--1"></span>
-            <span class="games-pixel games-pixel--2"></span>
-            <span class="games-pixel games-pixel--3"></span>
-            <span class="games-pixel games-pixel--4"></span>
-            <span class="games-pixel games-pixel--5"></span>
-            <span class="games-pixel games-pixel--6"></span>
-            <span class="games-pixel games-pixel--7"></span>
-            <span class="games-pixel games-pixel--8"></span>
-          </div>
-          <div class="games-stage-lights">
-            <span class="games-stage-light games-stage-light--left"></span>
-            <span class="games-stage-light games-stage-light--right"></span>
-          </div>
-          <div class="games-horizon-line"></div>
-          <div class="games-corner-frame games-corner-frame--tl"></div>
-          <div class="games-corner-frame games-corner-frame--tr"></div>
-          <div class="games-corner-frame games-corner-frame--bl"></div>
-          <div class="games-corner-frame games-corner-frame--br"></div>
-          <div class="games-marquee games-marquee--top">
-            <div class="games-marquee-track">
-              <span>Trivia Showdown</span><span>Memory Pairs</span
-              ><span>Spot the Difference</span><span>Slide Puzzle</span
-              ><span>True or False Sprint</span><span>Heritage Quest</span
-              ><span>Insert Coin</span><span>Press Start</span>
-              <span>Trivia Showdown</span><span>Memory Pairs</span
-              ><span>Spot the Difference</span><span>Slide Puzzle</span
-              ><span>True or False Sprint</span><span>Heritage Quest</span
-              ><span>Insert Coin</span><span>Press Start</span>
-            </div>
-          </div>
-          <div class="games-marquee games-marquee--bottom">
-            <div class="games-marquee-track games-marquee-track--reverse">
-              <span>MATI HERITAGE 3D</span><span>Level Up</span
-              ><span>Earn Points</span><span>Play &amp; Learn</span
-              ><span>Built Heritage</span><span>Natural Heritage</span
-              ><span>Cultural Heritage</span><span>Game On</span>
-              <span>MATI HERITAGE 3D</span><span>Level Up</span
-              ><span>Earn Points</span><span>Play &amp; Learn</span
-              ><span>Built Heritage</span><span>Natural Heritage</span
-              ><span>Cultural Heritage</span><span>Game On</span>
-            </div>
-          </div>
-          <div class="games-scanlines"></div>
-          <div class="games-grain"></div>
-          <div class="games-vignette"></div>
-        </div>
-
-        <div class="experience-games-inner">
-          <header class="games-portal-head reveal">
-            <p class="experience-eyebrow experience-eyebrow--light">
-              Interactive Learning
-            </p>
-            <div class="games-portal-title-row">
-              <h2 class="games-portal-title pixel-game-font">Games</h2>
-              <a
-                href="game.html"
-                class="games-portal-lobby-btn arcade-game-font"
-              >
-                <span class="games-portal-lobby-btn__icon" aria-hidden="true">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="3"
-                      y="8"
-                      width="18"
-                      height="10"
-                      rx="2"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                    />
-                    <path
-                      d="M8 12h2M14 12h2"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M12 8V5.5a1.5 1.5 0 0 1 3 0V8"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                      stroke-linecap="round"
-                    />
-                    <circle cx="7" cy="5" r="1" fill="currentColor" />
-                    <circle cx="17" cy="5" r="1" fill="currentColor" />
-                  </svg>
-                </span>
-                <span class="games-portal-lobby-btn__copy">
-                  <span class="games-portal-lobby-btn__label"
-                    >Enter Game Lobby</span
-                  >
-                  <span class="games-portal-lobby-btn__hint"
-                    >5 heritage challenges await</span
-                  >
-                </span>
-                <span class="games-portal-lobby-btn__arrow" aria-hidden="true">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 12h14M13 6l6 6-6 6"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-              </a>
-            </div>
-            <p class="games-portal-lead">
-              Five heritage challenges await. Preview each game, earn points,
-              and jump straight into the lobby.
-            </p>
-          </header>
-
-          <div
-            class="games-portal-layout reveal reveal-delay-1"
-            id="portal-game-spotlight"
-            tabindex="0"
-            role="region"
-            aria-label="Featured game preview"
-          >
-            <nav
-              class="games-portal-rack"
-              id="portal-game-rack"
-              aria-label="Select a game"
-            ></nav>
-
-            <div class="games-portal-main mt-8 md:mt-0">
-              <div class="games-portal-theater" id="portal-game-cabinet-screen">
-                <div class="portal-game-preview-stage">
-                  <div
-                    id="portal-game-preview-root"
-                    class="game-preview-root portal-game-preview-root"
-                  ></div>
-                </div>
-              </div>
-
-              <div class="games-portal-detail">
-                <div class="games-portal-detail-copy">
-                  <h3
-                    class="games-portal-game-title arcade-game-font"
-                    id="portal-game-title"
-                  >
-                    Mati Heritage Trivia
-                  </h3>
-                  <p
-                    class="games-portal-game-desc genre-game-font"
-                    id="portal-game-desc"
-                  >
-                    Discover Mati City&rsquo;s heritage through fun and
-                    interactive trivia.
-                  </p>
-                  <div class="games-portal-meta">
-                    <span
-                      class="games-portal-chip arcade-game-font"
-                      id="portal-game-players"
-                      >12.4K playing</span
-                    >
-                  </div>
-                </div>
-                <div class="games-portal-controls">
-                  <a
-                    href="trivia.html"
-                    class="games-portal-play-btn arcade-game-font"
-                    id="portal-game-play"
-                  >
-                    Play Now
-                  </a>
-                </div>
+            <!-- About Text -->
+            <div class="heritage-media-item reveal reveal-delay-4">
+              <div class="heritage-media-content">
+                <h3 class="heritage-media-title display-font">
+                  About Mati Heritage 3D
+                </h3>
+                <p class="heritage-media-description">
+                  Mati Heritage 3D is a digital preservation project dedicated
+                  to documenting and showcasing the rich cultural heritage of
+                  Mati City, Davao Oriental. Through immersive 3D models,
+                  interactive maps, and curated galleries, we bring the stories
+                  of built landmarks, living traditions, and natural landscapes
+                  to life for explorers, students, and heritage enthusiasts
+                  worldwide.
+                </p>
               </div>
             </div>
           </div>
@@ -6601,7 +5960,7 @@
               <span class="heritage-card-index" aria-hidden="true">01</span>
               <span class="heritage-count">11 Sites</span>
               <img
-                src="data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                src="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
                 alt="Pylon Monument"
                 loading="lazy"
               />
@@ -6629,7 +5988,7 @@
               <span class="heritage-card-index" aria-hidden="true">02</span>
               <span class="heritage-count">3 Traditions</span>
               <img
-                src="data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
                 alt="Sambuokan Festival"
                 loading="lazy"
               />
@@ -6657,7 +6016,7 @@
               <span class="heritage-card-index" aria-hidden="true">03</span>
               <span class="heritage-count">8 Sites</span>
               <img
-                src="data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
+                src="assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
                 alt="Pujada Island"
                 loading="lazy"
               />
@@ -6672,7 +6031,7 @@
                   Dahican Shoreline, Pujada Bay, Sleeping Dinosaur, Oak Island,
                   and Mati's protected natural treasures.
                 </p>
-                <a href="3dexplore.html" class="heritage-link">
+                <a href="gallery.html" class="heritage-link">
                   Discover nature
                   <span aria-hidden="true">→</span>
                 </a>
@@ -6725,7 +6084,8 @@
                     >Visit the City Tourism Office</strong
                   >
                   <p class="text-sm text-stone-400 col-start-2">
-                    Visit the City Tourism Office for more information and personalized heritage site recommendations.
+                    Visit the City Tourism Office for more information and
+                    personalized heritage site recommendations.
                   </p>
                 </li>
                 <li>
@@ -6734,7 +6094,8 @@
                     >Explore Heritage Sites</strong
                   >
                   <p class="text-sm text-stone-400 col-start-2">
-                    Discover iconic sites including the Pylon Monument, Subangan Museum, and Dahican Beach.
+                    Discover iconic sites including the Pylon Monument, Subangan
+                    Museum, and Dahican Beach.
                   </p>
                 </li>
                 <li>
@@ -6783,18 +6144,16 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script src="data/mati-city-boundary.js"></script>
+    <script src="assets/data/mati-city-boundary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
-    <script src="heritage-pylon-model.js"></script>
-    <script src="model-viewer-loading.js"></script>
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="_backend/supabase-auth.js"></script>
-    <script src="heritage-realtime.js"></script>
-    <script src="admin-heritage-base.js"></script>
-    <script src="heritage-map-sites.js"></script>
-    <script src="admin-store.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
+    <script src="js/pages/admin/admin-heritage-base.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/pages/admin/admin-store.js"></script>
     <script>
       // Initialize admin store for visitor portal to access dynamic heritage data
       (async function initVisitorAdminStore() {
@@ -6816,7 +6175,7 @@
         }
       })();
     </script>
-    <script src="heritage-data.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
     <script>
       // Dynamic heritage count updates for hero section
       (async function initHeritageCounts() {
@@ -6912,16 +6271,13 @@
         }
       })();
     </script>
-    <script src="game-previews.js"></script>
-    <script src="game-tv-transition.js"></script>
-    <script src="auth.js"></script>
-    <script src="heritage-points.js"></script>
-    <script src="visitor-auth.js"></script>
-    <script src="game-auth-gate.js"></script>
-    <script src="auth-logout.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script>
       // Model loading is now handled by model-viewer-loading.js
-      fetch("header.html")
+      fetch("components/header.html")
         .then((res) => res.text())
         .then(async (data) => {
           const parser = new DOMParser();
@@ -6994,7 +6350,7 @@
           bootMatiMapAfterLayout();
         });
 
-      fetch("footer.html")
+      fetch("components/footer.html")
         .then((res) => res.text())
         .then((data) => {
           const doc = new DOMParser().parseFromString(data, "text/html");
@@ -7159,7 +6515,7 @@
         });
       })();
 
-      // Mati City map — locked to city bounds only (data in heritage-map-sites.js)
+      // Mati City map markers (data in heritage-map-sites.js)
       const HERITAGE_COLORS = HERITAGE_MAP_COLORS;
       let HERITAGE_SITES = HERITAGE_MAP_SITES;
       function barangayLabel(id) {
@@ -7167,74 +6523,6 @@
       }
       function buildPopup(site) {
         return buildHeritageMapPopup(site);
-      }
-
-      // Fallback if boundary file cannot be loaded
-      const MATI_CITY_BOUNDARY_FALLBACK = [
-        [6.99547, 126.09071],
-        [6.72291, 126.19004],
-        [6.63428, 126.15502],
-        [6.32186, 126.19861],
-        [6.13412, 126.19226],
-        [6.13576, 126.21427],
-        [6.16922, 126.28439],
-        [6.24148, 126.33157],
-        [6.62428, 126.36241],
-        [6.74499, 126.47326],
-        [6.86135, 126.48227],
-        [6.9278, 126.37202],
-        [7.01857, 126.37133],
-        [7.03119, 126.29238],
-        [7.08391, 126.29581],
-        [7.0484, 126.11576],
-      ];
-
-      function ringsFromGeojson(geojson) {
-        if (!geojson) return [];
-
-        if (geojson.type === "Polygon") {
-          return [geojson.coordinates[0].map(([lng, lat]) => [lat, lng])];
-        }
-
-        if (geojson.type === "MultiPolygon") {
-          return geojson.coordinates.map((poly) =>
-            poly[0].map(([lng, lat]) => [lat, lng]),
-          );
-        }
-
-        return [];
-      }
-
-      async function loadMatiCityRings() {
-        if (window.MATI_CITY_GEOJSON) {
-          const rings = ringsFromGeojson(window.MATI_CITY_GEOJSON);
-          if (rings.length) return rings;
-        }
-
-        try {
-          const res = await fetch("data/mati-city-boundary.json");
-          if (!res.ok) throw new Error("boundary fetch failed");
-          const data = await res.json();
-          const rings = ringsFromGeojson(data[0]?.geojson);
-          if (rings.length) return rings;
-        } catch (err) {
-          console.warn("Using fallback Mati City boundary:", err);
-        }
-
-        return [MATI_CITY_BOUNDARY_FALLBACK];
-      }
-
-      const WORLD_MASK_RING = [
-        [-90, -180],
-        [-90, 180],
-        [90, 180],
-        [90, -180],
-      ];
-
-      function getMainRing(rings) {
-        return rings.reduce((longest, ring) =>
-          ring.length > longest.length ? ring : longest,
-        );
       }
 
       function getMatiViewBounds(sites = HERITAGE_SITES) {
@@ -7276,10 +6564,11 @@
 
         visibleSites.forEach((site) => {
           L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site, 40),
+            icon: createHeritagePhotoIcon(site),
+            interactive: true,
           })
-            .bindPopup(buildPopup(site), { maxWidth: 260, minWidth: 200 })
-            .addTo(layerGroup);
+            .addTo(layerGroup)
+            .bindPopup(buildPopup(site));
         });
 
         if (visibleSites.length) {
@@ -7326,45 +6615,6 @@
         updateMapFilterWrapState(filter.value);
       }
 
-      function applyCityClip(map, mainRing) {
-        const pane = map.getPane("mapPane");
-        if (!pane || !mainRing.length) return;
-
-        function updateClip() {
-          const points = mainRing
-            .map(([lat, lng]) => map.latLngToLayerPoint([lat, lng]))
-            .map((point) => `${point.x}px ${point.y}px`)
-            .join(", ");
-
-          pane.style.clipPath = `polygon(${points})`;
-          pane.style.webkitClipPath = pane.style.clipPath;
-        }
-
-        map.on("move zoom zoomend moveend viewreset resize", updateClip);
-        map.whenReady(() => {
-          updateClip();
-          requestAnimationFrame(updateClip);
-        });
-      }
-
-      function addOutsideMask(map, mainRing, fillColor = "#ecfdf5") {
-        const hole = [...mainRing].reverse();
-
-        if (!map.getPane("maskPane")) {
-          map.createPane("maskPane");
-          map.getPane("maskPane").style.zIndex = 450;
-          map.getPane("maskPane").style.pointerEvents = "none";
-        }
-
-        L.polygon([WORLD_MASK_RING, hole], {
-          pane: "maskPane",
-          stroke: false,
-          fillColor,
-          fillOpacity: 1,
-          interactive: false,
-        }).addTo(map);
-      }
-
       async function initMatiMap() {
         if (window.matiMapInstance) return;
 
@@ -7396,45 +6646,18 @@
           }
         }
 
-        const rings = await loadMatiCityRings();
-        const mainRing = getMainRing(rings);
-        const cityBounds = L.latLngBounds(mainRing);
-
-        // Focus on central cluster of sites like 3dexplore.html
-        const centralSites = HERITAGE_SITES.filter(
-          (site) =>
-            site.barangay === "central" ||
-            (site.lat >= 6.94 &&
-              site.lat <= 6.96 &&
-              site.lng >= 126.21 &&
-              site.lng <= 126.23),
-        );
-        const viewBounds =
-          centralSites.length > 0
-            ? getMatiViewBounds(centralSites)
-            : cityBounds;
-
         const map = L.map("mati-map", {
-          maxBounds: cityBounds,
-          maxBoundsViscosity: 1.0,
-          maxZoom: 17,
+          maxZoom: 19,
           zoomControl: true,
           attributionControl: false,
           scrollWheelZoom: false,
         });
 
-        L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-          {
-            maxZoom: 20,
-            subdomains: "abcd",
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          },
-        ).addTo(map);
-
-        addOutsideMask(map, mainRing);
-        applyCityClip(map, mainRing);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 20,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
 
         const heritageMarkersLayer = L.layerGroup().addTo(map);
         syncHeritageMapMarkers(map, heritageMarkersLayer, "all", () => {
@@ -7442,19 +6665,17 @@
         });
         bindMapHeritageFilter(map, heritageMarkersLayer);
 
-        // Use exact coordinates from 3dexplore.html
+        const initialSite = HERITAGE_SITES.find((site) => site.id === "pylon");
+        const initialCenter = initialSite
+          ? [initialSite.lat, initialSite.lng]
+          : [6.8975057184388415, 126.27308050000003];
         console.log(
-          "Setting map view to [6.8975057184388415, 126.27308050000003] zoom 12",
+          "Setting map view to exact heritage location",
+          initialCenter,
         );
-        map.setView([6.8975057184388415, 126.27308050000003], 12);
+        map.setView(initialCenter, 17);
         console.log("Current map center:", map.getCenter());
         console.log("Current map zoom:", map.getZoom());
-        map.setMinZoom(12);
-        console.log("Set min zoom to 12");
-
-        map.on("drag", () =>
-          map.panInsideBounds(cityBounds, { animate: false }),
-        );
 
         window.matiMapInstance = map;
         window.matiHeritageMarkersLayer = heritageMarkersLayer;
@@ -8182,7 +7403,7 @@
 
                 // Always set the direct path to avoid any path resolution issues
                 const directPath =
-                  "data/Built Heritage/Pylon Monument/Pylon.glb";
+                  "assets/data/Built Heritage/Pylon Monument/Pylon.glb";
                 portalPylonModel.setAttribute("src", directPath);
 
                 // Manual progress tracking instead of ModelViewerLoading
@@ -8416,44 +7637,6 @@
         );
         portalGamesObserver.observe(portalGamesSection);
       }
-
-      // Gallery Video Background - Alternate between Pujada Island and Oak Island videos
-      document.addEventListener("DOMContentLoaded", function () {
-        const galleryVideo = document.querySelector(".gallery-video");
-        if (galleryVideo) {
-          const videos = [
-            "data/Natural Heritage/Pujada Island/Videos/1.mp4",
-            "data/Natural Heritage/Oak Island/Videos/OAK ISLAND.mp4",
-          ];
-          let currentVideoIndex = 0;
-          const videoSwitchInterval = 20000; // Switch every 20 seconds
-
-          function switchVideo() {
-            currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-            const newSrc = videos[currentVideoIndex];
-
-            // Create a fade effect
-            galleryVideo.style.opacity = "0";
-
-            setTimeout(() => {
-              galleryVideo.src = newSrc;
-              galleryVideo.load();
-              galleryVideo.play().catch((e) => {
-                // Error handling for autoplay
-              });
-              galleryVideo.style.opacity = "1";
-            }, 500); // Wait for fade out
-          }
-
-          // Handle video end event to switch to next video
-          galleryVideo.addEventListener("ended", function () {
-            switchVideo();
-          });
-
-          // Also switch videos at regular intervals as backup
-          setInterval(switchVideo, videoSwitchInterval);
-        }
-      });
 
       // Premium Custom Cursor for Heritage Media Archive Gallery
       document.addEventListener("DOMContentLoaded", function () {

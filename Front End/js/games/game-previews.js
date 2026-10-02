@@ -15,7 +15,7 @@
       showTitle: "MATI HERITAGE",
       showSubtitle: "TRIVIA SHOWDOWN",
       gameplayImg:
-        "data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg",
+        "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg",
     },
     {
       title2: "Memory Matching Pairs",
@@ -32,7 +32,7 @@
       showTitle: "MEMORY",
       showSubtitle: "MATCHING PAIRS",
       gameplayImg:
-        "data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
+        "assets/data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
     },
     {
       title2: "Spot the Difference",
@@ -49,7 +49,7 @@
       showTitle: "SPOT THE",
       showSubtitle: "DIFFERENCE",
       gameplayImg:
-        "data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg",
+        "assets/data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg",
     },
     {
       title2: "Slide Puzzle",
@@ -66,7 +66,7 @@
       showTitle: "HERITAGE",
       showSubtitle: "SLIDE PUZZLE",
       gameplayImg:
-        "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+        "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
     },
     {
       title2: "True or False Sprint",
@@ -83,7 +83,7 @@
       showTitle: "TRUE OR FALSE",
       showSubtitle: "SPRINT",
       gameplayImg:
-        "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+        "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
     },
   ];
 
@@ -168,7 +168,7 @@
       <div class="game-polaroid-row" aria-hidden="true">
         <div class="game-polaroid game-polaroid--tilt-l">
           <span class="game-polaroid__tape"></span>
-          <img class="game-polaroid__photo" src="data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg" alt="" />
+          <img class="game-polaroid__photo" src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg" alt="" />
         </div>
         <div class="game-polaroid game-polaroid--tilt-r">
           <span class="game-polaroid__tape"></span>
@@ -224,28 +224,28 @@
       name: "Pylon Monument",
       category: "built",
       emoji: "🏛",
-      img: "data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
+      img: "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
     },
     {
       id: "sleeping-dino",
       name: "Taytay Daga (Sleeping Dinosaur)",
       category: "natural",
       emoji: "🦕",
-      img: "data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+      img: "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
     },
     {
       id: "pujada-island",
       name: "Pujada Island",
       category: "natural",
       emoji: "🏝",
-      img: "data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+      img: "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
     },
     {
       id: "gabaldon",
       name: "Gabaldon Structure (RRMCES-1)",
       category: "built",
       emoji: "🏫",
-      img: "data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
+      img: "assets/data/Built Heritage/Gabaldon Structure of RRMCES-1/Photographs/Old/Central Gabaldon.jpg",
     },
   ];
 

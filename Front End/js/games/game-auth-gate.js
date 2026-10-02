@@ -325,7 +325,7 @@ const MatiGameAuthGate = (() => {
             <header class="auth-portal-header">
               <div class="auth-portal-logo">
                 <img
-                  src="logo/MatiHeritage logo.png"
+                  src="assets/logos/MatiHeritage logo.png"
                   alt="Mati Heritage 3D"
                   class="auth-portal-logo__image"
                   style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
@@ -348,18 +348,24 @@ const MatiGameAuthGate = (() => {
     `;
     document.body.appendChild(root);
 
-    root.querySelector("[data-gate-register]")?.addEventListener("click", (event) => {
-      event.preventDefault();
-      window.location.href = authUrl("userregistration.html", returnTo);
-    });
-    root.querySelector("[data-gate-login]")?.addEventListener("click", (event) => {
-      event.preventDefault();
-      window.location.href = authUrl("login.html", returnTo);
-    });
-    root.querySelector("[data-gate-close]")?.addEventListener("click", (event) => {
-      event.preventDefault();
-      window.location.href = "index.html";
-    });
+    root
+      .querySelector("[data-gate-register]")
+      ?.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = authUrl("userregistration.html", returnTo);
+      });
+    root
+      .querySelector("[data-gate-login]")
+      ?.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = authUrl("login.html", returnTo);
+      });
+    root
+      .querySelector("[data-gate-close]")
+      ?.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = "index.html";
+      });
 
     root.addEventListener("click", (event) => {
       if (event.target === root) event.stopPropagation();

@@ -25,12 +25,6 @@ const MatiAuthOAuth = (() => {
     const nextTarget =
       redirectTarget || oauthResult.redirectTarget || "index.html";
 
-    if (!oauthResult.hasEmailPasswordCredential) {
-      window.location.href =
-        MatiSupabaseAuth.passwordSetupRedirectUrl?.(nextTarget);
-      return user;
-    }
-
     if (
       typeof MatiAdminAuth !== "undefined" &&
       (await MatiAdminAuth.isAdmin())
