@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Luckiest+Guy&family=Nunito:wght@400;600;700;800&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Satisfy&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link
@@ -46,18 +46,39 @@
         text-size-adjust: 100%;
         margin: 0;
         padding: 0;
+        scrollbar-color: #ffffff #ffffff;
+        scrollbar-width: thin;
       }
 
       body {
         font-family: "Source Sans 3", sans-serif;
         color: var(--slate);
-        background: var(--bg-site);
+        background: #ffffff;
         overflow-x: hidden;
         margin: 0;
         padding: 0;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 10px;
+        background: #ffffff;
+      }
+
+      html::-webkit-scrollbar-track,
+      body::-webkit-scrollbar-track {
+        background: #ffffff;
+        box-shadow: none;
+      }
+
+      html::-webkit-scrollbar-thumb,
+      body::-webkit-scrollbar-thumb {
+        background: #ffffff;
+        border: 0;
+        box-shadow: none;
       }
 
       /* Reset for gallery section to ensure full height */
@@ -1095,6 +1116,11 @@
           top: 0.75rem;
           right: 0.75rem;
           left: auto;
+        }
+
+        .map-legend {
+          bottom: 0.75rem;
+          right: 0.75rem;
         }
       }
 
@@ -2757,7 +2783,9 @@
         padding: 0;
         margin: 0;
         position: relative;
-        background: #f4f4f4;
+        background: #ffffff;
+        box-shadow: none !important;
+        filter: none !important;
         overflow: hidden;
       }
 
@@ -2907,7 +2935,7 @@
         height: 100%;
         z-index: 1;
         font-family: "Source Sans 3", sans-serif;
-        background: #f4f4f4;
+        background: #ffffff;
       }
 
       .map-section__inner {
@@ -2917,6 +2945,7 @@
         max-width: 94rem;
         width: 100%;
         margin: 0 auto;
+        background: #ffffff;
         min-height: calc(
           (100svh - var(--header-h, 5.625rem)) / var(--visitor-ui-scale, 1)
         );
@@ -2933,11 +2962,40 @@
         border-radius: 1.35rem;
         overflow: hidden;
         border: 1px solid rgba(4, 120, 87, 0.15);
-        box-shadow:
-          0 25px 60px rgba(15, 23, 42, 0.08),
-          0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+        box-shadow: none !important;
+        filter: none !important;
         z-index: 10;
-        background: #f4f4f4;
+        background: #ffffff;
+      }
+
+      .map-section__frame,
+      .map-section__frame::before,
+      .map-section__frame::after,
+      #mati-map,
+      #mati-map::before,
+      #mati-map::after,
+      #mati-map .leaflet-container {
+        box-shadow: none !important;
+        filter: none !important;
+      }
+
+      .heritage-google-marker-label {
+        margin-left: 0.45rem !important;
+        padding: 0.25rem 0.5rem !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        border-radius: 0.35rem !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16) !important;
+        color: #0f172a !important;
+        font-family: "Source Sans 3", sans-serif !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        white-space: normal !important;
+      }
+
+      .map-section__frame {
+        border-right: 0;
       }
 
       /* Radial glow behind map */
@@ -3128,7 +3186,7 @@
 
       .map-heritage-filter-label {
         font-family: "Source Sans 3", sans-serif;
-        font-size: 0.625rem;
+        font-size: 0.6875rem;
         font-weight: 700;
         letter-spacing: 0.16em;
         text-transform: uppercase;
@@ -3138,23 +3196,23 @@
 
       .map-heritage-filter {
         appearance: none;
-        min-width: 11.5rem;
-        padding: 0.62rem 2.25rem 0.62rem 0.85rem;
+        min-width: 13.5rem;
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
         font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
+        font-size: 0.9375rem;
         font-weight: 600;
         color: #0f172a;
-        border-radius: 0.65rem;
-        border: 1px solid rgba(4, 120, 87, 0.18);
+        border-radius: 0.75rem;
+        border: 1.5px solid rgba(4, 120, 87, 0.2);
         background:
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23047857' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
-            no-repeat right 0.75rem center / 0.9rem,
-          rgba(255, 255, 255, 0.96);
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23047857' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+            no-repeat right 1rem center / 1rem,
+          rgba(255, 255, 255, 0.97);
         box-shadow:
-          0 10px 28px rgba(15, 23, 42, 0.1),
+          0 12px 32px rgba(15, 23, 42, 0.12),
           inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         cursor: pointer;
         transition:
           border-color 0.2s ease,
@@ -3180,9 +3238,241 @@
         border-color: rgba(2, 132, 199, 0.28);
       }
 
+      .map-legend {
+        position: absolute;
+        bottom: clamp(1rem, 2.5vw, 1.35rem);
+        right: clamp(1rem, 2.5vw, 1.35rem);
+        z-index: 500;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 1.1rem;
+        border: 2px solid rgba(4, 120, 87, 0.25);
+        box-shadow:
+          0 14px 40px rgba(15, 23, 42, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.98);
+        pointer-events: auto;
+      }
+
+      .map-legend-title {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--forest-dark);
+        margin-bottom: 0.1rem;
+      }
+
+      .map-legend-item {
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr);
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .map-legend-marker {
+        display: block;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.95);
+      }
+
+      .map-legend-marker--built {
+        background: #047857;
+      }
+
+      .map-legend-marker--natural {
+        background: #0284c7;
+      }
+
+      .map-legend-label {
+        min-width: 0;
+        position: relative;
+        z-index: 1;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #0f172a;
+        white-space: nowrap;
+      }
+
+      .map-detail-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 450px;
+        z-index: 600;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-left: 1px solid rgba(4, 120, 87, 0.15);
+        box-shadow: -12px 0 40px rgba(15, 23, 42, 0.12);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        pointer-events: auto;
+        display: flex;
+        flex-direction: column;
+        will-change: transform;
+      }
+
+      .map-detail-panel.is-visible {
+        transform: translateX(0);
+      }
+
+      .map-detail-panel__close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(4, 120, 87, 0.2);
+        border-radius: 0.5rem;
+        color: #64748b;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          border-color 0.2s ease;
+        z-index: 10;
+      }
+
+      .map-detail-panel__close:hover {
+        background: rgba(255, 255, 255, 1);
+        color: #047857;
+        border-color: rgba(4, 120, 87, 0.3);
+      }
+
+      .map-detail-panel__close svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .map-detail-panel__content {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .map-detail-panel__image {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #f1f5f9;
+        overflow: hidden;
+      }
+
+      .map-detail-panel__image.is-empty {
+        display: none;
+      }
+
+      .map-detail-panel__image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .map-detail-panel__info {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .map-detail-panel__category {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: 0.375rem;
+        align-self: flex-start;
+      }
+
+      .map-detail-panel__category--built {
+        background: rgba(4, 120, 87, 0.1);
+        color: #047857;
+      }
+
+      .map-detail-panel__category--natural {
+        background: rgba(2, 132, 199, 0.1);
+        color: #0284c7;
+      }
+
+      .map-detail-panel__title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #0f172a;
+        margin: 0;
+      }
+
+      .map-detail-panel__location {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .map-detail-panel__location svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .map-detail-panel__description {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.9375rem;
+        line-height: 1.7;
+        color: #475569;
+        margin: 0;
+      }
+
       @media (max-width: 768px) {
         .map-section-first {
-          min-height: 86svh;
+          min-height: 0;
+        }
+
+        .map-section__inner {
+          flex: none;
+          min-height: 0;
+          padding: 0.75rem;
+        }
+
+        .map-section__frame {
+          flex: none;
+          height: clamp(22rem, 62svh, 32rem);
+        }
+
+        #mati-map {
+          flex: 1;
+          min-height: 0;
+          height: 100%;
+        }
+
+        .map-detail-panel {
+          width: 400px;
+        }
+
+        .map-detail-panel__title {
+          font-size: 1.5rem;
         }
       }
 
@@ -3190,6 +3480,63 @@
         .map-heritage-filter {
           width: 100%;
           min-width: 0;
+          padding: 0.65rem 2.25rem 0.65rem 0.85rem;
+          font-size: 0.875rem;
+        }
+
+        .map-heritage-filter-label {
+          font-size: 0.625rem;
+        }
+
+        .map-heritage-filter-wrap {
+          top: 0.75rem;
+        }
+
+        .map-legend {
+          bottom: 0.75rem;
+          right: 0.75rem;
+          padding: 1rem 1.15rem;
+        }
+
+        .map-legend-title {
+          font-size: 0.75rem;
+        }
+
+        .map-legend-marker {
+          width: 22px;
+          height: 22px;
+        }
+
+        .map-legend-label {
+          font-size: 0.875rem;
+        }
+
+        .map-detail-panel {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .map-detail-panel__close {
+          top: 0.75rem;
+          right: 0.75rem;
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .map-detail-panel__image {
+          aspect-ratio: 16/9;
+        }
+
+        .map-detail-panel__info {
+          padding: 1.25rem;
+        }
+
+        .map-detail-panel__title {
+          font-size: 1.375rem;
+        }
+
+        .map-detail-panel__description {
+          font-size: 0.875rem;
         }
 
         .map-intro-overlay {
@@ -5306,7 +5653,23 @@
             </div>
 
             <div
-              class="map-intro-overlay"
+              class="map-legend hidden md:block"
+              id="map-legend"
+              aria-label="Map legend"
+            >
+              <div class="map-legend-title">Legend</div>
+              <div class="map-legend-item">
+                <div class="map-legend-marker map-legend-marker--built"></div>
+                <span class="map-legend-label">Built Heritage</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="map-legend-marker map-legend-marker--natural"></div>
+                <span class="map-legend-label">Natural Heritage</span>
+              </div>
+            </div>
+
+            <div
+              class="map-intro-overlay hidden md:block"
               id="map-intro-overlay"
               aria-hidden="false"
             >
@@ -5323,7 +5686,7 @@
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
-                  <span>Official Heritage Sites</span>
+                  <span>Heritage Sites</span>
                 </div>
                 <h2 class="map-intro-overlay__title">Mati City</h2>
                 <p class="map-intro-overlay__desc">
@@ -5391,6 +5754,49 @@
           </div>
         </div>
       </section>
+
+      <!-- Map Detail Panel -->
+      <div class="map-detail-panel" id="map-detail-panel" aria-hidden="true">
+        <button
+          class="map-detail-panel__close"
+          id="map-detail-panel-close"
+          aria-label="Close detail panel"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <div class="map-detail-panel__content">
+          <div class="map-detail-panel__image">
+            <img id="map-detail-panel-image" src="" alt="" />
+          </div>
+          <div class="map-detail-panel__info">
+            <span
+              class="map-detail-panel__category"
+              id="map-detail-panel-category"
+            ></span>
+            <h2
+              class="map-detail-panel__title"
+              id="map-detail-panel-title"
+            ></h2>
+            <div
+              class="map-detail-panel__location"
+              id="map-detail-panel-location"
+            ></div>
+            <p
+              class="map-detail-panel__description"
+              id="map-detail-panel-description"
+            ></p>
+          </div>
+        </div>
+      </div>
 
       <!-- Hero -->
       <section class="hero-section hero-cinematic" id="hero">
@@ -6145,6 +6551,7 @@
       crossorigin=""
     ></script>
     <script src="assets/data/mati-city-boundary.js"></script>
+    <script src="_backend/google-maps-config.local.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
@@ -6413,8 +6820,14 @@
           .join("");
       }
 
-      // Scroll reveal
+      // Reveal all ready sections together when the page finishes loading.
       const revealEls = document.querySelectorAll(".reveal");
+      const revealAll = () => {
+        revealEls.forEach((el) => {
+          el.classList.add("visible");
+        });
+      };
+
       const revealObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -6426,6 +6839,14 @@
         },
         { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
       );
+
+      if (document.readyState === "complete") {
+        revealAll();
+      } else {
+        window.addEventListener("load", revealAll, { once: true });
+      }
+
+      // Keep the observer for any newly added reveal elements.
       revealEls.forEach((el) => revealObserver.observe(el));
 
       // Animated stat counters
@@ -6528,6 +6949,14 @@
       function getMatiViewBounds(sites = HERITAGE_SITES) {
         if (!sites.length) return null;
 
+        if (window.google?.maps && window.matiMapProvider === "google") {
+          const bounds = new google.maps.LatLngBounds();
+          sites.forEach((site) =>
+            bounds.extend({ lat: site.lat, lng: site.lng }),
+          );
+          return bounds;
+        }
+
         return L.latLngBounds(sites.map((site) => [site.lat, site.lng])).pad(
           0.14,
         );
@@ -6563,22 +6992,56 @@
         const visibleSites = getFilteredHeritageSites(category);
 
         visibleSites.forEach((site) => {
-          L.marker([site.lat, site.lng], {
+          if (window.matiMapProvider === "google") {
+            const markerColor =
+              HERITAGE_COLORS[site.category] ||
+              (site.category === "built" ? "#047857" : "#0284c7");
+            const markerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50"><path fill="${markerColor}" stroke="white" stroke-width="2" d="M20 1C9.5 1 1 9.5 1 20c0 12 19 29 19 29s19-17 19-29C39 9.5 30.5 1 20 1Z"/><circle cx="20" cy="20" r="6.5" fill="white"/></svg>`;
+            const marker = new google.maps.Marker({
+              map,
+              position: { lat: site.lat, lng: site.lng },
+              title: site.name,
+              icon: {
+                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(markerSvg)}`,
+                scaledSize: new google.maps.Size(40, 50),
+                anchor: new google.maps.Point(20, 50),
+                labelOrigin: new google.maps.Point(44, 20),
+              },
+              label: {
+                text: site.name,
+                className: "heritage-google-marker-label",
+              },
+              zIndex: 100,
+            });
+            marker.addListener("click", () => showMapDetailPanel(site));
+            layerGroup.markers.push(marker);
+            return;
+          }
+
+          const marker = L.marker([site.lat, site.lng], {
             icon: createHeritagePhotoIcon(site),
             interactive: true,
-          })
-            .addTo(layerGroup)
-            .bindPopup(buildPopup(site));
+          });
+
+          marker.on("click", (e) => {
+            L.DomEvent.stopPropagation(e);
+            showMapDetailPanel(site);
+          });
+
+          marker.addTo(layerGroup);
         });
 
         if (visibleSites.length) {
           const bounds = getMatiViewBounds(visibleSites);
           if (bounds) {
-            map.fitBounds(bounds, {
-              padding: [32, 32],
-              animate: true,
-              duration: 0.65,
-            });
+            if (window.matiMapProvider === "google") {
+              map.fitBounds(bounds, 32);
+            } else {
+              map.fitBounds(bounds, {
+                padding: [32, 32],
+                animate: false,
+              });
+            }
           }
         }
 
@@ -6615,6 +7078,121 @@
         updateMapFilterWrapState(filter.value);
       }
 
+      function showMapDetailPanel(site) {
+        const panel = document.getElementById("map-detail-panel");
+        const image = document.getElementById("map-detail-panel-image");
+        const imageContainer = image?.parentElement;
+        const category = document.getElementById("map-detail-panel-category");
+        const title = document.getElementById("map-detail-panel-title");
+        const location = document.getElementById("map-detail-panel-location");
+        const description = document.getElementById(
+          "map-detail-panel-description",
+        );
+
+        if (!panel) return;
+
+        // Position the panel within the map frame, not the whole page section.
+        const mapFrame = document.querySelector(".map-section__frame");
+        if (mapFrame) {
+          const rect = mapFrame.getBoundingClientRect();
+          panel.style.top = rect.top + "px";
+          panel.style.bottom = window.innerHeight - rect.bottom + "px";
+        }
+
+        if (image && imageContainer) {
+          imageContainer.classList.remove("is-empty");
+          image.alt = site.name;
+          image.onerror = () => {
+            image.removeAttribute("src");
+            imageContainer.classList.add("is-empty");
+          };
+          image.onload = () => imageContainer.classList.remove("is-empty");
+          image.src = site.image ? encodeURI(site.image) : "";
+          if (!site.image) imageContainer.classList.add("is-empty");
+        }
+
+        category.textContent =
+          site.category === "built" ? "Built Heritage" : "Natural Heritage";
+        category.className =
+          "map-detail-panel__category map-detail-panel__category--" +
+          site.category;
+
+        title.textContent = site.name;
+
+        location.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <span>Brgy. ${heritageBarangayLabel(site.barangay)} · Mati City</span>
+        `;
+
+        description.textContent = site.desc;
+
+        panel.classList.add("is-visible");
+        panel.setAttribute("aria-hidden", "false");
+      }
+
+      function hideMapDetailPanel() {
+        const panel = document.getElementById("map-detail-panel");
+        if (!panel) return;
+
+        panel.classList.remove("is-visible");
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function bindMapDetailPanel(map) {
+        const closeBtn = document.getElementById("map-detail-panel-close");
+        if (closeBtn) {
+          closeBtn.addEventListener("click", hideMapDetailPanel);
+        }
+
+        if (map) {
+          const onMapClick = () => {
+            hideMapDetailPanel();
+          };
+          if (window.matiMapProvider === "google") {
+            map.addListener("click", onMapClick);
+          } else {
+            map.on("click", onMapClick);
+          }
+        }
+
+        const updatePanelBounds = () => {
+          const panel = document.getElementById("map-detail-panel");
+          const mapFrame = document.querySelector(".map-section__frame");
+          if (!panel || !mapFrame) return;
+
+          const rect = mapFrame.getBoundingClientRect();
+          const top = Math.max(rect.top, 0);
+          const bottom = Math.min(rect.bottom, window.innerHeight);
+          const height = Math.max(bottom - top, 0);
+
+          if (!height) {
+            panel.classList.remove("is-visible");
+            panel.setAttribute("aria-hidden", "true");
+            return;
+          }
+
+          panel.style.top = `${top}px`;
+          panel.style.bottom = `${Math.max(window.innerHeight - bottom, 0)}px`;
+          panel.style.maxHeight = `${height}px`;
+        };
+
+        // Keep the preview inside the visible map frame.
+        window.addEventListener("scroll", () => {
+          if (
+            document
+              .getElementById("map-detail-panel")
+              ?.classList.contains("is-visible")
+          ) {
+            updatePanelBounds();
+          }
+        });
+        window.addEventListener("resize", updatePanelBounds);
+        updatePanelBounds();
+      }
+
       async function initMatiMap() {
         if (window.matiMapInstance) return;
 
@@ -6646,40 +7224,149 @@
           }
         }
 
-        const map = L.map("mati-map", {
-          maxZoom: 19,
-          zoomControl: true,
-          attributionControl: false,
-          scrollWheelZoom: false,
-        });
+        const apiKey = window.MATI_GOOGLE_MAPS_CONFIG?.apiKey?.trim();
+        let googleMapsReady = false;
+        if (apiKey) {
+          try {
+            await loadGoogleMapsApi(apiKey);
+            googleMapsReady = true;
+          } catch (error) {
+            console.error(
+              "Google Maps failed to load; falling back to OpenStreetMap.",
+              error,
+            );
+          }
+        } else {
+          console.info(
+            "Google Maps API key is not configured; using OpenStreetMap.",
+          );
+        }
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 20,
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+        const cityBounds =
+          typeof MATI_CITY_GEOJSON !== "undefined"
+            ? L.geoJSON(MATI_CITY_GEOJSON).getBounds()
+            : null;
+        let map;
+        let heritageMarkersLayer;
 
-        const heritageMarkersLayer = L.layerGroup().addTo(map);
+        if (googleMapsReady) {
+          window.matiMapProvider = "google";
+          const restrictionBounds = cityBounds
+            ? {
+                north: cityBounds.getNorth(),
+                south: cityBounds.getSouth(),
+                east: cityBounds.getEast(),
+                west: cityBounds.getWest(),
+              }
+            : undefined;
+          map = new google.maps.Map(document.getElementById("mati-map"), {
+            center: { lat: 6.8975057184388415, lng: 126.27308050000003 },
+            zoom: 12,
+            minZoom: 10,
+            maxZoom: 19,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            streetViewControl: false,
+            fullscreenControl: true,
+            zoomControl: true,
+            gestureHandling: window.matchMedia("(max-width: 768px)").matches
+              ? "cooperative"
+              : "greedy",
+            ...(restrictionBounds
+              ? {
+                  restriction: {
+                    latLngBounds: restrictionBounds,
+                    strictBounds: false,
+                  },
+                }
+              : {}),
+          });
+          if (typeof MATI_CITY_GEOJSON !== "undefined") {
+            const cityBoundary = new google.maps.Data({ map });
+            cityBoundary.addGeoJson({
+              type: "Feature",
+              properties: {},
+              geometry: MATI_CITY_GEOJSON,
+            });
+            cityBoundary.setStyle({
+              strokeColor: "#047857",
+              strokeOpacity: 0.9,
+              strokeWeight: 3,
+              fillColor: "#ffffff",
+              fillOpacity: 0.08,
+              clickable: false,
+            });
+          }
+          heritageMarkersLayer = {
+            markers: [],
+            clearLayers() {
+              this.markers.forEach((marker) => marker.setMap(null));
+              this.markers = [];
+            },
+          };
+        } else {
+          window.matiMapProvider = "openstreetmap";
+          map = L.map("mati-map", {
+            ...(cityBounds
+              ? {
+                  maxBounds: cityBounds,
+                  maxBoundsViscosity: 1.0,
+                }
+              : {}),
+            maxZoom: 19,
+            zoomControl: true,
+            attributionControl: false,
+            scrollWheelZoom: false,
+            dragging: !window.matchMedia("(max-width: 768px)").matches,
+          });
+
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 20,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(map);
+
+          if (typeof MATI_CITY_GEOJSON !== "undefined") {
+            L.geoJSON(MATI_CITY_GEOJSON, {
+              style: {
+                color: "#047857",
+                weight: 3,
+                opacity: 0.9,
+                fillColor: "#ffffff",
+                fillOpacity: 0.08,
+                interactive: false,
+              },
+            }).addTo(map);
+          }
+
+          heritageMarkersLayer = L.layerGroup().addTo(map);
+        }
+
         syncHeritageMapMarkers(map, heritageMarkersLayer, "all", () => {
           console.log("All heritage markers loaded together");
         });
         bindMapHeritageFilter(map, heritageMarkersLayer);
+        bindMapDetailPanel(map);
 
-        const initialSite = HERITAGE_SITES.find((site) => site.id === "pylon");
-        const initialCenter = initialSite
-          ? [initialSite.lat, initialSite.lng]
-          : [6.8975057184388415, 126.27308050000003];
-        console.log(
-          "Setting map view to exact heritage location",
-          initialCenter,
-        );
-        map.setView(initialCenter, 17);
-        console.log("Current map center:", map.getCenter());
-        console.log("Current map zoom:", map.getZoom());
+        // syncHeritageMapMarkers fits the map to all visible sites. Only use
+        // the city center as a fallback when the catalog has no coordinates.
+        if (!HERITAGE_SITES.length) {
+          if (window.matiMapProvider === "google") {
+            map.setCenter({
+              lat: 6.8975057184388415,
+              lng: 126.27308050000003,
+            });
+            map.setZoom(13);
+          } else {
+            map.setView([6.8975057184388415, 126.27308050000003], 13);
+          }
+        }
 
         window.matiMapInstance = map;
         window.matiHeritageMarkersLayer = heritageMarkersLayer;
-        setTimeout(() => map.invalidateSize(), 150);
+        if (window.matiMapProvider === "openstreetmap") {
+          setTimeout(() => map.invalidateSize(), 150);
+        }
         bindMapScrollWheel(map);
         bindMapVisibilityPause(
           map,
@@ -6779,6 +7466,7 @@
                     window.matiHeritageMarkersLayer,
                     filter,
                   );
+                  updateSiteSelector(filter);
                 }
               }
             } catch (error) {
@@ -6855,6 +7543,7 @@
       };
 
       function bindMapScrollWheel(map) {
+        if (window.matiMapProvider === "google") return;
         const container = map?.getContainer();
         if (!container) return;
 
@@ -6900,19 +7589,24 @@
           scheduleReshow();
         };
 
-        const container = map.getContainer();
-        const activityEvents = [
-          "dragstart",
-          "zoomstart",
-          "zoom",
-          "movestart",
-          "move",
-          "click",
-        ];
-
-        activityEvents.forEach((eventName) => {
-          map.on(eventName, onMapActivity);
-        });
+        const container =
+          window.matiMapProvider === "google"
+            ? map.getDiv()
+            : map.getContainer();
+        if (window.matiMapProvider === "google") {
+          ["dragstart", "zoom_changed", "bounds_changed", "click"].forEach(
+            (eventName) => map.addListener(eventName, onMapActivity),
+          );
+        } else {
+          [
+            "dragstart",
+            "zoomstart",
+            "zoom",
+            "movestart",
+            "move",
+            "click",
+          ].forEach((eventName) => map.on(eventName, onMapActivity));
+        }
 
         if (container) {
           container.addEventListener("mousedown", onMapActivity);
@@ -6935,7 +7629,13 @@
             isVisible = nowVisible;
 
             if (nowVisible) {
-              requestAnimationFrame(() => map.invalidateSize());
+              requestAnimationFrame(() => {
+                if (window.matiMapProvider === "google") {
+                  google.maps.event.trigger(map, "resize");
+                } else {
+                  map.invalidateSize();
+                }
+              });
             }
           },
           { rootMargin: "80px 0px", threshold: 0.01 },
@@ -6945,6 +7645,44 @@
       }
 
       let matiMapBooted = false;
+
+      function loadGoogleMapsApi(apiKey) {
+        if (window.google?.maps?.Map) return Promise.resolve();
+        if (window.matiGoogleMapsLoadPromise) {
+          return window.matiGoogleMapsLoadPromise;
+        }
+
+        window.matiGoogleMapsLoadPromise = new Promise((resolve, reject) => {
+          const callbackName = "__matiGoogleMapsReady";
+          const script = document.createElement("script");
+          const timeoutId = window.setTimeout(() => {
+            delete window[callbackName];
+            reject(new Error("Timed out while loading the Google Maps API."));
+          }, 15000);
+
+          window[callbackName] = () => {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            resolve();
+          };
+          script.async = true;
+          script.defer = true;
+          script.onerror = () => {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            reject(new Error("The Google Maps API script failed to load."));
+          };
+          script.src =
+            "https://maps.googleapis.com/maps/api/js?key=" +
+            encodeURIComponent(apiKey) +
+            "&callback=" +
+            callbackName +
+            "&loading=async";
+          document.head.appendChild(script);
+        });
+
+        return window.matiGoogleMapsLoadPromise;
+      }
 
       function bootMatiMapAfterLayout() {
         if (matiMapBooted) {

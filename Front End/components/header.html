@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -59,23 +60,23 @@
         position: relative;
         height: 100%;
         overflow: visible;
-        background: rgba(255, 255, 255, 0.96);
+        background: #ffffff;
         border-bottom: 1px solid var(--hdr-line);
         backdrop-filter: blur(28px) saturate(1.4);
         -webkit-backdrop-filter: blur(28px) saturate(1.4);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.98) inset,
-          0 16px 48px rgba(4, 120, 87, 0.05);
+          0 4px 16px rgba(0, 0, 0, 0.1);
         transition:
           box-shadow 0.45s ease,
           background 0.45s ease;
       }
 
       .site-header.is-scrolled .header-bg {
-        background: rgba(255, 255, 255, 0.97);
+        background: #ffffff;
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 1) inset,
-          0 12px 40px rgba(12, 26, 20, 0.08);
+          0 6px 24px rgba(0, 0, 0, 0.12);
       }
 
       /* ── Heritage scene ── */
@@ -389,59 +390,11 @@
       }
 
       .header-accent-line {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 2px;
-        z-index: 1;
-        background: linear-gradient(
-          90deg,
-          transparent 0%,
-          var(--forest-dark) 8%,
-          var(--forest) 25%,
-          var(--amber) 50%,
-          var(--sky) 75%,
-          #0369a1 92%,
-          transparent 100%
-        );
-        background-size: 200% 100%;
-        animation: hdr-accent-flow 7s linear infinite;
-      }
-
-      @keyframes hdr-accent-flow {
-        0% {
-          background-position: 100% 0;
-        }
-        100% {
-          background-position: -100% 0;
-        }
+        display: none;
       }
 
       .header-shimmer {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background: linear-gradient(
-          105deg,
-          transparent 38%,
-          rgba(255, 255, 255, 0.4) 50%,
-          transparent 62%
-        );
-        transform: translateX(-130%);
-        animation: hdr-shimmer 10s ease-in-out infinite;
-        pointer-events: none;
-      }
-
-      @keyframes hdr-shimmer {
-        0%,
-        65%,
-        100% {
-          transform: translateX(-130%);
-        }
-        82% {
-          transform: translateX(130%);
-        }
+        display: none;
       }
 
       /* ── Bar ── */
@@ -639,36 +592,12 @@
         justify-content: center;
         justify-self: center;
         margin-left: 10rem;
-        padding: 0.32rem;
-        border-radius: 9999px;
-        background: var(--hdr-dock);
-        border: 1px solid rgba(255, 255, 255, 0.82);
-        box-shadow:
-          0 6px 32px rgba(12, 26, 20, 0.07),
-          0 0 0 1px rgba(4, 120, 87, 0.04),
-          inset 0 1px 0 rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-      }
-
-      .site-nav::before {
-        content: "";
-        position: absolute;
-        inset: -1px;
-        border-radius: 9999px;
-        background: linear-gradient(
-          135deg,
-          rgba(4, 120, 87, 0.12),
-          rgba(2, 132, 199, 0.08),
-          rgba(245, 158, 11, 0.06)
-        );
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.35s ease;
-      }
-
-      .site-nav:hover::before {
-        opacity: 1;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
       }
 
       @media (min-width: 1024px) {
@@ -678,29 +607,7 @@
       }
 
       .site-nav__indicator {
-        position: absolute;
-        top: 0.32rem;
-        left: 0;
-        height: calc(100% - 0.64rem);
-        border-radius: 9999px;
-        background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
-        border: 1px solid rgba(4, 120, 87, 0.14);
-        box-shadow:
-          0 6px 20px rgba(4, 120, 87, 0.12),
-          0 0 0 1px rgba(255, 255, 255, 0.8) inset,
-          0 0 24px rgba(4, 120, 87, 0.08);
-        pointer-events: none;
-        opacity: 0;
-        transform: translateX(0);
-        transition:
-          transform 0.45s var(--header-ease),
-          width 0.45s var(--header-ease),
-          opacity 0.25s ease;
-        z-index: 0;
-      }
-
-      .site-nav.has-indicator .site-nav__indicator {
-        opacity: 1;
+        display: none;
       }
 
       .site-nav__link {
@@ -711,13 +618,13 @@
         gap: 0.5rem;
         padding: 0.65rem 1.15rem;
         font-family: "Source Sans 3", sans-serif;
-        font-size: 1.025rem;
+        font-size: 1.15rem;
         font-weight: 500;
         letter-spacing: 0.015em;
         text-decoration: none;
         color: var(--hdr-muted);
         white-space: nowrap;
-        border-radius: 9999px;
+        border-radius: 0;
         transition:
           color 0.25s ease,
           transform 0.3s var(--header-ease);
@@ -779,15 +686,9 @@
 
       .site-nav__link--featured.is-active {
         color: var(--forest-dark);
-        background: linear-gradient(
-          135deg,
-          rgba(4, 120, 87, 0.14),
-          rgba(2, 132, 199, 0.12)
-        );
-        border: 1px solid rgba(4, 120, 87, 0.2);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.85),
-          0 0 20px rgba(4, 120, 87, 0.1);
+        background: transparent;
+        border: none;
+        box-shadow: none;
       }
 
       .site-nav__link--featured.is-active .site-nav__chip {
@@ -811,7 +712,7 @@
 
       body.visitor-module .site-nav__link {
         background: transparent;
-        border: 1px solid transparent;
+        border: none;
         box-shadow: none;
       }
 
@@ -819,12 +720,9 @@
       body.visitor-module .site-nav__link:focus-visible,
       body.visitor-module .site-nav__link.is-active {
         color: var(--hdr-ink);
-        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-        border-color: rgba(4, 120, 87, 0.14);
-        box-shadow:
-          0 6px 20px rgba(4, 120, 87, 0.12),
-          0 0 0 1px rgba(255, 255, 255, 0.82) inset,
-          0 0 20px rgba(4, 120, 87, 0.06);
+        background: transparent;
+        border: none;
+        box-shadow: none;
       }
 
       body.visitor-module .site-nav__link.is-active .site-nav__icon,
@@ -1366,18 +1264,13 @@
       }
 
       body:not(.visitor-module) .header-bg {
-        background: rgba(10, 16, 28, 0.97);
+        background: #ffffff;
         border-bottom-color: rgba(255, 255, 255, 0.08);
         box-shadow: 0 10px 48px rgba(0, 0, 0, 0.45);
       }
 
       body:not(.visitor-module) .header-scroll-progress {
         box-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
-      }
-
-      body:not(.visitor-module) .header-shimmer,
-      body:not(.visitor-module) .header-accent-line {
-        opacity: 0.55;
       }
 
       body:not(.visitor-module) .site-brand__mark {
@@ -1409,19 +1302,9 @@
       }
 
       body:not(.visitor-module) .site-nav {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.06),
-          0 0 40px rgba(212, 175, 55, 0.04);
-      }
-
-      body:not(.visitor-module) .site-nav__indicator {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.14);
-        box-shadow:
-          0 6px 24px rgba(0, 0, 0, 0.3),
-          0 0 20px rgba(212, 175, 55, 0.08);
+        background: transparent;
+        border: none;
+        box-shadow: none;
       }
 
       body:not(.visitor-module) .site-nav__link:hover,
@@ -1434,12 +1317,8 @@
       }
 
       body:not(.visitor-module) .site-nav__link--featured.is-active {
-        background: linear-gradient(
-          135deg,
-          rgba(212, 175, 55, 0.18),
-          rgba(4, 120, 87, 0.14)
-        );
-        border-color: rgba(212, 175, 55, 0.28);
+        background: transparent;
+        border: none;
       }
 
       body:not(.visitor-module) .header-points-badge,
@@ -1565,7 +1444,6 @@
         .site-header,
         .header-bg,
         .site-nav__link,
-        .site-nav__indicator,
         .site-mobile-nav,
         .site-mobile-nav__link,
         .site-nav-toggle__bars span,
@@ -1575,8 +1453,6 @@
         .header-scene__cloud,
         .header-scene__mist,
         .header-scene__particles span,
-        .header-accent-line,
-        .header-shimmer,
         .hdr-palm,
         .hdr-wave-1,
         .hdr-wave-2,
@@ -1595,7 +1471,7 @@
     </style>
   </head>
 
-  <body>
+  <body class="visitor-module">
     <header class="site-header" id="site-header">
       <div class="header-bg">
         <div
@@ -1605,9 +1481,6 @@
         ></div>
 
         <!-- Removed header scene -->
-
-        <div class="header-shimmer" aria-hidden="true"></div>
-        <div class="header-accent-line" aria-hidden="true"></div>
 
         <div class="site-header__bar">
           <a href="index.html" class="site-brand">
@@ -1621,11 +1494,6 @@
           </a>
 
           <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-            <span
-              class="site-nav__indicator"
-              id="site-nav-indicator"
-              aria-hidden="true"
-            ></span>
             <a href="index.html" class="site-nav__link" data-nav="home">
               <span class="site-nav__icon" aria-hidden="true">
                 <svg
@@ -1993,7 +1861,6 @@
       window.initSiteHeader = function () {
         const header = document.getElementById("site-header");
         const nav = document.getElementById("site-nav");
-        const indicator = document.getElementById("site-nav-indicator");
         const toggle = document.getElementById("site-nav-toggle");
         const mobileNav = document.getElementById("site-mobile-nav");
         const mobileLinksWrap = document.getElementById(
@@ -2006,53 +1873,6 @@
 
         if (!header || header.dataset.headerInit === "1") return;
         header.dataset.headerInit = "1";
-
-        const moveIndicator = (link) => {
-          if (!nav || !indicator || !link) return;
-          if (document.body.classList.contains("visitor-module")) {
-            nav.classList.remove("has-indicator");
-            indicator.style.opacity = "0";
-            return;
-          }
-          if (
-            link.classList.contains("site-nav__link--featured") &&
-            link.classList.contains("is-active")
-          ) {
-            indicator.style.opacity = "0";
-            nav.classList.remove("has-indicator");
-            return;
-          }
-          const navRect = nav.getBoundingClientRect();
-          const linkRect = link.getBoundingClientRect();
-          indicator.style.width = linkRect.width + "px";
-          indicator.style.transform = `translateX(${linkRect.left - navRect.left}px)`;
-          nav.classList.add("has-indicator");
-          indicator.style.opacity = "1";
-        };
-
-        const activeLink = document.querySelector(".site-nav__link.is-active");
-        if (activeLink) moveIndicator(activeLink);
-
-        document.querySelectorAll(".site-nav__link").forEach((link) => {
-          link.addEventListener("mouseenter", () => moveIndicator(link));
-          link.addEventListener("focus", () => moveIndicator(link));
-        });
-
-        if (nav) {
-          nav.addEventListener("mouseleave", () => {
-            const active = document.querySelector(".site-nav__link.is-active");
-            if (active) moveIndicator(active);
-            else {
-              nav.classList.remove("has-indicator");
-              indicator.style.opacity = "0";
-            }
-          });
-        }
-
-        window.addEventListener("resize", () => {
-          const active = document.querySelector(".site-nav__link.is-active");
-          if (active) moveIndicator(active);
-        });
 
         const syncMobileLinks = () => {
           if (!mobileLinksWrap) return;

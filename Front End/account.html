@@ -59,22 +59,6 @@
         margin: 0;
       }
 
-      .account-back-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8125rem;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #ffffff;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-      }
-
-      .account-back-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
-      }
-
       .account-dashboard-layout {
         display: grid;
         grid-template-columns: 1fr;
@@ -428,7 +412,6 @@
           <div id="account-content" hidden>
             <header class="account-card__hero">
               <h1 class="account-card__title">My Account</h1>
-              <a href="game.html" class="account-back-btn">Back to Games</a>
             </header>
 
             <div class="account-dashboard-layout">
@@ -809,15 +792,6 @@
             "success",
           );
 
-          // Update session with new username to ensure real-time sync across app
-          const currentSession = MatiAuth.getSession();
-          if (currentSession && result.user) {
-            MatiAuth.setSession({
-              ...currentSession,
-              username: result.user.username,
-            });
-          }
-
           // Update username display
           const usernameDisplay = document.getElementById(
             "account-username-display",
@@ -907,13 +881,7 @@
                 }
 
                 // Update local session
-                const currentSession = MatiAuth.getSession();
-                if (currentSession) {
-                  MatiAuth.setSession({
-                    ...currentSession,
-                    avatarUrl: avatarUrl,
-                  });
-                }
+                MatiAuth.updateSession({ avatarUrl });
 
                 // Update avatar display
                 if (avatar) {
@@ -938,13 +906,7 @@
                   }
 
                   // Update local session
-                  const currentSession = MatiAuth.getSession();
-                  if (currentSession) {
-                    MatiAuth.setSession({
-                      ...currentSession,
-                      avatarUrl: avatarUrl,
-                    });
-                  }
+                  MatiAuth.updateSession({ avatarUrl });
 
                   // Update avatar display
                   if (avatar) {

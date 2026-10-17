@@ -1,8 +1,31 @@
 /* Shared heritage map markers & popups (visitor + admin) */
 
 .heritage-marker-wrap {
+  position: relative;
   background: transparent;
   border: none;
+  overflow: visible;
+}
+
+.heritage-marker-label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.5rem);
+  z-index: 1;
+  max-width: 14rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16);
+  color: #0f172a;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.2;
+  pointer-events: none;
+  transform: translateY(-50%);
+  white-space: normal;
 }
 
 .heritage-photo-marker {

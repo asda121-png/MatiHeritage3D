@@ -267,8 +267,11 @@
 
   function mediaUrl(src) {
     const value = String(src || "");
-    if (/^https?:\/\//i.test(value)) return value;
-    return encodeURI(value);
+    if (/^(?:https?:\/\/|data:|blob:)/i.test(value)) return value;
+    const assetPath = value.replace(/^\/?data\//i, (prefix) =>
+      prefix.startsWith("/") ? "/assets/data/" : "assets/data/",
+    );
+    return encodeURI(assetPath);
   }
 
   function linkifyCitation(text) {
@@ -413,13 +416,11 @@
   ];
 
   function getPilePhotos(siteId, cover) {
-    const fromMedia = resolveSiteMedia(siteId)
-      .filter((item) => item.type === "photo")
-      .map((item) => item.src);
-    const photos = [...new Set([cover, ...fromMedia].filter(Boolean))];
-    if (!photos.length) return [];
-    while (photos.length < 4) photos.push(photos[0]);
-    return photos.slice(0, 4);
+    const staticPhotos =
+      typeof GALLERY_SITE_PHOTOS !== "undefined"
+        ? GALLERY_SITE_PHOTOS[siteId] || []
+        : [];
+    return [...staticPhotos, ...Array(4)].slice(0, 4);
   }
 
   function renderPilePrints(siteId, cover) {
@@ -431,12 +432,11 @@
             style="--print-i: ${index}"
             data-print="${index}"
           >
-            <img
-              src="${escapeHtml(src)}"
-              alt=""
-              loading="lazy"
-              style="filter: ${PILE_PRINT_FILTERS[index]}"
-            />
+            ${
+              src
+                ? `<img src="${escapeHtml(src)}" alt="" loading="lazy" style="filter: ${PILE_PRINT_FILTERS[index]}" />`
+                : ""
+            }
           </span>`;
       })
       .join("");
@@ -2496,7 +2496,7 @@
   }
 
   async function hydrateFromSupabase() {
-    if (GALLERY_EMBED) return;
+    if (GALLERY_EMBED || INITIAL_CATEGORY) return;
     if (typeof MatiHeritageData === "undefined") return;
     if (typeof MatiHeritageData.hydrateGalleryCatalog !== "function") return;
 
@@ -2551,7 +2551,7 @@
   }
 
   function ensureGalleryLive() {
-    if (GALLERY_EMBED) return;
+    if (GALLERY_EMBED || INITIAL_CATEGORY) return;
 
     if (typeof MatiHeritageData?.subscribeCatalog === "function") {
       // subscribeCatalog already invalidates + hydrates before this callback.

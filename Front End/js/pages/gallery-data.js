@@ -1178,6 +1178,48 @@ function getSiteMedia(siteId) {
   return GALLERY_MEDIA.filter((m) => m.siteId === siteId);
 }
 
+const GALLERY_SITE_PHOTOS = {
+  sambuokan: [
+    "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2763.jpg",
+    "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2768.JPG",
+    "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg",
+    "assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2760.jpg",
+  ],
+  "pujada-festival": [],
+  "dioscoro": [
+    "assets/data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Photographs/1.png",
+    "assets/data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Photographs/2.png",
+    "assets/data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Photographs/3.png",
+    "assets/data/Intangible Cultural Heritage/Works of Dioscoro Vicentino/Photographs/4.png.png",
+  ],
+  mamacao: [
+    "assets/data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
+  ],
+  "taytay-daga": [
+    "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
+    "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0754.jpg",
+    "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0761.jpg",
+    "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/DJI_0771.jpg",
+  ],
+  "guang-guang": [
+    "assets/data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park/Photographs/d.jpg",
+  ],
+  "dahican-shoreline": [],
+  "oak-island": [
+    "assets/data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG",
+    "assets/data/Natural Heritage/Oak Island/Photographs/Oak-Island.jpg",
+    "assets/data/Natural Heritage/Oak Island/Photographs/Oak & Pujada island.JPG",
+  ],
+  "pujada-island": [
+    "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
+    "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island.jpg",
+    "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island-3.jpg",
+    "assets/data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg",
+  ],
+  "pujada-bay": ["assets/data/GALLERY/DJI_0812.jpg"],
+  waniban: ["assets/data/GALLERY/Waniban-island.jpg"],
+};
+
 function getSiteStats(siteId) {
   const media = getSiteMedia(siteId);
   return {

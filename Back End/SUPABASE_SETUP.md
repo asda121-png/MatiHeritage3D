@@ -292,6 +292,7 @@ After the player saves a new password, they are signed out and redirected to **L
 - Admin/visitor leaderboards read live rankings (Realtime on `leaderboard_entries`)  
 - Run migration `20260708140000_live_leaderboard.sql` once in SQL Editor  
 - Run migration `20260708150000_realtime_heritage_catalog.sql` once for live sites/media across admin, visitors, and players  
+- Run migration `20261008200000_fix_profiles_display_name.sql` to repair older deployments where signup fails because `profiles.display_name` is missing  
 - Shared client hub: `Front End/heritage-realtime.js`
 
 ## 9. Browser console check

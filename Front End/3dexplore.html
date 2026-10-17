@@ -18,14 +18,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
-    <link rel="stylesheet" href="css/heritage-map-markers.css" />
     <link rel="stylesheet" href="css/gallery-page.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
@@ -310,6 +303,36 @@
         font-size: 0.9375rem;
         line-height: 1.7;
         color: #64748b;
+      }
+
+      .explore3d-site-picker {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem 1rem 0;
+      }
+
+      .explore3d-site-picker__label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: min(100%, 34rem);
+        color: var(--ink);
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      .explore3d-site-picker__select {
+        flex: 1;
+        min-width: 0;
+        padding: 0.7rem 2.25rem 0.7rem 0.85rem;
+        border: 1px solid rgba(4, 120, 87, 0.2);
+        border-radius: 0.65rem;
+        color: var(--ink);
+        background: #fff;
+        font: inherit;
+        cursor: pointer;
       }
 
       .explore3d-stage-layout {
@@ -712,11 +735,6 @@
         box-shadow: 0 8px 20px rgba(4, 120, 87, 0.2);
       }
 
-      .explore3d-details-tab.is-active[data-detail-view="map"] {
-        background: linear-gradient(135deg, #0369a1, #0284c7);
-        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.22);
-      }
-
       .explore3d-details-tab[hidden] {
         display: none !important;
       }
@@ -1015,22 +1033,6 @@
         letter-spacing: 0.02em;
       }
 
-      .explore3d-loading-progress {
-        width: min(16rem, 70%);
-        height: 0.4rem;
-        overflow: hidden;
-        border-radius: 999px;
-        background: rgba(203, 213, 225, 0.2);
-      }
-
-      .explore3d-loading-progress-bar {
-        width: 0%;
-        height: 100%;
-        border-radius: inherit;
-        background: #6ee7b7;
-        transition: width 0.2s ease;
-      }
-
       .explore3d-loading-text {
         font-size: 0.875rem;
         font-weight: 500;
@@ -1040,6 +1042,7 @@
       }
 
       .auto-rotate-btn,
+      .pan-mode-btn,
       .controls-help-btn,
       .zoom-control-btn,
       .fullscreen-toggle-btn {
@@ -1048,6 +1051,7 @@
       }
 
       .auto-rotate-btn::after,
+      .pan-mode-btn::after,
       .controls-help-btn::after,
       .zoom-control-btn::after,
       .fullscreen-toggle-btn::after {
@@ -1076,6 +1080,8 @@
 
       .auto-rotate-btn:hover::after,
       .auto-rotate-btn:focus-visible::after,
+      .pan-mode-btn:hover::after,
+      .pan-mode-btn:focus-visible::after,
       .controls-help-btn:hover::after,
       .controls-help-btn:focus-visible::after,
       .zoom-control-btn:hover::after,
@@ -1521,6 +1527,58 @@
         z-index: 10;
       }
 
+      .pan-mode-btn {
+        position: absolute;
+        top: calc(50% - 5.5rem);
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 30;
+      }
+
+      .pan-mode-btn[hidden] {
+        display: none !important;
+      }
+
+      .pan-mode-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .pan-mode-btn.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .pan-mode-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .fullscreen-pan-mode-btn {
+        top: calc(50% - 1.25rem);
+        right: 1rem;
+      }
+
+      .pan-mode-active {
+        cursor: grab;
+      }
+
+      .pan-mode-active.pan-dragging {
+        cursor: grabbing;
+      }
+
       .auto-rotate-btn:hover {
         background: rgba(255, 255, 255, 0.25);
         border-color: rgba(255, 255, 255, 0.4);
@@ -1577,6 +1635,17 @@
         .auto-rotate-btn {
           right: 0.5rem;
           top: calc(50% - 2.4rem);
+        }
+
+        .pan-mode-btn {
+          right: 0.5rem;
+          top: calc(50% - 5rem);
+          width: 2.25rem;
+          height: 2.25rem;
+        }
+
+        .fullscreen-pan-mode-btn {
+          top: calc(50% - 1.125rem);
         }
 
         .zoom-controls-group {
@@ -2818,85 +2887,20 @@
     <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
 
     <main class="explore3d-page">
-      <section id="mati-map-section" class="map-section map-section-first">
-        <div class="map-section__inner">
-          <div class="map-section__frame">
-            <div
-              id="mati-map"
-              role="region"
-              aria-label="Map of Mati City built heritage sites"
-            ></div>
-            <div
-              class="map-intro-overlay"
-              id="map-intro-overlay"
-              aria-hidden="false"
-            >
-              <div class="map-intro-overlay__content">
-                <div class="map-intro-overlay__label">
-                  <svg
-                    class="map-intro-overlay__label-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  <span>Official Heritage Sites</span>
-                </div>
-                <h2 class="map-intro-overlay__title">Built Heritage</h2>
-                <p class="map-intro-overlay__desc">Discover built heritage</p>
-                <div class="map-intro-overlay__actions">
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 9l7 7 7-7" />
-                    </svg>
-                    <span>Drag to pan</span>
-                  </button>
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    <span>Scroll to zoom</span>
-                  </button>
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                      />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    <span>Tap the markers</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <div id="explore3d-viewer" class="explore3d-workspace">
         <div class="explore3d-workspace__bg" aria-hidden="true"></div>
+        <div class="explore3d-site-picker">
+          <label class="explore3d-site-picker__label" for="explore-site-select">
+            Built heritage
+            <select
+              id="explore-site-select"
+              class="explore3d-site-picker__select"
+              aria-label="Choose a built heritage site"
+            >
+              <option value="">Choose a site</option>
+            </select>
+          </label>
+        </div>
 
         <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
           <div
@@ -2948,18 +2952,8 @@
                 <div
                   class="explore3d-stage-head__actions"
                   role="navigation"
-                  aria-label="Jump to site sections"
+                  aria-label="Site photographs"
                 >
-                  <button
-                    type="button"
-                    class="explore3d-details-tab"
-                    data-detail-view="map"
-                    aria-selected="false"
-                    id="detail-tab-map"
-                    hidden
-                  >
-                    Map
-                  </button>
                   <button
                     type="button"
                     class="explore3d-details-tab"
@@ -2992,19 +2986,6 @@
                   >
                     0%
                   </div>
-                  <div
-                    class="explore3d-loading-progress"
-                    role="progressbar"
-                    aria-label="3D model loading progress"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    aria-valuenow="0"
-                  >
-                    <div
-                      class="explore3d-loading-progress-bar"
-                      id="model-loading-progress-bar"
-                    ></div>
-                  </div>
                   <div class="explore3d-loading-text" id="model-loading-text">
                     Loading 3D model...
                   </div>
@@ -3019,7 +3000,7 @@
                   touch-action="pan-y"
                   camera-orbit="0deg 82deg 52%"
                   min-camera-orbit="-180deg 30deg 42%"
-                  max-camera-orbit="180deg 105deg 100%"
+                  max-camera-orbit="180deg 90deg 100%"
                   shadow-intensity="1.15"
                   exposure="1.06"
                   environment-image="neutral"
@@ -3027,6 +3008,34 @@
                   reveal="auto"
                   interaction-prompt="none"
                 ></model-viewer>
+                <button
+                  type="button"
+                  class="pan-mode-btn"
+                  id="model-pan-toggle"
+                  aria-label="Enable pan mode"
+                  aria-pressed="false"
+                  data-tooltip="Pan model"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
+                    ></path>
+                    <path
+                      d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
+                    ></path>
+                  </svg>
+                </button>
                 <button
                   type="button"
                   class="auto-rotate-btn"
@@ -3071,6 +3080,12 @@
                     <span class="controls-help-icon">🖱️</span>
                     <span class="controls-help-text"
                       >Drag — Rotate the model</span
+                    >
+                  </div>
+                  <div class="controls-help-item">
+                    <span class="controls-help-icon">✋</span>
+                    <span class="controls-help-text"
+                      >Hand button + drag — Pan in any direction</span
                     >
                   </div>
                   <div class="controls-help-item">
@@ -3167,8 +3182,7 @@
                   hidden
                 />
                 <p class="explore3d-viewer-empty" id="viewer-empty" hidden>
-                  No 3D model for this site — use Map or Photographs beside the
-                  title.
+                  No 3D model uploaded yet.
                 </p>
               </div>
             </div>
@@ -3344,6 +3358,34 @@
           ></span>
           <p id="fullscreen-loading-label">Loading 3D model…</p>
         </div>
+        <button
+          type="button"
+          class="pan-mode-btn fullscreen-pan-mode-btn"
+          id="fullscreen-pan-toggle"
+          aria-label="Enable pan mode"
+          aria-pressed="false"
+          data-tooltip="Pan model"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
+            ></path>
+            <path
+              d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
+            ></path>
+          </svg>
+        </button>
         <model-viewer
           id="fullscreen-model"
           class="heritage-fullscreen__model"
@@ -3354,7 +3396,7 @@
           touch-action="pan-y"
           camera-orbit="auto 72deg 88%"
           min-camera-orbit="auto 18deg 52%"
-          max-camera-orbit="auto 105deg 160%"
+          max-camera-orbit="auto 90deg 160%"
           shadow-intensity="1.25"
           exposure="1.1"
           environment-image="neutral"
@@ -3375,12 +3417,6 @@
 
     <div id="footer-placeholder"></div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script src="assets/data/mati-city-boundary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="js/utils/heritage/heritage-pylon-model.js"></script>
@@ -3708,8 +3744,8 @@
           barangay: "Central",
           barangayKey: "central",
           category: "built",
-          lat: 6.9472,
-          lng: 126.2268,
+          lat: 6.948308,
+          lng: 126.2262,
           official: false,
           image:
             "assets/data/Built Heritage/Provincial Capitol Old Mansion/Photographs/Old/Capitol Old Mansion.jpg",
@@ -3724,8 +3760,8 @@
             "Central",
             "Government Structure/Capitol Building",
             "Government Property",
-            "126.2268",
-            "6.9472",
+            "126.2262",
+            "6.948308",
           ),
           facts: [],
         },
@@ -3738,7 +3774,8 @@
           lat: 6.952258,
           lng: 126.216889,
           official: true,
-          modelSrc: "assets/data/Built Heritage/Pylon Monument/Pylon.glb",
+          modelSrc:
+            "assets/data/Built Heritage/Pylon Monument/3D/Pylon Monument.glb",
           image:
             "assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg",
           photos: [
@@ -3771,6 +3808,8 @@
           lat: 6.94425,
           lng: 126.248333,
           official: true,
+          modelSrc:
+            "assets/data/Built Heritage/Subangan Museum/3D/Subangan Museum.glb",
           image:
             "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
           photos: [
@@ -3778,7 +3817,7 @@
             "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.jpg",
             "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/Old/Capitol White House.1.jpg",
           ],
-          available: false,
+          available: true,
           desc: "The Subangan Museum was inaugurated on January 8, 2014. As the flagship project of the provincial government, the museum was designed to centralize and preserve the region's heritage. The concept originated around 2010 after a sperm whale was discovered in the town of Governor Generoso, sparking the initiative to build a permanent home for its remains and other local treasures. Its name is derived from the Cebuano term \"Subangon\", meaning 'east' or 'place of the rising sun,' symbolizing the province's geographic position and cultural identity.",
           specs: heritageSpecs(
             "Subangan Museum",
@@ -3916,9 +3955,6 @@
       const modelLoadingPercentage = document.getElementById(
         "model-loading-percentage",
       );
-      const modelLoadingProgressBar = document.getElementById(
-        "model-loading-progress-bar",
-      );
       const modelLoadingText = document.getElementById("model-loading-text");
       const explorePhotoGrid = document.getElementById("explore-photo-grid");
       const exploreSiteMap = document.getElementById("explore-site-map");
@@ -3933,7 +3969,6 @@
       const galLightboxCitation = document.getElementById(
         "galLightboxCitation",
       );
-      const detailTabMap = document.getElementById("detail-tab-map");
       const detailTabPhotos = document.getElementById("detail-tab-photos");
       const exploreMediaShowcase = document.getElementById(
         "explore-media-showcase",
@@ -3989,6 +4024,10 @@
       );
       const modelZoomIn = document.getElementById("model-zoom-in");
       const modelZoomOut = document.getElementById("model-zoom-out");
+      const panModeButtons = [
+        document.getElementById("model-pan-toggle"),
+        document.getElementById("fullscreen-pan-toggle"),
+      ];
       const autoRotateBtn = document.getElementById("auto-rotate-btn");
       const controlsHelpBtn = document.getElementById("controls-help-btn");
       const controlsHelpOverlay = document.getElementById(
@@ -4090,6 +4129,22 @@
         closeMediaDisplay();
       }
 
+      function populateSitePicker() {
+        const picker = document.getElementById("explore-site-select");
+        if (!picker) return;
+
+        const currentValue = picker.value;
+        picker.replaceChildren(new Option("Choose a site", ""));
+        HERITAGE_3D_SITES.filter((site) => site.category === "built").forEach(
+          (site) => {
+            picker.add(new Option(site.name, site.id));
+          },
+        );
+        if (HERITAGE_3D_SITES.some((site) => site.id === currentValue)) {
+          picker.value = currentValue;
+        }
+      }
+
       function hideGeofenceGate() {
         exploreGeofenceGate?.setAttribute("hidden", "");
         if (exploreGeofenceRetry) exploreGeofenceRetry.hidden = true;
@@ -4181,8 +4236,6 @@
 
       function updateDetailTabs(site) {
         const photos = getSitePhotos(site);
-        const mapSrc = getSiteMap(site);
-        if (detailTabMap) detailTabMap.hidden = !mapSrc;
         if (detailTabPhotos) detailTabPhotos.hidden = !photos.length;
         closeMediaDisplay();
       }
@@ -4193,6 +4246,8 @@
         hideGeofenceGate();
 
         activeSiteId = site.id;
+        const sitePicker = document.getElementById("explore-site-select");
+        if (sitePicker) sitePicker.value = site.id;
         highlightMapMarker(site.id);
         pulseMapMarker(site.id);
 
@@ -4204,18 +4259,11 @@
         if (exploreRevealLabel) {
           exploreRevealLabel.textContent = `Loading ${site.name}…`;
         }
-        if (site.available && site.modelSrc && heritageModel) {
+        if (site.modelSrc && heritageModel) {
           modelLoadingOverlay?.removeAttribute("hidden");
           modelLoadingOverlay?.setAttribute("aria-busy", "true");
           if (modelLoadingPercentage) {
             modelLoadingPercentage.textContent = "0%";
-          }
-          if (modelLoadingProgressBar) {
-            modelLoadingProgressBar.style.width = "0%";
-            modelLoadingProgressBar.parentElement?.setAttribute(
-              "aria-valuenow",
-              "0",
-            );
           }
           if (modelLoadingText) {
             modelLoadingText.textContent = "Loading 3D model...";
@@ -4458,12 +4506,16 @@
       function openFullscreenHeritage(site = getActiveSite()) {
         if (!site || !heritageFullscreen) return;
 
+        panModeButtons[1]?.toggleAttribute(
+          "hidden",
+          !(site.modelSrc && fullscreenModel),
+        );
         fullscreenTitle.textContent = site.name;
         heritageFullscreen.hidden = false;
         heritageFullscreen.setAttribute("aria-hidden", "false");
         document.body.classList.add("heritage-fullscreen-open");
 
-        if (site.available && site.modelSrc && fullscreenModel) {
+        if (site.modelSrc && fullscreenModel) {
           fullscreenPhoto.hidden = true;
           fullscreenModel.hidden = false;
           fullscreenModel.setAttribute("alt", `${site.name} 3D model`);
@@ -4507,7 +4559,7 @@
       function highlightMapMarker(siteId) {
         mapMarkers.forEach((marker, id) => {
           const el = marker
-            .getElement()
+            ?.getElement()
             ?.querySelector(".heritage-photo-marker");
           if (el) el.classList.toggle("is-active", id === siteId);
         });
@@ -4516,10 +4568,12 @@
       function updateViewer(site) {
         // Force local path for Pylon Monument
         if (site.id === "pylon") {
-          site.modelSrc = "assets/data/Built Heritage/Pylon Monument/Pylon.glb";
+          site.modelSrc =
+            "assets/data/Built Heritage/Pylon Monument/3D/Pylon Monument.glb";
         }
 
-        const hasModel = site.available && site.modelSrc && heritageModel;
+        const hasModel = Boolean(site.modelSrc && heritageModel);
+        panModeButtons[0]?.toggleAttribute("hidden", !hasModel);
 
         heritageViewerPanel?.classList.remove("is-photo");
 
@@ -4544,30 +4598,15 @@
           if (modelLoadingPercentage) {
             modelLoadingPercentage.textContent = "0%";
           }
-          if (modelLoadingProgressBar) {
-            modelLoadingProgressBar.style.width = "0%";
-            modelLoadingProgressBar.parentElement?.setAttribute(
-              "aria-valuenow",
-              "0",
-            );
-          }
 
           heritageModel.setAttribute("alt", `${site.name} 3D model`);
-          heritageModel.autoRotate = true;
+          syncHeritageAutoRotate();
 
-          // Track loading progress
           const handleProgress = (event) => {
             if (event.detail && event.detail.totalProgress !== undefined) {
               const progress = Math.round(event.detail.totalProgress * 100);
               if (modelLoadingPercentage) {
                 modelLoadingPercentage.textContent = `${progress}%`;
-              }
-              if (modelLoadingProgressBar) {
-                modelLoadingProgressBar.style.width = `${progress}%`;
-                modelLoadingProgressBar.parentElement?.setAttribute(
-                  "aria-valuenow",
-                  String(progress),
-                );
               }
             }
           };
@@ -4576,19 +4615,13 @@
             if (modelLoadingPercentage) {
               modelLoadingPercentage.textContent = "100%";
             }
-            if (modelLoadingProgressBar) {
-              modelLoadingProgressBar.style.width = "100%";
-              modelLoadingProgressBar.parentElement?.setAttribute(
-                "aria-valuenow",
-                "100",
-              );
-            }
             if (modelLoadingOverlay) {
               modelLoadingOverlay.setAttribute("hidden", "");
               modelLoadingOverlay.setAttribute("aria-busy", "false");
             }
             heritageModel.removeEventListener("progress", handleProgress);
             heritageModel.removeEventListener("load", handleLoad);
+            syncHeritageAutoRotate();
           };
 
           const handleError = () => {
@@ -4625,8 +4658,7 @@
             modelLoadingOverlay.setAttribute("aria-busy", "false");
           }
           if (viewerEmpty) {
-            viewerEmpty.textContent =
-              "3D model not available yet for this heritage site.";
+            viewerEmpty.textContent = "No 3D model uploaded yet.";
           }
           viewerEmpty?.removeAttribute("hidden");
           if (viewerHint) viewerHint.hidden = true;
@@ -4648,6 +4680,20 @@
       }
 
       const hasSiteFromQuery = initFromQuery();
+
+      const sitePicker = document.getElementById("explore-site-select");
+      sitePicker?.addEventListener("change", () => {
+        const site = HERITAGE_3D_SITES.find(
+          (item) => item.id === sitePicker.value,
+        );
+        if (site) {
+          void revealSiteFromMap(site, {
+            skipFly: true,
+            skipScroll: true,
+            skipDelay: true,
+          });
+        }
+      });
 
       if (viewHeritageBtn) {
         viewHeritageBtn.addEventListener("click", () => {
@@ -4719,12 +4765,26 @@
       });
 
       // Auto-rotate toggle
+      let autoRotateEnabled = true;
+
+      function setHeritageAutoRotate(enabled) {
+        if (!heritageModel) return;
+        heritageModel.autoRotate = enabled;
+        heritageModel.toggleAttribute("auto-rotate", enabled);
+      }
+
+      function syncHeritageAutoRotate() {
+        if (!heritageModel) return;
+        setHeritageAutoRotate(autoRotateEnabled && !heritageModel.hidden);
+        autoRotateBtn?.classList.toggle(
+          "active",
+          heritageModel.autoRotate,
+        );
+      }
+
       autoRotateBtn?.addEventListener("click", () => {
-        const model = document.getElementById("heritage-model");
-        if (model) {
-          model.autoRotate = !model.autoRotate;
-          autoRotateBtn.classList.toggle("active", model.autoRotate);
-        }
+        autoRotateEnabled = !autoRotateEnabled;
+        syncHeritageAutoRotate();
       });
 
       // Controls help overlay
@@ -4820,9 +4880,10 @@
       const model = document.getElementById("heritage-model");
       if (model && autoRotateBtn) {
         // Set initial state
-        autoRotateBtn.classList.toggle("active", model.autoRotate);
+        autoRotateEnabled = model.autoRotate;
+        autoRotateBtn.classList.toggle("active", autoRotateEnabled);
 
-        // Update button state when auto-rotate changes (e.g., after user interaction)
+        // Keep the button state synchronized with model-viewer.
         model.addEventListener("change", () => {
           autoRotateBtn.classList.toggle("active", model.autoRotate);
         });
@@ -4847,253 +4908,135 @@
         }
       }
 
-      // Model panning controls
-      let isPanning = false;
+      let panModeEnabled = false;
 
-      const modelRotateLeft = null;
-      const modelRotateRight = null;
-      const modelPanUp = null;
-      const modelPanDown = null;
-
-      // Debug: Check if all control buttons are found
-      console.log("Control buttons status:", {
-        modelZoomIn: !!modelZoomIn,
-        modelZoomOut: !!modelZoomOut,
-        autoRotateBtn: !!autoRotateBtn,
-        controlsHelpBtn: !!controlsHelpBtn,
-      });
-
-      modelRotateLeft?.addEventListener("click", () => {
-        if (isPanning) return;
-        const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const panAmount = 0.3; // Radians for panning
-            const newTheta = currentOrbit.theta - panAmount;
-
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startTheta = currentOrbit.theta;
-
-            function animatePan(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedTheta =
-                startTheta + (newTheta - startTheta) * easeProgress;
-              model.cameraOrbit = `${animatedTheta}rad ${currentOrbit.phi}rad ${currentOrbit.radius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animatePan);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animatePan);
-          } catch (error) {
-            console.error("Error rotating left:", error);
-            isPanning = false;
+      function setPanMode(enabled) {
+        panModeEnabled = enabled;
+        panModeButtons.forEach((button) => {
+          button?.classList.toggle("active", enabled);
+          button?.setAttribute("aria-pressed", String(enabled));
+          button?.setAttribute(
+            "aria-label",
+            enabled ? "Disable pan mode" : "Enable pan mode",
+          );
+          if (button) {
+            button.dataset.tooltip = enabled ? "Pan mode on" : "Pan model";
           }
-        }
+        });
+
+        [model, fullscreenModel].forEach((viewer) => {
+          viewer?.setAttribute("touch-action", enabled ? "none" : "pan-y");
+          viewer?.classList.toggle("pan-mode-active", enabled);
+        });
+      }
+
+      panModeButtons.forEach((button) => {
+        button?.addEventListener("click", () => {
+          setPanMode(!panModeEnabled);
+        });
       });
 
-      modelRotateRight?.addEventListener("click", () => {
-        if (isPanning) return;
+      function enableModelPanning(viewer) {
+        let drag = null;
+
+        const finishDrag = (event) => {
+          if (!drag || (event && event.pointerId !== drag.pointerId)) return;
+          viewer.classList.remove("pan-dragging");
+          viewer.autoRotate = drag.wasAutoRotate;
+          drag = null;
+        };
+
+        viewer.addEventListener(
+          "pointerdown",
+          (event) => {
+            if (!panModeEnabled || !viewer.loaded || event.button !== 0) return;
+
+            const bounds = viewer.getBoundingClientRect();
+            drag = {
+              pointerId: event.pointerId,
+              startX: event.clientX,
+              startY: event.clientY,
+              target: viewer.getCameraTarget(),
+              orbit: viewer.getCameraOrbit(),
+              height: Math.max(bounds.height, 1),
+              wasAutoRotate: viewer.autoRotate,
+            };
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            viewer.setPointerCapture(event.pointerId);
+            viewer.autoRotate = false;
+            viewer.classList.add("pan-dragging");
+          },
+          true,
+        );
+
+        viewer.addEventListener(
+          "pointermove",
+          (event) => {
+            if (!drag || event.pointerId !== drag.pointerId) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            const theta = drag.orbit.theta;
+            const phi = drag.orbit.phi;
+            const scale = (drag.orbit.radius * 2) / drag.height;
+            const dx = event.clientX - drag.startX;
+            const dy = event.clientY - drag.startY;
+            const rightX = Math.cos(theta);
+            const rightZ = -Math.sin(theta);
+            const upX = -Math.sin(theta) * Math.cos(phi);
+            const upY = Math.sin(phi);
+            const upZ = -Math.cos(theta) * Math.cos(phi);
+
+            const targetX =
+              drag.target.x - dx * scale * rightX + dy * scale * upX;
+            const targetY = drag.target.y + dy * scale * upY;
+            const targetZ =
+              drag.target.z - dx * scale * rightZ + dy * scale * upZ;
+
+            viewer.cameraTarget = `${targetX}m ${targetY}m ${targetZ}m`;
+          },
+          true,
+        );
+
+        ["pointerup", "pointercancel", "lostpointercapture"].forEach((type) => {
+          viewer.addEventListener(
+            type,
+            (event) => {
+              if (!drag || event.pointerId !== drag.pointerId) return;
+              event.stopImmediatePropagation();
+              finishDrag(event);
+            },
+            true,
+          );
+        });
+      }
+
+      enableModelPanning(model);
+      enableModelPanning(fullscreenModel);
+
+      function zoomHeritageModel(direction) {
         const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const panAmount = 0.3; // Radians for panning
-            const newTheta = currentOrbit.theta + panAmount;
+        if (!model?.loaded) return;
 
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startTheta = currentOrbit.theta;
+        try {
+          const currentOrbit = model.getCameraOrbit();
+          const zoomFactor = direction < 0 ? 0.8 : 1.25;
+          const newRadius = Math.min(
+            Math.max(currentOrbit.radius * zoomFactor, 0.1),
+            100,
+          );
 
-            function animatePan(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedTheta =
-                startTheta + (newTheta - startTheta) * easeProgress;
-              model.cameraOrbit = `${animatedTheta}rad ${currentOrbit.phi}rad ${currentOrbit.radius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animatePan);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animatePan);
-          } catch (error) {
-            console.error("Error rotating right:", error);
-            isPanning = false;
-          }
+          // Scale the current camera distance, like Blender's dolly zoom,
+          // while preserving the current viewing angle and rotation state.
+          model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${newRadius}m`;
+        } catch (error) {
+          console.error("Error zooming model:", error);
         }
-      });
+      }
 
-      modelPanUp?.addEventListener("click", () => {
-        if (isPanning) return;
-        const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const panAmount = 0.2; // Radians for vertical panning
-            const newPhi = Math.min(currentOrbit.phi + panAmount, 1.5); // Limit vertical movement
-
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startPhi = currentOrbit.phi;
-
-            function animatePan(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedPhi = startPhi + (newPhi - startPhi) * easeProgress;
-              model.cameraOrbit = `${currentOrbit.theta}rad ${animatedPhi}rad ${currentOrbit.radius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animatePan);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animatePan);
-          } catch (error) {
-            console.error("Error panning up:", error);
-            isPanning = false;
-          }
-        }
-      });
-
-      modelPanDown?.addEventListener("click", () => {
-        if (isPanning) return;
-        const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const panAmount = 0.2; // Radians for vertical panning
-            const newPhi = Math.max(currentOrbit.phi - panAmount, 0.3); // Limit vertical movement
-
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startPhi = currentOrbit.phi;
-
-            function animatePan(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedPhi = startPhi + (newPhi - startPhi) * easeProgress;
-              model.cameraOrbit = `${currentOrbit.theta}rad ${animatedPhi}rad ${currentOrbit.radius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animatePan);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animatePan);
-          } catch (error) {
-            console.error("Error panning down:", error);
-            isPanning = false;
-          }
-        }
-      });
-
-      modelZoomIn?.addEventListener("click", () => {
-        if (isPanning) return;
-        const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const zoomAmount = 2; // Meters for zooming
-            const newRadius = Math.max(currentOrbit.radius - zoomAmount, 1); // Limit minimum zoom
-
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startRadius = currentOrbit.radius;
-
-            function animateZoom(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedRadius =
-                startRadius + (newRadius - startRadius) * easeProgress;
-              model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${animatedRadius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animateZoom);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animateZoom);
-          } catch (error) {
-            console.error("Error zooming in:", error);
-            isPanning = false;
-          }
-        }
-      });
-
-      modelZoomOut?.addEventListener("click", () => {
-        if (isPanning) return;
-        const model = document.getElementById("heritage-model");
-        if (model && model.loaded) {
-          isPanning = true;
-          try {
-            const currentOrbit = model.getCameraOrbit();
-            const zoomAmount = 2; // Meters for zooming
-            const newRadius = Math.min(currentOrbit.radius + zoomAmount, 20); // Limit maximum zoom
-
-            // Smooth animation
-            const duration = 300; // ms
-            const startTime = performance.now();
-            const startRadius = currentOrbit.radius;
-
-            function animateZoom(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-              const animatedRadius =
-                startRadius + (newRadius - startRadius) * easeProgress;
-              model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${animatedRadius}m`;
-
-              if (progress < 1) {
-                requestAnimationFrame(animateZoom);
-              } else {
-                isPanning = false;
-              }
-            }
-
-            requestAnimationFrame(animateZoom);
-          } catch (error) {
-            console.error("Error zooming out:", error);
-            isPanning = false;
-          }
-        }
-      });
+      modelZoomIn?.addEventListener("click", () => zoomHeritageModel(-1));
+      modelZoomOut?.addEventListener("click", () => zoomHeritageModel(1));
 
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
@@ -5113,7 +5056,11 @@
           (entries) => {
             entries.forEach((entry) => {
               if (heritageModel.hidden) return;
-              heritageModel.autoRotate = entry.isIntersecting;
+              if (entry.isIntersecting) {
+                syncHeritageAutoRotate();
+              } else {
+                setHeritageAutoRotate(false);
+              }
             });
           },
           { threshold: 0.08 },
@@ -5408,6 +5355,7 @@
           syncExploreSitesFromMapCatalog();
           await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
           syncExploreSitesFromMapCatalog();
+          populateSitePicker();
           if (typeof MatiHeritageData.subscribeCatalog === "function") {
             MatiHeritageData.subscribeCatalog(async () => {
               await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
@@ -5439,7 +5387,18 @@
           });
         }
 
-        await initBuiltHeritageMap();
+        const initialSite =
+          getActiveSite() ||
+          HERITAGE_3D_SITES.find((site) => site.modelSrc) ||
+          HERITAGE_3D_SITES[0];
+        if (initialSite) {
+          await revealSiteFromMap(initialSite, {
+            skipScroll: true,
+            skipDelay: true,
+          });
+        } else {
+          showIdleState();
+        }
       })();
 
       fetch("components/header.html")
@@ -5499,9 +5458,6 @@
             window.initSiteHeader();
           }
 
-          setTimeout(() => {
-            if (window.matiMapInstance) window.matiMapInstance.invalidateSize();
-          }, 200);
         })
         .catch((err) => console.error("Error loading header:", err));
 

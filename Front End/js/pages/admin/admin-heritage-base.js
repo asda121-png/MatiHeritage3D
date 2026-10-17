@@ -128,8 +128,8 @@ const BUILT_HERITAGE_SITES = [
     description:
       "The Provincial Capitol Old Mansion is a significant heritage structure situated atop the scenic Capitol Hills in Barangay Central. Historically recognized as the Old Governor's Mansion, this site served as the primary administrative and residential seat for provincial leadership prior to the modernization of the capitol complex. For decades, it remained the center of political and social life in Davao Oriental, maintaining its prominence until the inauguration of the new Provincial Capitol building in 2010. Currently, the mansion stands as a resilient landmark of the city's administrative history. Following the relocation of the provincial seat, the building has been successfully repurposed to house the Professional Regulation Commission (PRC) Office for Region 11, demonstrating an effective adaptive reuse of one of the province's most notable civil structures.",
     location: "Barangay Central",
-    lat: 6.9472,
-    lng: 126.2268,
+    lat: 6.948308,
+    lng: 126.2262,
     heritageCategory: "Government Structure/Capitol Building",
     ownership: "Government Property",
   },
@@ -147,7 +147,7 @@ const BUILT_HERITAGE_SITES = [
     heritageCategory: "Monument",
     ownership: "Government Property",
     modelSrc:
-      "https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb",
+      "assets/data/Built Heritage/Pylon Monument/3D/Pylon Monument.glb",
   },
   {
     id: "subangan",
@@ -163,5 +163,7 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.248333,
     heritageCategory: "Museum",
     ownership: "Government Property",
+    modelSrc:
+      "assets/data/Built Heritage/Subangan Museum/3D/Subangan Museum.glb",
   },
 ];

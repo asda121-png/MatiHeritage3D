@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@600;700;800&family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Luckiest+Guy&family=MedievalSharp&family=Nunito:wght@400;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Passion+One:wght@400;700&family=Patrick+Hand&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Satisfy&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@600;700;800&family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Luckiest+Guy&family=MedievalSharp&family=Nunito:wght@400;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Passion+One:wght@400;700&family=Patrick+Hand&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Satisfy&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
@@ -25,7 +25,7 @@
 
       body {
         font-family: "Orbitron", sans-serif;
-        background: #020512;
+        background: #f4f4f4;
         overflow-x: hidden;
       }
 
@@ -45,74 +45,17 @@
       }
 
       .hero-bg {
-        background:
-          radial-gradient(
-            circle at 15% 15%,
-            rgba(168, 85, 247, 0.25),
-            transparent 45%
-          ),
-          radial-gradient(
-            circle at 85% 85%,
-            rgba(34, 211, 238, 0.2),
-            transparent 45%
-          ),
-          #020512;
+        background: #f4f4f4;
         position: relative;
         overflow: hidden;
       }
 
-      /* Background Animation Pattern */
       .hero-bg::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image:
-          radial-gradient(rgba(34, 211, 238, 0.15) 1px, transparent 1px),
-          radial-gradient(rgba(168, 85, 247, 0.1) 1.5px, transparent 1.5px);
-        background-size:
-          40px 40px,
-          120px 120px;
-        animation: grid-scroll 20s linear infinite;
-        z-index: 0;
-        pointer-events: none;
+        content: none;
       }
 
       .hero-bg::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          to bottom,
-          transparent 0%,
-          rgba(34, 211, 238, 0.05) 50%,
-          transparent 100%
-        );
-        background-size: 100% 200%;
-        animation: scanline 12s linear infinite;
-        pointer-events: none;
-        z-index: 1;
-      }
-
-      @keyframes grid-scroll {
-        from {
-          background-position:
-            0 0,
-            0 0;
-        }
-        to {
-          background-position:
-            40px 40px,
-            120px 120px;
-        }
-      }
-
-      @keyframes scanline {
-        0% {
-          background-position: 0 -100%;
-        }
-        100% {
-          background-position: 0 100%;
-        }
+        content: none;
       }
 
       .game-card {
@@ -678,50 +621,6 @@
         scrollbar-width: none;
       }
 
-      /* Tetris & Explosion Animations */
-      .tetris-letter {
-        display: inline-block;
-        opacity: 0;
-        transform: translateY(-200px);
-      }
-      .tetris-letter.fall {
-        animation: tetris-fall 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-          forwards;
-      }
-      @keyframes tetris-fall {
-        0% {
-          transform: translateY(-300px);
-          opacity: 0;
-          filter: brightness(2);
-        }
-        80% {
-          transform: translateY(0);
-          opacity: 1;
-          filter: brightness(1.5);
-        }
-        100% {
-          transform: translateY(0);
-          opacity: 1;
-          filter: brightness(1);
-        }
-      }
-      .exploded-letter {
-        position: fixed;
-        pointer-events: none;
-        z-index: 9999;
-        animation: letter-boom 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-      }
-      @keyframes letter-boom {
-        0% {
-          transform: translate(0, 0) rotate(0deg) scale(1);
-          opacity: 1;
-        }
-        100% {
-          transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(0);
-          opacity: 0;
-        }
-      }
-
       /* Keep profile dropdown above arcade hero layers */
       #header-placeholder,
       .site-header {
@@ -746,103 +645,6 @@
 
       .site-header .header-dropdown {
         z-index: 520;
-      }
-
-      /* Game lobby: points + profile only when signed in */
-      body.games-hub-page.is-logged-in .site-header__utilities {
-        display: flex !important;
-        align-items: center;
-        gap: 0.45rem;
-        flex-shrink: 0;
-      }
-
-      body.game-page .header-points-badge {
-        padding: 0.38rem 0.62rem;
-        gap: 0.35rem;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.14);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      }
-
-      body.game-page .header-points-label {
-        font-size: 0.52rem;
-        letter-spacing: 0.08em;
-        color: #94a3b8;
-      }
-
-      body.game-page #header-total-points {
-        font-size: 0.82rem;
-        color: #f8fafc;
-      }
-
-      body.game-page .header-points-dot {
-        background: #22d3ee;
-        box-shadow: 0 0 10px rgba(34, 211, 238, 0.55);
-      }
-
-      body.game-page .site-profile__trigger {
-        padding: 0.15rem 0.28rem 0.15rem 0.15rem;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.14);
-      }
-
-      body.game-page .site-profile__avatar {
-        width: 2.15rem;
-        height: 2.15rem;
-        border-color: rgba(34, 211, 238, 0.35);
-      }
-
-      body.game-page .site-profile__chevron {
-        width: 0.7rem;
-        height: 0.7rem;
-        margin-right: 0.05rem;
-        color: #94a3b8;
-      }
-
-      @media (max-width: 1023px) {
-        body.game-page .site-header__end {
-          gap: 0.35rem;
-        }
-
-        body.game-page .header-points-label {
-          display: none;
-        }
-
-        body.game-page .header-points-badge {
-          padding: 0.32rem 0.5rem;
-        }
-
-        body.game-page #header-total-points {
-          font-size: 0.78rem;
-        }
-
-        body.game-page .site-profile__chevron {
-          display: none;
-        }
-
-        body.game-page .site-profile__trigger {
-          padding: 0.12rem;
-        }
-
-        body.game-page .site-nav-toggle {
-          width: 2.55rem;
-          height: 2.55rem;
-        }
-      }
-
-      @media (max-width: 380px) {
-        body.game-page .site-brand__tagline {
-          display: none;
-        }
-      }
-
-      /* Keep header color and size unchanged when scrolling (games page only) */
-      body.game-page .site-header.is-scrolled {
-        height: var(--header-h);
-      }
-
-      body.game-page .site-header.is-scrolled .header-scene__svg {
-        opacity: 0.78;
       }
 
       .hero-bg {
@@ -961,12 +763,16 @@
         <div class="flex flex-row items-center gap-2 md:gap-6 select-none mt-6">
           <div
             id="title-word-select"
-            class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-          ></div>
+            class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+          >
+            SELECT
+          </div>
           <div
             id="title-word-game"
-            class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-          ></div>
+            class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+          >
+            GAME
+          </div>
         </div>
       </div>
 
@@ -976,12 +782,16 @@
       >
         <div
           id="title-word-select-desktop"
-          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-        ></div>
+          class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+        >
+          SELECT
+        </div>
         <div
           id="title-word-game-desktop"
-          class="text-white text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font opacity-90 cursor-pointer flex gap-1"
-        ></div>
+          class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+        >
+          GAME
+        </div>
       </div>
 
       <!-- LEADERBOARD -->
@@ -1122,17 +932,6 @@
       src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
       preload="auto"
     ></audio>
-    <audio
-      id="tetris-fall-sound"
-      src="https://assets.mixkit.co/active_storage/sfx/2050/2050-preview.mp3"
-      preload="auto"
-    ></audio>
-    <audio
-      id="tetris-boom-sound"
-      src="https://assets.mixkit.co/active_storage/sfx/2772/2772-preview.mp3"
-      preload="auto"
-    ></audio>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
@@ -1686,8 +1485,36 @@
       bgMusic.volume = initialMusicVol;
       announcerVoice.volume = initialSfxVol;
       clickSound.volume = initialSfxVol;
-      document.getElementById("tetris-fall-sound").volume = initialSfxVol;
-      document.getElementById("tetris-boom-sound").volume = initialSfxVol;
+
+      let shouldResumeBgMusic = false;
+
+      const pauseBackgroundAudioWhenHidden = () => {
+        if (!bgMusic.paused) {
+          shouldResumeBgMusic = true;
+          bgMusic.pause();
+        }
+      };
+
+      const resumeBackgroundAudioWhenVisible = () => {
+        if (
+          shouldResumeBgMusic &&
+          bgMusic.volume > 0 &&
+          document.visibilityState === "visible"
+        ) {
+          bgMusic.play().catch(() => {});
+        }
+        shouldResumeBgMusic = false;
+      };
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") {
+          pauseBackgroundAudioWhenHidden();
+        } else {
+          resumeBackgroundAudioWhenVisible();
+        }
+      });
+
+      window.addEventListener("pagehide", pauseBackgroundAudioWhenHidden);
 
       let hasAnnounced = false;
 
@@ -1738,6 +1565,8 @@
       };
 
       const playIntroSequence = () => {
+        if (document.visibilityState !== "visible") return;
+
         if (bgMusic.volume > 0 && bgMusic.paused) {
           bgMusic
             .play()
@@ -1762,91 +1591,6 @@
       document.addEventListener("click", handleFirstInteraction);
       document.addEventListener("keydown", handleFirstInteraction);
 
-      // Tetris Title Animation Logic
-      const initTetrisWord = (id, word) => {
-        const container = document.getElementById(id);
-        if (!container) return;
-
-        let isAnimating = false;
-        const fallSound = document.getElementById("tetris-fall-sound");
-        const boomSound = document.getElementById("tetris-boom-sound");
-
-        const createLetters = (playSound = true) => {
-          container.innerHTML = "";
-          word.split("").forEach((l, i) => {
-            const span = document.createElement("span");
-            span.textContent = l;
-            span.className = "tetris-letter fall";
-            span.style.animationDelay = `${i * 0.08}s`;
-            container.appendChild(span);
-
-            // Play a tick sound as each letter "drops"
-            if (playSound) {
-              setTimeout(() => {
-                if (fallSound && fallSound.volume > 0) {
-                  const s = fallSound.cloneNode();
-                  s.volume = fallSound.volume;
-                  s.play().catch(() => {});
-                }
-              }, i * 80);
-            }
-          });
-          setTimeout(
-            () => {
-              isAnimating = false;
-            },
-            word.length * 80 + 400,
-          );
-        };
-
-        const explode = () => {
-          if (isAnimating) return;
-          isAnimating = true;
-
-          if (boomSound) {
-            boomSound.currentTime = 0;
-            boomSound.play().catch(() => {});
-          }
-
-          const letters = container.querySelectorAll(".tetris-letter");
-
-          letters.forEach((letter) => {
-            const rect = letter.getBoundingClientRect();
-            const clone = letter.cloneNode(true);
-
-            // Random explosion trajectory
-            const tx = (Math.random() - 0.5) * 600;
-            const ty = (Math.random() - 0.5) * 600;
-            const tr = (Math.random() - 0.5) * 1080;
-
-            clone.className =
-              "exploded-letter pixel-font text-white text-2xl md:text-4xl font-bold uppercase";
-            clone.style.left = `${rect.left}px`;
-            clone.style.top = `${rect.top}px`;
-            clone.style.setProperty("--tx", `${tx}px`);
-            clone.style.setProperty("--ty", `${ty}px`);
-            clone.style.setProperty("--tr", `${tr}deg`);
-
-            document.body.appendChild(clone);
-            setTimeout(() => clone.remove(), 700);
-
-            letter.style.opacity = "0";
-            letter.classList.remove("fall");
-          });
-
-          // Rebuild after the "boom"
-          setTimeout(() => createLetters(true), 1000);
-        };
-
-        container.addEventListener("click", explode);
-        createLetters(false);
-      };
-
-      // Initialize the animations
-      initTetrisWord("title-word-select-desktop", "SELECT");
-      initTetrisWord("title-word-game-desktop", "GAME");
-      initTetrisWord("title-word-select", "SELECT", false); // No sound for mobile clone
-      initTetrisWord("title-word-game", "GAME", false); // No sound for mobile clone
     </script>
   </body>
 </html>

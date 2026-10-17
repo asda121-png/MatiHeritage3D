@@ -105,8 +105,8 @@ const HERITAGE_MAP_SITES = [
     name: "Provincial Capitol Old Mansion",
     category: "built",
     barangay: "central",
-    lat: 6.9472,
-    lng: 126.2268,
+    lat: 6.948308,
+    lng: 126.2262,
     official: false,
     desc: "The Provincial Capitol Old Mansion is a historic structure linked to the governance history of Davao Oriental. This heritage building represents an earlier era of provincial administration and stands as an architectural reminder of the region's political evolution. The mansion's historical significance lies in its connection to the early governance structures that shaped Davao Oriental before the construction of the modern capitol complex. As a preserved heritage structure, it offers insights into the architectural styles and administrative practices of the past, contributing to the understanding of the province's institutional development.",
     image:
@@ -265,10 +265,17 @@ function heritageBarangayLabel(id) {
 }
 
 function createHeritagePhotoIcon(site, size = 40) {
+  const siteName = String(site.name || "Heritage site")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
   return L.divIcon({
     className: "heritage-marker-wrap",
-    html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size * 1.25}px" title="${site.name}">
-          </div>`,
+    html: `<div class="heritage-photo-marker ${site.category}" style="width:${size}px;height:${size * 1.25}px" title="${siteName}"></div>
+          <span class="heritage-marker-label">${siteName}</span>`,
     iconSize: [size, size * 1.25],
     iconAnchor: [size / 2, size * 1.25],
     popupAnchor: [0, -size * 1.25],
@@ -324,10 +331,19 @@ function adminSiteToMapSite(site) {
 
 function mergeMapSite(base, admin) {
   if (!isMapCategory(admin.category) && admin.category) return null;
+  const isOldMansion = base.id === "old-mansion";
   const lat =
-    admin.lat != null && admin.lat !== "" ? Number(admin.lat) : base.lat;
+    isOldMansion
+      ? base.lat
+      : admin.lat != null && admin.lat !== ""
+        ? Number(admin.lat)
+        : base.lat;
   const lng =
-    admin.lng != null && admin.lng !== "" ? Number(admin.lng) : base.lng;
+    isOldMansion
+      ? base.lng
+      : admin.lng != null && admin.lng !== ""
+        ? Number(admin.lng)
+        : base.lng;
   return {
     ...base,
     name: admin.name || base.name,

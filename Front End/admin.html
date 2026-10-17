@@ -86,20 +86,16 @@
   <body class="admin-body">
     <div id="admin-shell" class="admin-shell">
       <aside class="admin-sidebar">
-        <div class="admin-sidebar__brand">
-          <img
-            class="admin-sidebar__logo"
-            src="assets/data/GALLERY/logo.jpg"
-            alt="City of Mati seal"
-            width="40"
-            height="40"
-          />
-          <div>
-            <div class="admin-sidebar__title">Heritage Admin</div>
-            <p class="admin-sidebar__hint">City Tourism Office</p>
-          </div>
+        <div class="admin-sidebar__profile">
+          <span class="admin-profile__avatar admin-sidebar__avatar">
+            <img data-admin-profile-image alt="" hidden />
+            <span data-admin-profile-avatar-fallback>M</span>
+          </span>
+          <span class="admin-sidebar__identity">
+            <strong data-admin-profile-name>matiadmin</strong>
+            <small>City of Mati Tourism Personnel</small>
+          </span>
         </div>
-
         <nav class="admin-nav" aria-label="Admin sections">
           <button
             type="button"
@@ -194,7 +190,7 @@
         </nav>
 
         <div class="admin-sidebar__foot">
-          <button type="button" id="admin-logout" class="admin-nav__btn">
+          <button type="button" id="admin-logout-legacy" class="admin-nav__btn">
             <svg
               class="admin-nav__icon"
               viewBox="0 0 24 24"
@@ -215,6 +211,46 @@
       </aside>
 
       <div class="admin-content">
+        <header class="admin-topbar">
+          <div class="admin-profile" data-admin-profile>
+            <button
+              type="button"
+              class="admin-profile__trigger"
+              data-admin-profile-trigger
+              aria-label="Open account menu"
+              aria-expanded="false"
+              aria-controls="admin-profile-menu"
+            >
+              <span class="admin-profile__avatar" aria-hidden="true">
+                <img data-admin-profile-image alt="" hidden />
+                <span data-admin-profile-avatar-fallback>M</span>
+              </span>
+            </button>
+            <div id="admin-profile-menu" class="admin-profile__menu" hidden>
+              <div class="admin-profile__signed-in">
+                <span>Signed in as</span>
+                <strong data-admin-profile-signed-in>matiadmin</strong>
+                <small data-admin-profile-email
+                  >matiheritage.admin@cityofmati.gov.ph</small
+                >
+              </div>
+              <button
+                type="button"
+                class="admin-profile__menu-item"
+                data-view="settings"
+              >
+                Settings
+              </button>
+              <button
+                type="button"
+                id="admin-logout"
+                class="admin-profile__menu-item admin-profile__menu-item--danger"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </header>
         <main class="admin-main">
           <!-- Dashboard -->
           <section id="view-dashboard" class="admin-view">
@@ -262,15 +298,6 @@
                 <span class="dashboard-loader__text">Loading dashboard...</span>
               </div>
 
-              <!-- Welcome Section -->
-              <div class="dashboard-welcome">
-                <div class="dashboard-welcome__header">
-                  <div class="dashboard-welcome__main">
-                    <h1 class="dashboard-welcome__title">Dashboard Overview</h1>
-                  </div>
-                </div>
-              </div>
-
               <!-- Heritage Statistics Cards -->
               <section
                 class="dashboard-section"
@@ -289,7 +316,11 @@
               </section>
 
               <!-- KPI Summary Cards -->
-              <section class="dashboard-section" aria-labelledby="kpi-heading">
+              <section
+                class="dashboard-section"
+                aria-labelledby="kpi-heading"
+                hidden
+              >
                 <h2 id="kpi-heading" class="dashboard-section__title">
                   Key Performance Indicators
                 </h2>
@@ -395,6 +426,7 @@
               <section
                 class="dashboard-section"
                 aria-labelledby="analytics-heading"
+                hidden
               >
                 <h2 id="analytics-heading" class="dashboard-section__title">
                   Analytics Overview
@@ -550,8 +582,22 @@
                     Add Built heritage
                   </button>
                 </div>
-
-                <div id="heritage-built-grid" class="admin-heritage-grid"></div>
+                <div class="admin-built__filters">
+                  <label>
+                    <span>Barangay</span>
+                    <select id="built-heritage-barangay">
+                      <option value="all">All barangays</option>
+                    </select>
+                  </label>
+                </div>
+                <div
+                  id="heritage-built-grid"
+                  class="admin-built__table-wrap"
+                ></div>
+                <div
+                  class="admin-built__pagination"
+                  id="heritage-built-pagination"
+                ></div>
               </div>
 
               <div id="heritage-other-shell" hidden>
@@ -677,17 +723,47 @@
             <div class="admin-reports">
               <header class="admin-reports__head">
                 <div class="admin-reports__intro">
-                  <h2 class="admin-reports__title">System Report</h2>
+                  <h2 class="admin-reports__title">Graphical Reports</h2>
                   <p class="admin-reports__desc">
-                    Overall system report showing total record counts for heritage
-                    collections, registered users, and leaderboard records.
+                    View, generate, and export tourism and cultural heritage
+                    statistics.
                   </p>
                 </div>
                 <div class="admin-reports__actions">
                   <button
                     type="button"
-                    id="btn-export-csv"
+                    id="btn-generate-report"
                     class="admin-btn admin-btn--primary"
+                    aria-describedby="report-status"
+                  >
+                    <svg
+                      class="admin-btn__icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 19.5A2.5 2.5 0 016.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"
+                      />
+                    </svg>
+                    Generate Report
+                    <span
+                      id="report-loading-indicator"
+                      class="report-loading-indicator"
+                      hidden
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-export-csv"
+                    class="admin-btn admin-btn--ghost"
+                    disabled
+                    aria-describedby="report-status"
                   >
                     <svg
                       class="admin-btn__icon"
@@ -707,36 +783,264 @@
                 </div>
               </header>
 
-              <div class="admin-reports__summary" id="report-summary" aria-label="Record counts summary">
-                <div class="report-stats-grid">
-                  <div class="report-stat-card">
-                    <div class="report-stat-card__label">Built Heritage</div>
-                    <div class="report-stat-card__value" id="stat-built">0</div>
+              <div
+                id="report-status-panel"
+                class="admin-reports__status-panel"
+                role="status"
+                aria-live="polite"
+              >
+                <span id="report-status"
+                  >Generate a report to load the latest system statistics.</span
+                >
+                <time id="report-generated-at" hidden></time>
+              </div>
+
+              <div id="report-results" hidden>
+                <div
+                  class="admin-reports__summary"
+                  id="report-summary"
+                  aria-label="Record counts summary"
+                >
+                  <div class="report-stats-grid">
+                    <div class="report-stat-card">
+                      <div class="report-stat-card__top">
+                        <span class="report-stat-card__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01M15 12v.01M15 15v.01M15 18v.01"
+                            />
+                          </svg>
+                        </span>
+                        <span class="report-stat-card__label"
+                          >Built Heritage</span
+                        >
+                      </div>
+                      <strong class="report-stat-card__value" id="stat-built"
+                        >—</strong
+                      >
+                    </div>
+                    <div class="report-stat-card">
+                      <div class="report-stat-card__top">
+                        <span class="report-stat-card__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M9 18V5l12-2v13M9 18c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zm12-2c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zM9 9l12-2"
+                            />
+                          </svg>
+                        </span>
+                        <span class="report-stat-card__label">
+                          Intangible Cultural Heritage
+                        </span>
+                      </div>
+                      <strong
+                        class="report-stat-card__value"
+                        id="stat-intangible"
+                        >—</strong
+                      >
+                    </div>
+                    <div class="report-stat-card">
+                      <div class="report-stat-card__top">
+                        <span class="report-stat-card__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 22v-8m0 0c-4 0-7-3-7-7 0-1 .2-2 .6-3 3.3 0 5.5 1 6.4 3 .9-2 3.1-3 6.4-3 .4 1 .6 2 .6 3 0 4-3 7-7 7zm-4 8h8"
+                            />
+                          </svg>
+                        </span>
+                        <span class="report-stat-card__label"
+                          >Natural Heritage</span
+                        >
+                      </div>
+                      <strong class="report-stat-card__value" id="stat-natural"
+                        >—</strong
+                      >
+                    </div>
+                    <div class="report-stat-card">
+                      <div class="report-stat-card__top">
+                        <span class="report-stat-card__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2m18 0v-2a4 4 0 00-3-3.87M9 11a4 4 0 100-8 4 4 0 000 8zm12-4a4 4 0 01-3 3.87"
+                            />
+                          </svg>
+                        </span>
+                        <span class="report-stat-card__label"
+                          >Registered Users</span
+                        >
+                      </div>
+                      <strong class="report-stat-card__value" id="stat-users"
+                        >—</strong
+                      >
+                    </div>
+                    <div class="report-stat-card">
+                      <div class="report-stat-card__top">
+                        <span class="report-stat-card__icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M8 21h8m-4-4v4m-5-18h10v5a5 5 0 01-10 0V3zM7 5H4v2a4 4 0 004 4m9-6h3v2a4 4 0 01-4 4"
+                            />
+                          </svg>
+                        </span>
+                        <span class="report-stat-card__label"
+                          >Leaderboard Records</span
+                        >
+                      </div>
+                      <strong
+                        class="report-stat-card__value"
+                        id="stat-leaderboard"
+                        >—</strong
+                      >
+                    </div>
                   </div>
-                  <div class="report-stat-card">
-                    <div class="report-stat-card__label">Intangible Cultural Heritage</div>
-                    <div class="report-stat-card__value" id="stat-intangible">0</div>
-                  </div>
-                  <div class="report-stat-card">
-                    <div class="report-stat-card__label">Natural Heritage</div>
-                    <div class="report-stat-card__value" id="stat-natural">0</div>
-                  </div>
-                  <div class="report-stat-card">
-                    <div class="report-stat-card__label">Registered Users</div>
-                    <div class="report-stat-card__value" id="stat-users">0</div>
-                  </div>
-                  <div class="report-stat-card">
-                    <div class="report-stat-card__label">Leaderboard Records</div>
-                    <div class="report-stat-card__value" id="stat-leaderboard">0</div>
-                  </div>
+                </div>
+
+                <div class="admin-reports__chart-grid">
+                  <section class="admin-reports__chart">
+                    <div class="admin-reports__chart-heading">
+                      <div>
+                        <h3 class="admin-reports__chart-title">
+                          Heritage Collection
+                        </h3>
+                        <p class="admin-reports__chart-description">
+                          Total records by heritage category
+                        </p>
+                      </div>
+                    </div>
+                    <div class="admin-reports__chart-container">
+                      <canvas
+                        id="report-heritage-chart"
+                        role="img"
+                        aria-label="Bar chart comparing built, intangible cultural, and natural heritage records"
+                      ></canvas>
+                      <p
+                        id="report-heritage-empty"
+                        class="admin-reports__chart-empty"
+                        hidden
+                      >
+                        No heritage records are currently available.
+                      </p>
+                    </div>
+                  </section>
+
+                  <section class="admin-reports__chart">
+                    <div class="admin-reports__chart-heading">
+                      <div>
+                        <h3 class="admin-reports__chart-title">
+                          User Registration Trend
+                        </h3>
+                        <p class="admin-reports__chart-description">
+                          Registrations by month over the last 12 months
+                        </p>
+                      </div>
+                    </div>
+                    <div class="admin-reports__chart-container">
+                      <canvas
+                        id="report-users-chart"
+                        role="img"
+                        aria-label="Line chart showing monthly user registrations"
+                      ></canvas>
+                      <p
+                        id="report-users-empty"
+                        class="admin-reports__chart-empty"
+                        hidden
+                      >
+                        Registration history is not available for these
+                        accounts.
+                      </p>
+                    </div>
+                  </section>
+
+                  <section
+                    class="admin-reports__chart admin-reports__chart--leaderboard"
+                  >
+                    <div class="admin-reports__chart-heading">
+                      <div>
+                        <h3 class="admin-reports__chart-title">
+                          Leaderboard Records
+                        </h3>
+                        <p class="admin-reports__chart-description">
+                          Top participants by heritage points
+                        </p>
+                      </div>
+                    </div>
+                    <div class="admin-reports__table-wrap">
+                      <table class="admin-reports__table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Heritage points</th>
+                          </tr>
+                        </thead>
+                        <tbody id="report-leaderboard-rows"></tbody>
+                      </table>
+                      <p
+                        id="report-leaderboard-empty"
+                        class="admin-reports__table-empty"
+                        hidden
+                      >
+                        No leaderboard records are available yet.
+                      </p>
+                    </div>
+                  </section>
                 </div>
               </div>
 
-              <div class="admin-reports__chart">
-                <h3 class="admin-reports__chart-title">Record Counts Overview</h3>
-                <div class="admin-reports__chart-container">
-                  <canvas id="report-chart"></canvas>
-                </div>
+              <div id="report-initial-empty" class="admin-reports__empty">
+                <span class="admin-reports__empty-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 3v18h18M7 14l4-4 4 4 6-7"
+                    />
+                  </svg>
+                </span>
+                <h3>Ready to generate your report?</h3>
+                <p>
+                  Generate a fresh snapshot to see current heritage,
+                  registration, and leaderboard statistics.
+                </p>
               </div>
             </div>
           </section>
@@ -783,8 +1087,6 @@
                     </div>
                   </dl>
                 </section>
-
-
               </div>
             </div>
           </section>
@@ -854,6 +1156,16 @@
       aria-busy="true"
     >
       <div class="admin-upload-progress__panel">
+        <button
+          type="button"
+          id="admin-upload-progress-close"
+          class="admin-upload-progress__close"
+          aria-label="Close upload message"
+          title="Close"
+          hidden
+        >
+          &times;
+        </button>
         <div class="admin-upload-progress__icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" role="presentation" aria-hidden="true">
             <path
@@ -880,9 +1192,16 @@
         >
           Uploading...
         </h2>
-        <p id="admin-upload-progress-file" class="admin-upload-progress__file">
-          Pylon.glb
-        </p>
+        <div class="admin-upload-progress__file-row">
+          <p id="admin-upload-progress-file" class="admin-upload-progress__file">
+            Pylon.glb
+          </p>
+          <span
+            id="admin-upload-progress-file-type"
+            class="admin-upload-progress__file-type"
+            >.GLB</span
+          >
+        </div>
         <div class="admin-upload-progress__stats" aria-live="polite">
           <span
             id="admin-upload-progress-pct"
@@ -892,7 +1211,7 @@
           <span
             id="admin-upload-progress-size"
             class="admin-upload-progress__size"
-            >0 MB of 0 MB</span
+            >0 MB / 0 MB</span
           >
         </div>
         <div
@@ -909,29 +1228,37 @@
             style="width: 0%"
           ></span>
         </div>
-        <div class="admin-upload-progress__eta-row">
-          <span class="admin-upload-progress__eta-icon" aria-hidden="true"
-            >◔</span
+        <div class="admin-upload-progress__status-row" aria-live="polite">
+          <span
+            id="admin-upload-progress-spinner"
+            class="admin-upload-progress__processing-spinner"
+            aria-hidden="true"
+            hidden
+          ></span>
+          <p
+            id="admin-upload-progress-detail"
+            class="admin-upload-progress__status"
           >
-          <p id="admin-upload-progress-eta" class="admin-upload-progress__eta">
-            Calculating time remaining...
+            Preparing file...
           </p>
         </div>
-        <button
-          type="button"
-          id="admin-upload-progress-cancel"
-          class="admin-btn admin-upload-progress__cancel"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          id="admin-upload-progress-resume"
-          class="admin-btn admin-upload-progress__resume"
-          hidden
-        >
-          Resume upload
-        </button>
+        <div class="admin-upload-progress__footer">
+          <button
+            type="button"
+            id="admin-upload-progress-cancel"
+            class="admin-btn admin-upload-progress__cancel"
+          >
+            Cancel upload
+          </button>
+          <button
+            type="button"
+            id="admin-upload-progress-resume"
+            class="admin-btn admin-upload-progress__resume"
+            hidden
+          >
+            Resume upload
+          </button>
+        </div>
       </div>
     </div>
 
@@ -943,6 +1270,7 @@
       aria-busy="true"
     >
       <div class="admin-logout-overlay__panel">
+        <div class="admin-logout-overlay__brand" aria-hidden="true">MH</div>
         <div class="admin-logout-overlay__loader" aria-hidden="true">
           <svg
             class="admin-logout-overlay__loader-svg"
@@ -975,11 +1303,15 @@
             />
           </svg>
         </div>
-        <p class="admin-logout-overlay__text">
-          Log out<span class="admin-logout-overlay__dots" aria-hidden="true"
-            ><span>.</span><span>.</span></span
-          >
-        </p>
+        <div class="admin-logout-overlay__copy">
+          <p class="admin-logout-overlay__text">Signing you out</p>
+          <p class="admin-logout-overlay__subtext">
+            Closing your secure admin session
+          </p>
+        </div>
+        <div class="admin-logout-overlay__progress" aria-hidden="true">
+          <span></span>
+        </div>
       </div>
     </div>
 
@@ -1286,6 +1618,9 @@
         <div class="admin-modal__head">
           <div>
             <h2 id="media-modal-title">Add multimedia files</h2>
+            <p id="media-modal-description" hidden>
+              Update the 3D model for this heritage landmark.
+            </p>
           </div>
           <button
             type="button"
@@ -1320,12 +1655,162 @@
             <label class="admin-label" for="media-file" id="media-file-label"
               >Upload file</label
             >
+            <div id="media-model-manager" class="admin-model-manager" hidden>
+              <section
+                id="media-current-model-section"
+                class="admin-model-section"
+                aria-labelledby="media-current-model-label"
+                hidden
+              >
+                <h3
+                  id="media-current-model-label"
+                  class="admin-model-section__label"
+                >
+                  Current model
+                </h3>
+                <div id="media-current-model" class="admin-model-current">
+                  <span class="admin-model-current__icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 0v9m8-4.5-8 4.5-8-4.5m8 4.5V21"
+                      />
+                    </svg>
+                  </span>
+                  <span class="admin-model-current__details">
+                    <span
+                      id="media-current-model-name"
+                      class="admin-model-current__name"
+                    ></span>
+                    <span class="admin-model-current__type">GLB 3D model</span>
+                  </span>
+                  <span class="admin-model-current__status">Current</span>
+                </div>
+              </section>
+
+              <section
+                class="admin-model-section"
+                aria-labelledby="media-replace-model-label"
+              >
+                <h3
+                  id="media-replace-model-label"
+                  class="admin-model-section__label"
+                >
+                  Replace model
+                </h3>
+                <div class="admin-model-upload-area">
+                  <span
+                    class="admin-model-upload-area__icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 0v9m8-4.5-8 4.5-8-4.5m8 4.5V21"
+                      />
+                    </svg>
+                  </span>
+                  <p class="admin-model-upload-area__title">
+                    Drag and drop your GLB file here
+                  </p>
+                  <button
+                    type="button"
+                    id="btn-choose-model-file"
+                    class="admin-btn admin-btn--ghost admin-btn--sm"
+                  >
+                    Choose GLB file
+                  </button>
+                  <p class="admin-model-upload-area__format">
+                    Supported format: .glb
+                  </p>
+                  <div
+                    id="media-selected-model"
+                    class="admin-model-selected"
+                    hidden
+                    aria-live="polite"
+                  >
+                    <span class="admin-model-selected__details">
+                      <span
+                        id="media-selected-model-name"
+                        class="admin-model-selected__name"
+                      ></span>
+                      <span
+                        id="media-selected-model-size"
+                        class="admin-model-selected__size"
+                      ></span>
+                    </span>
+                    <button
+                      type="button"
+                      id="btn-clear-model-file"
+                      class="admin-model-selected__remove"
+                    >
+                      Remove selection
+                    </button>
+                  </div>
+                  <p
+                    id="media-model-replace-note"
+                    class="admin-model-upload-area__note"
+                    hidden
+                  >
+                    The new model will replace the current model after
+                    confirmation.
+                  </p>
+                </div>
+            </div>
+            <div id="media-upload-drop-area" class="admin-media-upload" hidden>
+              <span class="admin-media-upload__icon" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15.5v3A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-3"
+                  />
+                </svg>
+              </span>
+              <p id="media-upload-instruction" class="admin-media-upload__title">
+                Choose photographs or drag them here
+              </p>
+              <button
+                type="button"
+                id="btn-choose-media-files"
+                class="admin-btn admin-btn--ghost admin-btn--sm"
+              >
+                Choose photographs
+              </button>
+              <p id="media-upload-format" class="admin-media-upload__format">
+                Image files
+              </p>
+              <p
+                id="media-selected-files"
+                class="admin-media-upload__selection"
+                aria-live="polite"
+                hidden
+              ></p>
+            </div>
             <input
               type="file"
               id="media-file"
               class="admin-file"
-              accept="image/*"
-              multiple
+              accept=".glb,model/gltf-binary"
+              aria-describedby="media-file-hint"
+              hidden
             />
             <p id="media-file-hint" class="admin-hint"></p>
             <div
@@ -1360,6 +1845,14 @@
             <p id="media-caption-hint" class="admin-hint" hidden></p>
           </div>
           <div class="admin-modal__actions">
+            <button
+              type="button"
+              id="btn-remove-model"
+              class="admin-btn admin-btn--danger admin-btn--sm"
+              hidden
+            >
+              Remove model
+            </button>
             <button
               type="button"
               class="admin-btn admin-btn--ghost"

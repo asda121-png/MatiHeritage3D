@@ -13,6 +13,14 @@
   let builtModelObserver = null;
   let logoutInProgress = false;
   let activeUploadController = null;
+  let modelFileValidationId = 0;
+  let modelFileIsValid = false;
+  let modelFileValidationInProgress = false;
+  let modelSubmitInProgress = false;
+  let modelReplaceConfirmationInProgress = false;
+  let modelUploadInProgress = false;
+  let builtHeritagePage = 1;
+  const BUILT_HERITAGE_PAGE_SIZE = 10;
 
   const ADMIN_STYLE_ID = "mati-admin-dynamic-styles";
   const TYPE_LABELS = {
@@ -185,124 +193,6 @@
         40%, 60% { transform: translateX(3px); }
       }
     `,
-    modelUpload: `
-      .admin-modal--model-upload .admin-modal__body {
-        padding: 0;
-      }
-      .admin-model-upload-area {
-        padding: 2.5rem;
-        text-align: center;
-        border: 2px dashed #e2e8f0;
-        border-radius: 0.85rem;
-        background: #f8fafc;
-        transition: all 0.25s ease-in-out;
-        cursor: pointer;
-      }
-      .admin-model-upload-area:hover {
-        border-color: #cbd5e1;
-        background: #f1f5f9;
-      }
-      .admin-model-upload-area.is-dragover {
-        transform: scale(1.01);
-        border-color: #059669;
-        background: #f0fdf4;
-        box-shadow: 0 0 24px rgba(5, 150, 105, 0.2);
-      }
-      .admin-model-upload-area.is-dragover-invalid {
-        transform: scale(1.01);
-        border-color: #dc2626;
-        background: #fef2f2;
-        box-shadow: 0 0 24px rgba(220, 38, 38, 0.18);
-        animation: admin-card-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-      }
-      .admin-model-upload__icon {
-        width: 3.5rem;
-        height: 3.5rem;
-        margin: 0 auto 1rem;
-        color: #94a3b8;
-        transition: all 0.25s ease;
-      }
-      .admin-model-upload-area:hover .admin-model-upload__icon {
-        color: #64748b;
-      }
-      .admin-model-upload-area.is-dragover .admin-model-upload__icon {
-        color: #059669;
-        transform: scale(1.1);
-      }
-      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__icon {
-        color: #b91c1c;
-        transform: scale(1.1);
-      }
-      .admin-model-upload__title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin: 0 0 0.25rem;
-      }
-      .admin-model-upload__text {
-        font-size: 0.9rem;
-        color: #64748b;
-        margin: 0;
-      }
-      .admin-model-upload__formats {
-        font-size: 0.8rem;
-        color: #94a3b8;
-        margin-top: 1rem;
-      }
-      .admin-model-upload-area.is-dragover .admin-model-upload__title,
-      .admin-model-upload-area.is-dragover .admin-model-upload__text,
-      .admin-model-upload-area.is-dragover .admin-model-upload__formats {
-        opacity: 0;
-        transition: opacity 0.2s ease;
-      }
-      .admin-model-upload__drop-label {
-        display: none;
-        color: #065f46;
-      }
-      .admin-model-upload-area.is-dragover .admin-model-upload__drop-label {
-        display: block;
-      }
-      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__title {
-        color: #991b1b;
-      }
-      .admin-model-upload-area.is-dragover-invalid .admin-model-upload__text {
-        color: #b91c1c;
-      }
-
-      .admin-model-preview-card {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.25rem;
-        border-radius: 0.75rem;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-      }
-      .admin-model-preview-card__icon {
-        flex-shrink: 0;
-        width: 2.5rem;
-        height: 2.5rem;
-        color: #059669;
-      }
-      .admin-model-preview-card__meta {
-        flex-grow: 1;
-      }
-      .admin-model-preview-card__name {
-        font-weight: 600;
-        color: #1e293b;
-      }
-      .admin-model-preview-card__size {
-        font-size: 0.85rem;
-        color: #64748b;
-      }
-      .admin-model-preview-card__progress-bar {
-        height: 4px;
-        background: #e2e8f0;
-        border-radius: 2px;
-        margin-top: 0.5rem;
-        overflow: hidden;
-      }
-    `,
   };
 
   function injectStyles(keys) {
@@ -342,7 +232,7 @@
   let uploadProgressAnimFrame = null;
   let uploadProgressDisplay = 0;
   let uploadProgressTarget = 0;
-  let uploadDetailSwapTimer = null;
+  let uploadProgressMeta = {};
   let resumeUploadHandler = null;
 
   function formatBytes(bytes) {
@@ -358,16 +248,11 @@
     return `${Number(value).toFixed(decimals)} ${units[unitIndex]}`;
   }
 
-  function formatEta(seconds) {
-    if (!Number.isFinite(seconds) || seconds <= 0)
-      return "Estimated time remaining: --";
-    const totalSeconds = Math.max(0, Math.round(seconds));
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    if (mins > 0) {
-      return `Estimated time remaining: ${mins} min ${secs} sec`;
-    }
-    return `Estimated time remaining: ${secs} sec`;
+  function progressFileType(fileName) {
+    const extension = String(fileName || "")
+      .split(/[?#]/, 1)[0]
+      .match(/\.([^.\\/]+)$/)?.[1];
+    return extension ? `.${extension.toUpperCase()}` : "FILE";
   }
 
   function uploadProgressEls() {
@@ -376,56 +261,53 @@
       title: $("#admin-upload-progress-title"),
       file: $("#admin-upload-progress-file"),
       detail: $("#admin-upload-progress-detail"),
+      spinner: $("#admin-upload-progress-spinner"),
       pct: $("#admin-upload-progress-pct"),
       size: $("#admin-upload-progress-size"),
-      eta: $("#admin-upload-progress-eta"),
       cancel: $("#admin-upload-progress-cancel"),
+      close: $("#admin-upload-progress-close"),
       resume: $("#admin-upload-progress-resume"),
+      fileType: $("#admin-upload-progress-file-type"),
       fill: $("#admin-upload-progress-fill"),
       bar: $("#admin-upload-progress-bar"),
     };
   }
 
-  function paintUploadProgress(value, meta = {}) {
-    const { pct, size, eta, file, fill, bar } = uploadProgressEls();
+  function paintUploadProgress(value, meta = uploadProgressMeta) {
+    const { pct, size, file, fileType, fill, bar } =
+      uploadProgressEls();
     const rounded = Math.max(0, Math.min(100, Math.round(value)));
     if (pct) pct.textContent = `${rounded}%`;
     if (fill) fill.style.width = `${rounded}%`;
     if (bar) bar.setAttribute("aria-valuenow", String(rounded));
-    if (meta.fileName && file) file.textContent = meta.fileName;
+    if (meta.fileName) {
+      if (file) file.textContent = meta.fileName;
+      if (fileType) {
+        fileType.hidden = false;
+        fileType.textContent = progressFileType(meta.fileName);
+      }
+    }
 
-    const totalBytes = Number(meta.totalBytes || 0);
-    // Handle loadedBytes being an object or number
-    const loadedBytesValue =
-      typeof meta.loadedBytes === "object" ? 0 : Number(meta.loadedBytes || 0);
+    const progressBytes =
+      meta.loadedBytes && typeof meta.loadedBytes === "object"
+        ? meta.loadedBytes
+        : null;
+    const totalBytes = Number(meta.totalBytes || progressBytes?.total || 0);
+    const rawLoadedBytes = progressBytes
+      ? progressBytes.loaded
+      : meta.loadedBytes;
+    const loadedBytesValue = Number(rawLoadedBytes || 0);
 
     if (totalBytes > 0) {
-      const actualLoaded =
-        loadedBytesValue > 0
-          ? loadedBytesValue
-          : Math.max(0, Math.min(totalBytes, totalBytes * (rounded / 100)));
+      const actualLoaded = Math.max(
+        0,
+        Math.min(totalBytes, loadedBytesValue),
+      );
       if (size) {
-        size.textContent = `${formatBytes(actualLoaded)} of ${formatBytes(totalBytes)}`;
-      }
-
-      const startedAt = Number(meta.startedAt || Date.now());
-      const elapsed = Math.max(0, (Date.now() - startedAt) / 1000);
-
-      if (rounded >= 100) {
-        if (eta) eta.textContent = "Upload complete";
-      } else if (actualLoaded > 0 && elapsed > 0.5) {
-        const uploadSpeed = actualLoaded / elapsed;
-        const remainingBytes = Math.max(0, totalBytes - actualLoaded);
-        const remainingSeconds = remainingBytes / uploadSpeed;
-
-        if (eta)
-          eta.textContent = `Estimated time remaining: ${formatEta(remainingSeconds)}`;
-      } else {
-        if (eta) eta.textContent = "Calculating time remaining...";
+        size.textContent = `${formatBytes(actualLoaded)} / ${formatBytes(totalBytes)}`;
       }
     } else if (size) {
-      size.textContent = "0 MB of 0 MB";
-      if (eta) eta.textContent = "Calculating time remaining...";
+      size.textContent = "0 MB / 0 MB";
     }
   }
 
@@ -434,22 +316,18 @@
     const diff = uploadProgressTarget - uploadProgressDisplay;
     if (Math.abs(diff) < 0.15) {
       uploadProgressDisplay = uploadProgressTarget;
-      paintUploadProgress(uploadProgressDisplay);
+      paintUploadProgress(uploadProgressDisplay, uploadProgressMeta);
       return;
     }
     uploadProgressDisplay += diff * 0.22;
-    paintUploadProgress(uploadProgressDisplay);
+    paintUploadProgress(uploadProgressDisplay, uploadProgressMeta);
     uploadProgressAnimFrame = requestAnimationFrame(tickUploadProgressAnim);
   }
 
-  function setUploadDetailText(detailEl, text) {
-    if (!detailEl || detailEl.textContent === text) return;
-    clearTimeout(uploadDetailSwapTimer);
-    detailEl.classList.add("is-swap");
-    uploadDetailSwapTimer = setTimeout(() => {
-      detailEl.textContent = text;
-      detailEl.classList.remove("is-swap");
-    }, 120);
+  function setUploadStatus(text, isProcessing = false) {
+    const { detail, spinner } = uploadProgressEls();
+    if (detail) detail.textContent = text;
+    if (spinner) spinner.hidden = !isProcessing;
   }
 
   function showUploadProgress({
@@ -463,14 +341,20 @@
       root,
       title: titleEl,
       detail: detailEl,
+      spinner,
       cancel: cancelBtn,
+      close: closeBtn,
       resume: resumeBtn,
+      fileType,
       size,
-      eta,
     } = uploadProgressEls();
     if (!root) return;
     clearTimeout(uploadProgressHideTimer);
     root.hidden = false;
+    if (closeBtn) {
+      closeBtn.hidden = true;
+      closeBtn.onclick = null;
+    }
     if (activeUploadController) {
       activeUploadController.abort();
     }
@@ -486,14 +370,20 @@
     root.classList.remove("is-done", "is-error", "is-exiting");
     root.setAttribute("aria-busy", "true");
     if (titleEl) titleEl.textContent = title;
-    if (detailEl) {
-      detailEl.classList.remove("is-swap");
-      detailEl.textContent = detail;
+    if (detailEl) detailEl.textContent = detail;
+    if (spinner) {
+      spinner.hidden = !/finaliz|saving|finishing/i.test(detail);
     }
-    if (size) size.textContent = "0 MB of 0 MB";
-    if (eta) eta.textContent = "Calculating time remaining...";
+    if (size) size.textContent = "0 MB / 0 MB";
     const fileEl = $("#admin-upload-progress-file");
-    if (fileEl && meta.fileName) fileEl.textContent = meta.fileName;
+    if (fileEl) fileEl.textContent = meta.fileName || "Preparing file...";
+    if (fileType) {
+      fileType.hidden = !meta.fileName;
+      fileType.textContent = meta.fileName
+        ? progressFileType(meta.fileName)
+        : "";
+    }
+    uploadProgressMeta = { ...meta };
     uploadProgressDisplay = Math.max(0, Number(percent) || 0);
     uploadProgressTarget = uploadProgressDisplay;
     paintUploadProgress(uploadProgressDisplay, meta);
@@ -511,31 +401,21 @@
     const { detail: detailEl, root, file } = uploadProgressEls();
     const value = Math.max(0, Math.min(100, Number(percent) || 0));
     uploadProgressTarget = value;
+    uploadProgressMeta = { ...uploadProgressMeta, ...meta };
     if (!uploadProgressAnimFrame) {
       uploadProgressAnimFrame = requestAnimationFrame(tickUploadProgressAnim);
     }
     if (detail != null) {
-      setUploadDetailText(detailEl, detail);
+      const isFinalizing = /finaliz|saving|finishing/i.test(detail);
+      setUploadStatus(detail, isFinalizing);
       if (file && typeof meta.fileName === "string") {
         file.textContent = meta.fileName;
       }
     }
     paintUploadProgress(value, {
-      ...meta,
+      ...uploadProgressMeta,
       fileName: meta.fileName || file?.textContent || "Pylon.glb",
     });
-    if (root && value >= 99.5) {
-      const { cancel: cancelBtn } = uploadProgressEls();
-      if (cancelBtn) {
-        cancelBtn.hidden = true;
-      }
-      root.classList.add("is-done");
-      root.setAttribute("aria-busy", "false");
-      const { title } = uploadProgressEls();
-      if (title && !/complete|saved|done/i.test(title.textContent || "")) {
-        title.textContent = "Complete";
-      }
-    }
   }
 
   function hideUploadProgress({ delay = 0 } = {}) {
@@ -561,16 +441,23 @@
         }
         uploadProgressDisplay = 0;
         uploadProgressTarget = 0;
+        uploadProgressMeta = {};
         paintUploadProgress(0);
-        const { detail, title, file } = uploadProgressEls();
-        if (detail) {
-          detail.classList.remove("is-swap");
-          detail.textContent = "Preparing file…";
+        const { detail, title, file, fileType, spinner } = uploadProgressEls();
+        if (detail) detail.textContent = "Preparing file...";
+        if (file) file.textContent = "Preparing file...";
+        if (fileType) {
+          fileType.hidden = true;
+          fileType.textContent = "";
         }
-        if (file) file.textContent = "Pylon.glb";
-        const { cancel: cancelBtn } = uploadProgressEls();
+        if (spinner) spinner.hidden = true;
+        const { cancel: cancelBtn, close: closeBtn } = uploadProgressEls();
         if (cancelBtn) {
           cancelBtn.hidden = true;
+        }
+        if (closeBtn) {
+          closeBtn.hidden = true;
+          closeBtn.onclick = null;
         }
         const { resume: resumeBtn } = uploadProgressEls();
         if (resumeBtn) {
@@ -621,12 +508,20 @@
       });
       const { title } = uploadProgressEls();
       if (title) title.textContent = options.doneTitle || "Complete";
-      setUploadProgress(100, options.doneDetail || "Done.");
+      setUploadStatus(options.doneDetail || "Upload complete.");
+      setUploadProgress(100);
+      const { root, cancel } = uploadProgressEls();
+      if (root) {
+        root.classList.add("is-done");
+        root.setAttribute("aria-busy", "false");
+      }
+      if (cancel) cancel.hidden = true;
       hideUploadProgress({ delay: options.doneDelay ?? 900 });
       return result;
     } catch (error) {
       if (error?.fileTooLarge) {
-        const { root, title, detail, cancel, resume } = uploadProgressEls();
+        const { root, title, detail, cancel, close, resume } =
+          uploadProgressEls();
         if (root) {
           root.hidden = false;
           root.classList.add("is-visible", "is-error");
@@ -636,8 +531,13 @@
             detail.textContent =
               "This file exceeds the Supabase Storage limit. Reduce the file size or increase the bucket limit, then upload again.";
           }
+          setUploadStatus(detail?.textContent || "Upload could not start.");
           paintUploadProgress(lastProgress, lastMeta);
           if (cancel) cancel.hidden = false;
+          if (close) {
+            close.hidden = false;
+            close.onclick = () => hideUploadProgress();
+          }
           if (resume) {
             resume.hidden = true;
             resume.onclick = null;
@@ -658,6 +558,7 @@
               ? `The partial upload is preserved. ${error.message || "Check your connection and try Resume again."}`
               : "The partial upload is saved. Resume when your connection returns.";
           }
+          setUploadStatus(detail?.textContent || "Upload paused.");
           paintUploadProgress(lastProgress, lastMeta);
           if (cancel) cancel.hidden = true;
           if (resume) {
@@ -709,6 +610,7 @@
     title = "Are you sure?",
     message = "This action cannot be undone.",
     confirmLabel = "Delete",
+    variant = "",
   } = {}) {
     const { root, title: titleEl, message: messageEl, ok } = confirmEls();
     if (!root) {
@@ -720,6 +622,7 @@
     if (titleEl) titleEl.textContent = title;
     if (messageEl) messageEl.textContent = message;
     if (ok) ok.textContent = confirmLabel;
+    root.classList.toggle("admin-confirm-modal--large", variant === "large");
     root.hidden = false;
     requestAnimationFrame(() => ok?.focus());
     return new Promise((resolve) => {
@@ -751,24 +654,6 @@
         doneDelay: 1100,
       },
     );
-  }
-
-  function makeBatchProgress(totalFiles, baseLabel) {
-    let currentIndex = 0;
-    return {
-      startFile(index, fileName) {
-        currentIndex = index;
-        setUploadProgress(
-          Math.round((index / Math.max(totalFiles, 1)) * 100),
-          `${baseLabel} ${index + 1} of ${totalFiles}: ${fileName}`,
-        );
-      },
-      onFileProgress(pct) {
-        const overall =
-          ((currentIndex + pct / 100) / Math.max(totalFiles, 1)) * 100;
-        setUploadProgress(overall);
-      },
-    };
   }
 
   function syncOk(payload) {
@@ -1011,6 +896,53 @@
     return modelMedia?.src || "";
   }
 
+  function modelFilename(modelSrc) {
+    if (!modelSrc) return "";
+    const path = String(modelSrc).split(/[?#]/, 1)[0];
+    const filename = path.slice(path.lastIndexOf("/") + 1);
+    try {
+      return decodeURIComponent(filename);
+    } catch {
+      return filename;
+    }
+  }
+
+  async function isValidGlbFile(file) {
+    if (
+      !file ||
+      !String(file.name || "").toLowerCase().endsWith(".glb") ||
+      file.size < 12
+    ) {
+      return false;
+    }
+
+    const header = await file.slice(0, 12).arrayBuffer();
+    const view = new DataView(header);
+    return (
+      view.getUint32(0, true) === 0x46546c67 &&
+      view.getUint32(4, true) === 2 &&
+      view.getUint32(8, true) === file.size
+    );
+  }
+
+  async function removeStoredModelObject(siteId, modelSrc) {
+    if (!modelSrc) return false;
+    if (
+      typeof MatiAdminUploads !== "undefined" &&
+      MatiAdminUploads.isUploadUri?.(modelSrc)
+    ) {
+      await MatiAdminUploads.remove(modelSrc);
+      return true;
+    }
+    if (
+      typeof MatiSupabaseApi !== "undefined" &&
+      typeof MatiSupabaseApi.removeSiteMediaObject === "function"
+    ) {
+      return MatiSupabaseApi.removeSiteMediaObject(siteId, "model3d", modelSrc);
+    }
+    return false;
+  }
+
   async function resolveModelViewerSrc(modelPath) {
     if (!modelPath) return "";
     if (
@@ -1163,36 +1095,13 @@
   }
 
   function filterAndSortBuiltSites(sites) {
-    const filter = $("#built-heritage-filter")?.value || "all";
-    const typeFilter = $("#built-heritage-type")?.value || "all";
+    const barangay = $("#built-heritage-barangay")?.value || "all";
     let list = [...sites];
 
-    if (filter === "has-3d") {
-      list = list.filter((site) => builtSiteHas3d(site));
-    } else if (filter === "has-photos") {
-      list = list.filter((site) => builtSiteHasPhotos(site));
-    } else if (filter === "has-map") {
-      list = list.filter((site) => builtSiteHasMap(site));
-    } else if (filter === "needs-media") {
-      list = list.filter((site) => builtSiteNeedsMedia(site));
-    } else if (filter === "edited") {
-      list = list.filter((site) => MatiAdminStore.siteHasAdminEdits(site.id));
+    if (barangay !== "all") {
+      list = list.filter((site) => (site.location || "").includes(barangay));
     }
-
-    if (typeFilter !== "all") {
-      list = list.filter((site) => site.heritageCategory === typeFilter);
-    }
-
-    const sort = $("#built-heritage-sort")?.value || "name-asc";
-    list.sort((a, b) => {
-      if (sort === "name-desc") return b.name.localeCompare(a.name);
-      if (sort === "location") {
-        return (a.location || "").localeCompare(b.location || "", undefined, {
-          sensitivity: "base",
-        });
-      }
-      return a.name.localeCompare(b.name);
-    });
+    list.sort((a, b) => a.name.localeCompare(b.name));
 
     return list;
   }
@@ -1285,6 +1194,29 @@
     const el = $("#heritage-built-count");
     if (!el) return;
     el.textContent = String(totalCount);
+  }
+
+  function populateBuiltHeritageBarangayFilter(sites) {
+    const select = $("#built-heritage-barangay");
+    if (!select) return;
+    const current = select.value || "all";
+    const barangays = [
+      ...new Set(
+        sites
+          .flatMap((site) => (site.location || "").split(","))
+          .map((value) => value.trim())
+          .filter(Boolean),
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+    select.innerHTML =
+      `<option value="all">All barangays</option>` +
+      barangays
+        .map(
+          (barangay) =>
+            `<option value="${escapeAttr(barangay)}">${escapeHtml(barangay)}</option>`,
+        )
+        .join("");
+    select.value = barangays.includes(current) ? current : "all";
   }
 
   function renderBuiltHeritageMeta(filteredCount, totalCount, query) {
@@ -1419,15 +1351,9 @@
   }
 
   function renderModelCard(site) {
-    if (site.modelSrc) {
-      const filename = site.modelSrc.split("/").pop();
-      const lastUpdated = site.updatedAt
-        ? new Date(site.updatedAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })
-        : "";
+    const modelSrc = getSiteModelSource(site);
+    if (modelSrc) {
+      const filename = modelFilename(modelSrc);
 
       return `
         <div class="admin-model-card admin-model-card--filled">
@@ -1441,7 +1367,7 @@
             <p class="admin-model-card__filename">${escapeHtml(filename)}</p>
             <div class="admin-model-card__actions">
               <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-view-model="${escapeAttr(site.id)}">Preview</button>
-              <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="model3d">Manage</button>
+              <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-manage-model="${escapeAttr(site.id)}">Manage</button>
             </div>
           </div>
         </div>
@@ -1660,16 +1586,34 @@
     bindModelCardDragDrop(container);
   }
 
-  function photoTitleFromFile(file) {
-    return String(file.name || "Photograph").replace(/\.[^.]+$/i, "");
+  function mediaTitleFromFile(file) {
+    return String(file.name || "Media file").replace(/\.[^.]+$/i, "");
   }
 
-  function getSelectedPhotoFiles() {
+  function mediaFileMatchesType(type, file) {
+    const name = String(file?.name || "");
+    if (type === "photo") {
+      return (
+        file?.type?.startsWith("image/") ||
+        /\.(png|jpe?g|gif|webp|bmp|avif|tiff?)$/i.test(name)
+      );
+    }
+    if (type === "video") {
+      return (
+        file?.type?.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(name)
+      );
+    }
+    if (type === "audio") {
+      return (
+        file?.type?.startsWith("audio/") || /\.(mp3|wav|ogg|m4a)$/i.test(name)
+      );
+    }
+    return false;
+  }
+
+  function getSelectedMediaFiles() {
     const fileInput = $("#media-file");
-    if (!fileInput?.files?.length) return [];
-    return [...fileInput.files].filter((file) =>
-      file.type.startsWith("image/"),
-    );
+    return fileInput?.files ? [...fileInput.files] : [];
   }
 
   function updateMediaFormUi() {
@@ -1712,23 +1656,147 @@
     const fileInput = $("#media-file");
     const fileLabel = $("#media-file-label");
     const fileHint = $("#media-file-hint");
+    const modelManager = $("#media-model-manager");
     const captionField = $("#media-caption-field");
     const mediaModal = $("#media-modal");
     const saveBtn = $("#btn-save-media");
+    const modalDescription = $("#media-modal-description");
+    const currentModelSection = $("#media-current-model-section");
+    const currentModelPanel = $("#media-current-model");
+    const currentModelName = $("#media-current-model-name");
+    const removeModelButton = $("#btn-remove-model");
+    const chooseModelButton = $("#btn-choose-model-file");
+    const clearModelFileButton = $("#btn-clear-model-file");
+    const selectedModelPanel = $("#media-selected-model");
+    const selectedModelName = $("#media-selected-model-name");
+    const selectedModelSize = $("#media-selected-model-size");
+    const replaceModelNote = $("#media-model-replace-note");
+    const currentModelSrc =
+      activeType === "model3d" ? getSiteModelSource(site) : "";
+    const hasCurrentModel = Boolean(currentModelSrc);
+    const selectedModelFile =
+      activeType === "model3d" && modelFileIsValid
+        ? fileInput?.files?.[0]
+        : null;
 
     const previewWrap = $("#media-file-preview-wrap");
     const previewImg = $("#media-file-preview");
     const titleInput = $("#media-title");
     const captionHint = $("#media-caption-hint");
-    const selectedPhotos =
-      activeType === "photo" && usesFile ? getSelectedPhotoFiles() : [];
-    const bulkPhotos = selectedPhotos.length > 1;
+    const selectedFiles =
+      usesFile &&
+      ["photo", "video", "audio"].includes(activeType)
+        ? getSelectedMediaFiles()
+        : [];
+    const supportsBatchUpload =
+      usesFile && ["photo", "video", "audio"].includes(activeType);
+    const mediaUploadDropArea = $("#media-upload-drop-area");
+    const chooseMediaFilesButton = $("#btn-choose-media-files");
+    const mediaUploadInstruction = $("#media-upload-instruction");
+    const mediaUploadFormat = $("#media-upload-format");
+    const selectedFilesSummary = $("#media-selected-files");
+    const mediaUploadConfig = {
+      photo: {
+        noun: "photographs",
+        accept: "image/*",
+        format: "Image files",
+      },
+      video: {
+        noun: "videos",
+        accept: "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov",
+        format: "MP4, WebM, or MOV video files",
+      },
+      audio: {
+        noun: "audio recordings",
+        accept: "audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a",
+        format: "MP3, WAV, OGG, or M4A audio files",
+      },
+    }[activeType];
 
     if (mediaModal) {
       mediaModal.classList.toggle(
         "admin-modal--model-upload",
         activeType === "model3d",
       );
+    }
+    if (mediaUploadDropArea) {
+      mediaUploadDropArea.hidden = !supportsBatchUpload;
+    }
+    if (mediaUploadInstruction && mediaUploadConfig) {
+      mediaUploadInstruction.textContent =
+        `Choose one or many ${mediaUploadConfig.noun}, or drag files here`;
+    }
+    if (chooseMediaFilesButton && mediaUploadConfig) {
+      chooseMediaFilesButton.textContent = `Choose ${mediaUploadConfig.noun}`;
+    }
+    if (mediaUploadFormat && mediaUploadConfig) {
+      mediaUploadFormat.textContent = mediaUploadConfig.format;
+    }
+    if (selectedFilesSummary) {
+      selectedFilesSummary.hidden = selectedFiles.length === 0;
+      selectedFilesSummary.textContent =
+        selectedFiles.length === 1
+          ? selectedFiles[0].name
+          : selectedFiles.length > 1
+            ? `${selectedFiles.length} ${mediaUploadConfig?.noun || "files"} selected: ${selectedFiles
+                .slice(0, 3)
+                .map((file) => file.name)
+                .join(", ")}${selectedFiles.length > 3 ? `, and ${selectedFiles.length - 3} more` : ""}`
+            : "";
+    }
+    if (modelManager) {
+      modelManager.hidden = activeType !== "model3d";
+    }
+    if (modalDescription) {
+      modalDescription.hidden = activeType !== "model3d";
+      if (activeType === "model3d") {
+        modalDescription.textContent =
+          "Update the 3D model for this heritage landmark.";
+      }
+    }
+    if (currentModelSection) {
+      currentModelSection.hidden = !hasCurrentModel;
+    }
+    if (currentModelPanel) currentModelPanel.hidden = false;
+    if (currentModelName) {
+      currentModelName.textContent = modelFilename(currentModelSrc);
+    }
+    if (removeModelButton) {
+      removeModelButton.hidden = !hasCurrentModel;
+      removeModelButton.disabled =
+        !hasCurrentModel ||
+        modelFileValidationInProgress ||
+        modelSubmitInProgress ||
+        modelReplaceConfirmationInProgress ||
+        modelUploadInProgress;
+    }
+    if (chooseModelButton) {
+      chooseModelButton.disabled =
+        modelFileValidationInProgress ||
+        modelSubmitInProgress ||
+        modelReplaceConfirmationInProgress ||
+        modelUploadInProgress;
+    }
+    if (selectedModelPanel) {
+      selectedModelPanel.hidden = !selectedModelFile;
+    }
+    if (selectedModelName) {
+      selectedModelName.textContent = selectedModelFile?.name || "";
+    }
+    if (selectedModelSize) {
+      selectedModelSize.textContent = selectedModelFile
+        ? formatBytes(selectedModelFile.size)
+        : "";
+    }
+    if (clearModelFileButton) {
+      clearModelFileButton.disabled =
+        modelFileValidationInProgress ||
+        modelSubmitInProgress ||
+        modelReplaceConfirmationInProgress ||
+        modelUploadInProgress;
+    }
+    if (replaceModelNote) {
+      replaceModelNote.hidden = !hasCurrentModel || !selectedModelFile;
     }
 
     if (fileField) fileField.hidden = !usesFile;
@@ -1738,25 +1806,17 @@
     if (typeField) typeField.hidden = built || Boolean(mediaModalPresetType);
     if (titleField) {
       titleField.hidden =
-        activeType === "map" || activeType === "model3d" || bulkPhotos;
+        activeType === "map" ||
+        activeType === "model3d" ||
+        supportsBatchUpload;
     }
     if (titleInput) {
-      titleInput.required = usesFile && activeType === "photo" && !bulkPhotos;
-      if (
-        usesFile &&
-        activeType === "photo" &&
-        selectedPhotos.length === 1 &&
-        !titleInput.value.trim()
-      ) {
-        titleInput.placeholder = photoTitleFromFile(selectedPhotos[0]);
-      } else if (usesFile && activeType === "photo") {
-        titleInput.placeholder = "Photograph title";
-      } else {
-        titleInput.removeAttribute("placeholder");
-      }
+      titleInput.required = false;
+      titleInput.removeAttribute("placeholder");
     }
 
     if (fileInput) {
+      fileInput.hidden = activeType === "model3d" || supportsBatchUpload;
       if (activeType === "photo" || activeType === "map") {
         fileInput.accept = "image/*";
         fileInput.multiple = activeType === "photo";
@@ -1764,18 +1824,17 @@
         fileInput.accept = ".glb,model/gltf-binary";
         fileInput.multiple = false;
       } else if (activeType === "video") {
-        fileInput.accept =
-          "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
-        fileInput.multiple = false;
+        fileInput.accept = mediaUploadConfig.accept;
+        fileInput.multiple = true;
       } else if (activeType === "audio") {
-        fileInput.accept =
-          "audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a";
-        fileInput.multiple = false;
+        fileInput.accept = mediaUploadConfig.accept;
+        fileInput.multiple = true;
       }
       if (!usesFile) fileInput.value = "";
     }
 
     if (fileLabel) {
+      fileLabel.hidden = activeType === "model3d" || supportsBatchUpload;
       const labels = {
         photo: "Upload photographs",
         map: "Upload site map",
@@ -1787,34 +1846,41 @@
     }
 
     if (fileHint) {
-      if (activeType === "map") {
+      if (supportsBatchUpload) {
+        fileHint.textContent = "";
+      } else if (activeType === "map") {
         fileHint.textContent =
           "Choose an image file or drag it into this area to upload a site map.";
-      } else if (activeType === "photo") {
-        if (bulkPhotos) {
-          fileHint.textContent = `${selectedPhotos.length} photographs selected. Each will use its file name as the title.`;
-        } else {
-          fileHint.textContent =
-            "Choose one or many photographs, or drag images from a folder into this area.";
-        }
       } else if (activeType === "model3d") {
-        fileHint.textContent =
-          "Upload a .glb 3D model file (.glb files are automatically sent to Sketchfab), or drag it into this area.";
-      } else if (activeType === "video") {
-        fileHint.textContent =
-          "Upload an MP4/WebM file (stored in Supabase Storage), or switch to Link for YouTube/Facebook.";
-      } else if (activeType === "audio") {
-        fileHint.textContent =
-          "Upload an MP3/WAV recording — it is stored in Supabase Storage for visitors.";
+        fileHint.textContent = "";
       }
     }
 
     if (captionField) {
-      captionField.hidden = activeType === "model3d" || activeType === "map";
+      captionField.hidden =
+        activeType === "model3d" ||
+        activeType === "map" ||
+        supportsBatchUpload;
     }
     if (saveBtn) {
-      saveBtn.disabled = activeType === "model3d" && !fileInput.files.length;
-      saveBtn.textContent = activeType === "model3d" ? "Upload" : "Save";
+      saveBtn.disabled =
+        activeType === "model3d" &&
+        (!selectedModelFile ||
+          modelFileValidationInProgress ||
+          modelSubmitInProgress ||
+          modelReplaceConfirmationInProgress ||
+          modelUploadInProgress);
+      if (activeType !== "model3d") {
+        saveBtn.textContent = "Save";
+      } else if (modelUploadInProgress) {
+        saveBtn.textContent = "Replacing…";
+      } else if (modelReplaceConfirmationInProgress) {
+        saveBtn.textContent = "Confirming…";
+      } else if (modelSubmitInProgress) {
+        saveBtn.textContent = "Checking…";
+      } else {
+        saveBtn.textContent = hasCurrentModel ? "Replace model" : "Upload model";
+      }
     }
 
     if (previewWrap && previewImg && activeType !== "map") {
@@ -1849,10 +1915,6 @@
       section.hidden = id !== view;
     });
 
-    if (view === "reports") {
-      renderReport();
-    }
-
     if (view === "gallery" && prevView !== "gallery") {
       window.MatiGalleryEmbed?.resetToCollections();
     } else if (view !== "gallery") {
@@ -1873,7 +1935,6 @@
       ensureLeaderboardLive();
       void renderLeaderboard({ force: true });
     }
-    if (view === "reports") void renderReport();
     if (view === "settings") syncSettings();
   }
 
@@ -1887,6 +1948,53 @@
     if (name) name.textContent = session.username || "Administrator";
     if (email) email.textContent = session.email || "Not available";
     if (role) role.textContent = session.role || "Administrator";
+    syncAdminProfile(session);
+  }
+
+  function syncAdminProfile(session = {}) {
+    const name = session.username || session.email || "matiadmin";
+    const nameEl = $("[data-admin-profile-name]");
+    const signedInEl = $("[data-admin-profile-signed-in]");
+    const emailEl = $("[data-admin-profile-email]");
+    if (nameEl) nameEl.textContent = name;
+    if (signedInEl) signedInEl.textContent = name;
+    if (emailEl) {
+      emailEl.textContent =
+        session.email || "matiheritage.admin@cityofmati.gov.ph";
+    }
+    const initials = name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase();
+    document.querySelectorAll("[data-admin-profile-avatar-fallback]").forEach(
+      (fallback) => {
+        fallback.textContent = initials;
+      },
+    );
+    document.querySelectorAll("[data-admin-profile-image]").forEach((image) => {
+      const fallback = image.parentElement.querySelector(
+        "[data-admin-profile-avatar-fallback]",
+      );
+      const avatarUrl = session.avatarUrl;
+      const showFallback = () => {
+        image.hidden = true;
+        fallback.hidden = false;
+      };
+
+      image.onerror = showFallback;
+      if (avatarUrl) {
+        image.alt = `${name} profile picture`;
+        image.src = avatarUrl;
+        image.hidden = false;
+        fallback.hidden = true;
+      } else {
+        image.removeAttribute("src");
+        showFallback();
+      }
+    });
   }
 
   function openModal(id) {
@@ -1970,10 +2078,61 @@
       latVal && lngVal ? { lat: Number(latVal), lng: Number(lngVal) } : null;
 
     MatiAdminMap.enablePickMode((lat, lng) => {
+      if (!isWithinMatiCity(lat, lng)) {
+        showToast("Choose a location within Mati City.");
+        return;
+      }
       if ($("#site-lat")) $("#site-lat").value = lat.toFixed(6);
       if ($("#site-lng")) $("#site-lng").value = lng.toFixed(6);
       updateCoordinatePreviews();
     }, current);
+  }
+
+  function pointInRing(lat, lng, ring) {
+    let inside = false;
+    for (
+      let index = 0, previous = ring.length - 1;
+      index < ring.length;
+      previous = index++
+    ) {
+      const [previousLat, previousLng] = ring[previous];
+      const [currentLat, currentLng] = ring[index];
+      const intersects =
+        currentLng > lng !== previousLng > lng &&
+        lat <
+          ((previousLat - currentLat) * (lng - currentLng)) /
+            (previousLng - currentLng) +
+            currentLat;
+      if (intersects) inside = !inside;
+    }
+    return inside;
+  }
+
+  function isWithinMatiCity(lat, lng) {
+    const latitude = Number(lat);
+    const longitude = Number(lng);
+    const geojson = window.MATI_CITY_GEOJSON;
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || !geojson) {
+      return false;
+    }
+
+    const polygons =
+      geojson.type === "Polygon"
+        ? [geojson.coordinates]
+        : geojson.type === "MultiPolygon"
+          ? geojson.coordinates
+          : [];
+
+    return polygons.some((polygon) => {
+      const [outerRing, ...holes] = polygon;
+      const toLatLng = ([ringLng, ringLat]) => [ringLat, ringLng];
+      return (
+        pointInRing(latitude, longitude, outerRing.map(toLatLng)) &&
+        !holes.some((hole) =>
+          pointInRing(latitude, longitude, hole.map(toLatLng)),
+        )
+      );
+    });
   }
 
   function formatCoordinateDms(value, isLatitude) {
@@ -2093,7 +2252,15 @@
     dashboardShell.setAttribute("aria-busy", String(loading));
   }
 
-  async function renderDashboard() {
+  function removeUnusedDashboardSections() {
+    ["kpi-heading", "analytics-heading"].forEach(
+      (headingId) => {
+        document.getElementById(headingId)?.closest(".dashboard-section")?.remove();
+      },
+    );
+  }
+
+  function renderDashboard() {
     const dashboardShell = $("#dashboard-shell");
     const isFirstDashboardLoad =
       dashboardShell && !dashboardShell.dataset.dashboardInitialized;
@@ -2103,15 +2270,10 @@
 
     try {
       const collections = MatiAdminStore.getDashboardCollectionSummary();
-      const community = await MatiAdminStore.getDashboardCommunityStats();
       const heritageCards = $("#dashboard-heritage-cards");
       const emptyDb = $("#dashboard-supabase-empty");
       const tbody = $("#dashboard-summary-body");
       const tfoot = $("#dashboard-summary-foot");
-      const totalUsersStat = $("#total-users-stat");
-      const pageVisitsStat = $("#page-visits-stat");
-      const pageVisitsTrend = $("#page-visits-trend");
-
       const supabaseConfigured =
         typeof MatiSupabase !== "undefined" && MatiSupabase.isConfigured();
       const remoteSiteCount =
@@ -2121,25 +2283,6 @@
 
       if (emptyDb) {
         emptyDb.hidden = !supabaseConfigured || remoteSiteCount > 0;
-      }
-
-      // Update user stats
-      if (totalUsersStat) {
-        totalUsersStat.textContent = community.registeredUsers || 0;
-      }
-      if (pageVisitsStat) {
-        pageVisitsStat.textContent =
-          community.pageVisits ?? community.totalPageViews ?? 0;
-      }
-      if (pageVisitsTrend) {
-        const active = community.activeSessions ?? 0;
-        const sessions = community.uniqueSessions ?? 0;
-        pageVisitsTrend.textContent = `${active} active now · ${sessions} unique sessions`;
-      }
-
-      // Refresh analytics dashboard
-      if (typeof MatiAnalytics !== "undefined" && MatiAnalytics.refreshCharts) {
-        MatiAnalytics.refreshCharts();
       }
 
       if (heritageCards) {
@@ -2291,7 +2434,9 @@
           return site.name.toLowerCase().startsWith(q);
         },
       );
+      populateBuiltHeritageBarangayFilter(allBuilt);
       const sites = filterAndSortBuiltSites(allBuilt);
+      builtHeritagePage = Math.max(1, builtHeritagePage);
       renderBuiltHeritageCount(
         MatiAdminStore.getSitesByCategory("built").length,
       );
@@ -2390,6 +2535,72 @@
     const grid = $("#heritage-built-grid");
     if (!grid) return;
 
+    const totalPages = Math.max(
+      1,
+      Math.ceil(sites.length / BUILT_HERITAGE_PAGE_SIZE),
+    );
+    builtHeritagePage = Math.min(builtHeritagePage, totalPages);
+    const start = (builtHeritagePage - 1) * BUILT_HERITAGE_PAGE_SIZE;
+    const pageSites = sites.slice(start, start + BUILT_HERITAGE_PAGE_SIZE);
+    if (!pageSites.length) {
+      grid.innerHTML =
+        '<div class="admin-built__empty">No built heritage records match the current filters.</div>';
+    } else {
+      grid.innerHTML = `
+        <div class="admin-built__table-scroll">
+          <table class="admin-built__table">
+            <thead>
+              <tr>
+                <th>Heritage Site Name</th>
+                <th>Barangay</th>
+                <th>Category</th>
+                <th>3D Model Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${pageSites
+                .map((site) => {
+                  const updated = site.updatedAt
+                    ? new Date(site.updatedAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "—";
+                  const uploaded = builtSiteHas3d(site);
+                  return `
+                    <tr>
+                      <td><strong>${escapeHtml(site.name)}</strong></td>
+                      <td>${escapeHtml(site.location || "—")}</td>
+                      <td>${escapeHtml(site.heritageCategory || "—")}</td>
+                      <td><span class="admin-built__status ${uploaded ? "is-uploaded" : "is-missing"}">${uploaded ? "Uploaded" : "Not Uploaded"}</span></td>
+                      <td>${updated}</td>
+                      <td>
+                        <button type="button" class="admin-btn admin-btn--primary admin-btn--sm" data-edit-site="${escapeAttr(site.id)}">Manage</button>
+                      </td>
+                    </tr>`;
+                })
+                .join("")}
+            </tbody>
+          </table>
+        </div>`;
+    }
+    const pagination = $("#heritage-built-pagination");
+    if (pagination) {
+      const first = sites.length ? start + 1 : 0;
+      const last = Math.min(start + BUILT_HERITAGE_PAGE_SIZE, sites.length);
+      pagination.innerHTML = `
+        <span>Showing ${first}–${last} of ${sites.length}</span>
+        <div>
+          <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-built-page="${builtHeritagePage - 1}" ${builtHeritagePage <= 1 ? "disabled" : ""}>Previous</button>
+          <span>Page ${sites.length ? builtHeritagePage : 0} of ${sites.length ? totalPages : 0}</span>
+          <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-built-page="${builtHeritagePage + 1}" ${builtHeritagePage >= totalPages ? "disabled" : ""}>Next</button>
+        </div>`;
+    }
+    return;
+
     if (builtModelObserver) {
       builtModelObserver.disconnect();
       builtModelObserver = null;
@@ -2433,10 +2644,6 @@
         const locationClass = site.location
           ? "admin-heritage-card__meta"
           : "admin-heritage-card__meta admin-heritage-card__meta--muted";
-        const coords = MatiAdminStore.resolveCoords(site);
-        const mapBtn = coords
-          ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm admin-heritage-card__map-btn" data-view-on-map="${escapeAttr(site.id)}">View on map</button>`
-          : "";
         const viewBtn = builtSiteHas3d(site)
           ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm admin-heritage-card__view-btn" data-view-model="${escapeAttr(site.id)}">VIEW</button>`
           : "";
@@ -2468,7 +2675,6 @@
           </div>
           <div class="admin-heritage-card__foot">
             <div class="admin-heritage-card__actions">
-              ${mapBtn}
               <button type="button" class="admin-btn admin-btn--primary admin-btn--sm admin-heritage-card__btn" data-edit-site="${escapeAttr(site.id)}">${heritageCardActionLabel(site)}</button>
             </div>
           </div>
@@ -2656,7 +2862,6 @@
     if (view === "gallery") {
       window.MatiGalleryEmbed?.refresh?.();
     }
-    if (view === "reports") void renderReport();
     if (view === "leaderboard") void renderLeaderboard({ force: true });
   }
 
@@ -2689,9 +2894,6 @@
         void renderLeaderboard({ force: true });
       }
       if (view === "dashboard") renderDashboard();
-      if (view === "reports") {
-        void renderReport();
-      }
     });
   }
 
@@ -3044,6 +3246,12 @@
     $("#media-site-id").value = siteId || editingSiteId || "";
     const fileInput = $("#media-file");
     if (fileInput) fileInput.value = "";
+    modelFileValidationId += 1;
+    modelFileIsValid = false;
+    modelFileValidationInProgress = false;
+    modelSubmitInProgress = false;
+    modelReplaceConfirmationInProgress = false;
+    modelUploadInProgress = false;
     const previewWrap = $("#media-file-preview-wrap");
     const previewImg = $("#media-file-preview");
     if (previewWrap) previewWrap.hidden = true;
@@ -3070,11 +3278,13 @@
     }
 
     $("#media-modal-title").textContent = isNew
-      ? builtSite && presetType
-        ? titles[presetType] || "Add multimedia files"
-        : presetType
+      ? presetType === "model3d" && getSiteModelSource(site)
+        ? "Manage 3D Model"
+        : builtSite && presetType
           ? titles[presetType] || "Add multimedia files"
-          : "Add multimedia files"
+          : presetType
+            ? titles[presetType] || "Add multimedia files"
+            : "Add multimedia files"
       : titles[modalType] || "Edit multimedia";
 
     openModal("#media-modal");
@@ -3089,7 +3299,9 @@
     updateMediaFormUi();
 
     requestAnimationFrame(() => {
-      if (builtSite && isNew) {
+      if (presetType === "model3d") {
+        $("#btn-choose-model-file")?.focus();
+      } else if (builtSite && isNew) {
         $("#media-file")?.focus();
       } else {
         $("#media-type")?.focus();
@@ -3219,7 +3431,7 @@
         ? [["#site-heritage-type", "heritage type"]]
         : []),
       ["#site-location", "location"],
-      ...(category === "natural"
+      ...(category === "built" || category === "natural"
         ? [
             ["#site-lat", "latitude"],
             ["#site-lng", "longitude"],
@@ -3233,6 +3445,15 @@
     if (missingField) {
       showToast(`Enter the ${missingField[1]} before saving.`);
       $(missingField[0])?.focus();
+      return;
+    }
+
+    if (
+      (category === "built" || category === "natural") &&
+      !isWithinMatiCity($("#site-lat").value, $("#site-lng").value)
+    ) {
+      showToast("Heritage sites must be located within Mati City.");
+      $("#site-lat")?.focus();
       return;
     }
 
@@ -3543,16 +3764,23 @@
       startedAt: Date.now(),
     };
 
-    setProgress(5, `Uploading 3D model...`, fileMeta);
+    setProgress(0, "Preparing file...", {
+      ...fileMeta,
+      loadedBytes: 0,
+    });
 
     const modelSrc = await MatiAdminUploads.put(`${siteId}/model`, file, {
       type: "model3d",
       siteId,
       onProgress: (pct, loadedBytes) => {
-        const actualLoaded = loadedBytes || Math.round((pct / 100) * file.size);
+        const actualLoaded =
+          Number.isFinite(loadedBytes)
+            ? loadedBytes
+            : Math.round((pct / 100) * file.size);
+        const uploadComplete = pct >= 100;
         setProgress(
-          Math.round(pct * 0.85),
-          `Uploading 3D model: ${file.name}`,
+          pct,
+          uploadComplete ? "Finalizing upload..." : "Uploading model...",
           {
             fileName: fileMeta.fileName,
             totalBytes: fileMeta.totalBytes,
@@ -3564,13 +3792,92 @@
       signal,
     });
 
-    setProgress(100, `Upload complete`, {
+    setProgress(100, "Finalizing upload...", {
       fileName: fileMeta.fileName,
       totalBytes: fileMeta.totalBytes,
       startedAt: fileMeta.startedAt,
       loadedBytes: file.size,
     });
     return modelSrc;
+  }
+
+  async function removeCurrentModel() {
+    if (
+      modelFileValidationInProgress ||
+      modelSubmitInProgress ||
+      modelReplaceConfirmationInProgress ||
+      modelUploadInProgress
+    ) {
+      return;
+    }
+    const siteId = $("#media-site-id")?.value || editingSiteId;
+    const site = siteId ? MatiAdminStore.getSiteById(siteId) : null;
+    const modelSrc = getSiteModelSource(site);
+    if (!site || !modelSrc) {
+      showToast("Could not find the 3D model to remove.");
+      return;
+    }
+
+    const confirmed = await confirmAction({
+      title: "Remove 3D model?",
+      message: `Remove the 3D model from ${site.name}? Visitors will no longer be able to preview it.`,
+      confirmLabel: "Remove model",
+      variant: "large",
+    });
+    if (!confirmed) return;
+
+    const removeButton = $("#btn-remove-model");
+    const saveButton = $("#btn-save-media");
+    if (removeButton) removeButton.disabled = true;
+    if (saveButton) saveButton.disabled = true;
+
+    try {
+      const savedSite = await MatiAdminStore.saveSite({
+        ...site,
+        modelSrc: "",
+      });
+      if (!syncOk(savedSite)) {
+        showToast(
+          syncFailedMessage(savedSite, "Could not remove the 3D model."),
+        );
+        return;
+      }
+
+      const legacyModel = MatiAdminStore.getSiteMedia(siteId).find(
+        (item) => item.type === "model3d",
+      );
+      let storageCleanupFailed = false;
+      if (legacyModel) {
+        try {
+          await MatiAdminStore.deleteMedia(legacyModel.id);
+        } catch (error) {
+          storageCleanupFailed = true;
+          console.error("Could not remove legacy 3D model record:", error);
+        }
+      }
+
+      try {
+        await removeStoredModelObject(siteId, modelSrc);
+      } catch (error) {
+        storageCleanupFailed = true;
+        console.error("Could not remove stored 3D model file:", error);
+      }
+
+      closeMediaModal();
+      refreshSiteViews(siteId);
+      if ($("#site-modal") && !$("#site-modal").hidden) {
+        syncSiteFormSubmitLabel(siteId);
+      }
+      showToast(storageCleanupFailed
+        ? "Model removed from the heritage record, but its old record or stored file could not be deleted."
+        : "3D model removed.");
+    } catch (error) {
+      console.error("Could not remove 3D model:", error);
+      showToast(error?.message || "Could not remove the 3D model.");
+    } finally {
+      if (removeButton) removeButton.disabled = false;
+      if (saveButton) updateMediaFormUi();
+    }
   }
 
   async function saveMediaForm(e) {
@@ -3598,6 +3905,15 @@
 
     const isNew = !$("#media-id").value.trim();
     const type = $("#media-type").value;
+    if (
+      type === "model3d" &&
+      (modelUploadInProgress ||
+        modelFileValidationInProgress ||
+        modelSubmitInProgress ||
+        modelReplaceConfirmationInProgress)
+    ) {
+      return;
+    }
     const allowedTypes = categoryMediaTypes(site.category);
 
     if (!allowedTypes.includes(type)) {
@@ -3629,22 +3945,81 @@
         showToast("Choose a file to upload.");
         return;
       }
-      if (type === "model3d" && !files[0].name.toLowerCase().endsWith(".glb")) {
-        showToast("3D model must be a .glb file.");
-        return;
+      if (type === "model3d") {
+        modelSubmitInProgress = true;
+        updateMediaFormUi();
+        let valid = false;
+        let validationFailed = false;
+        try {
+          valid = modelFileIsValid && (await isValidGlbFile(files[0]));
+        } catch (error) {
+          validationFailed = true;
+          console.error("Could not validate 3D model file:", error);
+        }
+        if (!valid) {
+          modelSubmitInProgress = false;
+          modelFileIsValid = false;
+          updateMediaFormUi();
+          showToast(
+            validationFailed
+              ? "Could not validate the selected GLB file."
+              : "Choose a valid GLB 2.0 model file.",
+          );
+          return;
+        }
+      }
+      if (type === "model3d" && getSiteModelSource(site)) {
+        modelReplaceConfirmationInProgress = true;
+        updateMediaFormUi();
+        let confirmed = false;
+        try {
+          confirmed = await confirmAction({
+            title: "Replace 3D model?",
+            message: `Replace the current 3D model for ${site.name} with the selected file?`,
+            confirmLabel: "Replace model",
+          });
+        } catch (error) {
+          console.error("Could not confirm 3D model replacement:", error);
+          modelSubmitInProgress = false;
+          showToast("Could not confirm the model replacement.");
+          return;
+        } finally {
+          modelReplaceConfirmationInProgress = false;
+          updateMediaFormUi();
+        }
+        if (!confirmed) {
+          modelSubmitInProgress = false;
+          updateMediaFormUi();
+          return;
+        }
       }
 
       try {
         if (typeof MatiAdminUploads === "undefined") {
+          modelSubmitInProgress = false;
+          updateMediaFormUi();
           showToast("Uploads are not available.");
           return;
         }
 
         const typeTitle =
-          type === "photo" && files.length > 1
-            ? "Uploading photographs…"
-            : `Uploading ${TYPE_LABELS[type] || "file"}…`;
+          type === "model3d"
+            ? "Uploading 3D model"
+            : files.length > 1 && ["photo", "video", "audio"].includes(type)
+            ? `Uploading ${
+                type === "photo"
+                  ? "photographs"
+                  : type === "video"
+                    ? "videos"
+                    : "audio recordings"
+              }…`
+              : `Uploading ${TYPE_LABELS[type] || "file"}…`;
 
+        if (type === "model3d") {
+          modelSubmitInProgress = false;
+          modelUploadInProgress = true;
+          updateMediaFormUi();
+        }
         activeUploadController = new AbortController();
 
         await withUploadProgress(
@@ -3698,16 +4073,12 @@
                 showToast("Site map uploaded to database.");
               }
             } else if (type === "model3d") {
+              const previousModelSrc = getSiteModelSource(site);
               const fileMeta = {
                 fileName: files[0].name,
                 totalBytes: files[0].size,
                 startedAt: Date.now(),
               };
-              setUploadProgress(
-                5,
-                `Uploading 3D model: ${files[0].name}`,
-                fileMeta,
-              );
 
               const modelSrc = await uploadSiteModelFile({
                 siteId,
@@ -3718,7 +4089,7 @@
               });
 
               if (activeUploadController.signal.aborted) return;
-              setUploadProgress(90, "Saving 3D model to database…", {
+              setUploadProgress(100, "Finalizing upload...", {
                 fileName: fileMeta.fileName,
                 totalBytes: fileMeta.totalBytes,
                 startedAt: fileMeta.startedAt,
@@ -3736,151 +4107,127 @@
                   ),
                 );
               } else {
-                showToast("3D model uploaded to database.");
-              }
-            } else if (type === "video" || type === "audio") {
-              const title = $("#media-title").value.trim() || files[0].name;
-              const key = `${siteId}/${type}s/${MatiAdminStore.slugId(files[0].name)}-${Date.now()}`;
-              const fileMeta = {
-                fileName: files[0].name,
-                totalBytes: files[0].size,
-                startedAt: Date.now(),
-              };
-              setUploadProgress(
-                5,
-                `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
-                fileMeta,
-              );
-              const src = await MatiAdminUploads.put(key, files[0], {
-                type,
-                siteId,
-                onProgress: (pct, loadedBytes) => {
-                  const actualLoaded =
-                    loadedBytes || Math.round((pct / 100) * files[0].size);
-                  setUploadProgress(
-                    Math.round(pct * 0.85),
-                    `Uploading ${TYPE_LABELS[type]}: ${files[0].name}`,
-                    {
-                      fileName: fileMeta.fileName,
-                      totalBytes: fileMeta.totalBytes,
-                      startedAt: fileMeta.startedAt,
-                      loadedBytes: actualLoaded,
-                    },
-                  );
-                },
-                signal: activeUploadController.signal,
-              });
-              setUploadProgress(90, "Saving media record…", {
-                fileName: fileMeta.fileName,
-                totalBytes: fileMeta.totalBytes,
-                startedAt: fileMeta.startedAt,
-                loadedBytes: files[0].size,
-              });
-              if (activeUploadController.signal.aborted) return;
-              const saved = await MatiAdminStore.saveMedia({
-                siteId,
-                type,
-                title,
-                src,
-                caption: $("#media-caption").value,
-              });
-              if (!saved) {
-                throw new Error(`Could not save ${type}.`);
-              }
-              if (!syncOk(saved)) {
+                let cleanupFailed = false;
+                if (previousModelSrc && previousModelSrc !== modelSrc) {
+                  try {
+                    await removeStoredModelObject(siteId, previousModelSrc);
+                  } catch (error) {
+                    cleanupFailed = true;
+                    console.error(
+                      "Could not remove replaced 3D model file:",
+                      error,
+                    );
+                  }
+                }
                 showToast(
-                  syncFailedMessage(
-                    saved,
-                    `${TYPE_LABELS[type]} saved locally only.`,
-                  ),
+                  cleanupFailed
+                    ? "3D model replaced, but the previous file could not be deleted."
+                    : "3D model uploaded to database.",
                 );
-              } else {
-                showToast(`${TYPE_LABELS[type]} uploaded to database.`);
               }
-            } else {
-              const sharedCaption = $("#media-caption").value;
-              const sharedTitle = $("#media-title").value.trim();
-              const imageFiles = files.filter((file) =>
-                file.type.startsWith("image/"),
+            } else if (
+              type === "photo" ||
+              type === "video" ||
+              type === "audio"
+            ) {
+              const mediaFiles = files.filter((file) =>
+                mediaFileMatchesType(type, file),
               );
-              if (!imageFiles.length) {
-                throw new Error("Choose at least one image file.");
+              if (!mediaFiles.length || mediaFiles.length !== files.length) {
+                throw new Error(
+                  `Choose valid ${type === "photo" ? "image" : type} files to upload.`,
+                );
               }
-              const batch = makeBatchProgress(imageFiles.length, "Photograph");
-              const uploadedIds = [];
-              let lastSaved = null;
-              let totalBytes = imageFiles.reduce((sum, f) => sum + f.size, 0);
-              let uploadedBytes = 0;
 
-              for (const [i, file] of imageFiles.entries()) {
+              const singular = TYPE_LABELS[type] || "File";
+              const plural =
+                type === "photo"
+                  ? "Photographs"
+                  : type === "video"
+                    ? "Videos"
+                    : "Audio recordings";
+              const folder =
+                type === "photo"
+                  ? "photos"
+                  : type === "video"
+                    ? "videos"
+                    : "audio";
+              const uploadedIds = [];
+              const totalBytes = mediaFiles.reduce(
+                (sum, file) => sum + file.size,
+                0,
+              );
+              let uploadedBytes = 0;
+              let lastSaved = null;
+
+              for (const [i, file] of mediaFiles.entries()) {
                 const fileMeta = {
                   fileName:
-                    imageFiles.length > 1
-                      ? `${file.name} (${i + 1}/${imageFiles.length})`
+                    mediaFiles.length > 1
+                      ? `${file.name} (${i + 1}/${mediaFiles.length})`
                       : file.name,
-                  totalBytes: totalBytes,
+                  totalBytes,
                   startedAt: Date.now(),
                 };
-
-                batch.startFile(i, file.name);
-                const key = `${siteId}/photos/${MatiAdminStore.slugId(file.name)}-${Date.now()}-${i}`;
+                const key = `${siteId}/${folder}/${MatiAdminStore.slugId(file.name)}-${Date.now()}-${i}`;
                 const src = await MatiAdminUploads.put(key, file, {
-                  type: "photo",
+                  type,
                   siteId,
                   onProgress: (pct, loadedBytes) => {
                     const currentFileLoaded =
-                      loadedBytes || Math.round((pct / 100) * file.size);
-                    const totalUploadedSoFar =
-                      uploadedBytes + currentFileLoaded;
-                    batch.onFileProgress(pct);
+                      loadedBytes ?? Math.round((pct / 100) * file.size);
                     setUploadProgress(
-                      Math.round(((i + pct / 100) / imageFiles.length) * 100),
-                      `Uploading photograph ${i + 1} of ${imageFiles.length}: ${file.name}`,
+                      totalBytes
+                        ? ((uploadedBytes + currentFileLoaded) / totalBytes) *
+                            100
+                        : 100,
+                      `Uploading ${singular.toLowerCase()} ${i + 1} of ${mediaFiles.length}…`,
                       {
                         fileName: fileMeta.fileName,
-                        totalBytes: fileMeta.totalBytes,
+                        totalBytes,
                         startedAt: fileMeta.startedAt,
-                        loadedBytes: totalUploadedSoFar,
+                        loadedBytes: uploadedBytes + currentFileLoaded,
                       },
                     );
                   },
                   signal: activeUploadController.signal,
                 });
-                uploadedBytes += file.size;
+
+                if (activeUploadController.signal.aborted) return;
                 setUploadProgress(
-                  Math.round(((i + 0.92) / imageFiles.length) * 100),
-                  `Saving photograph ${i + 1} of ${imageFiles.length}…`,
+                  totalBytes
+                    ? ((uploadedBytes + file.size) / totalBytes) * 100
+                    : 100,
+                  `Saving ${singular.toLowerCase()} ${i + 1} of ${mediaFiles.length}…`,
                   {
                     fileName: fileMeta.fileName,
-                    totalBytes: fileMeta.totalBytes,
+                    totalBytes,
                     startedAt: fileMeta.startedAt,
-                    loadedBytes: uploadedBytes,
+                    loadedBytes: uploadedBytes + file.size,
                   },
                 );
-                if (activeUploadController.signal.aborted) return;
                 const saved = await MatiAdminStore.saveMedia({
                   siteId,
-                  type: "photo",
-                  title:
-                    imageFiles.length > 1
-                      ? photoTitleFromFile(file)
-                      : sharedTitle || photoTitleFromFile(file),
+                  type,
+                  title: mediaTitleFromFile(file),
                   src,
-                  caption: sharedCaption,
+                  caption: "",
                 });
                 if (!saved) {
-                  throw new Error("Could not save photograph.");
+                  throw new Error(`Could not save ${singular.toLowerCase()}.`);
                 }
+                uploadedBytes += file.size;
                 lastSaved = saved;
                 uploadedIds.push(saved.id);
               }
+
               if (uploadedIds.length > 1) {
                 const ordered = MatiAdminStore.getOrderedSiteMedia(
                   siteId,
-                  "photo",
+                  type,
                 ).map((item) => item.id);
                 const rest = ordered.filter((id) => !uploadedIds.includes(id));
-                MatiAdminStore.reorderSiteMedia(siteId, "photo", [
+                MatiAdminStore.reorderSiteMedia(siteId, type, [
                   ...uploadedIds,
                   ...rest,
                 ]);
@@ -3889,14 +4236,12 @@
                 showToast(
                   syncFailedMessage(
                     lastSaved,
-                    "Photographs saved locally only.",
+                    `${plural} saved locally only.`,
                   ),
                 );
               } else {
                 showToast(
-                  imageFiles.length > 1
-                    ? "Photographs uploaded to database."
-                    : "Photograph uploaded to database.",
+                  `${plural} uploaded to database.`,
                 );
               }
             }
@@ -3922,6 +4267,12 @@
           showToast(message || "Could not upload file.");
         }
         return;
+      } finally {
+        if (type === "model3d") {
+          modelSubmitInProgress = false;
+          modelUploadInProgress = false;
+          updateMediaFormUi();
+        }
       }
 
       closeMediaModal();
@@ -4639,173 +4990,312 @@
     { key: "leaderboard", label: "Leaderboard Records" },
   ];
 
-  const HERITAGE_STAT_KEYS = new Set([
-    "photos",
-    "videos",
-    "audio",
-    "links",
-    "models",
-  ]);
+  let generatedReport = null;
+  let reportHeritageChart = null;
+  let reportUsersChart = null;
 
-  function renderHeritageReportCell(key, value) {
-    if (key === "name") {
-      return `<td><div class="admin-report-site">${escapeHtml(value || "—")}</div></td>`;
+  async function fetchReportData() {
+    if (
+      typeof MatiAdminAuth?.isAdmin !== "function" ||
+      !(await MatiAdminAuth.isAdmin())
+    ) {
+      throw new Error("Only authorized City Tourism Office personnel can generate reports.");
     }
 
-    if (HERITAGE_STAT_KEYS.has(key)) {
-      const count = Number(value) || 0;
-      return `<td><span class="admin-report-stat${count ? "" : " is-zero"}">${count}</span></td>`;
+    const catalogRefresh = await MatiAdminStore.initFromSupabase();
+    if (!catalogRefresh?.ok) {
+      throw new Error(
+        catalogRefresh?.error?.message ||
+          "Could not refresh heritage records from the database.",
+      );
     }
 
-    if (key === "location") {
-      const text = String(value || "").trim();
-      return `<td class="admin-report-location">${
-        text ? escapeHtml(text) : '<span class="admin-report-muted">—</span>'
-      }</td>`;
+    const [builtRows, intangibleRows, naturalRows] = await Promise.all([
+      MatiAdminStore.heritageReportRows("built"),
+      MatiAdminStore.heritageReportRows("intangible"),
+      MatiAdminStore.heritageReportRows("natural"),
+    ]);
+
+    let users;
+    if (
+      typeof MatiSupabaseAuth !== "undefined" &&
+      MatiSupabaseAuth.enabled?.()
+    ) {
+      users = await MatiSupabaseAuth.getAllUsers();
+      if (!Array.isArray(users)) {
+        throw new Error("Could not load registered users from the database.");
+      }
+    } else {
+      users = await MatiAdminStore.getRegisteredUsers();
     }
 
-    const text = String(value ?? "").trim();
-    return `<td>${text ? escapeHtml(text) : '<span class="admin-report-muted">—</span>'}</td>`;
-  }
+    if (!Array.isArray(users)) {
+      throw new Error("Could not load registered users.");
+    }
 
-  function renderHeritageReportRow(row, headers) {
-    const cells = headers
-      .map((header) => renderHeritageReportCell(header.key, row[header.key]))
-      .join("");
-    return `<tr class="admin-report-row">${cells}<td class="admin-report-actions-cell">${renderSiteReportActions(row.id)}</td></tr>`;
-  }
-
-  async function fetchReportCounts() {
+    const leaderboard = users
+      .map((user) => ({
+        username: user.username || user.displayName || "User",
+        points: Number(user.points ?? user.heritagePoints) || 0,
+      }))
+      .filter((user) => user.points > 0)
+      .sort((a, b) => b.points - a.points);
     const counts = {
-      built: 0,
-      intangible: 0,
-      natural: 0,
-      users: 0,
-      leaderboard: 0,
+      built: builtRows.length,
+      intangible: intangibleRows.length,
+      natural: naturalRows.length,
+      users: users.length,
+      leaderboard: leaderboard.length,
     };
 
-    try {
-      counts.built = (await MatiAdminStore.heritageReportRows("built")).length;
-      counts.intangible = (await MatiAdminStore.heritageReportRows("intangible")).length;
-      counts.natural = (await MatiAdminStore.heritageReportRows("natural")).length;
-      counts.users = (await MatiAdminStore.getRegisteredUsers()).length;
-      counts.leaderboard = (await MatiAdminStore.getLeaderboard()).length;
-    } catch (error) {
-      console.error("Error fetching report counts:", error);
-    }
-
-    return counts;
-  }
-
-  async function renderReport() {
-    const counts = await fetchReportCounts();
-
-    // Update stat cards
-    $("#stat-built").textContent = counts.built;
-    $("#stat-intangible").textContent = counts.intangible;
-    $("#stat-natural").textContent = counts.natural;
-    $("#stat-users").textContent = counts.users;
-    $("#stat-leaderboard").textContent = counts.leaderboard;
-
-    // Render chart
-    renderReportChart(counts);
-  }
-
-  function renderReportChart(counts) {
-    const canvas = document.getElementById("report-chart");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (window.reportChartInstance) {
-      window.reportChartInstance.destroy();
-    }
-
-    const data = {
-      labels: REPORT_CATEGORIES.map((cat) => cat.label),
-      datasets: [
-        {
-          label: "Total Records",
-          data: [
-            counts.built,
-            counts.intangible,
-            counts.natural,
-            counts.users,
-            counts.leaderboard,
-          ],
-          backgroundColor: [
-            "rgba(54, 162, 235, 0.8)",
-            "rgba(255, 206, 86, 0.8)",
-            "rgba(75, 192, 192, 0.8)",
-            "rgba(153, 102, 255, 0.8)",
-            "rgba(255, 99, 132, 0.8)",
-          ],
-          borderColor: [
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 99, 132, 1)",
-          ],
-          borderWidth: 2,
-        },
-      ],
+    return {
+      counts,
+      users,
+      leaderboard,
+      generatedAt: new Date(),
     };
+  }
 
-    window.reportChartInstance = new Chart(ctx, {
+  function monthlyRegistrationData(users, now) {
+    const months = [];
+    const monthCounts = new Map();
+    const monthFormatter = new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      year: "numeric",
+    });
+
+    for (let offset = 11; offset >= 0; offset -= 1) {
+      const month = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+      const key = `${month.getFullYear()}-${String(
+        month.getMonth() + 1,
+      ).padStart(2, "0")}`;
+      months.push({ key, label: monthFormatter.format(month) });
+      monthCounts.set(key, 0);
+    }
+
+    let hasHistory = false;
+    users.forEach((user) => {
+      if (!user.createdAt) return;
+      const registeredAt = new Date(user.createdAt);
+      if (Number.isNaN(registeredAt.getTime())) return;
+      hasHistory = true;
+      const key = `${registeredAt.getFullYear()}-${String(
+        registeredAt.getMonth() + 1,
+      ).padStart(2, "0")}`;
+      if (monthCounts.has(key)) {
+        monthCounts.set(key, monthCounts.get(key) + 1);
+      }
+    });
+
+    return {
+      hasHistory,
+      labels: months.map((month) => month.label),
+      values: months.map((month) => monthCounts.get(month.key)),
+    };
+  }
+
+  function renderReport(counts, users, leaderboard, generatedAt) {
+    $("#stat-built").textContent = counts.built.toLocaleString();
+    $("#stat-intangible").textContent = counts.intangible.toLocaleString();
+    $("#stat-natural").textContent = counts.natural.toLocaleString();
+    $("#stat-users").textContent = counts.users.toLocaleString();
+    $("#stat-leaderboard").textContent = counts.leaderboard.toLocaleString();
+    $("#report-results").hidden = false;
+    $("#report-initial-empty").hidden = true;
+
+    const history = monthlyRegistrationData(users, generatedAt);
+    renderReportHeritageChart(counts);
+    renderReportUsersChart(history);
+    renderReportLeaderboard(leaderboard);
+
+    const timestamp = $("#report-generated-at");
+    timestamp.dateTime = generatedAt.toISOString();
+    timestamp.textContent = `Generated ${generatedAt.toLocaleString()}`;
+    timestamp.hidden = false;
+  }
+
+  function renderReportHeritageChart(counts) {
+    const values = [counts.built, counts.intangible, counts.natural];
+    const hasRecords = values.some((value) => value > 0);
+    const canvas = $("#report-heritage-chart");
+    $("#report-heritage-empty").hidden = hasRecords;
+    canvas.hidden = !hasRecords;
+
+    if (reportHeritageChart) {
+      reportHeritageChart.destroy();
+      reportHeritageChart = null;
+    }
+    if (!hasRecords) return;
+
+    reportHeritageChart = new Chart(canvas.getContext("2d"), {
       type: "bar",
-      data: data,
+      data: {
+        labels: REPORT_CATEGORIES.slice(0, 3).map((category) => category.label),
+        datasets: [
+          {
+            label: "Heritage records",
+            data: values,
+            backgroundColor: ["#176b52", "#4a9a79", "#a9cbb9"],
+            borderRadius: 5,
+            maxBarThickness: 58,
+          },
+        ],
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            display: false,
-          },
-          title: {
-            display: false,
-          },
+          legend: { display: false },
+          tooltip: { enabled: true },
         },
         scales: {
           y: {
             beginAtZero: true,
-            ticks: {
-              stepSize: 1,
-            },
+            ticks: { precision: 0 },
+            grid: { color: "#edf1ef" },
           },
           x: {
-            ticks: {
-              maxRotation: 45,
-              minRotation: 45,
-            },
+            grid: { display: false },
+            ticks: { maxRotation: 0 },
           },
         },
       },
     });
   }
 
+  function renderReportUsersChart(history) {
+    const canvas = $("#report-users-chart");
+    $("#report-users-empty").hidden = history.hasHistory;
+    canvas.hidden = !history.hasHistory;
+
+    if (reportUsersChart) {
+      reportUsersChart.destroy();
+      reportUsersChart = null;
+    }
+    if (!history.hasHistory) return;
+
+    reportUsersChart = new Chart(canvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: history.labels,
+        datasets: [
+          {
+            label: "New registrations",
+            data: history.values,
+            borderColor: "#176b52",
+            backgroundColor: "rgba(23, 107, 82, 0.1)",
+            fill: true,
+            tension: 0.25,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 },
+            grid: { color: "#edf1ef" },
+          },
+          x: {
+            grid: { display: false },
+            ticks: { maxTicksLimit: 6, maxRotation: 0 },
+          },
+        },
+      },
+    });
+  }
+
+  function renderReportLeaderboard(leaderboard) {
+    const rows = $("#report-leaderboard-rows");
+    const empty = $("#report-leaderboard-empty");
+    const topEntries = leaderboard.slice(0, 10);
+    rows.innerHTML = topEntries
+      .map(
+        (entry, index) => `
+          <tr>
+            <td><span class="report-rank">${index + 1}</span></td>
+            <td>${escapeHtml(entry.username)}</td>
+            <td>${entry.points.toLocaleString()}</td>
+          </tr>
+        `,
+      )
+      .join("");
+    empty.hidden = topEntries.length > 0;
+  }
+
+  function setReportStatus(message, state = "") {
+    const status = $("#report-status");
+    const panel = $("#report-status-panel");
+    status.textContent = message;
+    panel.classList.toggle("is-error", state === "error");
+    panel.classList.toggle("is-success", state === "success");
+    panel.classList.toggle("is-loading", state === "loading");
+  }
+
+  function reportCsvValue(value) {
+    const text = String(value ?? "");
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
   async function exportCurrentReport() {
-    const counts = await fetchReportCounts();
+    if (!generatedReport) {
+      setReportStatus("Generate a report before exporting it.", "error");
+      return;
+    }
 
-    const csvContent = [
-      "Category,Total Records",
-      `Built Heritage,${counts.built}`,
-      `Intangible Cultural Heritage,${counts.intangible}`,
-      `Natural Heritage,${counts.natural}`,
-      `Registered Users,${counts.users}`,
-      `Leaderboard Records,${counts.leaderboard}`,
-    ].join("\n");
+    let url;
+    let link;
+    try {
+      if (
+        typeof MatiAdminAuth?.isAdmin !== "function" ||
+        !(await MatiAdminAuth.isAdmin())
+      ) {
+        throw new Error(
+          "Only authorized City Tourism Office personnel can export reports.",
+        );
+      }
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "system-report.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showToast("CSV exported successfully.");
+      const { counts, generatedAt } = generatedReport;
+      const rows = [
+        ["Category", "Total records"],
+        ...REPORT_CATEGORIES.map(({ key, label }) => [label, counts[key]]),
+      ];
+      const csvContent = `\uFEFF${rows
+        .map((row) => row.map(reportCsvValue).join(","))
+        .join("\r\n")}`;
+      const date = [
+        generatedAt.getFullYear(),
+        String(generatedAt.getMonth() + 1).padStart(2, "0"),
+        String(generatedAt.getDate()).padStart(2, "0"),
+      ].join("-");
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      url = URL.createObjectURL(blob);
+      link = document.createElement("a");
+      link.href = url;
+      link.download = `tourism_graphical_report_${date}.csv`;
+      link.hidden = true;
+      document.body.appendChild(link);
+      link.click();
+      setReportStatus("CSV report exported successfully.", "success");
+      showToast("CSV report exported successfully.");
+    } catch (error) {
+      console.error("CSV report export failed:", error);
+      setReportStatus(
+        error?.message || "Could not export the CSV report. Please try again.",
+        "error",
+      );
+      showToast(error?.message || "Could not export the CSV report. Please try again.");
+    } finally {
+      link?.remove();
+      if (url) window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
   }
 
   function escapeHtml(str) {
@@ -4834,6 +5324,8 @@
       const mediaType = $("#media-type")?.value;
       if (
         (mediaType !== "photo" &&
+          mediaType !== "video" &&
+          mediaType !== "audio" &&
           mediaType !== "model3d" &&
           mediaType !== "map") ||
         $("#media-id")?.value?.trim()
@@ -4855,6 +5347,8 @@
       const mediaType = $("#media-type")?.value;
       if (
         (mediaType !== "photo" &&
+          mediaType !== "video" &&
+          mediaType !== "audio" &&
           mediaType !== "model3d" &&
           mediaType !== "map") ||
         $("#media-id")?.value?.trim()
@@ -4864,28 +5358,44 @@
       e.preventDefault();
 
       let files = [];
-      if (mediaType === "photo") {
-        files = [...(e.dataTransfer?.files || [])].filter((file) =>
-          file.type.startsWith("image/"),
+      const droppedFiles = [...(e.dataTransfer?.files || [])];
+      if (
+        mediaType === "photo" ||
+        mediaType === "video" ||
+        mediaType === "audio"
+      ) {
+        files = droppedFiles.filter((file) =>
+          mediaFileMatchesType(mediaType, file),
         );
-        if (!files.length) {
-          showToast("Drop image files only.");
+        if (!files.length || files.length !== droppedFiles.length) {
+          const allowed =
+            mediaType === "photo"
+              ? "image"
+              : mediaType === "video"
+                ? "video"
+                : "audio";
+          showToast(`Drop only supported ${allowed} files.`);
           return;
         }
       } else if (mediaType === "model3d") {
-        files = [...(e.dataTransfer?.files || [])].filter(
+        files = droppedFiles.filter(
           (file) =>
-            file.name.endsWith(".glb") || file.type === "model/gltf-binary",
+            file.name.toLowerCase().endsWith(".glb") ||
+            file.type === "model/gltf-binary",
         );
-        if (!files.length) {
+        if (!files.length || files.length !== droppedFiles.length) {
           showToast("Drop .glb 3D model files only.");
           return;
         }
+        if (files.length > 1) {
+          showToast("Drop only one 3D model file.");
+          return;
+        }
       } else if (mediaType === "map") {
-        files = [...(e.dataTransfer?.files || [])].filter((file) =>
-          file.type.startsWith("image/"),
+        files = droppedFiles.filter((file) =>
+          mediaFileMatchesType("photo", file),
         );
-        if (!files.length) {
+        if (!files.length || files.length !== droppedFiles.length) {
           showToast("Drop image files only for site map.");
           return;
         }
@@ -4904,7 +5414,41 @@
   }
 
   function bindEvents() {
+    const profile = $("[data-admin-profile]");
+    const profileTrigger = $("[data-admin-profile-trigger]");
+    const profileMenu = $("#admin-profile-menu");
+    const closeProfileMenu = () => {
+      if (!profileMenu || profileMenu.hidden) return;
+      profileMenu.hidden = true;
+      profileTrigger?.setAttribute("aria-expanded", "false");
+    };
+
+    profileTrigger?.addEventListener("click", () => {
+      if (!profileMenu) return;
+      profileMenu.hidden = !profileMenu.hidden;
+      profileTrigger.setAttribute(
+        "aria-expanded",
+        String(!profileMenu.hidden),
+      );
+    });
+    profileMenu?.addEventListener("click", (event) => {
+      const viewButton = event.target.closest("[data-view]");
+      if (!viewButton) return;
+      closeProfileMenu();
+      setView(viewButton.dataset.view);
+    });
+    document.addEventListener("click", (event) => {
+      if (profile && !profile.contains(event.target)) closeProfileMenu();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeProfileMenu();
+    });
+    syncAdminProfile(
+      typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() || {} : {},
+    );
+
     $("#admin-logout")?.addEventListener("click", () => {
+      closeProfileMenu();
       startLogout();
     });
 
@@ -4976,6 +5520,16 @@
       if (built) built.value = e.target.value;
       renderHeritage();
     });
+    $("#built-heritage-barangay")?.addEventListener("change", () => {
+      builtHeritagePage = 1;
+      renderHeritage();
+    });
+    $("#heritage-built-pagination")?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-built-page]");
+      if (!button || button.disabled) return;
+      builtHeritagePage = Number(button.dataset.builtPage) || 1;
+      renderHeritage();
+    });
 
     $("#site-lat")?.addEventListener("input", syncMapPickMode);
     $("#site-lng")?.addEventListener("input", syncMapPickMode);
@@ -4986,14 +5540,107 @@
       }
     });
 
-    $("#media-type")?.addEventListener("change", updateMediaFormUi);
+    $("#media-type")?.addEventListener("change", () => {
+      const input = $("#media-file");
+      if (input) input.value = "";
+      modelFileValidationId += 1;
+      modelFileIsValid = false;
+      modelFileValidationInProgress = false;
+      updateMediaFormUi();
+    });
 
     bindMediaFileDrop();
 
-    $("#media-file")?.addEventListener("change", (e) => {
+    $("#btn-choose-model-file")?.addEventListener("click", () => {
+      if (
+        !modelFileValidationInProgress &&
+        !modelSubmitInProgress &&
+        !modelReplaceConfirmationInProgress &&
+        !modelUploadInProgress
+      ) {
+        $("#media-file")?.click();
+      }
+    });
+
+    $("#btn-choose-media-files")?.addEventListener("click", () => {
       const type = $("#media-type")?.value;
-      const file = e.target.files?.[0];
+      if (
+        ["photo", "video", "audio"].includes(type) &&
+        !$("#media-file")?.disabled
+      ) {
+        $("#media-file")?.click();
+      }
+    });
+
+    $("#btn-clear-model-file")?.addEventListener("click", () => {
+      if (
+        modelFileValidationInProgress ||
+        modelSubmitInProgress ||
+        modelReplaceConfirmationInProgress ||
+        modelUploadInProgress
+      ) {
+        return;
+      }
+      const input = $("#media-file");
+      if (input) input.value = "";
+      modelFileValidationId += 1;
+      modelFileIsValid = false;
+      updateMediaFormUi();
+    });
+
+    $("#media-file")?.addEventListener("change", async (e) => {
+      const type = $("#media-type")?.value;
+      const input = e.target;
+      const file = input.files?.[0];
       if (type === "model3d") {
+        const validationId = ++modelFileValidationId;
+        modelFileIsValid = false;
+        modelFileValidationInProgress = Boolean(file);
+        updateMediaFormUi();
+        if (!file) return;
+
+        try {
+          const valid = await isValidGlbFile(file);
+          if (
+            validationId !== modelFileValidationId ||
+            input.files?.[0] !== file
+          ) {
+            return;
+          }
+          modelFileIsValid = valid;
+          if (!valid) {
+            input.value = "";
+            showToast("Choose a valid GLB 2.0 model file.");
+          }
+        } catch (error) {
+          console.error("Could not validate 3D model file:", error);
+          if (
+            validationId === modelFileValidationId &&
+            input.files?.[0] === file
+          ) {
+            input.value = "";
+            showToast("Could not validate the selected GLB file.");
+          }
+        } finally {
+          if (validationId === modelFileValidationId) {
+            modelFileValidationInProgress = false;
+            updateMediaFormUi();
+          }
+        }
+        return;
+      }
+      if (["photo", "video", "audio"].includes(type)) {
+        const selected = [...(input.files || [])];
+        if (selected.some((file) => !mediaFileMatchesType(type, file))) {
+          input.value = "";
+          showToast(
+            type === "photo"
+              ? "Choose image files only."
+              : type === "video"
+                ? "Choose supported video files only."
+                : "Choose supported audio files only.",
+          );
+        }
         updateMediaFormUi();
         return;
       }
@@ -5023,14 +5670,6 @@
         e.preventDefault();
         e.stopPropagation();
         void openModelViewerModal(viewModel.dataset.viewModel);
-        return;
-      }
-
-      const mapSite = e.target.closest("[data-view-on-map]");
-      if (mapSite) {
-        e.preventDefault();
-        e.stopPropagation();
-        viewBuiltSiteOnMap(mapSite.dataset.viewOnMap);
         return;
       }
 
@@ -5158,6 +5797,13 @@
         openSiteModal(manageSite.dataset.editSite);
         return;
       }
+      const manageModel = e.target.closest("[data-manage-model]");
+      if (manageModel) {
+        e.preventDefault();
+        e.stopPropagation();
+        openMediaModal(null, manageModel.dataset.manageModel, "model3d");
+        return;
+      }
 
       const heritageCard = e.target.closest(
         ".admin-heritage-card[data-edit-site]",
@@ -5226,6 +5872,9 @@
     });
 
     $("#media-form")?.addEventListener("submit", saveMediaForm);
+    $("#btn-remove-model")?.addEventListener("click", () => {
+      void removeCurrentModel();
+    });
 
     $("#btn-delete-site")?.addEventListener("click", async () => {
       const id = $("#site-id")?.value?.trim();
@@ -5268,7 +5917,50 @@
       }
     });
 
-    $("#btn-export-csv")?.addEventListener("click", exportCurrentReport);
+    $("#btn-generate-report")?.addEventListener("click", async (event) => {
+      const generateButton = event.currentTarget;
+      const exportButton = $("#btn-export-csv");
+      const loadingIndicator = $("#report-loading-indicator");
+      generateButton.disabled = true;
+      generateButton.setAttribute("aria-busy", "true");
+      generatedReport = null;
+      exportButton.disabled = true;
+      loadingIndicator.hidden = false;
+      $("#report-results").hidden = true;
+      $("#report-initial-empty").hidden = true;
+      $("#report-generated-at").hidden = true;
+      setReportStatus("Loading the latest report data...", "loading");
+      try {
+        const report = await fetchReportData();
+        renderReport(
+          report.counts,
+          report.users,
+          report.leaderboard,
+          report.generatedAt,
+        );
+        generatedReport = report;
+        exportButton.disabled = false;
+        setReportStatus("Report generated successfully.", "success");
+        showToast("Report generated successfully.");
+      } catch (error) {
+        console.error("Error generating report:", error);
+        $("#report-results").hidden = true;
+        $("#report-initial-empty").hidden = false;
+        setReportStatus(
+          error?.message || "Could not generate the report. Please try again.",
+          "error",
+        );
+        showToast("Could not generate the report. Please try again.");
+      } finally {
+        generateButton.disabled = false;
+        generateButton.removeAttribute("aria-busy");
+        loadingIndicator.hidden = true;
+      }
+    });
+
+    $("#btn-export-csv")?.addEventListener("click", () => {
+      void exportCurrentReport();
+    });
 
     $("#report-panel")?.addEventListener("click", (event) => {
       const printBtn = event.target.closest("[data-print-site-report]");
@@ -5366,7 +6058,7 @@
                   ? "Please drop a valid video file."
                   : isAudio
                     ? "Please drop a valid audio file."
-                    : "Please drop a valid .glb or .gltf 3D model file."
+                    : "Please drop a valid .glb 3D model file."
             : isMap
               ? "Upload a site map to preview and manage it here."
               : isPhoto
@@ -5420,7 +6112,7 @@
                   ? "Please drop a valid video file."
                   : isAudio
                     ? "Please drop a valid audio file."
-                    : "Please drop a valid .glb or .gltf 3D model file.";
+                    : "Please drop a valid .glb 3D model file.";
           setTimeout(() => card.classList.remove("is-dragover-invalid"), 1200);
           return;
         }
@@ -5519,11 +6211,6 @@
                 }
                 return;
               } else if (isModel) {
-                setProgress(5, `Uploading 3D model...`, {
-                  fileName: file.name,
-                  totalBytes: file.size,
-                  startedAt: Date.now(),
-                });
                 const modelSrc = await uploadSiteModelFile({
                   siteId,
                   site,
@@ -5532,8 +6219,8 @@
                   setProgress: (pct, label, meta) => {
                     if (activeUploadController.signal.aborted) return;
                     setProgress(
-                      Math.min(95, pct),
-                      label || `Uploading 3D model: ${file.name}`,
+                      pct,
+                      label || "Uploading model...",
                       meta || {
                         fileName: file.name,
                         totalBytes: file.size,
@@ -5543,7 +6230,7 @@
                   },
                 });
                 if (activeUploadController.signal.aborted) return;
-                setProgress(90, "Saving 3D model to database…", {
+                setProgress(100, "Finalizing upload...", {
                   fileName: file.name,
                   totalBytes: file.size,
                   loadedBytes: file.size,
@@ -5598,7 +6285,8 @@
 
   function init() {
     const mediaModal = $("#media-modal");
-    injectStyles(["photoPile", "modelCard", "modelUpload"]);
+    removeUnusedDashboardSections();
+    injectStyles(["photoPile", "modelCard"]);
     if (mediaModal) document.body.appendChild(mediaModal);
 
     bindEvents();
@@ -5615,6 +6303,9 @@
         const allowed = await MatiAdminAuth.requireAdmin();
         if (!allowed) return;
       }
+      syncAdminProfile(
+        typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() || {} : {},
+      );
 
       if (typeof MatiAdminStore?.initFromSupabase === "function") {
         await MatiAdminStore.initFromSupabase();

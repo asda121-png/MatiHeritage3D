@@ -405,7 +405,13 @@ const MatiSupabaseApi = (() => {
       "cacheControl " + btoa("3600"),
     ].join(",");
 
-    const request = (method, url, headers = {}, body = null) =>
+    const request = (
+      method,
+      url,
+      headers = {},
+      body = null,
+      onUploadProgress = null,
+    ) =>
       new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
@@ -414,6 +420,11 @@ const MatiSupabaseApi = (() => {
         Object.entries(headers).forEach(([key, value]) =>
           xhr.setRequestHeader(key, value),
         );
+        if (typeof onUploadProgress === "function" && xhr.upload) {
+          xhr.upload.addEventListener("progress", (event) => {
+            onUploadProgress(event.loaded);
+          });
+        }
         xhr.onload = () => resolve(xhr);
         xhr.onerror = () => reject(new Error("Network error while uploading."));
         xhr.onabort = () => reject(new Error("Upload cancelled."));
@@ -469,6 +480,9 @@ const MatiSupabaseApi = (() => {
       }
 
       let offset = await readOffset(uploadUrl);
+      if (typeof options.onProgress === "function" && offset > 0) {
+        options.onProgress(Math.round((offset / file.size) * 100), offset);
+      }
       const chunkSize = 6 * 1024 * 1024;
       while (offset < file.size) {
         const end = Math.min(offset + chunkSize, file.size);
@@ -481,6 +495,15 @@ const MatiSupabaseApi = (() => {
             "Content-Type": "application/offset+octet-stream",
           },
           file.slice(offset, end),
+          (chunkLoaded) => {
+            if (typeof options.onProgress === "function") {
+              const loaded = Math.min(file.size, offset + chunkLoaded);
+              options.onProgress(
+                Math.round((loaded / file.size) * 100),
+                loaded,
+              );
+            }
+          },
         );
         if (response.status < 200 || response.status >= 300) {
           const error = new Error(
@@ -491,10 +514,7 @@ const MatiSupabaseApi = (() => {
         }
         offset = Number(response.getResponseHeader("Upload-Offset") || end);
         if (typeof options.onProgress === "function") {
-          options.onProgress(Math.round((offset / file.size) * 100), {
-            loaded: offset,
-            total: file.size,
-          });
+          options.onProgress(Math.round((offset / file.size) * 100), offset);
         }
       }
 
@@ -504,7 +524,7 @@ const MatiSupabaseApi = (() => {
         /* ignore */
       }
       if (typeof options.onProgress === "function") {
-        options.onProgress(100, { loaded: file.size, total: file.size });
+        options.onProgress(100, file.size);
       }
       return path;
     })().catch((error) => {
@@ -538,8 +558,55 @@ const MatiSupabaseApi = (() => {
     const bucket = bucketForMediaType(type);
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const fileVersion = Number(file.lastModified) || 0;
-    const path = `${siteId}/${fileVersion}-${safeName}`;
+    const folderByType = {
+      photo: "photos",
+      video: "videos",
+      audio: "audio",
+    };
+    const folder = folderByType[type];
+    const path = [
+      siteId,
+      ...(folder ? [folder] : []),
+      `${fileVersion}-${safeName}`,
+    ].join("/");
     return uploadFile(bucket, path, file, options);
+  }
+
+  async function removeSiteMediaObject(siteId, type, src) {
+    if (!siteId || !src) return false;
+
+    const cfg = window.MATI_SUPABASE_CONFIG;
+    const sb = client();
+    if (!cfg?.url || !sb) {
+      throw new Error("Supabase is not configured.");
+    }
+
+    const bucket = bucketForMediaType(type);
+    const sourceUrl = new URL(src);
+    const projectUrl = new URL(cfg.url);
+    const objectPrefix = `/storage/v1/object/public/${bucket}/`;
+    if (
+      sourceUrl.origin !== projectUrl.origin ||
+      !sourceUrl.pathname.startsWith(objectPrefix)
+    ) {
+      return false;
+    }
+
+    const path = sourceUrl.pathname
+      .slice(objectPrefix.length)
+      .split("/")
+      .map((segment) => decodeURIComponent(segment))
+      .join("/");
+    if (
+      !path.startsWith(`${siteId}/`) ||
+      path.split("/").some((segment) => segment === "." || segment === "..")
+    ) {
+      return false;
+    }
+
+    const { error } = await sb.storage.from(bucket).remove([path]);
+    if (error) throw error;
+    return true;
   }
 
   return {
@@ -549,6 +616,7 @@ const MatiSupabaseApi = (() => {
     listMedia,
     upsertMedia,
     softDeleteMedia,
+    removeSiteMediaObject,
     setMediaSortOrder,
     getLeaderboard,
     syncHeritagePoints,

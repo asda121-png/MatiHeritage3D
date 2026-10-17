@@ -66,6 +66,19 @@ const MatiAuth = (() => {
     return session;
   }
 
+  function updateSession(updates) {
+    const current = getSession();
+    if (!current) return null;
+
+    const remember = current.remember !== false;
+    const session = { ...current, ...updates };
+    delete session.remember;
+
+    const storage = remember ? localStorage : sessionStorage;
+    storage.setItem(SESSION_KEY, JSON.stringify(session));
+    return { ...session, remember };
+  }
+
   function clearSession() {
     localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
@@ -453,5 +466,6 @@ const MatiAuth = (() => {
     checkUsernameAvailability,
     updateProfile,
     updatePasswordWithCurrent,
+    updateSession,
   };
 })();

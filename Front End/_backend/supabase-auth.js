@@ -752,7 +752,7 @@ const MatiSupabaseAuth = (() => {
       displayName: profile.username || "User",
       username: profile.username || "",
       email: profile.email || "",
-      createdAt: profile.created_at || new Date().toISOString(),
+      createdAt: profile.created_at || null,
       points: profile.heritage_points || 0,
       avatarUrl: profile.avatar_url || null,
     }));

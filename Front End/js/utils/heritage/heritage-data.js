@@ -330,7 +330,7 @@ const MatiHeritageData = (() => {
       if (!local) return;
       applyTo3dExploreSite(local, remote);
       const modelPath = String(remote.modelSrc || local.modelSrc || "");
-      local.available = remote.id === "pylon" && /\.glb$/i.test(modelPath);
+      local.available = /\.glb$/i.test(modelPath);
     });
 
     return sitesArray;
