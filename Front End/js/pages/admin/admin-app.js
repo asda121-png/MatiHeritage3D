@@ -523,13 +523,21 @@
         const { root, title, detail, cancel, close, resume } =
           uploadProgressEls();
         if (root) {
+          const isModelUpload = /3d model/i.test(options.title || "");
+          const uploadKind = isModelUpload ? "3D model" : "file";
+          const fileSize = Number(lastMeta.totalBytes);
+          const fileSizeLabel =
+            fileSize > 0 ? ` (${formatBytes(fileSize)})` : "";
           root.hidden = false;
           root.classList.add("is-visible", "is-error");
           root.setAttribute("aria-busy", "false");
-          if (title) title.textContent = "Upload not started";
+          if (title) {
+            title.textContent = isModelUpload
+              ? "Model is too large"
+              : "File is too large";
+          }
           if (detail) {
-            detail.textContent =
-              "This file exceeds the Supabase Storage limit. Reduce the file size or increase the bucket limit, then upload again.";
+            detail.textContent = `This ${uploadKind}${fileSizeLabel} is larger than the allowed upload size. Choose a smaller ${isModelUpload ? ".glb model" : "file"} or ask your administrator to increase the upload limit, then try again.`;
           }
           setUploadStatus(detail?.textContent || "Upload could not start.");
           paintUploadProgress(lastProgress, lastMeta);

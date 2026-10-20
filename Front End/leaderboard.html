@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard - Mati Heritage 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/heritage-palette.css" />
+  </head>
+  <body class="visitor-module">
+    <div id="header-placeholder"></div>
+
+    <main class="min-h-screen flex items-center justify-center p-8">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">Leaderboard</h1>
+        <p class="text-gray-600">Top performers coming soon...</p>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+      async function loadSharedComponent(url, selector, placeholderId, init) {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Unable to load ${url}: ${response.status}`);
+        }
+        const source = await response.text();
+        const componentDocument = new DOMParser().parseFromString(
+          source,
+          "text/html",
+        );
+        const component = componentDocument.querySelector(selector);
+        const placeholder = document.getElementById(placeholderId);
+        if (!component || !placeholder) {
+          throw new Error(`The ${selector} component is missing from ${url}.`);
+        }
+        placeholder.replaceWith(component);
+        const style = componentDocument.querySelector("style");
+        if (style) document.head.appendChild(style.cloneNode(true));
+        const inlineScript = Array.from(componentDocument.scripts).find(
+          (script) => !script.src,
+        )?.textContent;
+        if (inlineScript) {
+          const script = document.createElement("script");
+          script.textContent = inlineScript;
+          document.body.appendChild(script);
+        }
+        init();
+      }
+
+      loadSharedComponent(
+        "components/header.html",
+        "header",
+        "header-placeholder",
+        () => {
+          window.initSiteHeader?.();
+        },
+      ).catch((error) => console.error("Error loading header:", error));
+
+      loadSharedComponent(
+        "components/footer.html",
+        "footer",
+        "footer-placeholder",
+        () => window.initSiteFooter?.("leaderboard"),
+      ).catch((error) => console.error("Error loading footer:", error));
+    </script>
+  </body>
+</html>

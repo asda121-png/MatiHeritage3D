@@ -1,0 +1,594 @@
+html,
+body {
+  min-height: 100%;
+}
+
+:root {
+  --map-content-width: 90rem;
+  --map-content-gutter: clamp(1.5rem, 4vw, 4rem);
+}
+
+.map-page {
+  margin: 0;
+  color: var(--ink);
+  background: #ebe8df;
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.map-main {
+  min-height: calc(100svh - var(--header-h, 5.625rem));
+}
+
+.map-hero {
+  position: relative;
+  display: flex;
+  min-height: clamp(16rem, 32vw, 26rem);
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background: #123c35;
+}
+
+.map-hero::after {
+  position: absolute;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(8, 35, 31, 0.88) 0%,
+    rgba(8, 35, 31, 0.58) 48%,
+    rgba(8, 35, 31, 0.12) 100%
+  );
+  content: "";
+  inset: 0;
+}
+
+.map-hero__image {
+  position: absolute;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+  inset: 0;
+}
+
+.map-hero__content {
+  width: min(
+    calc(100% - var(--map-content-gutter) * 2),
+    var(--map-content-width)
+  );
+  margin-inline: auto;
+  padding-block: 3.25rem;
+  color: #fff;
+}
+
+.map-hero__eyebrow {
+  margin: 0 0 0.5rem;
+  color: #fcd78a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.map-hero__content h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  line-height: 0.98;
+}
+
+.map-hero__content > p:last-child {
+  max-width: 38rem;
+  margin: 0.8rem 0 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(1rem, 1.7vw, 1.2rem);
+  line-height: 1.55;
+}
+
+.map-section {
+  display: flex;
+  gap: 1rem;
+  width: min(
+    calc(100% - var(--map-content-gutter) * 2),
+    var(--map-content-width)
+  );
+  height: calc(
+    100svh / var(--visitor-ui-scale, 1) - var(--header-h, 5.625rem)
+  );
+  min-height: 36rem;
+  margin: clamp(1.5rem, 3vw, 2.5rem) auto;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.map-explorer {
+  z-index: 2;
+  display: flex;
+  flex: 0 0 clamp(21rem, 26%, 25rem);
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  background: #fffefa;
+}
+
+.map-explorer__header {
+  padding: 1.6rem 1.6rem 1rem;
+}
+
+.map-site-count {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.map-explorer__header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.map-explorer__header p {
+  margin: 0.45rem 0 0;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.map-search,
+.map-filter {
+  flex: 0 0 auto;
+  margin: 0 1.6rem 0.9rem;
+}
+
+.map-search input,
+.map-filter select {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #f4f1e9;
+  color: var(--ink);
+  font: inherit;
+}
+
+.map-filter label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.map-search input:focus,
+.map-filter select:focus {
+  outline: 2px solid rgba(4, 120, 87, 0.25);
+  border-color: var(--forest);
+}
+
+.map-site-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 1rem 1rem;
+}
+
+.map-site-row {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.75rem 0.65rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-site-row:hover,
+.map-site-row[aria-pressed="true"] {
+  background: #ecfdf5;
+}
+
+.map-site-row__number {
+  color: #66836e;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.map-site-row__name,
+.map-site-row__meta {
+  display: block;
+}
+
+.map-site-row__name {
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.map-site-row__meta {
+  margin-top: 0.15rem;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.map-site-empty {
+  padding: 0.8rem 0.55rem;
+  color: #64748b;
+}
+
+.map-selection {
+  flex: 0 0 auto;
+  padding: 1.1rem 1.6rem 1.4rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.map-selection__eyebrow {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.map-selection h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.map-selection a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.8rem;
+  margin-top: 0.8rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: var(--forest);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.map-selection a span[aria-hidden="true"] {
+  position: absolute;
+  right: 1rem;
+}
+
+.map-selection a:hover,
+.map-selection a:focus-visible {
+  background: var(--forest-dark);
+}
+
+.map-selection a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.map-canvas {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  background: #dce7e3;
+}
+
+#mati-map {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background: #fffefa;
+}
+
+.map-canvas .leaflet-top.leaflet-right {
+  top: 3.5rem;
+}
+
+.map-canvas .leaflet-control-zoom a {
+  pointer-events: auto;
+}
+
+.map-canvas .leaflet-control-attribution {
+  right: auto;
+  left: 0.5rem;
+  float: left;
+  font-size: 0.7rem;
+}
+
+.map-show-all {
+  position: absolute;
+  z-index: 500;
+  top: 1rem;
+  left: 1rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  color: #1e293b;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.map-legend {
+  position: absolute;
+  z-index: 500;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  font-size: 0.85rem;
+}
+
+.map-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.map-legend__marker {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+}
+
+.map-legend__marker--built {
+  background: #047857;
+}
+
+.map-legend__marker--natural {
+  background: #0284c7;
+}
+
+.map-canvas .heritage-marker-label {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.map-canvas .heritage-marker-wrap:hover .heritage-marker-label,
+.map-canvas .heritage-marker-wrap.is-selected .heritage-marker-label {
+  visibility: visible;
+  opacity: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.map-barangays {
+  padding-block: clamp(3.5rem, 6vw, 5.5rem) clamp(4rem, 7vw, 6rem);
+  background: #f7f4ed;
+}
+
+.map-barangays__inner {
+  width: min(
+    calc(100% - var(--map-content-gutter) * 2),
+    var(--map-content-width)
+  );
+  margin-inline: auto;
+}
+
+.map-barangays__intro,
+.map-barangay-list {
+  width: 100%;
+}
+
+.map-barangays__intro {
+  margin-bottom: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.map-barangays__intro h2 {
+  margin: 0;
+  color: #33251d;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.25rem, 4.3vw, 3.25rem);
+  line-height: 1.05;
+}
+
+.map-barangays__intro > p:last-child {
+  margin: 0.7rem 0 0;
+  color: #81786f;
+  font-size: 1.1rem;
+}
+
+.map-barangay-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+  row-gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.map-barangay {
+  min-width: 0;
+  padding: 1.35rem 0 0;
+  border-top: 1px solid #ddd7cd;
+}
+
+.map-barangay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.map-barangay__header h3 {
+  margin: 0;
+  color: #3d3028;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.3rem, 2vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.map-barangay__count {
+  flex: 0 0 auto;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8eadf;
+  color: #50745c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.map-barangay__sites {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-barangay-list--single {
+  grid-template-columns: 1fr;
+}
+
+.map-barangay-list--single .map-barangay__sites {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(1rem, 4vw, 3rem);
+}
+
+.map-barangay-list--single .map-barangay__header {
+  grid-column: 1 / -1;
+}
+
+.map-barangay__site a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem 1rem;
+  min-height: 3.6rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e5dfd5;
+  color: inherit;
+  text-decoration: none;
+}
+
+.map-barangay__site:last-child a {
+  border-bottom: 0;
+}
+
+.map-barangay__site a:hover .map-barangay__site-name,
+.map-barangay__site a:focus-visible .map-barangay__site-name {
+  color: var(--forest);
+}
+
+.map-barangay__site-name {
+  min-width: 0;
+  color: #4a3b32;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.map-barangay__site-meta {
+  grid-column: 1;
+  margin-top: -0.15rem;
+  color: #8b8177;
+  font-size: 0.85rem;
+}
+
+.map-barangay__site-arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--forest);
+  font-size: 1.2rem;
+}
+
+.map-barangay-empty {
+  grid-column: 1 / -1;
+  color: #81786f;
+}
+
+@media (max-width: 768px) {
+  .map-main {
+    min-height: 0;
+  }
+
+  .map-hero {
+    min-height: 17rem;
+  }
+
+  .map-hero__content {
+    width: calc(100% - 2rem);
+    padding-block: 2.75rem;
+  }
+
+  .map-section {
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: calc(100% - 2rem);
+    margin-block: 1.25rem;
+    overflow: visible;
+  }
+
+  .map-explorer {
+    flex: 0 0 auto;
+    min-height: 34rem;
+    border-radius: 1.25rem;
+  }
+
+  .map-site-list {
+    flex: 0 0 auto;
+    max-height: 15rem;
+  }
+
+  .map-canvas {
+    flex: 0 0 auto;
+    width: 100%;
+    height: clamp(24rem, 62svh, 32rem);
+    border-radius: 1.25rem;
+  }
+
+  .map-barangay-list {
+    grid-template-columns: 1fr;
+  }
+
+  .map-barangays__inner {
+    width: calc(100% - 2rem);
+  }
+
+  .map-barangay-list--single .map-barangay__sites {
+    grid-template-columns: 1fr;
+  }
+
+  .map-barangay-list--single .map-barangay__sites {
+    grid-template-columns: 1fr;
+  }
+}

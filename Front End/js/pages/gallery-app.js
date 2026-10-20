@@ -7,18 +7,43 @@
     : document.documentElement.dataset.galleryHome || null;
   const INITIAL_CATEGORY =
     document.documentElement.dataset.galleryCategory || null;
+  const DESKTOP_MEDIA_PAGE_SIZE = 15;
+  const MOBILE_MEDIA_PAGE_SIZE = 10;
   const MEDIA_BATCH_SIZE = 12;
+
+  function getMediaPageSize() {
+    return window.matchMedia("(max-width: 640px)").matches
+      ? MOBILE_MEDIA_PAGE_SIZE
+      : DESKTOP_MEDIA_PAGE_SIZE;
+  }
 
   function getInitialState() {
     const base = {
       lightboxIndex: 0,
       lightboxItems: [],
       mediaVisibleCount: MEDIA_BATCH_SIZE,
+      mediaPage: 0,
       siteEditing: false,
       siteDraft: null,
       mediaSelectMode: false,
       selectedMediaIds: [],
     };
+
+    const requestedSiteId = new URLSearchParams(window.location.search).get(
+      "site",
+    );
+    const requestedSite = requestedSiteId
+      ? getSiteById(requestedSiteId)
+      : null;
+    if (!GALLERY_EMBED && requestedSite?.category === "natural") {
+      return {
+        ...base,
+        step: "site",
+        category: "natural",
+        siteId: requestedSite.id,
+        folder: null,
+      };
+    }
 
     if (INITIAL_CATEGORY === "intangible" || INITIAL_CATEGORY === "natural") {
       return {
@@ -467,7 +492,12 @@
   }
 
   function goFolder(folder) {
-    setState({ step: "media", folder, mediaVisibleCount: MEDIA_BATCH_SIZE });
+    setState({
+      step: "media",
+      folder,
+      mediaVisibleCount: MEDIA_BATCH_SIZE,
+      mediaPage: 0,
+    });
     if (
       GALLERY_EMBED &&
       typeof MatiAdminStore?.publishSiteMediaOrder === "function"
@@ -1282,16 +1312,24 @@
         </div>`;
     }
 
-    const visibleCount = Math.min(state.mediaVisibleCount, items.length);
-    const visibleItems = items.slice(0, visibleCount);
+    const pageSize = getMediaPageSize();
+    const pageCount = Math.ceil(items.length / pageSize);
+    const currentPage = GALLERY_EMBED
+      ? 0
+      : Math.min(state.mediaPage, pageCount - 1);
+    const startIndex = GALLERY_EMBED ? 0 : currentPage * pageSize;
+    const visibleCount = GALLERY_EMBED
+      ? Math.min(state.mediaVisibleCount, items.length)
+      : Math.min(pageSize, items.length - startIndex);
+    const endIndex = startIndex + visibleCount;
+    const visibleItems = items.slice(startIndex, endIndex);
     const remaining = items.length - visibleCount;
-    const loadMoreLabel =
-      state.folder === "photos"
-        ? `Load more photographs (${remaining} remaining)`
-        : `Load more (${remaining} remaining)`;
+    const itemRangeLabel = GALLERY_EMBED
+      ? `${visibleCount} of ${items.length}`
+      : `${startIndex + 1}-${endIndex} of ${items.length}`;
 
     const grid = visibleItems
-      .map((item, index) => renderMediaGridItem(item, index, site))
+      .map((item, index) => renderMediaGridItem(item, startIndex + index, site))
       .join("");
 
     return `
@@ -1299,15 +1337,21 @@
         ${renderGalleryMediaToolbar(
           site,
           state.folder,
-          `<span class="gal-media-count">${visibleCount} of ${items.length} ${folderTitles[state.folder]?.toLowerCase() || "items"}</span>`,
+          `<span class="gal-media-count">${itemRangeLabel} ${folderTitles[state.folder]?.toLowerCase() || "items"}</span>`,
         )}
         <div class="gal-media-grid" data-media-type="${escapeHtml(type)}">${grid}</div>
         ${
-          remaining > 0
+          GALLERY_EMBED && remaining > 0
             ? `<div class="gal-media-more-wrap">
-                <button type="button" class="gal-load-more" data-load-more>${escapeHtml(loadMoreLabel)}</button>
+                <button type="button" class="gal-load-more" data-load-more>Load more (${remaining} remaining)</button>
               </div>`
-            : ""
+            : !GALLERY_EMBED && pageCount > 1
+              ? `<div class="gal-media-pagination" aria-label="Gallery pages">
+                  <button type="button" class="gal-load-more gal-page-nav" data-media-page="previous"${currentPage === 0 ? " disabled" : ""}>Previous</button>
+                  <span class="gal-media-page-label">Page ${currentPage + 1} of ${pageCount}</span>
+                  <button type="button" class="gal-load-more gal-page-nav" data-media-page="next"${currentPage >= pageCount - 1 ? " disabled" : ""}>Next</button>
+                </div>`
+              : ""
         }
       </div>`;
   }
@@ -1496,22 +1540,28 @@
 
       img.dataset.loaded = "pending";
       img.classList.add("is-loading");
-
-      const loader = new Image();
-      loader.decoding = "async";
-      loader.onload = () => {
-        img.src = src;
-        img.removeAttribute("data-src");
-        img.dataset.loaded = "true";
-        img.classList.remove("is-loading");
-        img.classList.add("is-loaded");
-      };
-      loader.onerror = () => {
-        img.dataset.loaded = "error";
-        img.classList.remove("is-loading");
-        img.classList.add("is-error");
-      };
-      loader.src = mediaUrl(src);
+      img.loading = "lazy";
+      img.addEventListener(
+        "load",
+        () => {
+          if (img.dataset.loaded !== "pending") return;
+          img.removeAttribute("data-src");
+          img.dataset.loaded = "true";
+          img.classList.remove("is-loading");
+          img.classList.add("is-loaded");
+        },
+        { once: true },
+      );
+      img.addEventListener(
+        "error",
+        () => {
+          img.dataset.loaded = "error";
+          img.classList.remove("is-loading");
+          img.classList.add("is-error");
+        },
+        { once: true },
+      );
+      img.src = mediaUrl(src);
     };
 
     if (!("IntersectionObserver" in window)) {
@@ -1527,7 +1577,7 @@
           obs.unobserve(entry.target);
         });
       },
-      { rootMargin: "480px 0px", threshold: 0.01 },
+      { rootMargin: "180px 0px", threshold: 0.01 },
     );
 
     const startObserving = () => {
@@ -1539,7 +1589,7 @@
           return;
         observer.observe(img);
         const rect = img.getBoundingClientRect();
-        if (rect.bottom >= -120 && rect.top <= window.innerHeight + 480) {
+        if (rect.bottom >= -120 && rect.top <= window.innerHeight + 180) {
           loadImage(img);
           observer.unobserve(img);
         }
@@ -1817,6 +1867,23 @@
         setState({
           mediaVisibleCount: state.mediaVisibleCount + MEDIA_BATCH_SIZE,
         });
+      });
+    });
+
+    container.querySelectorAll("[data-media-page]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const direction = btn.dataset.mediaPage === "next" ? 1 : -1;
+        const pageCount = Math.ceil(
+          resolveOrderedSiteMedia(state.siteId, folderToMediaType(state.folder))
+            .length / getMediaPageSize(),
+        );
+        const nextPage = state.mediaPage + direction;
+        if (nextPage < 0 || nextPage >= pageCount) return;
+
+        setState({ mediaPage: nextPage });
+        container
+          .querySelector(".gal-view--media")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
 
@@ -2135,10 +2202,6 @@
       )
       .join("");
 
-    const source = getMediaSourceText(item)
-      ? `<p class="gal-lyrics__source"><span class="gal-lyrics__source-label">${escapeHtml(getMediaSourceLabel(item))}</span> ${linkifyCitation(getMediaSourceText(item))}</p>`
-      : "";
-
     return `
       <aside class="gal-lyrics" aria-label="Song lyrics">
         <div class="gal-lyrics__header">
@@ -2147,7 +2210,6 @@
           ${lyrics.note ? `<p class="gal-lyrics__note">${escapeHtml(lyrics.note)}</p>` : ""}
         </div>
         <div class="gal-lyrics__body">${sections}</div>
-        ${source ? `<div class="gal-lyrics__footer">${source}</div>` : ""}
       </aside>`;
   }
 
@@ -2159,6 +2221,8 @@
     const meta = $("galLightboxMeta");
     const citation = $("galLightboxCitation");
     if (!item || !box || !media) return;
+    const isAudio = item.type === "audio";
+    box.classList.toggle("gal-lightbox--audio", isAudio);
 
     const site = resolveSiteById(state.siteId);
 
@@ -2168,13 +2232,13 @@
       const lyricsHtml = renderAudioLyrics(item);
       media.innerHTML = `
         <div class="gal-lightbox-audio${lyricsHtml ? " gal-lightbox-audio--with-lyrics" : ""}">
-          <div class="gal-lightbox-player-wrap gal-lightbox-player-wrap--audio">
-            <div class="gal-lightbox-audio-visual" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <audio src="${escapeHtml(mediaUrl(item.src))}" controls autoplay preload="metadata"></audio>
+          <div class="gal-lightbox-audio-visual" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
           </div>
           ${lyricsHtml}
+          <div class="gal-lightbox-player-wrap gal-lightbox-player-wrap--audio">
+            <audio src="${escapeHtml(mediaUrl(item.src))}" controls controlsList="nodownload" autoplay preload="metadata"></audio>
+          </div>
         </div>`;
     } else if (isEmbeddableLink(item)) {
       const embed = getLinkEmbed(item.src);
@@ -2188,7 +2252,7 @@
       media.innerHTML = `<div class="gal-lightbox-player-wrap"><video src="${escapeHtml(mediaUrl(item.src))}" controls autoplay playsinline preload="metadata"${poster}></video>${renderPlayerCreditOverlay(item)}</div>`;
     }
 
-    title.textContent = item.title;
+    title.textContent = isAudio ? "" : item.title;
 
     const authorCaption = $("galLightboxAuthor");
     if (authorCaption) {
@@ -2215,11 +2279,11 @@
         }
       });
     } else if (meta) {
-      meta.textContent = item.siteName || "";
-      meta.hidden = !item.siteName;
+      meta.textContent = isAudio ? "" : item.siteName || "";
+      meta.hidden = isAudio || !item.siteName;
     }
 
-    const citationHtml = renderLightboxCitation(item);
+    const citationHtml = isAudio ? "" : renderLightboxCitation(item);
     if (citation) {
       if (citationHtml) {
         citation.innerHTML = citationHtml;
@@ -2230,7 +2294,7 @@
       }
     }
 
-    const showNav = state.lightboxItems.length > 1;
+    const showNav = state.lightboxItems.length > 1 && !isAudio;
     $("galLightboxPrev")?.classList.toggle("is-hidden", !showNav);
     $("galLightboxNext")?.classList.toggle("is-hidden", !showNav);
 
@@ -2513,14 +2577,19 @@
   let galleryLiveRefreshTimer = null;
   let galleryLiveRefreshing = false;
 
-  function clampMediaVisibleCount() {
+  function clampMediaPage() {
     if (state.step !== "media" || !state.siteId || !state.folder) return;
     const type = folderToMediaType(state.folder);
     if (!type) return;
     const total = resolveOrderedSiteMedia(state.siteId, type).length;
-    if (state.mediaVisibleCount > total) {
-      state.mediaVisibleCount = Math.max(total, 0);
+    if (GALLERY_EMBED) {
+      if (state.mediaVisibleCount > total) {
+        state.mediaVisibleCount = Math.max(total, 0);
+      }
+      return;
     }
+    const lastPage = Math.max(0, Math.ceil(total / getMediaPageSize()) - 1);
+    state.mediaPage = Math.min(state.mediaPage, lastPage);
   }
 
   async function refreshGalleryFromLive() {
@@ -2540,7 +2609,7 @@
       if (typeof MatiHeritageData?.hydrateGalleryCatalog === "function") {
         await MatiHeritageData.hydrateGalleryCatalog({ force: true });
       }
-      clampMediaVisibleCount();
+      clampMediaPage();
       render();
     } catch (error) {
       console.warn("Gallery live refresh failed:", error);
@@ -2556,7 +2625,7 @@
     if (typeof MatiHeritageData?.subscribeCatalog === "function") {
       // subscribeCatalog already invalidates + hydrates before this callback.
       MatiHeritageData.subscribeCatalog(() => {
-        clampMediaVisibleCount();
+        clampMediaPage();
         render();
       });
     } else if (typeof MatiHeritageRealtime?.on === "function") {
@@ -2583,6 +2652,11 @@
     }
     initLightbox();
     if (!GALLERY_EMBED && document.querySelector(".gal-hero")) initHeroReveal();
+    window.matchMedia("(max-width: 640px)").addEventListener("change", () => {
+      if (GALLERY_EMBED || state.step !== "media") return;
+      state.mediaPage = 0;
+      render();
+    });
     await hydrateFromSupabase();
     render();
     ensureGalleryLive();
@@ -2604,6 +2678,7 @@
           siteId: null,
           folder: null,
           mediaVisibleCount: MEDIA_BATCH_SIZE,
+          mediaPage: 0,
         });
       },
       refresh() {

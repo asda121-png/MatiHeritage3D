@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mati Heritage Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="css/map-page.css" />
+  </head>
+  <body class="visitor-module map-page">
+    <div id="header-placeholder"></div>
+
+    <main class="map-main">
+      <section class="map-hero" aria-labelledby="map-page-title">
+        <img
+          class="map-hero__image"
+          src="assets/data/GALLERY/DJI_0812.jpg"
+          alt="Aerial view of the islands and coastline of Pujada Bay"
+          fetchpriority="high"
+        />
+        <div class="map-hero__content">
+          <h1 id="map-page-title">Map</h1>
+          <p>
+            Explore heritage sites and cultural trails across Mati City through
+            an interactive map.
+          </p>
+        </div>
+      </section>
+
+      <section class="map-section" aria-label="Mati City heritage map">
+        <aside class="map-explorer" aria-label="Explore Mati City locations">
+          <header class="map-explorer__header">
+            <span class="map-site-count" id="map-site-count"
+              >19 heritage sites</span
+            >
+            <h2>Explore Mati City</h2>
+            <p>Find a place on the map, then explore its story.</p>
+          </header>
+          <label class="map-search">
+            <span class="sr-only">Search heritage sites</span>
+            <input
+              id="map-search"
+              type="search"
+              placeholder="Search heritage sites"
+              autocomplete="off"
+            />
+          </label>
+          <div class="map-filter">
+            <label for="map-category">Heritage type</label>
+            <select id="map-category">
+              <option value="all">All Heritage</option>
+              <option value="built">Built Heritage</option>
+              <option value="natural">Natural Heritage</option>
+            </select>
+          </div>
+          <div
+            class="map-site-list"
+            id="map-site-list"
+            role="list"
+            aria-label="Heritage locations"
+          ></div>
+          <section class="map-selection" id="map-selection" aria-live="polite">
+            <span class="map-selection__eyebrow">Selected heritage site</span>
+            <h2 id="map-selection-title">Choose a location</h2>
+            <a
+              id="map-selection-link"
+              href="3dexplore.html"
+              aria-disabled="true"
+              tabindex="-1"
+            >
+              <span>View details</span><span aria-hidden="true">→</span>
+            </a>
+          </section>
+        </aside>
+        <div class="map-canvas">
+          <div
+            id="mati-map"
+            role="region"
+            aria-label="Map of Mati City heritage sites"
+          ></div>
+          <button class="map-show-all" id="map-show-all" type="button">
+            Show all locations
+          </button>
+          <div class="map-legend" aria-label="Map legend">
+            <strong>Legend</strong>
+            <span>
+              <i class="map-legend__marker map-legend__marker--built"></i>
+              Built Heritage
+            </span>
+            <span>
+              <i class="map-legend__marker map-legend__marker--natural"></i>
+              Natural Heritage
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="map-barangays"
+        id="sites-by-barangay"
+        aria-labelledby="map-barangays-title"
+      >
+        <div class="map-barangays__inner">
+          <div class="map-barangays__intro">
+            <h2 id="map-barangays-title">Sites by barangay</h2>
+            <p>
+              Every mapped heritage site, grouped by the barangay it sits in.
+            </p>
+          </div>
+          <div class="map-barangay-list" id="map-barangay-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="assets/data/mati-city-boundary.js"></script>
+    <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/pages/map-page.js"></script>
+    <script>
+      async function loadSharedComponent(url, selector, placeholderId, init) {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Unable to load ${url}: ${response.status}`);
+        }
+        const source = await response.text();
+        const componentDocument = new DOMParser().parseFromString(
+          source,
+          "text/html",
+        );
+        const component = componentDocument.querySelector(selector);
+        const placeholder = document.getElementById(placeholderId);
+        if (!component || !placeholder) {
+          throw new Error(`The ${selector} component is missing from ${url}.`);
+        }
+        placeholder.replaceWith(component);
+        const style = componentDocument.querySelector("style");
+        if (style) document.head.appendChild(style.cloneNode(true));
+        const inlineScript = Array.from(componentDocument.scripts).find(
+          (script) => !script.src,
+        )?.textContent;
+        if (inlineScript) {
+          const script = document.createElement("script");
+          script.textContent = inlineScript;
+          document.body.appendChild(script);
+        }
+        init();
+      }
+
+      loadSharedComponent(
+        "components/header.html",
+        "header",
+        "header-placeholder",
+        () => {
+          document
+            .querySelector('.site-nav__link[data-nav="map"]')
+            ?.classList.add("is-active");
+          window.initSiteHeader?.();
+        },
+      ).catch((error) => console.error("Error loading header:", error));
+
+      loadSharedComponent(
+        "components/footer.html",
+        "footer",
+        "footer-placeholder",
+        () => window.initSiteFooter?.("map"),
+      ).catch((error) => console.error("Error loading footer:", error));
+    </script>
+  </body>
+</html>

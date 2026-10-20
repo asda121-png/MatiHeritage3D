@@ -504,6 +504,57 @@
           diff-panel-float 5s ease-in-out infinite 1.2s;
       }
 
+      .difficulty-screen {
+        position: relative;
+        z-index: 20;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 2rem auto 0;
+        padding: 0 1rem;
+      }
+
+      .difficulty-screen .difficulty-panel {
+        grid-column: auto;
+        grid-row: auto;
+        justify-self: center;
+      }
+
+      .difficulty-screen,
+      .difficulty-screen *,
+      .difficulty-screen *::before,
+      .difficulty-screen *::after {
+        animation: none !important;
+      }
+
+      .difficulty-screen .difficulty-panel {
+        perspective: none;
+        transform: none;
+      }
+
+      .difficulty-screen .difficulty-panel__frame {
+        transform: none;
+        transform-style: flat;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 248, 235, 0.08),
+          0 8px 20px rgba(0, 0, 0, 0.35);
+      }
+
+      .difficulty-screen .difficulty-panel__options {
+        transform-style: flat;
+      }
+
+      .difficulty-screen .difficulty-panel__options .diff-btn,
+      .difficulty-screen .difficulty-panel__options .diff-btn:hover:not(:disabled),
+      .difficulty-screen .difficulty-panel__options .diff-btn.is-active {
+        transform: none;
+      }
+
+      #footer-placeholder,
+      #site-footer {
+        display: none !important;
+      }
+
       .difficulty-panel__frame {
         position: relative;
         padding: 1.65rem 1.35rem 1.75rem;
@@ -1911,8 +1962,8 @@
                       points for every correct answer!
                     </p>
 
-                    <button type="button" id="start-game-btn" class="start-btn">
-                      ▶ START SHOW
+                    <button type="button" id="play-game-btn" class="start-btn">
+                      ▶ PLAY
                     </button>
                   </div>
                 </div>
@@ -1923,6 +1974,9 @@
           </div>
         </div>
 
+      </section>
+
+      <section id="difficulty-screen" class="difficulty-screen hidden">
         <aside class="difficulty-panel" aria-label="Select difficulty">
           <div class="difficulty-panel__frame">
             <span class="difficulty-panel__label">SELECT DIFFICULTY:</span>
@@ -1952,6 +2006,12 @@
                 <span class="diff-btn__label">HARD</span>
               </button>
             </div>
+            <button type="button" id="start-game-btn" class="start-btn">
+              START SHOW
+            </button>
+            <button type="button" id="back-to-intro-btn" class="start-btn">
+              BACK
+            </button>
           </div>
         </aside>
       </section>
@@ -2762,10 +2822,24 @@
         );
 
         document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.remove("hidden");
         loadQuestion();
       }
+
+      document.getElementById("play-game-btn").addEventListener("click", () => {
+        playShowClick("click");
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.remove("hidden");
+      });
+
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", () => {
+          document.getElementById("difficulty-screen").classList.add("hidden");
+          document.getElementById("intro-screen").classList.remove("hidden");
+        });
 
       document
         .getElementById("start-game-btn")
@@ -2779,6 +2853,7 @@
         gameActive = false;
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("intro-screen").classList.remove("hidden");
       });
 

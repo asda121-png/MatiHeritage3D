@@ -552,6 +552,23 @@
         filter: drop-shadow(0 32px 48px rgba(0, 0, 0, 0.35));
       }
 
+      .intro-layout.intro-layout--single {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .difficulty-screen {
+        position: relative;
+        z-index: 20;
+        width: min(100%, 70rem);
+        display: grid;
+        justify-items: center;
+        filter: drop-shadow(0 32px 48px rgba(0, 0, 0, 0.35));
+      }
+
+      .difficulty-screen.hidden {
+        display: none;
+      }
+
       @media (min-width: 900px) {
         .intro-layout {
           grid-template-columns: 1.22fr 0.78fr;
@@ -1962,7 +1979,7 @@
 
     <main class="puzzle-stage">
       <!-- INTRO -->
-      <section id="intro-screen" class="intro-layout">
+      <section id="intro-screen" class="intro-layout intro-layout--single">
         <div class="parchment-card">
           <div class="parchment-card__inner">
             <span
@@ -2024,9 +2041,18 @@
                 </div>
               </div>
             </div>
+            <button id="play-btn" type="button" class="start-btn">
+              Play
+            </button>
           </div>
         </div>
+      </section>
 
+      <section
+        id="difficulty-screen"
+        class="difficulty-screen hidden"
+        aria-label="Choose puzzle difficulty"
+      >
         <aside class="diff-panel" aria-label="Select difficulty">
           <div class="diff-panel__frame">
             <div class="diff-panel__header">
@@ -2081,6 +2107,13 @@
               disabled
             >
               Start Puzzle
+            </button>
+            <button
+              id="back-to-intro-btn"
+              class="start-btn"
+              type="button"
+            >
+              Back
             </button>
           </div>
         </aside>
@@ -3078,6 +3111,18 @@
         endGame(true);
       };
 
+      document.getElementById("play-btn").addEventListener("click", () => {
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.remove("hidden");
+      });
+
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", () => {
+          document.getElementById("difficulty-screen").classList.add("hidden");
+          document.getElementById("intro-screen").classList.remove("hidden");
+        });
+
       document.getElementById("start-btn").onclick = async () => {
         if (!difficulty) return;
 
@@ -3087,7 +3132,7 @@
         sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
         applyMusicVolume();
         startPuzzleMusic();
-        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
 
         await prepareSlideSites();

@@ -1019,6 +1019,11 @@
         }
       }
 
+      .intro-layout.intro-layout--single {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+      }
+
       .fest-banner,
       .ticket-booth {
         position: relative;
@@ -2215,7 +2220,7 @@
 
     <main class="festival-stage">
       <!-- INTRO -->
-      <section id="intro-screen" class="intro-layout">
+      <section id="intro-screen" class="intro-layout intro-layout--single">
         <div class="fest-banner fest-pattern-frame">
           <span class="fest-banner__sun" aria-hidden="true"></span>
           <div class="fest-banner__ribbon-wrap"></div>
@@ -2259,8 +2264,17 @@
             aria-hidden="true"
             >🪶</span
           >
+          <button type="button" id="play-btn" class="btn-fest btn-fest--start">
+            PLAY
+          </button>
         </div>
+      </section>
 
+      <section
+        id="difficulty-screen"
+        class="intro-layout intro-layout--single hidden"
+        aria-label="Choose game difficulty"
+      >
         <aside class="ticket-booth fest-pattern-frame">
           <div class="ticket-booth__watermark" aria-hidden="true"></div>
           <span class="ticket-booth__drum" aria-hidden="true">🪘</span>
@@ -2308,6 +2322,13 @@
             disabled
           >
             ENTER
+          </button>
+          <button
+            type="button"
+            id="back-to-intro-btn"
+            class="btn-fest btn-fest--ghost"
+          >
+            Back
           </button>
         </aside>
       </section>
@@ -3099,6 +3120,7 @@
         document.getElementById("img-2").src = imgSrc;
 
         document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
 
@@ -3126,6 +3148,18 @@
         getFestAudioCtx();
         void startGame();
       });
+
+      document.getElementById("play-btn").addEventListener("click", () => {
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.remove("hidden");
+      });
+
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", () => {
+          document.getElementById("difficulty-screen").classList.add("hidden");
+          document.getElementById("intro-screen").classList.remove("hidden");
+        });
 
       document.getElementById("replay-btn").addEventListener("click", () => {
         playFestSound("click");

@@ -146,8 +146,8 @@
         display: grid;
         place-items: center;
         padding: 1rem;
-        background: rgba(2, 5, 18, 0.78);
-        backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
       }
 
       .leaderboard-modal[hidden] {
@@ -157,75 +157,68 @@
       .leaderboard-modal__panel {
         display: flex;
         flex-direction: column;
-        width: min(100%, 52rem);
-        max-height: min(90vh, 48rem);
+        width: min(100%, 40rem);
+        max-height: min(90vh, 45rem);
         overflow: hidden;
-        border: 1px solid rgba(34, 211, 238, 0.28);
-        border-radius: 1rem;
-        background: rgba(5, 11, 24, 0.98);
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+        border-radius: 12px;
+        background: #f4f4f4;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
       }
 
       .leaderboard-modal__head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
-        padding: 1.25rem 1.5rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .leaderboard-modal__head > div {
-        flex: 1;
+        padding: 1.5rem 2rem;
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
       }
 
       .leaderboard-modal__title {
         margin: 0;
-        color: #fff;
-        font-family: "Orbitron", sans-serif;
-        font-size: clamp(1.1rem, 3vw, 1.6rem);
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-align: center;
-        text-transform: uppercase;
+        color: #f59e0b;
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
       }
 
       .leaderboard-modal__close {
-        display: grid;
-        flex: 0 0 auto;
-        width: 2.25rem;
-        height: 2.25rem;
-        place-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 0.5rem;
-        background: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
-        font-size: 1.3rem;
-        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: none;
+        border-radius: 8px;
+        background: #f3f4f6;
+        color: #6b7280;
+        font-size: 1.5rem;
         cursor: pointer;
+        transition: all 0.15s;
       }
 
       .leaderboard-modal__close:hover {
-        border-color: rgba(34, 211, 238, 0.6);
-        color: #22d3ee;
+        background: #e5e7eb;
+        color: #374151;
       }
 
       .leaderboard-modal__table {
-        min-height: 0;
+        flex: 1;
         overflow-y: auto;
-        padding: 0.9rem 1.5rem 1rem;
+        padding: 1rem 2rem;
       }
 
       .leaderboard-modal__columns {
         display: grid;
-        grid-template-columns: 4rem minmax(0, 1fr) 8rem;
-        gap: 1.5rem;
-        padding: 0 1rem 0.45rem;
-        color: #94a3b8;
-        font-family: "Rajdhani", sans-serif;
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
+        grid-template-columns: 3rem 1fr 5rem;
+        gap: 1rem;
+        padding: 0 0.5rem 0.75rem;
+        color: #6b7280;
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
       }
 
@@ -236,254 +229,162 @@
       .leaderboard-modal__table #leaderboard-list {
         display: flex;
         flex-direction: column;
-        gap: 0.55rem;
+        gap: 0.5rem;
       }
 
-      .leaderboard-modal__table #leaderboard-list .card-animate {
+      .leaderboard-row {
         display: grid;
-        grid-template-columns: 4rem minmax(0, 1fr) auto;
-        gap: 1.5rem;
+        grid-template-columns: 3rem 1fr 5rem;
+        gap: 1rem;
         align-items: center;
-        padding: 0.7rem 1rem;
-        border-radius: 0.65rem;
+        padding: 0.875rem 0.75rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.15s;
       }
 
-      .leaderboard-modal__table
-        #leaderboard-list
-        .card-animate
-        > div:first-child {
-        display: grid;
-        grid-column: 1 / 3;
-        grid-template-columns: 4rem 2.7rem minmax(0, 1fr);
-        column-gap: 2rem;
-        row-gap: 1rem;
+      .leaderboard-row:hover {
+        border-color: #047857;
+        box-shadow: 0 2px 8px rgba(4, 120, 87, 0.1);
+      }
+
+      .leaderboard-row__rank {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #374151;
+        text-align: center;
+      }
+
+      .leaderboard-row__rank--1 {
+        color: #f59e0b;
+      }
+
+      .leaderboard-row__rank--2 {
+        color: #9ca3af;
+      }
+
+      .leaderboard-row__rank--3 {
+        color: #fb923c;
+      }
+
+      .leaderboard-row__player {
+        display: flex;
         align-items: center;
+        gap: 0.75rem;
         min-width: 0;
       }
 
-      .leaderboard-modal__table
-        #leaderboard-list
-        .card-animate
-        > div:last-child {
-        grid-column: 3;
-        min-width: 7rem;
+      .leaderboard-row__avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+      }
+
+      .leaderboard-row__name {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #1f2937;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .leaderboard-row__points {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #047857;
+        text-align: right;
       }
 
       .leaderboard-modal__summary {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 1.25rem 2rem;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .leaderboard-modal__summary-info {
+        display: flex;
+        align-items: center;
         gap: 1rem;
-        padding: 1rem 1.5rem 1.25rem;
-        border-top: 1px solid rgba(34, 211, 238, 0.18);
-        background: rgba(10, 18, 36, 0.9);
+      }
+
+      .leaderboard-modal__summary-avatar {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #047857;
+      }
+
+      .leaderboard-modal__summary-text {
+        display: flex;
+        flex-direction: column;
       }
 
       .leaderboard-modal__summary-label {
-        margin: 0 0 0.2rem;
-        color: #64748b;
-        font-family: "Rajdhani", sans-serif;
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
         text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       .leaderboard-modal__summary-value {
-        color: #22d3ee;
-        font-family: "Orbitron", sans-serif;
-        font-size: 1.35rem;
-        font-weight: 800;
-      }
-
-      .leaderboard-modal__user-avatar {
-        display: block;
-        margin-top: 0.55rem;
-        border: 2px solid rgba(34, 211, 238, 0.55);
-        border-radius: 50%;
-        object-fit: cover;
-        box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #047857;
       }
 
       .leaderboard-modal__summary-points {
-        color: #fff;
-        font-family: "Orbitron", sans-serif;
-        font-size: 1.15rem;
-        font-weight: 700;
         text-align: right;
+      }
+
+      .leaderboard-modal__summary-points-label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .leaderboard-modal__summary-points-value {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1f2937;
       }
 
       @media (max-width: 600px) {
         .leaderboard-modal {
-          align-items: end;
           padding: 0;
         }
 
         .leaderboard-modal__panel {
           width: 100%;
-          max-height: 92vh;
-          border-radius: 1rem 1rem 0 0;
+          max-height: 100vh;
+          border-radius: 0;
         }
 
         .leaderboard-modal__head,
         .leaderboard-modal__table,
         .leaderboard-modal__summary {
-          padding-inline: 1rem;
-        }
-
-        .leaderboard-modal__columns {
-          grid-template-columns: 2.5rem minmax(0, 1fr) 5rem;
-          gap: 0.65rem;
-          padding-inline: 0.7rem;
-        }
-
-        .leaderboard-modal__table #leaderboard-list .card-animate {
-          grid-template-columns: 2.5rem minmax(0, 1fr) auto;
-          gap: 0.65rem;
-          padding-inline: 0.7rem;
-        }
-
-        .leaderboard-modal__table
-          #leaderboard-list
-          .card-animate
-          > div:first-child {
-          grid-template-columns: 2.5rem 2.45rem minmax(0, 1fr);
-          column-gap: 1.2rem;
-          row-gap: 0.55rem;
-        }
-
-        .leaderboard-modal__table
-          #leaderboard-list
-          .card-animate
-          > div:last-child {
-          min-width: 4.5rem;
+          padding-left: 1rem;
+          padding-right: 1rem;
         }
       }
 
-      .rank-card {
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.03) 0%,
-          rgba(255, 255, 255, 0.07) 100%
-        );
-      }
-
-      .glass-card-dark {
-        background: rgba(13, 20, 37, 0.7);
-        backdrop-filter: blur(10px);
-      }
-
-      .rank-1-highlight {
-        background: linear-gradient(
-          90deg,
-          rgba(251, 191, 36, 0.12) 0%,
-          rgba(251, 191, 36, 0.05) 100%
-        );
-        box-shadow:
-          0 0 20px rgba(251, 191, 36, 0.1),
-          inset 0 0 15px rgba(251, 191, 36, 0.05);
-        animation: gold-pulse 3s infinite alternate;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .rank-2-highlight {
-        background: linear-gradient(
-          90deg,
-          rgba(203, 213, 225, 0.12) 0%,
-          rgba(203, 213, 225, 0.05) 100%
-        );
-        box-shadow:
-          0 0 20px rgba(203, 213, 225, 0.1),
-          inset 0 0 15px rgba(203, 213, 225, 0.05);
-        animation: silver-pulse 3s infinite alternate;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .rank-3-highlight {
-        background: linear-gradient(
-          90deg,
-          rgba(251, 146, 60, 0.12) 0%,
-          rgba(251, 146, 60, 0.05) 100%
-        );
-        box-shadow:
-          0 0 20px rgba(251, 146, 60, 0.1),
-          inset 0 0 15px rgba(251, 146, 60, 0.05);
-        animation: bronze-pulse 3s infinite alternate;
-        position: relative;
-        overflow: hidden;
-      }
-
-      /* Shimmer sweep effect for top 3 players */
-      .rank-1-highlight::after,
-      .rank-2-highlight::after,
-      .rank-3-highlight::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -150%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.08),
-          transparent
-        );
-        transform: skewX(-20deg);
-        animation: shine-sweep 4s infinite;
-        pointer-events: none;
-      }
-
-      @keyframes gold-pulse {
-        from {
-          border-color: rgba(251, 191, 36, 0.3);
-          box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
-        }
-        to {
-          border-color: rgba(251, 191, 36, 0.8);
-          box-shadow:
-            0 0 35px rgba(251, 191, 36, 0.3),
-            inset 0 0 20px rgba(251, 191, 36, 0.1);
-        }
-      }
-
-      @keyframes silver-pulse {
-        from {
-          border-color: rgba(203, 213, 225, 0.3);
-          box-shadow: 0 0 15px rgba(203, 213, 225, 0.1);
-        }
-        to {
-          border-color: rgba(203, 213, 225, 0.8);
-          box-shadow:
-            0 0 30px rgba(203, 213, 225, 0.2),
-            inset 0 0 15px rgba(203, 213, 225, 0.05);
-        }
-      }
-
-      @keyframes bronze-pulse {
-        from {
-          border-color: rgba(251, 146, 60, 0.3);
-          box-shadow: 0 0 15px rgba(251, 146, 60, 0.1);
-        }
-        to {
-          border-color: rgba(251, 146, 60, 0.8);
-          box-shadow:
-            0 0 30px rgba(251, 146, 60, 0.2),
-            inset 0 0 15px rgba(251, 146, 60, 0.05);
-        }
-      }
-
-      @keyframes shine-sweep {
-        0% {
-          left: -150%;
-        }
-        25%,
-        100% {
-          left: 150%;
-        }
-      }
 
       @keyframes crown-bounce {
         0%,
@@ -763,13 +664,15 @@
         <div class="flex flex-row items-center gap-2 md:gap-6 select-none mt-6">
           <div
             id="title-word-select"
-            class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+            class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
+            style="font-family: 'Inter', system-ui, sans-serif;"
           >
             SELECT
           </div>
           <div
             id="title-word-game"
-            class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+            class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
+            style="font-family: 'Inter', system-ui, sans-serif;"
           >
             GAME
           </div>
@@ -782,13 +685,15 @@
       >
         <div
           id="title-word-select-desktop"
-          class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+          class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
+          style="font-family: 'Inter', system-ui, sans-serif;"
         >
           SELECT
         </div>
         <div
           id="title-word-game-desktop"
-          class="text-slate-800 text-2xl md:text-4xl font-bold uppercase tracking-[0.05em] pixel-font flex gap-1"
+          class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
+          style="font-family: 'Inter', system-ui, sans-serif;"
         >
           GAME
         </div>
@@ -883,26 +788,22 @@
         </div>
 
         <footer class="leaderboard-modal__summary">
-          <div>
-            <p class="leaderboard-modal__summary-label">Your rank</p>
-            <span id="user-rank-val" class="leaderboard-modal__summary-value"
-              >--</span
-            >
+          <div class="leaderboard-modal__summary-info">
             <img
               id="user-avatar"
-              class="leaderboard-modal__user-avatar"
+              class="leaderboard-modal__summary-avatar"
               src=""
               alt="Your avatar"
-              width="48"
-              height="48"
               hidden
             />
-          </div>
-          <div>
-            <p class="leaderboard-modal__summary-label">Your score</p>
-            <div id="user-points-val" class="leaderboard-modal__summary-points">
-              0 Pts
+            <div class="leaderboard-modal__summary-text">
+              <p class="leaderboard-modal__summary-label">Your rank</p>
+              <span id="user-rank-val" class="leaderboard-modal__summary-value">--</span>
             </div>
+          </div>
+          <div class="leaderboard-modal__summary-points">
+            <p class="leaderboard-modal__summary-points-label">Your score</p>
+            <span id="user-points-val" class="leaderboard-modal__summary-points-value">0</span>
           </div>
         </footer>
       </section>
@@ -1000,7 +901,7 @@
 
           bindHoverSoundToElements(
             document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume, #language-select",
+              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume",
             ),
           );
         });
@@ -1148,8 +1049,8 @@
           dot.type = "button";
           dot.className =
             i === currentIndex
-              ? "game-dot game-dot-active w-10 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_cyan] cursor-pointer"
-              : "game-dot w-2 h-2 rounded-full bg-white/30 cursor-pointer hover:bg-white/50 transition-colors";
+              ? "game-dot game-dot-active w-10 h-2 rounded-full bg-[#10b981] cursor-pointer"
+              : "game-dot w-2 h-2 rounded-full bg-[#047857]/30 cursor-pointer hover:bg-[#10b981]/50 transition-colors";
           dot.setAttribute("aria-label", `Show game ${i + 1}`);
           dot.addEventListener("click", () => {
             currentIndex = i;
@@ -1267,7 +1168,7 @@
         leaderboardList.innerHTML = "";
         if (!entries.length) {
           const empty = document.createElement("p");
-          empty.className = "text-center text-white/50 py-8";
+          empty.className = "text-center text-gray-500 py-8";
           empty.textContent =
             "No rankings yet. Play heritage games while logged in to appear here.";
           leaderboardList.appendChild(empty);
@@ -1283,64 +1184,18 @@
             entry.avatarUrl ||
             `https://i.pravatar.cc/150?u=${encodeURIComponent(name)}`;
 
-          let rankStyle = "bg-white/5 border-white/5";
-          let glowColor = "rgba(34, 211, 238, 0.4)";
-          let borderCol = "border-white/5";
-          let crown = "";
-          let rankNumberColor = "text-white/40";
-
-          const isRunnerUp = rank > 3;
-          const paddingClass = isRunnerUp ? "p-4" : "p-5";
-          const avatarSizeClass = isRunnerUp ? "h-12 w-12" : "h-16 w-16";
-          const nameSizeClass = "text-lg";
-          const pointsSizeClass = isRunnerUp ? "text-lg" : "text-2xl";
-
-          if (rank === 1) {
-            rankStyle = "rank-1-highlight";
-            borderCol = "border-amber-400/30";
-            glowColor = "#fbbf24";
-            rankNumberColor = "text-amber-400";
-            crown = `<span class="absolute -top-3 -left-3 text-2xl crown-animate z-10">👑</span>`;
-          } else if (rank === 2) {
-            rankStyle = "rank-2-highlight";
-            borderCol = "border-slate-300/30";
-            glowColor = "#cbd5e1";
-            rankNumberColor = "text-slate-300";
-          } else if (rank === 3) {
-            rankStyle = "rank-3-highlight";
-            borderCol = "border-orange-400/30";
-            glowColor = "#fb923c";
-            rankNumberColor = "text-orange-400";
-          }
-
-          item.className = `card-animate relative flex items-center justify-between ${paddingClass} ${
-            isRunnerUp ? "opacity-70" : ""
-          } rounded-2xl border ${rankStyle} ${borderCol} transition-all duration-300 hover:scale-[1.02] hover:opacity-100`;
-          item.style.animationDelay = `${index * 0.1}s`;
-
+          const rankClass = rank <= 3 ? `leaderboard-row__rank--${rank}` : "";
+          
+          item.className = "leaderboard-row";
           item.innerHTML = `
-            <div class="flex items-center gap-2 flex-1">
-              <span class="orbitron text-2xl font-bold ${rankNumberColor} w-10">${rank}</span>
-              <div class="relative">
-                ${crown}
-                <div class="${avatarSizeClass} rounded-full border-2 p-0.5" style="border-color: ${glowColor}">
-                   <img src="${avatar}" class="rounded-full h-full w-full object-cover" />
-                </div>
-              </div>
-              <p class="genre-font text-white ${nameSizeClass} tracking-wider truncate">${name}</p>
+            <span class="leaderboard-row__rank ${rankClass}">${rank}</span>
+            <div class="leaderboard-row__player">
+              <img src="${avatar}" class="leaderboard-row__avatar" alt="" />
+              <span class="leaderboard-row__name">${name}</span>
             </div>
-            <div class="text-right">
-               <span class="points-val ${pointsSizeClass} font-black orbitron text-white" data-target="${points}">0 <span class="text-[10px] opacity-60 uppercase">Pts</span></span>
-            </div>
+            <span class="leaderboard-row__points">${points.toLocaleString()}</span>
           `;
           leaderboardList.appendChild(item);
-
-          setTimeout(
-            () => {
-              animateValue(item.querySelector(".points-val"), 0, points, 1000);
-            },
-            500 + index * 100,
-          );
         });
       }
 
@@ -1364,7 +1219,7 @@
           rankLabel = "—";
         }
         const rankEl = document.getElementById("user-rank-val");
-        if (rankEl) rankEl.innerText = rankLabel;
+        if (rankEl) rankEl.textContent = rankLabel;
         const avatarEl = document.getElementById("user-avatar");
         if (avatarEl && session?.username) {
           avatarEl.src =
@@ -1374,17 +1229,13 @@
         } else if (avatarEl) {
           avatarEl.hidden = true;
         }
-        animateValue(
-          document.getElementById("user-points-val"),
-          0,
-          userPts,
-          1000,
-        );
+        const pointsEl = document.getElementById("user-points-val");
+        if (pointsEl) pointsEl.textContent = userPts.toLocaleString();
       }
 
       async function loadLeaderboard() {
         leaderboardList.innerHTML =
-          '<p class="text-center text-white/50 py-8">Loading top players…</p>';
+          '<p class="text-center text-gray-500 py-8">Loading top players…</p>';
         try {
           if (typeof MatiSupabaseApi?.getLeaderboard === "function") {
             const remote = await MatiSupabaseApi.getLeaderboard(50);

@@ -1130,7 +1130,7 @@
       <!-- INTRO -->
       <section
         id="intro-screen"
-        class="grid gap-8 sm:gap-12 w-full max-w-7xl lg:grid-cols-[1fr_0.9fr] items-stretch"
+        class="grid gap-8 sm:gap-12 w-full max-w-2xl mx-auto items-stretch"
       >
         <!-- Main parchment scroll -->
         <div class="hero-scroll flex flex-col min-h-[500px]">
@@ -1214,10 +1214,23 @@
                 >
               </div>
             </div>
+            <button
+              type="button"
+              id="play-btn"
+              class="enter-btn start-btn w-full max-w-sm mt-6 py-3.5 font-display text-sm font-bold"
+            >
+              PLAY
+            </button>
           </div>
           <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
         </div>
+      </section>
 
+      <section
+        id="difficulty-screen"
+        class="hidden w-full max-w-2xl mx-auto"
+        aria-label="Choose game difficulty"
+      >
         <!-- Difficulty scroll -->
         <div class="hero-scroll scroll-sidebar flex flex-col min-h-[500px]">
           <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
@@ -1269,6 +1282,13 @@
               disabled
             >
               ENTER
+            </button>
+            <button
+              type="button"
+              id="back-to-intro-btn"
+              class="enter-btn w-full mt-3 py-3 font-display text-sm font-bold"
+            >
+              BACK
             </button>
           </div>
           <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
@@ -1800,6 +1820,18 @@
         btn.addEventListener("click", () => setDifficulty(btn.dataset.level));
       });
 
+      document.getElementById("play-btn").addEventListener("click", () => {
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("difficulty-screen").classList.remove("hidden");
+      });
+
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", () => {
+          document.getElementById("difficulty-screen").classList.add("hidden");
+          document.getElementById("intro-screen").classList.remove("hidden");
+        });
+
       document.getElementById("best-val").textContent = bestScore;
 
       function playAnnouncer(text) {
@@ -2042,7 +2074,7 @@
           getSprintAudioCtx();
           startSprintMusic();
           document.body.classList.add("is-game-mode");
-          document.getElementById("intro-screen").classList.add("hidden");
+          document.getElementById("difficulty-screen").classList.add("hidden");
           document.getElementById("game-screen").classList.remove("hidden");
           currentScore = 0;
           correctCount = 0;

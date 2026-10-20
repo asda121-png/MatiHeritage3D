@@ -19,6 +19,13 @@
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/gallery-page.css" />
+    <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
@@ -88,6 +95,456 @@
       body.visitor-module .display-font,
       body.visitor-module header .site-brand__title {
         font-family: "Inter", system-ui, sans-serif !important;
+      }
+
+      body.visitor-module .site-header .header-scroll-progress {
+        display: none !important;
+      }
+
+      body.has-heritage-site-story {
+        background: #faf8f3;
+      }
+
+      body.has-heritage-site-story .explore3d-workspace {
+        display: none;
+      }
+
+      .heritage-site-story[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story {
+        background: #faf8f3;
+        color: #44372e;
+      }
+
+      .heritage-site-story__hero {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        min-height: clamp(26rem, 43vw, 36rem);
+        overflow: hidden;
+        isolation: isolate;
+        background: #18382f;
+      }
+
+      .heritage-site-story__hero-image,
+      .heritage-site-story__hero-shade {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .heritage-site-story__hero-image {
+        z-index: -2;
+        object-fit: cover;
+        object-position: center 45%;
+      }
+
+      .heritage-site-story__hero-shade {
+        z-index: -1;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(8, 22, 17, 0.86),
+            rgba(8, 22, 17, 0.14) 82%
+          ),
+          linear-gradient(0deg, rgba(8, 22, 17, 0.5), transparent 62%);
+      }
+
+      .heritage-site-story__hero-content {
+        width: min(100%, 88rem);
+        margin: 0 auto;
+        padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4rem);
+        color: #fff;
+      }
+
+      .heritage-site-story__eyebrow {
+        margin: 0 0 1rem;
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .heritage-site-story__title {
+        max-width: 54rem;
+        margin: 0;
+        color: #fff;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2.8rem, 7vw, 5.4rem);
+        font-weight: 700;
+        line-height: 0.98;
+        text-wrap: balance;
+      }
+
+      .heritage-site-story__summary {
+        max-width: 44rem;
+        margin: 1.25rem 0 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: clamp(1rem, 1.7vw, 1.2rem);
+        line-height: 1.65;
+      }
+
+      .heritage-site-story__content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+        gap: clamp(2rem, 6vw, 5rem);
+        width: min(100%, 88rem);
+        margin: 0 auto;
+        padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+      }
+
+      .heritage-site-story__article {
+        min-width: 0;
+      }
+
+      .heritage-site-story__article-title {
+        margin: 0 0 1.25rem;
+        color: #44372e;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .heritage-site-story__description {
+        max-width: 52rem;
+        margin: 0;
+        color: #6b6258;
+        font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+        line-height: 1.8;
+        white-space: pre-line;
+      }
+
+      .heritage-site-story__gallery {
+        margin-top: clamp(2rem, 4vw, 3rem);
+      }
+
+      .heritage-site-story__gallery[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story__gallery-title {
+        margin: 0 0 1rem;
+        color: #44372e;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+      }
+
+      .heritage-site-story__gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .heritage-site-story__gallery-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .heritage-site-story__gallery-pagination[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story__gallery-page-button {
+        padding: 0.55rem 0.9rem;
+        border: 1px solid rgba(4, 120, 87, 0.2);
+        border-radius: 999px;
+        background: #fff;
+        color: var(--forest-dark);
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .heritage-site-story__gallery-page-button:hover:not(:disabled) {
+        background: #e8eee5;
+      }
+
+      .heritage-site-story__gallery-page-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .heritage-site-story__gallery-page-label {
+        color: #6b6258;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .heritage-site-story__gallery-item {
+        display: block;
+        aspect-ratio: 4 / 3;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid rgba(68, 55, 46, 0.12);
+        border-radius: 0.65rem;
+        background: #e8eee5;
+        cursor: zoom-in;
+      }
+
+      .heritage-site-story__gallery-item img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .heritage-site-story__gallery-item:hover img {
+        transform: scale(1.04);
+      }
+
+      @media (min-width: 761px) {
+        .heritage-site-story__gallery-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      .heritage-site-story__model {
+        margin-top: clamp(2rem, 4vw, 3rem);
+      }
+
+      .heritage-site-story__model[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story__model-title {
+        margin: 0 0 1rem;
+        color: #44372e;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+      }
+
+      .heritage-site-story__model-viewer {
+        position: relative;
+        min-height: clamp(22rem, 55vw, 42rem);
+        overflow: hidden;
+        border: 1px solid rgba(68, 55, 46, 0.14);
+        border-radius: 1rem;
+        background: #090e14;
+      }
+
+      .heritage-site-story__model-viewer model-viewer {
+        display: block;
+        width: 100%;
+        height: clamp(22rem, 55vw, 42rem);
+        --poster-color: #090e14;
+        background: #090e14;
+      }
+
+      .heritage-site-story__model-status {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+        background: rgba(9, 14, 20, 0.82);
+        color: #f8fafc;
+        font-size: 0.95rem;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .heritage-site-story__model-status[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story__model-tools {
+        position: absolute;
+        inset: 0.85rem 0.85rem 0.85rem auto;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        pointer-events: none;
+      }
+
+      .heritage-site-story__model-tools button {
+        display: grid;
+        width: 2.65rem;
+        height: 2.65rem;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.6rem;
+        background: rgba(30, 35, 40, 0.82);
+        color: #fff;
+        font: inherit;
+        font-size: 1.25rem;
+        cursor: pointer;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .heritage-site-story__model-tools button:hover,
+      .heritage-site-story__model-tools button.active {
+        background: rgba(4, 120, 87, 0.9);
+      }
+
+      .heritage-site-story__model-tools .heritage-site-story__model-fullscreen {
+        margin-top: auto;
+      }
+
+      .heritage-site-story__model-zoom {
+        display: grid;
+        gap: 0.25rem;
+      }
+
+      .heritage-site-story__model-help {
+        position: absolute;
+        top: 3.5rem;
+        right: 3.75rem;
+        z-index: 3;
+        width: min(17rem, calc(100% - 5rem));
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.75rem;
+        background: rgba(15, 23, 42, 0.94);
+        color: #f8fafc;
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
+
+      .heritage-site-story__model-help[hidden] {
+        display: none !important;
+      }
+
+      .heritage-site-story__aside {
+        align-self: start;
+        padding: 1.5rem;
+        border: 1px solid rgba(68, 55, 46, 0.1);
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(34, 28, 20, 0.04);
+      }
+
+      .heritage-site-story__sidebar {
+        min-width: 0;
+      }
+
+      .heritage-site-story__aside-title {
+        margin: 0 0 1rem;
+        color: #44372e;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+      }
+
+      .heritage-site-story__location {
+        margin-top: 2rem;
+      }
+
+      .heritage-site-story__location-title {
+        margin: 0 0 0.75rem;
+        color: #44372e;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+      }
+
+      .heritage-site-story__map {
+        min-height: 18rem;
+        overflow: hidden;
+        border: 1px solid rgba(68, 55, 46, 0.12);
+        border-radius: 1rem;
+        background: #dce9e5;
+      }
+
+      .heritage-site-story__map .heritage-marker-label {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .heritage-site-story__map-link {
+        display: inline-flex;
+        margin-top: 0.85rem;
+        color: var(--forest-dark);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .heritage-site-story__map-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
+
+      .heritage-site-story__facts {
+        margin: 0;
+      }
+
+      .heritage-site-story__fact {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+        gap: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(68, 55, 46, 0.1);
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .heritage-site-story__fact:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .heritage-site-story__fact dt {
+        color: #93897f;
+      }
+
+      .heritage-site-story__fact dd {
+        margin: 0;
+        color: #51483e;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+
+      .heritage-site-story__image-missing {
+        display: none;
+        position: absolute;
+        inset: auto 1rem 1rem;
+        color: #fff;
+        font-size: 0.9rem;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+      }
+
+      .heritage-site-story__hero.has-no-image
+        .heritage-site-story__image-missing {
+        display: block;
+      }
+
+      @media (max-width: 760px) {
+        .heritage-site-story__hero {
+          min-height: clamp(25rem, 75svh, 34rem);
+        }
+
+        .heritage-site-story__hero-shade {
+          background:
+            linear-gradient(
+              0deg,
+              rgba(8, 22, 17, 0.88),
+              rgba(8, 22, 17, 0.08) 95%
+            ),
+            linear-gradient(90deg, rgba(8, 22, 17, 0.25), transparent);
+        }
+
+        .heritage-site-story__content {
+          grid-template-columns: 1fr;
+        }
+
+        .heritage-site-story__aside {
+          width: 100%;
+        }
       }
 
       body.visitor-module .visitor-auth-actions {
@@ -473,7 +930,7 @@
       .explore3d-media-overlay {
         position: fixed;
         inset: 0;
-        z-index: 120;
+        z-index: 10000;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1107,6 +1564,14 @@
         cursor: zoom-in;
       }
 
+      .heritage-model-container.is-photo .auto-rotate-btn,
+      .heritage-model-container.is-photo .pan-mode-btn,
+      .heritage-model-container.is-photo .controls-help-btn,
+      .heritage-model-container.is-photo .zoom-controls-group,
+      .heritage-model-container.is-photo .fullscreen-toggle-btn {
+        display: none;
+      }
+
       .explore3d-viewer-lines {
         position: absolute;
         inset: 0;
@@ -1153,13 +1618,16 @@
 
       .heritage-fullscreen {
         position: fixed;
-        top: var(--header-h, 5.625rem);
+        top: 0;
         left: 0;
-        right: 0;
+        right: auto;
         bottom: 0;
+        width: 100%;
+        min-width: 0;
         z-index: 9000;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
         background: #0a0f14;
       }
 
@@ -1220,6 +1688,8 @@
       .heritage-fullscreen__model {
         flex: 1;
         width: 100%;
+        min-width: 0;
+        max-width: 100%;
         min-height: 0;
         --poster-color: #0a0f14;
         background: transparent;
@@ -1257,7 +1727,8 @@
       }
 
       body.heritage-fullscreen-open .explore3d-page,
-      body.heritage-fullscreen-open #footer-placeholder {
+      body.heritage-fullscreen-open #footer-placeholder,
+      body.heritage-fullscreen-open .site-header {
         visibility: hidden;
       }
 
@@ -1266,7 +1737,10 @@
         flex: 1;
         display: flex;
         flex-direction: column;
+        width: 100%;
+        min-width: 0;
         min-height: 0;
+        overflow: hidden;
       }
 
       .heritage-fullscreen__loading {
@@ -2881,27 +3355,354 @@
           padding: 0.4rem 0.75rem;
         }
       }
+
+      @media (max-width: 640px) {
+        .explore3d-media-overlay {
+          align-items: stretch;
+          padding: 0;
+        }
+
+        .explore3d-media-overlay__sheet {
+          width: 100%;
+          height: 100%;
+          max-height: 100vh;
+          max-height: 100dvh;
+          border: 0;
+          border-radius: 0;
+        }
+
+        .explore3d-media-overlay__bar {
+          min-height: 4.25rem;
+          padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
+        }
+
+        .explore3d-media-overlay__close {
+          width: 2.75rem;
+          height: 2.75rem;
+          flex: 0 0 auto;
+          color: #0f172a;
+          background: #fff;
+        }
+
+        .explore3d-media-overlay__content {
+          padding: 0.75rem 0.75rem max(1rem, env(safe-area-inset-bottom));
+        }
+
+        .explore3d-media-overlay.is-photos .explore3d-media-overlay__sheet {
+          background: #f8fafc;
+        }
+
+        .explore3d-media-overlay__panel--photos .gal-media-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.65rem;
+        }
+
+        .explore3d-media-overlay__panel--photos .gal-media-item {
+          min-width: 0;
+          aspect-ratio: 4 / 3;
+        }
+
+        .heritage-model-container {
+          width: 100%;
+          min-height: 340px;
+          height: min(62svh, 480px);
+          max-height: 480px;
+          overflow: hidden;
+        }
+
+        .explore3d-model {
+          min-height: 0;
+          max-height: none;
+        }
+
+        .controls-help-btn {
+          top: 0.5rem;
+          right: 0.5rem;
+        }
+
+        .pan-mode-btn:not(.fullscreen-pan-mode-btn) {
+          top: 3.1rem;
+          right: 0.5rem;
+        }
+
+        .auto-rotate-btn {
+          top: 5.7rem;
+          right: 0.5rem;
+        }
+
+        .zoom-controls-group {
+          top: auto;
+          right: 0.5rem;
+          bottom: 0.5rem;
+        }
+
+        .fullscreen-toggle-btn {
+          top: auto;
+          right: auto;
+          bottom: 0.5rem;
+          left: 0.5rem;
+        }
+      }
+
+      .heritage-fullscreen:fullscreen {
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+      }
+
+      .fullscreen-control-rail {
+        position: absolute;
+        inset: 0;
+        z-index: 30;
+        pointer-events: none;
+      }
+
+      .heritage-fullscreen .fullscreen-pan-mode-btn,
+      .heritage-fullscreen .fullscreen-auto-rotate-btn,
+      .heritage-fullscreen .fullscreen-controls-help,
+      .heritage-fullscreen .fullscreen-controls-help-overlay,
+      .heritage-fullscreen .fullscreen-zoom-controls {
+        display: none !important;
+      }
+
+      .fullscreen-control-rail .fullscreen-toggle-btn {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        pointer-events: auto;
+      }
+
+      @media (max-width: 640px) {
+        .heritage-fullscreen:not(:fullscreen) {
+          top: 0;
+        }
+
+        .heritage-fullscreen__top {
+          padding-top: max(0.65rem, env(safe-area-inset-top));
+        }
+
+        .fullscreen-control-rail .fullscreen-toggle-btn {
+          right: 0.5rem;
+          bottom: max(0.75rem, env(safe-area-inset-bottom));
+        }
+      }
     </style>
   </head>
   <body class="visitor-module">
     <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
 
     <main class="explore3d-page">
+      <section
+        class="heritage-site-story"
+        id="heritage-site-story"
+        aria-labelledby="heritage-site-story-title"
+        hidden
+      >
+        <header class="heritage-site-story__hero">
+          <img
+            class="heritage-site-story__hero-image"
+            id="heritage-site-story-image"
+            alt=""
+            decoding="async"
+            fetchpriority="high"
+          />
+          <div class="heritage-site-story__hero-shade" aria-hidden="true"></div>
+          <p
+            class="heritage-site-story__image-missing"
+            id="heritage-site-story-image-missing"
+          >
+            No featured photograph is available for this site.
+          </p>
+          <div class="heritage-site-story__hero-content">
+            <p
+              class="heritage-site-story__eyebrow"
+              id="heritage-site-story-eyebrow"
+            ></p>
+            <h1
+              class="heritage-site-story__title"
+              id="heritage-site-story-title"
+            ></h1>
+            <p
+              class="heritage-site-story__summary"
+              id="heritage-site-story-summary"
+            ></p>
+          </div>
+        </header>
+        <div class="heritage-site-story__content">
+          <article class="heritage-site-story__article">
+            <h2
+              class="heritage-site-story__article-title"
+              id="heritage-site-story-article-title"
+            ></h2>
+            <p
+              class="heritage-site-story__description"
+              id="heritage-site-story-description"
+            ></p>
+            <section
+              class="heritage-site-story__gallery"
+              id="heritage-site-story-gallery"
+              aria-labelledby="heritage-site-story-gallery-title"
+              hidden
+            >
+              <h2
+                class="heritage-site-story__gallery-title"
+                id="heritage-site-story-gallery-title"
+              >
+                Photographs
+              </h2>
+              <div
+                class="heritage-site-story__gallery-grid"
+                id="heritage-site-story-gallery-grid"
+              ></div>
+              <nav
+                class="heritage-site-story__gallery-pagination"
+                id="heritage-site-story-gallery-pagination"
+                aria-label="Photo gallery pages"
+                hidden
+              ></nav>
+            </section>
+            <section
+              class="heritage-site-story__model"
+              id="heritage-site-story-model-section"
+              aria-labelledby="heritage-site-story-model-title"
+              hidden
+            >
+              <h2
+                class="heritage-site-story__model-title"
+                id="heritage-site-story-model-title"
+              >
+                Explore in 3D
+              </h2>
+              <div class="heritage-site-story__model-viewer">
+                <model-viewer
+                  id="heritage-site-story-model"
+                  alt=""
+                  camera-controls
+                  auto-rotate
+                  rotation-per-second="14deg"
+                  touch-action="pan-y"
+                  camera-orbit="0deg 82deg 52%"
+                  min-camera-orbit="-180deg 30deg 42%"
+                  max-camera-orbit="180deg 90deg 100%"
+                  shadow-intensity="1.15"
+                  exposure="1.06"
+                  environment-image="neutral"
+                  loading="eager"
+                  reveal="auto"
+                  interaction-prompt="none"
+                ></model-viewer>
+                <p
+                  class="heritage-site-story__model-status"
+                  id="heritage-site-story-model-status"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Loading 3D model…
+                </p>
+                <div
+                  class="heritage-site-story__model-help"
+                  id="heritage-site-story-model-help"
+                  role="dialog"
+                  aria-label="3D model controls"
+                  hidden
+                >
+                  Drag to rotate. Use the hand tool and drag to pan. Use the
+                  plus and minus buttons to zoom.
+                </div>
+                <div class="heritage-site-story__model-tools">
+                  <button
+                    type="button"
+                    id="heritage-site-story-model-help-button"
+                    aria-label="Show model controls"
+                    aria-expanded="false"
+                    title="Show model controls"
+                  >ⓘ</button>
+                  <button
+                    type="button"
+                    id="heritage-site-story-model-pan"
+                    aria-label="Enable pan mode"
+                    aria-pressed="false"
+                    title="Pan model"
+                  >✋</button>
+                  <button
+                    type="button"
+                    id="heritage-site-story-model-rotate"
+                    aria-label="Pause auto-rotation"
+                    aria-pressed="true"
+                    title="Toggle auto-rotation"
+                  >↻</button>
+                  <div class="heritage-site-story__model-zoom">
+                    <button
+                      type="button"
+                      id="heritage-site-story-model-zoom-in"
+                      aria-label="Zoom in"
+                      title="Zoom in"
+                    >+</button>
+                    <button
+                      type="button"
+                      id="heritage-site-story-model-zoom-out"
+                      aria-label="Zoom out"
+                      title="Zoom out"
+                    >−</button>
+                  </div>
+                  <button
+                    type="button"
+                    class="heritage-site-story__model-fullscreen"
+                    id="heritage-site-story-model-fullscreen"
+                    aria-label="View 3D model fullscreen"
+                    title="View fullscreen"
+                  >⛶</button>
+                </div>
+              </div>
+            </section>
+          </article>
+          <div class="heritage-site-story__sidebar">
+            <aside
+              class="heritage-site-story__aside"
+              aria-labelledby="heritage-site-story-aside-title"
+            >
+              <h2
+                class="heritage-site-story__aside-title"
+                id="heritage-site-story-aside-title"
+              >
+                At a glance
+              </h2>
+              <dl
+                class="heritage-site-story__facts"
+                id="heritage-site-story-facts"
+              ></dl>
+            </aside>
+            <section
+              class="heritage-site-story__location"
+              aria-labelledby="heritage-site-story-location-title"
+            >
+              <h2
+                class="heritage-site-story__location-title"
+                id="heritage-site-story-location-title"
+              >
+                Where it is
+              </h2>
+              <div
+                class="heritage-site-story__map"
+                id="heritage-site-story-map"
+                role="region"
+                aria-label="Map showing the heritage site location"
+              ></div>
+              <a
+                class="heritage-site-story__map-link"
+                href="map.html"
+                id="heritage-site-story-map-link"
+              >
+                Explore on map
+              </a>
+            </section>
+          </div>
+        </div>
+      </section>
+
       <div id="explore3d-viewer" class="explore3d-workspace">
         <div class="explore3d-workspace__bg" aria-hidden="true"></div>
-        <div class="explore3d-site-picker">
-          <label class="explore3d-site-picker__label" for="explore-site-select">
-            Built heritage
-            <select
-              id="explore-site-select"
-              class="explore3d-site-picker__select"
-              aria-label="Choose a built heritage site"
-            >
-              <option value="">Choose a site</option>
-            </select>
-          </label>
-        </div>
-
         <div class="explore3d-stage-layout" id="explore-stage-layout" hidden>
           <div
             class="explore3d-geofence-gate"
@@ -2993,7 +3794,7 @@
                 <model-viewer
                   id="heritage-model"
                   class="experience-3d-model"
-                  alt="Built heritage 3D model"
+                  alt="Heritage 3D model"
                   auto-rotate
                   rotation-per-second="14deg"
                   camera-controls
@@ -3324,28 +4125,9 @@
       class="heritage-fullscreen"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="fullscreen-title"
+      aria-label="Expanded heritage model"
       hidden
     >
-      <div class="heritage-fullscreen__top">
-        <div>
-          <h2
-            class="heritage-fullscreen__title display-font"
-            id="fullscreen-title"
-            hidden
-          ></h2>
-        </div>
-        <div class="heritage-fullscreen__actions">
-          <button
-            type="button"
-            class="heritage-fullscreen__close"
-            id="fullscreen-close"
-            aria-label="Close fullscreen 3D model"
-          >
-            &times;
-          </button>
-        </div>
-      </div>
       <div class="heritage-fullscreen__stage">
         <div
           class="heritage-fullscreen__loading"
@@ -3358,38 +4140,141 @@
           ></span>
           <p id="fullscreen-loading-label">Loading 3D model…</p>
         </div>
-        <button
-          type="button"
-          class="pan-mode-btn fullscreen-pan-mode-btn"
-          id="fullscreen-pan-toggle"
-          aria-label="Enable pan mode"
-          aria-pressed="false"
-          data-tooltip="Pan model"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+        <div class="fullscreen-control-rail">
+          <button
+            type="button"
+            class="pan-mode-btn fullscreen-pan-mode-btn !h-12 !w-12 !rounded-xl"
+            id="fullscreen-pan-toggle"
+            aria-label="Enable pan mode"
+            aria-pressed="false"
+            data-tooltip="Pan model"
           >
-            <path
-              d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
-            ></path>
-            <path
-              d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
-            ></path>
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
+              ></path>
+              <path
+                d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
+              ></path>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="auto-rotate-btn fullscreen-auto-rotate-btn !h-12 !w-12 !rounded-xl"
+            id="fullscreen-auto-rotate-btn"
+            aria-label="Toggle auto rotate"
+            aria-pressed="true"
+            data-tooltip="Toggle auto-rotate"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              ></path>
+              <path d="M21 3v5h-5"></path>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="fullscreen-controls-help !h-12 !w-12 !rounded-xl"
+            id="fullscreen-controls-help-btn"
+            aria-label="Show controls help"
+            data-tooltip="Show model controls"
+          >
+            ?
+          </button>
+          <div
+            class="fullscreen-controls-help-overlay"
+            id="fullscreen-controls-help-overlay"
+            role="dialog"
+            aria-label="3D model controls help"
+          >
+            <div class="controls-help-title">3D Model Controls</div>
+            <div class="controls-help-item">
+              <span class="controls-help-icon">Touch</span>
+              <span class="controls-help-text"
+                >Drag to rotate; pinch to zoom</span
+              >
+            </div>
+            <div class="controls-help-item">
+              <span class="controls-help-icon">Pan</span>
+              <span class="controls-help-text"
+                >Enable pan, then drag to move</span
+              >
+            </div>
+            <div class="controls-help-item">
+              <span class="controls-help-icon">+/-</span>
+              <span class="controls-help-text">Use the buttons to zoom</span>
+            </div>
+          </div>
+          <div class="zoom-controls-group fullscreen-zoom-controls">
+            <button
+              type="button"
+              class="zoom-control-btn !h-12 !w-12 !rounded-xl !text-xl"
+              id="fullscreen-model-zoom-in"
+              aria-label="Zoom in"
+              data-tooltip="Zoom in"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              class="zoom-control-btn !h-12 !w-12 !rounded-xl !text-xl"
+              id="fullscreen-model-zoom-out"
+              aria-label="Zoom out"
+              data-tooltip="Zoom out"
+            >
+              −
+            </button>
+          </div>
+          <button
+            type="button"
+            class="fullscreen-toggle-btn !h-12 !w-12 !rounded-xl"
+            id="fullscreen-minimize-btn"
+            aria-label="Return to site details"
+            data-tooltip="Return to site details"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M8 3v5H3 M16 3h5v5 M3 16h5v5 M21 16h-5v5"></path>
+            </svg>
+          </button>
+        </div>
         <model-viewer
           id="fullscreen-model"
           class="heritage-fullscreen__model"
-          alt="Built heritage 3D model"
+          alt="Heritage 3D model"
           auto-rotate
           rotation-per-second="14deg"
           camera-controls
@@ -3417,6 +4302,11 @@
 
     <div id="footer-placeholder"></div>
 
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
     <script src="js/utils/heritage/heritage-pylon-model.js"></script>
@@ -3426,6 +4316,7 @@
     <script src="_backend/supabase-api.js"></script>
     <script src="js/utils/heritage/heritage-realtime.js"></script>
     <script src="js/pages/admin/admin-heritage-base.js"></script>
+    <script src="js/pages/admin/admin-uploads.js"></script>
     <script src="js/pages/admin/admin-store.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
@@ -3808,8 +4699,6 @@
           lat: 6.94425,
           lng: 126.248333,
           official: true,
-          modelSrc:
-            "assets/data/Built Heritage/Subangan Museum/3D/Subangan Museum.glb",
           image:
             "assets/data/Built Heritage/Provincial Capitol of Davao Oriental/Photographs/New/Capitol White House1.jpg",
           photos: [
@@ -3935,6 +4824,7 @@
       );
       const exploreIdlePanel = document.getElementById("explore-idle-panel");
       const exploreWorkspace = document.getElementById("explore3d-viewer");
+      const heritageSiteStory = document.getElementById("heritage-site-story");
       const exploreRevealLoader = document.getElementById(
         "explore-reveal-loader",
       );
@@ -3948,6 +4838,41 @@
       const viewerBadge = document.getElementById("viewer-badge");
       const previewImage = document.getElementById("preview-image");
       const heritageModel = document.getElementById("heritage-model");
+      const heritageStoryModel = document.getElementById(
+        "heritage-site-story-model",
+      );
+      const heritageStoryModelSection = document.getElementById(
+        "heritage-site-story-model-section",
+      );
+      const heritageStoryModelStatus = document.getElementById(
+        "heritage-site-story-model-status",
+      );
+      const heritageStoryModelPanButton = document.getElementById(
+        "heritage-site-story-model-pan",
+      );
+      const heritageStoryModelRotateButton = document.getElementById(
+        "heritage-site-story-model-rotate",
+      );
+      const heritageStoryModelHelp = document.getElementById(
+        "heritage-site-story-model-help",
+      );
+      const heritageStoryModelHelpButton = document.getElementById(
+        "heritage-site-story-model-help-button",
+      );
+      const heritageStoryModelZoomIn = document.getElementById(
+        "heritage-site-story-model-zoom-in",
+      );
+      const heritageStoryModelZoomOut = document.getElementById(
+        "heritage-site-story-model-zoom-out",
+      );
+      const heritageStoryModelFullscreen = document.getElementById(
+        "heritage-site-story-model-fullscreen",
+      );
+      let heritageStoryModelSite = null;
+      let heritageStoryModelSource = "";
+      let heritageStoryModelResolveToken = 0;
+      let heritageStoryModelAutoRotate = true;
+      const heritageStoryModelObjectUrls = new Set();
       const viewerHint = document.getElementById("viewer-hint");
       const modelLoadingOverlay = document.getElementById(
         "model-loading-overlay",
@@ -4016,17 +4941,28 @@
       const heritageFullscreen = document.getElementById("heritage-fullscreen");
       const fullscreenModel = document.getElementById("fullscreen-model");
       const fullscreenPhoto = document.getElementById("fullscreen-photo");
-      const fullscreenTitle = document.getElementById("fullscreen-title");
       const fullscreenHint = document.getElementById("fullscreen-hint");
-      const fullscreenClose = document.getElementById("fullscreen-close");
+      const fullscreenMinimizeBtn = document.getElementById(
+        "fullscreen-minimize-btn",
+      );
       const fullscreenToggleBtn = document.getElementById(
         "fullscreen-toggle-btn",
+      );
+      const fullscreenAutoRotateBtn = document.getElementById(
+        "fullscreen-auto-rotate-btn",
+      );
+      const fullscreenModelZoomIn = document.getElementById(
+        "fullscreen-model-zoom-in",
+      );
+      const fullscreenModelZoomOut = document.getElementById(
+        "fullscreen-model-zoom-out",
       );
       const modelZoomIn = document.getElementById("model-zoom-in");
       const modelZoomOut = document.getElementById("model-zoom-out");
       const panModeButtons = [
         document.getElementById("model-pan-toggle"),
         document.getElementById("fullscreen-pan-toggle"),
+        heritageStoryModelPanButton,
       ];
       const autoRotateBtn = document.getElementById("auto-rotate-btn");
       const controlsHelpBtn = document.getElementById("controls-help-btn");
@@ -4053,7 +4989,12 @@
       }
 
       function mediaUrl(src) {
-        return encodeURI(String(src));
+        const value = String(src || "");
+        if (/^(?:https?:\/\/|data:|blob:)/i.test(value)) return value;
+        const assetPath = value.replace(/^\/?data\//i, (prefix) =>
+          prefix.startsWith("/") ? "/assets/data/" : "assets/data/",
+        );
+        return encodeURI(assetPath);
       }
 
       function hideFullscreenLoading() {
@@ -4259,7 +5200,7 @@
         if (exploreRevealLabel) {
           exploreRevealLabel.textContent = `Loading ${site.name}…`;
         }
-        if (site.modelSrc && heritageModel) {
+        if (!options.showSiteImage && site.modelSrc && heritageModel) {
           modelLoadingOverlay?.removeAttribute("hidden");
           modelLoadingOverlay?.setAttribute("aria-busy", "true");
           if (modelLoadingPercentage) {
@@ -4330,7 +5271,7 @@
 
         // Now update the rest of the details and 3D model
         updateDetails(site);
-        updateViewer(site);
+        updateViewer(site, { showSiteImage: options.showSiteImage });
         closeMediaDisplay();
 
         // Restore footer visibility
@@ -4463,7 +5404,6 @@
       function openFullscreenPhoto(site, photoSrc, options = {}) {
         if (!site || !photoSrc || !heritageFullscreen) return;
 
-        fullscreenTitle.textContent = site.name;
         heritageFullscreen.hidden = false;
         heritageFullscreen.setAttribute("aria-hidden", "false");
         document.body.classList.add("heritage-fullscreen-open");
@@ -4482,7 +5422,7 @@
         if (fullscreenHint) {
           fullscreenHint.textContent = options.isMap
             ? "Site map"
-            : "Built heritage photograph";
+            : "Heritage photograph";
         }
       }
 
@@ -4503,6 +5443,14 @@
         exploreSiteMapImg.alt = `${site.name} site map`;
       }
 
+      function isMobileViewerDevice() {
+        const userAgent = navigator.userAgent;
+        return (
+          /Android|iPhone|iPad|iPod|Mobile/i.test(userAgent) ||
+          (/Macintosh/i.test(userAgent) && navigator.maxTouchPoints > 1)
+        );
+      }
+
       function openFullscreenHeritage(site = getActiveSite()) {
         if (!site || !heritageFullscreen) return;
 
@@ -4510,7 +5458,6 @@
           "hidden",
           !(site.modelSrc && fullscreenModel),
         );
-        fullscreenTitle.textContent = site.name;
         heritageFullscreen.hidden = false;
         heritageFullscreen.setAttribute("aria-hidden", "false");
         document.body.classList.add("heritage-fullscreen-open");
@@ -4519,7 +5466,21 @@
           fullscreenPhoto.hidden = true;
           fullscreenModel.hidden = false;
           fullscreenModel.setAttribute("alt", `${site.name} 3D model`);
-          fullscreenModel.autoRotate = true;
+          fullscreenModel.autoRotate = autoRotateEnabled;
+          fullscreenAutoRotateBtn?.classList.toggle(
+            "active",
+            autoRotateEnabled,
+          );
+          fullscreenAutoRotateBtn?.setAttribute(
+            "aria-pressed",
+            String(autoRotateEnabled),
+          );
+          if (isMobileViewerDevice()) {
+            heritageFullscreen
+              .requestFullscreen?.({ navigationUI: "hide" })
+              ?.then(() => window.screen.orientation?.lock?.("landscape"))
+              .catch(() => {});
+          }
           waitForFullscreenModel(site);
         } else if (fullscreenModel) {
           hideFullscreenLoading();
@@ -4551,6 +5512,10 @@
         heritageFullscreen.hidden = true;
         heritageFullscreen.setAttribute("aria-hidden", "true");
         document.body.classList.remove("heritage-fullscreen-open");
+        if (document.fullscreenElement === heritageFullscreen) {
+          document.exitFullscreen?.().catch(() => {});
+        }
+        if (isMobileViewerDevice()) window.screen.orientation?.unlock?.();
         hideFullscreenLoading();
         if (fullscreenModel) fullscreenModel.autoRotate = false;
         closeFullscreenControlsHelp();
@@ -4565,7 +5530,7 @@
         });
       }
 
-      function updateViewer(site) {
+      function updateViewer(site, options = {}) {
         // Force local path for Pylon Monument
         if (site.id === "pylon") {
           site.modelSrc =
@@ -4573,17 +5538,39 @@
         }
 
         const hasModel = Boolean(site.modelSrc && heritageModel);
-        panModeButtons[0]?.toggleAttribute("hidden", !hasModel);
+        const siteImage = options.showSiteImage ? getSiteMarkerImage(site) : "";
+        panModeButtons[0]?.toggleAttribute(
+          "hidden",
+          !hasModel || Boolean(siteImage),
+        );
 
         heritageViewerPanel?.classList.remove("is-photo");
 
         if (viewerBadge) {
-          viewerBadge.textContent = hasModel ? "3D Preview" : "Built Heritage";
+          viewerBadge.textContent = siteImage
+            ? "Heritage Photograph"
+            : hasModel
+              ? "3D Preview"
+              : "Built Heritage";
         }
 
         previewImage.hidden = true;
 
-        if (hasModel) {
+        if (siteImage) {
+          heritageViewerPanel?.classList.add("is-photo");
+          heritageModel.hidden = true;
+          heritageModel.autoRotate = false;
+          modelLoadingOverlay?.setAttribute("hidden", "");
+          modelLoadingOverlay?.setAttribute("aria-busy", "false");
+          viewerEmpty?.setAttribute("hidden", "");
+          previewImage.src = mediaUrl(siteImage);
+          previewImage.alt = `${site.name} heritage site`;
+          previewImage.hidden = false;
+          if (viewerHint) {
+            viewerHint.textContent = "Click to enlarge photograph";
+            viewerHint.hidden = false;
+          }
+        } else if (hasModel) {
           viewerEmpty?.setAttribute("hidden", "");
           heritageModel.hidden = false;
 
@@ -4680,6 +5667,12 @@
       }
 
       const hasSiteFromQuery = initFromQuery();
+      const shouldShowHeritageStory =
+        hasSiteFromQuery ||
+        HERITAGE_3D_SITES.some((site) => site.id === "pylon");
+      if (!hasSiteFromQuery && shouldShowHeritageStory) {
+        activeSiteId = "pylon";
+      }
 
       const sitePicker = document.getElementById("explore-site-select");
       sitePicker?.addEventListener("change", () => {
@@ -4757,9 +5750,18 @@
         if (event.target === galLightbox) closePhotoLightbox();
       });
 
-      fullscreenClose?.addEventListener("click", closeFullscreenHeritage);
+      fullscreenMinimizeBtn?.addEventListener("click", closeFullscreenHeritage);
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && !heritageFullscreen?.hidden) {
+          closeFullscreenHeritage();
+        }
+      });
 
       fullscreenToggleBtn?.addEventListener("click", () => {
+        if (heritageFullscreen && !heritageFullscreen.hidden) {
+          closeFullscreenHeritage();
+          return;
+        }
         const site = getActiveSite();
         if (site) openFullscreenHeritage(site);
       });
@@ -4771,20 +5773,26 @@
         if (!heritageModel) return;
         heritageModel.autoRotate = enabled;
         heritageModel.toggleAttribute("auto-rotate", enabled);
+        if (fullscreenModel) fullscreenModel.autoRotate = enabled;
+        fullscreenAutoRotateBtn?.classList.toggle("active", enabled);
+        fullscreenAutoRotateBtn?.setAttribute("aria-pressed", String(enabled));
       }
 
       function syncHeritageAutoRotate() {
         if (!heritageModel) return;
         setHeritageAutoRotate(autoRotateEnabled && !heritageModel.hidden);
-        autoRotateBtn?.classList.toggle(
-          "active",
-          heritageModel.autoRotate,
-        );
+        autoRotateBtn?.classList.toggle("active", heritageModel.autoRotate);
       }
 
       autoRotateBtn?.addEventListener("click", () => {
         autoRotateEnabled = !autoRotateEnabled;
         syncHeritageAutoRotate();
+      });
+
+      fullscreenAutoRotateBtn?.addEventListener("click", () => {
+        autoRotateEnabled = !autoRotateEnabled;
+        setHeritageAutoRotate(autoRotateEnabled);
+        autoRotateBtn?.classList.toggle("active", autoRotateEnabled);
       });
 
       // Controls help overlay
@@ -4928,6 +5936,11 @@
           viewer?.setAttribute("touch-action", enabled ? "none" : "pan-y");
           viewer?.classList.toggle("pan-mode-active", enabled);
         });
+        heritageStoryModel?.setAttribute(
+          "touch-action",
+          enabled ? "none" : "pan-y",
+        );
+        heritageStoryModel?.classList.toggle("pan-mode-active", enabled);
       }
 
       panModeButtons.forEach((button) => {
@@ -5014,13 +6027,13 @@
 
       enableModelPanning(model);
       enableModelPanning(fullscreenModel);
+      enableModelPanning(heritageStoryModel);
 
-      function zoomHeritageModel(direction) {
-        const model = document.getElementById("heritage-model");
-        if (!model?.loaded) return;
+      function zoomHeritageModel(direction, viewer = model) {
+        if (!viewer?.loaded) return;
 
         try {
-          const currentOrbit = model.getCameraOrbit();
+          const currentOrbit = viewer.getCameraOrbit();
           const zoomFactor = direction < 0 ? 0.8 : 1.25;
           const newRadius = Math.min(
             Math.max(currentOrbit.radius * zoomFactor, 0.1),
@@ -5029,7 +6042,7 @@
 
           // Scale the current camera distance, like Blender's dolly zoom,
           // while preserving the current viewing angle and rotation state.
-          model.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${newRadius}m`;
+          viewer.cameraOrbit = `${currentOrbit.theta}rad ${currentOrbit.phi}rad ${newRadius}m`;
         } catch (error) {
           console.error("Error zooming model:", error);
         }
@@ -5037,9 +6050,78 @@
 
       modelZoomIn?.addEventListener("click", () => zoomHeritageModel(-1));
       modelZoomOut?.addEventListener("click", () => zoomHeritageModel(1));
+      fullscreenModelZoomIn?.addEventListener("click", () =>
+        zoomHeritageModel(-1, fullscreenModel),
+      );
+      fullscreenModelZoomOut?.addEventListener("click", () =>
+        zoomHeritageModel(1, fullscreenModel),
+      );
+      heritageStoryModelZoomIn?.addEventListener("click", () =>
+        zoomHeritageModel(-1, heritageStoryModel),
+      );
+      heritageStoryModelZoomOut?.addEventListener("click", () =>
+        zoomHeritageModel(1, heritageStoryModel),
+      );
+      heritageStoryModelRotateButton?.addEventListener("click", () => {
+        heritageStoryModelAutoRotate = !heritageStoryModelAutoRotate;
+        if (heritageStoryModel) {
+          heritageStoryModel.autoRotate = heritageStoryModelAutoRotate;
+          heritageStoryModel.toggleAttribute(
+            "auto-rotate",
+            heritageStoryModelAutoRotate,
+          );
+        }
+        heritageStoryModelRotateButton.classList.toggle(
+          "active",
+          heritageStoryModelAutoRotate,
+        );
+        heritageStoryModelRotateButton.setAttribute(
+          "aria-pressed",
+          String(heritageStoryModelAutoRotate),
+        );
+        heritageStoryModelRotateButton.setAttribute(
+          "aria-label",
+          heritageStoryModelAutoRotate
+            ? "Pause auto-rotation"
+            : "Start auto-rotation",
+        );
+      });
+      heritageStoryModelFullscreen?.addEventListener("click", () => {
+        if (heritageStoryModelSite && heritageStoryModelSource) {
+          openFullscreenHeritage({
+            ...heritageStoryModelSite,
+            modelSrc: heritageStoryModelSource,
+          });
+        }
+      });
+      heritageStoryModelHelpButton?.addEventListener("click", () => {
+        const isOpen = !heritageStoryModelHelp?.hidden;
+        if (heritageStoryModelHelp) heritageStoryModelHelp.hidden = isOpen;
+        heritageStoryModelHelpButton.setAttribute(
+          "aria-expanded",
+          String(!isOpen),
+        );
+      });
+      document.addEventListener("click", (event) => {
+        if (
+          !heritageStoryModelHelp ||
+          heritageStoryModelHelp.hidden ||
+          heritageStoryModelHelp.contains(event.target) ||
+          heritageStoryModelHelpButton?.contains(event.target)
+        ) {
+          return;
+        }
+        heritageStoryModelHelp.hidden = true;
+        heritageStoryModelHelpButton?.setAttribute("aria-expanded", "false");
+      });
 
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
+        if (heritageStoryModelHelp && !heritageStoryModelHelp.hidden) {
+          heritageStoryModelHelp.hidden = true;
+          heritageStoryModelHelpButton?.setAttribute("aria-expanded", "false");
+          return;
+        }
         if (galLightbox?.classList.contains("active")) {
           closePhotoLightbox();
           return;
@@ -5049,6 +6131,11 @@
           return;
         }
         closeFullscreenHeritage();
+      });
+
+      window.addEventListener("pagehide", () => {
+        heritageStoryModelObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+        heritageStoryModelObjectUrls.clear();
       });
 
       if (heritageModel) {
@@ -5089,6 +6176,346 @@
           detailFacts.innerHTML = facts.map((f) => `<li>${f}</li>`).join("");
           detailFacts.hidden = facts.length === 0;
         }
+      }
+
+      let heritageStoryMap = null;
+      let heritageStoryMarker = null;
+      const HERITAGE_STORY_GALLERY_PAGE_SIZE = 12;
+      let heritageStoryGalleryPhotos = [];
+      let heritageStoryGalleryPage = 0;
+      let heritageStoryGallerySiteId = null;
+
+      function renderHeritageStoryMap(site) {
+        const mapElement = document.getElementById("heritage-site-story-map");
+        if (
+          !mapElement ||
+          !Number.isFinite(site.lat) ||
+          !Number.isFinite(site.lng)
+        ) {
+          return;
+        }
+
+        const location = [site.lat, site.lng];
+        if (!heritageStoryMap) {
+          heritageStoryMap = L.map(mapElement, {
+            center: location,
+            zoom: 14,
+            zoomControl: false,
+            scrollWheelZoom: false,
+          });
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          }).addTo(heritageStoryMap);
+          L.control.zoom({ position: "topright" }).addTo(heritageStoryMap);
+          heritageStoryMarker = L.marker(location, {
+            title: site.name,
+            alt: site.name,
+            icon: createHeritagePhotoIcon(site),
+          }).addTo(heritageStoryMap);
+          heritageStoryMarker.bindTooltip(site.name);
+        } else {
+          heritageStoryMap.setView(location, 14);
+          heritageStoryMarker.setLatLng(location);
+          heritageStoryMarker.setIcon(createHeritagePhotoIcon(site));
+          heritageStoryMarker.setTooltipContent(site.name);
+          heritageStoryMarker.options.title = site.name;
+        }
+
+        requestAnimationFrame(() => heritageStoryMap.invalidateSize());
+      }
+
+      function renderHeritageStoryGallery(site) {
+        const gallery = document.getElementById("heritage-site-story-gallery");
+        const grid = document.getElementById(
+          "heritage-site-story-gallery-grid",
+        );
+        const pagination = document.getElementById(
+          "heritage-site-story-gallery-pagination",
+        );
+        if (!gallery || !grid || !pagination) return;
+
+        const photos = getSitePhotos(site);
+        if (heritageStoryGallerySiteId !== site.id) {
+          heritageStoryGallerySiteId = site.id;
+          heritageStoryGalleryPage = 0;
+        }
+        heritageStoryGalleryPhotos = photos;
+        photoLightboxItems = buildPhotoLightboxItems(site);
+        grid.replaceChildren();
+        pagination.replaceChildren();
+        gallery.hidden = photos.length === 0;
+        if (!photos.length) return;
+
+        const pageCount = Math.ceil(
+          photos.length / HERITAGE_STORY_GALLERY_PAGE_SIZE,
+        );
+        heritageStoryGalleryPage = Math.min(
+          heritageStoryGalleryPage,
+          pageCount - 1,
+        );
+        const pageStart =
+          heritageStoryGalleryPage * HERITAGE_STORY_GALLERY_PAGE_SIZE;
+        const visiblePhotos = photos.slice(
+          pageStart,
+          pageStart + HERITAGE_STORY_GALLERY_PAGE_SIZE,
+        );
+
+        visiblePhotos.forEach((src, visibleIndex) => {
+          const photoIndex = pageStart + visibleIndex;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "heritage-site-story__gallery-item";
+          button.dataset.photoIndex = String(photoIndex);
+          button.setAttribute(
+            "aria-label",
+            `${site.name} — photograph ${photoIndex + 1} of ${photos.length}`,
+          );
+          button.addEventListener("click", () =>
+            openPhotoLightbox(Number(button.dataset.photoIndex)),
+          );
+
+          const image = document.createElement("img");
+          image.src = mediaUrl(src);
+          image.alt = `${site.name} — photograph ${photoIndex + 1}`;
+          image.loading = "lazy";
+          image.decoding = "async";
+          image.addEventListener("error", () => {
+            const failedIndex = Number(button.dataset.photoIndex);
+            if (heritageStoryGalleryPhotos[failedIndex] !== src) return;
+            heritageStoryGalleryPhotos.splice(failedIndex, 1);
+            photoLightboxItems.splice(failedIndex, 1);
+            renderHeritageStoryGallery(site);
+          });
+
+          button.append(image);
+          grid.append(button);
+        });
+
+        if (pageCount > 1) {
+          const previous = document.createElement("button");
+          previous.type = "button";
+          previous.className = "heritage-site-story__gallery-page-button";
+          previous.textContent = "Previous";
+          previous.disabled = heritageStoryGalleryPage === 0;
+          previous.addEventListener("click", () => {
+            heritageStoryGalleryPage -= 1;
+            renderHeritageStoryGallery(site);
+          });
+
+          const pageLabel = document.createElement("span");
+          pageLabel.className = "heritage-site-story__gallery-page-label";
+          pageLabel.textContent = `Page ${heritageStoryGalleryPage + 1} of ${pageCount}`;
+          pageLabel.setAttribute("aria-live", "polite");
+
+          const next = document.createElement("button");
+          next.type = "button";
+          next.className = "heritage-site-story__gallery-page-button";
+          next.textContent = "Next";
+          next.disabled = heritageStoryGalleryPage >= pageCount - 1;
+          next.addEventListener("click", () => {
+            heritageStoryGalleryPage += 1;
+            renderHeritageStoryGallery(site);
+          });
+
+          pagination.append(previous, pageLabel, next);
+          pagination.hidden = false;
+        } else {
+          pagination.hidden = true;
+        }
+      }
+
+      async function renderHeritageStoryModel(site) {
+        if (
+          !heritageStoryModel ||
+          !heritageStoryModelSection ||
+          !heritageStoryModelStatus
+        ) {
+          return;
+        }
+
+        heritageStoryModelSite = site;
+        const modelPath =
+          site.id === "pylon"
+            ? "assets/data/Built Heritage/Pylon Monument/3D/Pylon Monument.glb"
+            : String(site.modelSrc || "").trim();
+        const resolveToken = ++heritageStoryModelResolveToken;
+        heritageStoryModelSource = "";
+        heritageStoryModelSection.hidden = !modelPath;
+        heritageStoryModelStatus.hidden = true;
+        if (!modelPath) {
+          heritageStoryModelSource = "";
+          heritageStoryModel.removeAttribute("src");
+          return;
+        }
+
+        heritageStoryModel.alt = `${site.name} 3D model`;
+        heritageStoryModel.autoRotate = heritageStoryModelAutoRotate;
+        heritageStoryModel.toggleAttribute(
+          "auto-rotate",
+          heritageStoryModelAutoRotate,
+        );
+        heritageStoryModelRotateButton?.classList.toggle(
+          "active",
+          heritageStoryModelAutoRotate,
+        );
+        heritageStoryModelRotateButton?.setAttribute(
+          "aria-pressed",
+          String(heritageStoryModelAutoRotate),
+        );
+        heritageStoryModelRotateButton?.setAttribute(
+          "aria-label",
+          heritageStoryModelAutoRotate
+            ? "Pause auto-rotation"
+            : "Start auto-rotation",
+        );
+        let modelSrc = modelPath;
+        if (
+          typeof MatiAdminUploads !== "undefined" &&
+          MatiAdminUploads.isUploadUri(modelPath)
+        ) {
+          try {
+            const objectUrl = await MatiAdminUploads.createObjectUrl(modelPath);
+            if (resolveToken !== heritageStoryModelResolveToken) {
+              if (objectUrl?.startsWith("blob:")) {
+                URL.revokeObjectURL(objectUrl);
+              }
+              return;
+            }
+            if (!objectUrl) {
+              heritageStoryModelStatus.textContent =
+                `The saved 3D model for ${site.name} could not be found in this browser.`;
+              heritageStoryModelStatus.hidden = false;
+              return;
+            }
+            modelSrc = objectUrl;
+            if (modelSrc.startsWith("blob:")) {
+              heritageStoryModelObjectUrls.add(modelSrc);
+            }
+          } catch (error) {
+            console.error("Unable to resolve the saved heritage 3D model:", error);
+            if (resolveToken === heritageStoryModelResolveToken) {
+              heritageStoryModelStatus.textContent =
+                `Unable to open the saved 3D model for ${site.name}.`;
+              heritageStoryModelStatus.hidden = false;
+            }
+            return;
+          }
+        }
+
+        if (resolveToken !== heritageStoryModelResolveToken) return;
+        heritageStoryModelSource = modelSrc;
+        if (heritageStoryModel.getAttribute("src") !== modelSrc) {
+          heritageStoryModel.setAttribute("src", modelSrc);
+        } else if (heritageStoryModel.loaded) {
+          heritageStoryModelStatus.hidden = true;
+        }
+      }
+
+      heritageStoryModel?.addEventListener("error", () => {
+        if (!heritageStoryModelStatus || !heritageStoryModelSite) return;
+        heritageStoryModelStatus.textContent =
+          `Unable to load the 3D model for ${heritageStoryModelSite.name}. Please try again later.`;
+        heritageStoryModelStatus.hidden = false;
+      });
+
+      function renderHeritageSiteStory(site) {
+        const title = document.getElementById("heritage-site-story-title");
+        const eyebrow = document.getElementById("heritage-site-story-eyebrow");
+        const summary = document.getElementById("heritage-site-story-summary");
+        const description = document.getElementById(
+          "heritage-site-story-description",
+        );
+        const articleTitle = document.getElementById(
+          "heritage-site-story-article-title",
+        );
+        const image = document.getElementById("heritage-site-story-image");
+        const facts = document.getElementById("heritage-site-story-facts");
+        const hero = heritageSiteStory?.querySelector(
+          ".heritage-site-story__hero",
+        );
+        if (
+          !heritageSiteStory ||
+          !title ||
+          !eyebrow ||
+          !summary ||
+          !description ||
+          !articleTitle ||
+          !image ||
+          !facts ||
+          !hero
+        ) {
+          return;
+        }
+
+        const categoryLabel =
+          site.category === "natural" ? "Natural Heritage" : "Built Heritage";
+        const siteDescription = String(site.desc || "").trim();
+        const featuredImage = getSiteMarkerImage(site);
+
+        title.textContent = site.name;
+        eyebrow.textContent = `${categoryLabel} · Mati City, Davao Oriental`;
+        summary.textContent =
+          siteDescription.length > 280
+            ? `${siteDescription.slice(0, 277).trimEnd()}…`
+            : siteDescription;
+        description.textContent = siteDescription;
+        articleTitle.textContent = site.name;
+
+        hero.classList.toggle("has-no-image", !featuredImage);
+        image.hidden = !featuredImage;
+        image.alt = featuredImage ? `${site.name} in Mati City` : "";
+        image.onerror = () => {
+          image.hidden = true;
+          hero.classList.add("has-no-image");
+        };
+        if (featuredImage) image.src = mediaUrl("assets/data/Built Heritage/Pylon Monument/Photographs/Old/images (5).jpg");
+        else image.removeAttribute("src");
+
+        const siteFacts = Array.isArray(site.specs)
+          ? site.specs
+              .filter(
+                (spec) =>
+                  spec.key &&
+                  spec.val &&
+                  ![
+                    "3D Model",
+                    "Status",
+                    "Barangay",
+                  ].includes(spec.key),
+              )
+              .map((spec) => [
+                spec.key === "Category" ? "Site category" : spec.key,
+                spec.val,
+              ])
+          : [];
+        const factEntries = [
+          ["Heritage type", categoryLabel],
+          ["Barangay", site.barangay || "Mati City"],
+          ...siteFacts,
+          ["Province", site.province || "Davao Oriental"],
+          ["Region", site.region || "Davao Region"],
+        ].slice(0, 8);
+
+        facts.replaceChildren();
+        factEntries.forEach(([label, value]) => {
+          const row = document.createElement("div");
+          row.className = "heritage-site-story__fact";
+          const term = document.createElement("dt");
+          term.textContent = label;
+          const detail = document.createElement("dd");
+          detail.textContent = String(value);
+          row.append(term, detail);
+          facts.append(row);
+        });
+
+        heritageSiteStory.hidden = false;
+        exploreWorkspace.hidden = true;
+        document.body.classList.add("has-heritage-site-story");
+        renderHeritageStoryGallery(site);
+        renderHeritageStoryModel(site);
+        renderHeritageStoryMap(site);
       }
 
       const MATI_CITY_BOUNDARY_FALLBACK = [
@@ -5334,12 +6761,7 @@
         );
         bindMapIntroDismiss(map);
 
-        if (hasSiteFromQuery) {
-          const siteFromQuery = getActiveSite();
-          if (siteFromQuery) {
-            revealSiteFromMap(siteFromQuery, { skipScroll: true });
-          }
-        } else {
+        if (!shouldShowHeritageStory) {
           showIdleState();
         }
       }
@@ -5364,7 +6786,9 @@
               // Soft refresh: update idle/site copy without resetting the map view.
               const active =
                 typeof getActiveSite === "function" ? getActiveSite() : null;
-              if (active && typeof revealSiteFromMap === "function") {
+              if (active && shouldShowHeritageStory) {
+                renderHeritageSiteStory(active);
+              } else if (active && typeof revealSiteFromMap === "function") {
                 revealSiteFromMap(active, { skipScroll: true });
               } else if (typeof showIdleState === "function") {
                 showIdleState();
@@ -5392,10 +6816,14 @@
           HERITAGE_3D_SITES.find((site) => site.modelSrc) ||
           HERITAGE_3D_SITES[0];
         if (initialSite) {
-          await revealSiteFromMap(initialSite, {
-            skipScroll: true,
-            skipDelay: true,
-          });
+          if (shouldShowHeritageStory) {
+            renderHeritageSiteStory(initialSite);
+          } else {
+            await revealSiteFromMap(initialSite, {
+              skipScroll: true,
+              skipDelay: true,
+            });
+          }
         } else {
           showIdleState();
         }
@@ -5457,7 +6885,6 @@
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
-
         })
         .catch((err) => console.error("Error loading header:", err));
 

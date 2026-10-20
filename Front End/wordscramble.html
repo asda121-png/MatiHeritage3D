@@ -210,9 +210,20 @@
           Unscramble heritage-themed words before time runs out!
         </p>
 
+        <button id="play-btn" class="btn-primary px-8 py-3.5 rounded-lg border-2 font-rajdhani font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 shadow-[0_4px_12px_rgba(0,0,0,0.1),0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15),0_0_30px_rgba(56,189,248,0.3)] active:translate-y-0">
+          Play
+        </button>
+      </div>
+
+      <!-- Difficulty Screen -->
+      <div id="difficulty-screen" class="text-center hidden">
+        <h2 class="font-fredoka text-3xl md:text-4xl font-bold mb-8">
+          Select Difficulty
+        </h2>
+
         <div class="mb-8">
           <p class="text-sm text-slate-500 mb-3 uppercase tracking-wider">
-            Select Difficulty
+            Choose your challenge
           </p>
           <div class="flex justify-center gap-3 flex-wrap">
             <button class="diff-btn is-active px-6 py-3 rounded-lg border-2 bg-slate-100 font-rajdhani font-semibold text-sm uppercase tracking-wider transition-all" data-difficulty="easy">
@@ -229,6 +240,9 @@
 
         <button id="start-btn" class="btn-primary px-8 py-3.5 rounded-lg border-2 font-rajdhani font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 shadow-[0_4px_12px_rgba(0,0,0,0.1),0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15),0_0_30px_rgba(56,189,248,0.3)] active:translate-y-0">
           Start Game
+        </button>
+        <button id="back-to-intro-btn" class="ml-3 px-6 py-3.5 rounded-lg border-2 font-rajdhani font-bold uppercase tracking-wider">
+          Back
         </button>
       </div>
 
@@ -376,6 +390,7 @@
 
       // DOM elements
       const introScreen = document.getElementById("intro-screen");
+      const difficultyScreen = document.getElementById("difficulty-screen");
       const gameScreen = document.getElementById("game-screen");
       const resultsScreen = document.getElementById("results-screen");
       const startBtn = document.getElementById("start-btn");
@@ -420,6 +435,17 @@
         });
       });
 
+      document.getElementById("play-btn").addEventListener("click", () => {
+        introScreen.classList.add("hidden");
+        difficultyScreen.classList.remove("hidden");
+      });
+      document
+        .getElementById("back-to-intro-btn")
+        .addEventListener("click", () => {
+          difficultyScreen.classList.add("hidden");
+          introScreen.classList.remove("hidden");
+        });
+
       // Start game
       startBtn.addEventListener("click", startGame);
       playAgainBtn.addEventListener("click", () => {
@@ -451,7 +477,7 @@
         timerFill.classList.remove("warning", "danger");
 
         // Switch screens
-        introScreen.classList.add("hidden");
+        difficultyScreen.classList.add("hidden");
         gameScreen.classList.remove("hidden");
 
         // Load first word

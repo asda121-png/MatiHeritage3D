@@ -163,7 +163,5 @@ const BUILT_HERITAGE_SITES = [
     lng: 126.248333,
     heritageCategory: "Museum",
     ownership: "Government Property",
-    modelSrc:
-      "assets/data/Built Heritage/Subangan Museum/3D/Subangan Museum.glb",
   },
 ];

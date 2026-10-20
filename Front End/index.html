@@ -15,13 +15,6 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <link rel="stylesheet" href="css/heritage-map-markers.css" />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/visitor-portal-showcase.css" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
@@ -96,7 +89,6 @@
       .hero-map-pin,
       .hero-cinematic-bg-img,
       .experience-3d-model,
-      .map-particle,
       .orb,
       .heritage-card,
       .stat-card {
@@ -106,9 +98,7 @@
       }
 
       .hero-cinematic-stage,
-      .map-section__frame,
-      .hero-section,
-      .map-section {
+      .hero-section {
         contain: style;
       }
 
@@ -1101,27 +1091,6 @@
           margin-inline: auto;
         }
 
-        .map-intro-overlay {
-          align-items: flex-start;
-          justify-content: center;
-          padding: 0.85rem clamp(1rem, 3vw, 1.25rem);
-        }
-
-        .map-intro-overlay__content {
-          width: 100%;
-          max-width: none;
-        }
-
-        .map-heritage-filter-wrap {
-          top: 0.75rem;
-          right: 0.75rem;
-          left: auto;
-        }
-
-        .map-legend {
-          bottom: 0.75rem;
-          right: 0.75rem;
-        }
       }
 
       @media (max-width: 640px) {
@@ -1527,8 +1496,24 @@
 
       /* Heritage Media Archive - alternating layout section */
       .heritage-media-section {
+        position: relative;
         padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 2.5rem);
         background: linear-gradient(180deg, var(--bg-site) 0%, #f0f4f8 100%);
+        overflow: hidden;
+      }
+
+      .heritage-ocean-pattern {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .heritage-media-section > .max-w-7xl {
+        position: relative;
+        z-index: 1;
       }
 
       .heritage-media-grid {
@@ -2577,6 +2562,160 @@
         transform: translateX(4px);
       }
 
+      /* Map promo section */
+      .map-promo-section {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: 600px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 1024px) {
+        .map-promo-section {
+          grid-template-columns: 1fr 1fr;
+          min-height: 700px;
+        }
+      }
+
+      .map-promo-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        overflow: hidden;
+      }
+
+      .map-promo-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .map-promo-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%);
+        color: white;
+        gap: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        .map-promo-content {
+          padding: 4rem 3rem;
+        }
+      }
+
+      .map-promo-compass {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        width: 48px;
+        height: 48px;
+        opacity: 0.6;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .map-promo-heading {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        line-height: 1.1;
+        max-width: 28rem;
+        margin: 0;
+      }
+
+      .map-promo-description {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.0625rem;
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.85);
+        max-width: 26rem;
+        margin: 0;
+      }
+
+      .map-promo-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: #F8F6F0;
+        color: #1E3D2D;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 9999px;
+        transition:
+          transform 0.3s var(--ease-out-expo),
+          background 0.3s ease;
+      }
+
+      .map-promo-btn:hover {
+        transform: translateY(-2px);
+        background: #EFEDE5;
+      }
+
+      .map-promo-categories {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 26rem;
+      }
+
+      .map-promo-categories-label {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+      }
+
+      .map-promo-category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .map-promo-category-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 9999px;
+        transition:
+          background 0.3s ease,
+          border-color 0.3s ease,
+          color 0.3s ease,
+          transform 0.3s var(--ease-out-expo);
+      }
+
+
+      .map-promo-category-btn svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
       /* Plan visit — cinematic split */
       .plan-section {
         position: relative;
@@ -2777,1117 +2916,6 @@
       }
 
       /* Portal showcase styles in visitor-portal-showcase.css */
-
-      /* ── Mati City Map ── */
-      .map-section {
-        padding: 0;
-        margin: 0;
-        position: relative;
-        background: #ffffff;
-        box-shadow: none !important;
-        filter: none !important;
-        overflow: hidden;
-      }
-
-      /* Floating particles */
-      .map-particles {
-        display: none;
-      }
-
-      .map-particle {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(4, 120, 87, 0.15);
-        animation: mapParticleFloat 20s ease-in-out infinite;
-      }
-
-      .map-particle:nth-child(1) {
-        width: 3px;
-        height: 3px;
-        top: 15%;
-        left: 10%;
-        animation-delay: 0s;
-      }
-
-      .map-particle:nth-child(2) {
-        width: 2px;
-        height: 2px;
-        top: 25%;
-        right: 15%;
-        animation-delay: -5s;
-        background: rgba(245, 158, 11, 0.12);
-      }
-
-      .map-particle:nth-child(3) {
-        width: 4px;
-        height: 4px;
-        bottom: 30%;
-        left: 20%;
-        animation-delay: -10s;
-      }
-
-      .map-particle:nth-child(4) {
-        width: 2px;
-        height: 2px;
-        bottom: 20%;
-        right: 25%;
-        animation-delay: -15s;
-        background: rgba(56, 189, 248, 0.1);
-      }
-
-      .map-particle:nth-child(5) {
-        width: 3px;
-        height: 3px;
-        top: 40%;
-        left: 5%;
-        animation-delay: -8s;
-      }
-
-      @keyframes mapParticleFloat {
-        0%,
-        100% {
-          transform: translate(0, 0) scale(1);
-          opacity: 0.3;
-        }
-        25% {
-          transform: translate(30px, -20px) scale(1.2);
-          opacity: 0.5;
-        }
-        50% {
-          transform: translate(-20px, 30px) scale(0.8);
-          opacity: 0.4;
-        }
-        75% {
-          transform: translate(20px, 20px) scale(1.1);
-          opacity: 0.6;
-        }
-      }
-
-      /* Organic decorative elements in corners */
-      .map-decoration {
-        display: none;
-      }
-
-      .map-decoration--top-left {
-        top: 0;
-        left: 0;
-        width: 180px;
-        height: 180px;
-        background: radial-gradient(
-          ellipse at top left,
-          rgba(4, 120, 87, 0.4) 0%,
-          transparent 60%
-        );
-      }
-
-      .map-decoration--top-right {
-        top: 0;
-        right: 0;
-        width: 200px;
-        height: 150px;
-        background: radial-gradient(
-          ellipse at top right,
-          rgba(245, 158, 11, 0.3) 0%,
-          transparent 60%
-        );
-      }
-
-      .map-decoration--bottom-left {
-        bottom: 0;
-        left: 0;
-        width: 160px;
-        height: 200px;
-        background: radial-gradient(
-          ellipse at bottom left,
-          rgba(56, 189, 248, 0.25) 0%,
-          transparent 60%
-        );
-      }
-
-      .map-decoration--bottom-right {
-        bottom: 0;
-        right: 0;
-        width: 190px;
-        height: 170px;
-        background: radial-gradient(
-          ellipse at bottom right,
-          rgba(4, 120, 87, 0.35) 0%,
-          transparent 60%
-        );
-      }
-
-      .map-section-first {
-        padding-top: 0;
-        min-height: 115svh;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-      }
-
-      #mati-map {
-        flex: 1;
-        width: 100%;
-        min-height: clamp(
-          420px,
-          calc(100vh - var(--header-h, 5.625rem) - 5rem),
-          760px
-        );
-        height: 100%;
-        z-index: 1;
-        font-family: "Source Sans 3", sans-serif;
-        background: #ffffff;
-      }
-
-      .map-section__inner {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        max-width: 94rem;
-        width: 100%;
-        margin: 0 auto;
-        background: #ffffff;
-        min-height: calc(
-          (100svh - var(--header-h, 5.625rem)) / var(--visitor-ui-scale, 1)
-        );
-        padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1.25rem, 3vw, 2.5rem);
-        box-sizing: border-box;
-      }
-
-      .map-section__frame {
-        position: relative;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-        border-radius: 1.35rem;
-        overflow: hidden;
-        border: 1px solid rgba(4, 120, 87, 0.15);
-        box-shadow: none !important;
-        filter: none !important;
-        z-index: 10;
-        background: #ffffff;
-      }
-
-      .map-section__frame,
-      .map-section__frame::before,
-      .map-section__frame::after,
-      #mati-map,
-      #mati-map::before,
-      #mati-map::after,
-      #mati-map .leaflet-container {
-        box-shadow: none !important;
-        filter: none !important;
-      }
-
-      .heritage-google-marker-label {
-        margin-left: 0.45rem !important;
-        padding: 0.25rem 0.5rem !important;
-        border: 1px solid rgba(15, 23, 42, 0.12) !important;
-        border-radius: 0.35rem !important;
-        background: rgba(255, 255, 255, 0.96) !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16) !important;
-        color: #0f172a !important;
-        font-family: "Source Sans 3", sans-serif !important;
-        font-size: 0.7rem !important;
-        font-weight: 700 !important;
-        line-height: 1.2 !important;
-        white-space: normal !important;
-      }
-
-      .map-section__frame {
-        border-right: 0;
-      }
-
-      /* Radial glow behind map */
-      .map-section__frame::before {
-        display: none;
-      }
-
-      .map-intro-overlay {
-        position: absolute;
-        bottom: clamp(1.5rem, 4vw, 2.5rem);
-        left: clamp(1.5rem, 4vw, 2.5rem);
-        right: auto;
-        top: auto;
-        z-index: 450;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
-        padding: 0;
-        pointer-events: none;
-        transition:
-          opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-          visibility 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
-      .map-intro-overlay.is-dismissed {
-        opacity: 0;
-        visibility: hidden;
-      }
-
-      .map-intro-overlay.is-dismissed .map-intro-overlay__content {
-        transform: translateY(1rem);
-        opacity: 0;
-      }
-
-      .map-intro-overlay__content {
-        position: relative;
-        text-align: left;
-        padding: 1.5rem;
-        max-width: min(24rem, calc(100% - 1rem));
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border-radius: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow:
-          0 25px 50px -12px rgba(15, 23, 42, 0.12),
-          0 0 0 1px rgba(255, 255, 255, 0.5);
-        transition:
-          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 0.5s ease;
-      }
-
-      .map-intro-overlay__content::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 1rem;
-        bottom: 1rem;
-        width: 4px;
-        border-radius: 0 4px 4px 0;
-        background: linear-gradient(180deg, #047857, #065f46);
-      }
-
-      .map-intro-overlay__label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #047857;
-        margin-bottom: 0.75rem;
-        padding-left: 0.5rem;
-      }
-
-      .map-intro-overlay__label-icon {
-        width: 14px;
-        height: 14px;
-        flex-shrink: 0;
-      }
-
-      .map-intro-overlay__title {
-        margin: 0 0 0.5rem;
-        padding-left: 0.5rem;
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: clamp(1.75rem, 4vw, 2.25rem);
-        font-weight: 700;
-        line-height: 1.1;
-        color: #0f172a;
-      }
-
-      .map-intro-overlay__desc {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
-        line-height: 1.6;
-        color: #64748b;
-        margin: 0 0 1rem;
-        padding-left: 0.5rem;
-        max-width: 20rem;
-      }
-
-      .map-intro-overlay__actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        padding-left: 0.5rem;
-      }
-
-      .map-intro-overlay__action-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.5rem 0.875rem;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #047857;
-        background: rgba(16, 185, 129, 0.08);
-        border: 1px solid rgba(16, 185, 129, 0.25);
-        border-radius: 9999px;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: auto;
-      }
-
-      .map-intro-overlay__action-btn:hover {
-        background: rgba(16, 185, 129, 0.15);
-        border-color: rgba(16, 185, 129, 0.4);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
-      }
-
-      .map-intro-overlay__action-btn svg {
-        width: 13px;
-        height: 13px;
-        flex-shrink: 0;
-      }
-
-      .map-next-section-btn {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        gap: 0.45rem;
-        width: 100%;
-        margin-top: 1rem;
-        padding: 0.7rem 0.9rem;
-        border: 1px solid rgba(4, 120, 87, 0.18);
-        border-radius: 9999px;
-        background: linear-gradient(
-          135deg,
-          rgba(4, 120, 87, 0.08),
-          rgba(14, 116, 144, 0.08)
-        );
-        color: #065f46;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        cursor: pointer;
-        pointer-events: auto;
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
-      }
-
-      .map-next-section-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 18px rgba(4, 120, 87, 0.12);
-      }
-
-      .map-next-section-btn svg {
-        width: 0.9rem;
-        height: 0.9rem;
-      }
-
-      .map-heritage-filter-wrap {
-        position: absolute;
-        top: clamp(1rem, 2.5vw, 1.35rem);
-        right: clamp(1rem, 2.5vw, 1.35rem);
-        z-index: 500;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        pointer-events: auto;
-      }
-
-      .map-heritage-filter-label {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--forest-dark);
-        padding-left: 0.15rem;
-      }
-
-      .map-heritage-filter {
-        appearance: none;
-        min-width: 13.5rem;
-        padding: 0.75rem 2.5rem 0.75rem 1rem;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.9375rem;
-        font-weight: 600;
-        color: #0f172a;
-        border-radius: 0.75rem;
-        border: 1.5px solid rgba(4, 120, 87, 0.2);
-        background:
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23047857' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
-            no-repeat right 1rem center / 1rem,
-          rgba(255, 255, 255, 0.97);
-        box-shadow:
-          0 12px 32px rgba(15, 23, 42, 0.12),
-          inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        cursor: pointer;
-        transition:
-          border-color 0.2s ease,
-          box-shadow 0.2s ease;
-      }
-
-      .map-heritage-filter:hover {
-        border-color: rgba(4, 120, 87, 0.32);
-        box-shadow: 0 12px 32px rgba(4, 120, 87, 0.12);
-      }
-
-      .map-heritage-filter:focus {
-        outline: none;
-        border-color: var(--sky);
-        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
-      }
-
-      .map-heritage-filter-wrap.is-built .map-heritage-filter {
-        border-color: rgba(4, 120, 87, 0.28);
-      }
-
-      .map-heritage-filter-wrap.is-natural .map-heritage-filter {
-        border-color: rgba(2, 132, 199, 0.28);
-      }
-
-      .map-legend {
-        position: absolute;
-        bottom: clamp(1rem, 2.5vw, 1.35rem);
-        right: clamp(1rem, 2.5vw, 1.35rem);
-        z-index: 500;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1.25rem 1.5rem;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 1.1rem;
-        border: 2px solid rgba(4, 120, 87, 0.25);
-        box-shadow:
-          0 14px 40px rgba(15, 23, 42, 0.18),
-          inset 0 1px 0 rgba(255, 255, 255, 0.98);
-        pointer-events: auto;
-      }
-
-      .map-legend-title {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.8125rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--forest-dark);
-        margin-bottom: 0.1rem;
-      }
-
-      .map-legend-item {
-        display: grid;
-        grid-template-columns: 24px minmax(0, 1fr);
-        align-items: center;
-        gap: 0.85rem;
-      }
-
-      .map-legend-marker {
-        display: block;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.95);
-      }
-
-      .map-legend-marker--built {
-        background: #047857;
-      }
-
-      .map-legend-marker--natural {
-        background: #0284c7;
-      }
-
-      .map-legend-label {
-        min-width: 0;
-        position: relative;
-        z-index: 1;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.9375rem;
-        font-weight: 600;
-        color: #0f172a;
-        white-space: nowrap;
-      }
-
-      .map-detail-panel {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 450px;
-        z-index: 600;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-left: 1px solid rgba(4, 120, 87, 0.15);
-        box-shadow: -12px 0 40px rgba(15, 23, 42, 0.12);
-        transform: translateX(100%);
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-        pointer-events: auto;
-        display: flex;
-        flex-direction: column;
-        will-change: transform;
-      }
-
-      .map-detail-panel.is-visible {
-        transform: translateX(0);
-      }
-
-      .map-detail-panel__close {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        width: 2.5rem;
-        height: 2.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(4, 120, 87, 0.2);
-        border-radius: 0.5rem;
-        color: #64748b;
-        cursor: pointer;
-        transition:
-          background 0.2s ease,
-          color 0.2s ease,
-          border-color 0.2s ease;
-        z-index: 10;
-      }
-
-      .map-detail-panel__close:hover {
-        background: rgba(255, 255, 255, 1);
-        color: #047857;
-        border-color: rgba(4, 120, 87, 0.3);
-      }
-
-      .map-detail-panel__close svg {
-        width: 1.25rem;
-        height: 1.25rem;
-      }
-
-      .map-detail-panel__content {
-        flex: 1;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .map-detail-panel__image {
-        width: 100%;
-        aspect-ratio: 16/9;
-        background: #f1f5f9;
-        overflow: hidden;
-      }
-
-      .map-detail-panel__image.is-empty {
-        display: none;
-      }
-
-      .map-detail-panel__image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .map-detail-panel__info {
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .map-detail-panel__category {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        border-radius: 0.375rem;
-        align-self: flex-start;
-      }
-
-      .map-detail-panel__category--built {
-        background: rgba(4, 120, 87, 0.1);
-        color: #047857;
-      }
-
-      .map-detail-panel__category--natural {
-        background: rgba(2, 132, 199, 0.1);
-        color: #0284c7;
-      }
-
-      .map-detail-panel__title {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: 1.75rem;
-        font-weight: 700;
-        line-height: 1.15;
-        color: #0f172a;
-        margin: 0;
-      }
-
-      .map-detail-panel__location {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: #64748b;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-      }
-
-      .map-detail-panel__location svg {
-        width: 1rem;
-        height: 1rem;
-      }
-
-      .map-detail-panel__description {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.9375rem;
-        line-height: 1.7;
-        color: #475569;
-        margin: 0;
-      }
-
-      @media (max-width: 768px) {
-        .map-section-first {
-          min-height: 0;
-        }
-
-        .map-section__inner {
-          flex: none;
-          min-height: 0;
-          padding: 0.75rem;
-        }
-
-        .map-section__frame {
-          flex: none;
-          height: clamp(22rem, 62svh, 32rem);
-        }
-
-        #mati-map {
-          flex: 1;
-          min-height: 0;
-          height: 100%;
-        }
-
-        .map-detail-panel {
-          width: 400px;
-        }
-
-        .map-detail-panel__title {
-          font-size: 1.5rem;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .map-heritage-filter {
-          width: 100%;
-          min-width: 0;
-          padding: 0.65rem 2.25rem 0.65rem 0.85rem;
-          font-size: 0.875rem;
-        }
-
-        .map-heritage-filter-label {
-          font-size: 0.625rem;
-        }
-
-        .map-heritage-filter-wrap {
-          top: 0.75rem;
-        }
-
-        .map-legend {
-          bottom: 0.75rem;
-          right: 0.75rem;
-          padding: 1rem 1.15rem;
-        }
-
-        .map-legend-title {
-          font-size: 0.75rem;
-        }
-
-        .map-legend-marker {
-          width: 22px;
-          height: 22px;
-        }
-
-        .map-legend-label {
-          font-size: 0.875rem;
-        }
-
-        .map-detail-panel {
-          width: 100%;
-          max-width: 100%;
-        }
-
-        .map-detail-panel__close {
-          top: 0.75rem;
-          right: 0.75rem;
-          width: 2.25rem;
-          height: 2.25rem;
-        }
-
-        .map-detail-panel__image {
-          aspect-ratio: 16/9;
-        }
-
-        .map-detail-panel__info {
-          padding: 1.25rem;
-        }
-
-        .map-detail-panel__title {
-          font-size: 1.375rem;
-        }
-
-        .map-detail-panel__description {
-          font-size: 0.875rem;
-        }
-
-        .map-intro-overlay {
-          align-items: flex-end;
-          padding: 1rem;
-        }
-
-        .map-intro-overlay__content {
-          width: 100%;
-          max-width: none;
-        }
-
-        .map-next-section-btn {
-          display: inline-flex;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .map-intro-overlay__hint li {
-          animation: none;
-        }
-      }
-
-      /* Map loading indicator */
-      .map-loading-indicator {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1.5rem 2rem;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 1rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        transition:
-          opacity 0.3s ease,
-          visibility 0.3s ease;
-      }
-
-      .map-loading-indicator.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-      }
-
-      .map-loading-spinner {
-        width: 2.5rem;
-        height: 2.5rem;
-        border: 3px solid #e2e8f0;
-        border-top-color: var(--forest);
-        border-radius: 50%;
-        animation: map-spin 0.8s linear infinite;
-      }
-
-      @keyframes map-spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .map-loading-text {
-        margin: 0;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--forest-dark);
-      }
-
-      .map-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-
-      @media (min-width: 1024px) {
-        .map-layout {
-          grid-template-columns: minmax(280px, 340px) 1fr;
-          gap: 1.25rem;
-        }
-      }
-
-      .barangay-panel {
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(4, 120, 87, 0.12);
-        border-radius: 1.25rem;
-        padding: 1.25rem;
-        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
-        max-height: clamp(420px, 56vh, 580px);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .barangay-panel-title {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 0.35rem;
-      }
-
-      .barangay-panel-sub {
-        font-size: 0.78rem;
-        color: #64748b;
-        line-height: 1.45;
-        margin-bottom: 1rem;
-      }
-
-      .barangay-tabs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        margin-bottom: 1rem;
-      }
-
-      .barangay-tab {
-        padding: 0.4rem 0.75rem;
-        border-radius: 9999px;
-        border: 1.5px solid rgba(4, 120, 87, 0.18);
-        background: #ffffff;
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--slate);
-        transition: all 0.2s ease;
-        cursor: pointer;
-      }
-
-      .barangay-tab:hover {
-        border-color: var(--forest);
-        color: var(--forest-dark);
-      }
-
-      .barangay-tab.active {
-        background: var(--forest);
-        border-color: var(--forest);
-        color: #ffffff;
-      }
-
-      .barangay-tab-count {
-        opacity: 0.75;
-        margin-left: 0.2rem;
-      }
-
-      .barangay-sites-list {
-        overflow-y: auto;
-        flex: 1;
-        padding-right: 0.25rem;
-      }
-
-      .barangay-group-label {
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--forest-dark);
-        margin: 0.75rem 0 0.5rem;
-      }
-
-      .barangay-group-label:first-child {
-        margin-top: 0;
-      }
-
-      .heritage-site-card {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        width: 100%;
-        padding: 0.65rem;
-        margin-bottom: 0.5rem;
-        border-radius: 0.875rem;
-        border: 1px solid rgba(2, 132, 199, 0.1);
-        background: #f8fafc;
-        text-align: left;
-        transition: all 0.2s ease;
-        cursor: pointer;
-      }
-
-      .heritage-site-card:hover {
-        border-color: rgba(4, 120, 87, 0.3);
-        background: #ffffff;
-        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
-      }
-
-      .heritage-site-card.is-mapped {
-        border-left: 3px solid var(--forest);
-      }
-
-      .heritage-site-card.is-pending {
-        opacity: 0.85;
-        cursor: default;
-      }
-
-      .heritage-site-card.is-pending:hover {
-        box-shadow: none;
-        background: #f8fafc;
-      }
-
-      .heritage-site-thumb {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        object-fit: cover;
-        flex-shrink: 0;
-        border: 2px solid #ffffff;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
-      }
-
-      .heritage-site-card.built .heritage-site-thumb {
-        outline: 2px solid var(--forest);
-      }
-
-      .heritage-site-card.natural .heritage-site-thumb {
-        outline: 2px solid var(--sky);
-      }
-
-      .heritage-site-card-body {
-        min-width: 0;
-      }
-
-      .heritage-site-card-name {
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: #0f172a;
-        line-height: 1.25;
-      }
-
-      .heritage-site-card-meta {
-        font-size: 0.68rem;
-        color: #64748b;
-        margin-top: 0.15rem;
-      }
-
-      .heritage-site-card-badge {
-        display: inline-block;
-        margin-top: 0.25rem;
-        font-size: 0.58rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 0.12rem 0.45rem;
-        border-radius: 9999px;
-      }
-
-      .badge-mapped {
-        background: #ecfdf5;
-        color: var(--forest-dark);
-      }
-
-      .badge-pending {
-        background: #fffbeb;
-        color: #b45309;
-      }
-
-      .map-active-barangay {
-        position: absolute;
-        top: 3.5rem;
-        left: 1rem;
-        z-index: 1000;
-        padding: 0.4rem 0.85rem;
-        background: rgba(4, 120, 87, 0.92);
-        color: #ffffff;
-        border-radius: 9999px;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        pointer-events: none;
-      }
-
-      .map-region-badge {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1000;
-        padding: 0.45rem 1rem;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(4, 120, 87, 0.2);
-        border-radius: 9999px;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--forest-dark);
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-        pointer-events: none;
-      }
-
-      .map-hint {
-        text-align: center;
-        margin-top: 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: #64748b;
-        letter-spacing: 0.02em;
-      }
-
-      .leaflet-popup-content-wrapper {
-        border-radius: 0.875rem !important;
-        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15) !important;
-        border: 1px solid rgba(4, 120, 87, 0.12);
-      }
-
-      .leaflet-popup-content {
-        margin: 0.75rem 1rem !important;
-        font-family: "Source Sans 3", sans-serif !important;
-        line-height: 1.45 !important;
-      }
-
-      .map-popup-title {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #0f172a;
-        margin-bottom: 0.25rem;
-      }
-
-      .map-popup-cat {
-        display: inline-block;
-        font-size: 0.6rem;
-        font-weight: 700;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        padding: 0.15rem 0.5rem;
-        border-radius: 9999px;
-        margin-bottom: 0.35rem;
-      }
-
-      .map-popup-desc {
-        font-size: 0.8rem;
-        color: #64748b;
-      }
-
-      .leaflet-control-zoom {
-        border: none !important;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
-        border-radius: 0.75rem !important;
-        overflow: hidden;
-      }
-
-      .leaflet-control-zoom a {
-        color: var(--forest-dark) !important;
-        font-weight: 700 !important;
-      }
 
       .section-heritage {
         position: relative;
@@ -5593,211 +4621,6 @@
     <div id="header-placeholder" class="relative z-50"></div>
 
     <div class="main-content">
-      <!-- Mati City Map -->
-      <section id="mati-map-section" class="map-section map-section-first">
-        <div
-          class="map-decoration map-decoration--top-left"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="map-decoration map-decoration--top-right"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="map-decoration map-decoration--bottom-left"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="map-decoration map-decoration--bottom-right"
-          aria-hidden="true"
-        ></div>
-        <div class="map-particles" aria-hidden="true">
-          <div class="map-particle"></div>
-          <div class="map-particle"></div>
-          <div class="map-particle"></div>
-          <div class="map-particle"></div>
-          <div class="map-particle"></div>
-        </div>
-        <div class="map-section__inner">
-          <div class="map-section__frame">
-            <div
-              id="mati-map"
-              role="region"
-              aria-label="Map of Mati City heritage sites"
-            ></div>
-            <div
-              id="map-loading-indicator"
-              class="map-loading-indicator"
-              aria-live="polite"
-              aria-busy="true"
-            >
-              <div class="map-loading-spinner"></div>
-              <p class="map-loading-text">Loading heritage sites...</p>
-            </div>
-            <div class="map-heritage-filter-wrap" id="map-heritage-filter-wrap">
-              <label
-                class="map-heritage-filter-label"
-                for="map-heritage-filter"
-              >
-                Heritage type
-              </label>
-              <select
-                id="map-heritage-filter"
-                class="map-heritage-filter"
-                aria-label="Filter map by heritage type"
-              >
-                <option value="all">All Heritage</option>
-                <option value="built">Built Heritage</option>
-                <option value="natural">Natural Heritage</option>
-              </select>
-            </div>
-
-            <div
-              class="map-legend hidden md:block"
-              id="map-legend"
-              aria-label="Map legend"
-            >
-              <div class="map-legend-title">Legend</div>
-              <div class="map-legend-item">
-                <div class="map-legend-marker map-legend-marker--built"></div>
-                <span class="map-legend-label">Built Heritage</span>
-              </div>
-              <div class="map-legend-item">
-                <div class="map-legend-marker map-legend-marker--natural"></div>
-                <span class="map-legend-label">Natural Heritage</span>
-              </div>
-            </div>
-
-            <div
-              class="map-intro-overlay hidden md:block"
-              id="map-intro-overlay"
-              aria-hidden="false"
-            >
-              <div class="map-intro-overlay__content">
-                <div class="map-intro-overlay__label">
-                  <svg
-                    class="map-intro-overlay__label-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  <span>Heritage Sites</span>
-                </div>
-                <h2 class="map-intro-overlay__title">Mati City</h2>
-                <p class="map-intro-overlay__desc">
-                  Explore built, cultural, and natural heritage landmarks across
-                  every barangay.
-                </p>
-                <div class="map-intro-overlay__actions">
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 9l7 7 7-7" />
-                    </svg>
-                    <span>Drag to pan</span>
-                  </button>
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    <span>Scroll to zoom</span>
-                  </button>
-                  <button class="map-intro-overlay__action-btn">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      aria-hidden="true"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                    <span>Tap markers</span>
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  class="map-next-section-btn"
-                  data-scroll-target="#hero"
-                  aria-label="Scroll to next section"
-                >
-                  <span>Next</span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true"
-                  >
-                    <path d="M7 10l5 5 5-5" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Map Detail Panel -->
-      <div class="map-detail-panel" id="map-detail-panel" aria-hidden="true">
-        <button
-          class="map-detail-panel__close"
-          id="map-detail-panel-close"
-          aria-label="Close detail panel"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-        <div class="map-detail-panel__content">
-          <div class="map-detail-panel__image">
-            <img id="map-detail-panel-image" src="" alt="" />
-          </div>
-          <div class="map-detail-panel__info">
-            <span
-              class="map-detail-panel__category"
-              id="map-detail-panel-category"
-            ></span>
-            <h2
-              class="map-detail-panel__title"
-              id="map-detail-panel-title"
-            ></h2>
-            <div
-              class="map-detail-panel__location"
-              id="map-detail-panel-location"
-            ></div>
-            <p
-              class="map-detail-panel__description"
-              id="map-detail-panel-description"
-            ></p>
-          </div>
-        </div>
-      </div>
-
       <!-- Hero -->
       <section class="hero-section hero-cinematic" id="hero">
         <div class="hero-cinematic-media" aria-hidden="true">
@@ -5840,7 +4663,7 @@
 
               <div class="hero-actions">
                 <a
-                  href="#mati-map-section"
+                  href="map.html"
                   class="btn-primary inline-flex items-center gap-2 font-bold px-8 py-4 text-sm tracking-wide"
                 >
                   Start Exploring
@@ -5859,7 +4682,7 @@
                   </svg>
                 </a>
                 <a
-                  href="#heritage"
+                  href="3dexplore.html"
                   class="btn-outline inline-flex items-center font-bold px-8 py-4 text-sm tracking-wide"
                 >
                   View Heritage Sites
@@ -6003,6 +4826,109 @@
         <div class="marquee-track" id="heritage-marquee-track"></div>
       </div>
 
+      <!-- Heritage Categories -->
+      <section id="heritage" class="section-heritage">
+        <div class="heritage-section-grid" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+          <div class="section-header reveal">
+            <p class="section-label">Heritage Collections</p>
+            <h2 class="section-title display-font font-bold">
+              Three Pillars of Mati Heritage
+            </h2>
+            <p class="section-subtitle">
+              Built landmarks, living traditions, and protected landscapes
+              reflect the full spectrum of Mati City's cultural identity.
+            </p>
+          </div>
+
+          <div class="heritage-grid">
+            <article
+              class="heritage-card heritage-card-built reveal reveal-delay-1"
+            >
+              <span class="heritage-card-index" aria-hidden="true">01</span>
+              <span class="heritage-count">11 Sites</span>
+              <img
+                src="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
+                alt="Pylon Monument"
+                loading="lazy"
+              />
+              <div class="heritage-card-overlay"></div>
+              <div class="heritage-card-shine" aria-hidden="true"></div>
+              <div class="heritage-card-body">
+                <span class="heritage-tag heritage-tag-built"
+                  >Built Heritage</span
+                >
+                <h3 class="display-font">Landmarks & Structures</h3>
+                <p>
+                  Pylon Monument, Subangan Museum, Gabaldon buildings, and other
+                  historical structures preserved in 3D and photographs.
+                </p>
+                <a href="3dexplore.html" class="heritage-link">
+                  Explore sites
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+
+            <article
+              class="heritage-card heritage-card-intangible reveal reveal-delay-2"
+            >
+              <span class="heritage-card-index" aria-hidden="true">02</span>
+              <span class="heritage-count">3 Traditions</span>
+              <img
+                src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
+                alt="Sambuokan Festival"
+                loading="lazy"
+              />
+              <div class="heritage-card-overlay"></div>
+              <div class="heritage-card-shine" aria-hidden="true"></div>
+              <div class="heritage-card-body">
+                <span class="heritage-tag heritage-tag-intangible"
+                  >Intangible Cultural Heritage</span
+                >
+                <h3 class="display-font">Culture & Traditions</h3>
+                <p>
+                  Sambuokan Festival, Pujada Festival, and the works of Dioscoro
+                  Vicentino — celebrating Mati's living cultural identity.
+                </p>
+                <a href="gallery.html" class="heritage-link">
+                  View gallery
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+
+            <article
+              class="heritage-card heritage-card-natural reveal reveal-delay-3"
+            >
+              <span class="heritage-card-index" aria-hidden="true">03</span>
+              <span class="heritage-count">8 Sites</span>
+              <img
+                src="assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
+                alt="Pujada Island"
+                loading="lazy"
+              />
+              <div class="heritage-card-overlay"></div>
+              <div class="heritage-card-shine" aria-hidden="true"></div>
+              <div class="heritage-card-body">
+                <span class="heritage-tag heritage-tag-natural"
+                  >Natural Heritage</span
+                >
+                <h3 class="display-font">Coasts & Landscapes</h3>
+                <p>
+                  Dahican Shoreline, Pujada Bay, Sleeping Dinosaur, Oak Island,
+                  and Mati's protected natural treasures.
+                </p>
+                <a href="gallery.html" class="heritage-link">
+                  Discover nature
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <!-- Gallery — Cinematic Storytelling Experience -->
       <section
         id="portal-gallery"
@@ -6066,6 +4992,42 @@
 
       <!-- Heritage Media Archive - Detailed Heritage Showcase -->
       <section class="heritage-media-section">
+        <!-- Ocean Current Background Pattern -->
+        <svg class="heritage-ocean-pattern" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="oceanGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#a7f3d0;stop-opacity:0.35" />
+              <stop offset="100%" style="stop-color:#67e8f9;stop-opacity:0.25" />
+            </linearGradient>
+            <linearGradient id="oceanGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#99f6e4;stop-opacity:0.32" />
+              <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:0.22" />
+            </linearGradient>
+            <linearGradient id="oceanGradient3" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:0.3" />
+              <stop offset="100%" style="stop-color:#99f6e4;stop-opacity:0.2" />
+            </linearGradient>
+            <linearGradient id="oceanGradient4" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" style="stop-color:#a7f3d0;stop-opacity:0.28" />
+              <stop offset="100%" style="stop-color:#67e8f9;stop-opacity:0.18" />
+            </linearGradient>
+          </defs>
+          <!-- Curve 1: Top-left to center-right -->
+          <path d="M-50,100 C150,80 300,150 500,120 S800,60 1000,100 S1300,140 1490,80" 
+                fill="none" stroke="url(#oceanGradient1)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Curve 2: Top-right flowing down -->
+          <path d="M1490,50 C1300,120 1100,180 900,160 S600,200 400,240 S100,280 -50,260" 
+                fill="none" stroke="url(#oceanGradient2)" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Curve 3: Left side flowing across -->
+          <path d="M-50,350 C100,320 300,380 500,360 S800,300 1000,340 S1300,400 1490,360" 
+                fill="none" stroke="url(#oceanGradient3)" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Curve 4: Bottom-left flowing up -->
+          <path d="M-50,650 C150,600 350,550 550,580 S850,650 1050,620 S1350,580 1490,620" 
+                fill="none" stroke="url(#oceanGradient4)" stroke-width="1.3" stroke-linecap="round"/>
+          <!-- Curve 5: Bottom-right gentle curve -->
+          <path d="M1490,750 C1300,720 1100,780 900,760 S600,700 400,740 S100,780 -50,750" 
+                fill="none" stroke="url(#oceanGradient1)" stroke-width="1.1" stroke-linecap="round"/>
+        </svg>
         <div class="max-w-7xl mx-auto">
           <div class="section-header reveal">
             <p class="section-subtitle">
@@ -6323,126 +5285,6 @@
               </div>
             </article>
 
-            <!-- About Text -->
-            <div class="heritage-media-item reveal reveal-delay-4">
-              <div class="heritage-media-content">
-                <h3 class="heritage-media-title display-font">
-                  About Mati Heritage 3D
-                </h3>
-                <p class="heritage-media-description">
-                  Mati Heritage 3D is a digital preservation project dedicated
-                  to documenting and showcasing the rich cultural heritage of
-                  Mati City, Davao Oriental. Through immersive 3D models,
-                  interactive maps, and curated galleries, we bring the stories
-                  of built landmarks, living traditions, and natural landscapes
-                  to life for explorers, students, and heritage enthusiasts
-                  worldwide.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Heritage Categories -->
-      <section id="heritage" class="section-heritage">
-        <div class="heritage-section-grid" aria-hidden="true"></div>
-        <div class="max-w-7xl mx-auto relative z-10">
-          <div class="section-header reveal">
-            <p class="section-label">Heritage Collections</p>
-            <h2 class="section-title display-font font-bold">
-              Three Pillars of Mati Heritage
-            </h2>
-            <p class="section-subtitle">
-              Built landmarks, living traditions, and protected landscapes
-              reflect the full spectrum of Mati City's cultural identity.
-            </p>
-          </div>
-
-          <div class="heritage-grid">
-            <article
-              class="heritage-card heritage-card-built reveal reveal-delay-1"
-            >
-              <span class="heritage-card-index" aria-hidden="true">01</span>
-              <span class="heritage-count">11 Sites</span>
-              <img
-                src="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
-                alt="Pylon Monument"
-                loading="lazy"
-              />
-              <div class="heritage-card-overlay"></div>
-              <div class="heritage-card-shine" aria-hidden="true"></div>
-              <div class="heritage-card-body">
-                <span class="heritage-tag heritage-tag-built"
-                  >Built Heritage</span
-                >
-                <h3 class="display-font">Landmarks & Structures</h3>
-                <p>
-                  Pylon Monument, Subangan Museum, Gabaldon buildings, and other
-                  historical structures preserved in 3D and photographs.
-                </p>
-                <a href="3dexplore.html" class="heritage-link">
-                  Explore sites
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
-
-            <article
-              class="heritage-card heritage-card-intangible reveal reveal-delay-2"
-            >
-              <span class="heritage-card-index" aria-hidden="true">02</span>
-              <span class="heritage-count">3 Traditions</span>
-              <img
-                src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2758.jpg"
-                alt="Sambuokan Festival"
-                loading="lazy"
-              />
-              <div class="heritage-card-overlay"></div>
-              <div class="heritage-card-shine" aria-hidden="true"></div>
-              <div class="heritage-card-body">
-                <span class="heritage-tag heritage-tag-intangible"
-                  >Intangible Cultural Heritage</span
-                >
-                <h3 class="display-font">Culture & Traditions</h3>
-                <p>
-                  Sambuokan Festival, Pujada Festival, and the works of Dioscoro
-                  Vicentino — celebrating Mati's living cultural identity.
-                </p>
-                <a href="gallery.html" class="heritage-link">
-                  View gallery
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
-
-            <article
-              class="heritage-card heritage-card-natural reveal reveal-delay-3"
-            >
-              <span class="heritage-card-index" aria-hidden="true">03</span>
-              <span class="heritage-count">8 Sites</span>
-              <img
-                src="assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg"
-                alt="Pujada Island"
-                loading="lazy"
-              />
-              <div class="heritage-card-overlay"></div>
-              <div class="heritage-card-shine" aria-hidden="true"></div>
-              <div class="heritage-card-body">
-                <span class="heritage-tag heritage-tag-natural"
-                  >Natural Heritage</span
-                >
-                <h3 class="display-font">Coasts & Landscapes</h3>
-                <p>
-                  Dahican Shoreline, Pujada Bay, Sleeping Dinosaur, Oak Island,
-                  and Mati's protected natural treasures.
-                </p>
-                <a href="gallery.html" class="heritage-link">
-                  Discover nature
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
           </div>
         </div>
       </section>
@@ -6542,47 +5384,96 @@
         </div>
       </section>
 
+      <!-- Map Promo Section -->
+      <section class="map-promo-section reveal">
+        <div class="map-promo-image">
+          <img
+            src="assets/data/GALLERY/DJI_0812.jpg"
+            alt="Aerial view of Pujada Bay and islands"
+            loading="lazy"
+          />
+        </div>
+        <div class="map-promo-content">
+          <svg
+            class="map-promo-compass"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12Z" />
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+          </svg>
+          <h2 class="map-promo-heading display-font">
+            Discover Mati City's Heritage on the Map
+          </h2>
+          <p class="map-promo-description">
+            Explore the locations of Mati City's cultural and natural heritage
+            through our interactive location map.
+          </p>
+          <a href="map.html" class="map-promo-btn">
+            Explore the Map
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1E3D2D"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+          <div class="map-promo-categories">
+            <p class="map-promo-categories-label">Explore heritage categories</p>
+            <div class="map-promo-category-buttons">
+              <span class="map-promo-category-btn">
+                Built Heritage
+              </span>
+              <span class="map-promo-category-btn">
+                Natural Heritage
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div id="footer-placeholder"></div>
     </div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script src="assets/data/mati-city-boundary.js"></script>
-    <script src="_backend/google-maps-config.local.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="_backend/supabase-config.js"></script>
-    <script src="_backend/supabase-client.js"></script>
-    <script src="_backend/supabase-api.js"></script>
-    <script src="_backend/supabase-auth.js"></script>
-    <script src="js/utils/heritage/heritage-realtime.js"></script>
-    <script src="js/pages/admin/admin-heritage-base.js"></script>
-    <script src="js/utils/heritage/heritage-map-sites.js"></script>
-    <script src="js/pages/admin/admin-store.js"></script>
-    <script>
-      // Initialize admin store for visitor portal to access dynamic heritage data
-      (async function initVisitorAdminStore() {
-        try {
-          if (
-            typeof MatiAdminStore !== "undefined" &&
-            typeof MatiAdminStore.initFromSupabase === "function"
-          ) {
-            await MatiAdminStore.initFromSupabase();
-            console.log(
-              "Visitor portal: Admin store initialized with Supabase data",
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+      <script src="_backend/supabase-config.js"></script>
+      <script src="_backend/supabase-client.js"></script>
+      <script src="_backend/supabase-api.js"></script>
+      <script src="_backend/supabase-auth.js"></script>
+      <script src="js/utils/heritage/heritage-realtime.js"></script>
+      <script src="js/pages/admin/admin-heritage-base.js"></script>
+      <script src="js/utils/heritage/heritage-map-sites.js"></script>
+      <script src="js/pages/admin/admin-store.js"></script>
+      <script>
+        (async function initVisitorAdminStore() {
+          try {
+            if (
+              typeof MatiAdminStore !== "undefined" &&
+              typeof MatiAdminStore.initFromSupabase === "function"
+            ) {
+              await MatiAdminStore.initFromSupabase();
+              console.log(
+                "Visitor portal: Admin store initialized with Supabase data",
+              );
+            }
+          } catch (error) {
+            console.warn(
+              "Visitor portal: Failed to initialize admin store from Supabase:",
+              error,
             );
           }
-        } catch (error) {
-          console.warn(
-            "Visitor portal: Failed to initialize admin store from Supabase:",
-            error,
-          );
-        }
-      })();
-    </script>
-    <script src="js/utils/heritage/heritage-data.js"></script>
+        })();
+      </script>
+      <script src="js/utils/heritage/heritage-data.js"></script>
     <script>
       // Dynamic heritage count updates for hero section
       (async function initHeritageCounts() {
@@ -6718,6 +5609,7 @@
           const navRoutes = {
             home: "index.html",
             about: "about_us.html",
+            map: "map.html",
             games: "game.html",
             "3d": "3dexplore.html",
             gallery: "gallery.html",
@@ -6748,13 +5640,9 @@
             await window.MatiVisitorAuth.refresh();
           }
 
-          requestAnimationFrame(() => {
-            bootMatiMapAfterLayout();
-          });
         })
         .catch((err) => {
           console.error("Error loading header:", err);
-          bootMatiMapAfterLayout();
         });
 
       fetch("components/footer.html")
@@ -6935,765 +5823,6 @@
           reset();
         });
       })();
-
-      // Mati City map markers (data in heritage-map-sites.js)
-      const HERITAGE_COLORS = HERITAGE_MAP_COLORS;
-      let HERITAGE_SITES = HERITAGE_MAP_SITES;
-      function barangayLabel(id) {
-        return heritageBarangayLabel(id);
-      }
-      function buildPopup(site) {
-        return buildHeritageMapPopup(site);
-      }
-
-      function getMatiViewBounds(sites = HERITAGE_SITES) {
-        if (!sites.length) return null;
-
-        if (window.google?.maps && window.matiMapProvider === "google") {
-          const bounds = new google.maps.LatLngBounds();
-          sites.forEach((site) =>
-            bounds.extend({ lat: site.lat, lng: site.lng }),
-          );
-          return bounds;
-        }
-
-        return L.latLngBounds(sites.map((site) => [site.lat, site.lng])).pad(
-          0.14,
-        );
-      }
-
-      function getFilteredHeritageSites(category = "all") {
-        // Use dynamic data source that includes admin-added sites
-        const sites =
-          typeof getHeritageMapDisplaySites === "function"
-            ? getHeritageMapDisplaySites()
-            : HERITAGE_SITES;
-
-        if (category === "all") return sites;
-        return sites.filter((site) => site.category === category);
-      }
-
-      function updateMapFilterWrapState(category) {
-        const wrap = document.getElementById("map-heritage-filter-wrap");
-        if (!wrap) return;
-        wrap.classList.toggle("is-built", category === "built");
-        wrap.classList.toggle("is-natural", category === "natural");
-      }
-
-      function syncHeritageMapMarkers(
-        map,
-        layerGroup,
-        category = "all",
-        onComplete = null,
-      ) {
-        if (!map || !layerGroup) return;
-
-        layerGroup.clearLayers();
-        const visibleSites = getFilteredHeritageSites(category);
-
-        visibleSites.forEach((site) => {
-          if (window.matiMapProvider === "google") {
-            const markerColor =
-              HERITAGE_COLORS[site.category] ||
-              (site.category === "built" ? "#047857" : "#0284c7");
-            const markerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50"><path fill="${markerColor}" stroke="white" stroke-width="2" d="M20 1C9.5 1 1 9.5 1 20c0 12 19 29 19 29s19-17 19-29C39 9.5 30.5 1 20 1Z"/><circle cx="20" cy="20" r="6.5" fill="white"/></svg>`;
-            const marker = new google.maps.Marker({
-              map,
-              position: { lat: site.lat, lng: site.lng },
-              title: site.name,
-              icon: {
-                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(markerSvg)}`,
-                scaledSize: new google.maps.Size(40, 50),
-                anchor: new google.maps.Point(20, 50),
-                labelOrigin: new google.maps.Point(44, 20),
-              },
-              label: {
-                text: site.name,
-                className: "heritage-google-marker-label",
-              },
-              zIndex: 100,
-            });
-            marker.addListener("click", () => showMapDetailPanel(site));
-            layerGroup.markers.push(marker);
-            return;
-          }
-
-          const marker = L.marker([site.lat, site.lng], {
-            icon: createHeritagePhotoIcon(site),
-            interactive: true,
-          });
-
-          marker.on("click", (e) => {
-            L.DomEvent.stopPropagation(e);
-            showMapDetailPanel(site);
-          });
-
-          marker.addTo(layerGroup);
-        });
-
-        if (visibleSites.length) {
-          const bounds = getMatiViewBounds(visibleSites);
-          if (bounds) {
-            if (window.matiMapProvider === "google") {
-              map.fitBounds(bounds, 32);
-            } else {
-              map.fitBounds(bounds, {
-                padding: [32, 32],
-                animate: false,
-              });
-            }
-          }
-        }
-
-        // Hide loading indicator and call completion callback
-        const loadingIndicator = document.getElementById(
-          "map-loading-indicator",
-        );
-        if (loadingIndicator) {
-          loadingIndicator.classList.add("hidden");
-        }
-
-        if (typeof onComplete === "function") {
-          onComplete();
-        }
-      }
-
-      function bindMapHeritageFilter(map, layerGroup) {
-        const filter = document.getElementById("map-heritage-filter");
-        if (!filter || !map || !layerGroup) return;
-
-        filter.addEventListener("change", () => {
-          const category = filter.value;
-          updateMapFilterWrapState(category);
-          // Show loading indicator briefly during filter change
-          const loadingIndicator = document.getElementById(
-            "map-loading-indicator",
-          );
-          if (loadingIndicator) {
-            loadingIndicator.classList.remove("hidden");
-          }
-          syncHeritageMapMarkers(map, layerGroup, category);
-        });
-
-        updateMapFilterWrapState(filter.value);
-      }
-
-      function showMapDetailPanel(site) {
-        const panel = document.getElementById("map-detail-panel");
-        const image = document.getElementById("map-detail-panel-image");
-        const imageContainer = image?.parentElement;
-        const category = document.getElementById("map-detail-panel-category");
-        const title = document.getElementById("map-detail-panel-title");
-        const location = document.getElementById("map-detail-panel-location");
-        const description = document.getElementById(
-          "map-detail-panel-description",
-        );
-
-        if (!panel) return;
-
-        // Position the panel within the map frame, not the whole page section.
-        const mapFrame = document.querySelector(".map-section__frame");
-        if (mapFrame) {
-          const rect = mapFrame.getBoundingClientRect();
-          panel.style.top = rect.top + "px";
-          panel.style.bottom = window.innerHeight - rect.bottom + "px";
-        }
-
-        if (image && imageContainer) {
-          imageContainer.classList.remove("is-empty");
-          image.alt = site.name;
-          image.onerror = () => {
-            image.removeAttribute("src");
-            imageContainer.classList.add("is-empty");
-          };
-          image.onload = () => imageContainer.classList.remove("is-empty");
-          image.src = site.image ? encodeURI(site.image) : "";
-          if (!site.image) imageContainer.classList.add("is-empty");
-        }
-
-        category.textContent =
-          site.category === "built" ? "Built Heritage" : "Natural Heritage";
-        category.className =
-          "map-detail-panel__category map-detail-panel__category--" +
-          site.category;
-
-        title.textContent = site.name;
-
-        location.innerHTML = `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-          <span>Brgy. ${heritageBarangayLabel(site.barangay)} · Mati City</span>
-        `;
-
-        description.textContent = site.desc;
-
-        panel.classList.add("is-visible");
-        panel.setAttribute("aria-hidden", "false");
-      }
-
-      function hideMapDetailPanel() {
-        const panel = document.getElementById("map-detail-panel");
-        if (!panel) return;
-
-        panel.classList.remove("is-visible");
-        panel.setAttribute("aria-hidden", "true");
-      }
-
-      function bindMapDetailPanel(map) {
-        const closeBtn = document.getElementById("map-detail-panel-close");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", hideMapDetailPanel);
-        }
-
-        if (map) {
-          const onMapClick = () => {
-            hideMapDetailPanel();
-          };
-          if (window.matiMapProvider === "google") {
-            map.addListener("click", onMapClick);
-          } else {
-            map.on("click", onMapClick);
-          }
-        }
-
-        const updatePanelBounds = () => {
-          const panel = document.getElementById("map-detail-panel");
-          const mapFrame = document.querySelector(".map-section__frame");
-          if (!panel || !mapFrame) return;
-
-          const rect = mapFrame.getBoundingClientRect();
-          const top = Math.max(rect.top, 0);
-          const bottom = Math.min(rect.bottom, window.innerHeight);
-          const height = Math.max(bottom - top, 0);
-
-          if (!height) {
-            panel.classList.remove("is-visible");
-            panel.setAttribute("aria-hidden", "true");
-            return;
-          }
-
-          panel.style.top = `${top}px`;
-          panel.style.bottom = `${Math.max(window.innerHeight - bottom, 0)}px`;
-          panel.style.maxHeight = `${height}px`;
-        };
-
-        // Keep the preview inside the visible map frame.
-        window.addEventListener("scroll", () => {
-          if (
-            document
-              .getElementById("map-detail-panel")
-              ?.classList.contains("is-visible")
-          ) {
-            updatePanelBounds();
-          }
-        });
-        window.addEventListener("resize", updatePanelBounds);
-        updatePanelBounds();
-      }
-
-      async function initMatiMap() {
-        if (window.matiMapInstance) return;
-
-        // Show loading indicator
-        const loadingIndicator = document.getElementById(
-          "map-loading-indicator",
-        );
-        if (loadingIndicator) {
-          loadingIndicator.classList.remove("hidden");
-        }
-
-        // Use dynamic data source that includes admin-added sites
-        if (typeof getHeritageMapDisplaySites === "function") {
-          try {
-            HERITAGE_SITES = getHeritageMapDisplaySites();
-            console.log(
-              "Visitor portal: Using dynamic heritage data with admin-added sites",
-            );
-          } catch (error) {
-            console.warn("Using static heritage map data", error);
-            HERITAGE_SITES = HERITAGE_MAP_SITES;
-          }
-        } else if (typeof MatiHeritageData !== "undefined") {
-          try {
-            HERITAGE_SITES = await MatiHeritageData.getMapSites();
-          } catch (error) {
-            console.warn("Using static heritage map data", error);
-            HERITAGE_SITES = HERITAGE_MAP_SITES;
-          }
-        }
-
-        const apiKey = window.MATI_GOOGLE_MAPS_CONFIG?.apiKey?.trim();
-        let googleMapsReady = false;
-        if (apiKey) {
-          try {
-            await loadGoogleMapsApi(apiKey);
-            googleMapsReady = true;
-          } catch (error) {
-            console.error(
-              "Google Maps failed to load; falling back to OpenStreetMap.",
-              error,
-            );
-          }
-        } else {
-          console.info(
-            "Google Maps API key is not configured; using OpenStreetMap.",
-          );
-        }
-
-        const cityBounds =
-          typeof MATI_CITY_GEOJSON !== "undefined"
-            ? L.geoJSON(MATI_CITY_GEOJSON).getBounds()
-            : null;
-        let map;
-        let heritageMarkersLayer;
-
-        if (googleMapsReady) {
-          window.matiMapProvider = "google";
-          const restrictionBounds = cityBounds
-            ? {
-                north: cityBounds.getNorth(),
-                south: cityBounds.getSouth(),
-                east: cityBounds.getEast(),
-                west: cityBounds.getWest(),
-              }
-            : undefined;
-          map = new google.maps.Map(document.getElementById("mati-map"), {
-            center: { lat: 6.8975057184388415, lng: 126.27308050000003 },
-            zoom: 12,
-            minZoom: 10,
-            maxZoom: 19,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: true,
-            streetViewControl: false,
-            fullscreenControl: true,
-            zoomControl: true,
-            gestureHandling: window.matchMedia("(max-width: 768px)").matches
-              ? "cooperative"
-              : "greedy",
-            ...(restrictionBounds
-              ? {
-                  restriction: {
-                    latLngBounds: restrictionBounds,
-                    strictBounds: false,
-                  },
-                }
-              : {}),
-          });
-          if (typeof MATI_CITY_GEOJSON !== "undefined") {
-            const cityBoundary = new google.maps.Data({ map });
-            cityBoundary.addGeoJson({
-              type: "Feature",
-              properties: {},
-              geometry: MATI_CITY_GEOJSON,
-            });
-            cityBoundary.setStyle({
-              strokeColor: "#047857",
-              strokeOpacity: 0.9,
-              strokeWeight: 3,
-              fillColor: "#ffffff",
-              fillOpacity: 0.08,
-              clickable: false,
-            });
-          }
-          heritageMarkersLayer = {
-            markers: [],
-            clearLayers() {
-              this.markers.forEach((marker) => marker.setMap(null));
-              this.markers = [];
-            },
-          };
-        } else {
-          window.matiMapProvider = "openstreetmap";
-          map = L.map("mati-map", {
-            ...(cityBounds
-              ? {
-                  maxBounds: cityBounds,
-                  maxBoundsViscosity: 1.0,
-                }
-              : {}),
-            maxZoom: 19,
-            zoomControl: true,
-            attributionControl: false,
-            scrollWheelZoom: false,
-            dragging: !window.matchMedia("(max-width: 768px)").matches,
-          });
-
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 20,
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          }).addTo(map);
-
-          if (typeof MATI_CITY_GEOJSON !== "undefined") {
-            L.geoJSON(MATI_CITY_GEOJSON, {
-              style: {
-                color: "#047857",
-                weight: 3,
-                opacity: 0.9,
-                fillColor: "#ffffff",
-                fillOpacity: 0.08,
-                interactive: false,
-              },
-            }).addTo(map);
-          }
-
-          heritageMarkersLayer = L.layerGroup().addTo(map);
-        }
-
-        syncHeritageMapMarkers(map, heritageMarkersLayer, "all", () => {
-          console.log("All heritage markers loaded together");
-        });
-        bindMapHeritageFilter(map, heritageMarkersLayer);
-        bindMapDetailPanel(map);
-
-        // syncHeritageMapMarkers fits the map to all visible sites. Only use
-        // the city center as a fallback when the catalog has no coordinates.
-        if (!HERITAGE_SITES.length) {
-          if (window.matiMapProvider === "google") {
-            map.setCenter({
-              lat: 6.8975057184388415,
-              lng: 126.27308050000003,
-            });
-            map.setZoom(13);
-          } else {
-            map.setView([6.8975057184388415, 126.27308050000003], 13);
-          }
-        }
-
-        window.matiMapInstance = map;
-        window.matiHeritageMarkersLayer = heritageMarkersLayer;
-        if (window.matiMapProvider === "openstreetmap") {
-          setTimeout(() => map.invalidateSize(), 150);
-        }
-        bindMapScrollWheel(map);
-        bindMapVisibilityPause(
-          map,
-          document.getElementById("mati-map-section"),
-        );
-        bindMapIntroDismiss(map);
-
-        if (typeof MatiHeritageData?.subscribeCatalog === "function") {
-          MatiHeritageData.subscribeCatalog(async () => {
-            try {
-              // Use dynamic data source that includes admin-added sites
-              if (typeof getHeritageMapDisplaySites === "function") {
-                HERITAGE_SITES = getHeritageMapDisplaySites();
-                console.log(
-                  "Visitor portal: Heritage data refreshed via subscription",
-                );
-              } else {
-                HERITAGE_SITES = await MatiHeritageData.getMapSites();
-              }
-            } catch (error) {
-              console.warn("Live map refresh failed:", error);
-              return;
-            }
-            const filter =
-              document.getElementById("map-heritage-filter")?.value || "all";
-            // Show loading indicator during live refresh
-            const loadingIndicator = document.getElementById(
-              "map-loading-indicator",
-            );
-            if (loadingIndicator) {
-              loadingIndicator.classList.remove("hidden");
-            }
-            syncHeritageMapMarkers(
-              window.matiMapInstance,
-              window.matiHeritageMarkersLayer,
-              filter,
-            );
-          });
-        }
-
-        // Periodic refresh for visitor portal to get admin-added sites
-        setInterval(async () => {
-          try {
-            if (typeof getHeritageMapDisplaySites === "function") {
-              const latestSites = getHeritageMapDisplaySites();
-              if (latestSites && latestSites.length > 0) {
-                const currentCount = HERITAGE_SITES.length;
-                HERITAGE_SITES = latestSites;
-                if (latestSites.length !== currentCount) {
-                  console.log(
-                    "Visitor portal: Heritage sites updated via periodic refresh",
-                  );
-                  const filter =
-                    document.getElementById("map-heritage-filter")?.value ||
-                    "all";
-                  const loadingIndicator = document.getElementById(
-                    "map-loading-indicator",
-                  );
-                  if (loadingIndicator) {
-                    loadingIndicator.classList.remove("hidden");
-                  }
-                  syncHeritageMapMarkers(
-                    window.matiMapInstance,
-                    window.matiHeritageMarkersLayer,
-                    filter,
-                  );
-                }
-              }
-            }
-          } catch (error) {
-            console.warn("Periodic heritage data refresh failed:", error);
-          }
-        }, 30000); // Refresh every 30 seconds
-
-        // Refresh map when user returns to the tab (picks up admin changes)
-        document.addEventListener("visibilitychange", async () => {
-          if (!document.hidden && window.matiMapInstance) {
-            try {
-              if (typeof getHeritageMapDisplaySites === "function") {
-                const latestSites = getHeritageMapDisplaySites();
-                if (latestSites && latestSites.length > 0) {
-                  HERITAGE_SITES = latestSites;
-                  console.log(
-                    "Visitor portal: Heritage sites refreshed on tab visibility change",
-                  );
-                  const filter =
-                    document.getElementById("map-heritage-filter")?.value ||
-                    "all";
-                  const loadingIndicator = document.getElementById(
-                    "map-loading-indicator",
-                  );
-                  if (loadingIndicator) {
-                    loadingIndicator.classList.remove("hidden");
-                  }
-                  syncHeritageMapMarkers(
-                    window.matiMapInstance,
-                    window.matiHeritageMarkersLayer,
-                    filter,
-                  );
-                  updateSiteSelector(filter);
-                }
-              }
-            } catch (error) {
-              console.warn("Tab visibility refresh failed:", error);
-            }
-          }
-        });
-
-        // Refresh map when window gains focus (picks up admin changes)
-        window.addEventListener("focus", async () => {
-          if (window.matiMapInstance) {
-            try {
-              if (typeof getHeritageMapDisplaySites === "function") {
-                const latestSites = getHeritageMapDisplaySites();
-                if (latestSites && latestSites.length > 0) {
-                  HERITAGE_SITES = latestSites;
-                  console.log(
-                    "Visitor portal: Heritage sites refreshed on window focus",
-                  );
-                  const filter =
-                    document.getElementById("map-heritage-filter")?.value ||
-                    "all";
-                  const loadingIndicator = document.getElementById(
-                    "map-loading-indicator",
-                  );
-                  if (loadingIndicator) {
-                    loadingIndicator.classList.remove("hidden");
-                  }
-                  syncHeritageMapMarkers(
-                    window.matiMapInstance,
-                    window.matiHeritageMarkersLayer,
-                    filter,
-                  );
-                }
-              }
-            } catch (error) {
-              console.warn("Window focus refresh failed:", error);
-            }
-          }
-        });
-      }
-
-      // Add global refresh function that can be called from admin panel
-      window.refreshVisitorMap = async function () {
-        if (
-          window.matiMapInstance &&
-          typeof getHeritageMapDisplaySites === "function"
-        ) {
-          try {
-            const latestSites = getHeritageMapDisplaySites();
-            if (latestSites && latestSites.length > 0) {
-              HERITAGE_SITES = latestSites;
-              console.log(
-                "Visitor portal: Heritage sites refreshed via global function",
-              );
-              const filter =
-                document.getElementById("map-heritage-filter")?.value || "all";
-              const loadingIndicator = document.getElementById(
-                "map-loading-indicator",
-              );
-              if (loadingIndicator) {
-                loadingIndicator.classList.remove("hidden");
-              }
-              syncHeritageMapMarkers(
-                window.matiMapInstance,
-                window.matiHeritageMarkersLayer,
-                filter,
-              );
-            }
-          } catch (error) {
-            console.warn("Global map refresh failed:", error);
-          }
-        }
-      };
-
-      function bindMapScrollWheel(map) {
-        if (window.matiMapProvider === "google") return;
-        const container = map?.getContainer();
-        if (!container) return;
-
-        container.addEventListener("mouseenter", () => {
-          map.scrollWheelZoom.enable();
-        });
-        container.addEventListener("mouseleave", () => {
-          map.scrollWheelZoom.disable();
-        });
-        container.addEventListener("focusin", () => {
-          map.scrollWheelZoom.enable();
-        });
-        container.addEventListener("focusout", () => {
-          map.scrollWheelZoom.disable();
-        });
-      }
-
-      function bindMapIntroDismiss(map, idleMs = 4000) {
-        const overlay = document.getElementById("map-intro-overlay");
-        if (!overlay || !map) return;
-
-        let idleTimer = null;
-
-        const showOverlay = () => {
-          overlay.classList.remove("is-dismissed");
-          overlay.setAttribute("aria-hidden", "false");
-        };
-
-        const hideOverlay = () => {
-          overlay.classList.add("is-dismissed");
-          overlay.setAttribute("aria-hidden", "true");
-        };
-
-        const scheduleReshow = () => {
-          clearTimeout(idleTimer);
-          idleTimer = window.setTimeout(showOverlay, idleMs);
-        };
-
-        const onMapActivity = () => {
-          if (!overlay.classList.contains("is-dismissed")) {
-            hideOverlay();
-          }
-          scheduleReshow();
-        };
-
-        const container =
-          window.matiMapProvider === "google"
-            ? map.getDiv()
-            : map.getContainer();
-        if (window.matiMapProvider === "google") {
-          ["dragstart", "zoom_changed", "bounds_changed", "click"].forEach(
-            (eventName) => map.addListener(eventName, onMapActivity),
-          );
-        } else {
-          [
-            "dragstart",
-            "zoomstart",
-            "zoom",
-            "movestart",
-            "move",
-            "click",
-          ].forEach((eventName) => map.on(eventName, onMapActivity));
-        }
-
-        if (container) {
-          container.addEventListener("mousedown", onMapActivity);
-          container.addEventListener("touchstart", onMapActivity, {
-            passive: true,
-          });
-          container.addEventListener("wheel", onMapActivity, { passive: true });
-        }
-      }
-
-      function bindMapVisibilityPause(map, sectionEl) {
-        if (!map || !sectionEl) return;
-
-        let isVisible = true;
-
-        const visibilityObserver = new IntersectionObserver(
-          ([entry]) => {
-            const nowVisible = entry.isIntersecting;
-            if (nowVisible === isVisible) return;
-            isVisible = nowVisible;
-
-            if (nowVisible) {
-              requestAnimationFrame(() => {
-                if (window.matiMapProvider === "google") {
-                  google.maps.event.trigger(map, "resize");
-                } else {
-                  map.invalidateSize();
-                }
-              });
-            }
-          },
-          { rootMargin: "80px 0px", threshold: 0.01 },
-        );
-
-        visibilityObserver.observe(sectionEl);
-      }
-
-      let matiMapBooted = false;
-
-      function loadGoogleMapsApi(apiKey) {
-        if (window.google?.maps?.Map) return Promise.resolve();
-        if (window.matiGoogleMapsLoadPromise) {
-          return window.matiGoogleMapsLoadPromise;
-        }
-
-        window.matiGoogleMapsLoadPromise = new Promise((resolve, reject) => {
-          const callbackName = "__matiGoogleMapsReady";
-          const script = document.createElement("script");
-          const timeoutId = window.setTimeout(() => {
-            delete window[callbackName];
-            reject(new Error("Timed out while loading the Google Maps API."));
-          }, 15000);
-
-          window[callbackName] = () => {
-            window.clearTimeout(timeoutId);
-            delete window[callbackName];
-            resolve();
-          };
-          script.async = true;
-          script.defer = true;
-          script.onerror = () => {
-            window.clearTimeout(timeoutId);
-            delete window[callbackName];
-            reject(new Error("The Google Maps API script failed to load."));
-          };
-          script.src =
-            "https://maps.googleapis.com/maps/api/js?key=" +
-            encodeURIComponent(apiKey) +
-            "&callback=" +
-            callbackName +
-            "&loading=async";
-          document.head.appendChild(script);
-        });
-
-        return window.matiGoogleMapsLoadPromise;
-      }
-
-      function bootMatiMapAfterLayout() {
-        if (matiMapBooted) {
-          window.matiMapInstance?.invalidateSize?.();
-          return;
-        }
-        matiMapBooted = true;
-        initMatiMap();
-      }
-
-      setTimeout(() => bootMatiMapAfterLayout(), 800);
 
       let portalGameIdx = 0;
       let portalGameSpotlightReady = false;
