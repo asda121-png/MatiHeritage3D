@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mati Heritage Games</title>
+    <title>Mini-Game Arcade | Mati Heritage 3D</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -15,7 +15,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
-    <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="stylesheet" href="css/games-portal.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link rel="stylesheet" href="css/auth-logout.css" />
 
     <style>
@@ -580,175 +581,272 @@
   </head>
 
   <body class="game-page games-hub-page visitor-module">
-    <svg class="game-tv-filters" aria-hidden="true" focusable="false">
-      <filter
-        id="game-tv-static-filter"
-        x="0%"
-        y="0%"
-        width="100%"
-        height="100%"
-      >
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.75"
-          numOctaves="3"
-          stitchTiles="stitch"
-          result="noise"
-        >
-          <animate
-            attributeName="seed"
-            dur="0.15s"
-            values="1;2;3;4;5;6;7;8;9;10"
-            repeatCount="indefinite"
-          />
-        </feTurbulence>
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"
-        />
-      </filter>
-    </svg>
     <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
 
-    <section
-      class="hero-bg min-h-screen flex items-center justify-center relative px-4 sm:px-6 pb-16"
-    >
-      <!-- CONE PLATFORM EFFECT -->
-      <div class="absolute top-8 right-8 lg:right-60 z-30 hidden md:block">
-        <button
-          id="leaderboard-btn"
-          class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
-            />
-          </svg>
-
-          <span class="text-sm font-bold uppercase tracking-wider">
-            Leaderboard
-          </span>
-        </button>
-      </div>
-
-      <!-- CONE PLATFORM EFFECT -->
-      <div class="cone-platform hidden md:block"></div>
-
-      <!-- Mobile Header: Leaderboard + Title -->
-      <div
-        class="md:hidden absolute top-16 left-4 right-4 z-30 flex flex-col items-center gap-10"
-      >
-        <button
-          id="leaderboard-btn-mobile"
-          class="leaderboard-btn flex items-center gap-2 rounded-full border border-amber-500/40 px-6 py-2.5 text-amber-400 transition duration-300 hover:scale-105 hover:border-amber-400"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M18 4V2H6v2H2v3c0 2.21 1.79 4 4 4h.09A6.002 6.002 0 0011 15.91V18H8v2h8v-2h-3v-2.09A6.002 6.002 0 0017.91 11H18c2.21 0 4-1.79 4-4V4h-4zM4 7V6h2v2c0 .35.03.69.08 1.02A2.001 2.001 0 014 7zm16 0a2.001 2.001 0 01-2.08 2.02c.05-.33.08-.67.08-1.02V6h2v1z"
-            />
-          </svg>
-          <span class="text-sm font-bold uppercase tracking-wider"
-            >Leaderboard</span
-          >
-        </button>
-        <div class="flex flex-row items-center gap-2 md:gap-6 select-none mt-6">
-          <div
-            id="title-word-select"
-            class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
-            style="font-family: 'Inter', system-ui, sans-serif;"
-          >
-            SELECT
+    <main class="games-arcade">
+      <div class="games-arcade__inner">
+        <header class="games-arcade__heading">
+          <div>
+            <h1 class="games-arcade__title">Games</h1>
+            <p class="games-arcade__lead">
+              Explore Mati’s stories, landmarks, and living traditions through
+              six quick mini-games.
+            </p>
           </div>
-          <div
-            id="title-word-game"
-            class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
-            style="font-family: 'Inter', system-ui, sans-serif;"
-          >
-            GAME
+        </header>
+
+        <section class="games-arcade__intro" aria-label="Discover Mati through games">
+          <div class="games-arcade__intro-heading">
+            <p class="games-arcade__eyebrow">DISCOVER MATI THROUGH PLAY</p>
+            <h2>Play your way through Mati’s heritage</h2>
           </div>
-        </div>
+          <p class="games-arcade__intro-copy">
+            Take on quick challenges inspired by the places, stories, and
+            traditions that make Mati unique.
+          </p>
+        </section>
+
+        <h2 class="games-arcade__prompt">Choose your game</h2>
+
+        <section class="games-arcade__grid" aria-label="Available mini-games">
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--trivia">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <g transform="rotate(-5 270 173)">
+                  <rect x="98" y="65" width="330" height="214" rx="20" fill="#252a2d" />
+                  <rect x="108" y="75" width="310" height="194" rx="14" fill="#fffefa" />
+                  <path d="M108 89a14 14 0 0 1 14-14h282a14 14 0 0 1 14 14v35H108z" fill="#17684d" />
+                  <circle cx="136" cy="103" r="8" fill="#e2bb67" />
+                  <path d="M157 103h144" stroke="#fffefa" stroke-width="8" stroke-linecap="round" opacity=".9" />
+                  <rect x="132" y="147" width="262" height="38" rx="10" fill="#f3efe5" />
+                  <circle cx="152" cy="166" r="8" fill="#c45e3b" />
+                  <path d="M172 166h126" stroke="#625e56" stroke-width="7" stroke-linecap="round" />
+                  <rect x="132" y="198" width="262" height="38" rx="10" fill="#e9f1eb" />
+                  <circle cx="152" cy="217" r="8" fill="#17684d" />
+                  <path d="M172 217h176" stroke="#625e56" stroke-width="7" stroke-linecap="round" />
+                </g>
+                <circle cx="488" cy="204" r="48" fill="#c45e3b" />
+                <text x="488" y="224" text-anchor="middle" fill="#fffefa" font-family="Georgia, serif" font-size="62" font-weight="700">?</text>
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Culture · Quiz</span>
+              <h2 class="arcade-card__title">Mati Heritage Trivia Challenge</h2>
+              <p class="arcade-card__description">
+                Test what you know about Mati’s history, culture, and landmarks.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="trivia.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--memory">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <g transform="rotate(-10 245 170)">
+                  <rect x="128" y="63" width="184" height="232" rx="18" fill="#252a2d" />
+                  <rect x="138" y="73" width="164" height="212" rx="12" fill="#fffefa" />
+                  <rect x="154" y="89" width="132" height="124" rx="10" fill="#e8efe7" />
+                  <path d="M170 193l33-49 22 28 17-19 28 40z" fill="#17684d" />
+                  <circle cx="254" cy="119" r="11" fill="#e2bb67" />
+                  <path d="M159 237h101M159 258h72" stroke="#d4cec1" stroke-width="8" stroke-linecap="round" />
+                  <circle cx="220" cy="174" r="20" fill="#c45e3b" opacity=".9" />
+                  <path d="M212 174l7 7 13-16" fill="none" stroke="#fffefa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <g transform="rotate(9 408 170)">
+                  <rect x="328" y="63" width="184" height="232" rx="18" fill="#252a2d" />
+                  <rect x="338" y="73" width="164" height="212" rx="12" fill="#fffefa" />
+                  <rect x="354" y="89" width="132" height="124" rx="10" fill="#f4e8d4" />
+                  <path d="M369 192l32-44 24 26 20-20 27 38z" fill="#c45e3b" />
+                  <circle cx="456" cy="119" r="11" fill="#17684d" />
+                  <path d="M359 237h101M359 258h72" stroke="#d4cec1" stroke-width="8" stroke-linecap="round" />
+                  <path d="M411 159c0-13 21-16 21 0 0 9-11 11-11 20m0 12v1" fill="none" stroke="#252a2d" stroke-width="6" stroke-linecap="round" />
+                </g>
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Memory · Matching</span>
+              <h2 class="arcade-card__title">Memory Matching Pairs</h2>
+              <p class="arcade-card__description">
+                Match heritage icons and landmarks before time runs out.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="memorypairs.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--spot">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <path d="M99 223v-52m0 0c-27-23-23-47-10-47 10 0 12 13 10 22 6-25 20-28 23-19 4 11-7 22-23 44m0 0c-15-24-30-25-31-15 0 9 10 16 31 25" fill="none" stroke="#252a2d" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M520 236v-69m0 0c-33-29-28-57-12-57 12 0 15 16 12 27 7-30 25-35 29-23 5 13-8 27-29 53m0 0c-18-29-36-30-37-18 0 11 12 20 37 31" fill="none" stroke="#252a2d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+                <g transform="rotate(-4 319 210)">
+                  <rect x="228" y="183" width="168" height="111" rx="12" fill="#fffefa" stroke="#252a2d" stroke-width="5" />
+                  <path d="M245 200h134v77H245z" fill="#e8efe7" />
+                  <path d="M245 254l35-33 25 22 23-18 51 39H245z" fill="#17684d" />
+                  <circle cx="348" cy="218" r="10" fill="#e2bb67" />
+                  <circle cx="355" cy="235" r="42" fill="none" stroke="#c45e3b" stroke-width="6" />
+                  <path d="M385 265l29 28" stroke="#c45e3b" stroke-width="10" stroke-linecap="round" />
+                </g>
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Observation · Visual</span>
+              <h2 class="arcade-card__title">Spot the Difference</h2>
+              <p class="arcade-card__description">
+                Look closely at Mati’s scenic places and find every change.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="spotthedifference.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--puzzle">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <rect x="133" y="43" width="326" height="258" rx="22" fill="#252a2d" />
+                <rect x="145" y="55" width="302" height="234" rx="14" fill="#fffefa" />
+                <g stroke="#d4cec1" stroke-width="4">
+                  <rect x="160" y="70" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect x="230" y="70" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
+                  <rect x="300" y="70" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
+                  <rect x="370" y="70" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect x="160" y="124" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
+                  <rect x="230" y="124" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
+                  <rect x="300" y="124" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect x="370" y="124" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
+                  <rect x="160" y="178" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
+                  <rect x="230" y="178" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect x="300" y="178" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
+                  <rect x="370" y="178" width="64" height="48" rx="6" fill="#fffefa" stroke="none" />
+                  <rect x="160" y="232" width="64" height="42" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect x="230" y="232" width="64" height="42" rx="6" fill="#91b9a2" stroke="none" />
+                  <rect x="300" y="232" width="64" height="42" rx="6" fill="#c45e3b" stroke="none" />
+                  <rect x="370" y="232" width="64" height="42" rx="6" fill="#e6c46e" stroke="none" />
+                </g>
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Puzzle · Picture</span>
+              <h2 class="arcade-card__title">Slide Puzzle</h2>
+              <p class="arcade-card__description">
+                Slide the pieces into place to reveal a Mati heritage photo.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="slidepuzzle.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--truefalse">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <g transform="rotate(-5 320 144)">
+                  <rect x="116" y="48" width="408" height="178" rx="20" fill="#fffefa" stroke="#252a2d" stroke-width="5" />
+                  <path d="M151 87h327M151 116h237" stroke="#d4cec1" stroke-width="10" stroke-linecap="round" />
+                  <path d="M151 152h194" stroke="#d4cec1" stroke-width="10" stroke-linecap="round" />
+                  <rect x="151" y="181" width="80" height="10" rx="5" fill="#17684d" />
+                </g>
+                <circle cx="225" cy="252" r="51" fill="#17684d" />
+                <path d="M198 252l19 19 36-40" fill="none" stroke="#fffefa" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="415" cy="252" r="51" fill="#c45e3b" />
+                <path d="M392 229l46 46m0-46l-46 46" stroke="#fffefa" stroke-width="12" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Knowledge · Quick-fire</span>
+              <h2 class="arcade-card__title">True or False Sprint</h2>
+              <p class="arcade-card__description">
+                Make quick calls on facts about Mati’s culture and history.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="truefalsesprint.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="arcade-card">
+            <div class="arcade-card__art arcade-card__art--scramble">
+              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
+                <g>
+                  <rect x="118" y="92" width="90" height="98" rx="14" fill="#17684d" />
+                  <rect x="218" y="92" width="90" height="98" rx="14" fill="#fffefa" stroke="#252a2d" stroke-width="4" />
+                  <rect x="318" y="92" width="90" height="98" rx="14" fill="#c45e3b" />
+                  <rect x="418" y="92" width="90" height="98" rx="14" fill="#fffefa" stroke="#252a2d" stroke-width="4" />
+                  <text x="163" y="158" text-anchor="middle" fill="#fffefa" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">M</text>
+                  <text x="263" y="158" text-anchor="middle" fill="#252a2d" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">A</text>
+                  <text x="363" y="158" text-anchor="middle" fill="#fffefa" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">T</text>
+                  <text x="463" y="158" text-anchor="middle" fill="#252a2d" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">I</text>
+                </g>
+                <circle cx="548" cy="84" r="18" fill="#c45e3b" />
+              </svg>
+            </div>
+            <div class="arcade-card__body">
+              <span class="arcade-card__category">Vocabulary · Word Play</span>
+              <h2 class="arcade-card__title">Word Scramble</h2>
+              <p class="arcade-card__description">
+                Unscramble words inspired by Mati’s heritage, places, and
+                traditions.
+              </p>
+              <div class="arcade-card__meta">
+                <span class="arcade-card__meta-label">Difficulty</span>
+                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                  <li class="arcade-card__difficulty">Easy</li>
+                  <li class="arcade-card__difficulty">Medium</li>
+                  <li class="arcade-card__difficulty">Hard</li>
+                </ul>
+              </div>
+              <a class="arcade-card__play" href="wordscramble.html">
+                PLAY NOW <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        </section>
       </div>
-
-      <!-- Desktop Title -->
-      <div
-        class="hidden md:flex absolute top-16 md:top-20 left-1/2 -translate-x-1/2 z-30 flex-col md:flex-row items-center gap-2 md:gap-6 select-none"
-      >
-        <div
-          id="title-word-select-desktop"
-          class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
-          style="font-family: 'Inter', system-ui, sans-serif;"
-        >
-          SELECT
-        </div>
-        <div
-          id="title-word-game-desktop"
-          class="text-slate-800 text-3xl md:text-5xl font-bold uppercase tracking-[0.05em] flex gap-1"
-          style="font-family: 'Inter', system-ui, sans-serif;"
-        >
-          GAME
-        </div>
-      </div>
-
-      <!-- LEADERBOARD -->
-      <!-- LEFT ARROW -->
-      <button
-        id="prev-btn"
-        class="absolute left-2 sm:left-4 md:left-10 lg:left-20 top-1/2 -translate-y-1/2 z-40 h-10 w-10 md:h-14 md:w-14 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white text-xl md:text-2xl hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:scale-110 transition-all flex items-center justify-center md:top-1/2"
-      >
-        ❮
-      </button>
-
-      <!-- RIGHT ARROW -->
-      <button
-        id="next-btn"
-        class="absolute right-2 sm:right-4 md:right-10 lg:right-20 top-1/2 -translate-y-1/2 z-40 h-10 w-10 md:h-14 md:w-14 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white text-xl md:text-2xl hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:scale-110 transition-all flex items-center justify-center md:top-1/2"
-      >
-        ❯
-      </button>
-
-      <!-- CAROUSEL CONTAINER -->
-      <div
-        class="relative flex items-center justify-center gap-2 lg:gap-12 z-10 w-full px-0 sm:px-4 mt-16 md:mt-16 flex-col md:flex-row"
-        style="padding-top: 1rem"
-      >
-        <!-- PREVIOUS GAME PREVIEW -->
-        <div
-          id="prev-card-preview"
-          class="side-card side-card-left hidden lg:block shadow-2xl overflow-hidden"
-        ></div>
-
-        <!-- FEATURED CARD (ACTIVE) -->
-        <div id="game-card" class="game-card relative z-10 game-card--trivia">
-          <div id="game-studio" class="game-studio">
-            <div id="game-preview-root" class="game-preview-root"></div>
-          </div>
-        </div>
-
-        <!-- NEXT GAME PREVIEW -->
-        <div
-          id="next-card-preview"
-          class="side-card side-card-right hidden lg:block shadow-2xl overflow-hidden"
-        ></div>
-      </div>
-
-      <!-- PAGINATION -->
-      <div
-        id="pagination-dots"
-        class="absolute bottom-48 md:bottom-40 left-1/2 -translate-x-1/2 flex gap-3 z-30"
-      >
-        <!-- Dots will be generated or styled by JS -->
-      </div>
-    </section>
+    </main>
 
     <div id="drawer-overlay" class="leaderboard-modal" hidden>
       <section
@@ -838,8 +936,6 @@
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
     <script src="js/utils/heritage/heritage-realtime.js"></script>
-    <script src="js/games/game-previews.js"></script>
-    <script src="js/games/game-tv-transition.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
@@ -869,6 +965,10 @@
             document.body.appendChild(script);
           }
 
+          // Move settings modal to body
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) document.body.appendChild(settingsModal);
+
           // Set the active navigation link for the 'Games' page
           document
             .querySelectorAll('.site-nav__link[data-nav="games"]')
@@ -880,6 +980,12 @@
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
           if (typeof window.MatiVisitorAuth !== "undefined") {
             await window.MatiVisitorAuth.refresh();
           }
@@ -939,131 +1045,6 @@
         })
         .catch((err) => console.error("Error loading footer:", err));
 
-      const gamePreviewApi = window.MatiGamePreviews;
-      const games = gamePreviewApi.GAMES;
-      const buildFeaturedPreview = gamePreviewApi.buildFeaturedPreview;
-      const buildSidePreview = gamePreviewApi.buildSidePreview;
-
-      function updatePreviewLayout(game) {
-        gamePreviewApi.applyPreviewLayoutClass(
-          document.getElementById("game-card"),
-          game,
-        );
-      }
-
-      function getLaunchPreviewElement() {
-        return document.querySelector("#game-preview-root [data-game-launch]");
-      }
-
-      function fitFeaturedPreviewToFrame() {
-        gamePreviewApi.fitPreviewToFrame(
-          document.getElementById("game-preview-root"),
-        );
-      }
-
-      function scheduleFeaturedPreviewFit() {
-        gamePreviewApi.schedulePreviewFit(
-          document.getElementById("game-preview-root"),
-        );
-      }
-
-      let currentIndex = 0;
-
-      // DOM Elements
-      const card = document.getElementById("game-card");
-      const prevPreview = document.getElementById("prev-card-preview");
-      const nextPreview = document.getElementById("next-card-preview");
-      if (prevPreview) {
-        prevPreview.style.cursor = "pointer";
-        prevPreview.addEventListener("click", () => {
-          currentIndex = (currentIndex - 1 + games.length) % games.length;
-          updateDisplay();
-        });
-      }
-      if (nextPreview) {
-        nextPreview.style.cursor = "pointer";
-        nextPreview.addEventListener("click", () => {
-          currentIndex = (currentIndex + 1) % games.length;
-          updateDisplay();
-        });
-      }
-      const paginationContainer = document.getElementById("pagination-dots");
-
-      function launchCurrentGame() {
-        if (
-          window.__matiGameHallUnlocked === false ||
-          (typeof MatiGameAuthGate !== "undefined" &&
-            !MatiGameAuthGate.isAllowed())
-        ) {
-          if (typeof MatiGameAuthGate !== "undefined") {
-            MatiGameAuthGate.open({ returnTo: "game.html" });
-          }
-          return;
-        }
-
-        const currentGame = games[currentIndex];
-        if (!currentGame.url) {
-          console.log(`${currentGame.title2} is not yet implemented.`);
-          return;
-        }
-        const launchEl = getLaunchPreviewElement();
-        if (
-          currentGame.expandTransition !== false &&
-          typeof window.launchGameFromTvCard === "function"
-        ) {
-          window.launchGameFromTvCard(launchEl, currentGame.url);
-        } else {
-          window.location.href = currentGame.url;
-        }
-      }
-
-      function updateDisplay() {
-        const game = games[currentIndex];
-        const prevIdx = (currentIndex - 1 + games.length) % games.length;
-        const nextIdx = (currentIndex + 1) % games.length;
-        const previewRoot = document.getElementById("game-preview-root");
-
-        if (previewRoot) previewRoot.classList.add("is-switching");
-
-        setTimeout(() => {
-          if (previewRoot) {
-            previewRoot.innerHTML = buildFeaturedPreview(game);
-            previewRoot.classList.remove("is-switching");
-          }
-          updatePreviewLayout(game);
-
-          if (prevPreview) {
-            prevPreview.innerHTML = buildSidePreview(games[prevIdx], "prev");
-          }
-          if (nextPreview) {
-            nextPreview.innerHTML = buildSidePreview(games[nextIdx], "next");
-          }
-
-          scheduleFeaturedPreviewFit();
-        }, 220);
-
-        // Update Pagination Dots
-        paginationContainer.innerHTML = "";
-        games.forEach((_, i) => {
-          const dot = document.createElement("button");
-          dot.type = "button";
-          dot.className =
-            i === currentIndex
-              ? "game-dot game-dot-active w-10 h-2 rounded-full bg-[#10b981] cursor-pointer"
-              : "game-dot w-2 h-2 rounded-full bg-[#047857]/30 cursor-pointer hover:bg-[#10b981]/50 transition-colors";
-          dot.setAttribute("aria-label", `Show game ${i + 1}`);
-          dot.addEventListener("click", () => {
-            currentIndex = i;
-            updateDisplay();
-          });
-          paginationContainer.appendChild(dot);
-        });
-
-        bindHoverSoundToElements(
-          paginationContainer.querySelectorAll(".game-dot"),
-        );
-      }
-
       function getSfxVolume() {
         return parseFloat(localStorage.getItem("sfxVol") || "0.8");
       }
@@ -1103,46 +1084,9 @@
         });
       }
 
-      // Initial Load
-      updateDisplay();
-      window.addEventListener("resize", scheduleFeaturedPreviewFit);
-
-      // Controls
-      const prevBtn = document.getElementById("prev-btn");
-      const nextBtn = document.getElementById("next-btn");
-      const gameStudio = document.getElementById("game-studio");
+      const gameLinks = document.querySelectorAll(".arcade-card__play");
       const leaderboardBtn = document.getElementById("leaderboard-btn");
       const clickSound = document.getElementById("click-sound");
-      const leaderboardBtnMobile = document.getElementById(
-        "leaderboard-btn-mobile",
-      );
-
-      nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % games.length;
-        updateDisplay();
-      });
-
-      prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + games.length) % games.length;
-        updateDisplay();
-      });
-
-      function bindGameLaunch(el) {
-        if (!el) return;
-        el.style.cursor = "pointer";
-        el.setAttribute("role", "button");
-        el.setAttribute("tabindex", "0");
-        el.setAttribute("aria-label", "Open selected game");
-        el.addEventListener("click", launchCurrentGame);
-        el.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            launchCurrentGame();
-          }
-        });
-      }
-
-      bindGameLaunch(gameStudio);
 
       // Leaderboard Modal Logic
       const drawer = document.getElementById("leaderboard-drawer");
@@ -1286,7 +1230,6 @@
       };
 
       if (leaderboardBtn) leaderboardBtn.onclick = showLeaderboard;
-      if (leaderboardBtnMobile) leaderboardBtnMobile.onclick = showLeaderboard;
       if (closeLeaderboard) closeLeaderboard.onclick = hideLeaderboard;
       if (overlay)
         overlay.onclick = (event) => {
@@ -1298,13 +1241,10 @@
       // Sound FX integration
       // prettier-ignore
       const allButtons = [
-        prevBtn,
-        nextBtn,
-        gameStudio,
         leaderboardBtn,
         closeLeaderboard,
+        ...gameLinks,
       ];
-      if (leaderboardBtnMobile) allButtons.push(leaderboardBtnMobile);
 
       bindHoverSoundToElements(allButtons);
 
@@ -1426,7 +1366,7 @@
 
         // Dramatic delay for "SELECT GAME"
         setTimeout(() => {
-          playAnnouncer("Welcome Player! Select a game.");
+          playAnnouncer("Welcome Player! Choose your next challenge.");
         }, 500);
       };
 

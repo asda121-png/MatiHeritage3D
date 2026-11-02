@@ -418,6 +418,47 @@ const MatiHeritageGameContent = (() => {
     });
   }
 
+  function buildWordScramble(pool, rng, { count = 10 } = {}) {
+    const words = [];
+
+    // Extract words from heritage site names
+    const siteNames = pool
+      .filter((site) => site.name)
+      .map((site) => shortenName(site.name).toUpperCase());
+
+    // Extract words from locations
+    const locations = pool
+      .filter((site) => site.location)
+      .map((site) => site.location.toUpperCase());
+
+    // Extract words from category labels
+    const categories = Object.values(CATEGORY_LABELS);
+
+    // Combine all potential words
+    const allWords = [...new Set([...siteNames, ...locations, ...categories])];
+
+    // Split multi-word phrases into individual words
+    const splitWords = [];
+    allWords.forEach((phrase) => {
+      const wordsInPhrase = phrase.split(/\s+/);
+      splitWords.push(...wordsInPhrase);
+    });
+
+    // Combine original phrases and split words
+    const combinedWords = [...new Set([...allWords, ...splitWords])];
+
+    // Filter for valid words (letters only, at least 3 chars)
+    const validWords = combinedWords.filter((word) => {
+      const cleaned = word.trim();
+      return cleaned.length >= 3 && cleaned.length <= 30 && /^[A-Z\s]+$/.test(cleaned);
+    });
+
+    // Randomly select words
+    const selected = rng.shuffle(validWords).slice(0, count);
+
+    return selected;
+  }
+
   async function createSession(options = {}) {
     // Refresh the pool each session so newly added catalog/DB sites are included.
     const pool = await init({ force: options.force !== false });
@@ -441,6 +482,9 @@ const MatiHeritageGameContent = (() => {
       },
       spotLevels(count = 4) {
         return buildSpotLevels(pool, createRng(`${seed}-spot`), { count });
+      },
+      wordScramble(count = 10) {
+        return buildWordScramble(pool, createRng(`${seed}-scramble`), { count });
       },
     };
   }

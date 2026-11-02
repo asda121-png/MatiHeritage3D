@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gallery</title>
+    <title>Gallery | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +13,7 @@
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/gallery-page.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <style>
       .gal-panel {
         content-visibility: auto;
@@ -334,6 +335,10 @@
             document.body.appendChild(s);
           }
 
+          // Move settings modal to body
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) document.body.appendChild(settingsModal);
+
           document.querySelectorAll(".site-nav__link").forEach((link) => {
             const routes = {
               home: "index.html",
@@ -352,6 +357,17 @@
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
+          }
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
+          // Bind logout functionality
+          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
+            MatiAuthLogout.bind({ redirect: "index.html" });
+            document.body.dataset.logoutBound = "1";
           }
         })
         .catch((err) => console.error("Error loading header:", err));

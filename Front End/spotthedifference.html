@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Spot the Difference — Mati Heritage</title>
+    <title>Spot the Difference | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -58,10 +58,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Luckiest+Guy&family=Poppins:wght@400;600;700;800&family=Satisfy&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Luckiest+Guy&family=Poppins:wght@400;600;700;800&family=Satisfy&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
 
     <style>
@@ -99,6 +100,10 @@
       body.festival-page {
         font-family: var(--font-body);
         color: var(--fest-ink);
+      }
+
+      .site-header {
+        font-family: "Source Sans 3", sans-serif;
       }
 
       /* ── Reference: night festival backdrop ── */
@@ -920,83 +925,6 @@
       #settings-modal .header-panel {
         background: var(--surface-dark-elevated) !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
-      }
-
-      .game-back-nav {
-        position: fixed;
-        top: calc(var(--header-h, 5.625rem) + 1.15rem);
-        left: 0;
-        right: 0;
-        z-index: 490;
-        max-width: 94rem;
-        margin: 0 auto;
-        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-        pointer-events: none;
-      }
-
-      .game-back-nav__align {
-        margin-left: calc(3.25rem + 0.9rem);
-      }
-
-      .game-back-nav a {
-        pointer-events: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-family: var(--font-banner);
-        font-size: 0.78rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: #f5e6c8;
-        text-decoration: none;
-        padding: 0.55rem 1.1rem 0.5rem;
-        border-radius: 0.45rem;
-        border: 3px solid #4a3018;
-        background: linear-gradient(
-          180deg,
-          #a0622a 0%,
-          #6b4423 45%,
-          #5c3d1e 100%
-        );
-        box-shadow:
-          inset 0 2px 0 rgba(255, 255, 255, 0.25),
-          0 6px 16px rgba(0, 0, 0, 0.45);
-        transition: all 0.2s ease;
-      }
-
-      .game-back-nav a::before,
-      .game-back-nav a::after {
-        content: "";
-        position: absolute;
-        top: -0.55rem;
-        width: 3px;
-        height: 0.65rem;
-        background: linear-gradient(180deg, #c9a227, #8b6914);
-        border-radius: 2px;
-      }
-
-      .game-back-nav a::before {
-        left: 1.25rem;
-        transform: rotate(-8deg);
-      }
-      .game-back-nav a::after {
-        right: 1.25rem;
-        transform: rotate(8deg);
-      }
-
-      .game-back-nav a {
-        position: relative;
-      }
-
-      .game-back-nav a:hover {
-        background: linear-gradient(
-          180deg,
-          #b87232 0%,
-          #7a5028 45%,
-          #6b4423 100%
-        );
-        border-color: #c9a227;
-        transform: translateY(-1px);
       }
 
       .hidden {
@@ -2212,12 +2140,6 @@
 
     <div id="header-placeholder"></div>
 
-    <nav class="game-back-nav" aria-label="Game navigation">
-      <div class="game-back-nav__align">
-        <a href="game.html">← Return to Game Hall</a>
-      </div>
-    </nav>
-
     <main class="festival-stage">
       <!-- INTRO -->
       <section id="intro-screen" class="intro-layout intro-layout--single">
@@ -3179,7 +3101,7 @@
       setupLoupe(panel2, img2);
 
       bindHoverSound(
-        document.querySelectorAll(".diff-chip, .btn-fest, .game-back-nav a"),
+        document.querySelectorAll(".diff-chip, .btn-fest"),
       );
       bindFestivalMusicStart();
 

@@ -540,19 +540,27 @@
         font-family: "Source Sans 3", sans-serif;
         font-size: clamp(1.05rem, 1.8vw, 1.3rem);
         font-weight: 800;
-        letter-spacing: 0.045em;
+        letter-spacing: 0.005em;
         line-height: 1;
         text-transform: uppercase;
         white-space: nowrap;
-        color: var(--forest);
+        background: linear-gradient(
+          90deg,
+          var(--forest),
+          var(--sky),
+          var(--amber)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
 
       .site-brand__brand-text-accent {
-        color: var(--sky);
+        color: transparent;
       }
 
       .site-brand__brand-text-highlight {
-        color: var(--amber-dark);
+        color: transparent;
       }
 
 
@@ -1621,16 +1629,10 @@
         max-height: 90vh;
         padding: clamp(1.25rem, 5vw, 2rem);
         overflow-y: auto;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 1.25rem;
-        background:
-          radial-gradient(
-            circle at 100% 0,
-            rgba(2, 132, 199, 0.14),
-            transparent 36%
-          ),
-          var(--surface-dark-elevated);
-        box-shadow: 0 24px 64px rgba(2, 6, 23, 0.4);
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        background: #ffffff;
+        box-shadow: 0 16px 48px rgba(4, 120, 87, 0.12);
       }
 
       .settings-header {
@@ -1639,27 +1641,29 @@
         justify-content: space-between;
         gap: 1rem;
         margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e2e8f0;
       }
 
       .settings-title {
         margin: 0;
-        color: #fff;
-        font-family: "Syne", sans-serif;
-        font-size: 1.4rem;
+        color: #0c1a14;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.25rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0;
       }
 
       .settings-close {
         display: grid;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 2.25rem;
+        height: 2.25rem;
         flex: 0 0 auto;
         place-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 0.75rem;
-        background: rgba(255, 255, 255, 0.06);
-        color: #cbd5e1;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        background: #f8fafc;
+        color: #64748b;
         cursor: pointer;
         transition:
           background 0.2s ease,
@@ -1669,23 +1673,23 @@
 
       .settings-close:hover,
       .settings-close:focus-visible {
-        border-color: rgba(16, 185, 129, 0.45);
-        background: rgba(4, 120, 87, 0.2);
-        color: #fff;
+        border-color: var(--forest);
+        background: var(--forest);
+        color: #ffffff;
       }
 
       .settings-controls {
         display: grid;
-        gap: 0.85rem;
+        gap: 1rem;
       }
 
       .settings-control {
         display: grid;
-        gap: 0.9rem;
-        padding: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.9rem;
-        background: rgba(255, 255, 255, 0.045);
+        gap: 0.75rem;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
       }
 
       .settings-control__header {
@@ -1696,42 +1700,78 @@
       }
 
       .settings-control__label {
-        color: #e2e8f0;
-        font-size: 0.95rem;
+        color: #475569;
+        font-size: 1rem;
         font-weight: 600;
+        font-family: "Source Sans 3", sans-serif;
       }
 
       .settings-control__value {
-        color: var(--amber-light);
-        font-size: 0.875rem;
+        color: var(--forest);
+        font-size: 0.95rem;
         font-weight: 700;
         font-variant-numeric: tabular-nums;
+        font-family: "Source Sans 3", sans-serif;
       }
 
       .settings-control input[type="range"] {
         width: 100%;
         margin: 0;
-        accent-color: var(--forest-light);
+        height: 6px;
+        border-radius: 3px;
+        background: #e2e8f0;
+        outline: none;
         cursor: pointer;
+        -webkit-appearance: none;
+      }
+
+      .settings-control input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--forest);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(4, 120, 87, 0.3);
+        transition: transform 0.2s ease;
+      }
+
+      .settings-control input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+      }
+
+      .settings-control input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--forest);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(4, 120, 87, 0.3);
       }
 
       .settings-save-btn {
-        min-height: 3.25rem;
-        margin-top: 1.25rem;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 0.85rem;
-        background: var(--gradient-register);
-        box-shadow: 0 8px 22px rgba(4, 120, 87, 0.25);
+        min-height: 3rem;
+        margin-top: 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: var(--forest);
+        color: #ffffff;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
         transition:
           transform 0.2s ease,
           box-shadow 0.2s ease,
-          filter 0.2s ease;
+          background 0.2s ease;
       }
 
       .settings-save-btn:hover {
         transform: translateY(-1px);
-        filter: brightness(1.08);
-        box-shadow: 0 12px 28px rgba(4, 120, 87, 0.35);
+        background: #047857;
+        box-shadow: 0 6px 16px rgba(4, 120, 87, 0.3);
       }
 
       select:focus {
@@ -1832,14 +1872,13 @@
           <a href="index.html" class="site-brand">
             <div class="site-brand__text">
               <img
-                src="assets/logos/MatiHeritage logo.png"
+                src="assets/logos/logo.png"
                 alt="Mati Heritage 3D"
                 class="h-16"
               />
               <span class="site-brand__brand-text">
                 MATI
-                <span class="site-brand__brand-text-accent">HERITAGE</span>
-                <span class="site-brand__brand-text-highlight">3D</span>
+                <span class="site-brand__brand-text-accent">HERITAGE</span><span class="site-brand__brand-text-highlight">3D</span>
               </span>
             </div>
           </a>
@@ -1971,9 +2010,8 @@
                   <a href="about.html" class="site-nav-more__item" role="menuitem">
                     <div class="site-nav-more__icon">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 16v-4" />
-                        <path d="M12 8h.01" />
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                       </svg>
                     </div>
                     <div class="site-nav-more__content">
@@ -2129,7 +2167,7 @@
               <span class="settings-control__header">
                 <span class="settings-control__label">Background Music</span>
                 <span id="music-vol-text" class="settings-control__value"
-                  >20%</span
+                  >0%</span
                 >
               </span>
               <input
@@ -2138,6 +2176,7 @@
                 min="0"
                 max="1"
                 step="0.01"
+                value="0"
                 aria-label="Background music volume"
               />
             </label>
@@ -2145,7 +2184,7 @@
               <span class="settings-control__header">
                 <span class="settings-control__label">Sound Effects</span>
                 <span id="sfx-vol-text" class="settings-control__value"
-                  >80%</span
+                  >0%</span
                 >
               </span>
               <input
@@ -2154,6 +2193,7 @@
                 min="0"
                 max="1"
                 step="0.01"
+                value="0"
                 aria-label="Sound effects volume"
               />
             </label>
@@ -2302,9 +2342,20 @@
             const mobileLink = document.createElement("a");
             mobileLink.href = item.href;
             mobileLink.className = "site-mobile-nav__link";
-            mobileLink.textContent = item.querySelector(
-              ".site-nav-more__title",
-            ).textContent;
+            
+            // Copy the icon from the dropdown item
+            const icon = item.querySelector(".site-nav-more__icon");
+            if (icon) {
+              const iconClone = icon.cloneNode(true);
+              mobileLink.appendChild(iconClone);
+            }
+            
+            // Add the text
+            const title = item.querySelector(".site-nav-more__title").textContent;
+            const textSpan = document.createElement("span");
+            textSpan.textContent = title;
+            mobileLink.appendChild(textSpan);
+            
             mobileLink.addEventListener("click", closeMobileMenu);
             mobileLinksWrap.appendChild(mobileLink);
           });

@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slide Puzzle — Mati Natural Heritage</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Slide Puzzle | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <style>
       :root {
         --nat-deep: #0d2818;
@@ -48,273 +48,23 @@
         overflow-x: hidden;
       }
 
+      .site-header {
+        font-family: "Source Sans 3", sans-serif;
+      }
+
+      #footer-placeholder {
+        margin-top: 20rem;
+      }
+
+      .site-footer {
+        margin-top: 20rem;
+      }
+
       .hidden {
         display: none !important;
       }
 
       /* ── Background ── */
-      .page-bg {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      .page-bg__photo {
-        display: none;
-      }
-
-      .page-bg__gradient {
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            ellipse 90% 70% at 50% 40%,
-            transparent 0%,
-            rgba(13, 40, 24, 0.25) 100%
-          ),
-          linear-gradient(
-            180deg,
-            rgba(13, 40, 24, 0.15) 0%,
-            transparent 35%,
-            rgba(13, 40, 24, 0.45) 100%
-          );
-      }
-
-      .page-bg__foliage {
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            ellipse 28% 22% at 0% 100%,
-            rgba(27, 67, 50, 0.75) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 28% 22% at 100% 100%,
-            rgba(27, 67, 50, 0.75) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 22% 18% at 0% 0%,
-            rgba(13, 40, 24, 0.55) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 22% 18% at 100% 0%,
-            rgba(13, 40, 24, 0.55) 0%,
-            transparent 70%
-          );
-        pointer-events: none;
-      }
-
-      .page-bg__game-photo {
-        position: absolute;
-        inset: -6%;
-        z-index: 0;
-        opacity: 0;
-        transition: opacity 1s ease;
-        background-size: cover;
-        background-position: center;
-        filter: blur(34px) brightness(0.48) saturate(1.4);
-        transform: scale(1.08);
-      }
-
-      .page-bg__game-rays {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        opacity: 0;
-        transition: opacity 1s ease;
-        background:
-          radial-gradient(
-            ellipse 65% 48% at 88% 78%,
-            rgba(255, 196, 120, 0.14) 0%,
-            transparent 52%
-          ),
-          linear-gradient(
-            165deg,
-            rgba(27, 67, 50, 0.72) 0%,
-            rgba(13, 40, 24, 0.88) 100%
-          );
-        z-index: -1;
-        animation: game-rays-shift 14s ease-in-out infinite alternate;
-      }
-
-      .page-bg__game-leaves {
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        opacity: 0;
-        transition: opacity 1s ease;
-        overflow: hidden;
-        pointer-events: none;
-        z-index: -1;
-      }
-
-      .leaf-float {
-        position: absolute;
-        width: 14px;
-        height: 20px;
-        background: linear-gradient(
-          145deg,
-          #74c69d 0%,
-          #40916c 55%,
-          #2d6a4f 100%
-        );
-        border-radius: 0 85% 0 85%;
-        opacity: 0;
-        animation: float-leaf linear infinite;
-        box-shadow: 0 2px 8px rgba(13, 40, 24, 0.25);
-      }
-
-      .leaf-float:nth-child(1) {
-        left: 8%;
-        animation-duration: 16s;
-        animation-delay: 0s;
-        width: 11px;
-        height: 16px;
-      }
-      .leaf-float:nth-child(2) {
-        left: 22%;
-        animation-duration: 19s;
-        animation-delay: 2s;
-      }
-      .leaf-float:nth-child(3) {
-        left: 38%;
-        animation-duration: 14s;
-        animation-delay: 5s;
-        width: 16px;
-        height: 22px;
-      }
-      .leaf-float:nth-child(4) {
-        left: 55%;
-        animation-duration: 21s;
-        animation-delay: 1s;
-      }
-      .leaf-float:nth-child(5) {
-        left: 68%;
-        animation-duration: 17s;
-        animation-delay: 7s;
-        width: 12px;
-        height: 17px;
-      }
-      .leaf-float:nth-child(6) {
-        left: 82%;
-        animation-duration: 15s;
-        animation-delay: 3s;
-      }
-      .leaf-float:nth-child(7) {
-        left: 92%;
-        animation-duration: 20s;
-        animation-delay: 9s;
-        width: 10px;
-        height: 15px;
-      }
-      .leaf-float:nth-child(8) {
-        left: 45%;
-        animation-duration: 18s;
-        animation-delay: 11s;
-        width: 13px;
-        height: 19px;
-      }
-
-      @keyframes float-leaf {
-        0% {
-          transform: translateY(105vh) rotate(-20deg) translateX(0);
-          opacity: 0;
-        }
-        8% {
-          opacity: 0.55;
-        }
-        50% {
-          transform: translateY(45vh) rotate(140deg) translateX(28px);
-          opacity: 0.45;
-        }
-        92% {
-          opacity: 0.3;
-        }
-        100% {
-          transform: translateY(-12vh) rotate(320deg) translateX(-18px);
-          opacity: 0;
-        }
-      }
-
-      @keyframes game-rays-shift {
-        from {
-          filter: hue-rotate(0deg) brightness(1);
-        }
-        to {
-          filter: hue-rotate(14deg) brightness(1.06);
-        }
-      }
-
-      .page-bg.is-game-mode #bg-tiles-container {
-        opacity: 0;
-      }
-
-      .page-bg.is-game-mode .page-bg__game-photo,
-      .page-bg.is-game-mode .page-bg__game-rays,
-      .page-bg.is-game-mode .page-bg__game-leaves {
-        opacity: 1;
-      }
-
-      .page-bg.is-game-mode .page-bg__foliage {
-        opacity: 0.4;
-      }
-
-      .page-bg.is-game-mode .page-bg__gradient {
-        background:
-          radial-gradient(
-            ellipse 90% 70% at 50% 40%,
-            rgba(82, 183, 136, 0.18) 0%,
-            rgba(13, 40, 24, 0.5) 100%
-          ),
-          linear-gradient(
-            180deg,
-            rgba(45, 106, 79, 0.22) 0%,
-            transparent 38%,
-            rgba(13, 40, 24, 0.62) 100%
-          );
-      }
-
-      .bg-overlay.is-game-mode {
-        background: radial-gradient(
-          ellipse 80% 70% at 50% 45%,
-          transparent 0%,
-          rgba(13, 40, 24, 0.38) 100%
-        );
-      }
-
-      .hero-tile-demo {
-        position: absolute;
-        background-size: 400% 400%;
-        border: none;
-        transition:
-          transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95),
-          filter 0.4s ease,
-          opacity 0.35s ease;
-        filter: brightness(0.72) saturate(1.12);
-        z-index: 1;
-        will-change: transform;
-      }
-
-      #bg-tiles-container.is-complete .hero-tile-demo {
-        filter: brightness(0.9) saturate(1.2);
-      }
-
-      .bg-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 2;
-        background: radial-gradient(
-          ellipse 85% 75% at 50% 45%,
-          transparent 0%,
-          rgba(13, 40, 24, 0.28) 100%
-        );
-        pointer-events: none;
-      }
-
       #settings-modal {
         z-index: 7000 !important;
       }
@@ -326,57 +76,6 @@
       #settings-modal .header-panel {
         background: var(--surface-dark-elevated) !important;
         border-color: rgba(82, 183, 136, 0.22) !important;
-      }
-
-      /* ── Nav — wooden pill ── */
-      .game-back-nav {
-        position: fixed;
-        top: calc(var(--header-h, 5.625rem) + 1.15rem);
-        left: 0;
-        right: 0;
-        z-index: 490;
-        max-width: 94rem;
-        margin: 0 auto;
-        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-        pointer-events: none;
-      }
-
-      .game-back-nav__align {
-        margin-left: calc(3.25rem + 0.9rem);
-      }
-
-      .game-back-nav a {
-        pointer-events: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        font-family: var(--font-body);
-        font-size: 0.68rem;
-        font-weight: 800;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: #f5f1e8;
-        text-decoration: none;
-        padding: 0.55rem 1.15rem 0.55rem 0.85rem;
-        border-radius: 999px;
-        border: 2px solid #1a120e;
-        background: linear-gradient(
-          180deg,
-          #5c4033 0%,
-          #3d2817 55%,
-          #2e1f16 100%
-        );
-        box-shadow:
-          0 4px 14px rgba(0, 0, 0, 0.45),
-          inset 0 1px 0 rgba(255, 255, 255, 0.12);
-        transition: all 0.2s ease;
-      }
-
-      .game-back-nav a:hover {
-        transform: translateY(-1px);
-        box-shadow:
-          0 6px 18px rgba(0, 0, 0, 0.5),
-          inset 0 1px 0 rgba(255, 255, 255, 0.15);
       }
 
       /* ── Now playing widget ── */
@@ -528,830 +227,6 @@
       }
 
       /* ── Stage ── */
-      .puzzle-stage {
-        position: relative;
-        z-index: 10;
-        min-height: 100vh;
-        padding: calc(var(--header-h) + 3.25rem) clamp(0.75rem, 2vw, 1.5rem)
-          14rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-
-      /* ── Intro — enhanced mockup layout ── */
-      .intro-layout {
-        position: relative;
-        z-index: 20;
-        width: min(100%, 70rem);
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.75rem;
-        align-items: stretch;
-        filter: drop-shadow(0 32px 48px rgba(0, 0, 0, 0.35));
-      }
-
-      .intro-layout.intro-layout--single {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .difficulty-screen {
-        position: relative;
-        z-index: 20;
-        width: min(100%, 70rem);
-        display: grid;
-        justify-items: center;
-        filter: drop-shadow(0 32px 48px rgba(0, 0, 0, 0.35));
-      }
-
-      .difficulty-screen.hidden {
-        display: none;
-      }
-
-      @media (min-width: 900px) {
-        .intro-layout {
-          grid-template-columns: 1.22fr 0.78fr;
-          gap: 2.25rem;
-        }
-      }
-
-      .intro-layout .parchment-card {
-        animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-
-      .intro-layout .diff-panel {
-        animation:
-          intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both,
-          diff-panel-float 5s ease-in-out infinite 1.2s;
-      }
-
-      @keyframes intro-rise {
-        from {
-          opacity: 0;
-          transform: translateY(22px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes diff-panel-float {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-5px);
-        }
-      }
-
-      @media (max-width: 899px) {
-        .diff-panel {
-          max-width: 26rem;
-          margin: 0 auto;
-          perspective: 620px;
-        }
-
-        .diff-panel__frame {
-          transform: rotateX(8deg) rotateY(-6deg);
-        }
-      }
-
-      /* Left — parchment + wood frame */
-      .parchment-card {
-        position: relative;
-        padding: 0.9rem;
-        border-radius: 1.15rem;
-        border: 3px solid #1a120e;
-        background:
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.08'/%3E%3C/svg%3E"),
-          linear-gradient(
-            155deg,
-            #5c4033 0%,
-            #3d2817 38%,
-            #2e1f16 72%,
-            #4a3228 100%
-          );
-        box-shadow:
-          0 32px 64px rgba(0, 0, 0, 0.55),
-          inset 0 2px 0 rgba(255, 255, 255, 0.1),
-          inset 0 -3px 8px rgba(0, 0, 0, 0.35);
-      }
-
-      .parchment-card__inner {
-        position: relative;
-        padding: 2.15rem 1.85rem 1.85rem;
-        border-radius: 0.55rem;
-        border: 1px solid rgba(92, 64, 51, 0.2);
-        background:
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
-          linear-gradient(175deg, #fdfbf5 0%, #f5eede 45%, #ebe0cc 100%);
-        text-align: center;
-        color: var(--nat-ink);
-        overflow: hidden;
-        box-shadow:
-          inset 0 0 48px rgba(92, 64, 51, 0.06),
-          inset 0 2px 0 rgba(255, 255, 255, 0.85);
-      }
-
-      .parchment-card__inner::after {
-        content: "";
-        position: absolute;
-        inset: 0.65rem;
-        border-radius: 0.35rem;
-        border: 1px dashed rgba(64, 145, 108, 0.12);
-        pointer-events: none;
-      }
-
-      .parchment-card__vine {
-        position: absolute;
-        font-size: 1.85rem;
-        line-height: 1;
-        pointer-events: none;
-        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
-        z-index: 3;
-      }
-
-      .parchment-card__vine--tl {
-        top: 0.25rem;
-        left: 0.25rem;
-        transform: rotate(-28deg);
-      }
-      .parchment-card__vine--tr {
-        top: 0.25rem;
-        right: 0.25rem;
-        transform: rotate(28deg) scaleX(-1);
-      }
-      .parchment-card__vine--bl {
-        bottom: 0.25rem;
-        left: 0.25rem;
-        transform: rotate(18deg);
-      }
-      .parchment-card__vine--br {
-        bottom: 0.25rem;
-        right: 0.25rem;
-        transform: rotate(-18deg) scaleX(-1);
-      }
-
-      .parchment-card__title {
-        position: relative;
-        z-index: 1;
-        font-family: var(--font-display);
-        font-size: clamp(2.35rem, 7.5vw, 3.5rem);
-        font-weight: 900;
-        line-height: 0.92;
-        margin: 0 0 0.85rem;
-        color: #1b4332;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.65);
-        letter-spacing: 0.02em;
-      }
-
-      .parchment-card__leaf {
-        font-size: 0.5em;
-        line-height: 1;
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
-      }
-
-      .parchment-card__title-accent {
-        color: #4a3228;
-      }
-
-      .parchment-card__ribbon {
-        position: relative;
-        z-index: 1;
-        display: block;
-        width: calc(100% + 3.5rem);
-        margin: 0 -1.75rem 1.15rem;
-        padding: 0.62rem 1.25rem;
-        font-family: var(--font-display);
-        font-size: clamp(0.84rem, 2.1vw, 1rem);
-        font-weight: 700;
-        font-style: italic;
-        color: #f8f4ea;
-        background: linear-gradient(
-          180deg,
-          #357a5c 0%,
-          #2d6a4f 45%,
-          #1b4332 100%
-        );
-        box-shadow:
-          0 4px 16px rgba(27, 67, 50, 0.4),
-          inset 0 1px 0 rgba(255, 255, 255, 0.15);
-      }
-
-      .parchment-card__ribbon::before,
-      .parchment-card__ribbon::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        width: 0;
-        height: 0;
-        border-style: solid;
-      }
-
-      .parchment-card__ribbon::before {
-        left: 1.25rem;
-        border-width: 7px 7px 0 0;
-        border-color: #0d2818 transparent transparent transparent;
-      }
-
-      .parchment-card__ribbon::after {
-        right: 1.25rem;
-        border-width: 7px 0 0 7px;
-        border-color: #0d2818 transparent transparent transparent;
-      }
-
-      .parchment-card__desc {
-        position: relative;
-        z-index: 1;
-        font-size: 0.9rem;
-        color: #4a5c4e;
-        max-width: 29rem;
-        margin: 0 auto 1.5rem;
-        line-height: 1.75;
-        padding-bottom: 1.25rem;
-        border-bottom: 1px solid rgba(64, 145, 108, 0.18);
-      }
-
-      .polaroid-row {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        gap: 0;
-        flex-wrap: wrap;
-        padding-bottom: 0.35rem;
-      }
-
-      .polaroid {
-        position: relative;
-        width: min(44%, 10.25rem);
-        padding: 0.5rem 0.5rem 1.85rem;
-        background: #fff;
-        border-radius: 0.2rem;
-        box-shadow:
-          0 14px 32px rgba(13, 40, 24, 0.28),
-          0 2px 0 rgba(255, 255, 255, 0.9) inset;
-      }
-
-      .polaroid--tilt-l {
-        transform: rotate(-5deg);
-        z-index: 1;
-      }
-
-      .polaroid--tilt-r {
-        transform: rotate(4deg);
-        margin-left: -0.85rem;
-        z-index: 2;
-      }
-
-      .polaroid__tape {
-        position: absolute;
-        top: -0.4rem;
-        left: 50%;
-        transform: translateX(-50%) rotate(-3deg);
-        width: 2.75rem;
-        height: 0.9rem;
-        background: rgba(255, 255, 255, 0.62);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 3;
-      }
-
-      .polaroid__photo {
-        display: block;
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
-        border-radius: 0.08rem;
-      }
-
-      .polaroid__puzzle {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-        aspect-ratio: 1;
-        background: rgba(13, 40, 24, 0.95);
-        border-radius: 0.08rem;
-        overflow: hidden;
-        padding: 2px;
-      }
-
-      .polaroid__tile {
-        background-image: url("assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg");
-        background-size: 300% 300%;
-        border-radius: 1px;
-      }
-
-      .polaroid__tile:nth-child(1) {
-        background-position: 0% 0%;
-      }
-      .polaroid__tile:nth-child(2) {
-        background-position: 50% 0%;
-      }
-      .polaroid__tile:nth-child(3) {
-        background-position: 100% 0%;
-      }
-      .polaroid__tile:nth-child(4) {
-        background-position: 0% 50%;
-      }
-      .polaroid__tile:nth-child(5) {
-        visibility: hidden;
-      }
-      .polaroid__tile:nth-child(6) {
-        background-position: 100% 50%;
-      }
-      .polaroid__tile:nth-child(7) {
-        background-position: 0% 100%;
-      }
-      .polaroid__tile:nth-child(8) {
-        background-position: 50% 100%;
-      }
-      .polaroid__tile:nth-child(9) {
-        background-position: 100% 100%;
-      }
-
-      /* Right — difficulty panel (trivia-style frame, nature theme) */
-      .diff-panel {
-        position: relative;
-        padding: 0.65rem 0.75rem 0.85rem;
-        border: none;
-        background: transparent;
-        box-shadow: none;
-        perspective: 720px;
-        perspective-origin: 50% 40%;
-      }
-
-      .diff-panel__frame {
-        position: relative;
-        padding: 1.35rem 1.25rem 1.45rem;
-        border-radius: 1.15rem;
-        display: flex;
-        flex-direction: column;
-        border: 2px solid rgba(149, 213, 178, 0.38);
-        background:
-          radial-gradient(
-            circle at 18% 22%,
-            rgba(149, 213, 178, 0.1) 0%,
-            transparent 42%
-          ),
-          linear-gradient(
-            165deg,
-            rgba(24, 62, 44, 0.96) 0%,
-            rgba(12, 36, 24, 0.98) 55%,
-            rgba(8, 24, 16, 0.99) 100%
-          );
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.1),
-          inset 0 -18px 28px rgba(0, 0, 0, 0.35),
-          0 22px 40px rgba(0, 0, 0, 0.5);
-        transform: rotateX(12deg) rotateY(-10deg);
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-        overflow: hidden;
-        animation: diff-frame-glow 3.5s ease-in-out infinite alternate;
-      }
-
-      .diff-panel__frame::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        pointer-events: none;
-        background: radial-gradient(
-          circle,
-          rgba(149, 213, 178, 0.16) 1px,
-          transparent 1px
-        );
-        background-size: 16px 16px;
-        opacity: 0.32;
-        mask-image: linear-gradient(
-          180deg,
-          rgba(0, 0, 0, 0.85),
-          transparent 88%
-        );
-        animation: diff-grid-drift 12s linear infinite;
-      }
-
-      .diff-panel__frame::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        pointer-events: none;
-        border: 1px solid transparent;
-        background: linear-gradient(
-            135deg,
-            rgba(149, 213, 178, 0.55),
-            transparent 38%,
-            transparent 62%,
-            rgba(166, 138, 58, 0.4)
-          )
-          border-box;
-        mask:
-          linear-gradient(#fff 0 0) padding-box,
-          linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        opacity: 0.5;
-        animation: diff-corner-pulse 2.8s ease-in-out infinite alternate;
-      }
-
-      @keyframes diff-frame-glow {
-        from {
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.1),
-            inset 0 -18px 28px rgba(0, 0, 0, 0.35),
-            0 22px 40px rgba(0, 0, 0, 0.5),
-            0 0 24px rgba(82, 183, 136, 0.08);
-        }
-        to {
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.12),
-            inset 0 -18px 28px rgba(0, 0, 0, 0.35),
-            0 22px 40px rgba(0, 0, 0, 0.5),
-            0 0 36px rgba(82, 183, 136, 0.18);
-        }
-      }
-
-      @keyframes diff-grid-drift {
-        from {
-          background-position: 0 0;
-        }
-        to {
-          background-position: 16px 16px;
-        }
-      }
-
-      @keyframes diff-corner-pulse {
-        from {
-          opacity: 0.35;
-        }
-        to {
-          opacity: 0.65;
-        }
-      }
-
-      @keyframes diff-label-glow {
-        from {
-          text-shadow: 0 0 8px rgba(186, 228, 204, 0.2);
-        }
-        to {
-          text-shadow: 0 0 16px rgba(186, 228, 204, 0.45);
-        }
-      }
-
-      @keyframes diff-label-line {
-        from {
-          opacity: 0.55;
-          transform: scaleX(0.85);
-        }
-        to {
-          opacity: 1;
-          transform: scaleX(1);
-        }
-      }
-
-      @keyframes diff-card-enter {
-        from {
-          opacity: 0;
-          transform: translateY(12px) translateZ(0);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) translateZ(8px);
-        }
-      }
-
-      @keyframes diff-card-active-glow {
-        0%,
-        100% {
-          box-shadow:
-            0 0 0 3px rgba(255, 220, 100, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            0 7px 0 rgba(0, 0, 0, 0.14);
-        }
-        50% {
-          box-shadow:
-            0 0 0 4px rgba(255, 220, 100, 0.72),
-            0 0 22px rgba(255, 220, 100, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.45),
-            0 7px 0 rgba(0, 0, 0, 0.14);
-        }
-      }
-
-      .diff-panel__header {
-        position: relative;
-        z-index: 1;
-        margin: 0 0 0.65rem;
-        padding: 0.7rem 1rem;
-        text-align: center;
-        border-radius: 0.55rem;
-        background:
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.07'/%3E%3C/svg%3E"),
-          linear-gradient(180deg, #6b4a38 0%, #4a3228 40%, #3d2817 100%);
-        border: 2px solid #1a120e;
-        box-shadow:
-          0 4px 14px rgba(0, 0, 0, 0.35),
-          inset 0 1px 0 rgba(255, 255, 255, 0.14);
-      }
-
-      .diff-panel__title {
-        font-family: var(--font-display);
-        font-size: clamp(0.78rem, 1.4vw, 0.92rem);
-        font-weight: 800;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: #e8f5ec;
-        margin: 0;
-        animation: diff-label-glow 2.4s ease-in-out infinite alternate;
-      }
-
-      .diff-panel__title::after {
-        content: "";
-        display: block;
-        width: min(70%, 8rem);
-        height: 2px;
-        margin: 0.5rem auto 0;
-        border-radius: 999px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--nat-leaf-light),
-          var(--nat-earth),
-          transparent
-        );
-        animation: diff-label-line 2.2s ease-in-out infinite alternate;
-      }
-
-      .diff-panel__hint {
-        position: relative;
-        z-index: 1;
-        font-size: 0.8rem;
-        color: rgba(186, 228, 204, 0.92);
-        text-align: center;
-        margin: 0 0 1rem;
-        font-style: italic;
-        line-height: 1.45;
-        padding: 0.45rem 0.65rem;
-        border-radius: 0.45rem;
-        background: rgba(0, 0, 0, 0.18);
-        border: 1px solid rgba(149, 213, 178, 0.15);
-      }
-
-      .diff-panel__hint.is-hidden {
-        display: none;
-      }
-
-      .diff-grid {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-        margin-bottom: 1rem;
-        flex: 1;
-        transform-style: preserve-3d;
-      }
-
-      .diff-card {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        min-height: 3.35rem;
-        padding: 0.85rem 1rem 0.85rem 1.15rem;
-        border-radius: 0.85rem;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        cursor: pointer;
-        text-align: left;
-        transition:
-          transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-          border-color 0.25s ease,
-          box-shadow 0.25s ease;
-        overflow: hidden;
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.3),
-          0 5px 0 rgba(0, 0, 0, 0.14);
-        transform: translateZ(8px);
-        animation: diff-card-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1)
-          backwards;
-      }
-
-      .diff-card:nth-child(1) {
-        animation-delay: 0.45s;
-      }
-      .diff-card:nth-child(2) {
-        animation-delay: 0.58s;
-      }
-      .diff-card:nth-child(3) {
-        animation-delay: 0.71s;
-      }
-
-      .diff-card::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 5px;
-        border-radius: 0.85rem 0 0 0.85rem;
-        background: rgba(255, 255, 255, 0.45);
-      }
-
-      .diff-card::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -130%;
-        width: 55%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.22),
-          transparent
-        );
-        transform: skewX(-18deg);
-        transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-        pointer-events: none;
-      }
-
-      .diff-card--easy {
-        background: linear-gradient(
-          160deg,
-          #9ed4a8 0%,
-          #72b87e 55%,
-          #5a9f68 100%
-        );
-        color: #0d2818;
-      }
-
-      .diff-card--easy::before {
-        background: rgba(13, 40, 24, 0.35);
-      }
-
-      .diff-card--medium {
-        background: linear-gradient(
-          160deg,
-          #e0c878 0%,
-          #c9a848 55%,
-          #b89238 100%
-        );
-        color: #2e1f16;
-      }
-
-      .diff-card--medium::before {
-        background: rgba(46, 31, 22, 0.35);
-      }
-
-      .diff-card--hard {
-        background: linear-gradient(
-          160deg,
-          #c4a888 0%,
-          #a08868 55%,
-          #887050 100%
-        );
-        color: #2a1a12;
-      }
-
-      .diff-card--hard::before {
-        background: rgba(42, 26, 18, 0.35);
-      }
-
-      .diff-card:hover {
-        transform: translateZ(14px) translateY(-2px);
-        border-color: rgba(255, 255, 255, 0.55);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.4),
-          0 8px 0 rgba(0, 0, 0, 0.16),
-          0 0 18px rgba(149, 213, 178, 0.15);
-      }
-
-      .diff-card:hover::after {
-        left: 140%;
-      }
-
-      .diff-card.is-active {
-        border-color: rgba(255, 248, 220, 0.95);
-        transform: translateZ(18px) translateY(-1px);
-        animation: diff-card-active-glow 2.2s ease-in-out infinite;
-      }
-
-      .diff-card__body {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        gap: 0.75rem;
-        min-width: 0;
-      }
-
-      .diff-card__name {
-        font-family: var(--font-display);
-        font-size: 1.08rem;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        line-height: 1;
-        flex-shrink: 0;
-      }
-
-      .diff-card__meta {
-        font-family: var(--font-body);
-        font-size: 0.72rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        opacity: 0.88;
-        text-align: right;
-        white-space: nowrap;
-      }
-
-      .diff-panel__divider {
-        position: relative;
-        z-index: 1;
-        height: 1px;
-        margin: 0.15rem 0 1rem;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(149, 213, 178, 0.45),
-          transparent
-        );
-      }
-
-      .diff-panel .start-btn {
-        position: relative;
-        z-index: 1;
-        transform: translateZ(10px);
-      }
-
-      .start-btn {
-        width: 100%;
-        font-family: var(--font-display);
-        font-size: 0.94rem;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        padding: 1.05rem 1.25rem;
-        border: 2px solid #0d0806;
-        border-radius: 0.8rem;
-        cursor: pointer;
-        color: #faf8f2;
-        background:
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.06'/%3E%3C/svg%3E"),
-          linear-gradient(180deg, #5c4033 0%, #3d2817 50%, #2a1a12 100%);
-        box-shadow:
-          0 7px 0 #1a100a,
-          0 14px 32px rgba(0, 0, 0, 0.45),
-          inset 0 1px 0 rgba(255, 255, 255, 0.12);
-        transition: all 0.2s ease;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-      }
-
-      .diff-panel .start-btn:hover:not(:disabled) {
-        transform: translateZ(12px) translateY(-2px);
-      }
-
-      .start-btn:hover:not(:disabled) {
-        transform: translateY(-2px);
-        background:
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.06'/%3E%3C/svg%3E"),
-          linear-gradient(180deg, #6b4a38 0%, #4a3228 50%, #3d2817 100%);
-        box-shadow:
-          0 9px 0 #1a100a,
-          0 18px 36px rgba(0, 0, 0, 0.5),
-          inset 0 1px 0 rgba(255, 255, 255, 0.15);
-      }
-
-      .start-btn:active:not(:disabled) {
-        transform: translateY(3px);
-        box-shadow:
-          0 3px 0 #1a100a,
-          0 8px 20px rgba(0, 0, 0, 0.4),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      }
-
-      .start-btn:disabled,
-      .start-btn.start-btn--disabled {
-        cursor: not-allowed;
-        opacity: 0.42;
-        color: rgba(250, 248, 242, 0.65);
-        background: linear-gradient(180deg, #2a2018 0%, #1a120e 100%);
-        box-shadow: 0 4px 0 #0d0806;
-        transform: none;
-      }
-
       .game-console {
         width: min(100%, 56rem);
       }
@@ -1893,39 +768,476 @@
         color: var(--nat-muted);
         font-weight: 600;
       }
+
+      body {
+        min-height: 100vh;
+        background: #f3f1eb;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      .puzzle-stage {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100svh - var(--header-h, 5.625rem));
+        padding: 1rem 0 3rem;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .game-console {
+        display: flex;
+        flex-direction: column;
+        width: min(
+          calc(100% - clamp(1.5rem, 4vw, 4rem) - clamp(1.5rem, 4vw, 4rem)),
+          90rem
+        );
+        max-width: 90rem;
+        margin: 0 auto;
+        padding: clamp(1rem, 2.5vw, 1.75rem) 0;
+        min-height: 0;
+      }
+
+      .puzzle-heading {
+        margin-bottom: 1.75rem;
+      }
+
+      .puzzle-heading h1 {
+        margin: 0;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+      }
+
+      .puzzle-heading p {
+        max-width: 48rem;
+        margin: 0.7rem 0 0;
+        color: #625e56;
+        font-size: 1.3rem;
+        line-height: 1.6;
+      }
+
+      .puzzle-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 2px solid #252a27;
+      }
+
+      .puzzle-controls__label {
+        color: #6b665e;
+        font-size: 1.15rem;
+      }
+
+      .puzzle-sizes {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+      }
+
+      .puzzle-size {
+        min-height: 3rem;
+        padding: 0.55rem 1rem;
+        border: 0;
+        border-right: 1px solid #e4e0d7;
+        background: #fffefa;
+        color: #383b38;
+        font: inherit;
+        font-size: 1.15rem;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background-color 140ms ease, color 140ms ease;
+      }
+
+      .puzzle-size:last-child {
+        border-right: 0;
+      }
+
+      .puzzle-size span {
+        color: inherit;
+        font-size: 0.82em;
+      }
+
+      .puzzle-size:hover {
+        background: #f0f7f2;
+      }
+
+      .puzzle-size.is-active {
+        background: #252a27;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .puzzle-new {
+        min-height: 3rem;
+        margin-left: auto;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        color: #fff;
+        font: inherit;
+        font-size: 1.15rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .puzzle-new:hover {
+        background: #126b4b;
+      }
+
+      .game-hud {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e4e0d7;
+      }
+
+      .puzzle-stat {
+        display: grid;
+        justify-items: center;
+        gap: 0.15rem;
+      }
+
+      .puzzle-stat__label {
+        color: #777168;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .puzzle-stat__value {
+        color: #252a2d;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .puzzle-stat__value--score {
+        color: #17684d;
+      }
+
+      .timer-bar-track {
+        grid-column: 1 / -1;
+        height: 0.35rem;
+        background: #e8e5de;
+      }
+
+      .timer-bar-fill {
+        background: #16835d;
+        box-shadow: none;
+      }
+
+      .game-main {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        gap: 2rem;
+        margin-top: 1.5rem;
+      }
+
+      @media (min-width: 1200px) {
+        .game-main {
+          width: min(100%, 70rem);
+          margin: 1.5rem auto 0;
+          grid-template-columns: minmax(0, 40rem) minmax(0, 28rem);
+        }
+      }
+
+      #game-play-area {
+        min-width: 0;
+      }
+
+      .puzzle-frame {
+        width: min(100%, 40rem);
+        margin: 0 auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .puzzle-start-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(13, 40, 24, 0.32);
+      }
+
+      .puzzle-image-error {
+        max-width: min(28rem, calc(100% - 2rem));
+        margin: 0;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        background: rgba(13, 40, 24, 0.9);
+        color: #fff;
+        text-align: center;
+      }
+
+      .puzzle-start {
+        margin: 0;
+        padding: 0.8rem 1.75rem;
+        font-size: 1.25rem;
+      }
+
+      #puzzle-board {
+        width: 100%;
+        max-width: 40rem;
+        padding: 0.25rem;
+        gap: 0.25rem;
+        background: #17684d;
+        border-radius: 0.5rem;
+        box-shadow: none;
+      }
+
+      .puzzle-tile {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 0.2rem;
+        box-shadow: none;
+      }
+
+      .site-panel {
+        display: block;
+        align-self: center;
+        padding: 1.25rem 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        text-align: left;
+        backdrop-filter: none;
+      }
+
+      .site-panel__label {
+        display: block;
+        margin-bottom: 0.75rem;
+        color: #777168;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: none;
+        white-space: nowrap;
+      }
+
+      .site-panel__separator {
+        margin: 0 0.35rem;
+        color: #a59f94;
+      }
+
+      .site-panel__cat {
+        color: #383b38;
+        letter-spacing: normal;
+        text-transform: none;
+      }
+
+      .site-panel__name {
+        margin-bottom: 0.4rem;
+        color: #252a27;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .site-panel__cat {
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      .site-preview {
+        display: block;
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border: 0;
+        border-radius: 0.5rem;
+        box-shadow: none;
+      }
+
+      .puzzle-help {
+        width: min(
+          calc(100% - clamp(1.5rem, 4vw, 4rem) - clamp(1.5rem, 4vw, 4rem)),
+          90rem
+        );
+        max-width: 90rem;
+        margin: 1.75rem auto 0;
+        padding: 1.5rem 0 0;
+        border-top: 1px solid #dcd8ce;
+        color: #383b38;
+        font-size: 1.35rem;
+        line-height: 1.65;
+      }
+
+      .puzzle-help h2 {
+        margin: 0 0 0.85rem;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      .puzzle-help ol {
+        margin: 0 0 1rem;
+        padding-left: 1.75rem;
+        list-style: decimal outside;
+      }
+
+      .puzzle-help li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.2rem;
+      }
+
+      .puzzle-help > p {
+        max-width: 72rem;
+        margin: 0 0 1.75rem;
+        color: #625e56;
+      }
+
+      .puzzle-help > h2:not(:first-child) {
+        margin-top: 1.75rem;
+      }
+
+      .puzzle-sizes-table-wrap {
+        overflow-x: auto;
+      }
+
+      .puzzle-help table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      .puzzle-help th,
+      .puzzle-help td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e9e5dc;
+      }
+
+      .puzzle-help thead th {
+        font-weight: 700;
+      }
+
+      .puzzle-help tbody tr:last-child th,
+      .puzzle-help tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .puzzle-help tbody th {
+        font-weight: 600;
+      }
+
+      .results-card {
+        width: min(100%, 90rem);
+        margin: 0 auto;
+        padding: 1rem 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .results-card__title,
+      .results-card__score {
+        color: #252a27;
+      }
+
+      .results-breakdown {
+        background: transparent;
+        border-radius: 0;
+      }
+
+      .results-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .results-actions .puzzle-new,
+      .results-actions .btn-ghost {
+        min-height: 2.8rem;
+        margin: 0;
+        padding: 0.5rem 1.25rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        color: #fff;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        text-transform: none;
+      }
+
+      .now-playing {
+        padding: 0.3rem;
+        border: 1px solid #ded9ce;
+        background: #fffefa;
+        box-shadow: 0 4px 14px rgba(37, 42, 45, 0.1);
+      }
+
+      .now-playing__title {
+        display: none;
+      }
+
+      .now-playing__mute {
+        border-color: #ded9ce;
+        color: #17684d;
+      }
+
+      @media (max-width: 640px) {
+        .puzzle-stage {
+          min-height: 0;
+          padding: 0.75rem 0 2rem;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .puzzle-controls {
+          align-items: flex-start;
+        }
+
+        .puzzle-controls__label {
+          flex-basis: 100%;
+        }
+
+        .puzzle-size {
+          padding-inline: 0.6rem;
+          font-size: 1rem;
+        }
+
+        .puzzle-new {
+          margin-left: 0;
+        }
+
+        .puzzle-heading h1 {
+          font-size: clamp(2.75rem, 10vw, 3rem);
+        }
+      }
     </style>
   </head>
   <body class="game-page visitor-module">
     <div id="header-placeholder"></div>
-
-    <div class="page-bg">
-      <div class="page-bg__photo"></div>
-      <div
-        id="game-bg-photo"
-        class="page-bg__game-photo"
-        aria-hidden="true"
-      ></div>
-      <div class="page-bg__game-rays" aria-hidden="true"></div>
-      <div class="page-bg__game-leaves" aria-hidden="true">
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-        <span class="leaf-float"></span>
-      </div>
-      <div class="page-bg__gradient"></div>
-      <div class="page-bg__foliage" aria-hidden="true"></div>
-    </div>
-    <div class="bg-overlay" id="bg-overlay"></div>
-
-    <nav class="game-back-nav" aria-label="Game navigation">
-      <div class="game-back-nav__align">
-        <a href="game.html">← Return to Game Hall</a>
-      </div>
-    </nav>
 
     <aside id="now-playing" class="now-playing" aria-label="Now playing">
       <button
@@ -1978,246 +1290,133 @@
     </aside>
 
     <main class="puzzle-stage">
-      <!-- INTRO -->
-      <section id="intro-screen" class="intro-layout intro-layout--single">
-        <div class="parchment-card">
-          <div class="parchment-card__inner">
-            <span
-              class="parchment-card__vine parchment-card__vine--tl"
-              aria-hidden="true"
-              >🌿</span
-            >
-            <span
-              class="parchment-card__vine parchment-card__vine--tr"
-              aria-hidden="true"
-              >🌿</span
-            >
-            <span
-              class="parchment-card__vine parchment-card__vine--bl"
-              aria-hidden="true"
-              >🌿</span
-            >
-            <span
-              class="parchment-card__vine parchment-card__vine--br"
-              aria-hidden="true"
-              >🌿</span
-            >
+      <section id="game-screen" class="game-console" aria-label="Slide Puzzle">
+        <header class="puzzle-heading">
+          <h1>Slide Puzzle</h1>
+          <p>
+            Slide the tiles to reveal photos of Mati's heritage landmarks,
+            natural places, and cultural traditions.
+          </p>
+        </header>
 
-            <h1 id="hero-title" class="parchment-card__title">
-              <span class="parchment-card__leaf" aria-hidden="true">🍃</span>
-              SLIDE <span class="parchment-card__title-accent">PUZZLE</span>
-              <span class="parchment-card__leaf" aria-hidden="true">🍃</span>
-            </h1>
-            <div class="parchment-card__ribbon">
-              Piece together Mati's landscapes and landmarks
-            </div>
-
-            <p class="parchment-card__desc">
-              From the Sleeping Dinosaur to festival grounds — restore scrambled
-              photographs of Mati City's natural and cultural treasures.
-            </p>
-
-            <div class="polaroid-row" aria-hidden="true">
-              <div class="polaroid polaroid--tilt-l">
-                <span class="polaroid__tape"></span>
-                <img
-                  class="polaroid__photo"
-                  src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="polaroid polaroid--tilt-r">
-                <span class="polaroid__tape"></span>
-                <div class="polaroid__puzzle">
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                  <div class="polaroid__tile"></div>
-                </div>
-              </div>
-            </div>
-            <button id="play-btn" type="button" class="start-btn">
-              Play
-            </button>
+        <div class="puzzle-controls" aria-label="Game options">
+          <span class="puzzle-controls__label">Difficulty</span>
+          <div class="puzzle-sizes" role="group" aria-label="Choose difficulty">
+            <button type="button" class="puzzle-size is-active" data-level="easy" aria-pressed="true">Easy <span>(3 &times; 3)</span></button>
+            <button type="button" class="puzzle-size" data-level="medium" aria-pressed="false">Medium <span>(4 &times; 4)</span></button>
+            <button type="button" class="puzzle-size" data-level="hard" aria-pressed="false">Hard <span>(6 &times; 6)</span></button>
           </div>
-        </div>
-      </section>
-
-      <section
-        id="difficulty-screen"
-        class="difficulty-screen hidden"
-        aria-label="Choose puzzle difficulty"
-      >
-        <aside class="diff-panel" aria-label="Select difficulty">
-          <div class="diff-panel__frame">
-            <div class="diff-panel__header">
-              <h2 class="diff-panel__title">Select Difficulty</h2>
-            </div>
-            <p id="diff-hint" class="diff-panel__hint">
-              Choose a level to begin your adventure
-            </p>
-            <div class="diff-grid">
-              <button
-                type="button"
-                id="btn-easy"
-                class="diff-card diff-card--easy"
-                data-level="easy"
-                onclick="setDifficulty('easy')"
-              >
-                <span class="diff-card__body">
-                  <span class="diff-card__name">EASY</span>
-                  <span class="diff-card__meta">3×3 · 5 MIN</span>
-                </span>
-              </button>
-              <button
-                type="button"
-                id="btn-medium"
-                class="diff-card diff-card--medium"
-                data-level="medium"
-                onclick="setDifficulty('medium')"
-              >
-                <span class="diff-card__body">
-                  <span class="diff-card__name">MEDIUM</span>
-                  <span class="diff-card__meta">4×4 · 8 MIN</span>
-                </span>
-              </button>
-              <button
-                type="button"
-                id="btn-hard"
-                class="diff-card diff-card--hard"
-                data-level="hard"
-                onclick="setDifficulty('hard')"
-              >
-                <span class="diff-card__body">
-                  <span class="diff-card__name">HARD</span>
-                  <span class="diff-card__meta">5×5 · 10 MIN</span>
-                </span>
-              </button>
-            </div>
-            <div class="diff-panel__divider" aria-hidden="true"></div>
-            <button
-              id="start-btn"
-              class="start-btn start-btn--disabled"
-              type="button"
-              disabled
-            >
-              Start Puzzle
-            </button>
-            <button
-              id="back-to-intro-btn"
-              class="start-btn"
-              type="button"
-            >
-              Back
-            </button>
-          </div>
-        </aside>
-      </section>
-
-      <!-- GAME -->
-      <section id="game-screen" class="hidden game-console">
-        <div class="hud-meta">
-          <span class="difficulty-badge" id="difficulty-badge">—</span>
+          <button type="button" id="new-game-btn" class="puzzle-new">New game</button>
         </div>
 
         <div class="game-hud">
-          <div class="hud-card">
-            <span class="hud-card__label">Points</span>
-            <span
-              id="score-display"
-              class="hud-card__value hud-card__value--score"
-              >0</span
-            >
+          <div class="puzzle-stat">
+            <span class="puzzle-stat__label">Moves</span>
+            <span id="moves-display" class="puzzle-stat__value">0</span>
           </div>
-          <div class="hud-card">
-            <span class="hud-card__label">Time Left</span>
-            <span
-              id="timer-display"
-              class="hud-card__value hud-card__value--timer"
-              >08:00</span
-            >
-            <span id="elapsed-display">00:00 elapsed</span>
+          <div class="puzzle-stat">
+            <span class="puzzle-stat__label">Time</span>
+            <span id="timer-display" class="puzzle-stat__value">05:00</span>
           </div>
-          <div class="hud-card">
-            <span class="hud-card__label">Moves</span>
-            <span id="moves-display" class="hud-card__value">0</span>
+          <div class="puzzle-stat">
+            <span class="puzzle-stat__label">Points</span>
+            <span id="score-display" class="puzzle-stat__value puzzle-stat__value--score">0</span>
           </div>
+          <span id="elapsed-display" class="hidden">00:00 elapsed</span>
+          <span id="difficulty-badge" class="hidden">EASY</span>
           <div class="timer-bar-track">
-            <div
-              id="timer-bar"
-              class="timer-bar-fill"
-              style="width: 100%"
-            ></div>
+            <div id="timer-bar" class="timer-bar-fill" style="width: 100%"></div>
           </div>
         </div>
 
         <div class="game-main" id="game-main">
           <div id="game-play-area">
             <div class="puzzle-frame">
-              <div id="puzzle-board"></div>
+              <div id="puzzle-board" aria-label="Sliding puzzle board"></div>
+              <div id="puzzle-start-overlay" class="puzzle-start-overlay hidden">
+                <button type="button" id="start-puzzle-btn" class="puzzle-new puzzle-start">
+                  Start Puzzle
+                </button>
+                <p id="puzzle-image-error" class="puzzle-image-error hidden" role="status">
+                  The heritage photo could not be loaded. Please try a new game.
+                </p>
+              </div>
             </div>
           </div>
-
           <aside class="site-panel" id="site-panel">
-            <p class="site-panel__label">Heritage Site</p>
-            <p id="site-name-display" class="site-panel__name">—</p>
-            <p id="site-category-display" class="site-panel__cat">—</p>
-            <img
-              id="reference-preview"
-              src=""
-              alt="Heritage photo preview"
-              class="site-preview"
-            />
+            <p class="site-panel__label">
+              Heritage Site
+              <span class="site-panel__separator" aria-hidden="true">|</span>
+              <span id="site-category-display" class="site-panel__cat">&mdash;</span>
+            </p>
+            <p id="site-name-display" class="site-panel__name">&mdash;</p>
+            <img id="reference-preview" src="" alt="Heritage photo preview" class="site-preview" />
           </aside>
         </div>
 
-        <div
-          id="heritage-reveal"
-          class="heritage-reveal hidden"
-          aria-live="polite"
-        >
+        <div id="heritage-reveal" class="heritage-reveal hidden" aria-live="polite">
           <div class="heritage-reveal__image-wrap">
             <span class="heritage-reveal__badge">Restored</span>
             <img id="reveal-image" src="" alt="" />
           </div>
           <div class="heritage-reveal__info">
             <p class="heritage-reveal__eyebrow">Heritage Restored</p>
-            <h2 id="reveal-site-name" class="heritage-reveal__name">—</h2>
-            <p id="reveal-site-cat" class="heritage-reveal__cat">—</p>
+            <h2 id="reveal-site-name" class="heritage-reveal__name">&mdash;</h2>
+            <p id="reveal-site-cat" class="heritage-reveal__cat">&mdash;</p>
             <p id="reveal-site-desc" class="heritage-reveal__desc"></p>
             <div class="heritage-reveal__stats">
-              <div class="heritage-reveal__stat">
-                <span class="heritage-reveal__stat-label">Time</span>
-                <span id="reveal-stat-time" class="heritage-reveal__stat-value"
-                  >—</span
-                >
-              </div>
-              <div class="heritage-reveal__stat">
-                <span class="heritage-reveal__stat-label">Moves</span>
-                <span id="reveal-stat-moves" class="heritage-reveal__stat-value"
-                  >—</span
-                >
-              </div>
-              <div class="heritage-reveal__stat">
-                <span class="heritage-reveal__stat-label">Points</span>
-                <span id="reveal-stat-score" class="heritage-reveal__stat-value"
-                  >—</span
-                >
-              </div>
+              <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Time</span><span id="reveal-stat-time" class="heritage-reveal__stat-value">&mdash;</span></div>
+              <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Moves</span><span id="reveal-stat-moves" class="heritage-reveal__stat-value">&mdash;</span></div>
+              <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Points</span><span id="reveal-stat-score" class="heritage-reveal__stat-value">&mdash;</span></div>
             </div>
-            <button
-              type="button"
-              id="reveal-continue-btn"
-              class="start-btn heritage-reveal__continue"
-            >
-              View Results
-            </button>
+            <button type="button" id="reveal-continue-btn" class="puzzle-new heritage-reveal__continue">View Results</button>
           </div>
+        </div>
+      </section>
+
+      <section class="puzzle-help" aria-labelledby="puzzle-help-title">
+        <h2 id="puzzle-help-title">How to play</h2>
+        <ol>
+          <li>Choose Easy, Medium, or Hard to set the board size.</li>
+          <li>Slide a tile into the empty space to move it.</li>
+          <li>Arrange the tiles in order to restore the heritage photo before time runs out.</li>
+        </ol>
+        <p>
+          Each move slides one tile into the empty space. Solve the board before
+          time runs out; larger grids offer a greater challenge.
+        </p>
+        <h2>Difficulty levels</h2>
+        <div class="puzzle-sizes-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Difficulty</th>
+                <th scope="col">Grid</th>
+                <th scope="col">Tiles</th>
+                <th scope="col">Good for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Easy</th>
+                <td>3 × 3</td>
+                <td>8</td>
+                <td>A short, relaxed game</td>
+              </tr>
+              <tr>
+                <th scope="row">Medium</th>
+                <td>4 × 4</td>
+                <td>15</td>
+                <td>A balanced game</td>
+              </tr>
+              <tr>
+                <th scope="row">Hard</th>
+                <td>6 × 6</td>
+                <td>35</td>
+                <td>For a bigger challenge</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -2233,8 +1432,7 @@
         <div class="results-actions">
           <button
             onclick="location.reload()"
-            class="start-btn"
-            style="width: auto; padding: 1rem 2rem"
+            class="puzzle-new"
             type="button"
           >
             Play Again
@@ -2386,9 +1584,26 @@
       ];
       const FALLBACK_SLIDE_SITES = heritageSites.slice();
       let heritageSession = null;
+      const slideImageAvailability = new Map();
 
       function imgUrl(path) {
         return encodeURI(path).replace(/#/g, "%23");
+      }
+
+      function canLoadSlideImage(path) {
+        const url = imgUrl(path);
+        if (slideImageAvailability.has(url)) {
+          return slideImageAvailability.get(url);
+        }
+
+        const availability = new Promise((resolve) => {
+          const image = new Image();
+          image.onload = () => resolve(true);
+          image.onerror = () => resolve(false);
+          image.src = url;
+        });
+        slideImageAvailability.set(url, availability);
+        return availability;
       }
 
       const config = {
@@ -2412,7 +1627,7 @@
         },
       };
 
-      let difficulty = null;
+      let difficulty = "easy";
       let board = [];
       let moves = 0;
       let timeLeft = 0;
@@ -2669,18 +1884,6 @@
           musicMode === "game" ? "Heritage Puzzle Rush" : "Mati Summer Trail";
       }
 
-      function setPageBackgroundMode(mode) {
-        const pageBg = document.querySelector(".page-bg");
-        const overlay = document.getElementById("bg-overlay");
-        const gamePhoto = document.getElementById("game-bg-photo");
-        const isGame = mode === "game";
-        pageBg?.classList.toggle("is-game-mode", isGame);
-        overlay?.classList.toggle("is-game-mode", isGame);
-        if (isGame && currentSite && gamePhoto) {
-          gamePhoto.style.backgroundImage = `url("${imgUrl(currentSite.src)}")`;
-        }
-      }
-
       function setMusicMode(mode) {
         musicMode = mode;
         const bgMusic = getActiveBgm();
@@ -2778,19 +1981,12 @@
 
       function setDifficulty(level) {
         playCuratorSound("click");
-
         difficulty = level;
-        document
-          .querySelectorAll(".diff-card")
-          .forEach((btn) => btn.classList.remove("is-active"));
-        document.getElementById(`btn-${level}`).classList.add("is-active");
-
-        const startBtn = document.getElementById("start-btn");
-        startBtn.disabled = false;
-        startBtn.classList.remove("start-btn--disabled");
-
-        const hint = document.getElementById("diff-hint");
-        if (hint) hint.classList.add("is-hidden");
+        document.querySelectorAll(".puzzle-size").forEach((button) => {
+          const isActive = button.dataset.level === level;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
       }
 
       async function prepareSlideSites() {
@@ -2813,12 +2009,26 @@
         return heritageSites;
       }
 
-      function pickRandomSite() {
+      async function pickRandomSite() {
         const pool = heritageSites.length
           ? heritageSites
           : FALLBACK_SLIDE_SITES;
-        currentSite = pool[Math.floor(Math.random() * pool.length)];
-        return imgUrl(currentSite.src);
+        const selected = pool[Math.floor(Math.random() * pool.length)];
+        const candidates = [
+          selected,
+          ...FALLBACK_SLIDE_SITES.filter((site) => site.src !== selected.src),
+        ];
+
+        for (const site of candidates) {
+          if (await canLoadSlideImage(site.src)) {
+            currentSite = site;
+            return;
+          }
+          console.warn("Skipping unavailable slide puzzle photo:", site.src);
+        }
+
+        currentSite = null;
+        throw new Error("No available heritage photos could be loaded.");
       }
 
       function formatTime(seconds) {
@@ -2851,7 +2061,6 @@
         board = Array.from({ length: totalTiles }, (_, i) => i);
         emptyPos = totalTiles - 1;
 
-        pickRandomSite();
         updateSiteUI();
         document.getElementById("difficulty-badge").textContent =
           config[difficulty].label;
@@ -2919,7 +2128,7 @@
             const correctRow = Math.floor(tileValue / size);
             const correctCol = tileValue % size;
             tile.style.backgroundImage = `url("${image}")`;
-            tile.style.backgroundSize = `${size * 100}%`;
+            tile.style.backgroundSize = `${size * 100}% ${size * 100}%`;
             tile.style.backgroundPosition = `${(correctCol / (size - 1)) * 100}% ${(correctRow / (size - 1)) * 100}%`;
             tile.onclick = () => {
               handleTileClick(index);
@@ -2981,10 +2190,8 @@
 
         document.getElementById("game-main").classList.add("hidden");
         document.querySelector(".game-hud")?.classList.add("hidden");
+        document.querySelector(".puzzle-help").classList.add("hidden");
         document.getElementById("heritage-reveal").classList.remove("hidden");
-
-        const gamePhoto = document.getElementById("game-bg-photo");
-        if (gamePhoto) gamePhoto.style.backgroundImage = `url("${imageUrl}")`;
 
         playCuratorSound("victory");
       }
@@ -3033,10 +2240,10 @@
         gameActive = false;
         clearInterval(timerInterval);
 
-        setPageBackgroundMode("intro");
         setMusicMode("intro");
 
         document.getElementById("game-screen").classList.add("hidden");
+        document.querySelector(".puzzle-help").classList.add("hidden");
         const resultsEl = document.getElementById("results-screen");
         resultsEl.classList.remove("hidden");
         resultsEl.classList.toggle("is-win", win);
@@ -3111,42 +2318,65 @@
         endGame(true);
       };
 
-      document.getElementById("play-btn").addEventListener("click", () => {
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("difficulty-screen").classList.remove("hidden");
-      });
-
-      document
-        .getElementById("back-to-intro-btn")
-        .addEventListener("click", () => {
-          document.getElementById("difficulty-screen").classList.add("hidden");
-          document.getElementById("intro-screen").classList.remove("hidden");
-        });
-
-      document.getElementById("start-btn").onclick = async () => {
-        if (!difficulty) return;
-
-        playCuratorSound("start");
-        getCuratorAudioCtx();
+      async function startPuzzle() {
+        clearInterval(timerInterval);
+        gameActive = false;
+        document.getElementById("puzzle-start-overlay").classList.add("hidden");
 
         sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
         applyMusicVolume();
-        startPuzzleMusic();
-        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("game-screen").classList.remove("hidden");
+        document.getElementById("results-screen").classList.add("hidden");
+        document.querySelector(".puzzle-help").classList.remove("hidden");
+        document.getElementById("puzzle-image-error").classList.add("hidden");
+        document.getElementById("start-puzzle-btn").classList.remove("hidden");
 
-        await prepareSlideSites();
+        try {
+          await prepareSlideSites();
+          await pickRandomSite();
+        } catch (error) {
+          console.error("Slide puzzle could not load a heritage photo:", error);
+          document.getElementById("start-puzzle-btn").classList.add("hidden");
+          document.getElementById("puzzle-image-error").classList.remove("hidden");
+          document.getElementById("puzzle-start-overlay").classList.remove("hidden");
+          return;
+        }
         initBoard();
         pendingWinScore = 0;
-        setPageBackgroundMode("game");
-        setMusicMode("game");
+        totalTime = config[difficulty].time;
+        timeLeft = totalTime;
+        elapsedSeconds = 0;
+        updateTimerUI();
+        document.getElementById("puzzle-start-overlay").classList.remove("hidden");
+        setMusicMode("intro");
+      }
 
+      function beginPuzzle() {
+        if (gameActive || !currentSite) return;
+        document.getElementById("puzzle-start-overlay").classList.add("hidden");
+        playCuratorSound("start");
+        getCuratorAudioCtx();
+        startPuzzleMusic();
+        setMusicMode("game");
         gameActive = true;
         startTimer();
         playAnnouncer(
           `${config[difficulty].label} difficulty. Restore the ${currentSite.name} heritage photograph.`,
         );
-      };
+      }
+
+      document.querySelectorAll(".puzzle-size").forEach((button) => {
+        button.addEventListener("click", () => {
+          setDifficulty(button.dataset.level);
+          void startPuzzle();
+        });
+      });
+      document
+        .getElementById("start-puzzle-btn")
+        .addEventListener("click", beginPuzzle);
+      document
+        .getElementById("new-game-btn")
+        .addEventListener("click", () => void startPuzzle());
 
       const musicToggleBtn = document.getElementById("music-toggle");
       if (musicToggleBtn) {
@@ -3160,7 +2390,7 @@
 
       bindHoverSound(
         document.querySelectorAll(
-          ".diff-card, .start-btn, .game-back-nav a, .results-actions .start-btn, .results-actions .btn-ghost, #reveal-continue-btn",
+          ".puzzle-size, .puzzle-new, .results-actions .puzzle-new, .results-actions .btn-ghost, #reveal-continue-btn",
         ),
       );
 
@@ -3168,7 +2398,7 @@
         MatiGameExitGuard.init({ isActive: () => gameActive, theme: "nature" });
       }
       document
-        .querySelector(".results-actions .start-btn")
+        .querySelector(".results-actions .puzzle-new")
         ?.addEventListener("click", () => playCuratorSound("click"));
       document
         .querySelector(".results-actions .btn-ghost")
@@ -3177,6 +2407,7 @@
       applyMusicVolume();
       updateNowPlayingTitle();
       updateMusicUI();
+      void startPuzzle();
     </script>
   </body>
 </html>

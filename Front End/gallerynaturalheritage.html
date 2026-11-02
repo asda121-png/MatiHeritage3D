@@ -8,6 +8,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mati Heritage 3D — Natural Heritage</title>
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -117,6 +118,10 @@
             document.body.appendChild(s);
           }
 
+          // Move settings modal to body
+          const settingsModal = document.getElementById("settings-modal");
+          if (settingsModal) document.body.appendChild(settingsModal);
+
           document
             .querySelectorAll('.site-nav__link[data-nav="gallery"]')
             .forEach((link) => link.classList.add("is-active"));
@@ -124,6 +129,12 @@
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
           if (typeof window.MatiVisitorAuth !== "undefined") {
             await window.MatiVisitorAuth.refresh();
           }

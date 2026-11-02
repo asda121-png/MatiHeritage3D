@@ -59,7 +59,11 @@
     if (typeof window.initSiteHeader === "function") {
       window.initSiteHeader();
     }
-    // Note: initGlobalSettings() is called by the individual pages after this runs.
+
+    // Initialize settings modal on all pages
+    if (typeof window.initGlobalSettings === "function") {
+      window.initGlobalSettings();
+    }
   }
 
   async function injectFooter(pageKey) {

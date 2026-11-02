@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Matching Pairs — Chronicle of Mati</title>
+    <title>Memory Pairs | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=MedievalSharp&family=Patrick+Hand&family=Quicksand:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=MedievalSharp&family=Patrick+Hand&family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
 
     <style>
       :root {
@@ -45,7 +46,6 @@
         overflow-x: hidden;
         min-height: 100vh;
         background: #2a1808;
-        zoom: 0.8;
       }
 
       .chronicle-font {
@@ -1834,6 +1834,10 @@
         z-index: 500;
       }
 
+      .site-header {
+        font-family: "Source Sans 3", sans-serif;
+      }
+
       #footer-placeholder {
         margin-top: 20rem;
       }
@@ -1945,49 +1949,6 @@
       #settings-modal select option {
         background: var(--surface-dark-elevated);
         color: #fff;
-      }
-
-      .game-back-nav {
-        position: fixed;
-        top: calc(var(--header-h, 5.625rem) + 1.15rem);
-        left: 0;
-        right: 0;
-        z-index: 490;
-        max-width: 94rem;
-        margin: 0 auto;
-        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-        pointer-events: none;
-      }
-
-      .game-back-nav__align {
-        margin-left: calc(3.25rem + 0.9rem);
-      }
-
-      .game-back-nav a {
-        pointer-events: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        max-width: 14rem;
-        font-family: "Quicksand", sans-serif;
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: var(--adv-gold-bright);
-        text-decoration: none;
-        padding: 0.4rem 0.75rem;
-        border-radius: 999px;
-        border: 2px solid rgba(212, 168, 67, 0.45);
-        background: rgba(42, 24, 8, 0.65);
-        backdrop-filter: blur(4px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-        transition: all 0.2s ease;
-      }
-
-      .game-back-nav a:hover {
-        color: #fffbeb;
-        border-color: var(--adv-gold);
-        background: rgba(92, 61, 30, 0.75);
-        box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);
       }
 
       @media (max-width: 640px) {
@@ -2130,17 +2091,611 @@
         letter-spacing: 0.12em;
         border-radius: 14px;
       }
+
+      body.chronicle-page {
+        color: #252a2d;
+        background: #f3f1eb;
+      }
+
+      .chronicle-bg,
+      .chronicle-bg::before,
+      .chronicle-bg::after,
+      .chronicle-stage::before,
+      .chronicle-stage::after,
+      .bg-adv-texture,
+      .bg-adv-parchment-wash,
+      .bg-adv-map-deco,
+      .bg-adv-wood-side,
+      .bg-adv-wood-top,
+      .bg-adv-scroll-edge,
+      .bg-adv-frame-corner,
+      .bg-adv-lantern-glow,
+      .bg-adv-lantern {
+        display: none !important;
+      }
+
+      .chronicle-stage,
+      body.chronicle-page.is-playing .chronicle-stage {
+        min-height: calc(100svh - var(--header-h, 5.625rem));
+        justify-content: flex-start;
+        padding: 1rem 0 3rem;
+        background: #f3f1eb;
+      }
+
+      body.chronicle-page.is-playing {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .chronicle-stage > .relative {
+        width: min(
+          calc(100% - clamp(1.5rem, 4vw, 4rem) - clamp(1.5rem, 4vw, 4rem)),
+          90rem
+        );
+        max-width: 90rem;
+        height: auto;
+        max-height: none;
+      }
+
+      #intro-screen,
+      #difficulty-screen {
+        display: none !important;
+      }
+
+      #intro-screen,
+      #difficulty-screen,
+      #results-screen {
+        width: min(100%, 48rem);
+        max-width: none;
+        margin: 1rem auto;
+        padding: clamp(1.35rem, 4vw, 2.5rem);
+        border: 1px solid #e4e0d7;
+        border-radius: 1rem;
+        background: #fffefa;
+        box-shadow: 0 8px 24px rgba(37, 42, 45, 0.06);
+        animation: none;
+      }
+
+      .adventure-corner,
+      .scroll-curl,
+      .keeper-wrap,
+      .keeper-bubble {
+        display: none !important;
+      }
+
+      #intro-screen .chronicle-title,
+      #difficulty-screen .chronicle-title,
+      #results-screen .chronicle-title,
+      #game-screen .game-screen__title {
+        color: #252a2d;
+        background: none;
+        filter: none;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-shadow: none;
+        -webkit-text-fill-color: currentColor;
+      }
+
+      #results-screen .adventure-score {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      .memory-result-label {
+        margin-top: -0.5rem;
+        color: #777168;
+        font-size: 0.85rem;
+      }
+
+      #intro-screen .chronicle-title {
+        margin-bottom: 0.75rem;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        line-height: 1.12;
+      }
+
+      .chronicle-title--divider::after,
+      .chronicle-title--divider::before {
+        display: none !important;
+      }
+
+      .adventure-body,
+      #intro-screen .intro-desc {
+        color: #625e56;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        text-shadow: none;
+      }
+
+      #intro-screen .intro-desc {
+        max-width: 34rem;
+        margin: 0 auto 1.5rem;
+      }
+
+      .quest-tab {
+        min-height: 6rem;
+        border: 1px solid #ded9ce;
+        border-radius: 0.75rem;
+        background: #fff;
+        box-shadow: none;
+        text-align: center;
+        transition:
+          border-color 160ms ease,
+          background-color 160ms ease;
+      }
+
+      .quest-tab:hover,
+      .quest-tab.is-active {
+        transform: none;
+        border-color: #16835d;
+        background: #f0f7f2;
+        box-shadow: none;
+      }
+
+      .quest-tab__label {
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+      }
+
+      .btn-chronicle,
+      #intro-screen .btn-treasure-chest {
+        min-width: 0;
+        padding: 0.7rem 1.4rem;
+        border: 1px solid #126b4b;
+        border-radius: 0.6rem;
+        background: #126b4b;
+        box-shadow: none;
+        color: #fff;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-shadow: none;
+        transition: background-color 160ms ease;
+      }
+
+      .btn-chronicle:hover,
+      #intro-screen .btn-treasure-chest:hover {
+        transform: none;
+        background: #0e573d;
+        box-shadow: none;
+      }
+
+      .btn-chronicle--ghost {
+        border-color: #ded9ce;
+        background: #fff;
+        color: #393d3b;
+      }
+
+      .btn-chronicle--ghost:hover {
+        background: #f3f1eb;
+        color: #252a2d;
+      }
+
+      #game-screen:not(.hidden) {
+        width: 100%;
+        margin: 0 auto;
+        padding: clamp(1rem, 2.5vw, 1.75rem) 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .memory-game-heading {
+        margin-bottom: 1.75rem;
+      }
+
+      #game-screen .memory-game-heading h1 {
+        margin: 0;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+      }
+
+      .memory-game-heading p {
+        max-width: 48rem;
+        margin: 0.7rem 0 0;
+        color: #625e56;
+        font-size: 1.3rem;
+        line-height: 1.6;
+      }
+
+      .memory-game-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 2px solid #252a27;
+      }
+
+      .memory-game-controls__label {
+        color: #6b665e;
+        font-size: 1.15rem;
+      }
+
+      .memory-game-controls__size-label {
+        margin-left: 0;
+      }
+
+      .memory-game-controls__set {
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        background: #e9eee8;
+        color: #17684d;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .memory-game-sizes {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+      }
+
+      .memory-game-size {
+        min-height: 3rem;
+        padding: 0.55rem 1rem;
+        border: 0;
+        border-right: 1px solid #e4e0d7;
+        background: #fffefa;
+        color: #383b38;
+        font: inherit;
+        font-size: 1.15rem;
+        white-space: nowrap;
+        cursor: pointer;
+        transition:
+          background-color 140ms ease,
+          color 140ms ease;
+      }
+
+      .memory-game-size:last-child {
+        border-right: 0;
+      }
+
+      .memory-game-size span {
+        color: inherit;
+        font-size: 0.82em;
+      }
+
+      .memory-game-size:hover {
+        background: #f0f7f2;
+      }
+
+      .memory-game-size.is-active {
+        background: #252a27;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .memory-game-new {
+        min-height: 3rem;
+        margin-left: auto;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        color: #fff;
+        font: inherit;
+        font-size: 1.15rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .memory-game-new:hover {
+        background: #126b4b;
+      }
+
+      .game-header {
+        display: block;
+        margin-bottom: 0;
+      }
+
+      .game-header__title {
+        display: none;
+      }
+
+      .game-header__actions,
+      .game-progress {
+        display: none;
+      }
+
+      #game-screen .game-screen__title {
+        font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+      }
+
+      #streak-badge {
+        display: none !important;
+      }
+
+      .game-header__stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e4e0d7;
+      }
+
+      #game-screen .hud-ribbon {
+        min-width: 0;
+        padding: 0.5rem 0.25rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      #game-screen .hud-ribbon__label {
+        color: #777168;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+
+      #game-screen .hud-ribbon__value {
+        color: #252a2d;
+        font-size: 2rem;
+        text-shadow: none;
+      }
+
+      .game-progress {
+        max-width: none;
+        margin: 0 0 1rem;
+      }
+
+      .hourglass-track {
+        height: 0.45rem;
+        border: 0;
+        background: #e8e5de;
+        box-shadow: none;
+      }
+
+      .hourglass-fill {
+        background: #16835d;
+      }
+
+      .pairs-progress {
+        display: none;
+      }
+
+      #game-table {
+        align-self: stretch;
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        min-height: 0;
+        align-items: center;
+        overflow: visible;
+        padding: 0.25rem;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        position: static;
+      }
+
+      #game-table::before {
+        display: none;
+      }
+
+      .memory-game-help {
+        width: 100%;
+        margin: 1.75rem auto 0;
+        padding: 1.5rem 0 0;
+        border-top: 1px solid #dcd8ce;
+        color: #383b38;
+        font-size: 1.35rem;
+        line-height: 1.65;
+      }
+
+      .memory-game-help h2 {
+        margin: 0 0 0.85rem;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      .memory-game-help ol {
+        margin: 0 0 1rem;
+        padding-left: 1.75rem;
+        list-style: decimal outside;
+      }
+
+      .memory-game-help li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.2rem;
+      }
+
+      .memory-game-help > p {
+        max-width: 72rem;
+        margin: 0 0 1.75rem;
+        color: #625e56;
+      }
+
+      .memory-game-table-wrap {
+        overflow-x: auto;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .memory-game-help table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      .memory-game-help th,
+      .memory-game-help td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e9e5dc;
+      }
+
+      .memory-game-help thead th {
+        background: transparent;
+        font-weight: 700;
+      }
+
+      .memory-game-help tbody tr:last-child th,
+      .memory-game-help tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .memory-game-help tbody th {
+        font-weight: 600;
+      }
+
+      #card-grid {
+        gap: 0.75rem;
+      }
+
+      .memory-card {
+        border-radius: 0.65rem;
+      }
+
+      .memory-card:focus-visible {
+        outline: 3px solid #16835d;
+        outline-offset: 3px;
+      }
+
+      .card-back {
+        border: 1px solid #d5d9d4;
+        border-radius: 0.65rem;
+        background:
+          radial-gradient(rgba(255, 255, 255, 0.42) 1px, transparent 1.5px) 0
+            0 / 10px 10px,
+          #17684d;
+        box-shadow: none;
+      }
+
+      .wax-seal {
+        width: 2rem;
+        height: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: none;
+        color: #fff;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        animation: none;
+      }
+
+      .card-front {
+        border: 1px solid #d9d6ce;
+        border-radius: 0.65rem;
+        background: #fff;
+        box-shadow: none;
+      }
+
+      .card-front__frame {
+        margin: 0.2rem;
+        border: 0;
+        border-radius: 0.4rem;
+      }
+
+      .card-front__frame::before {
+        display: none;
+      }
+
+      .card-front__name {
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+      }
+
+      .memory-card.is-matched .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .memory-card.is-matched .card-front,
+      .memory-card.is-matched[data-category="built"] .card-front,
+      .memory-card.is-matched[data-category="natural"] .card-front,
+      .memory-card.is-matched[data-category="intangible"] .card-front {
+        box-shadow: 0 0 0 2px #16835d;
+        animation: none;
+      }
+
+      .memory-card.is-dealing,
+      .memory-card.is-dealt,
+      .stamp-burst,
+      .score-float {
+        animation: none !important;
+      }
+
+      .dealing-overlay {
+        display: none !important;
+      }
+
+      .now-playing {
+        padding: 0.3rem !important;
+        border: 1px solid #ded9ce !important;
+        background: #fffefa !important;
+        box-shadow: 0 4px 14px rgba(37, 42, 45, 0.1) !important;
+      }
+
+      .now-playing__title {
+        display: none !important;
+      }
+
+      .music-toggle-btn {
+        border-color: #ded9ce !important;
+        color: #17684d !important;
+      }
+
+      @media (max-width: 640px) {
+        .chronicle-stage,
+        body.chronicle-page.is-playing .chronicle-stage {
+          min-height: 0;
+          padding: 0.75rem 0 2rem;
+        }
+
+        body.chronicle-page.is-playing .chronicle-stage > .relative {
+          height: auto;
+          max-height: none;
+        }
+
+        .memory-game-controls__size-label {
+          margin-left: 0;
+        }
+
+        .game-header__stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .memory-game-size {
+          padding-inline: 0.6rem;
+        }
+
+        .memory-game-new {
+          margin-left: 0;
+        }
+
+        #card-grid {
+          gap: 0.5rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .memory-card .card-inner,
+        .quest-tab,
+        .btn-chronicle {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
     </style>
   </head>
 
   <body class="chronicle-page game-page visitor-module">
     <div id="header-placeholder"></div>
-
-    <nav class="game-back-nav" aria-label="Game navigation">
-      <div class="game-back-nav__align">
-        <a href="game.html">← Return to Game Hall</a>
-      </div>
-    </nav>
 
     <div class="chronicle-bg" aria-hidden="true">
       <div class="bg-adv-texture" aria-hidden="true"></div>
@@ -2298,7 +2853,7 @@
     </div>
 
     <main class="chronicle-stage">
-      <div class="relative z-10 mx-auto w-full max-w-6xl flex flex-col">
+      <div class="relative z-10 mx-auto w-full flex flex-col">
         <!-- INTRO -->
         <section
           id="intro-screen"
@@ -2466,9 +3021,8 @@
           <p
             class="intro-desc adventure-body text-lg md:text-xl leading-relaxed max-w-xl mx-auto mb-8"
           >
-            Your expedition begins here! Flip the wax-sealed cards and pair the
-            treasures of Mati — monuments, islands, and living traditions —
-            before time runs out.
+            Flip two cards at a time and find every matching pair from Mati's
+            heritage before the timer runs out.
           </p>
 
           <button
@@ -2476,7 +3030,7 @@
             id="start-btn"
             class="btn-chronicle btn-chronicle--primary btn-treasure-chest"
           >
-            PLAY
+            CHOOSE DIFFICULTY
           </button>
         </section>
 
@@ -2557,39 +3111,68 @@
         </section>
 
         <!-- GAME -->
-        <section id="game-screen" class="hidden">
-          <!-- Game Header -->
+        <section id="game-screen">
+          <header class="memory-game-heading">
+            <h1 class="game-screen__title">Memory Matching Pairs</h1>
+            <p>
+              Turn over two cards at a time and find every matching pair in as
+              few moves as you can.
+            </p>
+          </header>
+
+          <div class="memory-game-controls" aria-label="Game options">
+            <span
+              class="memory-game-controls__label memory-game-controls__size-label"
+              >Difficulty</span
+            >
+            <div
+              class="memory-game-sizes"
+              role="group"
+              aria-label="Choose difficulty"
+            >
+              <button
+                type="button"
+                class="memory-game-size is-active"
+                data-level="easy"
+                aria-pressed="true"
+              >
+                Easy <span>(6 pairs)</span>
+              </button>
+              <button
+                type="button"
+                class="memory-game-size"
+                data-level="medium"
+                aria-pressed="false"
+              >
+                Medium <span>(8 pairs)</span>
+              </button>
+              <button
+                type="button"
+                class="memory-game-size"
+                data-level="hard"
+                aria-pressed="false"
+              >
+                Hard <span>(12 pairs)</span>
+              </button>
+            </div>
+            <button type="button" id="new-game-btn" class="memory-game-new">
+              New game
+            </button>
+          </div>
+
           <div class="game-header">
             <div class="game-header__title">
-              <h2 class="game-screen__title">Pair the Treasures of Mati</h2>
+              <h2 class="game-screen__title">Match Mati's Heritage</h2>
               <span id="streak-badge" class="streak-badge" aria-live="polite">
                 🔥 Streak ×<span id="streak-count">0</span>
               </span>
             </div>
             <div class="game-header__stats">
               <div class="hud-ribbon">
-                <div class="hud-ribbon__label">Time</div>
-                <div
-                  id="timer-display"
-                  class="hud-ribbon__value text-[var(--teal)]"
-                >
-                  60s
-                </div>
-              </div>
-              <div class="hud-ribbon">
-                <div class="hud-ribbon__label">Score</div>
-                <div
-                  id="score-display"
-                  class="hud-ribbon__value text-[var(--burgundy)]"
-                >
-                  0
-                </div>
-              </div>
-              <div class="hud-ribbon">
-                <div class="hud-ribbon__label">Turns</div>
+                <div class="hud-ribbon__label">Moves</div>
                 <div
                   id="moves-display"
-                  class="hud-ribbon__value text-[var(--gold)]"
+                  class="hud-ribbon__value text-[var(--burgundy)]"
                 >
                   0
                 </div>
@@ -2598,19 +3181,28 @@
                 <div class="hud-ribbon__label">Pairs</div>
                 <div class="hud-ribbon__value text-[var(--forest)]">
                   <span id="pairs-count">0</span>/<span id="total-pairs"
-                    >8</span
+                    >6</span
                   >
                 </div>
               </div>
-            </div>
-            <div class="game-header__actions">
-              <button
-                type="button"
-                id="game-back-btn"
-                class="btn-chronicle btn-chronicle--ghost"
-              >
-                ← Back
-              </button>
+              <div class="hud-ribbon">
+                <div class="hud-ribbon__label">Time</div>
+                <div
+                  id="timer-display"
+                  class="hud-ribbon__value text-[var(--teal)]"
+                >
+                  0:00
+                </div>
+              </div>
+              <div class="hud-ribbon">
+                <div class="hud-ribbon__label">Best</div>
+                <div
+                  id="best-display"
+                  class="hud-ribbon__value text-[var(--gold)]"
+                >
+                  –
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2628,6 +3220,7 @@
           <div id="game-table" class="game-table">
             <div id="card-grid" class="grid"></div>
           </div>
+          <span id="score-display" class="hidden" aria-hidden="true">0</span>
         </section>
 
         <!-- RESULTS -->
@@ -2664,6 +3257,7 @@
           <div id="final-score" class="chronicle-title adventure-score mb-2">
             0
           </div>
+          <div class="memory-result-label">moves</div>
           <p class="adventure-body text-xl mb-1" id="result-msg">
             Well done, chronicler!
           </p>
@@ -2680,6 +3274,62 @@
             >
               PLAY AGAIN
             </button>
+          </div>
+        </section>
+
+        <section
+          class="memory-game-help"
+          aria-labelledby="memory-game-help-title"
+        >
+          <h2 id="memory-game-help-title">How to play the memory game</h2>
+          <ol>
+            <li>Pick a difficulty. All cards begin face down.</li>
+            <li>
+              Flip over two cards. A matching pair stays open; if they do not
+              match, both cards turn face down again.
+            </li>
+            <li>
+              Find all the pairs. Try to finish in as few moves as possible.
+            </li>
+          </ol>
+          <p>
+            Each move means flipping over two cards. A perfect round finds one
+            pair with every move. Your best score for each difficulty is saved
+            on this device.
+          </p>
+
+          <h2>Difficulty levels</h2>
+          <div class="memory-game-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Difficulty</th>
+                  <th>Pairs</th>
+                  <th>Cards</th>
+                  <th>Good for</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Easy</th>
+                  <td>6</td>
+                  <td>12</td>
+                  <td>A short, relaxed game</td>
+                </tr>
+                <tr>
+                  <th scope="row">Medium</th>
+                  <td>8</td>
+                  <td>16</td>
+                  <td>A balanced game</td>
+                </tr>
+                <tr>
+                  <th scope="row">Hard</th>
+                  <td>12</td>
+                  <td>24</td>
+                  <td>For a bigger challenge</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </div>
@@ -2909,7 +3559,7 @@
           name: "Waniban Island",
           category: "natural",
           emoji: "🐚",
-          img: "assets/data/Natural Heritage/Waniban Island/Photographs/Waniban-island.jpg",
+          img: "assets/data/GALLERY/Waniban-island.jpg",
           fact: "Pristine island in Pujada Bay — snorkeling paradise with quiet white-sand shores.",
         },
         {
@@ -2946,31 +3596,32 @@
         easy: {
           cols: 4,
           pairs: 6,
-          time: 90,
+          cardScale: 1,
           basePoints: 10,
         },
         medium: {
           cols: 4,
           pairs: 8,
-          time: 60,
+          cardScale: Math.SQRT1_2,
           basePoints: 15,
         },
         hard: {
           cols: 6,
           pairs: 12,
-          time: 45,
+          cardScale: Math.SQRT1_2,
           basePoints: 20,
         },
       };
 
-      let difficulty = "medium";
+      let difficulty = "easy";
       let cards = [];
       let flippedCards = [];
       let matchedPairs = 0;
       let score = 0;
       let moves = 0;
-      let timeLeft = 0;
+      let elapsedSeconds = 0;
       let timerInterval = null;
+      let timerStarted = false;
       let gameActive = false;
       let toastTimer = null;
       let keeperTipTimer = null;
@@ -3169,19 +3820,22 @@
 
       function setDifficulty(level) {
         difficulty = level;
-        document.querySelectorAll(".quest-tab").forEach((btn) => {
-          btn.classList.toggle("is-active", btn.dataset.level === level);
+        document.querySelectorAll(".memory-game-size").forEach((btn) => {
+          const isActive = btn.dataset.level === level;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-pressed", String(isActive));
         });
       }
 
-      document.querySelectorAll(".quest-tab").forEach((btn) => {
+      document.querySelectorAll(".memory-game-size").forEach((btn) => {
         btn.addEventListener("click", () => {
-          btn.classList.add("is-selecting");
-          setTimeout(() => btn.classList.remove("is-selecting"), 350);
           setDifficulty(btn.dataset.level);
-          startGame(btn.dataset.level);
+          void startGame();
         });
       });
+      document
+        .getElementById("new-game-btn")
+        .addEventListener("click", () => void startGame());
 
       function popHud(id) {
         const el = document.getElementById(id)?.closest(".hud-ribbon");
@@ -3193,14 +3847,7 @@
 
       function updateStreakUI() {
         const badge = document.getElementById("streak-badge");
-        const countEl = document.getElementById("streak-count");
-        if (!badge || !countEl) return;
-        if (streak >= 2) {
-          countEl.textContent = streak;
-          badge.classList.add("is-visible");
-        } else {
-          badge.classList.remove("is-visible");
-        }
+        if (badge) badge.classList.remove("is-visible");
       }
 
       function updatePairProgress() {
@@ -3353,33 +4000,34 @@
           return;
 
         const totalCards = settings.pairs * 2;
-        const rows = Math.ceil(totalCards / settings.cols);
-        const gap = 16;
+        const gap = window.innerWidth <= 640 ? 8 : 12;
         const aspect = 0.72;
 
-        // Calculate available space based on viewport
-        const headerHeight = 120;
-        const progressHeight = 50;
-        const padding = 32;
-        const availH =
-          window.innerHeight - headerHeight - progressHeight - padding;
-        const availW = window.innerWidth * 0.9;
-
-        let cardH = (availH - gap * (rows - 1)) / rows;
-        let cardW = cardH * aspect;
-
-        const maxW = (availW - gap * (settings.cols - 1)) / settings.cols;
-        if (cardW > maxW) {
-          cardW = maxW;
-          cardH = cardW / aspect;
-        }
-
-        cardH = Math.max(140, Math.floor(cardH));
-        cardW = Math.max(100, Math.floor(cardH * aspect));
+        const availW = Math.min(
+          window.innerWidth * 0.9,
+          table.clientWidth || window.innerWidth * 0.9,
+        );
+        const minCardW = window.innerWidth <= 640 ? 64 : 80;
+        const maxColumns = window.innerWidth <= 640 ? 4 : settings.cols;
+        const preferredCardW = Math.round(
+          (window.innerWidth <= 640 ? 110 : 180) * settings.cardScale,
+        );
+        const cols = Math.min(
+          settings.cols,
+          maxColumns,
+          Math.max(3, Math.floor((availW + gap) / (preferredCardW + gap))),
+        );
+        const rows = Math.ceil(totalCards / cols);
+        const maxW = (availW - gap * (cols - 1)) / cols;
+        const cardW = Math.max(
+          minCardW,
+          Math.floor(Math.min(preferredCardW, maxW)),
+        );
+        const cardH = Math.floor(cardW / aspect);
 
         gameScreen.style.setProperty("--card-w", `${cardW}px`);
         gameScreen.style.setProperty("--card-h", `${cardH}px`);
-        grid.style.gridTemplateColumns = `repeat(${settings.cols}, ${cardW}px)`;
+        grid.style.gridTemplateColumns = `repeat(${cols}, ${cardW}px)`;
         grid.style.gridTemplateRows = `repeat(${rows}, ${cardH}px)`;
         grid.style.gap = `${gap}px`;
       }
@@ -3438,7 +4086,7 @@
       }
 
       window.addEventListener("resize", () => {
-        if (gameActive) syncBoardLayout();
+        syncBoardLayout();
       });
 
       function flipCard(card, item) {
@@ -3451,6 +4099,7 @@
           return;
         }
 
+        startElapsedTimer();
         card.classList.add("is-flipped");
         flippedCards.push({ card, item });
         playChronicleClick("card");
@@ -3483,10 +4132,6 @@
         flippedCards = [];
 
         playSfx(correctSfx);
-        spawnStampBurst();
-        spawnScoreFloat(pairScore, c1);
-        flashGameTable("match");
-        showFactScroll(item);
 
         setTimeout(() => {
           [c1, c2].forEach((card) => {
@@ -3498,19 +4143,16 @@
               `${item.emoji} ${item.name} — ${CATEGORY_LABELS[item.category]}`,
             );
           });
-          if (matchedPairs === CONFIG[difficulty].pairs) endGame(true);
+          if (matchedPairs === CONFIG[difficulty].pairs) endGame();
         }, 320);
       }
 
       function handleMismatch(c1, c2) {
         playSfx(wrongSfx);
-        flashGameTable("miss");
-        c1.classList.add("is-shake");
-        c2.classList.add("is-shake");
 
         setTimeout(() => {
-          c1.classList.remove("is-flipped", "is-shake");
-          c2.classList.remove("is-flipped", "is-shake");
+          c1.classList.remove("is-flipped");
+          c2.classList.remove("is-flipped");
           flippedCards = [];
         }, 900);
       }
@@ -3530,28 +4172,38 @@
         );
       }
 
-      function updateTimerBar() {
-        const settings = CONFIG[difficulty];
-        const pct = Math.max(0, (timeLeft / settings.time) * 100);
-        const bar = document.getElementById("timer-bar");
-        bar.style.width = `${pct}%`;
-        bar.classList.toggle("is-urgent", timeLeft <= 10);
+      function updateElapsedTimeDisplay() {
         const timerEl = document.getElementById("timer-display");
-        if (timerEl) timerEl.classList.toggle("is-urgent", timeLeft <= 10);
+        if (!timerEl) return;
+        const minutes = Math.floor(elapsedSeconds / 60);
+        const seconds = String(elapsedSeconds % 60).padStart(2, "0");
+        timerEl.textContent = `${minutes}:${seconds}`;
       }
 
-      function startTimer() {
-        const settings = CONFIG[difficulty];
-        timeLeft = settings.time;
-        document.getElementById("timer-display").textContent = `${timeLeft}s`;
-        updateTimerBar();
+      function updateBestDisplay() {
+        const bestEl = document.getElementById("best-display");
+        if (!bestEl) return;
+        const best = Number(
+          localStorage.getItem(`memoryPairsBestMoves:${difficulty}`),
+        );
+        bestEl.textContent = best > 0 ? String(best) : "–";
+      }
+
+      function resetElapsedTimer() {
+        elapsedSeconds = 0;
+        updateElapsedTimeDisplay();
 
         clearInterval(timerInterval);
+        timerStarted = false;
+      }
+
+      function startElapsedTimer() {
+        if (timerStarted) return;
+        timerStarted = true;
         timerInterval = setInterval(() => {
-          timeLeft--;
-          document.getElementById("timer-display").textContent = `${timeLeft}s`;
-          updateTimerBar();
-          if (timeLeft <= 0) endGame(false);
+          if (!gameActive) return;
+          elapsedSeconds++;
+          updateElapsedTimeDisplay();
         }, 1000);
       }
 
@@ -3565,37 +4217,37 @@
         }
       }
 
-      function endGame(win) {
+      function endGame() {
         gameActive = false;
         clearInterval(timerInterval);
 
         const settings = CONFIG[difficulty];
         const totalEarned = score;
 
-        document.getElementById("game-screen").classList.add("hidden");
-        document.body.classList.remove("is-playing");
         const results = document.getElementById("results-screen");
         results.classList.remove("hidden");
         results.classList.add("panel-enter");
 
         const finalEl = document.getElementById("final-score");
-        finalEl.textContent = totalEarned;
+        finalEl.textContent = moves;
         finalEl.classList.remove("final-score-pop");
         void finalEl.offsetWidth;
         finalEl.classList.add("final-score-pop");
 
-        if (win) spawnConfetti();
-        document.getElementById("result-badge").textContent = win
-          ? "✦ Codex Restored ✦"
-          : "⏳ Time's Up";
-        document.getElementById("result-title").textContent = win
-          ? "The Chronicle is Complete!"
-          : "Some Treasures Stay Hidden";
-        document.getElementById("result-msg").textContent = win
-          ? "Splendid work, chronicler! Every relic has been matched."
-          : "You ran out of time. Explore Mati's heritage and try again!";
+        document.getElementById("result-badge").textContent = "Game complete";
+        document.getElementById("result-title").textContent =
+          "Every pair matched!";
+        document.getElementById("result-msg").textContent =
+          "Great memory! You matched every pair from Mati's heritage.";
         document.getElementById("result-detail").textContent =
-          `${moves} turns · ${matchedPairs}/${settings.pairs} pairs sealed`;
+          `${moves} moves · ${matchedPairs}/${settings.pairs} pairs matched`;
+
+        const bestKey = `memoryPairsBestMoves:${difficulty}`;
+        const savedBest = Number(localStorage.getItem(bestKey));
+        if (!savedBest || moves < savedBest) {
+          localStorage.setItem(bestKey, String(moves));
+        }
+        updateBestDisplay();
 
         const currentTotal = parseInt(
           localStorage.getItem("totalHeritagePoints") || "0",
@@ -3608,11 +4260,7 @@
         const pointsEl = document.getElementById("header-total-points");
         if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
 
-        playAnnouncer(
-          win
-            ? `Huzzah! You earned ${totalEarned} heritage glory points.`
-            : "Time's up. Review the heritage pairs and play again when you're ready.",
-        );
+        playAnnouncer(`Well done. You earned ${totalEarned} heritage points.`);
       }
 
       function resetToIntro() {
@@ -3625,15 +4273,16 @@
         showIntroScreen();
       }
 
-      async function startGame() {
+      function startGame() {
         matchedPairs = 0;
         score = 0;
         moves = 0;
         flippedCards = [];
         gameActive = false;
+        clearInterval(timerInterval);
+        document.getElementById("results-screen").classList.add("hidden");
 
         const overlay = document.getElementById("dealing-overlay");
-        hideAllScreens();
         document.getElementById("game-screen").classList.remove("hidden");
         document.body.classList.add("is-playing");
         if (overlay) overlay.classList.add("is-visible");
@@ -3641,26 +4290,16 @@
         createBoard();
         updatePairProgress();
         updateStreakUI();
-
-        await animateCardsDeal();
+        updateBestDisplay();
 
         if (overlay) overlay.classList.remove("is-visible");
         syncBoardLayout();
         gameActive = true;
-        startTimer();
-        playAnnouncer("Find the matching heritage pairs before time runs out.");
+        resetElapsedTimer();
       }
 
-      document
-        .getElementById("start-btn")
-        .addEventListener("click", showDifficultyScreen);
-      document
-        .getElementById("back-to-intro-btn")
-        .addEventListener("click", showIntroScreen);
       document.getElementById("replay-btn").addEventListener("click", () => {
-        clearInterval(timerInterval);
-        gameActive = false;
-        showDifficultyScreen();
+        void startGame();
       });
 
       // Leave game modal logic
@@ -3698,15 +4337,13 @@
       }
 
       bindHoverSound([
-        document.getElementById("start-btn"),
+        document.getElementById("new-game-btn"),
         document.getElementById("replay-btn"),
-        document.getElementById("back-to-intro-btn"),
-        document.querySelector(".game-back-nav a"),
-        ...document.querySelectorAll(".quest-tab, .btn-chronicle"),
+        ...document.querySelectorAll(".memory-game-size, .btn-chronicle"),
       ]);
 
-      startKeeperTips();
       initMusic();
+      void startGame();
 
       const chronicleBg = document.querySelector(".chronicle-bg");
       if (chronicleBg && window.matchMedia("(pointer: fine)").matches) {

@@ -3,22 +3,428 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leaderboard - Mati Heritage 3D</title>
+    <title>Leaderboard | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
+    <style>
+      .leaderboard-page {
+        margin: 0;
+        color: var(--ink);
+        background: #f8f7f4;
+        font-family: "Source Sans 3", sans-serif;
+      }
+
+      :root {
+        --leaderboard-content-width: 90rem;
+        --leaderboard-content-gutter: clamp(1.5rem, 4vw, 4rem);
+      }
+
+      .leaderboard-hero {
+        position: relative;
+        display: flex;
+        min-height: clamp(16rem, 32vw, 26rem);
+        align-items: center;
+        overflow: hidden;
+        isolation: isolate;
+        background: #123c35;
+      }
+
+      .leaderboard-hero::after {
+        position: absolute;
+        z-index: -1;
+        background: linear-gradient(
+          90deg,
+          rgba(8, 35, 31, 0.88) 0%,
+          rgba(8, 35, 31, 0.58) 48%,
+          rgba(8, 35, 31, 0.12) 100%
+        );
+        content: "";
+        inset: 0;
+      }
+
+      .leaderboard-hero__image {
+        position: absolute;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 48%;
+        inset: 0;
+      }
+
+      .leaderboard-hero__content {
+        width: min(
+          calc(100% - var(--leaderboard-content-gutter) * 2),
+          var(--leaderboard-content-width)
+        );
+        margin-inline: auto;
+        padding-block: 3.25rem;
+        color: #fff;
+      }
+
+      .leaderboard-hero__content h1 {
+        margin: 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2.75rem, 6vw, 4.5rem);
+        font-weight: 700;
+        line-height: 0.98;
+      }
+
+      .leaderboard-hero__content p {
+        max-width: 38rem;
+        margin: 0.8rem 0 0;
+        font-size: clamp(1rem, 1.7vw, 1.2rem);
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      .leaderboard-content {
+        padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);
+        padding-bottom: clamp(6rem, 12vw, 10rem);
+      }
+
+      .leaderboard-wrapper {
+        width: min(
+          calc(100% - 3rem),
+          68rem
+        );
+        margin: 0 auto;
+      }
+
+      .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .leaderboard-table thead {
+        background: var(--forest);
+        color: #fff;
+      }
+
+      .leaderboard-table th {
+        padding: 1.25rem 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .leaderboard-table th:last-child {
+        text-align: right;
+      }
+
+      .leaderboard-table tbody tr {
+        border-bottom: 1px solid #e5e7eb;
+        transition: background 0.2s ease;
+      }
+
+      .leaderboard-table tbody tr:hover {
+        background: #f0fdf4;
+      }
+
+      .leaderboard-table tbody tr:last-child {
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .leaderboard-table tfoot tr td {
+        border: none;
+        padding: 0;
+      }
+
+      .leaderboard-table td {
+        padding: 1.25rem 1.5rem;
+        font-size: 1rem;
+        color: #374151;
+      }
+
+      .leaderboard-table td:last-child {
+        text-align: right;
+        font-weight: 700;
+        color: var(--forest);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .leaderboard-rank {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 1rem;
+        background: #f3f4f6;
+        color: #6b7280;
+      }
+
+      .leaderboard-rank--1 {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+
+      .leaderboard-rank--2 {
+        background: linear-gradient(135deg, #9ca3af, #6b7280);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+      }
+
+      .leaderboard-rank--3 {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+      }
+
+      .leaderboard-user {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .leaderboard-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--forest), var(--sky));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        object-fit: cover;
+      }
+
+      .leaderboard-name {
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .leaderboard-empty {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6b7280;
+      }
+
+      .leaderboard-empty p {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .leaderboard-table[hidden],
+      .leaderboard-empty[hidden] {
+        display: none;
+      }
+
+      .top-player-title {
+        text-align: center;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: var(--forest);
+        margin-bottom: 2rem;
+      }
+
+      .leaderboard-user-summary {
+        border-top: 1px solid #e5e7eb;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+
+      .leaderboard-user-summary[hidden] {
+        display: none;
+      }
+
+      .leaderboard-user-summary-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .leaderboard-user-summary-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--forest), var(--sky));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+
+      .leaderboard-user-summary-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .leaderboard-user-summary-label {
+        font-size: 0.7rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.2rem;
+      }
+
+      .leaderboard-user-summary-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--forest);
+      }
+
+      .leaderboard-user-summary-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-align: right;
+      }
+
+      @media (max-width: 768px) {
+        .leaderboard-user-summary {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+          padding: 1rem;
+        }
+
+        .leaderboard-user-summary-right {
+          align-items: flex-start;
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .leaderboard-hero {
+          min-height: 17rem;
+        }
+
+        .leaderboard-hero__content {
+          width: calc(100% - 2rem);
+          padding-block: 2.75rem;
+        }
+
+        .leaderboard-content {
+          padding: 2rem 1rem;
+        }
+
+        .leaderboard-wrapper {
+          width: calc(100% - 2rem);
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+          padding: 1rem;
+          font-size: 0.9rem;
+        }
+
+        .leaderboard-rank {
+          width: 2rem;
+          height: 2rem;
+          font-size: 0.85rem;
+        }
+
+        .leaderboard-avatar {
+          width: 2rem;
+          height: 2rem;
+          font-size: 0.8rem;
+        }
+      }
+    </style>
   </head>
-  <body class="visitor-module">
+  <body class="visitor-module leaderboard-page">
     <div id="header-placeholder"></div>
 
-    <main class="min-h-screen flex items-center justify-center p-8">
-      <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4">Leaderboard</h1>
-        <p class="text-gray-600">Top performers coming soon...</p>
-      </div>
+    <main>
+      <section class="leaderboard-hero" aria-labelledby="leaderboard-hero-title">
+        <img
+          class="leaderboard-hero__image"
+          src="assets/data/GALLERY/DJI_0812.jpg"
+          alt="Aerial view of the islands and coastline of Pujada Bay"
+        />
+        <div class="leaderboard-hero__content">
+          <h1 id="leaderboard-hero-title">Leaderboard</h1>
+          <p>
+            Top heritage explorers ranked by their achievements across games and
+            activities.
+          </p>
+        </div>
+      </section>
+
+      <section class="leaderboard-content" aria-label="Leaderboard rankings">
+        <div class="leaderboard-wrapper">
+          <h2 class="top-player-title">TOP PLAYER</h2>
+
+          <div id="leaderboard-loading" class="leaderboard-empty">
+            <p>Loading leaderboard...</p>
+          </div>
+          <table class="leaderboard-table" id="leaderboard-table" hidden>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+              <!-- Dynamic content will be inserted here -->
+            </tbody>
+            <tfoot id="leaderboard-footer">
+              <tr>
+                <td colspan="3">
+                  <div id="user-summary" class="leaderboard-user-summary" hidden>
+                    <div class="leaderboard-user-summary-left">
+                      <div id="user-avatar" class="leaderboard-user-summary-avatar"></div>
+                      <div class="leaderboard-user-summary-group">
+                        <div class="leaderboard-user-summary-label">YOUR RANK</div>
+                        <div class="leaderboard-user-summary-value" id="user-rank"></div>
+                      </div>
+                    </div>
+                    <div class="leaderboard-user-summary-right">
+                      <div class="leaderboard-user-summary-label">YOUR SCORE</div>
+                      <div class="leaderboard-user-summary-value" id="user-score"></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <div id="leaderboard-error" class="leaderboard-empty" hidden>
+            <p>Unable to load leaderboard. Please try again later.</p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <div id="footer-placeholder"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="_backend/supabase-config.js"></script>
+    <script src="_backend/supabase-client.js"></script>
+    <script src="_backend/supabase-api.js"></script>
+    <script src="_backend/supabase-auth.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
+    <script src="js/visitor-shell.js"></script>
     <script>
       async function loadSharedComponent(url, selector, placeholderId, init) {
         const response = await fetch(url);
@@ -55,6 +461,17 @@
         "header-placeholder",
         () => {
           window.initSiteHeader?.();
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
+          // Bind logout functionality
+          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
+            MatiAuthLogout.bind({ redirect: "index.html" });
+            document.body.dataset.logoutBound = "1";
+          }
         },
       ).catch((error) => console.error("Error loading header:", error));
 
@@ -64,6 +481,358 @@
         "footer-placeholder",
         () => window.initSiteFooter?.("leaderboard"),
       ).catch((error) => console.error("Error loading footer:", error));
+
+      // Load Supabase scripts after header is loaded
+      function loadSupabaseScripts() {
+        return Promise.all([
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "_backend/supabase-config.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "_backend/supabase-client.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "_backend/supabase-auth.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "_backend/supabase-api.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "js/utils/heritage/heritage-realtime.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "js/utils/heritage/heritage-points.js";
+            script.onload = resolve;
+            script.onerror = resolve;
+            document.head.appendChild(script);
+          }),
+        ]);
+      }
+
+      // Leaderboard functionality
+      const LeaderboardApp = (() => {
+        let unsubscribe = null;
+        let refreshInterval = null;
+
+        function getInitials(displayName) {
+          if (!displayName) return "?";
+          return displayName
+            .split(" ")
+            .map((name) => name.charAt(0).toUpperCase())
+            .join("")
+            .slice(0, 2);
+        }
+
+        function formatPoints(points) {
+          return new Intl.NumberFormat().format(points);
+        }
+
+        function renderLeaderboard(players) {
+          const tbody = document.getElementById("leaderboard-body");
+          const table = document.getElementById("leaderboard-table");
+          const loading = document.getElementById("leaderboard-loading");
+          const errorEl = document.getElementById("leaderboard-error");
+
+          if (!players || players.length === 0) {
+            loading.hidden = true;
+            table.hidden = true;
+            errorEl.hidden = false;
+            errorEl.querySelector("p").textContent = "No leaderboard entries yet.";
+            return;
+          }
+
+          loading.hidden = true;
+          errorEl.hidden = true;
+          table.hidden = false;
+
+          tbody.innerHTML = players
+            .map((player, index) => {
+              const rank = index + 1;
+              const rankClass =
+                rank === 1
+                  ? "leaderboard-rank--1"
+                  : rank === 2
+                    ? "leaderboard-rank--2"
+                    : rank === 3
+                      ? "leaderboard-rank--3"
+                      : "";
+              const initials = getInitials(player.displayName);
+              const avatarUrl = player.avatarUrl || null;
+
+              return `
+                <tr>
+                  <td><span class="leaderboard-rank ${rankClass}">${rank}</span></td>
+                  <td>
+                    <div class="leaderboard-user">
+                      ${avatarUrl
+                        ? `<img src="${avatarUrl}" class="leaderboard-avatar" alt="${player.displayName}" />`
+                        : `<div class="leaderboard-avatar">${initials}</div>`
+                      }
+                      <span class="leaderboard-name">${player.displayName}</span>
+                    </div>
+                  </td>
+                  <td>${formatPoints(player.points)}</td>
+                </tr>
+              `;
+            })
+            .join("");
+
+          // Render user stats
+          renderUserStats(players);
+        }
+
+        function renderUserStats(players) {
+          const userSummary = document.getElementById("user-summary");
+          const userAvatar = document.getElementById("user-avatar");
+          const userRank = document.getElementById("user-rank");
+          const userScore = document.getElementById("user-score");
+
+          console.log("renderUserStats called");
+          console.log("Players:", players);
+
+          // Get current user from auth
+          let currentUser = null;
+          if (typeof MatiVisitorAuth !== "undefined" && MatiVisitorAuth.restoreSession) {
+            MatiVisitorAuth.restoreSession().then(session => {
+              currentUser = session;
+              console.log("Current user from visitor auth:", currentUser);
+              displayUserStats(currentUser, players);
+            }).catch(err => {
+              console.error("Error getting session:", err);
+              userSummary.hidden = true;
+            });
+          } else if (typeof MatiSupabase !== "undefined" && MatiSupabase.getCurrentUser) {
+            currentUser = MatiSupabase.getCurrentUser();
+            console.log("Current user from supabase:", currentUser);
+            displayUserStats(currentUser, players);
+          } else {
+            console.log("No auth system available, hiding user summary");
+            userSummary.hidden = true;
+          }
+        }
+
+        async function displayUserStats(currentUser, players) {
+          const userSummary = document.getElementById("user-summary");
+          const userAvatar = document.getElementById("user-avatar");
+          const userRank = document.getElementById("user-rank");
+          const userScore = document.getElementById("user-score");
+
+          if (!currentUser) {
+            console.log("No current user, hiding user summary");
+            userSummary.hidden = true;
+            return;
+          }
+
+          console.log("Current user ID:", currentUser.id);
+          console.log("Current user email:", currentUser.email || currentUser.username);
+          console.log("All players in leaderboard:", players.map(p => ({ id: p.userId, name: p.displayName, points: p.points })));
+
+          // Get user's actual points using the same method as account page
+          let userActualPoints = 0;
+          try {
+            if (typeof MatiVisitorAuth !== "undefined" && MatiVisitorAuth.hydratePoints) {
+              userActualPoints = await MatiVisitorAuth.hydratePoints();
+              console.log("User's actual points from MatiVisitorAuth.hydratePoints():", userActualPoints);
+            } else if (typeof MatiHeritagePoints !== "undefined" && MatiHeritagePoints.hydrateFromCloud) {
+              userActualPoints = await MatiHeritagePoints.hydrateFromCloud();
+              console.log("User's actual points from MatiHeritagePoints.hydrateFromCloud():", userActualPoints);
+            } else if (typeof MatiHeritagePoints !== "undefined" && MatiHeritagePoints.readLocal) {
+              userActualPoints = MatiHeritagePoints.readLocal();
+              console.log("User's local points from MatiHeritagePoints.readLocal():", userActualPoints);
+            }
+          } catch (err) {
+            console.error("Error fetching user points:", err);
+          }
+
+          // Find user in leaderboard - try multiple ID matching strategies
+          let userInLeaderboard = players.find(
+            (player) => player.userId === currentUser.id
+          );
+
+          // If not found by userId, try matching by email
+          if (!userInLeaderboard && (currentUser.email || currentUser.username)) {
+            userInLeaderboard = players.find(
+              (player) => player.email === currentUser.email || player.email === currentUser.username
+            );
+            console.log("Tried matching by email, found:", userInLeaderboard);
+          }
+
+          console.log("User in leaderboard:", userInLeaderboard);
+
+          // Get user's rank if they're in the leaderboard
+          let userRankValue = "N/A";
+          let userScoreValue = userActualPoints; // Always use actual points from profile
+
+          if (userInLeaderboard) {
+            userRankValue = players.findIndex(
+              (player) => player.userId === currentUser.id
+            ) + 1;
+            console.log("User found - Rank:", userRankValue, "Actual Score:", userScoreValue, "Leaderboard score:", userInLeaderboard.points);
+          } else {
+            console.log("User not found in leaderboard - showing rank as N/A and actual score:", userScoreValue);
+          }
+
+          console.log("Displaying user stats - Rank:", userRankValue, "Score:", userScoreValue);
+
+          // Display user stats
+          userSummary.hidden = false;
+
+          // Avatar
+          const initials = getInitials(currentUser.displayName || currentUser.email || currentUser.username);
+          const avatarUrl = currentUser.avatarUrl || null;
+
+          if (avatarUrl) {
+            userAvatar.outerHTML = `<img id="user-avatar" src="${avatarUrl}" class="leaderboard-user-summary-avatar" alt="${currentUser.displayName}" />`;
+          } else {
+            userAvatar.textContent = initials;
+          }
+
+          // Rank
+          userRank.textContent = userRankValue;
+
+          // Score
+          userScore.textContent = formatPoints(userScoreValue);
+        }
+
+        async function loadLeaderboard() {
+          const loading = document.getElementById("leaderboard-loading");
+          const table = document.getElementById("leaderboard-table");
+          const errorEl = document.getElementById("leaderboard-error");
+
+          console.log("Loading leaderboard...");
+          console.log("MatiSupabaseApi available:", typeof MatiSupabaseApi !== "undefined");
+          console.log("MatiSupabase available:", typeof MatiSupabase !== "undefined");
+          console.log("MatiSupabase.isConfigured:", typeof MatiSupabase !== "undefined" ? MatiSupabase.isConfigured?.() : "N/A");
+
+          try {
+            if (typeof MatiSupabaseApi === "undefined") {
+              console.warn("MatiSupabaseApi not available");
+              loading.hidden = true;
+              table.hidden = true;
+              errorEl.hidden = false;
+              errorEl.querySelector("p").textContent = "Supabase not configured. Please try again later.";
+              return;
+            }
+
+            // Ensure Supabase is configured
+            if (typeof MatiSupabase !== "undefined" && !MatiSupabase.isConfigured?.()) {
+              console.warn("MatiSupabase not configured");
+              loading.hidden = true;
+              table.hidden = true;
+              errorEl.hidden = false;
+              errorEl.querySelector("p").textContent = "Supabase not configured. Please try again later.";
+              return;
+            }
+
+            // Wait for auth to be ready
+            if (typeof MatiSupabase !== "undefined" && MatiSupabase.waitForAuth) {
+              console.log("Waiting for auth to be ready...");
+              await MatiSupabase.waitForAuth();
+              console.log("Auth is ready");
+            }
+
+            console.log("Calling getLeaderboard...");
+            const players = await MatiSupabaseApi.getLeaderboard(50);
+            console.log("Leaderboard data received:", players);
+
+            if (!players || players.length === 0) {
+              console.log("No players found in leaderboard");
+              loading.hidden = true;
+              table.hidden = true;
+              errorEl.hidden = false;
+              errorEl.querySelector("p").textContent = "No leaderboard entries yet.";
+              return;
+            }
+
+            renderLeaderboard(players);
+          } catch (loadError) {
+            console.error("Failed to load leaderboard:", loadError);
+            loading.hidden = true;
+            table.hidden = true;
+            errorEl.hidden = false;
+            errorEl.querySelector("p").textContent = "Unable to load leaderboard. Please try again later.";
+          }
+        }
+
+        function subscribeToUpdates() {
+          if (typeof MatiSupabaseApi === "undefined") return;
+
+          unsubscribe = MatiSupabaseApi.subscribeLeaderboard(() => {
+            console.log("Leaderboard data changed via real-time subscription");
+            loadLeaderboard();
+          });
+
+          // Also listen for auth state changes to update user stats
+          if (typeof MatiSupabase !== "undefined" && MatiSupabase.onAuthStateChange) {
+            MatiSupabase.onAuthStateChange((event, session) => {
+              console.log("Auth state changed:", event, session);
+              // Reload leaderboard when auth state changes
+              loadLeaderboard();
+            });
+          }
+
+          // Add periodic refresh as fallback (every 30 seconds)
+          refreshInterval = setInterval(() => {
+            console.log("Periodic leaderboard refresh");
+            loadLeaderboard();
+          }, 30000);
+        }
+
+        async function init() {
+          await loadSupabaseScripts();
+          // Wait a bit more to ensure Supabase is fully initialized
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          loadLeaderboard();
+          subscribeToUpdates();
+        }
+
+        function cleanup() {
+          if (unsubscribe) {
+            unsubscribe();
+            unsubscribe = null;
+          }
+          if (refreshInterval) {
+            clearInterval(refreshInterval);
+            refreshInterval = null;
+          }
+        }
+
+        return {
+          init,
+          cleanup,
+        };
+      })();
+
+      // Initialize leaderboard when page loads
+      document.addEventListener("DOMContentLoaded", async () => {
+        await LeaderboardApp.init();
+      });
+
+      // Cleanup when page unloads
+      window.addEventListener("beforeunload", () => {
+        LeaderboardApp.cleanup();
+      });
     </script>
   </body>
 </html>

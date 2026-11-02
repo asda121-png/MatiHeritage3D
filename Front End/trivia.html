@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mati Heritage Trivia — Game Show</title>
+    <title>Trivia | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Orbitron:wght@500;700;900&family=Oswald:wght@400;500;600;700&family=Passion+One:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
-    <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
 
     <style>
       :root {
@@ -46,11 +46,15 @@
       }
 
       body {
-        font-family: "Rajdhani", sans-serif;
+        font-family: "Quicksand", sans-serif;
         background: var(--tv-studio-dark);
         color: var(--tv-cream);
         overflow-x: hidden;
         min-height: 100vh;
+      }
+
+      .site-header {
+        font-family: "Source Sans 3", sans-serif;
       }
 
       .gs-display {
@@ -319,48 +323,6 @@
         border-color: rgba(34, 211, 238, 0.18) !important;
       }
 
-      .game-back-nav {
-        position: fixed;
-        top: calc(var(--header-h, 5.625rem) + 1.15rem);
-        left: 0;
-        right: 0;
-        z-index: 490;
-        max-width: 94rem;
-        margin: 0 auto;
-        padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-        pointer-events: none;
-      }
-
-      .game-back-nav__align {
-        margin-left: calc(3.25rem + 0.9rem);
-      }
-
-      .game-back-nav a {
-        pointer-events: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-family: "Rajdhani", sans-serif;
-        font-size: 0.88rem;
-        font-weight: 700;
-        color: var(--tv-gold-light);
-        text-decoration: none;
-        padding: 0.4rem 0.85rem;
-        border-radius: 999px;
-        border: 2px solid rgba(212, 175, 55, 0.45);
-        background: rgba(18, 12, 14, 0.82);
-        backdrop-filter: blur(4px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
-        transition: all 0.2s ease;
-      }
-
-      .game-back-nav a:hover {
-        color: var(--tv-warm-white);
-        border-color: var(--tv-gold);
-        background: rgba(61, 18, 24, 0.88);
-        box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
-      }
-
       /* ── Intro ── */
       .intro-layout {
         position: relative;
@@ -545,14 +507,11 @@
       }
 
       .difficulty-screen .difficulty-panel__options .diff-btn,
-      .difficulty-screen .difficulty-panel__options .diff-btn:hover:not(:disabled),
+      .difficulty-screen
+        .difficulty-panel__options
+        .diff-btn:hover:not(:disabled),
       .difficulty-screen .difficulty-panel__options .diff-btn.is-active {
         transform: none;
-      }
-
-      #footer-placeholder,
-      #site-footer {
-        display: none !important;
       }
 
       .difficulty-panel__frame {
@@ -1846,6 +1805,493 @@
         height: 0;
         overflow: hidden;
       }
+
+      body {
+        min-height: 100vh;
+        background: #f7f5ef;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      .show-stage {
+        position: relative;
+        z-index: 4;
+        width: min(90rem, calc(100% - clamp(1.5rem, 4vw, 4rem) * 2));
+        min-height: 0;
+        margin: 0 auto;
+        padding: 1rem 0 0;
+        background: transparent;
+      }
+
+      .show-stage::before,
+      .spotlight-rig,
+      .spotlight,
+      .spotlight--left,
+      .spotlight--right,
+      .stage-lights,
+      .stage-floor,
+      .curtain-overlay,
+      .tv-filters {
+        display: none !important;
+      }
+
+      .trivia-intro {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        max-width: 90rem;
+        margin: 0 auto;
+        padding: clamp(1rem, 2.5vw, 1.75rem) 0 0;
+      }
+
+      .trivia-intro h1 {
+        margin: 0;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+        text-transform: none;
+        background: none;
+        filter: none;
+      }
+
+      .trivia-intro__description {
+        max-width: 55rem;
+        margin: 0 0 1.5rem;
+        color: #625e56;
+        font-size: 1.35rem;
+        line-height: 1.55;
+      }
+
+      .trivia-controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 0;
+        padding: 0 0 1rem;
+        border-bottom: 1px solid #252a27;
+      }
+
+      .trivia-controls__label {
+        color: #777168;
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
+      .trivia-difficulties {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 25.5rem;
+        max-width: 100%;
+        overflow: hidden;
+        border: 1px solid #dcd8ce;
+        border-radius: 999px;
+        background: #fffefa;
+      }
+
+      .trivia-difficulties .diff-btn {
+        min-height: 3rem;
+        padding: 0.55rem 0.65rem;
+        border: 0;
+        border-right: 1px solid #e4e0d7;
+        border-radius: 0;
+        background: transparent;
+        color: #383b38;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .trivia-difficulties .diff-btn span {
+        margin-left: 0.3em;
+        color: inherit;
+        font-size: 0.82em;
+      }
+
+      .trivia-difficulties .diff-btn:last-child {
+        border-right: 0;
+      }
+
+      .trivia-difficulties .diff-btn.is-active,
+      .trivia-difficulties .diff-btn:hover:not(:disabled) {
+        border-color: #252a27;
+        background: #252a27;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: none;
+      }
+
+      .start-btn {
+        min-height: 3rem;
+        margin-left: auto;
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        box-shadow: none;
+        color: #fff;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        cursor: pointer;
+      }
+
+      .start-btn:hover {
+        transform: none;
+        background: #17684d;
+        box-shadow: none;
+      }
+
+      #game-show {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        max-width: 90rem;
+        margin: 1.5rem auto 0;
+        padding: 0;
+      }
+
+      #game-show.is-preview {
+        filter: blur(4px);
+        opacity: 0.55;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .game-show__main {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .show-topbar {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e4e0d7;
+      }
+
+      .hud-stat {
+        display: grid;
+        justify-items: center;
+        gap: 0.15rem;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .hud-stat__label {
+        margin: 0;
+        color: #777168;
+        font-family: "Quicksand", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .hud-stat__value,
+      .timer-ring__value {
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .hud-stat--score .hud-stat__value {
+        color: #17684d;
+      }
+
+      .timer-ring {
+        position: relative;
+        width: auto;
+        height: auto;
+      }
+
+      .timer-ring svg {
+        display: none;
+      }
+
+      .timer-ring__value {
+        position: static;
+        display: block;
+      }
+
+      .question-panel {
+        grid-column: 1 / -1;
+        min-height: 8rem;
+        justify-content: flex-start;
+        padding: 1.5rem 0 0.75rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .question-panel::before,
+      .question-panel::after {
+        display: none;
+      }
+
+      .question-panel__text {
+        margin: 0;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: left;
+        animation: none;
+      }
+
+      .answers-grid {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem 1rem;
+        margin: 0;
+      }
+
+      .answer-btn {
+        min-height: 4rem;
+        padding: 0.85rem 1rem;
+        border: 1px solid #dcd8ce;
+        border-radius: 0.5rem;
+        background: #fffefa;
+        box-shadow: none;
+        color: #383b38;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .answer-btn:hover:not(:disabled) {
+        transform: none;
+        border-color: #17684d;
+        background: #f0f7f2;
+        box-shadow: none;
+      }
+
+      .answer-btn__letter {
+        width: 2rem;
+        height: 2rem;
+        border: 0;
+        background: #e9e5dc;
+        color: #383b38;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      .answer-btn.is-correct {
+        border-color: #16835d;
+        background: #eaf5ee;
+        color: #17684d;
+        box-shadow: none;
+      }
+
+      .answer-btn.is-wrong {
+        border-color: #b94a48;
+        background: #fbefed;
+        color: #8f2d2b;
+        opacity: 1;
+      }
+
+      .results-card {
+        width: 100%;
+        max-width: 90rem;
+        margin: 1.5rem auto 0;
+        padding: 1.5rem 0;
+        border: 0;
+        border-top: 1px solid #dcd8ce;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        color: #383b38;
+      }
+
+      .results-card .intro-card__badge {
+        display: block;
+        width: fit-content;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: #777168;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.05em;
+      }
+
+      .results-card h2 {
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      .results-card__score {
+        color: #17684d;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      .results-card__message {
+        color: #625e56;
+      }
+
+      .results-card__link {
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+        letter-spacing: 0;
+      }
+
+      .results-card__link:hover {
+        background: #f0f7f2;
+        border-color: #17684d;
+        color: #17684d;
+      }
+
+      .trivia-help {
+        width: 100%;
+        margin: 1.75rem auto 0;
+        padding: 1.5rem 0 0;
+        border-top: 1px solid #dcd8ce;
+        color: #383b38;
+        font-size: 1.35rem;
+        line-height: 1.65;
+      }
+
+      .trivia-help h2 {
+        margin: 0 0 0.85rem;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      .trivia-help ol {
+        margin: 0 0 1rem;
+        padding-left: 1.75rem;
+        list-style: decimal outside;
+      }
+
+      .trivia-help li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.2rem;
+      }
+
+      .trivia-help > p {
+        max-width: 72rem;
+        margin: 0 0 1.75rem;
+        color: #625e56;
+      }
+
+      .trivia-help > h2:not(:first-child) {
+        margin-top: 1.75rem;
+      }
+
+      .trivia-sizes-table-wrap {
+        overflow-x: auto;
+      }
+
+      .trivia-help table {
+        min-width: 40rem;
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      .trivia-help th,
+      .trivia-help td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e9e5dc;
+      }
+
+      .trivia-help thead th {
+        font-weight: 700;
+      }
+
+      .trivia-help tbody tr:last-child th,
+      .trivia-help tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .trivia-help tbody th {
+        font-weight: 600;
+      }
+
+      #footer-placeholder {
+        margin-top: 20rem;
+      }
+
+      .site-footer {
+        margin-top: 20rem;
+      }
+
+      @media (max-width: 640px) {
+        .show-stage {
+          width: calc(100% - 3rem);
+          padding-top: 0.75rem;
+        }
+
+        .trivia-intro {
+          padding-top: 1rem;
+        }
+
+        .trivia-controls {
+          align-items: flex-start;
+        }
+
+        .trivia-controls__label {
+          flex-basis: auto;
+        }
+
+        .trivia-difficulties {
+          width: auto;
+          flex: 1 1 24rem;
+        }
+
+        .trivia-difficulties .diff-btn {
+          flex: 1 1 0;
+          min-width: 0;
+          padding-inline: 0.45rem;
+          font-size: 0.95rem;
+        }
+
+        .start-btn {
+          margin-left: 0;
+        }
+
+        .game-show__main {
+          gap: 0.65rem;
+        }
+
+        .show-topbar {
+          gap: 0.5rem;
+        }
+
+        .answers-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .trivia-help {
+          font-size: 1.1rem;
+        }
+      }
     </style>
   </head>
   <style>
@@ -1872,234 +2318,126 @@
   </style>
 
   <body class="game-page visitor-module">
-    <svg class="tv-filters" aria-hidden="true" focusable="false">
-      <filter id="tv-static-filter" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.75"
-          numOctaves="3"
-          stitchTiles="stitch"
-          result="noise"
-        >
-          <animate
-            attributeName="seed"
-            dur="0.15s"
-            values="1;2;3;4;5;6;7;8;9;10"
-            repeatCount="indefinite"
-          />
-        </feTurbulence>
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0"
-        />
-      </filter>
-    </svg>
-
     <div id="header-placeholder"></div>
 
-    <nav class="game-back-nav" aria-label="Game navigation">
-      <div class="game-back-nav__align">
-        <a href="game.html">← Return to Game Hall</a>
-      </div>
-    </nav>
-
-    <div class="spotlight-rig" aria-hidden="true">
-      <div class="spotlight-fixture"></div>
-      <div class="spotlight-fixture"></div>
-      <div class="spotlight-fixture"></div>
-    </div>
-    <div class="spotlight" aria-hidden="true"></div>
-    <div class="spotlight--left" aria-hidden="true"></div>
-    <div class="spotlight--right" aria-hidden="true"></div>
-    <div class="stage-lights" aria-hidden="true">
-      <div class="stage-light stage-light--1"></div>
-      <div class="stage-light stage-light--2"></div>
-    </div>
-    <div class="stage-floor" aria-hidden="true"></div>
-
-    <div
-      id="curtain-overlay"
-      class="curtain-overlay is-open"
-      aria-hidden="true"
-    >
-      <div class="curtain-panel curtain-panel--left"></div>
-      <div class="curtain-panel curtain-panel--right"></div>
-    </div>
-
     <main class="show-stage">
-      <!-- INTRO -->
-      <section id="intro-screen" class="intro-layout">
-        <div class="intro-tv-wrap">
-          <div class="tv-set">
-            <div class="show-logo-bar">
-              <span class="live-badge"
-                ><span class="live-dot"></span> LIVE</span
-              >
-              <span class="show-logo-bar__spacer" aria-hidden="true"></span>
-            </div>
-
-            <div class="tv-bezel">
-              <span class="tv-power-led" aria-hidden="true"></span>
-              <div class="tv-vignette" aria-hidden="true"></div>
-              <div class="tv-scanlines" aria-hidden="true"></div>
-              <div class="tv-noise" aria-hidden="true"></div>
-              <div class="tv-flicker-overlay" aria-hidden="true"></div>
-              <div class="tv-glitch" aria-hidden="true"></div>
-              <div class="tv-distort-bar" aria-hidden="true"></div>
-              <div class="tv-screen">
-                <div class="tv-screen__inner">
-                  <div class="intro-card">
-                    <span class="intro-card__badge"
-                      >● ON AIR — LIVE TV BROADCAST</span
-                    >
-                    <h1>
-                      Mati Heritage<br /><span class="intro-card__title-sub"
-                        >TRIVIA CHALLENGE</span
-                      >
-                    </h1>
-                    <p class="intro-card__desc">
-                      Answer heritage questions before time runs out. Score
-                      points for every correct answer!
-                    </p>
-
-                    <button type="button" id="play-game-btn" class="start-btn">
-                      ▶ PLAY
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tv-stand" aria-hidden="true"></div>
-            <div class="tv-floor-glow" aria-hidden="true"></div>
+      <section id="intro-screen" class="trivia-intro">
+        <h1>Mati Heritage Trivia Challenge</h1>
+        <p class="trivia-intro__description">
+          Test what you know about Mati’s heritage. Answer each question before
+          time runs out and earn points for every correct answer.
+        </p>
+        <div class="trivia-controls" aria-label="Trivia game options">
+          <span class="trivia-controls__label">Difficulty</span>
+          <div
+            class="trivia-difficulties"
+            role="group"
+            aria-label="Choose difficulty"
+          >
+            <button
+              type="button"
+              id="btn-easy"
+              class="diff-btn"
+              data-level="easy"
+              aria-pressed="false"
+            >
+              Easy <span>(5 Q)</span>
+            </button>
+            <button
+              type="button"
+              id="btn-medium"
+              class="diff-btn is-active"
+              data-level="medium"
+              aria-pressed="true"
+            >
+              Medium <span>(8 Q)</span>
+            </button>
+            <button
+              type="button"
+              id="btn-hard"
+              class="diff-btn"
+              data-level="hard"
+              aria-pressed="false"
+            >
+              Hard <span>(10 Q)</span>
+            </button>
           </div>
+          <button type="button" id="start-game-btn" class="start-btn">
+            Start trivia
+          </button>
         </div>
-
       </section>
 
-      <section id="difficulty-screen" class="difficulty-screen hidden">
-        <aside class="difficulty-panel" aria-label="Select difficulty">
-          <div class="difficulty-panel__frame">
-            <span class="difficulty-panel__label">SELECT DIFFICULTY:</span>
-            <div class="difficulty-panel__options">
-              <button
-                type="button"
-                id="btn-easy"
-                class="diff-btn"
-                data-level="easy"
-              >
-                <span class="diff-btn__label">EASY</span>
-              </button>
-              <button
-                type="button"
-                id="btn-medium"
-                class="diff-btn"
-                data-level="medium"
-              >
-                <span class="diff-btn__label">MEDIUM</span>
-              </button>
-              <button
-                type="button"
-                id="btn-hard"
-                class="diff-btn"
-                data-level="hard"
-              >
-                <span class="diff-btn__label">HARD</span>
-              </button>
+      <section
+        id="game-show"
+        class="game-show is-preview"
+        aria-hidden="true"
+        inert
+      >
+        <div class="game-show__main">
+          <div class="show-topbar">
+            <div class="hud-stat hud-stat--score">
+              <span class="hud-stat__label">Score</span>
+              <span id="score-display" class="hud-stat__value">0</span>
             </div>
-            <button type="button" id="start-game-btn" class="start-btn">
-              START SHOW
-            </button>
-            <button type="button" id="back-to-intro-btn" class="start-btn">
-              BACK
-            </button>
+
+            <div class="hud-stat">
+              <span class="hud-stat__label">Time</span>
+              <span
+                id="timer-display"
+                class="timer-ring__value"
+                aria-live="polite"
+                >12</span
+              >
+              <svg class="hidden" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="timer-ring__track" cx="50" cy="50" r="45" />
+                <circle
+                  id="timer-progress"
+                  class="timer-ring__progress"
+                  cx="50"
+                  cy="50"
+                  r="45"
+                />
+              </svg>
+            </div>
+
+            <div class="hud-stat">
+              <span class="hud-stat__label">Question</span>
+              <span id="question-badge" class="hud-stat__value">1/8</span>
+            </div>
           </div>
-        </aside>
-      </section>
 
-      <!-- GAME SHOW STAGE -->
-      <section id="game-show" class="game-show hidden">
-        <div class="tv-studio">
-          <div class="tv-set">
-            <div class="show-logo-bar">
-              <span class="live-badge"
-                ><span class="live-dot"></span> LIVE</span
-              >
-              <h2 class="show-logo-text">
-                MATI HERITAGE<span>TRIVIA SHOWDOWN</span>
-              </h2>
-              <span class="show-logo-bar__spacer" aria-hidden="true"></span>
-            </div>
+          <div class="question-panel">
+            <p id="question-text" class="question-panel__text">
+              Your first question will appear here.
+            </p>
+          </div>
 
-            <div class="tv-bezel">
-              <span class="tv-power-led" aria-hidden="true"></span>
-              <div class="tv-vignette" aria-hidden="true"></div>
-              <div class="tv-scanlines" aria-hidden="true"></div>
-              <div class="tv-noise" aria-hidden="true"></div>
-              <div class="tv-flicker-overlay" aria-hidden="true"></div>
-              <div class="tv-glitch" aria-hidden="true"></div>
-              <div class="tv-distort-bar" aria-hidden="true"></div>
-
-              <div class="tv-screen">
-                <div class="tv-screen__inner">
-                  <div class="game-show__main">
-                    <div class="show-topbar">
-                      <div class="hud-stat hud-stat--score">
-                        <span class="hud-stat__label">SCORE</span>
-                        <span id="score-display" class="hud-stat__value"
-                          >0</span
-                        >
-                      </div>
-
-                      <div class="timer-ring" aria-live="polite">
-                        <svg viewBox="0 0 100 100" aria-hidden="true">
-                          <circle
-                            class="timer-ring__track"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                          <circle
-                            id="timer-progress"
-                            class="timer-ring__progress"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                        </svg>
-                        <span id="timer-display" class="timer-ring__value"
-                          >15</span
-                        >
-                      </div>
-
-                      <div class="hud-stat">
-                        <span class="hud-stat__label">QUESTION</span>
-                        <span id="question-badge" class="hud-stat__value"
-                          >1/5</span
-                        >
-                      </div>
-                    </div>
-
-                    <div class="question-panel">
-                      <p id="question-text" class="question-panel__text">
-                        Loading question…
-                      </p>
-                    </div>
-
-                    <div id="options-grid" class="answers-grid"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tv-stand" aria-hidden="true"></div>
-            <div class="tv-floor-glow" aria-hidden="true"></div>
+          <div id="options-grid" class="answers-grid">
+            <button type="button" class="answer-btn" disabled>
+              <span class="answer-btn__letter">A</span>
+              <span>Answer option</span>
+            </button>
+            <button type="button" class="answer-btn" disabled>
+              <span class="answer-btn__letter">B</span>
+              <span>Answer option</span>
+            </button>
+            <button type="button" class="answer-btn" disabled>
+              <span class="answer-btn__letter">C</span>
+              <span>Answer option</span>
+            </button>
+            <button type="button" class="answer-btn" disabled>
+              <span class="answer-btn__letter">D</span>
+              <span>Answer option</span>
+            </button>
           </div>
         </div>
       </section>
 
       <!-- RESULTS -->
       <section id="results-screen" class="results-card hidden">
-        <span class="intro-card__badge">FINAL SCORE</span>
-        <h2>Game Over!</h2>
+        <span class="intro-card__badge">Final score</span>
+        <h2>Trivia complete</h2>
         <div id="final-score" class="results-card__score">0</div>
         <p id="result-message" class="results-card__message"></p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -2108,9 +2446,68 @@
             id="retry-btn"
             class="start-btn text-sm py-3 px-8"
           >
-            PLAY AGAIN
+            Play again
           </button>
           <a href="game.html" class="results-card__link">Back to Games</a>
+        </div>
+      </section>
+
+      <section class="trivia-help" aria-labelledby="trivia-help-title">
+        <h2 id="trivia-help-title">
+          How to play Mati Heritage Trivia Challenge
+        </h2>
+        <ol>
+          <li>Choose Easy, Medium, or Hard, then start the trivia round.</li>
+          <li>
+            Read each Mati heritage question and select one answer before the
+            timer reaches zero.
+          </li>
+          <li>
+            Earn points for correct answers. Try to get the highest score you
+            can.
+          </li>
+        </ol>
+        <p>
+          Each difficulty has a different number of questions, time limit, and
+          point value. Your total score is added to your Mati Heritage points
+          when the round ends.
+        </p>
+        <h2>Difficulty levels</h2>
+        <div class="trivia-sizes-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Difficulty</th>
+                <th scope="col">Questions</th>
+                <th scope="col">Time per question</th>
+                <th scope="col">Points per correct answer</th>
+                <th scope="col">Good for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Easy</th>
+                <td>5</td>
+                <td>20 seconds</td>
+                <td>10</td>
+                <td>A short, relaxed round</td>
+              </tr>
+              <tr>
+                <th scope="row">Medium</th>
+                <td>8</td>
+                <td>12 seconds</td>
+                <td>15</td>
+                <td>A balanced game</td>
+              </tr>
+              <tr>
+                <th scope="row">Hard</th>
+                <td>10</td>
+                <td>8 seconds</td>
+                <td>20</td>
+                <td>For a bigger challenge</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </main>
@@ -2192,13 +2589,8 @@
     <script src="js/utils/auth.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
-    <script src="js/games/game-tv-transition.js"></script>
-    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "trivia.html" });
-      if (typeof window.initTvExpandReceive === "function") {
-        window.initTvExpandReceive();
-      }
 
       let quizData = [];
       let heritageSession = null;
@@ -2525,30 +2917,6 @@
         } catch (_) {}
       }
 
-      function playCurtainSting() {
-        const vol = getSfxVolume();
-        if (vol <= 0) return;
-
-        try {
-          const ctx = getStudioAudioCtx();
-          const now = ctx.currentTime;
-          [330, 415, 523].forEach((freq, i) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.value = freq;
-            const t = now + i * 0.14;
-            gain.gain.setValueAtTime(0, t);
-            gain.gain.linearRampToValueAtTime(vol * 0.1, t + 0.04);
-            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(t);
-            osc.stop(t + 0.75);
-          });
-        } catch (_) {}
-      }
-
       function pickAnnouncerVoice() {
         if (!("speechSynthesis" in window)) return null;
         const voices = window.speechSynthesis.getVoices();
@@ -2607,11 +2975,67 @@
         document.getElementById("score-display").textContent = score;
       }
 
+      function setRoundControlsDisabled(disabled) {
+        document.getElementById("start-game-btn").disabled = disabled;
+        document.querySelectorAll(".diff-btn").forEach((button) => {
+          button.disabled = disabled;
+        });
+      }
+
+      function setGamePreview(isPreview) {
+        const gameShow = document.getElementById("game-show");
+        gameShow.classList.toggle("is-preview", isPreview);
+        gameShow.toggleAttribute("inert", isPreview);
+        gameShow.setAttribute("aria-hidden", String(isPreview));
+
+        if (!isPreview) return;
+
+        clearInterval(timerInterval);
+        gameActive = false;
+        score = 0;
+        timeLeft = diffSettings[difficulty].time;
+        maxTime = timeLeft;
+        updateScoreDisplay();
+        updateTimerRing();
+        document.getElementById("question-badge").textContent =
+          `1/${diffSettings[difficulty].questions}`;
+        document.getElementById("question-text").textContent =
+          "Your first question will appear here.";
+
+        const grid = document.getElementById("options-grid");
+        grid.replaceChildren();
+        ["A", "B", "C", "D"].forEach((letter) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "answer-btn";
+          button.disabled = true;
+
+          const letterLabel = document.createElement("span");
+          letterLabel.className = "answer-btn__letter";
+          letterLabel.textContent = letter;
+
+          const optionLabel = document.createElement("span");
+          optionLabel.textContent = "Answer option";
+
+          button.append(letterLabel, optionLabel);
+          grid.appendChild(button);
+        });
+      }
+
       function setDifficulty(level) {
         difficulty = level;
         document.querySelectorAll(".diff-btn").forEach((btn) => {
-          btn.classList.toggle("is-active", btn.dataset.level === level);
+          const isActive = btn.dataset.level === level;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-pressed", String(isActive));
         });
+        if (document.getElementById("game-show").classList.contains("is-preview")) {
+          timeLeft = diffSettings[level].time;
+          maxTime = timeLeft;
+          updateTimerRing();
+          document.getElementById("question-badge").textContent =
+            `1/${diffSettings[level].questions}`;
+        }
       }
 
       document.querySelectorAll(".diff-btn").forEach((btn) => {
@@ -2626,17 +3050,6 @@
           ".diff-btn, .start-btn, #retry-btn, .results-card__link",
         ),
       );
-
-      function openCurtain() {
-        playCurtainSting();
-        const curtain = document.getElementById("curtain-overlay");
-        curtain.classList.add("is-animating");
-        curtain.classList.remove("is-open");
-        setTimeout(() => {
-          curtain.classList.add("is-open");
-          setTimeout(() => curtain.classList.remove("is-animating"), 1300);
-        }, 60);
-      }
 
       function spawnConfetti() {
         const colors = ["#d4af37", "#b8922a", "#5c1820", "#0c1a3d", "#f0e6c8"];
@@ -2742,6 +3155,7 @@
 
       function showResults() {
         gameActive = false;
+        setRoundControlsDisabled(false);
         document.getElementById("game-show").classList.add("hidden");
         document.getElementById("results-screen").classList.remove("hidden");
 
@@ -2803,43 +3217,30 @@
       }
 
       async function startGame() {
+        if (gameActive) return;
         currentQuestion = 0;
         score = 0;
         gameActive = true;
+        setRoundControlsDisabled(true);
         updateScoreDisplay();
         await prepareTriviaDeck();
         if (!quizData.length) {
           gameActive = false;
+          setRoundControlsDisabled(false);
           playAnnouncer("No heritage questions are available yet.", "host");
           return;
         }
-        openCurtain();
-
         if (bgMusic.paused && musicVol > 0) bgMusic.play().catch(() => {});
         playAnnouncer(
           `Welcome to Mati Heritage Trivia Challenge! ${diffSettings[difficulty].label} difficulty. The clock is ticking — good luck!`,
           "welcome",
         );
 
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("difficulty-screen").classList.add("hidden");
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.remove("hidden");
+        setGamePreview(false);
         loadQuestion();
       }
-
-      document.getElementById("play-game-btn").addEventListener("click", () => {
-        playShowClick("click");
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("difficulty-screen").classList.remove("hidden");
-      });
-
-      document
-        .getElementById("back-to-intro-btn")
-        .addEventListener("click", () => {
-          document.getElementById("difficulty-screen").classList.add("hidden");
-          document.getElementById("intro-screen").classList.remove("hidden");
-        });
 
       document
         .getElementById("start-game-btn")
@@ -2851,15 +3252,12 @@
       document.getElementById("retry-btn").addEventListener("click", () => {
         playShowClick("click");
         gameActive = false;
+        setRoundControlsDisabled(false);
         document.getElementById("results-screen").classList.add("hidden");
         document.getElementById("game-show").classList.add("hidden");
-        document.getElementById("difficulty-screen").classList.add("hidden");
-        document.getElementById("intro-screen").classList.remove("hidden");
+        document.getElementById("game-show").classList.remove("hidden");
+        setGamePreview(true);
       });
-
-      if (typeof MatiGameExitGuard !== "undefined") {
-        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "trivia" });
-      }
 
       document.getElementById("music-toggle")?.addEventListener("click", () => {
         playShowClick("click");
@@ -2873,7 +3271,7 @@
         getStudioAudioCtx();
         if (!hasWelcomed) {
           playAnnouncer(
-            "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
+            "You're tuned in to Mati Heritage Trivia Challenge. Choose a difficulty and press Start Trivia when you're ready.",
             "welcome",
           );
           hasWelcomed = true;
@@ -2889,7 +3287,7 @@
 
         if (!hasWelcomed) {
           playAnnouncer(
-            "You're tuned in to Mati Heritage Trivia Challenge. Select your difficulty and press Start Show when you're ready.",
+            "You're tuned in to Mati Heritage Trivia Challenge. Choose a difficulty and press Start Trivia when you're ready.",
             "welcome",
           );
           hasWelcomed = true;

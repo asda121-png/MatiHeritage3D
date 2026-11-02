@@ -61,6 +61,13 @@
       const link = event.target.closest(linkSelector);
       if (!link) return;
       event.preventDefault();
+
+      // Change link text to show loading state
+      const originalText = link.textContent;
+      link.textContent = "Logging out...";
+      link.style.pointerEvents = "none";
+      link.style.opacity = "0.6";
+
       startPixelLogout(redirect);
     });
   }

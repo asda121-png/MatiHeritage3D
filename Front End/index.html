@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>Visitor Portal - Mati Heritage 3D</title>
+    <title>Heritage | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/visitor-portal-showcase.css" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <style>
       :root {
         --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
@@ -5367,13 +5368,7 @@
               </p>
               <div class="flex flex-wrap justify-center md:justify-start gap-3">
                 <a
-                  href="userregistration.html"
-                  class="btn-primary text-sm font-bold px-7 py-3.5 rounded-full"
-                >
-                  Register Account
-                </a>
-                <a
-                  href="about_us.html"
+                  href="about.html"
                   class="inline-flex items-center text-sm font-bold px-7 py-3.5 rounded-full border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition"
                 >
                   About Mati Heritage 3D
@@ -5630,10 +5625,15 @@
             });
 
           const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) settingsModal.remove();
+          if (settingsModal) document.body.appendChild(settingsModal);
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
+          }
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
           }
 
           if (typeof window.MatiVisitorAuth !== "undefined") {

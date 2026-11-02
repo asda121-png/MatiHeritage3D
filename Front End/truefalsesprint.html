@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>True and False Sprint — Mati Heritage</title>
+    <title>True or False Sprint | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -64,10 +64,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link rel="stylesheet" href="css/game-tv-preview.css" />
     <style>
       :root {
@@ -85,6 +86,10 @@
         --medium: #b8860b;
         --hard: #8b3030;
         --hard-light: #b54545;
+      }
+
+      .site-header {
+        font-family: "Source Sans 3", sans-serif;
       }
 
       #settings-modal {
@@ -1042,14 +1047,503 @@
           transform: scaleY(1);
         }
       }
+
+      body {
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #f7f5ef;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      .scroll-bg {
+        display: none;
+      }
+
+      .tf-stage {
+        position: relative;
+        z-index: 4;
+        width: min(90rem, calc(100% - clamp(1.5rem, 4vw, 4rem) * 2));
+        margin: 0 auto;
+        padding: 1rem 0 0;
+      }
+
+      .tf-intro {
+        padding: clamp(1rem, 2.5vw, 1.75rem) 0 0;
+      }
+
+      .tf-intro h1 {
+        margin: 0;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .tf-intro__description {
+        max-width: 55rem;
+        margin: 0.7rem 0 1.5rem;
+        color: #625e56;
+        font-size: 1.3rem;
+        line-height: 1.6;
+      }
+
+      .tf-controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 2px solid #252a27;
+      }
+
+      .tf-controls__label {
+        color: #6b665e;
+        font-size: 1.15rem;
+      }
+
+      .tf-difficulties {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+      }
+
+      .tf-difficulties .speed-chip {
+        min-height: 3rem;
+        padding: 0.55rem 1rem;
+        border: 0;
+        border-right: 1px solid #e4e0d7;
+        border-radius: 0;
+        background: #fffefa;
+        color: #383b38;
+        font: inherit;
+        font-size: 1.05rem;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .tf-difficulties .speed-chip:last-child {
+        border-right: 0;
+      }
+
+      .tf-difficulties .speed-chip span {
+        margin-left: 0.25em;
+        font-size: 0.85em;
+      }
+
+      .tf-difficulties .speed-chip.is-active,
+      .tf-difficulties .speed-chip:hover:not(:disabled) {
+        background: #252a27;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .tf-start-btn {
+        min-height: 3rem;
+        margin-left: auto;
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        color: #fff;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .tf-start-btn:hover:not(:disabled) {
+        background: #17684d;
+      }
+
+      .tf-start-btn:disabled,
+      .tf-difficulties .speed-chip:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+      }
+
+      .tf-game {
+        width: 100%;
+        margin: 1.5rem auto 0;
+        padding: 0;
+      }
+
+      .tf-game.is-preview {
+        filter: blur(4px);
+        opacity: 0.55;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .tf-game .game-scroll {
+        min-height: 0;
+        filter: none;
+      }
+
+      .tf-game .hero-scroll__roller,
+      .tf-game .game-scroll__header {
+        display: none;
+      }
+
+      .tf-game .hero-scroll__paper {
+        padding: 0;
+        clip-path: none;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .tf-game .hero-scroll__paper::before,
+      .tf-game .hero-scroll__paper::after {
+        display: none;
+      }
+
+      .tf-game .grid.grid-cols-3 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e4e0d7;
+      }
+
+      .tf-game .stat-chip {
+        display: grid;
+        justify-items: center;
+        gap: 0.15rem;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .tf-game .stat-chip span:first-child {
+        color: #777168 !important;
+        font-family: "Quicksand", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+
+      .tf-game .stat-chip #score-val,
+      .tf-game .stat-chip #round-val,
+      .tf-game .stat-chip #best-val {
+        color: #252a2d !important;
+        font-family: "Quicksand", sans-serif;
+        font-size: 2rem;
+        line-height: 1.1;
+      }
+
+      .tf-game .stat-chip #score-val {
+        color: #17684d !important;
+      }
+
+      .tf-game .timer-medallion,
+      .tf-game .sand-particles {
+        display: none;
+      }
+
+      .tf-game .tf-timer {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 0.15rem;
+        width: auto;
+        height: auto;
+        margin: 0;
+      }
+
+      .tf-game .tf-timer svg {
+        display: none;
+      }
+
+      .tf-game #timer-sec {
+        position: relative;
+        display: block;
+        color: #252a2d;
+        font-family: "Quicksand", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .tf-game .tf-timer__label {
+        color: #777168;
+        font-family: "Quicksand", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .tf-game #timer-sec.is-urgent {
+        color: #b94a48;
+      }
+
+      .tf-game #fact-plaque {
+        margin: 1.5rem 0 1rem;
+        filter: none;
+      }
+
+      .tf-game .scroll-roll::before,
+      .tf-game .scroll-roll::after,
+      .tf-game .scroll-roll__body::before {
+        display: none;
+      }
+
+      .tf-game .scroll-roll__body {
+        min-height: 8rem;
+        padding: 1.5rem 0 0.75rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .tf-game #clue-label {
+        position: static;
+        margin-bottom: 0.5rem;
+        color: #777168;
+        font-family: "Quicksand", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+
+      .tf-game #fact-text {
+        color: #252a2d;
+        font-family: "Quicksand", sans-serif;
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        font-style: normal;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .tf-game .grid.grid-cols-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem 1rem;
+      }
+
+      .tf-game .verdict-btn {
+        min-height: 4rem;
+        padding: 0.85rem 1rem;
+        border: 1px solid #dcd8ce !important;
+        border-radius: 0.5rem;
+        background: #fffefa !important;
+        box-shadow: none !important;
+        color: #383b38 !important;
+      }
+
+      .tf-game .verdict-btn:hover {
+        transform: none;
+        border-color: #17684d !important;
+        background: #f0f7f2 !important;
+      }
+
+      .tf-game .verdict-btn__seal {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .tf-game .verdict-btn__text {
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 0;
+      }
+
+      .tf-game .verdict-btn__text--true {
+        color: #17684d;
+      }
+
+      .tf-game .verdict-btn__text--false {
+        color: #8f2d2b;
+      }
+
+      #results-screen {
+        width: 100%;
+        max-width: 90rem;
+        margin: 1.5rem auto 0;
+        padding: 1.5rem 0;
+        border: 0;
+        border-top: 1px solid #dcd8ce;
+        color: #383b38;
+      }
+
+      #results-screen .hero-scroll {
+        filter: none;
+      }
+
+      #results-screen .hero-scroll__roller,
+      #results-screen .scroll-flourish {
+        display: none;
+      }
+
+      #results-screen .hero-scroll__paper {
+        padding: 0;
+        clip-path: none;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      #results-screen .hero-scroll__paper::before,
+      #results-screen .hero-scroll__paper::after {
+        display: none;
+      }
+
+      #results-screen h2 {
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      #results-screen #final-score {
+        color: #17684d;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      #results-screen #result-msg {
+        color: #625e56;
+        font-family: "Quicksand", sans-serif;
+        font-style: normal;
+      }
+
+      #results-screen .results-actions .enter-btn {
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        background: #252a27;
+        box-shadow: none;
+        color: #fff;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0;
+      }
+
+      #results-screen .results-actions a {
+        border: 1px solid #252a27;
+        border-radius: 999px;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .tf-help {
+        width: 100%;
+        margin: 1.75rem auto 0;
+        padding: 1.5rem 0 0;
+        border-top: 1px solid #dcd8ce;
+        color: #383b38;
+        font-size: 1.35rem;
+        line-height: 1.65;
+      }
+
+      .tf-help h2 {
+        margin: 0 0 0.85rem;
+        color: #252a2d;
+        font-family: "Source Sans 3", "Quicksand", sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      .tf-help ol {
+        margin: 0 0 1rem;
+        padding-left: 1.75rem;
+        list-style: decimal outside;
+      }
+
+      .tf-help li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.2rem;
+      }
+
+      .tf-help > p {
+        max-width: 72rem;
+        margin: 0 0 1.75rem;
+        color: #625e56;
+      }
+
+      .tf-help > h2:not(:first-child) {
+        margin-top: 1.75rem;
+      }
+
+      .tf-sizes-table-wrap {
+        overflow-x: auto;
+      }
+
+      .tf-help table {
+        min-width: 40rem;
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      .tf-help th,
+      .tf-help td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e9e5dc;
+      }
+
+      .tf-help tbody tr:last-child th,
+      .tf-help tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      #footer-placeholder,
+      .site-footer {
+        margin-top: 20rem;
+      }
+
+      @media (max-width: 640px) {
+        .tf-stage {
+          width: calc(100% - 3rem);
+          padding-top: 0.75rem;
+        }
+
+        .tf-intro {
+          padding-top: 1rem;
+        }
+
+        .tf-controls {
+          align-items: flex-start;
+        }
+
+        .tf-controls__label {
+          flex-basis: 100%;
+        }
+
+        .tf-difficulties {
+          width: 100%;
+        }
+
+        .tf-difficulties .speed-chip {
+          flex: 1 1 0;
+          min-width: 0;
+          padding-inline: 0.4rem;
+          font-size: 0.82rem;
+        }
+
+        .tf-start-btn {
+          margin-left: 0;
+        }
+
+        .tf-game .grid.grid-cols-2 {
+          grid-template-columns: 1fr;
+        }
+
+        .tf-help {
+          font-size: 1.1rem;
+        }
+      }
     </style>
   </head>
   <!-- New Music Player Styles -->
   <style></style>
 
-  <body
-    class="game-page visitor-module font-body text-scroll-paper antialiased overflow-x-hidden"
-  >
+  <body class="game-page visitor-module antialiased overflow-x-hidden">
     <div
       class="scroll-bg fixed inset-0 -z-10 pointer-events-none"
       aria-hidden="true"
@@ -1058,20 +1552,6 @@
     </div>
 
     <div id="header-placeholder"></div>
-
-    <nav
-      class="fixed top-[calc(var(--header-h)+0.75rem)] left-0 right-0 z-[490] max-w-[94rem] mx-auto px-4 sm:px-8 pointer-events-none"
-      aria-label="Game navigation"
-    >
-      <div class="ml-[calc(3.25rem+0.9rem)]">
-        <a
-          href="game.html"
-          class="nav-scroll pointer-events-auto inline-flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.12em] uppercase px-4 py-2 rounded-sm transition-colors"
-        >
-          <span aria-hidden="true">←</span> Return to Game Hall
-        </a>
-      </div>
-    </nav>
 
     <aside
       id="now-playing"
@@ -1124,179 +1604,58 @@
       </span>
     </aside>
 
-    <main
-      class="relative z-10 min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 pt-[calc(var(--header-h)+2.5rem)] pb-64"
-    >
-      <!-- INTRO -->
-      <section
-        id="intro-screen"
-        class="grid gap-8 sm:gap-12 w-full max-w-2xl mx-auto items-stretch"
-      >
-        <!-- Main parchment scroll -->
-        <div class="hero-scroll flex flex-col min-h-[500px]">
-          <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
-          <div
-            class="hero-scroll__paper flex-1 flex flex-col items-center text-center p-8 sm:p-12"
-          >
-            <div class="scroll-flourish" aria-hidden="true">
-              <span class="scroll-flourish__gem"></span>
-            </div>
+    <main class="tf-stage">
+      <section id="intro-screen" class="tf-intro">
+        <h1>True or False Sprint</h1>
+        <p class="tf-intro__description">
+          Decide whether each Mati heritage fact is true or false before time
+          runs out. Answer quickly and earn points for every correct answer.
+        </p>
 
-            <h1
-              class="font-display title-main font-bold uppercase tracking-wide text-3xl sm:text-4xl lg:text-5xl"
-            >
-              True and False
-            </h1>
-            <p
-              class="font-display title-sprint font-bold uppercase text-4xl sm:text-5xl lg:text-6xl"
-            >
-              Sprint
-            </p>
-
-            <div class="scroll-flourish my-4" aria-hidden="true">
-              <span class="scroll-flourish__gem"></span>
-            </div>
-
-            <p
-              class="text-[#1a0f08] text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-sm mb-8 px-2 font-semibold"
-              style="text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5)"
-            >
-              Unroll each parchment entry and judge whether the heritage fact is
-              true or false — before the sands run out.
-            </p>
-
-            <div class="grid grid-cols-2 gap-4 w-full max-w-md mt-auto">
-              <div class="preview-verdict">
-                <span class="preview-verdict__seal preview-verdict__seal--true">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 7l3.5 3.5L12 3"
-                      stroke="white"
-                      stroke-width="2.2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="preview-verdict__label preview-verdict__label--true"
-                  >TRUE</span
-                >
-              </div>
-              <div class="preview-verdict">
-                <span
-                  class="preview-verdict__seal preview-verdict__seal--false"
-                >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 2l8 8M10 2L2 10"
-                      stroke="white"
-                      stroke-width="2.2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="preview-verdict__label preview-verdict__label--false"
-                  >FALSE</span
-                >
-              </div>
-            </div>
+        <div class="tf-controls" aria-label="True or False Sprint options">
+          <span class="tf-controls__label">Difficulty</span>
+          <div class="tf-difficulties" role="group" aria-label="Choose difficulty">
             <button
               type="button"
-              id="play-btn"
-              class="enter-btn start-btn w-full max-w-sm mt-6 py-3.5 font-display text-sm font-bold"
+              id="btn-easy"
+              class="speed-chip is-active"
+              data-level="easy"
+              aria-pressed="true"
             >
-              PLAY
+              Easy <span>(5 Q)</span>
+            </button>
+            <button
+              type="button"
+              id="btn-medium"
+              class="speed-chip"
+              data-level="medium"
+              aria-pressed="false"
+            >
+              Medium <span>(8 Q)</span>
+            </button>
+            <button
+              type="button"
+              id="btn-hard"
+              class="speed-chip"
+              data-level="hard"
+              aria-pressed="false"
+            >
+              Hard <span>(10 Q)</span>
             </button>
           </div>
-          <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
-        </div>
-      </section>
-
-      <section
-        id="difficulty-screen"
-        class="hidden w-full max-w-2xl mx-auto"
-        aria-label="Choose game difficulty"
-      >
-        <!-- Difficulty scroll -->
-        <div class="hero-scroll scroll-sidebar flex flex-col min-h-[500px]">
-          <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
-          <div
-            class="hero-scroll__paper flex-1 flex flex-col items-center text-center p-8 sm:p-12"
-          >
-            <h2 class="scroll-sidebar__heading">Select Difficulty</h2>
-
-            <div class="flex flex-col gap-4 w-full max-w-sm">
-              <button
-                type="button"
-                id="btn-easy"
-                class="speed-chip diff-bar diff-bar--easy"
-                data-level="easy"
-              >
-                <span class="diff-bar__name">EASY</span>
-                <span class="diff-bar__meta speed-chip__meta"
-                  >5 Questions • 10 Sec</span
-                >
-              </button>
-              <button
-                type="button"
-                id="btn-medium"
-                class="speed-chip diff-bar diff-bar--medium"
-                data-level="medium"
-              >
-                <span class="diff-bar__name">MEDIUM</span>
-                <span class="diff-bar__meta speed-chip__meta"
-                  >8 Questions • 8 Sec</span
-                >
-              </button>
-              <button
-                type="button"
-                id="btn-hard"
-                class="speed-chip diff-bar diff-bar--hard"
-                data-level="hard"
-              >
-                <span class="diff-bar__name">HARD</span>
-                <span class="diff-bar__meta speed-chip__meta"
-                  >10 Questions • 5 Sec</span
-                >
-              </button>
-            </div>
-
-            <button
-              type="button"
-              id="start-btn"
-              class="enter-btn start-btn w-full mt-6 py-3.5 font-display text-sm font-bold disabled:opacity-40"
-              disabled
-            >
-              ENTER
-            </button>
-            <button
-              type="button"
-              id="back-to-intro-btn"
-              class="enter-btn w-full mt-3 py-3 font-display text-sm font-bold"
-            >
-              BACK
-            </button>
-          </div>
-          <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
+          <button type="button" id="start-btn" class="tf-start-btn">
+            Start sprint
+          </button>
         </div>
       </section>
 
       <!-- GAME -->
-      <section id="game-screen" class="hidden w-full max-w-2xl">
+      <section
+        id="game-screen"
+        class="tf-game is-preview"
+        aria-hidden="true"
+        inert
+      >
         <div class="hero-scroll game-scroll flex flex-col min-h-[600px]">
           <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
           <div class="hero-scroll__paper p-6 sm:p-8">
@@ -1324,7 +1683,7 @@
               <div class="stat-chip text-center py-3">
                 <span
                   class="block text-xs font-display font-bold tracking-wider uppercase"
-                  >Entry</span
+                  >Question</span
                 >
                 <span
                   id="round-val"
@@ -1343,40 +1702,42 @@
                   >0</span
                 >
               </div>
-            </div>
-
-            <div class="relative w-[7rem] h-[7rem] mx-auto mb-6">
-              <div class="timer-medallion absolute inset-0 rounded-full"></div>
-              <svg
-                class="relative w-full h-full -rotate-90 p-2"
-                viewBox="0 0 100 100"
-                aria-hidden="true"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  fill="none"
-                  stroke="rgba(107,68,35,0.12)"
-                  stroke-width="4"
-                />
-                <circle
-                  id="timer-ring"
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  fill="none"
-                  stroke="#6b4423"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <span
-                id="timer-sec"
-                class="absolute inset-0 grid place-items-center font-display text-2xl sm:text-3xl font-bold text-[var(--ink)]"
-                >20</span
-              >
-              <div class="sand-particles" aria-hidden="true"></div>
+              <div class="stat-chip text-center py-3">
+                <span class="tf-timer__label block uppercase">Time</span>
+                <div class="tf-timer">
+                  <div class="timer-medallion absolute inset-0 rounded-full"></div>
+                  <svg
+                    class="relative w-full h-full -rotate-90 p-2"
+                    viewBox="0 0 100 100"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="42"
+                      fill="none"
+                      stroke="rgba(107,68,35,0.12)"
+                      stroke-width="4"
+                    />
+                    <circle
+                      id="timer-ring"
+                      cx="50"
+                      cy="50"
+                      r="42"
+                      fill="none"
+                      stroke="#6b4423"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span
+                    id="timer-sec"
+                    class="absolute inset-0 grid place-items-center font-display text-2xl sm:text-3xl font-bold text-[var(--ink)]"
+                    >10</span
+                  >
+                  <div class="sand-particles" aria-hidden="true"></div>
+                </div>
+              </div>
             </div>
 
             <div id="fact-plaque" class="scroll-roll relative mx-2 mb-5">
@@ -1392,7 +1753,7 @@
                   id="fact-text"
                   class="relative z-[1] font-body text-base sm:text-lg font-semibold italic text-[var(--ink)] text-center leading-relaxed mt-1 px-1"
                 >
-                  Loading…
+                  Your first heritage fact will appear here.
                 </p>
               </div>
             </div>
@@ -1402,6 +1763,7 @@
                 type="button"
                 id="true-btn"
                 class="verdict-btn py-3 rounded-sm active:scale-[0.98] transition-all"
+                disabled
               >
                 <span class="verdict-btn__seal verdict-btn__seal--true">
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -1422,6 +1784,7 @@
                 type="button"
                 id="false-btn"
                 class="verdict-btn py-3 rounded-sm active:scale-[0.98] transition-all"
+                disabled
               >
                 <span class="verdict-btn__seal verdict-btn__seal--false">
                   <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
@@ -1498,6 +1861,56 @@
           <div class="hero-scroll__roller shrink-0" aria-hidden="true"></div>
         </div>
       </section>
+
+      <section class="tf-help" aria-labelledby="tf-help-title">
+        <h2 id="tf-help-title">How to play</h2>
+        <ol>
+          <li>Choose a difficulty and start the sprint.</li>
+          <li>Read each Mati heritage statement and choose True or False before time runs out.</li>
+          <li>Answer quickly to earn points. The sprint ends when all questions are answered.</li>
+        </ol>
+        <p>
+          Each correct answer earns points. Faster rounds have shorter time
+          limits and give more points for each correct answer.
+        </p>
+        <h2>Difficulty levels</h2>
+        <div class="tf-sizes-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Difficulty</th>
+                <th scope="col">Questions</th>
+                <th scope="col">Time per question</th>
+                <th scope="col">Points per correct answer</th>
+                <th scope="col">Good for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Easy</th>
+                <td>5</td>
+                <td>10 seconds</td>
+                <td>10</td>
+                <td>A short, relaxed round</td>
+              </tr>
+              <tr>
+                <th scope="row">Medium</th>
+                <td>8</td>
+                <td>8 seconds</td>
+                <td>15</td>
+                <td>A balanced game</td>
+              </tr>
+              <tr>
+                <th scope="row">Hard</th>
+                <td>10</td>
+                <td>5 seconds</td>
+                <td>20</td>
+                <td>For a bigger challenge</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <div id="footer-placeholder"></div>
@@ -1540,7 +1953,6 @@
     <script src="js/games/game-auth-gate.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/games/game-tv-transition.js"></script>
-    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "truefalsesprint.html" });
       if (typeof window.initTvExpandReceive === "function") {
@@ -1627,6 +2039,7 @@
       let totalRounds = 5;
       let bestScore = parseInt(localStorage.getItem("tfSprintBest") || "0", 10);
       let gameActive = false;
+      let canAnswer = false;
       let timeLeft = diffSettings.medium.baseTime;
       let timerInterval = null;
       let currentFact = null;
@@ -1801,36 +2214,28 @@
         playSprintSound("click");
         getSprintAudioCtx();
         startSprintMusic();
+        if (gameActive) return;
         difficulty = level;
         document.querySelectorAll(".speed-chip").forEach((btn) => {
-          btn.classList.remove(...CHIP_ACTIVE);
+          const isActive = btn.dataset.level === level;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-pressed", String(isActive));
         });
-        const active = document.getElementById(`btn-${level}`);
-        active.classList.add(...CHIP_ACTIVE);
-        document.getElementById("start-btn").disabled = false;
+        totalRounds = diffSettings[level].rounds;
+        document.getElementById("round-val").textContent =
+          `1 / ${totalRounds}`;
+        document.getElementById("timer-sec").textContent = String(
+          diffSettings[level].baseTime / 1000,
+        );
+        document.getElementById("best-val").textContent = bestScore;
+        document.getElementById("game-diff-label").textContent =
+          diffSettings[level].label;
+        renderClueDots();
       };
-
-      // Play scroll animation sounds on page load
-      setTimeout(() => playSprintSound("thud"), 400);
-      setTimeout(() => playSprintSound("roller"), 800);
-      setTimeout(() => playSprintSound("roller"), 880);
-      setTimeout(() => playSprintSound("unroll"), 1100);
 
       document.querySelectorAll(".speed-chip").forEach((btn) => {
         btn.addEventListener("click", () => setDifficulty(btn.dataset.level));
       });
-
-      document.getElementById("play-btn").addEventListener("click", () => {
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("difficulty-screen").classList.remove("hidden");
-      });
-
-      document
-        .getElementById("back-to-intro-btn")
-        .addEventListener("click", () => {
-          document.getElementById("difficulty-screen").classList.add("hidden");
-          document.getElementById("intro-screen").classList.remove("hidden");
-        });
 
       document.getElementById("best-val").textContent = bestScore;
 
@@ -1919,6 +2324,7 @@
         clearInterval(timerInterval);
         const maxTime = getRoundTime();
         timeLeft = maxTime;
+        canAnswer = true;
         const ring = document.getElementById("timer-ring");
         const secEl = document.getElementById("timer-sec");
         ring?.classList.remove("is-urgent");
@@ -1941,6 +2347,7 @@
             clearInterval(timerInterval);
             timeLeft = 0;
             syncTimerUI();
+            handleAnswer(!currentFact.a);
           }
         }, 100);
       }
@@ -1958,7 +2365,9 @@
       }
 
       function handleAnswer(ans) {
-        if (!gameActive) return;
+        if (!gameActive || !canAnswer) return;
+        canAnswer = false;
+        clearInterval(timerInterval);
         const isCorrect = ans === currentFact.a;
         if (isCorrect) {
           correctCount++;
@@ -1997,8 +2406,16 @@
 
       function finishRun(isSuccess, reason) {
         gameActive = false;
+        canAnswer = false;
         clearInterval(timerInterval);
         document.body.classList.remove("is-game-mode");
+        document.getElementById("start-btn").disabled = false;
+        document.getElementById("start-btn").textContent = "Play again";
+        document.querySelectorAll(".speed-chip").forEach((button) => {
+          button.disabled = false;
+        });
+        document.getElementById("true-btn").disabled = true;
+        document.getElementById("false-btn").disabled = true;
 
         const isRecord = currentScore > bestScore;
         if (isRecord) {
@@ -2069,13 +2486,21 @@
       document
         .getElementById("start-btn")
         .addEventListener("click", async () => {
-          if (!difficulty) return;
+          if (!difficulty || gameActive) return;
           playSprintSound("start");
           getSprintAudioCtx();
           startSprintMusic();
           document.body.classList.add("is-game-mode");
-          document.getElementById("difficulty-screen").classList.add("hidden");
+          document.getElementById("start-btn").disabled = true;
+          document.querySelectorAll(".speed-chip").forEach((button) => {
+            button.disabled = true;
+          });
+          const gameScreen = document.getElementById("game-screen");
+          gameScreen.classList.remove("hidden", "is-preview");
+          gameScreen.removeAttribute("inert");
+          gameScreen.setAttribute("aria-hidden", "false");
           document.getElementById("game-screen").classList.remove("hidden");
+          document.getElementById("results-screen").classList.add("hidden");
           currentScore = 0;
           correctCount = 0;
           clueResults = [];
@@ -2096,12 +2521,20 @@
           if (!facts.length) {
             playAnnouncer("No heritage facts are available yet.");
             document.getElementById("game-screen").classList.add("hidden");
-            document.getElementById("intro-screen").classList.remove("hidden");
+            gameScreen.classList.add("is-preview");
+            gameScreen.setAttribute("inert", "");
+            gameScreen.setAttribute("aria-hidden", "true");
+            document.getElementById("start-btn").disabled = false;
+            document.querySelectorAll(".speed-chip").forEach((button) => {
+              button.disabled = false;
+            });
             document.body.classList.remove("is-game-mode");
             return;
           }
 
           gameActive = true;
+          document.getElementById("true-btn").disabled = false;
+          document.getElementById("false-btn").disabled = false;
           updateRoundDisplay();
           playAnnouncer(`Ready! ${diffSettings[difficulty].label} difficulty.`);
           nextFact();
@@ -2141,10 +2574,6 @@
           ".speed-chip, .start-btn, .enter-btn, .verdict-btn, nav a, .results-actions .start-btn, .results-actions a",
         ),
       );
-
-      if (typeof MatiGameExitGuard !== "undefined") {
-        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "scroll" });
-      }
 
       applyMusicVolume();
       updateMusicUI();

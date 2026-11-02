@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mati Heritage Map</title>
+    <title>Map | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +13,7 @@
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -133,6 +134,15 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="_backend/supabase-config.js"></script>
+    <script src="_backend/supabase-client.js"></script>
+    <script src="_backend/supabase-api.js"></script>
+    <script src="_backend/supabase-auth.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script src="assets/data/mati-city-boundary.js"></script>
     <script src="js/utils/heritage/heritage-map-sites.js"></script>
     <script src="js/pages/map-page.js"></script>
@@ -171,10 +181,16 @@
         "header",
         "header-placeholder",
         () => {
+          window.initSiteHeader?.();
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
           document
             .querySelector('.site-nav__link[data-nav="map"]')
             ?.classList.add("is-active");
-          window.initSiteHeader?.();
         },
       ).catch((error) => console.error("Error loading header:", error));
 

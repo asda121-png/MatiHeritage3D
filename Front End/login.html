@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/auth.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link rel="stylesheet" href="css/model-viewer-loading.css" />
     <script
       type="module"
@@ -153,7 +154,7 @@
             <header class="auth-portal-header">
               <div class="auth-portal-logo">
                 <img
-                  src="assets/logos/MatiHeritage logo.png"
+                  src="assets/logos/logo.png"
                   alt="Mati Heritage 3D"
                   class="auth-portal-logo__image"
                   style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
@@ -362,9 +363,21 @@
         const submitBtn = document.getElementById("login-submit");
         const identifierInput = document.getElementById("login-identifier");
 
+        // Show loading overlay if OAuth redirect is in progress
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("oauth") === "1") {
+          document.body.classList.add("auth-body--loading");
+          const loadingOverlay = document.createElement("div");
+          loadingOverlay.className = "auth-oauth-loading";
+          loadingOverlay.innerHTML = `
+            <div class="auth-oauth-loading__spinner"></div>
+            <p>Logging you in...</p>
+          `;
+          document.body.appendChild(loadingOverlay);
+        }
+
         identifierInput?.focus();
 
-        const params = new URLSearchParams(window.location.search);
         if (params.get("reset") === "success") {
           showAlert(
             "Password updated. Sign in with your new password.",

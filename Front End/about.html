@@ -3,22 +3,188 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us - Mati Heritage 3D</title>
+    <title>About | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/heritage-palette.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
+    <style>
+      .about-page {
+        margin: 0;
+        color: var(--ink);
+        background: #f8f7f4;
+        font-family: "Source Sans 3", sans-serif;
+      }
+
+      :root {
+        --about-content-width: 90rem;
+        --about-content-gutter: clamp(1.5rem, 4vw, 4rem);
+      }
+
+      .about-hero {
+        position: relative;
+        display: flex;
+        min-height: clamp(16rem, 32vw, 26rem);
+        align-items: center;
+        overflow: hidden;
+        isolation: isolate;
+        background: #123c35;
+      }
+
+      .about-hero::after {
+        position: absolute;
+        z-index: -1;
+        background: linear-gradient(
+          90deg,
+          rgba(8, 35, 31, 0.88) 0%,
+          rgba(8, 35, 31, 0.58) 48%,
+          rgba(8, 35, 31, 0.12) 100%
+        );
+        content: "";
+        inset: 0;
+      }
+
+      .about-hero__image {
+        position: absolute;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 48%;
+        inset: 0;
+      }
+
+      .about-hero__content {
+        width: min(
+          calc(100% - var(--about-content-gutter) * 2),
+          var(--about-content-width)
+        );
+        margin-inline: auto;
+        padding-block: 3.25rem;
+        color: #fff;
+      }
+
+      .about-hero__content h1 {
+        margin: 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2.75rem, 6vw, 4.5rem);
+        font-weight: 700;
+        line-height: 0.98;
+      }
+
+      .about-hero__content p {
+        max-width: 38rem;
+        margin: 0.8rem 0 0;
+        font-size: clamp(1rem, 1.7vw, 1.2rem);
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      .about-content {
+        padding: clamp(4rem, 8vw, 6rem) clamp(1.5rem, 4vw, 3rem);
+      }
+
+      .about-wrapper {
+        width: min(
+          calc(100% - 3rem),
+          48rem
+        );
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .about-logo {
+        width: 10rem;
+        margin: 0 auto 2rem;
+        display: block;
+      }
+
+      .about-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .about-wrapper p {
+        margin: 0;
+        font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+        line-height: 1.8;
+        color: #5c5c5c;
+      }
+
+      @media (max-width: 768px) {
+        .about-hero {
+          min-height: 17rem;
+        }
+
+        .about-hero__content {
+          width: calc(100% - 2rem);
+          padding-block: 2.75rem;
+        }
+
+        .about-content {
+          padding: 3rem 1.5rem;
+        }
+
+        .about-logo {
+          width: 8rem;
+          margin-bottom: 1.5rem;
+        }
+      }
+    </style>
   </head>
-  <body class="visitor-module">
+  <body class="visitor-module about-page">
     <div id="header-placeholder"></div>
 
-    <main class="min-h-screen flex items-center justify-center p-8">
-      <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4">About Us</h1>
-        <p class="text-gray-600">Our story coming soon...</p>
-      </div>
+    <main>
+      <section class="about-hero" aria-labelledby="about-hero-title">
+        <img
+          class="about-hero__image"
+          src="assets/data/GALLERY/DJI_0812.jpg"
+          alt="Aerial view of the islands and coastline of Pujada Bay"
+        />
+        <div class="about-hero__content">
+          <h1 id="about-hero-title">About</h1>
+          <p>Preserving Mati City's heritage through digital exploration.</p>
+        </div>
+      </section>
+
+      <section class="about-content" aria-label="About Mati Heritage 3D">
+        <div class="about-wrapper">
+          <div class="about-logo">
+            <img
+              src="assets/logos/logo.png"
+              alt="Mati Heritage 3D Logo"
+            />
+          </div>
+          <p>
+            Mati Heritage 3D is a web-based platform that documents and showcases
+            Mati City's built, intangible, and natural heritage through interactive
+            maps, multimedia galleries, 3D visualization models, and educational games. It
+            aims to make local heritage more accessible, engaging, and easier to
+            appreciate.
+          </p>
+        </div>
+      </section>
     </main>
 
     <div id="footer-placeholder"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="_backend/supabase-config.js"></script>
+    <script src="_backend/supabase-client.js"></script>
+    <script src="_backend/supabase-api.js"></script>
+    <script src="_backend/supabase-auth.js"></script>
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/heritage/heritage-points.js"></script>
+    <script src="js/utils/visitor-auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
+    <script src="js/visitor-shell.js"></script>
     <script>
       async function loadSharedComponent(url, selector, placeholderId, init) {
         const response = await fetch(url);
@@ -55,6 +221,17 @@
         "header-placeholder",
         () => {
           window.initSiteHeader?.();
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
+          // Bind logout functionality
+          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
+            MatiAuthLogout.bind({ redirect: "index.html" });
+            document.body.dataset.logoutBound = "1";
+          }
         },
       ).catch((error) => console.error("Error loading header:", error));
 
