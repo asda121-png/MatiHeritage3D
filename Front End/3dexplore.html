@@ -9,7 +9,7 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>3D Explore — Mati Heritage 3D</title>
+    <title>3D Explore | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/gallery-page.css" />
     <link rel="stylesheet" href="css/heritage-map-markers.css" />
+    <link rel="icon" type="image/png" href="assets/logos/logo.png" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -84,17 +85,21 @@
         --header-h-scrolled: 4.875rem;
       }
 
+      body.visitor-module .site-header {
+        font-family: "Source Sans 3", sans-serif;
+      }
+
       body.visitor-module header nav > a,
       body.visitor-module header .site-brand__tagline,
       body.visitor-module .visitor-auth-btn,
       body.visitor-module .site-footer,
       body.visitor-module .site-footer a {
-        font-family: "Inter", system-ui, sans-serif !important;
+        font-family: "Source Sans 3", sans-serif !important;
       }
 
       body.visitor-module .display-font,
       body.visitor-module header .site-brand__title {
-        font-family: "Inter", system-ui, sans-serif !important;
+        font-family: "Source Sans 3", sans-serif !important;
       }
 
       body.visitor-module .site-header .header-scroll-progress {
@@ -154,9 +159,12 @@
       }
 
       .heritage-site-story__hero-content {
-        width: min(100%, 88rem);
+        width: min(
+          calc(100% - var(--explore-content-gutter) * 2),
+          var(--explore-content-width)
+        );
         margin: 0 auto;
-        padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4rem);
+        padding-block: clamp(3rem, 7vw, 6rem);
         color: #fff;
       }
 
@@ -192,9 +200,12 @@
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
         gap: clamp(2rem, 6vw, 5rem);
-        width: min(100%, 88rem);
+        width: min(
+          calc(100% - var(--explore-content-gutter) * 2),
+          var(--explore-content-width)
+        );
         margin: 0 auto;
-        padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+        padding-block: clamp(2.5rem, 5vw, 4.5rem);
       }
 
       .heritage-site-story__article {
@@ -328,7 +339,7 @@
 
       .heritage-site-story__model-viewer {
         position: relative;
-        min-height: clamp(22rem, 55vw, 42rem);
+        min-height: clamp(22rem, 76vw, 54rem);
         overflow: hidden;
         border: 1px solid rgba(68, 55, 46, 0.14);
         border-radius: 1rem;
@@ -338,22 +349,56 @@
       .heritage-site-story__model-viewer model-viewer {
         display: block;
         width: 100%;
-        height: clamp(22rem, 55vw, 42rem);
+        height: clamp(22rem, 76vw, 54rem);
         --poster-color: #090e14;
         background: #090e14;
+      }
+
+      @media (min-width: 1024px) {
+        .heritage-site-story__model-viewer {
+          width: calc(100% + 22rem + clamp(2rem, 6vw, 5rem));
+        }
       }
 
       .heritage-site-story__model-status {
         position: absolute;
         inset: 0;
-        display: grid;
-        place-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
         padding: 1rem;
         background: rgba(9, 14, 20, 0.82);
         color: #f8fafc;
         font-size: 0.95rem;
         text-align: center;
         pointer-events: none;
+      }
+
+      .heritage-site-story__model-spinner {
+        width: 3rem;
+        height: 3rem;
+        border: 3px solid rgba(110, 231, 183, 0.2);
+        border-top-color: #6ee7b7;
+        border-radius: 50%;
+        animation: explore3d-spin 0.85s linear infinite;
+      }
+
+      .heritage-site-story__model-status.is-error
+        .heritage-site-story__model-spinner {
+        display: none;
+      }
+
+      .heritage-site-story__model-status.is-error
+        .heritage-site-story__model-progress {
+        display: none;
+      }
+
+      .heritage-site-story__model-progress {
+        font-size: 1.125rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
       }
 
       .heritage-site-story__model-status[hidden] {
@@ -373,27 +418,59 @@
 
       .heritage-site-story__model-tools button {
         display: grid;
-        width: 2.65rem;
-        height: 2.65rem;
+        width: 3rem;
+        height: 3rem;
         place-items: center;
         border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 0.6rem;
-        background: rgba(30, 35, 40, 0.82);
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.15);
         color: #fff;
         font: inherit;
         font-size: 1.25rem;
         cursor: pointer;
         pointer-events: auto;
-        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
       }
 
-      .heritage-site-story__model-tools button:hover,
+      .heritage-site-story__model-tools button:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
       .heritage-site-story__model-tools button.active {
-        background: rgba(4, 120, 87, 0.9);
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .heritage-site-story__model-tools .viewer-control-button {
+        position: relative;
+        z-index: 30;
+      }
+
+      .heritage-site-story__model-tools .viewer-control-button svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .heritage-site-story__model-tools .viewer-control-button:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
       }
 
       .heritage-site-story__model-tools .heritage-site-story__model-fullscreen {
         margin-top: auto;
+      }
+
+      .heritage-site-story__model-primary-tools {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        transform: translateY(-50%);
       }
 
       .heritage-site-story__model-zoom {
@@ -528,6 +605,11 @@
           min-height: clamp(25rem, 75svh, 34rem);
         }
 
+        .heritage-site-story__hero-content,
+        .heritage-site-story__content {
+          width: calc(100% - 2rem);
+        }
+
         .heritage-site-story__hero-shade {
           background:
             linear-gradient(
@@ -622,6 +704,8 @@
       }
 
       .explore3d-page {
+        --explore-content-width: 90rem;
+        --explore-content-gutter: clamp(1.5rem, 4vw, 4rem);
         position: relative;
         z-index: 1;
       }
@@ -1510,6 +1594,8 @@
       .auto-rotate-btn::after,
       .pan-mode-btn::after,
       .controls-help-btn::after,
+      .heritage-site-story__model-tools .viewer-control-button::after,
+      .fullscreen-controls-help::after,
       .zoom-control-btn::after,
       .fullscreen-toggle-btn::after {
         content: attr(data-tooltip);
@@ -1518,21 +1604,24 @@
         right: calc(100% + 0.55rem);
         z-index: 200;
         width: max-content;
-        max-width: 14rem;
-        padding: 0.4rem 0.6rem;
-        border-radius: 0.35rem;
-        background: rgba(10, 15, 20, 0.94);
+        max-width: min(14rem, calc(100vw - 5rem));
+        padding: 0.5rem 0.7rem;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.45rem;
+        background: rgba(10, 15, 20, 0.97);
         color: #f8fafc;
         font:
-          600 0.7rem/1.2 "Inter",
+          600 0.8rem/1.2 "Inter",
           system-ui,
           sans-serif;
+        white-space: nowrap;
         pointer-events: none;
         opacity: 0;
         transform: translateY(-50%) translateX(0.25rem);
         transition:
           opacity 0.18s ease,
           transform 0.18s ease;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
       }
 
       .auto-rotate-btn:hover::after,
@@ -1541,6 +1630,10 @@
       .pan-mode-btn:focus-visible::after,
       .controls-help-btn:hover::after,
       .controls-help-btn:focus-visible::after,
+      .heritage-site-story__model-tools .viewer-control-button:hover::after,
+      .heritage-site-story__model-tools .viewer-control-button:focus-visible::after,
+      .fullscreen-controls-help:hover::after,
+      .fullscreen-controls-help:focus-visible::after,
       .zoom-control-btn:hover::after,
       .zoom-control-btn:focus-visible::after,
       .fullscreen-toggle-btn:hover::after,
@@ -1771,6 +1864,16 @@
         animation: explore3d-spin 0.85s linear infinite;
       }
 
+      .heritage-fullscreen__loading-progress {
+        margin: 0;
+        font-size: 1.125rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .heritage-fullscreen__loading-label {
+        margin: 0;
+      }
+
       .heritage-fullscreen__model[hidden] {
         display: none !important;
       }
@@ -1948,8 +2051,8 @@
         position: absolute;
         bottom: 1rem;
         right: 1rem;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1977,16 +2080,16 @@
       }
 
       .fullscreen-toggle-btn svg {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
       }
 
       .auto-rotate-btn {
         position: absolute;
-        top: calc(50% - 2.65rem);
+        top: calc(50% - 6.45rem);
         right: 1rem;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2003,10 +2106,10 @@
 
       .pan-mode-btn {
         position: absolute;
-        top: calc(50% - 5.5rem);
+        top: calc(50% - 3.15rem);
         right: 1rem;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2036,13 +2139,117 @@
       }
 
       .pan-mode-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .fullscreen-pan-mode-btn {
+        position: absolute;
+        top: calc(50% - 3.75rem);
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 30;
+      }
+
+      .fullscreen-pan-mode-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .fullscreen-pan-mode-btn.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .fullscreen-pan-mode-btn svg {
         width: 1.25rem;
         height: 1.25rem;
       }
 
-      .fullscreen-pan-mode-btn {
+      .fullscreen-auto-rotate-btn {
+        position: absolute;
         top: calc(50% - 1.25rem);
         right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 30;
+      }
+
+      .fullscreen-auto-rotate-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .fullscreen-auto-rotate-btn.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
+      .fullscreen-auto-rotate-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .fullscreen-zoom-controls {
+        position: absolute;
+        top: calc(50% + 1.25rem);
+        right: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        z-index: 30;
+      }
+
+      .fullscreen-zoom-controls .zoom-control-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .fullscreen-zoom-controls .zoom-control-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .fullscreen-zoom-controls .zoom-control-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
       }
 
       .pan-mode-active {
@@ -2064,13 +2271,13 @@
       }
 
       .auto-rotate-btn svg {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
       }
 
       .zoom-controls-group {
         position: absolute;
-        top: calc(50% + 0.3rem);
+        top: calc(50% + 0.15rem);
         right: 1rem;
         display: flex;
         flex-direction: column;
@@ -2079,8 +2286,8 @@
       }
 
       .zoom-control-btn {
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2101,21 +2308,19 @@
       }
 
       .zoom-control-btn svg {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
       }
 
       @media (max-width: 768px) {
-        .auto-rotate-btn {
+        .auto-rotate-btn:not(.fullscreen-auto-rotate-btn) {
           right: 0.5rem;
-          top: calc(50% - 2.4rem);
         }
 
-        .pan-mode-btn {
+        .pan-mode-btn:not(.fullscreen-pan-mode-btn) {
           right: 0.5rem;
-          top: calc(50% - 5rem);
-          width: 2.25rem;
-          height: 2.25rem;
+          width: 3rem;
+          height: 3rem;
         }
 
         .fullscreen-pan-mode-btn {
@@ -2129,13 +2334,13 @@
         }
 
         .zoom-control-btn {
-          width: 2.25rem;
-          height: 2.25rem;
+          width: 3rem;
+          height: 3rem;
         }
 
         .zoom-control-btn svg {
-          width: 1.1rem;
-          height: 1.1rem;
+          width: 1.5rem;
+          height: 1.5rem;
         }
       }
 
@@ -2143,8 +2348,8 @@
         position: absolute;
         top: 1rem;
         right: 1rem;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2157,7 +2362,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         z-index: 10;
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 600;
         font-family: "Inter", system-ui, sans-serif;
         -webkit-tap-highlight-color: transparent;
@@ -2178,9 +2383,9 @@
       @media (max-width: 768px) {
         .controls-help-btn {
           right: 0.5rem;
-          width: 2.25rem;
-          height: 2.25rem;
-          font-size: 0.9rem;
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.25rem;
         }
 
         .controls-help-overlay {
@@ -2212,22 +2417,22 @@
 
         .fullscreen-toggle-btn {
           left: 0.5rem;
-          width: 2.25rem;
-          height: 2.25rem;
+          width: 3rem;
+          height: 3rem;
         }
 
         .fullscreen-toggle-btn svg {
-          width: 1.1rem;
-          height: 1.1rem;
+          width: 1.5rem;
+          height: 1.5rem;
         }
       }
 
       @media (max-width: 480px) {
         .controls-help-btn {
           right: 0.5rem;
-          width: 2rem;
-          height: 2rem;
-          font-size: 0.85rem;
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.25rem;
         }
 
         .controls-help-overlay {
@@ -2262,13 +2467,13 @@
 
         .fullscreen-toggle-btn {
           left: 0.25rem;
-          width: 2rem;
-          height: 2rem;
+          width: 3rem;
+          height: 3rem;
         }
 
         .fullscreen-toggle-btn svg {
-          width: 1rem;
-          height: 1rem;
+          width: 1.5rem;
+          height: 1.5rem;
         }
       }
 
@@ -2365,8 +2570,8 @@
       }
 
       .fullscreen-controls-help {
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 3rem;
+        height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2378,11 +2583,15 @@
         color: #ffffff;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 600;
         font-family: "Inter", system-ui, sans-serif;
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 30;
       }
 
       .fullscreen-controls-help:hover {
@@ -2440,9 +2649,9 @@
 
       @media (max-width: 768px) {
         .fullscreen-controls-help {
-          width: 2.25rem;
-          height: 2.25rem;
-          font-size: 0.9rem;
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.25rem;
         }
 
         .fullscreen-controls-help-overlay {
@@ -2463,9 +2672,9 @@
 
       @media (max-width: 480px) {
         .fullscreen-controls-help {
-          width: 2rem;
-          height: 2rem;
-          font-size: 0.85rem;
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.25rem;
         }
 
         .fullscreen-controls-help-overlay {
@@ -3421,12 +3630,12 @@
         }
 
         .pan-mode-btn:not(.fullscreen-pan-mode-btn) {
-          top: 3.1rem;
+          top: 4rem;
           right: 0.5rem;
         }
 
         .auto-rotate-btn {
-          top: 5.7rem;
+          top: 7.5rem;
           right: 0.5rem;
         }
 
@@ -3458,22 +3667,107 @@
         pointer-events: none;
       }
 
-      .heritage-fullscreen .fullscreen-pan-mode-btn,
-      .heritage-fullscreen .fullscreen-auto-rotate-btn,
-      .heritage-fullscreen .fullscreen-controls-help,
-      .heritage-fullscreen .fullscreen-controls-help-overlay,
-      .heritage-fullscreen .fullscreen-zoom-controls {
-        display: none !important;
+      .fullscreen-primary-controls {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        transform: translateY(-50%);
+      }
+
+      .fullscreen-primary-controls > button {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 3rem;
+        height: 3rem;
+        pointer-events: auto;
+      }
+
+      .fullscreen-primary-controls > button svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .fullscreen-primary-controls .fullscreen-zoom-controls {
+        position: static;
+        top: auto;
+        right: auto;
+        z-index: auto;
+        pointer-events: auto;
+      }
+
+      .fullscreen-primary-controls .fullscreen-zoom-controls .zoom-control-btn {
+        width: 3rem;
+        height: 3rem;
+        pointer-events: auto;
+      }
+
+      .fullscreen-primary-controls .fullscreen-zoom-controls .zoom-control-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .fullscreen-control-rail .fullscreen-controls-help {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.25rem;
       }
 
       .fullscreen-control-rail .fullscreen-toggle-btn {
         position: absolute;
         right: 1rem;
         bottom: 1rem;
+        width: 3rem;
+        height: 3rem;
         pointer-events: auto;
       }
 
+      .fullscreen-control-rail .fullscreen-toggle-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      #heritage-viewer-panel .viewer-control-button,
+      #heritage-fullscreen .viewer-control-button {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+      }
+
+      #heritage-viewer-panel .viewer-control-button svg,
+      #heritage-fullscreen .viewer-control-button svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      #heritage-viewer-panel .viewer-control-button:hover,
+      #heritage-fullscreen .viewer-control-button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      #heritage-viewer-panel .viewer-control-button.active,
+      #heritage-fullscreen .viewer-control-button.active {
+        background: rgba(4, 120, 87, 0.6);
+        border-color: rgba(4, 120, 87, 0.8);
+      }
+
       @media (max-width: 640px) {
+        .fullscreen-primary-controls {
+          right: 0.5rem;
+        }
+
         .heritage-fullscreen:not(:fullscreen) {
           top: 0;
         }
@@ -3515,10 +3809,6 @@
             No featured photograph is available for this site.
           </p>
           <div class="heritage-site-story__hero-content">
-            <p
-              class="heritage-site-story__eyebrow"
-              id="heritage-site-story-eyebrow"
-            ></p>
             <h1
               class="heritage-site-story__title"
               id="heritage-site-story-title"
@@ -3571,9 +3861,8 @@
               <h2
                 class="heritage-site-story__model-title"
                 id="heritage-site-story-model-title"
-              >
-                Explore in 3D
-              </h2>
+                hidden
+              ></h2>
               <div class="heritage-site-story__model-viewer">
                 <model-viewer
                   id="heritage-site-story-model"
@@ -3598,7 +3887,19 @@
                   role="status"
                   aria-live="polite"
                 >
-                  Loading 3D model…
+                  <span
+                    class="heritage-site-story__model-spinner"
+                    aria-hidden="true"
+                  ></span>
+                  <span id="heritage-site-story-model-status-message"
+                    >Loading 3D model…</span
+                  >
+                  <span
+                    class="heritage-site-story__model-progress"
+                    id="heritage-site-story-model-progress"
+                    aria-hidden="true"
+                    >0%</span
+                  >
                 </p>
                 <div
                   class="heritage-site-story__model-help"
@@ -3613,46 +3914,156 @@
                 <div class="heritage-site-story__model-tools">
                   <button
                     type="button"
+                    class="viewer-control-button"
                     id="heritage-site-story-model-help-button"
                     aria-label="Show model controls"
                     aria-expanded="false"
-                    title="Show model controls"
-                  >ⓘ</button>
-                  <button
-                    type="button"
-                    id="heritage-site-story-model-pan"
-                    aria-label="Enable pan mode"
-                    aria-pressed="false"
-                    title="Pan model"
-                  >✋</button>
-                  <button
-                    type="button"
-                    id="heritage-site-story-model-rotate"
-                    aria-label="Pause auto-rotation"
-                    aria-pressed="true"
-                    title="Toggle auto-rotation"
-                  >↻</button>
-                  <div class="heritage-site-story__model-zoom">
+                    data-tooltip="Show model controls"
+                  >
+                    ⓘ
+                  </button>
+                  <div class="heritage-site-story__model-primary-tools">
                     <button
                       type="button"
-                      id="heritage-site-story-model-zoom-in"
-                      aria-label="Zoom in"
-                      title="Zoom in"
-                    >+</button>
+                      class="viewer-control-button"
+                      id="heritage-site-story-model-rotate"
+                      aria-label="Pause auto-rotation"
+                      aria-pressed="true"
+                      data-tooltip="Pause auto-rotation"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                        ></path>
+                        <path d="M21 3v5h-5"></path>
+                      </svg>
+                    </button>
                     <button
                       type="button"
-                      id="heritage-site-story-model-zoom-out"
-                      aria-label="Zoom out"
-                      title="Zoom out"
-                    >−</button>
+                      class="viewer-control-button"
+                      id="heritage-site-story-model-pan"
+                      aria-label="Enable pan mode"
+                      aria-pressed="false"
+                      data-tooltip="Pan model"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
+                        ></path>
+                        <path
+                          d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
+                        ></path>
+                      </svg>
+                    </button>
+                    <div class="heritage-site-story__model-zoom">
+                      <button
+                        type="button"
+                        class="viewer-control-button"
+                        id="heritage-site-story-model-zoom-in"
+                        aria-label="Zoom in"
+                        data-tooltip="Zoom in"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"
+                          ></line>
+                          <line x1="11" y1="8" x2="11" y2="14"></line>
+                          <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="viewer-control-button"
+                        id="heritage-site-story-model-zoom-out"
+                        aria-label="Zoom out"
+                        data-tooltip="Zoom out"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"
+                          ></line>
+                          <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                   <button
                     type="button"
-                    class="heritage-site-story__model-fullscreen"
+                    class="heritage-site-story__model-fullscreen viewer-control-button"
                     id="heritage-site-story-model-fullscreen"
                     aria-label="View 3D model fullscreen"
-                    title="View fullscreen"
-                  >⛶</button>
+                    data-tooltip="View 3D model fullscreen"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                      <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+                      <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+                      <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </section>
@@ -3811,7 +4222,7 @@
                 ></model-viewer>
                 <button
                   type="button"
-                  class="pan-mode-btn"
+                  class="pan-mode-btn viewer-control-button"
                   id="model-pan-toggle"
                   aria-label="Enable pan mode"
                   aria-pressed="false"
@@ -3839,10 +4250,11 @@
                 </button>
                 <button
                   type="button"
-                  class="auto-rotate-btn"
+                  class="auto-rotate-btn viewer-control-button"
                   id="auto-rotate-btn"
-                  aria-label="Toggle auto rotate"
-                  data-tooltip="Toggle auto-rotate"
+                  aria-label="Pause auto-rotation"
+                  aria-pressed="true"
+                  data-tooltip="Pause auto-rotation"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -3863,7 +4275,7 @@
                 </button>
                 <button
                   type="button"
-                  class="controls-help-btn"
+                  class="controls-help-btn viewer-control-button"
                   id="controls-help-btn"
                   aria-label="Show controls help"
                   data-tooltip="Show model controls"
@@ -3904,7 +4316,7 @@
                 </div>
                 <button
                   type="button"
-                  class="fullscreen-toggle-btn"
+                  class="fullscreen-toggle-btn viewer-control-button"
                   id="fullscreen-toggle-btn"
                   aria-label="View in fullscreen"
                   data-tooltip="View 3D model fullscreen"
@@ -3929,7 +4341,7 @@
                 <div class="zoom-controls-group">
                   <button
                     type="button"
-                    class="zoom-control-btn"
+                    class="zoom-control-btn viewer-control-button"
                     id="model-zoom-in"
                     aria-label="Zoom in"
                     data-tooltip="Zoom in"
@@ -3953,7 +4365,7 @@
                   </button>
                   <button
                     type="button"
-                    class="zoom-control-btn"
+                    class="zoom-control-btn viewer-control-button"
                     id="model-zoom-out"
                     aria-label="Zoom out"
                     data-tooltip="Zoom out"
@@ -4138,71 +4550,136 @@
             class="heritage-fullscreen__loading-spinner"
             aria-hidden="true"
           ></span>
-          <p id="fullscreen-loading-label">Loading 3D model…</p>
+          <p
+            class="heritage-fullscreen__loading-progress"
+            id="fullscreen-loading-progress"
+            aria-hidden="true"
+          >
+            0%
+          </p>
+          <p
+            class="heritage-fullscreen__loading-label"
+            id="fullscreen-loading-label"
+          >
+            Loading 3D model…
+          </p>
         </div>
         <div class="fullscreen-control-rail">
-          <button
-            type="button"
-            class="pan-mode-btn fullscreen-pan-mode-btn !h-12 !w-12 !rounded-xl"
-            id="fullscreen-pan-toggle"
-            aria-label="Enable pan mode"
-            aria-pressed="false"
-            data-tooltip="Pan model"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
+          <div class="fullscreen-primary-controls">
+            <button
+              type="button"
+              class="auto-rotate-btn fullscreen-auto-rotate-btn viewer-control-button"
+              id="fullscreen-auto-rotate-btn"
+              aria-label="Pause auto-rotation"
+              aria-pressed="true"
+              data-tooltip="Pause auto-rotation"
             >
-              <path
-                d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
-              ></path>
-              <path
-                d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
-              ></path>
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="auto-rotate-btn fullscreen-auto-rotate-btn !h-12 !w-12 !rounded-xl"
-            id="fullscreen-auto-rotate-btn"
-            aria-label="Toggle auto rotate"
-            aria-pressed="true"
-            data-tooltip="Toggle auto-rotate"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                ></path>
+                <path d="M21 3v5h-5"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="pan-mode-btn fullscreen-pan-mode-btn viewer-control-button"
+              id="fullscreen-pan-toggle"
+              aria-label="Enable pan mode"
+              aria-pressed="false"
+              data-tooltip="Pan model"
             >
-              <path
-                d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
-              ></path>
-              <path d="M21 3v5h-5"></path>
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M8 12V5.75a1.75 1.75 0 0 1 3.5 0V11V4.75a1.75 1.75 0 0 1 3.5 0V11V6.25a1.75 1.75 0 0 1 3.5 0V13"
+                ></path>
+                <path
+                  d="M8 11.5 6.7 10.2a1.8 1.8 0 0 0-2.6 2.5l3.7 5.2a5 5 0 0 0 4.1 2.1h.6a5 5 0 0 0 5-5V12a1.75 1.75 0 0 0-3.5 0"
+                ></path>
+              </svg>
+            </button>
+            <div class="zoom-controls-group fullscreen-zoom-controls">
+              <button
+                type="button"
+                class="zoom-control-btn viewer-control-button"
+                id="fullscreen-model-zoom-in"
+                aria-label="Zoom in"
+                data-tooltip="Zoom in"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="11" y1="8" x2="11" y2="14"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="zoom-control-btn viewer-control-button"
+                id="fullscreen-model-zoom-out"
+                aria-label="Zoom out"
+                data-tooltip="Zoom out"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
           <button
             type="button"
-            class="fullscreen-controls-help !h-12 !w-12 !rounded-xl"
+            class="fullscreen-controls-help viewer-control-button"
             id="fullscreen-controls-help-btn"
             aria-label="Show controls help"
             data-tooltip="Show model controls"
           >
-            ?
+            ⓘ
           </button>
           <div
             class="fullscreen-controls-help-overlay"
@@ -4228,29 +4705,9 @@
               <span class="controls-help-text">Use the buttons to zoom</span>
             </div>
           </div>
-          <div class="zoom-controls-group fullscreen-zoom-controls">
-            <button
-              type="button"
-              class="zoom-control-btn !h-12 !w-12 !rounded-xl !text-xl"
-              id="fullscreen-model-zoom-in"
-              aria-label="Zoom in"
-              data-tooltip="Zoom in"
-            >
-              +
-            </button>
-            <button
-              type="button"
-              class="zoom-control-btn !h-12 !w-12 !rounded-xl !text-xl"
-              id="fullscreen-model-zoom-out"
-              aria-label="Zoom out"
-              data-tooltip="Zoom out"
-            >
-              −
-            </button>
-          </div>
           <button
             type="button"
-            class="fullscreen-toggle-btn !h-12 !w-12 !rounded-xl"
+            class="fullscreen-toggle-btn viewer-control-button"
             id="fullscreen-minimize-btn"
             aria-label="Return to site details"
             data-tooltip="Return to site details"
@@ -4314,15 +4771,16 @@
     <script src="js/utils/heritage/heritage-map-sites.js"></script>
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
-    <script src="js/utils/heritage/heritage-realtime.js"></script>
-    <script src="js/pages/admin/admin-heritage-base.js"></script>
-    <script src="js/pages/admin/admin-uploads.js"></script>
-    <script src="js/pages/admin/admin-store.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="_backend/supabase-config.js"></script>
+    <script src="_backend/supabase-client.js"></script>
+    <script src="_backend/supabase-api.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/utils/visitor-auth.js"></script>
     <script src="js/utils/auth-logout.js"></script>
+    <script src="js/games/game-auth-gate.js"></script>
     <script src="js/utils/heritage/heritage-data.js"></script>
     <script>
       const BH = "assets/data/Built Heritage";
@@ -4724,13 +5182,29 @@
       let revealInProgress = false;
       const mapMarkers = new Map();
 
-      function syncExploreSitesFromMapCatalog() {
+      async function syncExploreSitesFromMapCatalog() {
         if (typeof getHeritageMapDisplaySites !== "function") return;
 
         const mapSites = getHeritageMapDisplaySites().filter(
           (site) => site.category === "built",
         );
         const mapSiteIds = new Set(mapSites.map((site) => site.id));
+
+        // Fetch media for all sites from Supabase
+        const mediaBySiteId = new Map();
+        if (typeof MatiSupabaseApi !== "undefined" && typeof MatiSupabaseApi.listMedia === "function") {
+          for (const mapSite of mapSites) {
+            try {
+              const media = await MatiSupabaseApi.listMedia(mapSite.id);
+              if (media && media.length > 0) {
+                const photoMedia = media.filter(m => m.type === "photo").map(m => m.src);
+                mediaBySiteId.set(mapSite.id, photoMedia);
+              }
+            } catch (err) {
+              console.warn(`Failed to fetch media for ${mapSite.id}:`, err);
+            }
+          }
+        }
 
         mapSites.forEach((mapSite) => {
           const localSite = HERITAGE_3D_SITES.find(
@@ -4757,9 +5231,15 @@
             }
             if (!localSite.image && mapSite.image)
               localSite.image = mapSite.image;
+            // Sync photos from Supabase
+            const fetchedPhotos = mediaBySiteId.get(mapSite.id);
+            if (fetchedPhotos && fetchedPhotos.length > 0) {
+              localSite.photos = fetchedPhotos;
+            }
             return;
           }
 
+          const fetchedPhotos = mediaBySiteId.get(mapSite.id);
           HERITAGE_3D_SITES.push({
             id: mapSite.id,
             name: mapSite.name,
@@ -4770,7 +5250,7 @@
             lng: mapSite.lng,
             official: Boolean(mapSite.official),
             image: mapSite.image || "",
-            photos: mapSite.image ? [mapSite.image] : [],
+            photos: fetchedPhotos && fetchedPhotos.length > 0 ? fetchedPhotos : (mapSite.image ? [mapSite.image] : []),
             available: false,
             desc: mapSite.desc || mapSite.name,
             specs: heritageSpecs(
@@ -4846,6 +5326,12 @@
       );
       const heritageStoryModelStatus = document.getElementById(
         "heritage-site-story-model-status",
+      );
+      const heritageStoryModelStatusMessage = document.getElementById(
+        "heritage-site-story-model-status-message",
+      );
+      const heritageStoryModelProgress = document.getElementById(
+        "heritage-site-story-model-progress",
       );
       const heritageStoryModelPanButton = document.getElementById(
         "heritage-site-story-model-pan",
@@ -4979,6 +5465,41 @@
       const fullscreenLoadingLabel = document.getElementById(
         "fullscreen-loading-label",
       );
+      const fullscreenLoadingProgress = document.getElementById(
+        "fullscreen-loading-progress",
+      );
+      let fullscreenModelLoadCleanup = null;
+
+      function syncModelViewerCamera(source, destination) {
+        if (
+          !source?.loaded ||
+          !destination ||
+          typeof source.getCameraOrbit !== "function" ||
+          typeof source.getCameraTarget !== "function"
+        ) {
+          return;
+        }
+
+        const orbit = source.getCameraOrbit();
+        const target = source.getCameraTarget();
+        if (
+          !Number.isFinite(orbit.theta) ||
+          !Number.isFinite(orbit.phi) ||
+          !Number.isFinite(orbit.radius) ||
+          orbit.radius <= 0 ||
+          !Number.isFinite(target.x) ||
+          !Number.isFinite(target.y) ||
+          !Number.isFinite(target.z)
+        ) {
+          return;
+        }
+
+        destination.cameraOrbit =
+          `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`;
+        destination.cameraTarget =
+          `${target.x}m ${target.y}m ${target.z}m`;
+        destination.jumpCameraToGoal?.();
+      }
 
       function escapeHtml(str) {
         return String(str)
@@ -5003,10 +5524,16 @@
 
       function showFullscreenLoading(label = "Loading 3D model…") {
         if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
+        if (fullscreenLoadingProgress) {
+          fullscreenLoadingProgress.textContent = "0%";
+        }
         fullscreenLoading?.removeAttribute("hidden");
       }
 
-      function waitForFullscreenModel(site) {
+      function waitForFullscreenModel(site, sourceModel) {
+        fullscreenModelLoadCleanup?.();
+        fullscreenModelLoadCleanup = null;
+
         if (!fullscreenModel || !site?.modelSrc) {
           hideFullscreenLoading();
           return Promise.resolve();
@@ -5014,6 +5541,7 @@
 
         const sameSrc = fullscreenModel.getAttribute("src") === site.modelSrc;
         if (sameSrc && fullscreenModel.loaded) {
+          syncModelViewerCamera(sourceModel, fullscreenModel);
           hideFullscreenLoading();
           return Promise.resolve();
         }
@@ -5022,17 +5550,37 @@
 
         return new Promise((resolve) => {
           let settled = false;
+          const handleProgress = (event) => {
+            const totalProgress = event.detail?.totalProgress;
+            if (
+              fullscreenModel.getAttribute("src") === site.modelSrc &&
+              Number.isFinite(totalProgress) &&
+              fullscreenLoadingProgress
+            ) {
+              fullscreenLoadingProgress.textContent =
+                `${Math.round(totalProgress * 100)}%`;
+            }
+          };
           const finish = () => {
             if (settled) return;
             settled = true;
+            fullscreenModel.removeEventListener("progress", handleProgress);
             fullscreenModel.removeEventListener("load", onLoad);
             fullscreenModel.removeEventListener("error", onError);
+            fullscreenModelLoadCleanup = null;
             hideFullscreenLoading();
             resolve();
           };
-          const onLoad = () => finish();
+          const onLoad = () => {
+            if (fullscreenModel.getAttribute("src") === site.modelSrc) {
+              syncModelViewerCamera(sourceModel, fullscreenModel);
+            }
+            finish();
+          };
           const onError = () => finish();
 
+          fullscreenModelLoadCleanup = finish;
+          fullscreenModel.addEventListener("progress", handleProgress);
           fullscreenModel.addEventListener("load", onLoad, { once: true });
           fullscreenModel.addEventListener("error", onError, { once: true });
 
@@ -5207,7 +5755,7 @@
             modelLoadingPercentage.textContent = "0%";
           }
           if (modelLoadingText) {
-            modelLoadingText.textContent = "Loading 3D model...";
+            modelLoadingText.textContent = `Loading ${site.name}…`;
           }
         }
 
@@ -5278,6 +5826,11 @@
         if (window.tempFooter) {
           window.tempFooter.style.visibility = "visible";
           window.tempFooter = null;
+        }
+
+        // Load footer after site details are revealed
+        if (typeof loadFooter === "function") {
+          loadFooter();
         }
 
         revealInProgress = false;
@@ -5451,7 +6004,10 @@
         );
       }
 
-      function openFullscreenHeritage(site = getActiveSite()) {
+      function openFullscreenHeritage(
+        site = getActiveSite(),
+        sourceModel = heritageModel,
+      ) {
         if (!site || !heritageFullscreen) return;
 
         panModeButtons[1]?.toggleAttribute(
@@ -5467,21 +6023,14 @@
           fullscreenModel.hidden = false;
           fullscreenModel.setAttribute("alt", `${site.name} 3D model`);
           fullscreenModel.autoRotate = autoRotateEnabled;
-          fullscreenAutoRotateBtn?.classList.toggle(
-            "active",
-            autoRotateEnabled,
-          );
-          fullscreenAutoRotateBtn?.setAttribute(
-            "aria-pressed",
-            String(autoRotateEnabled),
-          );
+          updateAutoRotateButton(fullscreenAutoRotateBtn, autoRotateEnabled);
           if (isMobileViewerDevice()) {
             heritageFullscreen
               .requestFullscreen?.({ navigationUI: "hide" })
               ?.then(() => window.screen.orientation?.lock?.("landscape"))
               .catch(() => {});
           }
-          waitForFullscreenModel(site);
+          waitForFullscreenModel(site, sourceModel);
         } else if (fullscreenModel) {
           hideFullscreenLoading();
           fullscreenModel.hidden = true;
@@ -5580,7 +6129,7 @@
             modelLoadingOverlay.setAttribute("aria-busy", "true");
           }
           if (modelLoadingText) {
-            modelLoadingText.textContent = "Loading 3D model...";
+            modelLoadingText.textContent = `Loading ${site.name}…`;
           }
           if (modelLoadingPercentage) {
             modelLoadingPercentage.textContent = "0%";
@@ -5769,30 +6318,51 @@
       // Auto-rotate toggle
       let autoRotateEnabled = true;
 
+      function updateAutoRotateButton(button, enabled) {
+        if (!button) return;
+        const label = enabled ? "Pause auto-rotation" : "Start auto-rotation";
+        button.classList.toggle("active", enabled);
+        button.setAttribute("aria-pressed", String(enabled));
+        button.setAttribute("aria-label", label);
+        button.dataset.tooltip = label;
+      }
+
       function setHeritageAutoRotate(enabled) {
         if (!heritageModel) return;
         heritageModel.autoRotate = enabled;
         heritageModel.toggleAttribute("auto-rotate", enabled);
         if (fullscreenModel) fullscreenModel.autoRotate = enabled;
-        fullscreenAutoRotateBtn?.classList.toggle("active", enabled);
-        fullscreenAutoRotateBtn?.setAttribute("aria-pressed", String(enabled));
+        if (heritageStoryModel) {
+          heritageStoryModel.autoRotate = heritageStoryModelAutoRotate;
+          heritageStoryModel.toggleAttribute(
+            "auto-rotate",
+            heritageStoryModelAutoRotate,
+          );
+        }
+        updateAutoRotateButton(autoRotateBtn, enabled);
+        updateAutoRotateButton(fullscreenAutoRotateBtn, enabled);
+        updateAutoRotateButton(
+          heritageStoryModelRotateButton,
+          heritageStoryModelAutoRotate,
+        );
       }
 
       function syncHeritageAutoRotate() {
         if (!heritageModel) return;
         setHeritageAutoRotate(autoRotateEnabled && !heritageModel.hidden);
-        autoRotateBtn?.classList.toggle("active", heritageModel.autoRotate);
+        updateAutoRotateButton(autoRotateBtn, heritageModel.autoRotate);
       }
 
       autoRotateBtn?.addEventListener("click", () => {
         autoRotateEnabled = !autoRotateEnabled;
+        heritageStoryModelAutoRotate = autoRotateEnabled;
         syncHeritageAutoRotate();
       });
 
       fullscreenAutoRotateBtn?.addEventListener("click", () => {
         autoRotateEnabled = !autoRotateEnabled;
+        heritageStoryModelAutoRotate = autoRotateEnabled;
         setHeritageAutoRotate(autoRotateEnabled);
-        autoRotateBtn?.classList.toggle("active", autoRotateEnabled);
       });
 
       // Controls help overlay
@@ -5889,11 +6459,11 @@
       if (model && autoRotateBtn) {
         // Set initial state
         autoRotateEnabled = model.autoRotate;
-        autoRotateBtn.classList.toggle("active", autoRotateEnabled);
+        updateAutoRotateButton(autoRotateBtn, autoRotateEnabled);
 
         // Keep the button state synchronized with model-viewer.
         model.addEventListener("change", () => {
-          autoRotateBtn.classList.toggle("active", model.autoRotate);
+          updateAutoRotateButton(autoRotateBtn, model.autoRotate);
         });
 
         // Adjust camera orbit for mobile devices
@@ -6064,34 +6634,16 @@
       );
       heritageStoryModelRotateButton?.addEventListener("click", () => {
         heritageStoryModelAutoRotate = !heritageStoryModelAutoRotate;
-        if (heritageStoryModel) {
-          heritageStoryModel.autoRotate = heritageStoryModelAutoRotate;
-          heritageStoryModel.toggleAttribute(
-            "auto-rotate",
-            heritageStoryModelAutoRotate,
-          );
-        }
-        heritageStoryModelRotateButton.classList.toggle(
-          "active",
-          heritageStoryModelAutoRotate,
-        );
-        heritageStoryModelRotateButton.setAttribute(
-          "aria-pressed",
-          String(heritageStoryModelAutoRotate),
-        );
-        heritageStoryModelRotateButton.setAttribute(
-          "aria-label",
-          heritageStoryModelAutoRotate
-            ? "Pause auto-rotation"
-            : "Start auto-rotation",
-        );
+        autoRotateEnabled = heritageStoryModelAutoRotate;
+        syncHeritageAutoRotate();
       });
       heritageStoryModelFullscreen?.addEventListener("click", () => {
         if (heritageStoryModelSite && heritageStoryModelSource) {
+          autoRotateEnabled = heritageStoryModelAutoRotate;
           openFullscreenHeritage({
             ...heritageStoryModelSite,
             modelSrc: heritageStoryModelSource,
-          });
+          }, heritageStoryModel);
         }
       });
       heritageStoryModelHelpButton?.addEventListener("click", () => {
@@ -6262,7 +6814,22 @@
           pageStart + HERITAGE_STORY_GALLERY_PAGE_SIZE,
         );
 
-        visiblePhotos.forEach((src, visibleIndex) => {
+        // Ensure we always have HERITAGE_STORY_GALLERY_PAGE_SIZE items to maintain grid layout
+        const displayItems = [...visiblePhotos];
+        while (displayItems.length < HERITAGE_STORY_GALLERY_PAGE_SIZE) {
+          displayItems.push(null); // Add null placeholders
+        }
+
+        displayItems.forEach((src, visibleIndex) => {
+          if (src === null) {
+            // Create empty placeholder to maintain grid layout
+            const placeholder = document.createElement("div");
+            placeholder.className = "heritage-site-story__gallery-item placeholder";
+            placeholder.setAttribute("aria-hidden", "true");
+            grid.append(placeholder);
+            return;
+          }
+
           const photoIndex = pageStart + visibleIndex;
           const button = document.createElement("button");
           button.type = "button";
@@ -6314,7 +6881,9 @@
           next.className = "heritage-site-story__gallery-page-button";
           next.textContent = "Next";
           next.disabled = heritageStoryGalleryPage >= pageCount - 1;
-          next.addEventListener("click", () => {
+          next.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             heritageStoryGalleryPage += 1;
             renderHeritageStoryGallery(site);
           });
@@ -6343,7 +6912,15 @@
         const resolveToken = ++heritageStoryModelResolveToken;
         heritageStoryModelSource = "";
         heritageStoryModelSection.hidden = !modelPath;
-        heritageStoryModelStatus.hidden = true;
+        heritageStoryModelStatus.hidden = !modelPath;
+        heritageStoryModelStatus.classList.remove("is-error");
+        if (heritageStoryModelStatusMessage) {
+          heritageStoryModelStatusMessage.textContent =
+            `Loading ${site.name}…`;
+        }
+        if (heritageStoryModelProgress) {
+          heritageStoryModelProgress.textContent = "0%";
+        }
         if (!modelPath) {
           heritageStoryModelSource = "";
           heritageStoryModel.removeAttribute("src");
@@ -6370,6 +6947,19 @@
             ? "Pause auto-rotation"
             : "Start auto-rotation",
         );
+        if (heritageStoryModelRotateButton) {
+          heritageStoryModelRotateButton.dataset.tooltip =
+            heritageStoryModelAutoRotate
+              ? "Pause auto-rotation"
+              : "Start auto-rotation";
+        }
+        if (heritageStoryModelRotateButton) {
+          heritageStoryModelRotateButton.title = heritageStoryModelAutoRotate
+            ? "Pause auto-rotation"
+            : "Start auto-rotation";
+          heritageStoryModelRotateButton.dataset.tooltip =
+            heritageStoryModelRotateButton.title;
+        }
         let modelSrc = modelPath;
         if (
           typeof MatiAdminUploads !== "undefined" &&
@@ -6384,7 +6974,8 @@
               return;
             }
             if (!objectUrl) {
-              heritageStoryModelStatus.textContent =
+              heritageStoryModelStatus.classList.add("is-error");
+              heritageStoryModelStatusMessage.textContent =
                 `The saved 3D model for ${site.name} could not be found in this browser.`;
               heritageStoryModelStatus.hidden = false;
               return;
@@ -6396,7 +6987,8 @@
           } catch (error) {
             console.error("Unable to resolve the saved heritage 3D model:", error);
             if (resolveToken === heritageStoryModelResolveToken) {
-              heritageStoryModelStatus.textContent =
+              heritageStoryModelStatus.classList.add("is-error");
+              heritageStoryModelStatusMessage.textContent =
                 `Unable to open the saved 3D model for ${site.name}.`;
               heritageStoryModelStatus.hidden = false;
             }
@@ -6409,20 +7001,59 @@
         if (heritageStoryModel.getAttribute("src") !== modelSrc) {
           heritageStoryModel.setAttribute("src", modelSrc);
         } else if (heritageStoryModel.loaded) {
+          if (heritageStoryModelProgress) {
+            heritageStoryModelProgress.textContent = "100%";
+          }
           heritageStoryModelStatus.hidden = true;
         }
       }
 
+      heritageStoryModel?.addEventListener("progress", (event) => {
+        if (
+          heritageStoryModel.getAttribute("src") !== heritageStoryModelSource
+        ) {
+          return;
+        }
+        const totalProgress = event.detail?.totalProgress;
+        if (Number.isFinite(totalProgress) && heritageStoryModelProgress) {
+          heritageStoryModelProgress.textContent =
+            `${Math.round(totalProgress * 100)}%`;
+        }
+      });
+
+      heritageStoryModel?.addEventListener("load", () => {
+        if (
+          heritageStoryModel.getAttribute("src") !== heritageStoryModelSource
+        ) {
+          return;
+        }
+        if (heritageStoryModelProgress) {
+          heritageStoryModelProgress.textContent = "100%";
+        }
+        heritageStoryModelStatus?.classList.remove("is-error");
+        if (heritageStoryModelStatus) {
+          heritageStoryModelStatus.hidden = true;
+        }
+      });
+
       heritageStoryModel?.addEventListener("error", () => {
-        if (!heritageStoryModelStatus || !heritageStoryModelSite) return;
-        heritageStoryModelStatus.textContent =
-          `Unable to load the 3D model for ${heritageStoryModelSite.name}. Please try again later.`;
+        if (
+          !heritageStoryModelStatus ||
+          !heritageStoryModelSite ||
+          heritageStoryModel.getAttribute("src") !== heritageStoryModelSource
+        ) {
+          return;
+        }
+        heritageStoryModelStatus.classList.add("is-error");
+        if (heritageStoryModelStatusMessage) {
+          heritageStoryModelStatusMessage.textContent =
+            `Unable to load the 3D model for ${heritageStoryModelSite.name}. Please try again later.`;
+        }
         heritageStoryModelStatus.hidden = false;
       });
 
       function renderHeritageSiteStory(site) {
         const title = document.getElementById("heritage-site-story-title");
-        const eyebrow = document.getElementById("heritage-site-story-eyebrow");
         const summary = document.getElementById("heritage-site-story-summary");
         const description = document.getElementById(
           "heritage-site-story-description",
@@ -6438,7 +7069,6 @@
         if (
           !heritageSiteStory ||
           !title ||
-          !eyebrow ||
           !summary ||
           !description ||
           !articleTitle ||
@@ -6449,13 +7079,17 @@
           return;
         }
 
-        const categoryLabel =
-          site.category === "natural" ? "Natural Heritage" : "Built Heritage";
         const siteDescription = String(site.desc || "").trim();
         const featuredImage = getSiteMarkerImage(site);
+        const categoryLabels = {
+          built: "Built Heritage",
+          natural: "Natural Heritage",
+          intangible: "Intangible Cultural Heritage",
+        };
+        const categoryLabel =
+          site.categoryLabel || categoryLabels[site.category] || "Heritage";
 
         title.textContent = site.name;
-        eyebrow.textContent = `${categoryLabel} · Mati City, Davao Oriental`;
         summary.textContent =
           siteDescription.length > 280
             ? `${siteDescription.slice(0, 277).trimEnd()}…`
@@ -6774,14 +7408,14 @@
           ) {
             await MatiAdminStore.initFromSupabase();
           }
-          syncExploreSitesFromMapCatalog();
+          await syncExploreSitesFromMapCatalog();
           await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
-          syncExploreSitesFromMapCatalog();
+          await syncExploreSitesFromMapCatalog();
           populateSitePicker();
           if (typeof MatiHeritageData.subscribeCatalog === "function") {
             MatiHeritageData.subscribeCatalog(async () => {
               await MatiHeritageData.hydrate3dExploreSites(HERITAGE_3D_SITES);
-              syncExploreSitesFromMapCatalog();
+              await syncExploreSitesFromMapCatalog();
               syncExploreMapMarkers(window.matiMapInstance);
               // Soft refresh: update idle/site copy without resetting the map view.
               const active =
@@ -6880,46 +7514,62 @@
             });
 
           const settingsModal = document.getElementById("settings-modal");
-          if (settingsModal) settingsModal.remove();
+          if (settingsModal) document.body.appendChild(settingsModal);
 
           if (typeof window.initSiteHeader === "function") {
             window.initSiteHeader();
           }
+
+          // Initialize settings modal
+          if (typeof window.initGlobalSettings === "function") {
+            window.initGlobalSettings();
+          }
+
+          // Bind logout functionality
+          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
+            MatiAuthLogout.bind({ redirect: "index.html" });
+            document.body.dataset.logoutBound = "1";
+          }
         })
         .catch((err) => console.error("Error loading header:", err));
 
-      fetch("components/footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          const doc = new DOMParser().parseFromString(data, "text/html");
-          const footer = doc.querySelector("footer");
-          const placeholderEl = document.getElementById("footer-placeholder");
-          if (footer && placeholderEl) placeholderEl.replaceWith(footer);
+      // Load footer after header and content are ready
+      async function loadFooter() {
+        await fetch("components/footer.html")
+          .then((res) => res.text())
+          .then((data) => {
+            const doc = new DOMParser().parseFromString(data, "text/html");
+            const footer = doc.querySelector("footer");
+            const placeholderEl = document.getElementById("footer-placeholder");
+            if (footer && placeholderEl) placeholderEl.replaceWith(footer);
 
-          const footerStyle = doc.querySelector("style");
-          if (footerStyle)
-            document.head.appendChild(footerStyle.cloneNode(true));
+            const footerStyle = doc.querySelector("style");
+            if (footerStyle)
+              document.head.appendChild(footerStyle.cloneNode(true));
 
-          const scriptText = Array.from(doc.scripts).find(
-            (s) => !s.src,
-          )?.textContent;
-          if (scriptText) {
-            const s = document.createElement("script");
-            s.textContent = scriptText;
-            document.body.appendChild(s);
-          }
+            const scriptText = Array.from(doc.scripts).find(
+              (s) => !s.src,
+            )?.textContent;
+            if (scriptText) {
+              const s = document.createElement("script");
+              s.textContent = scriptText;
+              document.body.appendChild(s);
+            }
 
-          document
-            .querySelectorAll('.site-footer__link[data-nav="3d"]')
-            .forEach((link) => {
-              link.href = "3dexplore.html";
-            });
+            document
+              .querySelectorAll('.site-footer__link[data-nav="3d"]')
+              .forEach((link) => {
+                link.href = "3dexplore.html";
+              });
 
-          if (typeof window.initSiteFooter === "function") {
-            window.initSiteFooter("3d");
-          }
-        })
-        .catch((err) => console.error("Error loading footer:", err));
+            if (typeof window.initSiteFooter === "function") {
+              window.initSiteFooter("3d");
+            }
+          })
+          .catch((err) => console.error("Error loading footer:", err));
+      }
     </script>
+  </body>
+</html>
   </body>
 </html>
