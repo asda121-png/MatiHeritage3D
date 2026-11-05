@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trivia | Mati Heritage 3D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -46,6 +44,7 @@
       }
 
       body {
+        margin: 0;
         font-family: "Quicksand", sans-serif;
         background: var(--tv-studio-dark);
         color: var(--tv-cream);
@@ -899,6 +898,34 @@
         box-shadow:
           0 4px 0 #7a6018,
           0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .trivia-end-btn {
+        min-height: 3rem;
+        margin: 0;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font: 700 1.15rem "Quicksand", sans-serif;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .trivia-end-btn[hidden] {
+        display: none;
+      }
+
+      .trivia-round-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+      }
+
+      .trivia-end-btn:hover {
+        background: #f0f7f2;
       }
 
       /* ── Game show layout ── */
@@ -1799,6 +1826,28 @@
         display: none !important;
       }
 
+      .game-hidden {
+        display: none !important;
+      }
+
+      .trivia-results-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .trivia-start-again {
+        padding: 0.75rem 2rem;
+        font-size: 0.875rem;
+      }
+
+      @media (min-width: 640px) {
+        .trivia-results-actions {
+          flex-direction: row;
+        }
+      }
+
       .tv-filters {
         position: absolute;
         width: 0;
@@ -1878,7 +1927,7 @@
       .trivia-controls__label {
         color: #777168;
         font-size: 1.15rem;
-        font-weight: 700;
+        font-weight: 400;
       }
 
       .trivia-difficulties {
@@ -2244,7 +2293,7 @@
 
       @media (max-width: 640px) {
         .show-stage {
-          width: calc(100% - 3rem);
+          width: calc(100% - 2rem);
           padding-top: 0.75rem;
         }
 
@@ -2252,28 +2301,77 @@
           padding-top: 1rem;
         }
 
+        .trivia-intro h1 {
+          font-size: clamp(2.15rem, 9vw, 2.8rem);
+          line-height: 1.08;
+        }
+
+        .trivia-intro__description {
+          margin-bottom: 1rem;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
         .trivia-controls {
-          align-items: flex-start;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.65rem;
+          align-items: stretch;
+          padding-bottom: 0.9rem;
         }
 
         .trivia-controls__label {
-          flex-basis: auto;
+          font-size: 1rem;
         }
 
         .trivia-difficulties {
-          width: auto;
-          flex: 1 1 24rem;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          width: 100%;
+          max-width: none;
+          border-radius: 0.85rem;
         }
 
         .trivia-difficulties .diff-btn {
+          min-height: 3.25rem;
+          min-width: 0;
+          padding: 0.45rem 0.25rem;
+          font-size: 0.9rem;
+          white-space: normal;
+        }
+
+        .trivia-difficulties .diff-btn span {
+          display: block;
+          margin: 0.1rem 0 0;
+          font-size: 0.76em;
+        }
+
+        .trivia-round-actions {
+          width: 100%;
+          margin: 0;
+          gap: 0.5rem;
+        }
+
+        .trivia-round-actions > button {
           flex: 1 1 0;
           min-width: 0;
-          padding-inline: 0.45rem;
+          min-height: 2.9rem;
+          margin: 0;
+          padding: 0.5rem 0.6rem;
+          font-size: 0.95rem;
+          letter-spacing: 0.04em;
+        }
+
+        .trivia-end-btn {
           font-size: 0.95rem;
         }
 
         .start-btn {
           margin-left: 0;
+        }
+
+        .game-show {
+          width: calc(100% - 2rem);
         }
 
         .game-show__main {
@@ -2282,6 +2380,16 @@
 
         .show-topbar {
           gap: 0.5rem;
+          padding: 0.65rem 0;
+        }
+
+        .hud-stat__label {
+          font-size: 0.75rem;
+        }
+
+        .hud-stat__value,
+        .timer-ring__value {
+          font-size: 1.65rem;
         }
 
         .answers-grid {
@@ -2295,21 +2403,32 @@
     </style>
   </head>
   <style>
+    #now-playing {
+      display: none !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+    }
+
+    #now-playing .now-playing__title {
+      display: none !important;
+    }
+
     .music-toggle-btn {
-      background: linear-gradient(145deg, #d4af37, #b8922a);
-      border-color: #7a6018;
-      box-shadow:
-        0 3px 0 #4a3810,
-        inset 0 1px 0 rgba(255, 248, 235, 0.25);
+      background: transparent;
+      border-color: rgba(212, 175, 55, 0.55);
+      box-shadow: none;
     }
     .music-toggle-btn:hover {
       filter: brightness(1.1);
     }
     .music-toggle-btn[aria-pressed="true"] {
-      background: linear-gradient(145deg, #5a5248, #2a2520);
-      border-color: #1a1208;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
-      transform: translateY(1px);
+      background: transparent;
+      border-color: rgba(212, 175, 55, 0.55);
+      box-shadow: none;
     }
     .music-toggle-btn[aria-pressed="true"] .music-icon {
       color: #94a3b8;
@@ -2325,7 +2444,7 @@
         <h1>Mati Heritage Trivia Challenge</h1>
         <p class="trivia-intro__description">
           Test what you know about Mati’s heritage. Answer each question before
-          time runs out and earn points for every correct answer.
+          time runs out and earn a score for every correct answer.
         </p>
         <div class="trivia-controls" aria-label="Trivia game options">
           <span class="trivia-controls__label">Difficulty</span>
@@ -2362,9 +2481,19 @@
               Hard <span>(10 Q)</span>
             </button>
           </div>
-          <button type="button" id="start-game-btn" class="start-btn">
-            Start trivia
-          </button>
+          <div class="trivia-round-actions">
+            <button type="button" id="start-game-btn" class="start-btn">
+              Start Trivia
+            </button>
+            <button
+              type="button"
+              id="end-game-btn"
+              class="trivia-end-btn"
+              hidden
+            >
+              End Trivia
+            </button>
+          </div>
         </div>
       </section>
 
@@ -2389,7 +2518,7 @@
                 aria-live="polite"
                 >12</span
               >
-              <svg class="hidden" viewBox="0 0 100 100" aria-hidden="true">
+              <svg class="game-hidden" viewBox="0 0 100 100" aria-hidden="true">
                 <circle class="timer-ring__track" cx="50" cy="50" r="45" />
                 <circle
                   id="timer-progress"
@@ -2435,27 +2564,25 @@
       </section>
 
       <!-- RESULTS -->
-      <section id="results-screen" class="results-card hidden">
+      <section id="results-screen" class="results-card game-hidden">
         <span class="intro-card__badge">Final score</span>
-        <h2>Trivia complete</h2>
+        <h2 id="results-title">Trivia complete</h2>
         <div id="final-score" class="results-card__score">0</div>
         <p id="result-message" class="results-card__message"></p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <div class="trivia-results-actions">
           <button
             type="button"
             id="retry-btn"
-            class="start-btn text-sm py-3 px-8"
+            class="start-btn trivia-start-again"
           >
             Play again
           </button>
-          <a href="game.html" class="results-card__link">Back to Games</a>
+          <a href="game" class="results-card__link">Back to Games</a>
         </div>
       </section>
 
       <section class="trivia-help" aria-labelledby="trivia-help-title">
-        <h2 id="trivia-help-title">
-          How to play Mati Heritage Trivia Challenge
-        </h2>
+        <h2 id="trivia-help-title">How to play</h2>
         <ol>
           <li>Choose Easy, Medium, or Hard, then start the trivia round.</li>
           <li>
@@ -2463,13 +2590,13 @@
             timer reaches zero.
           </li>
           <li>
-            Earn points for correct answers. Try to get the highest score you
+            Earn a score for correct answers. Try to get the highest score you
             can.
           </li>
         </ol>
         <p>
           Each difficulty has a different number of questions, time limit, and
-          point value. Your total score is added to your Mati Heritage points
+          point value. Your total score is added to your Mati Heritage score
           when the round ends.
         </p>
         <h2>Difficulty levels</h2>
@@ -2480,7 +2607,7 @@
                 <th scope="col">Difficulty</th>
                 <th scope="col">Questions</th>
                 <th scope="col">Time per question</th>
-                <th scope="col">Points per correct answer</th>
+                <th scope="col">Score per correct answer</th>
                 <th scope="col">Good for</th>
               </tr>
             </thead>
@@ -2489,20 +2616,20 @@
                 <th scope="row">Easy</th>
                 <td>5</td>
                 <td>20 seconds</td>
-                <td>10</td>
+                <td>20</td>
                 <td>A short, relaxed round</td>
               </tr>
               <tr>
                 <th scope="row">Medium</th>
                 <td>8</td>
                 <td>12 seconds</td>
-                <td>15</td>
+                <td>18.75</td>
                 <td>A balanced game</td>
               </tr>
               <tr>
                 <th scope="row">Hard</th>
                 <td>10</td>
-                <td>8 seconds</td>
+                <td>10 seconds</td>
                 <td>20</td>
                 <td>For a bigger challenge</td>
               </tr>
@@ -2516,15 +2643,14 @@
 
     <audio
       id="bg-music"
-      src="assets/bgmusic/trivia.mp3"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
       loop
-      preload="auto"
-      autoplay
+      preload="none"
     ></audio>
 
     <aside
       id="now-playing"
-      class="now-playing music-bar fixed bottom-4 right-4 z-[480] flex items-center gap-3 max-w-[min(22rem,88vw)] px-4 py-2.5 rounded-sm"
+      class="now-playing music-bar"
       style="
         background: rgba(18, 12, 20, 0.88);
         border: 2px solid rgba(212, 175, 55, 0.4);
@@ -2537,14 +2663,14 @@
       <button
         type="button"
         id="music-toggle"
-        class="music-toggle-btn shrink-0 w-9 h-9 rounded-full border-2 text-amber-100 text-sm grid place-items-center transition-all duration-150"
+        class="music-toggle-btn"
         aria-pressed="false"
         aria-label="Mute music"
         title="Mute / Unmute"
       >
         <svg
           id="music-icon-unmuted"
-          class="music-icon w-5 h-5"
+          class="music-icon"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -2555,7 +2681,7 @@
         </svg>
         <svg
           id="music-icon-muted"
-          class="music-icon w-5 h-5 hidden"
+          class="music-icon game-hidden"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -2565,10 +2691,10 @@
           />
         </svg>
       </button>
-      <span class="min-w-0 flex-1">
+      <span>
         <span
-          class="now-playing__title block text-xs font-bold truncate text-amber-100"
-          >Trivia Showdown</span
+          class="now-playing__title"
+          >Zambolino - Caribbean · FreeToUse.com</span
         >
       </span>
     </aside>
@@ -2587,7 +2713,10 @@
     <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
+    <script src="js/games/game-session-lock.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "trivia.html" });
@@ -2632,9 +2761,9 @@
       ];
 
       const diffSettings = {
-        easy: { time: 20, points: 10, label: "Easy", questions: 5 },
-        medium: { time: 12, points: 15, label: "Medium", questions: 8 },
-        hard: { time: 8, points: 20, label: "Hard", questions: 10 },
+        easy: { time: 20, points: 20, label: "Easy", questions: 5 },
+        medium: { time: 12, points: 18.75, label: "Medium", questions: 8 },
+        hard: { time: 10, points: 20, label: "Hard", questions: 10 },
       };
 
       const TIMER_CIRC = 283;
@@ -2645,9 +2774,11 @@
       let gameActive = false;
       let canAnswer = true;
       let timerInterval = null;
+      let timerDeadline = null;
+      let timerVisibilityHandler = null;
+      let questionAdvanceTimeout = null;
       let timeLeft = 15;
       let maxTime = 15;
-      let hasWelcomed = false;
 
       const bgMusic = document.getElementById("bg-music");
 
@@ -2673,8 +2804,8 @@
         if (!nowPlayingEl || !musicToggleBtn || !musicIconOn || !musicIconOff)
           return;
 
-        musicIconOn.classList.toggle("hidden", musicMuted);
-        musicIconOff.classList.toggle("hidden", !musicMuted);
+        musicIconOn.classList.toggle("game-hidden", musicMuted);
+        musicIconOff.classList.toggle("game-hidden", !musicMuted);
 
         musicToggleBtn.setAttribute("aria-pressed", String(musicMuted));
         musicToggleBtn.title = musicMuted ? "Unmute music" : "Mute music";
@@ -2704,8 +2835,6 @@
       }
 
       let studioAudioCtx = null;
-      let lastHoverAt = 0;
-
       function getStudioAudioCtx() {
         if (!studioAudioCtx) {
           studioAudioCtx = new (
@@ -2718,74 +2847,6 @@
 
       function getSfxVolume() {
         return sfxVol;
-      }
-
-      /** Warm brass studio panel click — unique to Mati Heritage Trivia */
-      function playShowClick(variant = "click") {
-        const vol = getSfxVolume();
-        if (vol <= 0) return;
-
-        try {
-          const ctx = getStudioAudioCtx();
-          const now = ctx.currentTime;
-          const master = ctx.createGain();
-          master.connect(ctx.destination);
-
-          const levels = {
-            hover: 0.22,
-            click: 0.42,
-            answer: 0.55,
-            start: 0.62,
-          };
-          master.gain.value = vol * (levels[variant] || 0.42);
-
-          const thump = ctx.createOscillator();
-          const thumpGain = ctx.createGain();
-          thump.type = "sine";
-          thump.frequency.setValueAtTime(variant === "answer" ? 130 : 155, now);
-          thump.frequency.exponentialRampToValueAtTime(72, now + 0.07);
-          thumpGain.gain.setValueAtTime(variant === "hover" ? 0.2 : 0.38, now);
-          thumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-          thump.connect(thumpGain);
-          thumpGain.connect(master);
-          thump.start(now);
-          thump.stop(now + 0.1);
-
-          const brass = ctx.createOscillator();
-          const brassGain = ctx.createGain();
-          brass.type = "triangle";
-          const baseFreq =
-            variant === "answer" ? 880 : variant === "start" ? 740 : 660;
-          brass.frequency.setValueAtTime(baseFreq, now);
-          brass.frequency.exponentialRampToValueAtTime(
-            baseFreq * 1.18,
-            now + 0.045,
-          );
-          brassGain.gain.setValueAtTime(0, now);
-          brassGain.gain.linearRampToValueAtTime(
-            variant === "hover" ? 0.08 : 0.18,
-            now + 0.008,
-          );
-          brassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-          brass.connect(brassGain);
-          brassGain.connect(master);
-          brass.start(now);
-          brass.stop(now + 0.24);
-
-          if (variant !== "hover") {
-            const chime = ctx.createOscillator();
-            const chimeGain = ctx.createGain();
-            chime.type = "sine";
-            chime.frequency.setValueAtTime(988, now + 0.02);
-            chimeGain.gain.setValueAtTime(0, now + 0.02);
-            chimeGain.gain.linearRampToValueAtTime(0.1, now + 0.03);
-            chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-            chime.connect(chimeGain);
-            chimeGain.connect(master);
-            chime.start(now + 0.02);
-            chime.stop(now + 0.38);
-          }
-        } catch (_) {}
       }
 
       function playQuestionSting() {
@@ -2917,51 +2978,6 @@
         } catch (_) {}
       }
 
-      function pickAnnouncerVoice() {
-        if (!("speechSynthesis" in window)) return null;
-        const voices = window.speechSynthesis.getVoices();
-        return (
-          voices.find((v) =>
-            /Daniel|David|Mark|James|Guy|English.*Male/i.test(v.name),
-          ) ||
-          voices.find((v) => v.name.includes("Google US English")) ||
-          voices.find((v) => v.name.includes("Microsoft")) ||
-          voices.find((v) => v.lang.startsWith("en"))
-        );
-      }
-
-      function playAnnouncer(text, mood = "host") {
-        if (getSfxVolume() <= 0 || !("speechSynthesis" in window)) return;
-        const synth = window.speechSynthesis;
-        const speak = () => {
-          synth.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          const voice = pickAnnouncerVoice();
-          if (voice) u.voice = voice;
-          u.volume = Math.min(sfxVol * 0.95, 1);
-          u.rate = mood === "results" ? 0.94 : 0.9;
-          u.pitch = mood === "welcome" ? 0.92 : 0.96;
-          synth.speak(u);
-        };
-        if (synth.getVoices().length === 0) synth.onvoiceschanged = speak;
-        else speak();
-      }
-
-      function bindStudioHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach(
-          (el) => {
-            if (!el || el.dataset.studioHoverBound) return;
-            el.dataset.studioHoverBound = "true";
-            el.addEventListener("mouseenter", () => {
-              const now = Date.now();
-              if (now - lastHoverAt < 120) return;
-              lastHoverAt = now;
-              playShowClick("hover");
-            });
-          },
-        );
-      }
-
       function shuffle(array) {
         const copy = [...array];
         for (let i = copy.length - 1; i > 0; i--) {
@@ -2976,7 +2992,14 @@
       }
 
       function setRoundControlsDisabled(disabled) {
-        document.getElementById("start-game-btn").disabled = disabled;
+        const startButton = document.getElementById("start-game-btn");
+        startButton.disabled = disabled;
+        startButton.textContent = disabled
+          ? "New Trivia"
+          : gameActive
+            ? "Start Trivia"
+            : "Play again";
+        document.getElementById("end-game-btn").hidden = !disabled;
         document.querySelectorAll(".diff-btn").forEach((button) => {
           button.disabled = disabled;
         });
@@ -3029,7 +3052,9 @@
           btn.classList.toggle("is-active", isActive);
           btn.setAttribute("aria-pressed", String(isActive));
         });
-        if (document.getElementById("game-show").classList.contains("is-preview")) {
+        if (
+          document.getElementById("game-show").classList.contains("is-preview")
+        ) {
           timeLeft = diffSettings[level].time;
           maxTime = timeLeft;
           updateTimerRing();
@@ -3040,16 +3065,9 @@
 
       document.querySelectorAll(".diff-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
-          playShowClick("click");
           setDifficulty(btn.dataset.level);
         });
       });
-
-      bindStudioHoverSound(
-        document.querySelectorAll(
-          ".diff-btn, .start-btn, #retry-btn, .results-card__link",
-        ),
-      );
 
       function spawnConfetti() {
         const colors = ["#d4af37", "#b8922a", "#5c1820", "#0c1a3d", "#f0e6c8"];
@@ -3080,17 +3098,25 @@
       function startTimer() {
         maxTime = diffSettings[difficulty].time;
         timeLeft = maxTime;
+        timerDeadline = Date.now() + maxTime * 1000;
         updateTimerRing();
         clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-          timeLeft--;
+        const updateTimer = () => {
+          timeLeft = Math.max(
+            0,
+            Math.ceil((timerDeadline - Date.now()) / 1000),
+          );
           updateTimerRing();
           if (timeLeft <= 5 && timeLeft > 0) playTick();
           if (timeLeft <= 0) {
             clearInterval(timerInterval);
             handleAnswer(-1, null);
           }
-        }, 1000);
+        };
+        updateTimer();
+        timerVisibilityHandler = updateTimer;
+        timerInterval = setInterval(updateTimer, 250);
+        document.addEventListener("visibilitychange", timerVisibilityHandler);
       }
 
       function loadQuestion() {
@@ -3116,13 +3142,10 @@
           btn.className = "answer-btn";
           btn.innerHTML = `<span class="answer-btn__letter">${String.fromCharCode(65 + index)}</span><span>${opt}</span>`;
           btn.addEventListener("click", () => {
-            playShowClick("answer");
             handleAnswer(index, btn);
           });
           grid.appendChild(btn);
         });
-
-        bindStudioHoverSound(grid.querySelectorAll(".answer-btn"));
 
         startTimer();
       }
@@ -3131,6 +3154,11 @@
         if (!canAnswer) return;
         canAnswer = false;
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
 
         const correct = quizData[currentQuestion].currentCorrect;
         const allBtns = document.querySelectorAll(".answer-btn");
@@ -3146,18 +3174,32 @@
           playWrong();
         }
 
-        setTimeout(() => {
+        questionAdvanceTimeout = setTimeout(() => {
+          questionAdvanceTimeout = null;
           currentQuestion++;
           if (currentQuestion < quizData.length) loadQuestion();
           else showResults();
         }, 1800);
       }
 
-      function showResults() {
+      function showResults(endedEarly = false) {
         gameActive = false;
+        canAnswer = false;
+        clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
+        clearTimeout(questionAdvanceTimeout);
+        questionAdvanceTimeout = null;
+        window.MatiGameSessionLock.release();
         setRoundControlsDisabled(false);
-        document.getElementById("game-show").classList.add("hidden");
-        document.getElementById("results-screen").classList.remove("hidden");
+        document.getElementById("game-show").classList.add("game-hidden");
+        document.getElementById("results-screen").classList.remove("game-hidden");
+        document.getElementById("results-title").textContent = endedEarly
+          ? "Trivia ended"
+          : "Trivia complete";
 
         document.getElementById("final-score").textContent = score;
 
@@ -3186,13 +3228,11 @@
         else
           msg =
             "Good effort! Explore more to learn about Mati's rich heritage.";
-        document.getElementById("result-message").textContent = msg;
+        document.getElementById("result-message").textContent = endedEarly
+          ? `You ended the round early. Your score of ${score} has been saved.`
+          : msg;
 
-        if (score === maxScore) spawnConfetti();
-        playAnnouncer(
-          `That wraps up Mati Heritage Trivia Challenge. Your final score is ${score} points. ${msg}`,
-          "results",
-        );
+        if (!endedEarly && score === maxScore) spawnConfetti();
       }
 
       async function prepareTriviaDeck() {
@@ -3218,6 +3258,7 @@
 
       async function startGame() {
         if (gameActive) return;
+        if (!(await window.MatiGameSessionLock.acquire("Trivia"))) return;
         currentQuestion = 0;
         score = 0;
         gameActive = true;
@@ -3226,18 +3267,14 @@
         await prepareTriviaDeck();
         if (!quizData.length) {
           gameActive = false;
+          window.MatiGameSessionLock.release();
           setRoundControlsDisabled(false);
-          playAnnouncer("No heritage questions are available yet.", "host");
           return;
         }
         if (bgMusic.paused && musicVol > 0) bgMusic.play().catch(() => {});
-        playAnnouncer(
-          `Welcome to Mati Heritage Trivia Challenge! ${diffSettings[difficulty].label} difficulty. The clock is ticking — good luck!`,
-          "welcome",
-        );
 
-        document.getElementById("results-screen").classList.add("hidden");
-        document.getElementById("game-show").classList.remove("hidden");
+        document.getElementById("results-screen").classList.add("game-hidden");
+        document.getElementById("game-show").classList.remove("game-hidden");
         setGamePreview(false);
         loadQuestion();
       }
@@ -3245,22 +3282,24 @@
       document
         .getElementById("start-game-btn")
         .addEventListener("click", () => {
-          playShowClick("start");
           void startGame();
         });
 
+      document.getElementById("end-game-btn").addEventListener("click", () => {
+        if (gameActive) showResults(true);
+      });
+
       document.getElementById("retry-btn").addEventListener("click", () => {
-        playShowClick("click");
         gameActive = false;
+        window.MatiGameSessionLock.release();
         setRoundControlsDisabled(false);
-        document.getElementById("results-screen").classList.add("hidden");
-        document.getElementById("game-show").classList.add("hidden");
-        document.getElementById("game-show").classList.remove("hidden");
+        document.getElementById("results-screen").classList.add("game-hidden");
+        document.getElementById("game-show").classList.add("game-hidden");
+        document.getElementById("game-show").classList.remove("game-hidden");
         setGamePreview(true);
       });
 
       document.getElementById("music-toggle")?.addEventListener("click", () => {
-        playShowClick("click");
         toggleMusicMute();
       });
 
@@ -3269,13 +3308,6 @@
 
       const handleWelcome = () => {
         getStudioAudioCtx();
-        if (!hasWelcomed) {
-          playAnnouncer(
-            "You're tuned in to Mati Heritage Trivia Challenge. Choose a difficulty and press Start Trivia when you're ready.",
-            "welcome",
-          );
-          hasWelcomed = true;
-        }
         startTriviaMusic();
       };
       document.addEventListener("click", handleWelcome, { once: true });
@@ -3285,19 +3317,6 @@
           window.MatiVisitorAuth.refresh();
         }
 
-        if (!hasWelcomed) {
-          playAnnouncer(
-            "You're tuned in to Mati Heritage Trivia Challenge. Choose a difficulty and press Start Trivia when you're ready.",
-            "welcome",
-          );
-          hasWelcomed = true;
-        }
-
-        bindStudioHoverSound(
-          document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-          ),
-        );
       });
     </script>
   </body>

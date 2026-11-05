@@ -722,16 +722,18 @@
       }
 
       .music-bar {
-        background: linear-gradient(
-          180deg,
-          rgba(232, 213, 176, 0.95),
-          rgba(216, 196, 160, 0.98)
-        );
-        border: 1px solid rgba(107, 68, 35, 0.35);
-        box-shadow:
-          0 6px 20px rgba(0, 0, 0, 0.35),
-          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        display: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
         color: var(--ink);
+      }
+
+      .music-bar .now-playing__title {
+        display: none !important;
       }
 
       .game-scroll {
@@ -1145,26 +1147,56 @@
 
       .tf-start-btn {
         min-height: 3rem;
-        margin-left: auto;
-        padding: 0.65rem 1.5rem;
+        padding: 0.55rem 1.25rem;
         border: 1px solid #252a27;
         border-radius: 999px;
         background: #252a27;
         color: #fff;
-        font: inherit;
-        font-size: 1rem;
+        font: 700 1.15rem "Quicksand", sans-serif;
         font-weight: 700;
         cursor: pointer;
+        transition: background-color 140ms ease;
       }
 
       .tf-start-btn:hover:not(:disabled) {
         background: #17684d;
       }
 
-      .tf-start-btn:disabled,
-      .tf-difficulties .speed-chip:disabled {
+      .tf-end-btn {
+        min-height: 3rem;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font: 700 1.15rem "Quicksand", sans-serif;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .tf-end-btn[hidden] {
+        display: none;
+      }
+
+      .tf-round-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+      }
+
+      .tf-end-btn:hover {
+        background: #f0f7f2;
+      }
+
+      .tf-start-btn:disabled {
         cursor: not-allowed;
-        opacity: 0.65;
+      }
+
+      .tf-difficulties .speed-chip.is-active:disabled {
+        background: #252a27;
+        color: #fff;
+        opacity: 1;
       }
 
       .tf-game {
@@ -1499,7 +1531,7 @@
 
       @media (max-width: 640px) {
         .tf-stage {
-          width: calc(100% - 3rem);
+          width: calc(100% - 2rem);
           padding-top: 0.75rem;
         }
 
@@ -1507,31 +1539,100 @@
           padding-top: 1rem;
         }
 
+        .tf-intro h1 {
+          font-size: clamp(2.15rem, 9vw, 2.8rem);
+          line-height: 1.08;
+        }
+
+        .tf-intro__description {
+          margin-bottom: 1rem;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
         .tf-controls {
-          align-items: flex-start;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.65rem;
+          align-items: stretch;
+          padding-bottom: 0.9rem;
         }
 
         .tf-controls__label {
-          flex-basis: 100%;
+          font-size: 1rem;
         }
 
         .tf-difficulties {
           width: 100%;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          border-radius: 0.85rem;
         }
 
         .tf-difficulties .speed-chip {
-          flex: 1 1 0;
+          min-height: 3.25rem;
           min-width: 0;
-          padding-inline: 0.4rem;
-          font-size: 0.82rem;
+          padding: 0.45rem 0.25rem;
+          font-size: 0.88rem;
+          white-space: normal;
         }
 
-        .tf-start-btn {
-          margin-left: 0;
+        .tf-difficulties .speed-chip span {
+          display: block;
+          margin: 0.1rem 0 0;
+          font-size: 0.76em;
+        }
+
+        .tf-round-actions {
+          width: 100%;
+          margin: 0;
+          gap: 0.5rem;
+        }
+
+        .tf-round-actions > button {
+          flex: 1 1 0;
+          min-width: 0;
+          min-height: 2.9rem;
+          padding: 0.5rem 0.6rem;
+          font-size: 0.95rem;
+        }
+
+        .tf-game .hero-scroll__paper {
+          padding: 1rem 0.85rem;
+        }
+
+        .tf-game .grid.grid-cols-3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.5rem;
+        }
+
+        .tf-game .stat-chip {
+          min-width: 0;
+          padding: 0.6rem 0.25rem;
+        }
+
+        .tf-game .stat-chip span {
+          font-size: 0.9rem;
+        }
+
+        .tf-game .stat-chip strong {
+          font-size: 1.25rem;
         }
 
         .tf-game .grid.grid-cols-2 {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.55rem;
+        }
+
+        .tf-game .verdict-btn {
+          min-width: 0;
+          padding: 0.7rem 0.4rem;
+          font-size: 0.95rem;
+        }
+
+        .tf-game .verdict-btn__seal {
+          width: 2.25rem;
+          height: 2.25rem;
         }
 
         .tf-help {
@@ -1599,7 +1700,7 @@
       <span class="min-w-0 flex-1">
         <span
           class="now-playing__title block text-xs font-bold truncate text-amber-100"
-          >Heritage Sprint Rush</span
+          >Zambolino - Caribbean · FreeToUse.com</span
         >
       </span>
     </aside>
@@ -1609,7 +1710,7 @@
         <h1>True or False Sprint</h1>
         <p class="tf-intro__description">
           Decide whether each Mati heritage fact is true or false before time
-          runs out. Answer quickly and earn points for every correct answer.
+          runs out. Answer quickly and earn a score for every correct answer.
         </p>
 
         <div class="tf-controls" aria-label="True or False Sprint options">
@@ -1643,9 +1744,14 @@
               Hard <span>(10 Q)</span>
             </button>
           </div>
-          <button type="button" id="start-btn" class="tf-start-btn">
-            Start sprint
-          </button>
+          <div class="tf-round-actions">
+            <button type="button" id="start-btn" class="tf-start-btn">
+              Start Sprint
+            </button>
+            <button type="button" id="end-game-btn" class="tf-end-btn" hidden>
+              End Sprint
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1852,7 +1958,7 @@
                 Play Again
               </button>
               <a
-                href="game.html"
+                href="game"
                 class="inline-flex items-center justify-center px-8 py-3 rounded-sm text-xs font-semibold tracking-wider uppercase text-[#6b4423] border border-[rgba(107,68,35,0.35)] bg-[rgba(255,252,245,0.4)] hover:border-[var(--terracotta)] transition-all"
                 >Back to Games</a
               >
@@ -1867,11 +1973,12 @@
         <ol>
           <li>Choose a difficulty and start the sprint.</li>
           <li>Read each Mati heritage statement and choose True or False before time runs out.</li>
-          <li>Answer quickly to earn points. The sprint ends when all questions are answered.</li>
+          <li>Answer quickly to earn a score. The sprint ends when all questions are answered.</li>
         </ol>
         <p>
-          Each correct answer earns points. Faster rounds have shorter time
-          limits and give more points for each correct answer.
+          Each correct answer earns the fixed score for the selected
+          difficulty. Higher difficulties have shorter time limits and higher
+          maximum scores.
         </p>
         <h2>Difficulty levels</h2>
         <div class="tf-sizes-table-wrap">
@@ -1881,7 +1988,7 @@
                 <th scope="col">Difficulty</th>
                 <th scope="col">Questions</th>
                 <th scope="col">Time per question</th>
-                <th scope="col">Points per correct answer</th>
+                <th scope="col">Score per correct answer</th>
                 <th scope="col">Good for</th>
               </tr>
             </thead>
@@ -1890,20 +1997,20 @@
                 <th scope="row">Easy</th>
                 <td>5</td>
                 <td>10 seconds</td>
-                <td>10</td>
+                <td>20</td>
                 <td>A short, relaxed round</td>
               </tr>
               <tr>
                 <th scope="row">Medium</th>
                 <td>8</td>
                 <td>8 seconds</td>
-                <td>15</td>
+                <td>18.75</td>
                 <td>A balanced game</td>
               </tr>
               <tr>
                 <th scope="row">Hard</th>
                 <td>10</td>
-                <td>5 seconds</td>
+                <td>7 seconds</td>
                 <td>20</td>
                 <td>For a bigger challenge</td>
               </tr>
@@ -1917,10 +2024,9 @@
 
     <audio
       id="bg-music"
-      src="assets/bgmusic/truefalsesprint.mp3"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
       loop
-      preload="auto"
-      autoplay
+      preload="none"
     ></audio>
 
     <!-- Animation SFX -->
@@ -1950,7 +2056,10 @@
     <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
+    <script src="js/games/game-session-lock.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/games/game-tv-transition.js"></script>
     <script>
@@ -1963,12 +2072,6 @@
         if (typeof window.MatiVisitorAuth !== "undefined") {
           window.MatiVisitorAuth.refresh();
         }
-
-        bindHoverSound(
-          document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-          ),
-        );
       });
       let facts = [];
       let heritageSession = null;
@@ -2025,9 +2128,9 @@
       ];
 
       const diffSettings = {
-        easy: { baseTime: 10000, rounds: 5, points: 10, label: "Easy" },
-        medium: { baseTime: 8000, rounds: 8, points: 15, label: "Medium" },
-        hard: { baseTime: 5000, rounds: 10, points: 20, label: "Hard" },
+        easy: { baseTime: 10000, rounds: 5, points: 20, label: "Easy" },
+        medium: { baseTime: 8000, rounds: 8, points: 18.75, label: "Medium" },
+        hard: { baseTime: 7000, rounds: 10, points: 20, label: "Hard" },
       };
 
       const CHIP_ACTIVE = ["is-active"];
@@ -2042,116 +2145,17 @@
       let canAnswer = false;
       let timeLeft = diffSettings.medium.baseTime;
       let timerInterval = null;
+      let timerDeadline = null;
+      let timerVisibilityHandler = null;
       let currentFact = null;
       let lastFactIndex = -1;
       let clueResults = [];
       const TIMER_RING_LEN = 264;
 
-      let sprintAudioCtx = null;
-      let audioUnlocked = false;
-      let lastHoverAt = 0;
-
       const bgMusic = document.getElementById("bg-music");
       let musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
-      let sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.7");
       bgMusic.volume = musicVol;
       let musicMuted = localStorage.getItem("sprintBgmMuted") === "true";
-      function getSfxVolume() {
-        sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.7");
-        return sfxVol;
-      }
-
-      function playSprintSound(variant = "click") {
-        const vol = getSfxVolume();
-        if (vol <= 0) return;
-        try {
-          const ctx = getSprintAudioCtx();
-          const now = ctx.currentTime;
-          const master = ctx.createGain();
-          master.connect(ctx.destination);
-
-          const levels = {
-            hover: 0.3,
-            click: 0.85,
-            correct: 0.9,
-            wrong: 0.8,
-            start: 0.8,
-            unroll: 0.25,
-            roller: 0.3,
-            thud: 0.5,
-          };
-          master.gain.value = vol * (levels[variant] || 0.5);
-
-          // Wooden knock
-          const wood = ctx.createOscillator();
-          const woodGain = ctx.createGain();
-          wood.type = "sine";
-          wood.frequency.setValueAtTime(
-            variant === "correct" ? 180 : variant === "thud" ? 80 : 220,
-            now,
-          );
-          wood.frequency.exponentialRampToValueAtTime(90, now + 0.09);
-          woodGain.gain.setValueAtTime(variant === "hover" ? 0.35 : 0.65, now);
-          woodGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-          wood.connect(woodGain);
-          woodGain.connect(master);
-          wood.start(now);
-          wood.stop(now + 0.14);
-
-          // Parchment rustle
-          if (variant !== "hover" && variant !== "thud") {
-            const bufferSize = Math.floor(ctx.sampleRate * 0.08);
-            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-              data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-            }
-            const noise = ctx.createBufferSource();
-            noise.buffer = buffer;
-            const filter = ctx.createBiquadFilter();
-            filter.type = "bandpass";
-            filter.frequency.value =
-              variant === "correct" ? 3200 : variant === "unroll" ? 1800 : 2400;
-            filter.Q.value = 0.8;
-            const noiseGain = ctx.createGain();
-            noiseGain.gain.setValueAtTime(
-              variant === "correct" ? 0.18 : variant === "unroll" ? 0.22 : 0.09,
-              now,
-            );
-            noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-            noise.connect(filter);
-            filter.connect(noiseGain);
-            noiseGain.connect(master);
-            noise.start(now);
-          }
-        } catch (_) {}
-      }
-
-      function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach(
-          (el) => {
-            if (!el || el.dataset.sprintHoverBound) return;
-            el.dataset.sprintHoverBound = "true";
-            el.addEventListener("mouseenter", () => {
-              if (Date.now() - lastHoverAt < 90) return;
-              lastHoverAt = Date.now();
-              playSprintSound("hover");
-            });
-            el.addEventListener("click", () => {
-              playSprintSound("click");
-            });
-          },
-        );
-      }
-
-      function getSprintAudioCtx() {
-        if (!sprintAudioCtx)
-          sprintAudioCtx = new (
-            window.AudioContext || window.webkitAudioContext
-          )();
-        if (sprintAudioCtx.state === "suspended") sprintAudioCtx.resume();
-        return sprintAudioCtx;
-      }
 
       function applyMusicVolume() {
         musicVol = parseFloat(localStorage.getItem("bgMusicVol") || "0.2");
@@ -2186,20 +2190,6 @@
           });
       }
 
-      function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach(
-          (el) => {
-            if (!el || el.dataset.sprintHoverBound) return;
-            el.dataset.sprintHoverBound = "true";
-            el.addEventListener("mouseenter", () => {
-              if (Date.now() - lastHoverAt < 90) return;
-              lastHoverAt = Date.now();
-              playSprintSound("hover");
-            });
-          },
-        );
-      }
-
       function toggleMusicMute() {
         musicMuted = !musicMuted;
         bgMusic.muted = musicMuted;
@@ -2211,8 +2201,6 @@
       }
 
       window.setDifficulty = (level) => {
-        playSprintSound("click");
-        getSprintAudioCtx();
         startSprintMusic();
         if (gameActive) return;
         difficulty = level;
@@ -2238,17 +2226,6 @@
       });
 
       document.getElementById("best-val").textContent = bestScore;
-
-      function playAnnouncer(text) {
-        const sVol = getSfxVolume();
-        if (sVol > 0 && "speechSynthesis" in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.volume = sVol;
-          u.rate = 1.05;
-          window.speechSynthesis.speak(u);
-        }
-      }
 
       async function prepareFactDeck() {
         const count = Math.max(
@@ -2324,6 +2301,7 @@
         clearInterval(timerInterval);
         const maxTime = getRoundTime();
         timeLeft = maxTime;
+        timerDeadline = Date.now() + maxTime;
         canAnswer = true;
         const ring = document.getElementById("timer-ring");
         const secEl = document.getElementById("timer-sec");
@@ -2336,8 +2314,8 @@
           if (secEl) secEl.textContent = String(Math.ceil(timeLeft / 1000));
         };
         syncTimerUI();
-        timerInterval = setInterval(() => {
-          timeLeft -= 100;
+        const updateTimer = () => {
+          timeLeft = Math.max(0, timerDeadline - Date.now());
           syncTimerUI();
           if ((timeLeft / maxTime) * 100 <= 25) {
             ring?.classList.add("is-urgent");
@@ -2349,7 +2327,11 @@
             syncTimerUI();
             handleAnswer(!currentFact.a);
           }
-        }, 100);
+        };
+        updateTimer();
+        timerVisibilityHandler = updateTimer;
+        timerInterval = setInterval(updateTimer, 100);
+        document.addEventListener("visibilitychange", timerVisibilityHandler);
       }
 
       function nextFact() {
@@ -2368,15 +2350,18 @@
         if (!gameActive || !canAnswer) return;
         canAnswer = false;
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
         const isCorrect = ans === currentFact.a;
         if (isCorrect) {
           correctCount++;
           currentScore += diffSettings[difficulty].points;
           document.getElementById("score-val").textContent = currentScore;
-          playSprintSound("correct");
           flashPlaque("ok");
         } else {
-          playSprintSound("wrong");
           flashPlaque("bad");
         }
         clueResults.push(isCorrect);
@@ -2404,10 +2389,17 @@
           .join("");
       }
 
-      function finishRun(isSuccess, reason) {
+      function finishRun(isSuccess, reason, endedEarly = false) {
         gameActive = false;
+        document.getElementById("end-game-btn").hidden = true;
+        window.MatiGameSessionLock.release();
         canAnswer = false;
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
         document.body.classList.remove("is-game-mode");
         document.getElementById("start-btn").disabled = false;
         document.getElementById("start-btn").textContent = "Play again";
@@ -2445,7 +2437,9 @@
         resultsEl.classList.toggle("ring-2", isRecord);
         resultsEl.classList.toggle("ring-[var(--gold)]", isRecord);
 
-        document.getElementById("results-title").textContent = isSuccess
+        document.getElementById("results-title").textContent = endedEarly
+          ? "Sprint Ended"
+          : isSuccess
           ? isRecord
             ? "New Best Sprint!"
             : "Sprint Complete!"
@@ -2458,25 +2452,20 @@
               : "Time's Up";
         document.getElementById("final-score").textContent =
           currentScore.toLocaleString();
-        document.getElementById("result-msg").textContent = isRecord
-          ? `Personal best! ${reason}`
-          : reason;
+        document.getElementById("result-msg").textContent = endedEarly
+          ? `${reason} Your score has been saved.`
+          : isRecord
+            ? `Personal best! ${reason}`
+            : reason;
 
         renderScoreBreakdown([
           { label: "Difficulty", value: diffSettings[difficulty].label },
           { label: "Correct", value: `${correctCount} / ${totalRounds}` },
-          { label: "Points Earned", value: currentScore.toLocaleString() },
+          { label: "Score Earned", value: currentScore.toLocaleString() },
           { label: "All-Time Best", value: bestScore.toLocaleString() },
         ]);
 
         document.getElementById("best-val").textContent = bestScore;
-        playAnnouncer(
-          isSuccess
-            ? `Sprint complete! You scored ${currentScore} points.`
-            : partialComplete
-              ? `Sprint finished. You scored ${currentScore} points.`
-              : `Time's up. You scored ${currentScore} points.`,
-        );
       }
 
       function gameOver(reason) {
@@ -2487,11 +2476,11 @@
         .getElementById("start-btn")
         .addEventListener("click", async () => {
           if (!difficulty || gameActive) return;
-          playSprintSound("start");
-          getSprintAudioCtx();
+          if (!(await window.MatiGameSessionLock.acquire("True or False Sprint"))) return;
           startSprintMusic();
           document.body.classList.add("is-game-mode");
           document.getElementById("start-btn").disabled = true;
+          document.getElementById("start-btn").textContent = "New Sprint";
           document.querySelectorAll(".speed-chip").forEach((button) => {
             button.disabled = true;
           });
@@ -2519,7 +2508,7 @@
 
           await prepareFactDeck();
           if (!facts.length) {
-            playAnnouncer("No heritage facts are available yet.");
+            window.MatiGameSessionLock.release();
             document.getElementById("game-screen").classList.add("hidden");
             gameScreen.classList.add("is-preview");
             gameScreen.setAttribute("inert", "");
@@ -2533,12 +2522,22 @@
           }
 
           gameActive = true;
+          document.getElementById("end-game-btn").hidden = false;
           document.getElementById("true-btn").disabled = false;
           document.getElementById("false-btn").disabled = false;
           updateRoundDisplay();
-          playAnnouncer(`Ready! ${diffSettings[difficulty].label} difficulty.`);
           nextFact();
         });
+
+      document.getElementById("end-game-btn").addEventListener("click", () => {
+        if (gameActive) {
+          finishRun(
+            false,
+            `You ended the sprint after ${correctCount} of ${totalRounds} answers.`,
+            true,
+          );
+        }
+      });
 
       document
         .getElementById("true-btn")
@@ -2556,7 +2555,6 @@
       });
 
       const handleUserInteraction = () => {
-        getSprintAudioCtx();
         startSprintMusic();
       };
       document.addEventListener("click", handleUserInteraction, { once: true });
@@ -2565,15 +2563,8 @@
         .getElementById("music-toggle")
         ?.addEventListener("click", (e) => {
           e.stopPropagation();
-          playSprintSound("click");
           toggleMusicMute();
         });
-
-      bindHoverSound(
-        document.querySelectorAll(
-          ".speed-chip, .start-btn, .enter-btn, .verdict-btn, nav a, .results-actions .start-btn, .results-actions a",
-        ),
-      );
 
       applyMusicVolume();
       updateMusicUI();

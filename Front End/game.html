@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini-Game Arcade | Mati Heritage 3D</title>
-
+    <title>Games | Mati Heritage 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +16,6 @@
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/games-portal.css" />
     <link rel="icon" type="image/png" href="assets/logos/logo.png" />
-    <link rel="stylesheet" href="css/auth-logout.css" />
 
     <style>
       :root {
@@ -25,10 +23,11 @@
       }
 
       body {
+        margin: 0;
         font-family: "Orbitron", sans-serif;
         background: #f4f4f4;
-        overflow-x: hidden;
       }
+
 
       .pixel-font {
         font-family: "Press Start 2P", cursive;
@@ -151,8 +150,26 @@
         backdrop-filter: blur(4px);
       }
 
+      .leaderboard-modal.is-open {
+        display: grid;
+      }
+
       .leaderboard-modal[hidden] {
         display: none;
+      }
+
+      .leaderboard-loading {
+        padding: 2rem 0;
+        color: #6b7280;
+        text-align: center;
+      }
+
+      .leaderboard-points-unit {
+        color: inherit;
+        font-size: 10px;
+        letter-spacing: 0.05em;
+        opacity: 0.6;
+        text-transform: uppercase;
       }
 
       .leaderboard-modal__panel {
@@ -386,7 +403,6 @@
         }
       }
 
-
       @keyframes crown-bounce {
         0%,
         100% {
@@ -524,20 +540,8 @@
       }
 
       /* Keep profile dropdown above arcade hero layers */
-      #header-placeholder,
       .site-header {
         z-index: 500;
-      }
-
-      .site-header .header-bg {
-        overflow: visible;
-      }
-
-      .site-header .site-header__bar,
-      .site-header .site-header__end,
-      .site-header .site-header__utilities,
-      .site-header .site-profile {
-        overflow: visible;
       }
 
       .site-header .site-profile {
@@ -581,21 +585,65 @@
   </head>
 
   <body class="game-page games-hub-page visitor-module">
-    <div id="header-placeholder" class="min-h-[90px] relative z-50"></div>
+    <div id="header-placeholder"></div>
 
     <main class="games-arcade">
       <div class="games-arcade__inner">
         <header class="games-arcade__heading">
-          <div>
+          <div class="games-arcade__heading-copy">
             <h1 class="games-arcade__title">Games</h1>
             <p class="games-arcade__lead">
               Explore Mati’s stories, landmarks, and living traditions through
-              six quick mini-games.
+              five quick mini-games.
             </p>
+          </div>
+          <div
+            class="games-arcade__showcase"
+            role="group"
+            aria-label="Featured mini-game artwork"
+          >
+            <a
+              class="games-arcade__showcase-game"
+              href="trivia"
+              aria-label="Play Mati Heritage Trivia"
+            >
+              <span class="arcade-card__art games-arcade__showcase-art"></span>
+            </a>
+            <a
+              class="games-arcade__showcase-game"
+              href="memorypairs"
+              aria-label="Play Memory Matching Pairs"
+            >
+              <span class="arcade-card__art games-arcade__showcase-art"></span>
+            </a>
+            <a
+              class="games-arcade__showcase-game"
+              href="slidepuzzle"
+              aria-label="Play Slide Puzzle"
+            >
+              <span class="arcade-card__art games-arcade__showcase-art"></span>
+            </a>
+            <a
+              class="games-arcade__showcase-game"
+              href="truefalsesprint"
+              aria-label="Play True or False Sprint"
+            >
+              <span class="arcade-card__art games-arcade__showcase-art"></span>
+            </a>
+            <a
+              class="games-arcade__showcase-game"
+              href="wordscramble"
+              aria-label="Play Word Scramble"
+            >
+              <span class="arcade-card__art games-arcade__showcase-art"></span>
+            </a>
           </div>
         </header>
 
-        <section class="games-arcade__intro" aria-label="Discover Mati through games">
+        <section
+          class="games-arcade__intro"
+          aria-label="Discover Mati through games"
+        >
           <div class="games-arcade__intro-heading">
             <p class="games-arcade__eyebrow">DISCOVER MATI THROUGH PLAY</p>
             <h2>Play your way through Mati’s heritage</h2>
@@ -613,20 +661,77 @@
             <div class="arcade-card__art arcade-card__art--trivia">
               <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
                 <g transform="rotate(-5 270 173)">
-                  <rect x="98" y="65" width="330" height="214" rx="20" fill="#252a2d" />
-                  <rect x="108" y="75" width="310" height="194" rx="14" fill="#fffefa" />
-                  <path d="M108 89a14 14 0 0 1 14-14h282a14 14 0 0 1 14 14v35H108z" fill="#17684d" />
+                  <rect
+                    x="98"
+                    y="65"
+                    width="330"
+                    height="214"
+                    rx="20"
+                    fill="#252a2d"
+                  />
+                  <rect
+                    x="108"
+                    y="75"
+                    width="310"
+                    height="194"
+                    rx="14"
+                    fill="#fffefa"
+                  />
+                  <path
+                    d="M108 89a14 14 0 0 1 14-14h282a14 14 0 0 1 14 14v35H108z"
+                    fill="#17684d"
+                  />
                   <circle cx="136" cy="103" r="8" fill="#e2bb67" />
-                  <path d="M157 103h144" stroke="#fffefa" stroke-width="8" stroke-linecap="round" opacity=".9" />
-                  <rect x="132" y="147" width="262" height="38" rx="10" fill="#f3efe5" />
+                  <path
+                    d="M157 103h144"
+                    stroke="#fffefa"
+                    stroke-width="8"
+                    stroke-linecap="round"
+                    opacity=".9"
+                  />
+                  <rect
+                    x="132"
+                    y="147"
+                    width="262"
+                    height="38"
+                    rx="10"
+                    fill="#f3efe5"
+                  />
                   <circle cx="152" cy="166" r="8" fill="#c45e3b" />
-                  <path d="M172 166h126" stroke="#625e56" stroke-width="7" stroke-linecap="round" />
-                  <rect x="132" y="198" width="262" height="38" rx="10" fill="#e9f1eb" />
+                  <path
+                    d="M172 166h126"
+                    stroke="#625e56"
+                    stroke-width="7"
+                    stroke-linecap="round"
+                  />
+                  <rect
+                    x="132"
+                    y="198"
+                    width="262"
+                    height="38"
+                    rx="10"
+                    fill="#e9f1eb"
+                  />
                   <circle cx="152" cy="217" r="8" fill="#17684d" />
-                  <path d="M172 217h176" stroke="#625e56" stroke-width="7" stroke-linecap="round" />
+                  <path
+                    d="M172 217h176"
+                    stroke="#625e56"
+                    stroke-width="7"
+                    stroke-linecap="round"
+                  />
                 </g>
                 <circle cx="488" cy="204" r="48" fill="#c45e3b" />
-                <text x="488" y="224" text-anchor="middle" fill="#fffefa" font-family="Georgia, serif" font-size="62" font-weight="700">?</text>
+                <text
+                  x="488"
+                  y="224"
+                  text-anchor="middle"
+                  fill="#fffefa"
+                  font-family="Georgia, serif"
+                  font-size="62"
+                  font-weight="700"
+                >
+                  ?
+                </text>
               </svg>
             </div>
             <div class="arcade-card__body">
@@ -637,13 +742,16 @@
               </p>
               <div class="arcade-card__meta">
                 <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                <ul
+                  class="arcade-card__difficulties"
+                  aria-label="Available difficulty levels"
+                >
                   <li class="arcade-card__difficulty">Easy</li>
                   <li class="arcade-card__difficulty">Medium</li>
                   <li class="arcade-card__difficulty">Hard</li>
                 </ul>
               </div>
-              <a class="arcade-card__play" href="trivia.html">
+              <a class="arcade-card__play" href="trivia">
                 PLAY NOW <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -653,23 +761,94 @@
             <div class="arcade-card__art arcade-card__art--memory">
               <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
                 <g transform="rotate(-10 245 170)">
-                  <rect x="128" y="63" width="184" height="232" rx="18" fill="#252a2d" />
-                  <rect x="138" y="73" width="164" height="212" rx="12" fill="#fffefa" />
-                  <rect x="154" y="89" width="132" height="124" rx="10" fill="#e8efe7" />
+                  <rect
+                    x="128"
+                    y="63"
+                    width="184"
+                    height="232"
+                    rx="18"
+                    fill="#252a2d"
+                  />
+                  <rect
+                    x="138"
+                    y="73"
+                    width="164"
+                    height="212"
+                    rx="12"
+                    fill="#fffefa"
+                  />
+                  <rect
+                    x="154"
+                    y="89"
+                    width="132"
+                    height="124"
+                    rx="10"
+                    fill="#e8efe7"
+                  />
                   <path d="M170 193l33-49 22 28 17-19 28 40z" fill="#17684d" />
                   <circle cx="254" cy="119" r="11" fill="#e2bb67" />
-                  <path d="M159 237h101M159 258h72" stroke="#d4cec1" stroke-width="8" stroke-linecap="round" />
-                  <circle cx="220" cy="174" r="20" fill="#c45e3b" opacity=".9" />
-                  <path d="M212 174l7 7 13-16" fill="none" stroke="#fffefa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path
+                    d="M159 237h101M159 258h72"
+                    stroke="#d4cec1"
+                    stroke-width="8"
+                    stroke-linecap="round"
+                  />
+                  <circle
+                    cx="220"
+                    cy="174"
+                    r="20"
+                    fill="#c45e3b"
+                    opacity=".9"
+                  />
+                  <path
+                    d="M212 174l7 7 13-16"
+                    fill="none"
+                    stroke="#fffefa"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </g>
                 <g transform="rotate(9 408 170)">
-                  <rect x="328" y="63" width="184" height="232" rx="18" fill="#252a2d" />
-                  <rect x="338" y="73" width="164" height="212" rx="12" fill="#fffefa" />
-                  <rect x="354" y="89" width="132" height="124" rx="10" fill="#f4e8d4" />
+                  <rect
+                    x="328"
+                    y="63"
+                    width="184"
+                    height="232"
+                    rx="18"
+                    fill="#252a2d"
+                  />
+                  <rect
+                    x="338"
+                    y="73"
+                    width="164"
+                    height="212"
+                    rx="12"
+                    fill="#fffefa"
+                  />
+                  <rect
+                    x="354"
+                    y="89"
+                    width="132"
+                    height="124"
+                    rx="10"
+                    fill="#f4e8d4"
+                  />
                   <path d="M369 192l32-44 24 26 20-20 27 38z" fill="#c45e3b" />
                   <circle cx="456" cy="119" r="11" fill="#17684d" />
-                  <path d="M359 237h101M359 258h72" stroke="#d4cec1" stroke-width="8" stroke-linecap="round" />
-                  <path d="M411 159c0-13 21-16 21 0 0 9-11 11-11 20m0 12v1" fill="none" stroke="#252a2d" stroke-width="6" stroke-linecap="round" />
+                  <path
+                    d="M359 237h101M359 258h72"
+                    stroke="#d4cec1"
+                    stroke-width="8"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M411 159c0-13 21-16 21 0 0 9-11 11-11 20m0 12v1"
+                    fill="none"
+                    stroke="#252a2d"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                  />
                 </g>
               </svg>
             </div>
@@ -681,48 +860,16 @@
               </p>
               <div class="arcade-card__meta">
                 <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                <ul
+                  class="arcade-card__difficulties"
+                  aria-label="Available difficulty levels"
+                >
                   <li class="arcade-card__difficulty">Easy</li>
                   <li class="arcade-card__difficulty">Medium</li>
                   <li class="arcade-card__difficulty">Hard</li>
                 </ul>
               </div>
-              <a class="arcade-card__play" href="memorypairs.html">
-                PLAY NOW <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          </article>
-
-          <article class="arcade-card">
-            <div class="arcade-card__art arcade-card__art--spot">
-              <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
-                <path d="M99 223v-52m0 0c-27-23-23-47-10-47 10 0 12 13 10 22 6-25 20-28 23-19 4 11-7 22-23 44m0 0c-15-24-30-25-31-15 0 9 10 16 31 25" fill="none" stroke="#252a2d" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M520 236v-69m0 0c-33-29-28-57-12-57 12 0 15 16 12 27 7-30 25-35 29-23 5 13-8 27-29 53m0 0c-18-29-36-30-37-18 0 11 12 20 37 31" fill="none" stroke="#252a2d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
-                <g transform="rotate(-4 319 210)">
-                  <rect x="228" y="183" width="168" height="111" rx="12" fill="#fffefa" stroke="#252a2d" stroke-width="5" />
-                  <path d="M245 200h134v77H245z" fill="#e8efe7" />
-                  <path d="M245 254l35-33 25 22 23-18 51 39H245z" fill="#17684d" />
-                  <circle cx="348" cy="218" r="10" fill="#e2bb67" />
-                  <circle cx="355" cy="235" r="42" fill="none" stroke="#c45e3b" stroke-width="6" />
-                  <path d="M385 265l29 28" stroke="#c45e3b" stroke-width="10" stroke-linecap="round" />
-                </g>
-              </svg>
-            </div>
-            <div class="arcade-card__body">
-              <span class="arcade-card__category">Observation · Visual</span>
-              <h2 class="arcade-card__title">Spot the Difference</h2>
-              <p class="arcade-card__description">
-                Look closely at Mati’s scenic places and find every change.
-              </p>
-              <div class="arcade-card__meta">
-                <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
-                  <li class="arcade-card__difficulty">Easy</li>
-                  <li class="arcade-card__difficulty">Medium</li>
-                  <li class="arcade-card__difficulty">Hard</li>
-                </ul>
-              </div>
-              <a class="arcade-card__play" href="spotthedifference.html">
+              <a class="arcade-card__play" href="memorypairs">
                 PLAY NOW <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -731,25 +878,167 @@
           <article class="arcade-card">
             <div class="arcade-card__art arcade-card__art--puzzle">
               <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
-                <rect x="133" y="43" width="326" height="258" rx="22" fill="#252a2d" />
-                <rect x="145" y="55" width="302" height="234" rx="14" fill="#fffefa" />
+                <rect
+                  x="133"
+                  y="43"
+                  width="326"
+                  height="258"
+                  rx="22"
+                  fill="#252a2d"
+                />
+                <rect
+                  x="145"
+                  y="55"
+                  width="302"
+                  height="234"
+                  rx="14"
+                  fill="#fffefa"
+                />
                 <g stroke="#d4cec1" stroke-width="4">
-                  <rect x="160" y="70" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
-                  <rect x="230" y="70" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
-                  <rect x="300" y="70" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
-                  <rect x="370" y="70" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
-                  <rect x="160" y="124" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
-                  <rect x="230" y="124" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
-                  <rect x="300" y="124" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
-                  <rect x="370" y="124" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
-                  <rect x="160" y="178" width="64" height="48" rx="6" fill="#c45e3b" stroke="none" />
-                  <rect x="230" y="178" width="64" height="48" rx="6" fill="#e6c46e" stroke="none" />
-                  <rect x="300" y="178" width="64" height="48" rx="6" fill="#91b9a2" stroke="none" />
-                  <rect x="370" y="178" width="64" height="48" rx="6" fill="#fffefa" stroke="none" />
-                  <rect x="160" y="232" width="64" height="42" rx="6" fill="#e6c46e" stroke="none" />
-                  <rect x="230" y="232" width="64" height="42" rx="6" fill="#91b9a2" stroke="none" />
-                  <rect x="300" y="232" width="64" height="42" rx="6" fill="#c45e3b" stroke="none" />
-                  <rect x="370" y="232" width="64" height="42" rx="6" fill="#e6c46e" stroke="none" />
+                  <rect
+                    x="160"
+                    y="70"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
+                  <rect
+                    x="230"
+                    y="70"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#91b9a2"
+                    stroke="none"
+                  />
+                  <rect
+                    x="300"
+                    y="70"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#c45e3b"
+                    stroke="none"
+                  />
+                  <rect
+                    x="370"
+                    y="70"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
+                  <rect
+                    x="160"
+                    y="124"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#91b9a2"
+                    stroke="none"
+                  />
+                  <rect
+                    x="230"
+                    y="124"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#c45e3b"
+                    stroke="none"
+                  />
+                  <rect
+                    x="300"
+                    y="124"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
+                  <rect
+                    x="370"
+                    y="124"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#91b9a2"
+                    stroke="none"
+                  />
+                  <rect
+                    x="160"
+                    y="178"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#c45e3b"
+                    stroke="none"
+                  />
+                  <rect
+                    x="230"
+                    y="178"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
+                  <rect
+                    x="300"
+                    y="178"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#91b9a2"
+                    stroke="none"
+                  />
+                  <rect
+                    x="370"
+                    y="178"
+                    width="64"
+                    height="48"
+                    rx="6"
+                    fill="#fffefa"
+                    stroke="none"
+                  />
+                  <rect
+                    x="160"
+                    y="232"
+                    width="64"
+                    height="42"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
+                  <rect
+                    x="230"
+                    y="232"
+                    width="64"
+                    height="42"
+                    rx="6"
+                    fill="#91b9a2"
+                    stroke="none"
+                  />
+                  <rect
+                    x="300"
+                    y="232"
+                    width="64"
+                    height="42"
+                    rx="6"
+                    fill="#c45e3b"
+                    stroke="none"
+                  />
+                  <rect
+                    x="370"
+                    y="232"
+                    width="64"
+                    height="42"
+                    rx="6"
+                    fill="#e6c46e"
+                    stroke="none"
+                  />
                 </g>
               </svg>
             </div>
@@ -761,13 +1050,16 @@
               </p>
               <div class="arcade-card__meta">
                 <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                <ul
+                  class="arcade-card__difficulties"
+                  aria-label="Available difficulty levels"
+                >
                   <li class="arcade-card__difficulty">Easy</li>
                   <li class="arcade-card__difficulty">Medium</li>
                   <li class="arcade-card__difficulty">Hard</li>
                 </ul>
               </div>
-              <a class="arcade-card__play" href="slidepuzzle.html">
+              <a class="arcade-card__play" href="slidepuzzle">
                 PLAY NOW <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -777,15 +1069,53 @@
             <div class="arcade-card__art arcade-card__art--truefalse">
               <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
                 <g transform="rotate(-5 320 144)">
-                  <rect x="116" y="48" width="408" height="178" rx="20" fill="#fffefa" stroke="#252a2d" stroke-width="5" />
-                  <path d="M151 87h327M151 116h237" stroke="#d4cec1" stroke-width="10" stroke-linecap="round" />
-                  <path d="M151 152h194" stroke="#d4cec1" stroke-width="10" stroke-linecap="round" />
-                  <rect x="151" y="181" width="80" height="10" rx="5" fill="#17684d" />
+                  <rect
+                    x="116"
+                    y="48"
+                    width="408"
+                    height="178"
+                    rx="20"
+                    fill="#fffefa"
+                    stroke="#252a2d"
+                    stroke-width="5"
+                  />
+                  <path
+                    d="M151 87h327M151 116h237"
+                    stroke="#d4cec1"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M151 152h194"
+                    stroke="#d4cec1"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                  />
+                  <rect
+                    x="151"
+                    y="181"
+                    width="80"
+                    height="10"
+                    rx="5"
+                    fill="#17684d"
+                  />
                 </g>
                 <circle cx="225" cy="252" r="51" fill="#17684d" />
-                <path d="M198 252l19 19 36-40" fill="none" stroke="#fffefa" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                  d="M198 252l19 19 36-40"
+                  fill="none"
+                  stroke="#fffefa"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
                 <circle cx="415" cy="252" r="51" fill="#c45e3b" />
-                <path d="M392 229l46 46m0-46l-46 46" stroke="#fffefa" stroke-width="12" stroke-linecap="round" />
+                <path
+                  d="M392 229l46 46m0-46l-46 46"
+                  stroke="#fffefa"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                />
               </svg>
             </div>
             <div class="arcade-card__body">
@@ -796,13 +1126,16 @@
               </p>
               <div class="arcade-card__meta">
                 <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                <ul
+                  class="arcade-card__difficulties"
+                  aria-label="Available difficulty levels"
+                >
                   <li class="arcade-card__difficulty">Easy</li>
                   <li class="arcade-card__difficulty">Medium</li>
                   <li class="arcade-card__difficulty">Hard</li>
                 </ul>
               </div>
-              <a class="arcade-card__play" href="truefalsesprint.html">
+              <a class="arcade-card__play" href="truefalsesprint">
                 PLAY NOW <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -812,16 +1145,87 @@
             <div class="arcade-card__art arcade-card__art--scramble">
               <svg viewBox="0 0 640 340" aria-hidden="true" focusable="false">
                 <g>
-                  <rect x="118" y="92" width="90" height="98" rx="14" fill="#17684d" />
-                  <rect x="218" y="92" width="90" height="98" rx="14" fill="#fffefa" stroke="#252a2d" stroke-width="4" />
-                  <rect x="318" y="92" width="90" height="98" rx="14" fill="#c45e3b" />
-                  <rect x="418" y="92" width="90" height="98" rx="14" fill="#fffefa" stroke="#252a2d" stroke-width="4" />
-                  <text x="163" y="158" text-anchor="middle" fill="#fffefa" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">M</text>
-                  <text x="263" y="158" text-anchor="middle" fill="#252a2d" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">A</text>
-                  <text x="363" y="158" text-anchor="middle" fill="#fffefa" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">T</text>
-                  <text x="463" y="158" text-anchor="middle" fill="#252a2d" font-family="Quicksand, sans-serif" font-size="48" font-weight="700">I</text>
+                  <rect
+                    x="118"
+                    y="92"
+                    width="90"
+                    height="98"
+                    rx="14"
+                    fill="#17684d"
+                  />
+                  <rect
+                    x="218"
+                    y="92"
+                    width="90"
+                    height="98"
+                    rx="14"
+                    fill="#fffefa"
+                    stroke="#252a2d"
+                    stroke-width="4"
+                  />
+                  <rect
+                    x="318"
+                    y="92"
+                    width="90"
+                    height="98"
+                    rx="14"
+                    fill="#c45e3b"
+                  />
+                  <rect
+                    x="418"
+                    y="92"
+                    width="90"
+                    height="98"
+                    rx="14"
+                    fill="#fffefa"
+                    stroke="#252a2d"
+                    stroke-width="4"
+                  />
+                  <text
+                    x="163"
+                    y="158"
+                    text-anchor="middle"
+                    fill="#fffefa"
+                    font-family="Quicksand, sans-serif"
+                    font-size="48"
+                    font-weight="700"
+                  >
+                    M
+                  </text>
+                  <text
+                    x="263"
+                    y="158"
+                    text-anchor="middle"
+                    fill="#252a2d"
+                    font-family="Quicksand, sans-serif"
+                    font-size="48"
+                    font-weight="700"
+                  >
+                    A
+                  </text>
+                  <text
+                    x="363"
+                    y="158"
+                    text-anchor="middle"
+                    fill="#fffefa"
+                    font-family="Quicksand, sans-serif"
+                    font-size="48"
+                    font-weight="700"
+                  >
+                    T
+                  </text>
+                  <text
+                    x="463"
+                    y="158"
+                    text-anchor="middle"
+                    fill="#252a2d"
+                    font-family="Quicksand, sans-serif"
+                    font-size="48"
+                    font-weight="700"
+                  >
+                    I
+                  </text>
                 </g>
-                <circle cx="548" cy="84" r="18" fill="#c45e3b" />
               </svg>
             </div>
             <div class="arcade-card__body">
@@ -833,13 +1237,16 @@
               </p>
               <div class="arcade-card__meta">
                 <span class="arcade-card__meta-label">Difficulty</span>
-                <ul class="arcade-card__difficulties" aria-label="Available difficulty levels">
+                <ul
+                  class="arcade-card__difficulties"
+                  aria-label="Available difficulty levels"
+                >
                   <li class="arcade-card__difficulty">Easy</li>
                   <li class="arcade-card__difficulty">Medium</li>
                   <li class="arcade-card__difficulty">Hard</li>
                 </ul>
               </div>
-              <a class="arcade-card__play" href="wordscramble.html">
+              <a class="arcade-card__play" href="wordscramble">
                 PLAY NOW <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -847,6 +1254,32 @@
         </section>
       </div>
     </main>
+
+    <script>
+      document
+        .querySelectorAll(".games-arcade__showcase-game")
+        .forEach((showcaseGame) => {
+          const target = showcaseGame.getAttribute("href");
+          const sourceCard = [
+            ...document.querySelectorAll(".arcade-card"),
+          ].find(
+            (card) =>
+              card.querySelector(".arcade-card__play")?.getAttribute("href") ===
+              target,
+          );
+          const sourceArt = sourceCard?.querySelector(".arcade-card__art");
+          const artwork = sourceArt?.querySelector("svg");
+
+          if (!artwork) {
+            console.error(`Missing featured artwork for ${target}.`);
+            return;
+          }
+
+          showcaseGame
+            .querySelector(".games-arcade__showcase-art")
+            .append(artwork.cloneNode(true));
+        });
+    </script>
 
     <div id="drawer-overlay" class="leaderboard-modal" hidden>
       <section
@@ -896,12 +1329,18 @@
             />
             <div class="leaderboard-modal__summary-text">
               <p class="leaderboard-modal__summary-label">Your rank</p>
-              <span id="user-rank-val" class="leaderboard-modal__summary-value">--</span>
+              <span id="user-rank-val" class="leaderboard-modal__summary-value"
+                >--</span
+              >
             </div>
           </div>
           <div class="leaderboard-modal__summary-points">
             <p class="leaderboard-modal__summary-points-label">Your score</p>
-            <span id="user-points-val" class="leaderboard-modal__summary-points-value">0</span>
+            <span
+              id="user-points-val"
+              class="leaderboard-modal__summary-points-value"
+              >0</span
+            >
           </div>
         </footer>
       </section>
@@ -909,20 +1348,11 @@
 
     <div id="footer-placeholder"></div>
 
-    <!-- BACKGROUND AMBIANCE -->
     <audio
       id="bg-music"
-      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
       loop
-      preload="auto"
-    ></audio>
-
-    <!-- ANNOUNCER VOICE -->
-    <audio
-      id="announcer-voice"
-      src="https://cdn.pixabay.com/audio/2021/08/04/audio_06d649495b.mp3"
-      data-type="select-game"
-      preload="auto"
+      preload="none"
     ></audio>
 
     <!-- AUDIO ASSETS -->
@@ -941,6 +1371,7 @@
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/utils/visitor-auth.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
     <script src="js/utils/auth-logout.js"></script>
     <script>
       fetch("components/header.html") // Fetches the header content
@@ -990,12 +1421,6 @@
             await window.MatiVisitorAuth.refresh();
           }
 
-          // Bind logout functionality
-          if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
-            MatiAuthLogout.bind({ redirect: "login.html" });
-            document.body.dataset.logoutBound = "1";
-          }
-
           if (typeof window.MatiGameAuthGate !== "undefined") {
             const canPlay = await window.MatiGameAuthGate.guardPage({
               returnTo: "game.html",
@@ -1004,12 +1429,6 @@
           } else {
             window.__matiGameHallUnlocked = true;
           }
-
-          bindHoverSoundToElements(
-            document.querySelectorAll(
-              ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings, #music-volume, #sfx-volume",
-            ),
-          );
         });
 
       // Load Footer
@@ -1045,48 +1464,8 @@
         })
         .catch((err) => console.error("Error loading footer:", err));
 
-      function getSfxVolume() {
-        return parseFloat(localStorage.getItem("sfxVol") || "0.8");
-      }
-
-      let lastHoverSoundAt = 0;
-      let lastHoverSoundEl = null;
-
-      function playHoverSound() {
-        const clickSoundEl = document.getElementById("click-sound");
-        if (!clickSoundEl) return;
-
-        const vol = getSfxVolume();
-        if (vol <= 0) return;
-
-        const now = Date.now();
-        if (now - lastHoverSoundAt < 110) return;
-        lastHoverSoundAt = now;
-
-        clickSoundEl.volume = Math.min(vol * 0.45, 0.35);
-        clickSoundEl.currentTime = 0;
-        clickSoundEl.play().catch(() => {});
-      }
-
-      function bindHoverSoundToElements(elements) {
-        elements.forEach((el) => {
-          if (!el || el.dataset.hoverSoundBound === "true") return;
-          el.dataset.hoverSoundBound = "true";
-          el.addEventListener("mouseenter", () => {
-            if (lastHoverSoundEl === el) return;
-            lastHoverSoundEl = el;
-            playHoverSound();
-          });
-          el.addEventListener("mouseleave", () => {
-            if (lastHoverSoundEl === el) lastHoverSoundEl = null;
-          });
-          el.addEventListener("focus", playHoverSound);
-        });
-      }
-
       const gameLinks = document.querySelectorAll(".arcade-card__play");
       const leaderboardBtn = document.getElementById("leaderboard-btn");
-      const clickSound = document.getElementById("click-sound");
 
       // Leaderboard Modal Logic
       const drawer = document.getElementById("leaderboard-drawer");
@@ -1102,7 +1481,7 @@
           if (!startTimestamp) startTimestamp = timestamp;
           const progress = Math.min((timestamp - startTimestamp) / duration, 1);
           const val = Math.floor(progress * (end - start) + start);
-          obj.innerHTML = `${val.toLocaleString()} <span class="text-[10px] opacity-60 uppercase">Pts</span>`;
+          obj.innerHTML = `${val.toLocaleString()} <span class="leaderboard-points-unit">Score</span>`;
           if (progress < 1) window.requestAnimationFrame(step);
         };
         window.requestAnimationFrame(step);
@@ -1112,7 +1491,7 @@
         leaderboardList.innerHTML = "";
         if (!entries.length) {
           const empty = document.createElement("p");
-          empty.className = "text-center text-gray-500 py-8";
+          empty.className = "leaderboard-loading";
           empty.textContent =
             "No rankings yet. Play heritage games while logged in to appear here.";
           leaderboardList.appendChild(empty);
@@ -1129,7 +1508,7 @@
             `https://i.pravatar.cc/150?u=${encodeURIComponent(name)}`;
 
           const rankClass = rank <= 3 ? `leaderboard-row__rank--${rank}` : "";
-          
+
           item.className = "leaderboard-row";
           item.innerHTML = `
             <span class="leaderboard-row__rank ${rankClass}">${rank}</span>
@@ -1179,7 +1558,7 @@
 
       async function loadLeaderboard() {
         leaderboardList.innerHTML =
-          '<p class="text-center text-gray-500 py-8">Loading top players…</p>';
+          '<p class="leaderboard-loading">Loading top players…</p>';
         try {
           if (typeof MatiSupabaseApi?.getLeaderboard === "function") {
             const remote = await MatiSupabaseApi.getLeaderboard(50);
@@ -1212,7 +1591,7 @@
 
       function showLeaderboard() {
         overlay.hidden = false;
-        overlay.classList.remove("hidden");
+        overlay.classList.add("is-open");
         setTimeout(() => (overlay.style.opacity = "1"), 10);
         ensureVisitorLeaderboardLive();
         void loadLeaderboard();
@@ -1224,7 +1603,7 @@
       const hideLeaderboard = () => {
         overlay.style.opacity = "0";
         setTimeout(() => {
-          overlay.classList.add("hidden");
+          overlay.classList.remove("is-open");
           overlay.hidden = true;
         }, 500);
       };
@@ -1238,136 +1617,26 @@
 
       if (window.location.hash === "#leaderboard") showLeaderboard();
 
-      // Sound FX integration
-      // prettier-ignore
-      const allButtons = [
-        leaderboardBtn,
-        closeLeaderboard,
-        ...gameLinks,
-      ];
-
-      bindHoverSoundToElements(allButtons);
-
-      allButtons.forEach((btn) => {
-        if (btn) {
-          btn.addEventListener("click", () => {
-            clickSound.volume = getSfxVolume();
-            clickSound.currentTime = 0;
-            clickSound
-              .play()
-              .catch((e) =>
-                console.log(
-                  "Audio playback prevented by browser until user interaction.",
-                ),
-              );
-          });
-        }
-      });
-
       // Background Music Logic
       const bgMusic = document.getElementById("bg-music");
-      const announcerVoice = document.getElementById("announcer-voice");
 
       const initialMusicVol = parseFloat(
         localStorage.getItem("bgMusicVol") || "0.2",
       );
-      const initialSfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
-
       bgMusic.volume = initialMusicVol;
-      announcerVoice.volume = initialSfxVol;
-      clickSound.volume = initialSfxVol;
-
-      let shouldResumeBgMusic = false;
-
-      const pauseBackgroundAudioWhenHidden = () => {
-        if (!bgMusic.paused) {
-          shouldResumeBgMusic = true;
-          bgMusic.pause();
-        }
-      };
-
-      const resumeBackgroundAudioWhenVisible = () => {
-        if (
-          shouldResumeBgMusic &&
-          bgMusic.volume > 0 &&
-          document.visibilityState === "visible"
-        ) {
-          bgMusic.play().catch(() => {});
-        }
-        shouldResumeBgMusic = false;
-      };
-
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") {
-          pauseBackgroundAudioWhenHidden();
-        } else {
-          resumeBackgroundAudioWhenVisible();
-        }
-      });
-
-      window.addEventListener("pagehide", pauseBackgroundAudioWhenHidden);
-
-      let hasAnnounced = false;
-
-      /**
-       * Helper to play announcer lines using Web Speech API for reliability
-       * and custom messaging.
-       */
-      const playAnnouncer = (text) => {
-        const currentSfxVol = parseFloat(
-          localStorage.getItem("sfxVol") || "0.8",
-        );
-
-        if (currentSfxVol > 0 && "speechSynthesis" in window && !hasAnnounced) {
-          const synth = window.speechSynthesis;
-
-          const speak = () => {
-            if (hasAnnounced) return;
-            synth.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            const voices = synth.getVoices();
-
-            // Broadened search to find high-energy female voices across different OS
-            const femaleVoice =
-              voices.find((v) => v.name.includes("Google US English")) ||
-              voices.find((v) => v.name.includes("Samantha")) ||
-              voices.find((v) => v.name.includes("Zira")) || // Standard Windows Female
-              voices.find((v) => v.name.toLowerCase().includes("female")) ||
-              voices.find(
-                (v) =>
-                  v.lang.startsWith("en") &&
-                  !v.name.toLowerCase().includes("male"),
-              );
-
-            if (femaleVoice) utterance.voice = femaleVoice;
-            utterance.volume = currentSfxVol;
-            utterance.rate = 1.0; // Restored to normal speed for better responsiveness
-            utterance.pitch = 1.1; // Balanced pitch for a clear, high-energy female voice
-            hasAnnounced = true;
-            synth.speak(utterance);
-          };
-
-          if (synth.getVoices().length === 0) {
-            synth.onvoiceschanged = speak;
-          } else {
-            speak();
-          }
-        }
-      };
 
       const playIntroSequence = () => {
         if (document.visibilityState !== "visible") return;
 
-        if (bgMusic.volume > 0 && bgMusic.paused) {
+        if (
+          document.visibilityState === "visible" &&
+          bgMusic.volume > 0 &&
+          bgMusic.paused
+        ) {
           bgMusic
             .play()
             .catch((e) => console.log("BG Music playback blocked."));
         }
-
-        // Dramatic delay for "SELECT GAME"
-        setTimeout(() => {
-          playAnnouncer("Welcome Player! Choose your next challenge.");
-        }, 500);
       };
 
       // Try autoplay immediately
@@ -1381,7 +1650,6 @@
       };
       document.addEventListener("click", handleFirstInteraction);
       document.addEventListener("keydown", handleFirstInteraction);
-
     </script>
   </body>
 </html>

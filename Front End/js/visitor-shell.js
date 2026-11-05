@@ -3,7 +3,8 @@
 
   const NAV_ROUTES = {
     home: "index.html",
-    about: "about_us.html",
+    about: "about.html",
+    map: "map.html",
     games: "game.html",
     "3d": "3dexplore.html",
     gallery: "gallery.html",

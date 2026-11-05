@@ -17,7 +17,7 @@
       .leaderboard-page {
         margin: 0;
         color: var(--ink);
-        background: #f8f7f4;
+        background: #ebe8df;
         font-family: "Source Sans 3", sans-serif;
       }
 
@@ -91,10 +91,7 @@
       }
 
       .leaderboard-wrapper {
-        width: min(
-          calc(100% - 3rem),
-          68rem
-        );
+        width: min(calc(100% - 3rem), 68rem);
         margin: 0 auto;
       }
 
@@ -353,7 +350,10 @@
     <div id="header-placeholder"></div>
 
     <main>
-      <section class="leaderboard-hero" aria-labelledby="leaderboard-hero-title">
+      <section
+        class="leaderboard-hero"
+        aria-labelledby="leaderboard-hero-title"
+      >
         <img
           class="leaderboard-hero__image"
           src="assets/data/GALLERY/DJI_0812.jpg"
@@ -380,7 +380,7 @@
               <tr>
                 <th>Rank</th>
                 <th>Player</th>
-                <th>Points</th>
+                <th>Score</th>
               </tr>
             </thead>
             <tbody id="leaderboard-body">
@@ -389,17 +389,34 @@
             <tfoot id="leaderboard-footer">
               <tr>
                 <td colspan="3">
-                  <div id="user-summary" class="leaderboard-user-summary" hidden>
+                  <div
+                    id="user-summary"
+                    class="leaderboard-user-summary"
+                    hidden
+                  >
                     <div class="leaderboard-user-summary-left">
-                      <div id="user-avatar" class="leaderboard-user-summary-avatar"></div>
+                      <div
+                        id="user-avatar"
+                        class="leaderboard-user-summary-avatar"
+                      ></div>
                       <div class="leaderboard-user-summary-group">
-                        <div class="leaderboard-user-summary-label">YOUR RANK</div>
-                        <div class="leaderboard-user-summary-value" id="user-rank"></div>
+                        <div class="leaderboard-user-summary-label">
+                          YOUR RANK
+                        </div>
+                        <div
+                          class="leaderboard-user-summary-value"
+                          id="user-rank"
+                        ></div>
                       </div>
                     </div>
                     <div class="leaderboard-user-summary-right">
-                      <div class="leaderboard-user-summary-label">YOUR SCORE</div>
-                      <div class="leaderboard-user-summary-value" id="user-score"></div>
+                      <div class="leaderboard-user-summary-label">
+                        YOUR SCORE
+                      </div>
+                      <div
+                        class="leaderboard-user-summary-value"
+                        id="user-score"
+                      ></div>
                     </div>
                   </div>
                 </td>
@@ -452,14 +469,18 @@
           script.textContent = inlineScript;
           document.body.appendChild(script);
         }
-        init();
+        return init();
       }
 
-      loadSharedComponent(
+      const headerReady = loadSharedComponent(
         "components/header.html",
         "header",
         "header-placeholder",
         () => {
+          document
+            .getElementById("site-nav-more")
+            ?.classList.add("is-active");
+
           window.initSiteHeader?.();
 
           // Initialize settings modal
@@ -473,7 +494,10 @@
             document.body.dataset.logoutBound = "1";
           }
         },
-      ).catch((error) => console.error("Error loading header:", error));
+      ).catch((error) => {
+        console.error("Error loading header:", error);
+        return null;
+      });
 
       loadSharedComponent(
         "components/footer.html",
@@ -548,7 +572,82 @@
           return new Intl.NumberFormat().format(points);
         }
 
-        function renderLeaderboard(players) {
+        function getProfileAvatarUrl(profile) {
+          if (profile?.avatarUrl) return profile.avatarUrl;
+          if (
+            profile?.username &&
+            typeof MatiAuth !== "undefined" &&
+            MatiAuth.getAvatarUrl
+          ) {
+            return MatiAuth.getAvatarUrl(profile.username);
+          }
+          return null;
+        }
+
+        async function resolveCurrentUser() {
+          const localSession =
+            typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() : null;
+          if (localSession) return localSession;
+
+          const restoredSession =
+            typeof MatiVisitorAuth !== "undefined" &&
+            MatiVisitorAuth.restoreSession
+              ? await MatiVisitorAuth.restoreSession()
+              : null;
+          return restoredSession;
+        }
+
+        function inferCurrentUserFromHeader(players) {
+          const headerAvatar = document
+            .querySelector(".site-profile__avatar")
+            ?.getAttribute("src");
+          const headerPointsText = document
+            .querySelector("#header-total-points")
+            ?.textContent.replace(/[^\d.-]/g, "");
+          const headerPoints = Number(headerPointsText);
+          const matchedPlayer =
+            players.find(
+              (player) => headerAvatar && player.avatarUrl === headerAvatar,
+            ) ||
+            players.find(
+              (player) =>
+                Number.isFinite(headerPoints) && player.points === headerPoints,
+            );
+
+          return matchedPlayer
+            ? {
+                username: matchedPlayer.username,
+                displayName: matchedPlayer.displayName,
+                avatarUrl: matchedPlayer.avatarUrl,
+                email: matchedPlayer.email || null,
+              }
+            : null;
+        }
+
+        async function waitForHeaderProfile() {
+          for (let attempt = 0; attempt < 20; attempt += 1) {
+            const headerPoints = Number(
+              document
+                .querySelector("#header-total-points")
+                ?.textContent.replace(/[^\d.-]/g, ""),
+            );
+            const headerAvatar = document
+              .querySelector(".site-profile__avatar")
+              ?.getAttribute("src");
+            const hasResolvedAvatar =
+              headerAvatar && !headerAvatar.includes("pravatar.cc");
+            if (
+              (Number.isFinite(headerPoints) && headerPoints > 0) ||
+              (document.body.classList.contains("is-logged-in") &&
+                hasResolvedAvatar)
+            ) {
+              return;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        }
+
+        function renderLeaderboard(players, currentUser = null) {
           const tbody = document.getElementById("leaderboard-body");
           const table = document.getElementById("leaderboard-table");
           const loading = document.getElementById("leaderboard-loading");
@@ -558,13 +657,15 @@
             loading.hidden = true;
             table.hidden = true;
             errorEl.hidden = false;
-            errorEl.querySelector("p").textContent = "No leaderboard entries yet.";
+            errorEl.querySelector("p").textContent =
+              "No leaderboard entries yet.";
             return;
           }
 
           loading.hidden = true;
           errorEl.hidden = true;
           table.hidden = false;
+          currentUser = currentUser || inferCurrentUserFromHeader(players);
 
           tbody.innerHTML = players
             .map((player, index) => {
@@ -578,16 +679,25 @@
                       ? "leaderboard-rank--3"
                       : "";
               const initials = getInitials(player.displayName);
-              const avatarUrl = player.avatarUrl || null;
+              const isCurrentUser =
+                currentUser?.username &&
+                player.username &&
+                player.username.trim().toLowerCase() ===
+                  currentUser.username.trim().toLowerCase();
+              const avatarUrl = isCurrentUser
+                ? getProfileAvatarUrl(currentUser) ||
+                  getProfileAvatarUrl(player)
+                : getProfileAvatarUrl(player);
 
               return `
                 <tr>
                   <td><span class="leaderboard-rank ${rankClass}">${rank}</span></td>
                   <td>
                     <div class="leaderboard-user">
-                      ${avatarUrl
-                        ? `<img src="${avatarUrl}" class="leaderboard-avatar" alt="${player.displayName}" />`
-                        : `<div class="leaderboard-avatar">${initials}</div>`
+                      ${
+                        avatarUrl
+                          ? `<img src="${avatarUrl}" class="leaderboard-avatar" alt="${player.displayName}" />`
+                          : `<div class="leaderboard-avatar">${initials}</div>`
                       }
                       <span class="leaderboard-name">${player.displayName}</span>
                     </div>
@@ -599,10 +709,10 @@
             .join("");
 
           // Render user stats
-          renderUserStats(players);
+          renderUserStats(players, currentUser);
         }
 
-        function renderUserStats(players) {
+        function renderUserStats(players, knownCurrentUser = null) {
           const userSummary = document.getElementById("user-summary");
           const userAvatar = document.getElementById("user-avatar");
           const userRank = document.getElementById("user-rank");
@@ -612,23 +722,35 @@
           console.log("Players:", players);
 
           // Get current user from auth
-          let currentUser = null;
-          if (typeof MatiVisitorAuth !== "undefined" && MatiVisitorAuth.restoreSession) {
-            MatiVisitorAuth.restoreSession().then(session => {
-              currentUser = session;
-              console.log("Current user from visitor auth:", currentUser);
-              displayUserStats(currentUser, players);
-            }).catch(err => {
-              console.error("Error getting session:", err);
-              userSummary.hidden = true;
-            });
-          } else if (typeof MatiSupabase !== "undefined" && MatiSupabase.getCurrentUser) {
+          let currentUser = knownCurrentUser;
+          if (
+            !currentUser &&
+            typeof MatiVisitorAuth !== "undefined" &&
+            MatiVisitorAuth.restoreSession
+          ) {
+            MatiVisitorAuth.restoreSession()
+              .then((session) => {
+                currentUser = session;
+                console.log("Current user from visitor auth:", currentUser);
+                displayUserStats(currentUser, players);
+              })
+              .catch((err) => {
+                console.error("Error getting session:", err);
+                userSummary.hidden = true;
+              });
+          } else if (
+            !currentUser &&
+            typeof MatiSupabase !== "undefined" &&
+            MatiSupabase.getCurrentUser
+          ) {
             currentUser = MatiSupabase.getCurrentUser();
             console.log("Current user from supabase:", currentUser);
             displayUserStats(currentUser, players);
           } else {
-            console.log("No auth system available, hiding user summary");
-            userSummary.hidden = true;
+            console.log(
+              "No authenticated user available; showing an empty summary",
+            );
+            displayUserStats(null, players);
           }
         }
 
@@ -639,71 +761,157 @@
           const userScore = document.getElementById("user-score");
 
           if (!currentUser) {
-            console.log("No current user, hiding user summary");
-            userSummary.hidden = true;
+            await waitForHeaderProfile();
+            currentUser = inferCurrentUserFromHeader(players);
+          }
+
+          if (!currentUser) {
+            userSummary.hidden = false;
+            userRank.textContent = "N/A";
+            userScore.textContent = formatPoints(0);
             return;
           }
 
           console.log("Current user ID:", currentUser.id);
-          console.log("Current user email:", currentUser.email || currentUser.username);
-          console.log("All players in leaderboard:", players.map(p => ({ id: p.userId, name: p.displayName, points: p.points })));
+          console.log(
+            "Current user email:",
+            currentUser.email || currentUser.username,
+          );
+          console.log(
+            "All players in leaderboard:",
+            players.map((p) => ({
+              id: p.userId,
+              name: p.displayName,
+              points: p.points,
+            })),
+          );
 
           // Get user's actual points using the same method as account page
           let userActualPoints = 0;
           try {
-            if (typeof MatiVisitorAuth !== "undefined" && MatiVisitorAuth.hydratePoints) {
+            if (
+              typeof MatiVisitorAuth !== "undefined" &&
+              MatiVisitorAuth.hydratePoints
+            ) {
               userActualPoints = await MatiVisitorAuth.hydratePoints();
-              console.log("User's actual points from MatiVisitorAuth.hydratePoints():", userActualPoints);
-            } else if (typeof MatiHeritagePoints !== "undefined" && MatiHeritagePoints.hydrateFromCloud) {
+              console.log(
+                "User's actual points from MatiVisitorAuth.hydratePoints():",
+                userActualPoints,
+              );
+            } else if (
+              typeof MatiHeritagePoints !== "undefined" &&
+              MatiHeritagePoints.hydrateFromCloud
+            ) {
               userActualPoints = await MatiHeritagePoints.hydrateFromCloud();
-              console.log("User's actual points from MatiHeritagePoints.hydrateFromCloud():", userActualPoints);
-            } else if (typeof MatiHeritagePoints !== "undefined" && MatiHeritagePoints.readLocal) {
+              console.log(
+                "User's actual points from MatiHeritagePoints.hydrateFromCloud():",
+                userActualPoints,
+              );
+            } else if (
+              typeof MatiHeritagePoints !== "undefined" &&
+              MatiHeritagePoints.readLocal
+            ) {
               userActualPoints = MatiHeritagePoints.readLocal();
-              console.log("User's local points from MatiHeritagePoints.readLocal():", userActualPoints);
+              console.log(
+                "User's local points from MatiHeritagePoints.readLocal():",
+                userActualPoints,
+              );
             }
           } catch (err) {
             console.error("Error fetching user points:", err);
           }
 
           // Find user in leaderboard - try multiple ID matching strategies
+          const currentUsername = String(currentUser.username || "")
+            .trim()
+            .toLowerCase();
           let userInLeaderboard = players.find(
-            (player) => player.userId === currentUser.id
+            (player) =>
+              currentUsername &&
+              String(player.username || "")
+                .trim()
+                .toLowerCase() === currentUsername,
           );
 
           // If not found by userId, try matching by email
-          if (!userInLeaderboard && (currentUser.email || currentUser.username)) {
+          if (
+            !userInLeaderboard &&
+            (currentUser.email || currentUser.username)
+          ) {
             userInLeaderboard = players.find(
-              (player) => player.email === currentUser.email || player.email === currentUser.username
+              (player) =>
+                player.email === currentUser.email ||
+                player.email === currentUser.username,
             );
             console.log("Tried matching by email, found:", userInLeaderboard);
+          }
+
+          if (!userInLeaderboard) {
+            await waitForHeaderProfile();
+            const headerUser = inferCurrentUserFromHeader(players);
+            if (headerUser) {
+              currentUser = headerUser;
+              userInLeaderboard = players.find(
+                (player) =>
+                  String(player.username || "")
+                    .trim()
+                    .toLowerCase() ===
+                  String(headerUser.username || "")
+                    .trim()
+                    .toLowerCase(),
+              );
+              console.log(
+                "Matched current user from the authenticated header:",
+                userInLeaderboard,
+              );
+            }
           }
 
           console.log("User in leaderboard:", userInLeaderboard);
 
           // Get user's rank if they're in the leaderboard
           let userRankValue = "N/A";
-          let userScoreValue = userActualPoints; // Always use actual points from profile
+          let userScoreValue = userActualPoints;
+          let userLeaderboardIndex = -1;
 
           if (userInLeaderboard) {
-            userRankValue = players.findIndex(
-              (player) => player.userId === currentUser.id
-            ) + 1;
-            console.log("User found - Rank:", userRankValue, "Actual Score:", userScoreValue, "Leaderboard score:", userInLeaderboard.points);
+            userLeaderboardIndex = players.indexOf(userInLeaderboard);
+            userRankValue = userLeaderboardIndex + 1;
+            userScoreValue = userInLeaderboard.points;
+            console.log(
+              "User found - Rank:",
+              userRankValue,
+              "Actual Score:",
+              userScoreValue,
+              "Leaderboard score:",
+              userInLeaderboard.points,
+            );
           } else {
-            console.log("User not found in leaderboard - showing rank as N/A and actual score:", userScoreValue);
+            console.log(
+              "User not found in leaderboard - showing rank as N/A and actual score:",
+              userScoreValue,
+            );
           }
 
-          console.log("Displaying user stats - Rank:", userRankValue, "Score:", userScoreValue);
+          console.log(
+            "Displaying user stats - Rank:",
+            userRankValue,
+            "Score:",
+            userScoreValue,
+          );
 
           // Display user stats
           userSummary.hidden = false;
 
-          // Avatar
-          const initials = getInitials(currentUser.displayName || currentUser.email || currentUser.username);
-          const avatarUrl = currentUser.avatarUrl || null;
+          // Keep the summary profile consistent with the matching leaderboard row.
+          const profile = currentUser;
+          const initials = getInitials(
+            profile.displayName || profile.email || profile.username,
+          );
+          const avatarUrl = getProfileAvatarUrl(profile);
 
           if (avatarUrl) {
-            userAvatar.outerHTML = `<img id="user-avatar" src="${avatarUrl}" class="leaderboard-user-summary-avatar" alt="${currentUser.displayName}" />`;
+            userAvatar.outerHTML = `<img id="user-avatar" src="${avatarUrl}" class="leaderboard-user-summary-avatar" alt="${profile.displayName || "Your profile"}" />`;
           } else {
             userAvatar.textContent = initials;
           }
@@ -721,9 +929,20 @@
           const errorEl = document.getElementById("leaderboard-error");
 
           console.log("Loading leaderboard...");
-          console.log("MatiSupabaseApi available:", typeof MatiSupabaseApi !== "undefined");
-          console.log("MatiSupabase available:", typeof MatiSupabase !== "undefined");
-          console.log("MatiSupabase.isConfigured:", typeof MatiSupabase !== "undefined" ? MatiSupabase.isConfigured?.() : "N/A");
+          console.log(
+            "MatiSupabaseApi available:",
+            typeof MatiSupabaseApi !== "undefined",
+          );
+          console.log(
+            "MatiSupabase available:",
+            typeof MatiSupabase !== "undefined",
+          );
+          console.log(
+            "MatiSupabase.isConfigured:",
+            typeof MatiSupabase !== "undefined"
+              ? MatiSupabase.isConfigured?.()
+              : "N/A",
+          );
 
           try {
             if (typeof MatiSupabaseApi === "undefined") {
@@ -731,22 +950,30 @@
               loading.hidden = true;
               table.hidden = true;
               errorEl.hidden = false;
-              errorEl.querySelector("p").textContent = "Supabase not configured. Please try again later.";
+              errorEl.querySelector("p").textContent =
+                "Supabase not configured. Please try again later.";
               return;
             }
 
             // Ensure Supabase is configured
-            if (typeof MatiSupabase !== "undefined" && !MatiSupabase.isConfigured?.()) {
+            if (
+              typeof MatiSupabase !== "undefined" &&
+              !MatiSupabase.isConfigured?.()
+            ) {
               console.warn("MatiSupabase not configured");
               loading.hidden = true;
               table.hidden = true;
               errorEl.hidden = false;
-              errorEl.querySelector("p").textContent = "Supabase not configured. Please try again later.";
+              errorEl.querySelector("p").textContent =
+                "Supabase not configured. Please try again later.";
               return;
             }
 
             // Wait for auth to be ready
-            if (typeof MatiSupabase !== "undefined" && MatiSupabase.waitForAuth) {
+            if (
+              typeof MatiSupabase !== "undefined" &&
+              MatiSupabase.waitForAuth
+            ) {
               console.log("Waiting for auth to be ready...");
               await MatiSupabase.waitForAuth();
               console.log("Auth is ready");
@@ -761,17 +988,22 @@
               loading.hidden = true;
               table.hidden = true;
               errorEl.hidden = false;
-              errorEl.querySelector("p").textContent = "No leaderboard entries yet.";
+              errorEl.querySelector("p").textContent =
+                "No leaderboard entries yet.";
               return;
             }
 
-            renderLeaderboard(players);
+            const currentUser =
+              (await resolveCurrentUser()) ||
+              inferCurrentUserFromHeader(players);
+            renderLeaderboard(players, currentUser);
           } catch (loadError) {
             console.error("Failed to load leaderboard:", loadError);
             loading.hidden = true;
             table.hidden = true;
             errorEl.hidden = false;
-            errorEl.querySelector("p").textContent = "Unable to load leaderboard. Please try again later.";
+            errorEl.querySelector("p").textContent =
+              "Unable to load leaderboard. Please try again later.";
           }
         }
 
@@ -784,7 +1016,10 @@
           });
 
           // Also listen for auth state changes to update user stats
-          if (typeof MatiSupabase !== "undefined" && MatiSupabase.onAuthStateChange) {
+          if (
+            typeof MatiSupabase !== "undefined" &&
+            MatiSupabase.onAuthStateChange
+          ) {
             MatiSupabase.onAuthStateChange((event, session) => {
               console.log("Auth state changed:", event, session);
               // Reload leaderboard when auth state changes
@@ -801,8 +1036,14 @@
 
         async function init() {
           await loadSupabaseScripts();
-          // Wait a bit more to ensure Supabase is fully initialized
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await headerReady;
+          if (
+            typeof MatiVisitorAuth !== "undefined" &&
+            MatiVisitorAuth.refresh
+          ) {
+            await MatiVisitorAuth.refresh();
+          }
+          await waitForHeaderProfile();
           loadLeaderboard();
           subscribeToUpdates();
         }

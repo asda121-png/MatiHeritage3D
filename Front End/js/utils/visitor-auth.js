@@ -150,6 +150,18 @@ const MatiVisitorAuth = (() => {
     authSubscription = listener?.data?.subscription || null;
   }
 
+  window.addEventListener("mati-auth-logout", () => {
+    void refresh();
+
+    if (
+      typeof window.MatiGameAuthGate !== "undefined" &&
+      window.MatiGameAuthGate.isGameHref(window.location.href)
+    ) {
+      const returnTo = window.location.pathname.split("/").pop() || "game.html";
+      void window.MatiGameAuthGate.guardPage({ returnTo });
+    }
+  });
+
   async function hydratePoints() {
     if (typeof MatiHeritagePoints?.hydrateFromCloud === "function") {
       return MatiHeritagePoints.hydrateFromCloud();
@@ -170,6 +182,11 @@ const MatiVisitorAuth = (() => {
     bindProfileDropdown();
     initAuthStateSync();
 
+    if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
+      MatiAuthLogout.bind({ redirect: "login.html" });
+      document.body.dataset.logoutBound = "1";
+    }
+
     const session = await restoreSession();
     const loggedIn = Boolean(session);
 
@@ -183,11 +200,6 @@ const MatiVisitorAuth = (() => {
     updateAvatar(session);
     const total = await hydratePoints();
     updatePointsDisplay(total);
-
-    if (window.MatiAuthLogout && !document.body.dataset.logoutBound) {
-      MatiAuthLogout.bind({ redirect: "login.html" });
-      document.body.dataset.logoutBound = "1";
-    }
 
     if (!isGamesHubPage()) {
       return session;

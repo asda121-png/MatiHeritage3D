@@ -35,23 +35,6 @@
         "assets/data/Built Heritage/Pylon Monument/Photographs/New/J6000x4000-00255.jpg",
     },
     {
-      title2: "Spot the Difference",
-      title: "Spot the Difference",
-      genre: "Observation Game",
-      cardGenre: "Observation",
-      cardTitle: "Spot the Difference",
-      desc: "Sharpen your eyes and find subtle differences between images of Mati's scenic spots.",
-      players: "5.1K playing",
-      pts: "400 PTS",
-      url: "spotthedifference.html",
-      preview: "spot",
-      expandTransition: true,
-      showTitle: "SPOT THE",
-      showSubtitle: "DIFFERENCE",
-      gameplayImg:
-        "assets/data/Natural Heritage/Pujada Island/Photographs/pujada1.jpg",
-    },
-    {
       title2: "Slide Puzzle",
       title: "Slide Puzzle",
       genre: "Puzzle Game",

@@ -181,16 +181,51 @@ const MatiSupabaseApi = (() => {
 
   function mapLeaderboardRow(row) {
     const username = row.username;
-    // Facebook-style silhouette avatar
-    const defaultAvatar = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="#ccc"><path d="M18 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 4c-5.33 0-16 2.67-16 8v2h32v-2c0-5.33-10.67-8-16-8z"/></svg>`)}`;
 
     return {
       username,
       displayName: row.display_name || row.displayName || username,
       points: Number(row.heritage_points ?? row.points) || 0,
-      avatarUrl: row.avatar_url || row.avatarUrl || defaultAvatar,
+      avatarUrl: row.avatar_url || row.avatarUrl || null,
       updatedAt: row.updated_at || row.updatedAt || null,
     };
+  }
+
+  async function mergeProfileAvatars(rows) {
+    const sb = client();
+    const usernames = rows
+      .map((row) => row.username)
+      .filter(Boolean);
+    if (!sb || usernames.length === 0) return rows;
+
+    const { data, error } = await sb
+      .from("profiles")
+      .select("username, display_name, avatar_url")
+      .in("username", usernames);
+
+    if (error) {
+      console.warn("Could not refresh leaderboard profile avatars:", error);
+      return rows;
+    }
+
+    const profiles = new Map(
+      (data || []).map((profile) => [
+        String(profile.username).trim().toLowerCase(),
+        profile,
+      ])
+    );
+
+    return rows.map((row) => {
+      const profile = profiles.get(
+        String(row.username).trim().toLowerCase()
+      );
+      if (!profile) return row;
+      return {
+        ...row,
+        displayName: profile.display_name || row.displayName,
+        avatarUrl: profile.avatar_url || row.avatarUrl || null,
+      };
+    });
   }
 
   async function getLeaderboard(limit = 50) {
@@ -206,7 +241,9 @@ const MatiSupabaseApi = (() => {
       .limit(limit);
 
     if (!primary.error) {
-      return (primary.data || []).map(mapLeaderboardRow);
+      return mergeProfileAvatars(
+        (primary.data || []).map(mapLeaderboardRow)
+      );
     }
 
     const { data, error } = await sb

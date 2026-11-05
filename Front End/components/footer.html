@@ -3,8 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -49,7 +47,7 @@
       .site-footer__inner {
         position: relative;
         z-index: 1;
-        max-width: 90rem;
+        max-width: 94rem;
         margin: 0 auto;
         padding: 3.75rem clamp(1.25rem, 3vw, 2.5rem) 2rem;
       }
@@ -64,7 +62,7 @@
 
       @media (min-width: 768px) {
         .site-footer__grid {
-          grid-template-columns: 1.55fr 1fr 1fr 1fr;
+          grid-template-columns: 1.45fr repeat(2, 1fr);
           gap: 2.25rem;
         }
 
@@ -82,24 +80,79 @@
         align-items: center;
       }
 
+      .site-footer__col {
+        text-align: center;
+      }
+
+      .site-footer__brand {
+        align-items: center;
+      }
+
+      .site-footer__lgu {
+        text-align: center;
+      }
+
       .site-footer__brand-mark {
         height: auto;
-        max-height: 96px;
+        max-height: 72px;
         width: auto;
         max-width: 100%;
         margin-bottom: 0.5rem;
         object-fit: contain;
       }
 
+      .site-footer__brand-head {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .site-footer__brand-identity {
+        display: grid;
+        gap: 0.1rem;
+        min-width: 0;
+      }
+
+      .site-footer__brand-identity strong {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        line-height: 1;
+        white-space: nowrap;
+        color: #000;
+      }
+
+      .site-footer__brand-identity small {
+        color: #333;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.82rem;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+
       @media (min-width: 768px) {
         .site-footer__brand-head {
+          align-items: center;
+        }
+
+        .site-footer__col {
+          text-align: left;
+        }
+
+        .site-footer__brand {
           align-items: flex-start;
+        }
+
+        .site-footer__lgu {
+          text-align: left;
         }
       }
 
       @media (max-width: 767px) {
         .site-footer__brand-mark {
-          max-height: 64px;
+          max-height: 72px;
           max-width: 200px;
         }
 
@@ -116,14 +169,14 @@
 
       @media (max-width: 480px) {
         .site-footer__brand-mark {
-          max-height: 48px;
+          max-height: 72px;
           max-width: 160px;
         }
       }
 
       .site-footer__title {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: 1.55rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.5rem;
         font-weight: 700;
         line-height: 1.15;
         color: #fff;
@@ -331,6 +384,172 @@
       body:not(.visitor-module) .site-footer {
         background: linear-gradient(180deg, #070d0a 0%, #080f0c 100%);
       }
+
+      body .site-footer {
+        color: #334155;
+        background: #f4f4f4;
+        border-top-color: rgba(15, 23, 42, 0.12);
+      }
+
+      body .site-footer__ambient {
+        display: none;
+      }
+
+      body .site-footer__grid {
+        border-bottom-color: rgba(15, 23, 42, 0.12);
+        grid-template-columns: 1.35fr repeat(2, 0.9fr);
+        gap: clamp(2.5rem, 5vw, 5rem);
+      }
+
+      body .site-footer__col:not(:first-child) {
+        border-left: none;
+        padding-left: 0;
+      }
+
+      body .site-footer__title {
+        color: #0f172a;
+        max-width: 24rem;
+        margin: 0 0 1.25rem;
+        font-size: 1.5rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700 !important;
+        line-height: 1.04;
+        letter-spacing: 0.01em;
+      }
+
+      body .site-footer__tagline {
+        display: none;
+      }
+
+      body .site-footer__brand-mark {
+        max-height: 72px;
+      }
+
+      body .site-footer__heading {
+        color: #047857;
+      }
+
+      body .site-footer__heading {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+      }
+
+      body .site-footer__desc,
+      body .site-footer__heritage-list li,
+      body .site-footer__link,
+      body .site-footer__lgu-title {
+        color: #334155;
+      }
+
+      body .site-footer__desc {
+        font-size: 1.15rem;
+        line-height: 1.65;
+        max-width: 32rem;
+      }
+
+      body .site-footer__links,
+      body .site-footer__heritage-list {
+        gap: 0.9rem;
+      }
+
+      body .site-footer__link,
+      body .site-footer__heritage-list li {
+        font-size: 1.1rem;
+        line-height: 1.45;
+      }
+
+      body .site-footer__lgu {
+        padding: 1.25rem 1.35rem;
+      }
+
+      body .site-footer__lgu-badge,
+      body .site-footer__partner-label {
+        font-size: 0.78rem;
+      }
+
+      body .site-footer__lgu-title,
+      body .site-footer__partner-name {
+        font-size: 1.05rem;
+      }
+
+      body .site-footer__lgu-sub {
+        font-size: 0.95rem;
+      }
+
+      body .site-footer__link:hover {
+        color: #047857;
+      }
+
+      body .site-footer__link.is-active {
+        color: #0f172a;
+        font-weight: 700;
+      }
+
+      body .site-footer__link::after {
+        background: #047857;
+      }
+
+      body .site-footer__partner,
+      body .site-footer__lgu {
+        background: rgba(255, 253, 248, 0.72);
+        border-color: rgba(15, 23, 42, 0.12);
+      }
+
+      body .site-footer__partner-label,
+      body .site-footer__lgu-sub,
+      body .site-footer__copy {
+        color: #64748b;
+      }
+
+      body .site-footer__copy {
+        font-size: 0.95rem;
+      }
+
+      body .site-footer__partner-name {
+        color: #475569;
+      }
+
+      body .site-footer__lgu-badge {
+        color: #047857;
+        background: rgba(4, 120, 87, 0.1);
+        border-color: rgba(4, 120, 87, 0.22);
+      }
+
+      body .site-footer__back-top {
+        color: #475569;
+        border-color: rgba(15, 23, 42, 0.2);
+        font-size: 0.95rem;
+        padding: 0.6rem 1rem;
+      }
+
+      body .site-footer__back-top:hover {
+        background: rgba(255, 253, 248, 0.8);
+        border-color: #047857;
+        color: #047857;
+      }
+
+      @media (max-width: 767px) {
+        body .site-footer__grid {
+          grid-template-columns: 1fr;
+          gap: 2.25rem;
+        }
+
+        body .site-footer__brand-mark {
+          max-height: 72px;
+          max-width: 200px;
+        }
+
+        body .site-footer__title {
+          font-size: 1.5rem;
+        }
+
+        body .site-footer__desc {
+          font-size: 1.08rem;
+        }
+      }
     </style>
 
     <footer class="site-footer visitor-footer" id="site-footer">
@@ -338,23 +557,22 @@
 
       <div class="site-footer__inner">
         <div class="site-footer__grid">
-          <div
-            class="site-footer__col site-footer__brand text-center md:text-left items-center md:items-start"
-          >
-            <div
-              class="site-footer__brand-head flex flex-col justify-center md:justify-start"
-            >
+          <div class="site-footer__col site-footer__brand">
+            <div class="site-footer__brand-head">
               <img
                 src="assets/logos/logo.png"
                 alt="Mati Heritage 3D Logo"
                 class="site-footer__brand-mark"
               />
-              <div>
-                <p class="site-footer__tagline">
-                  Preserving the Past, Inspiring the Future
-                </p>
-              </div>
+              <span class="site-footer__brand-identity">
+                <strong>Mati Heritage 3D</strong>
+                <small>Discover Mati's heritage</small>
+              </span>
             </div>
+            <h2 class="site-footer__title">
+              Preserving the Past,<br />
+              Inspiring the Future
+            </h2>
             <p class="site-footer__desc">
               An interactive cultural heritage platform dedicated to the
               preservation, accessibility, and promotion of Mati City's heritage
@@ -362,69 +580,66 @@
             </p>
           </div>
 
-          <div class="site-footer__col text-center md:text-left">
-            <h3 class="site-footer__heading">Quick Links</h3>
+          <div class="site-footer__col">
+            <h3 class="site-footer__heading">Explore</h3>
             <ul class="site-footer__links">
               <li>
-                <a href="index.html" class="site-footer__link" data-nav="home"
-                  >Home</a
+                <a href="/" class="site-footer__link" data-nav="home"
+                  >Heritage Sites</a
                 >
               </li>
               <li>
-                <a
-                  href="about_us.html"
-                  class="site-footer__link"
-                  data-nav="about"
-                  >About Us</a
+                <a href="map" class="site-footer__link" data-nav="map"
+                  >Map</a
                 >
               </li>
               <li>
-                <a href="game.html" class="site-footer__link" data-nav="games"
+                <a href="game" class="site-footer__link" data-nav="games"
                   >Games</a
                 >
               </li>
               <li>
-                <a href="3dexplore.html" class="site-footer__link" data-nav="3d"
+                <a href="3dexplore" class="site-footer__link" data-nav="3d"
                   >3D Explore</a
                 >
               </li>
               <li>
                 <a
-                  href="gallery.html"
+                  href="gallery"
                   class="site-footer__link"
                   data-nav="gallery"
                   >Gallery</a
                 >
               </li>
+            </ul>
+          </div>
+
+          <div class="site-footer__col">
+            <h3 class="site-footer__heading">Mati Heritage 3D</h3>
+            <ul class="site-footer__links">
+              <li>
+                <a href="about" class="site-footer__link" data-nav="about"
+                  >About</a
+                >
+              </li>
               <li>
                 <a
-                  href="game.html#leaderboard"
+                  href="leaderboard"
                   class="site-footer__link"
                   data-nav="leaderboard"
                   >Leaderboard</a
                 >
               </li>
+              <li>
+                <a href="privacy" class="site-footer__link">Privacy</a>
+              </li>
+              <li>
+                <a href="contact" class="site-footer__link">Contact</a>
+              </li>
+              <li>
+                <a href="partner" class="site-footer__link">Partner</a>
+              </li>
             </ul>
-          </div>
-
-          <div class="site-footer__col text-center md:text-left">
-            <h3 class="site-footer__heading">Heritage</h3>
-            <ul class="site-footer__heritage-list">
-              <li>Built Heritage</li>
-              <li>Intangible Cultural Heritage</li>
-              <li>Natural Heritage</li>
-            </ul>
-          </div>
-
-          <div class="site-footer__col text-center md:text-left">
-            <h3 class="site-footer__heading">LGU Partner</h3>
-            <div class="site-footer__lgu text-center md:text-left">
-              <span class="site-footer__lgu-badge">Official Partner</span>
-              <p class="site-footer__lgu-title">
-                Local Government Unit of Mati City
-              </p>
-              <p class="site-footer__lgu-sub">City Tourism Office</p>
-            </div>
           </div>
         </div>
 

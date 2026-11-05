@@ -962,7 +962,10 @@
     return modelPath;
   }
 
+  let modelViewerRequest = 0;
+
   function closeModelViewerModal() {
+    modelViewerRequest += 1;
     const modal = $("#model-viewer-modal");
     const fullscreenModel = $("#fullscreen-model");
     const fullscreenPhoto = $("#fullscreen-photo");
@@ -984,6 +987,7 @@
   }
 
   async function openModelViewerModal(siteId) {
+    const requestId = ++modelViewerRequest;
     const site = MatiAdminStore.getSiteById(siteId);
     if (!site) {
       showToast("Site not found.");
@@ -997,22 +1001,19 @@
     }
 
     const modal = $("#model-viewer-modal");
-    const fullscreenTitle = $("#fullscreen-title");
     const fullscreenModel = $("#fullscreen-model");
     const fullscreenPhoto = $("#fullscreen-photo");
     const fullscreenHint = $("#fullscreen-hint");
     const fullscreenLoading = $("#fullscreen-loading");
-    const fullscreenLoadingLabel = $("#fullscreen-loading-label");
-
     if (!modal || !fullscreenModel) return;
 
     const src = await resolveModelViewerSrc(modelPath);
+    if (requestId !== modelViewerRequest) return;
     if (!src) {
       showToast("Could not load the 3D model.");
       return;
     }
 
-    fullscreenTitle.textContent = site.name;
     modal.hidden = false;
     modal.removeAttribute("hidden");
     modal.setAttribute("aria-hidden", "false");
@@ -1020,9 +1021,9 @@
 
     showFullscreenLoading(`Loading ${site.name}…`);
 
-    // Show the model viewer and hide photo
-    fullscreenModel.hidden = false;
-    fullscreenModel.removeAttribute("hidden");
+    // Keep the previous model hidden until the requested model finishes loading.
+    fullscreenModel.hidden = true;
+    fullscreenModel.setAttribute("hidden", "");
     fullscreenPhoto.hidden = true;
     fullscreenPhoto.setAttribute("hidden", "");
 
@@ -1033,6 +1034,8 @@
 
     const sameSrc = fullscreenModel.getAttribute("src") === src;
     if (sameSrc && fullscreenModel.loaded) {
+      fullscreenModel.hidden = false;
+      fullscreenModel.removeAttribute("hidden");
       hideFullscreenLoading();
       return;
     }
@@ -1044,7 +1047,13 @@
         settled = true;
         fullscreenModel.removeEventListener("load", onLoad);
         fullscreenModel.removeEventListener("error", onError);
-        hideFullscreenLoading();
+        if (requestId === modelViewerRequest) {
+          fullscreenModel.hidden = false;
+          fullscreenModel.removeAttribute("hidden");
+        }
+        if (requestId === modelViewerRequest) {
+          hideFullscreenLoading();
+        }
         resolve();
       };
       const onLoad = () => finish();
@@ -1064,20 +1073,22 @@
   function showFullscreenLoading(label = "Loading 3D model…") {
     const fullscreenLoadingLabel = $("#fullscreen-loading-label");
     const fullscreenLoading = $("#fullscreen-loading");
+    const fullscreenLoadingPercent = $("#fullscreen-loading-percent");
     if (fullscreenLoadingLabel) fullscreenLoadingLabel.textContent = label;
+    if (fullscreenLoadingPercent) fullscreenLoadingPercent.textContent = "0%";
     if (fullscreenLoading) fullscreenLoading.removeAttribute("hidden");
 
-    // Initialize percentage tracking if ModelViewerLoading is available
-    if (typeof ModelViewerLoading !== "undefined") {
-      ModelViewerLoading.initializeFullscreen(
-        "fullscreen-model",
-        "fullscreen-loading",
-        "fullscreen-loading-label",
-        "fullscreen-loading-percent",
-        {
-          loadingTextSelector: ".model-viewer-loading__text",
-        },
-      );
+    const fullscreenModel = $("#fullscreen-model");
+    if (fullscreenModel && !fullscreenModel.dataset.loadingBound) {
+      fullscreenModel.addEventListener("progress", (event) => {
+        const totalProgress = event.detail?.totalProgress;
+        if (Number.isFinite(totalProgress) && fullscreenLoadingPercent) {
+          fullscreenLoadingPercent.textContent = `${Math.round(
+            totalProgress * 100,
+          )}%`;
+        }
+      });
+      fullscreenModel.dataset.loadingBound = "true";
     }
   }
 
@@ -1300,13 +1311,16 @@
       showEdit && !m.linked
         ? `<button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-edit-media="${escapeAttr(m.id)}">Edit</button>`
         : "";
+    const removeBtn = !m.linked
+      ? `<button type="button" class="admin-btn admin-btn--danger admin-btn--sm" data-delete-media="${escapeAttr(m.id)}">Remove</button>`
+      : "";
     return `
       <li>
         <div>
           <div class="admin-media-list__title">${escapeHtml(m.title)}</div>
           <div class="admin-media-list__meta">${TYPE_LABELS[m.type] || m.type}${m.linked ? "" : ` · ${escapeHtml(formatMediaSrc(m.src))}`}</div>
         </div>
-        ${editBtn}
+        <div class="admin-media-list__actions">${editBtn}${removeBtn}</div>
       </li>`;
   }
 
@@ -1478,11 +1492,11 @@
     container.innerHTML = `
       <div class="admin-media-groups">
         <section class="admin-media-group">
-          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--photo">Photographs</h4></div>
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--photo">Photographs <span class="admin-media-group__count">${photos.length}</span></h4><button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="photo">+ Add</button></div>
           ${photoContent}
         </section>
         <section class="admin-media-group">
-          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--video">Videos</h4></div>
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--video">Videos <span class="admin-media-group__count">${videos.length}</span></h4><button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="video">+ Add</button></div>
           ${videoContent}
         </section>
       </div>`;
@@ -1499,7 +1513,7 @@
       .map(([title, type, empty]) => {
         const items = media.filter((item) => item.type === type);
         return `<section class="admin-media-group">
-          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--${type === "audio" ? "video" : type}">${title}</h4></div>
+          <div class="admin-media-group__head"><h4 class="admin-media-group__title admin-media-group__title--${type === "audio" ? "video" : type}">${title} <span class="admin-media-group__count">${items.length}</span></h4><button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-add-media-type="${type}">+ Add</button></div>
           ${items.length ? `<ul class="admin-media-list">${items.map((item) => renderMediaListItem(item)).join("")}</ul>` : empty}
         </section>`;
       })
@@ -2039,30 +2053,40 @@
     mapPickSession = false;
   }
 
-  function startLogout() {
+  function startLogout(trigger) {
     if (logoutInProgress) return;
     logoutInProgress = true;
 
-    const overlay = $("#logout-overlay");
-    const showMs = 1650;
-    const exitMs = 450;
-
-    if (overlay) {
-      overlay.hidden = false;
-      overlay.removeAttribute("hidden");
-      overlay.classList.remove("is-exiting");
-      requestAnimationFrame(() => overlay.classList.add("is-active"));
+    const label = trigger?.querySelector("[data-logout-label]");
+    const originalText = label?.textContent || trigger?.textContent?.trim() || "Logout";
+    if (label) label.textContent = "Logging out...";
+    if (trigger) {
+      trigger.disabled = true;
+      trigger.style.pointerEvents = "none";
+      trigger.style.opacity = "0.6";
+      trigger.setAttribute("aria-busy", "true");
     }
 
     window.setTimeout(() => {
-      if (overlay) overlay.classList.add("is-exiting");
-      window.setTimeout(async () => {
-        if (typeof MatiAuth !== "undefined") {
-          await MatiAuth.logout();
+      void (async () => {
+        try {
+          if (typeof MatiAuth !== "undefined") {
+            await MatiAuth.logout();
+          }
+          window.location.href = "login.html";
+        } catch (error) {
+          console.error("Admin logout failed.", error);
+          logoutInProgress = false;
+          if (label) label.textContent = originalText;
+          if (trigger) {
+            trigger.disabled = false;
+            trigger.style.pointerEvents = "";
+            trigger.style.opacity = "";
+            trigger.removeAttribute("aria-busy");
+          }
         }
-        window.location.href = "login.html";
-      }, exitMs);
-    }, showMs);
+      })();
+    }, 500);
   }
 
   function syncMapPickMode() {
@@ -2456,9 +2480,28 @@
     if (col3d) col3d.hidden = true;
     if (!tbody) return;
 
+    const categoryLabel = MatiAdminStore.categoryLabel(currentCategory);
+    const count = $("#heritage-other-count");
+    const title = $("#heritage-other-title");
+    const summary = $("#heritage-other-summary");
+    const addButton = $("#btn-add-other-site");
+    if (count) count.textContent = String(MatiAdminStore.getSitesByCategory(currentCategory).length);
+    if (title) title.textContent = categoryLabel;
+    if (summary) {
+      const mediaLabel =
+        currentCategory === "intangible"
+          ? "photographs, videos, and audio recordings"
+          : "photographs and videos";
+      summary.textContent = `Manage ${categoryLabel.toLowerCase()} sites, ${mediaLabel}.`;
+    }
+    if (addButton) {
+      addButton.dataset.adminAddSiteCategory = currentCategory;
+      addButton.textContent = `Add ${categoryLabel.replace(" Heritage", "")} site`;
+    }
+
     if (!allSites.length) {
       tbody.innerHTML = `
-        <tr><td colspan="5" class="admin-empty">No sites in this category yet. Use <strong>Add site</strong> to create one.</td></tr>`;
+        <tr><td colspan="6" class="admin-built__empty">No sites in this category yet. Use <strong>Add site</strong> to create one.</td></tr>`;
       return;
     }
 
@@ -2466,15 +2509,23 @@
       .map((site) => {
         const stats = MatiAdminStore.getSiteStats(site.id);
         const location = site.location?.trim() || "—";
+        const updated = site.updatedAt
+          ? new Date(site.updatedAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })
+          : "—";
+        const hasModel = stats.models > 0;
         return `
         <tr>
-          <td>
-            <div class="admin-table__name">${escapeHtml(site.name)}</div>
-          </td>
-          <td class="admin-table__location">${escapeHtml(location)}</td>
+          <td><strong>${escapeHtml(site.name)}</strong></td>
+          <td>${escapeHtml(location)}</td>
           <td>${mediaChips(stats, false, site)}</td>
+          <td class="heritage-3d-cell" hidden><span class="admin-built__status ${hasModel ? "is-uploaded" : "is-missing"}">${hasModel ? "Uploaded" : "Not Uploaded"}</span></td>
+          <td>${updated}</td>
           <td>
-            <button type="button" class="admin-btn admin-btn--ghost admin-btn--sm" data-edit-site="${escapeAttr(site.id)}">${heritageCardActionLabel(site)}</button>
+            <button type="button" class="admin-btn admin-btn--primary admin-btn--sm" data-edit-site="${escapeAttr(site.id)}">Manage</button>
           </td>
         </tr>`;
       })
@@ -2813,6 +2864,7 @@
     viewer.setAttribute("auto-rotate", "");
     viewer.setAttribute("rotation-per-second", "20deg");
     viewer.setAttribute("camera-orbit", "0deg 78deg 108%");
+    viewer.setAttribute("max-camera-orbit", "auto 100deg auto");
     viewer.setAttribute("interaction-prompt", "none");
     viewer.setAttribute("touch-action", "pan-y");
     viewer.setAttribute("loading", "lazy");
@@ -3205,10 +3257,7 @@
             : site.category === "intangible"
               ? "Intangible cultural heritage"
               : site.heritageCategory || "";
-      $("#site-category-select").value =
-        site.category === "built"
-          ? site.heritageCategory || ""
-          : $("#site-category-select").value || "";
+      $("#site-category-select").value = site.heritageCategory || "";
       $("#site-ownership").value = site.ownership || "";
       $("#site-location").value = site.location || "";
       $("#site-lat").value =
@@ -3385,11 +3434,7 @@
       category,
       categoryLabel: MatiAdminStore.categoryLabel(category),
       heritageCategory:
-        category === "built"
-          ? classificationValue || existing?.heritageCategory || ""
-          : category === "natural" || category === "intangible"
-            ? fixedHeritageType
-            : existing?.heritageCategory || "",
+        classificationValue || existing?.heritageCategory || fixedHeritageType,
       ownership:
         category === "built"
           ? $("#site-ownership").value.trim()
@@ -5268,10 +5313,27 @@
         );
       }
 
-      const { counts, generatedAt } = generatedReport;
+      const { counts, users, leaderboard, generatedAt } = generatedReport;
+      const registrationHistory = monthlyRegistrationData(users, generatedAt);
       const rows = [
+        ["REPORT SUMMARY"],
         ["Category", "Total records"],
         ...REPORT_CATEGORIES.map(({ key, label }) => [label, counts[key]]),
+        [],
+        ["USER REGISTRATION TREND"],
+        ["Month", "Registrations"],
+        ...registrationHistory.labels.map((label, index) => [
+          label,
+          registrationHistory.values[index],
+        ]),
+        [],
+        ["LEADERBOARD RECORDS"],
+        ["Rank", "Username", "Heritage points"],
+        ...leaderboard.map((entry, index) => [
+          index + 1,
+          entry.username,
+          entry.points,
+        ]),
       ];
       const csvContent = `\uFEFF${rows
         .map((row) => row.map(reportCsvValue).join(","))
@@ -5287,7 +5349,7 @@
       url = URL.createObjectURL(blob);
       link = document.createElement("a");
       link.href = url;
-      link.download = `tourism_graphical_report_${date}.csv`;
+      link.download = `tourism_report_${date}.csv`;
       link.hidden = true;
       document.body.appendChild(link);
       link.click();
@@ -5455,13 +5517,18 @@
       typeof MatiAuth !== "undefined" ? MatiAuth.getSession?.() || {} : {},
     );
 
-    $("#admin-logout")?.addEventListener("click", () => {
-      closeProfileMenu();
-      startLogout();
+    ["#admin-logout", "#admin-logout-legacy"].forEach((selector) => {
+      $(selector)?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const trigger = event.currentTarget;
+        closeProfileMenu();
+        startLogout(trigger);
+      });
     });
 
     $$(".admin-nav__btn").forEach((btn) => {
       btn.addEventListener("click", () => {
+        if (btn.id === "admin-logout-legacy") return;
         const view = btn.dataset.view;
         const category = btn.dataset.category;
         setView(view, category ? { category } : {});
@@ -5515,6 +5582,13 @@
       const addButton = event.target.closest("[data-admin-add-site-category]");
       if (!addButton) return;
       currentCategory = addButton.dataset.adminAddSiteCategory || "natural";
+      openSiteModal(null);
+    });
+
+    $("#view-heritage")?.addEventListener("click", (event) => {
+      const addButton = event.target.closest("[data-admin-add-site-category]");
+      if (!addButton) return;
+      currentCategory = addButton.dataset.adminAddSiteCategory || currentCategory;
       openSiteModal(null);
     });
 
@@ -5664,7 +5738,7 @@
       updateMediaFormUi();
     });
 
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", async (e) => {
       const addMediaType = e.target.closest("[data-add-media-type]");
       if (addMediaType) {
         e.preventDefault();
@@ -5841,6 +5915,30 @@
       if (editMedia) {
         const siteId = $("#site-id").value.trim();
         openMediaModal(editMedia.dataset.editMedia, siteId);
+        return;
+      }
+      const deleteMedia = e.target.closest("[data-delete-media]");
+      if (deleteMedia) {
+        const media = MatiAdminStore.getAllMedia().find(
+          (item) => item.id === deleteMedia.dataset.deleteMedia,
+        );
+        if (!media) {
+          showToast("Could not find that media item.");
+          return;
+        }
+        const confirmed = await confirmAction({
+          title: "Remove media?",
+          message: `Remove “${media.title || TYPE_LABELS[media.type] || "this file"}” from this heritage site?`,
+          confirmLabel: "Remove",
+        });
+        if (!confirmed) return;
+        const result = await MatiAdminStore.deleteMedia(media.id);
+        if (!result?.ok && !result?.localOnly) {
+          showToast("Could not remove the media item.");
+          return;
+        }
+        refreshSiteViews(media.siteId);
+        showToast("Media item removed.");
         return;
       }
       if (e.target.closest("[data-close-modal]")) {

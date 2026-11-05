@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="../" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -507,63 +503,46 @@
       .site-brand__text {
         display: flex;
         align-items: center;
-        gap: 0.9rem;
+        gap: 0.75rem;
         min-width: 0;
       }
 
-      .site-brand__title {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: clamp(1.4rem, 2.5vw, 1.75rem);
-        font-weight: 700;
-        letter-spacing: 0.015em;
-        line-height: 1;
-        color: var(--hdr-ink);
-        white-space: nowrap;
-        transition:
-          background 0.4s ease,
-          color 0.3s ease;
+      .site-brand__text img {
+        display: block;
+        width: 2.875rem;
+        height: 2.875rem;
+        flex: 0 0 auto;
+        object-fit: contain;
       }
 
-      .site-brand:hover .site-brand__title {
-        background: linear-gradient(
-          90deg,
-          var(--forest-dark),
-          var(--sky),
-          var(--forest)
-        );
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+      .site-brand__identity {
+        display: grid;
+        gap: 0.1rem;
+        min-width: 0;
       }
 
-      .site-brand__brand-text {
+      .site-brand__identity strong {
         font-family: "Source Sans 3", sans-serif;
-        font-size: clamp(1.05rem, 1.8vw, 1.3rem);
-        font-weight: 800;
-        letter-spacing: 0.005em;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
         line-height: 1;
-        text-transform: uppercase;
         white-space: nowrap;
-        background: linear-gradient(
-          90deg,
-          var(--forest),
-          var(--sky),
-          var(--amber)
-        );
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+        color: var(--hdr-ink);
+        transition: color 0.3s ease;
       }
 
-      .site-brand__brand-text-accent {
-        color: transparent;
+      .site-brand:hover .site-brand__identity strong {
+        color: var(--forest-dark);
       }
 
-      .site-brand__brand-text-highlight {
-        color: transparent;
+      .site-brand__identity small {
+        color: var(--hdr-muted);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.82rem;
+        line-height: 1.2;
+        white-space: nowrap;
       }
-
-
 
       .site-brand__meta {
         display: flex;
@@ -612,8 +591,21 @@
           display: none;
         }
 
-        .site-brand__brand-text {
-          display: none;
+        .site-brand__text {
+          gap: 0.6rem;
+        }
+
+        .site-brand__text img {
+          width: 2.625rem;
+          height: 2.625rem;
+        }
+
+        .site-brand__identity strong {
+          font-size: 0.95rem;
+        }
+
+        .site-brand__identity small {
+          font-size: 0.75rem;
         }
       }
 
@@ -667,8 +659,24 @@
         transform: translateY(-1px);
       }
 
+      .site-nav-more__trigger.is-active {
+        color: var(--hdr-ink);
+      }
+
+      .site-nav-more__trigger.is-active::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -0.25rem;
+        width: 1.5rem;
+        height: 3px;
+        border-radius: 9999px;
+        background: var(--forest);
+        transform: translateX(-50%);
+      }
+
       .site-nav__icon {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         width: 1.1rem;
@@ -692,7 +700,18 @@
 
       .site-nav__link.is-active {
         color: var(--hdr-ink);
-        font-weight: 600;
+      }
+
+      .site-nav__link.is-active::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 0.25rem;
+        width: 1.5rem;
+        height: 3px;
+        border-radius: 9999px;
+        background: var(--forest);
+        transform: translateX(-50%);
       }
 
       .site-nav__link.is-active .site-nav__icon {
@@ -801,6 +820,30 @@
         transform: translateY(-1px);
       }
 
+      .site-nav-more.is-active .site-nav-more__trigger > span {
+        position: relative;
+      }
+
+      .site-nav-more.is-active .site-nav-more__trigger > span::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -0.55rem;
+        width: 1.5rem;
+        height: 3px;
+        border-radius: 9999px;
+        background: var(--forest);
+        transform: translateX(-50%);
+      }
+
+      .site-nav-more.is-active .site-nav-more__trigger {
+        color: var(--hdr-ink);
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        -webkit-text-stroke: 0.2px currentColor;
+      }
+
       .site-nav-more__chevron {
         width: 0.85rem;
         height: 0.85rem;
@@ -869,7 +912,11 @@
         height: 2.5rem;
         flex-shrink: 0;
         border-radius: 0.65rem;
-        background: linear-gradient(135deg, rgba(4, 120, 87, 0.1), rgba(2, 132, 199, 0.1));
+        background: linear-gradient(
+          135deg,
+          rgba(4, 120, 87, 0.1),
+          rgba(2, 132, 199, 0.1)
+        );
         color: var(--forest);
         transition:
           background 0.2s ease,
@@ -877,7 +924,11 @@
       }
 
       .site-nav-more__item:hover .site-nav-more__icon {
-        background: linear-gradient(135deg, rgba(4, 120, 87, 0.15), rgba(2, 132, 199, 0.15));
+        background: linear-gradient(
+          135deg,
+          rgba(4, 120, 87, 0.15),
+          rgba(2, 132, 199, 0.15)
+        );
         color: var(--forest-dark);
       }
 
@@ -1587,7 +1638,9 @@
         color: #6ee7b7;
       }
 
-      body:not(.visitor-module) .site-nav-more__item:hover .site-nav-more__icon {
+      body:not(.visitor-module)
+        .site-nav-more__item:hover
+        .site-nav-more__icon {
         background: rgba(255, 255, 255, 0.1);
         color: #6ee7b7;
       }
@@ -1596,7 +1649,9 @@
         color: #f1f5f9;
       }
 
-      body:not(.visitor-module) .site-nav-more__item:hover .site-nav-more__title {
+      body:not(.visitor-module)
+        .site-nav-more__item:hover
+        .site-nav-more__title {
         color: #fff;
       }
 
@@ -1604,7 +1659,9 @@
         color: #94a3b8;
       }
 
-      body:not(.visitor-module) .site-nav-more__item:hover .site-nav-more__subtitle {
+      body:not(.visitor-module)
+        .site-nav-more__item:hover
+        .site-nav-more__subtitle {
         color: #cbd5e1;
       }
 
@@ -1619,8 +1676,23 @@
       }
 
       .settings-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
         box-sizing: border-box;
         padding: 1rem;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(0.25rem);
+        -webkit-backdrop-filter: blur(0.25rem);
+        text-transform: none;
+        letter-spacing: normal;
+      }
+
+      .settings-modal.is-open {
+        display: flex;
       }
 
       .settings-panel {
@@ -1750,33 +1822,8 @@
         box-shadow: 0 2px 6px rgba(4, 120, 87, 0.3);
       }
 
-      .settings-save-btn {
-        min-height: 3rem;
-        margin-top: 1.5rem;
-        border: none;
-        border-radius: 0.5rem;
-        background: var(--forest);
-        color: #ffffff;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease,
-          background 0.2s ease;
-      }
-
-      .settings-save-btn:hover {
-        transform: translateY(-1px);
-        background: #047857;
-        box-shadow: 0 6px 16px rgba(4, 120, 87, 0.3);
-      }
-
       select:focus {
         border-color: var(--sky) !important;
-        --tw-ring-color: var(--sky) !important;
       }
 
       .switch {
@@ -1869,22 +1916,18 @@
         <!-- Removed header scene -->
 
         <div class="site-header__bar">
-          <a href="index.html" class="site-brand">
+          <a href="/" class="site-brand">
             <div class="site-brand__text">
-              <img
-                src="assets/logos/logo.png"
-                alt="Mati Heritage 3D"
-                class="h-16"
-              />
-              <span class="site-brand__brand-text">
-                MATI
-                <span class="site-brand__brand-text-accent">HERITAGE</span><span class="site-brand__brand-text-highlight">3D</span>
+              <img src="assets/logos/logo.png" alt="Mati Heritage 3D" />
+              <span class="site-brand__identity">
+                <strong>Mati Heritage 3D</strong>
+                <small>Discover Mati's heritage</small>
               </span>
             </div>
           </a>
 
           <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-            <a href="index.html" class="site-nav__link" data-nav="home">
+            <a href="/" class="site-nav__link" data-nav="home">
               <span class="site-nav__icon" aria-hidden="true">
                 <svg
                   viewBox="0 0 24 24"
@@ -1897,9 +1940,9 @@
                   />
                 </svg>
               </span>
-              Heritage
+              Heritage Sites
             </a>
-            <a href="map.html" class="site-nav__link" data-nav="map">
+            <a href="map" class="site-nav__link" data-nav="map">
               <span class="site-nav__icon" aria-hidden="true">
                 <svg
                   viewBox="0 0 24 24"
@@ -1914,7 +1957,7 @@
               </span>
               Map
             </a>
-            <a href="game.html" class="site-nav__link" data-nav="games">
+            <a href="game" class="site-nav__link" data-nav="games">
               <span class="site-nav__icon" aria-hidden="true">
                 <svg
                   viewBox="0 0 24 24"
@@ -1929,7 +1972,7 @@
               Games
             </a>
             <a
-              href="3dexplore.html"
+              href="3dexplore"
               class="site-nav__link site-nav__link--featured"
               data-nav="3d"
             >
@@ -1947,7 +1990,7 @@
               </span>
               3D Explore
             </a>
-            <a href="gallery.html" class="site-nav__link" data-nav="gallery">
+            <a href="gallery" class="site-nav__link" data-nav="gallery">
               <span class="site-nav__icon" aria-hidden="true">
                 <svg
                   viewBox="0 0 24 24"
@@ -1967,6 +2010,7 @@
               <button
                 type="button"
                 class="site-nav-more__trigger"
+                data-nav="about"
                 aria-haspopup="true"
                 aria-expanded="false"
                 aria-label="More options"
@@ -1988,28 +2032,56 @@
                 </svg>
               </button>
 
-              <div class="site-nav-more__dropdown" role="menu" aria-label="More options">
+              <div
+                class="site-nav-more__dropdown"
+                role="menu"
+                aria-label="More options"
+              >
                 <div class="site-nav-more__grid">
-                  <a href="leaderboard.html" class="site-nav-more__item" role="menuitem">
+                  <a
+                    href="leaderboard"
+                    class="site-nav-more__item"
+                    role="menuitem"
+                  >
                     <div class="site-nav-more__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
                         <path d="M4 22h16" />
-                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                        <path
+                          d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+                        />
+                        <path
+                          d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+                        />
                         <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
                       </svg>
                     </div>
                     <div class="site-nav-more__content">
                       <span class="site-nav-more__title">Leaderboard</span>
-                      <span class="site-nav-more__subtitle">Top performers</span>
+                      <span class="site-nav-more__subtitle"
+                        >Top performers</span
+                      >
                     </div>
                   </a>
 
-                  <a href="about.html" class="site-nav-more__item" role="menuitem">
+                  <a
+                    href="about"
+                    class="site-nav-more__item"
+                    role="menuitem"
+                  >
                     <div class="site-nav-more__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
@@ -2028,7 +2100,7 @@
             <div class="site-header__utilities" id="site-header-utilities">
               <div class="header-points-badge">
                 <div class="header-points-dot"></div>
-                <span class="header-points-label">Points</span>
+                <span class="header-points-label">Score</span>
                 <span id="header-total-points">0</span>
               </div>
 
@@ -2059,7 +2131,7 @@
                   </svg>
                 </div>
                 <div class="header-dropdown">
-                  <a href="account.html" id="account-link">Account</a>
+                  <a href="account" id="account-link">Account</a>
                   <a href="javascript:void(0)" id="settings-link">Settings</a>
                   <div class="header-dropdown__divider"></div>
                   <a href="#" id="site-logout-link" class="is-danger">Logout</a>
@@ -2068,7 +2140,7 @@
             </div>
 
             <div class="visitor-auth-actions" id="visitor-auth-actions">
-              <a href="login.html" class="visitor-auth-btn visitor-auth-login">
+              <a href="login" class="visitor-auth-btn visitor-auth-login">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -2085,7 +2157,7 @@
                 <span>Login</span>
               </a>
               <a
-                href="userregistration.html"
+                href="userregistration"
                 class="visitor-auth-btn visitor-auth-register"
               >
                 <span>Register</span>
@@ -2127,19 +2199,14 @@
 
       <div
         id="settings-modal"
-        class="settings-modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm normal-case tracking-normal"
+        class="settings-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="settings-title"
       >
         <div class="settings-panel mx-4">
           <div class="settings-header">
-            <h3
-              id="settings-title"
-              class="settings-title"
-            >
-              Settings
-            </h3>
+            <h3 id="settings-title" class="settings-title">Settings</h3>
             <button
               id="close-settings"
               type="button"
@@ -2148,7 +2215,7 @@
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
+                class="settings-close-icon"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -2198,13 +2265,6 @@
               />
             </label>
           </div>
-          <button
-            id="save-settings"
-            type="button"
-            class="settings-save-btn w-full py-3 text-white font-bold tracking-widest uppercase text-sm"
-          >
-            Save Changes
-          </button>
         </div>
       </div>
     </header>
@@ -2217,10 +2277,8 @@
         const musicVolText = document.getElementById("music-vol-text");
         const sfxVolText = document.getElementById("sfx-vol-text");
         const settingsLink = document.getElementById("settings-link");
-        const saveBtn = document.getElementById("save-settings");
         const sfxIds = [
           "click-sound",
-          "announcer-voice",
           "correct-sfx",
           "wrong-sfx",
           "tetris-fall-sound",
@@ -2251,12 +2309,11 @@
         if (settingsLink) {
           settingsLink.onclick = (e) => {
             e.preventDefault();
-            if (modal) modal.classList.replace("hidden", "flex");
+            if (modal) modal.classList.add("is-open");
           };
         }
 
-        const closeModal = () =>
-          modal && modal.classList.replace("flex", "hidden");
+        const closeModal = () => modal && modal.classList.remove("is-open");
         const closeBtn = document.getElementById("close-settings");
         if (closeBtn) closeBtn.onclick = closeModal;
         if (modal) modal.onclick = (e) => e.target === modal && closeModal();
@@ -2266,8 +2323,12 @@
             const val = e.target.value;
             if (musicVolText)
               musicVolText.textContent = Math.round(val * 100) + "%";
+            localStorage.setItem("bgMusicVol", val);
             const bg = document.getElementById("bg-music");
-            if (bg) bg.volume = val;
+            if (bg) {
+              bg.volume = val;
+              if (Number(val) <= 0) bg.pause();
+            }
           };
         }
 
@@ -2285,15 +2346,6 @@
               preview.currentTime = 0;
               preview.play().catch(() => {});
             }
-          };
-        }
-
-        if (saveBtn) {
-          saveBtn.onclick = () => {
-            if (musicSlider)
-              localStorage.setItem("bgMusicVol", musicSlider.value);
-            if (sfxSlider) localStorage.setItem("sfxVol", sfxSlider.value);
-            closeModal();
           };
         }
 
@@ -2342,20 +2394,22 @@
             const mobileLink = document.createElement("a");
             mobileLink.href = item.href;
             mobileLink.className = "site-mobile-nav__link";
-            
+
             // Copy the icon from the dropdown item
             const icon = item.querySelector(".site-nav-more__icon");
             if (icon) {
               const iconClone = icon.cloneNode(true);
               mobileLink.appendChild(iconClone);
             }
-            
+
             // Add the text
-            const title = item.querySelector(".site-nav-more__title").textContent;
+            const title = item.querySelector(
+              ".site-nav-more__title",
+            ).textContent;
             const textSpan = document.createElement("span");
             textSpan.textContent = title;
             mobileLink.appendChild(textSpan);
-            
+
             mobileLink.addEventListener("click", closeMobileMenu);
             mobileLinksWrap.appendChild(mobileLink);
           });
@@ -2381,7 +2435,10 @@
           if (moreDropdown) {
             moreDropdown.classList.toggle("is-open", open);
             if (moreTrigger) {
-              moreTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+              moreTrigger.setAttribute(
+                "aria-expanded",
+                open ? "true" : "false",
+              );
             }
           }
         };
@@ -2412,11 +2469,13 @@
         });
 
         // Close dropdown when clicking on a menu item
-        moreDropdown?.querySelectorAll(".site-nav-more__item").forEach((item) => {
-          item.addEventListener("click", () => {
-            closeMoreDropdown();
+        moreDropdown
+          ?.querySelectorAll(".site-nav-more__item")
+          .forEach((item) => {
+            item.addEventListener("click", () => {
+              closeMoreDropdown();
+            });
           });
-        });
 
         if (toggle) {
           toggle.addEventListener("click", () => {

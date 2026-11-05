@@ -2380,7 +2380,6 @@
 
       .memory-game-new {
         min-height: 3rem;
-        margin-left: auto;
         padding: 0.55rem 1.25rem;
         border: 1px solid #252a27;
         border-radius: 999px;
@@ -2395,6 +2394,33 @@
 
       .memory-game-new:hover {
         background: #126b4b;
+      }
+
+      .memory-game-end {
+        min-height: 3rem;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font: 700 1.15rem "Quicksand", sans-serif;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .memory-game-end:hover {
+        background: #f0f7f2;
+      }
+
+      .memory-game-round-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+      }
+
+      .memory-game-round-actions [hidden] {
+        display: none;
       }
 
       .game-header {
@@ -2635,10 +2661,13 @@
       }
 
       .now-playing {
-        padding: 0.3rem !important;
-        border: 1px solid #ded9ce !important;
-        background: #fffefa !important;
-        box-shadow: 0 4px 14px rgba(37, 42, 45, 0.1) !important;
+        display: none !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
       }
 
       .now-playing__title {
@@ -2654,32 +2683,97 @@
         .chronicle-stage,
         body.chronicle-page.is-playing .chronicle-stage {
           min-height: 0;
-          padding: 0.75rem 0 2rem;
+          padding: 0.75rem 0.5rem 2rem;
         }
 
         body.chronicle-page.is-playing .chronicle-stage > .relative {
+          width: 100%;
           height: auto;
           max-height: none;
         }
 
-        .memory-game-controls__size-label {
-          margin-left: 0;
+        #game-screen:not(.hidden) {
+          padding: 0.5rem 0;
         }
 
-        .game-header__stats {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+        #game-screen .memory-game-heading h1 {
+          font-size: clamp(2rem, 8vw, 2.75rem);
+          line-height: 1.08;
+        }
+
+        .memory-game-heading {
+          margin-bottom: 1.1rem;
+        }
+
+        .memory-game-heading p {
+          margin-top: 0.55rem;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
+        .memory-game-controls {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.65rem;
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.9rem;
+        }
+
+        .memory-game-controls__size-label {
+          margin-left: 0;
+          font-size: 1rem;
+        }
+
+        .memory-game-sizes {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          width: 100%;
+          border-radius: 0.85rem;
         }
 
         .memory-game-size {
-          padding-inline: 0.6rem;
+          min-width: 0;
+          min-height: 3.25rem;
+          padding: 0.45rem 0.3rem;
+          font-size: 0.9rem;
+          white-space: normal;
         }
 
-        .memory-game-new {
-          margin-left: 0;
+        .memory-game-size span {
+          display: block;
+          margin-top: 0.1rem;
+          font-size: 0.76em;
+        }
+
+        .memory-game-round-actions {
+          width: 100%;
+          margin: 0;
+          gap: 0.5rem;
+        }
+
+        .memory-game-round-actions button {
+          flex: 1 1 0;
+          min-width: 0;
+          min-height: 2.85rem;
+          padding: 0.45rem 0.6rem;
+          font-size: 0.95rem;
+        }
+
+        .game-header__stats {
+          gap: 0.35rem 0.75rem;
+          padding: 0.6rem 0;
+        }
+
+        #game-screen .hud-ribbon__label {
+          font-size: 0.76rem;
+        }
+
+        #game-screen .hud-ribbon__value {
+          font-size: 1.65rem;
         }
 
         #card-grid {
-          gap: 0.5rem;
+          gap: 0.4rem;
         }
       }
 
@@ -3155,9 +3249,19 @@
                 Hard <span>(12 pairs)</span>
               </button>
             </div>
-            <button type="button" id="new-game-btn" class="memory-game-new">
-              New game
-            </button>
+            <div class="memory-game-round-actions">
+              <button type="button" id="new-game-btn" class="memory-game-new">
+                New Pairs
+              </button>
+              <button
+                type="button"
+                id="end-game-btn"
+                class="memory-game-end"
+                hidden
+              >
+                End Pairs
+              </button>
+            </div>
           </div>
 
           <div class="game-header">
@@ -3381,7 +3485,7 @@
       <span class="min-w-0 flex-1">
         <span
           class="now-playing__title block text-xs font-bold truncate text-amber-100"
-          >Memory Chronicle</span
+          >Zambolino - Caribbean · FreeToUse.com</span
         >
       </span>
     </aside>
@@ -3439,10 +3543,9 @@
 
     <audio
       id="bg-music"
-      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
       loop
-      preload="auto"
-      autoplay
+      preload="none"
     ></audio>
     <audio
       id="correct-sfx"
@@ -3469,7 +3572,10 @@
     <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
+    <script src="js/games/game-session-lock.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/games/game-tv-transition.js"></script>
     <script src="js/games/game-exit-guard.js"></script>
@@ -3597,19 +3703,22 @@
           cols: 4,
           pairs: 6,
           cardScale: 1,
-          basePoints: 10,
+          time: 120,
+          maxScore: 100,
         },
         medium: {
           cols: 4,
           pairs: 8,
           cardScale: Math.SQRT1_2,
-          basePoints: 15,
+          time: 180,
+          maxScore: 150,
         },
         hard: {
           cols: 6,
           pairs: 12,
           cardScale: Math.SQRT1_2,
-          basePoints: 20,
+          time: 300,
+          maxScore: 200,
         },
       };
 
@@ -3620,17 +3729,24 @@
       let score = 0;
       let moves = 0;
       let elapsedSeconds = 0;
+      let remainingSeconds = 0;
+      let timerDeadline = null;
       let timerInterval = null;
+      let timerVisibilityHandler = null;
       let timerStarted = false;
       let gameActive = false;
       let toastTimer = null;
       let keeperTipTimer = null;
 
+      function formatScore(value) {
+        return Number(value.toFixed(2)).toLocaleString();
+      }
+
       const KEEPER_TIPS = [
         "Flip two cards at a time — can you remember where each relic hides?",
-        "Match faster to build a streak and earn bonus points!",
+        "Match faster to build a streak and earn a bonus score!",
         "Every pair reveals a heritage fact about Mati City.",
-        "Watch the hourglass — speed earns you bonus points at the end!",
+        "Watch the hourglass — speed earns you a bonus score at the end!",
       ];
 
       const bgMusic = document.getElementById("bg-music");
@@ -3712,6 +3828,7 @@
 
       /** Wax-seal tap + parchment rustle + gold chime — unique to this game */
       function playChronicleClick(variant = "hover") {
+        if (variant === "click" || variant === "card") return;
         const vol = getSfxVolume();
         if (vol <= 0) return;
 
@@ -3796,26 +3913,6 @@
         el.volume = Math.min(vol * scale, 1);
         el.currentTime = 0;
         el.play().catch(() => {});
-      }
-
-      let lastHoverAt = 0;
-      function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach(
-          (el) => {
-            if (!el || el.dataset.hoverBound) return;
-            el.dataset.hoverBound = "true";
-            el.addEventListener("mouseenter", () => {
-              const now = Date.now();
-              if (now - lastHoverAt < 110) return;
-              lastHoverAt = now;
-              playChronicleClick("hover");
-            });
-            el.addEventListener("click", () => {
-              if (!el.classList.contains("memory-card"))
-                playChronicleClick("click");
-            });
-          },
-        );
       }
 
       function setDifficulty(level) {
@@ -4078,7 +4175,6 @@
           grid.appendChild(card);
         });
 
-        bindHoverSound(grid.querySelectorAll(".memory-card"));
         requestAnimationFrame(() => {
           syncBoardLayout();
           requestAnimationFrame(syncBoardLayout);
@@ -4102,7 +4198,6 @@
         startElapsedTimer();
         card.classList.add("is-flipped");
         flippedCards.push({ card, item });
-        playChronicleClick("card");
 
         if (flippedCards.length === 2) {
           moves++;
@@ -4121,10 +4216,12 @@
       function handleMatch(c1, c2, item) {
         matchedPairs++;
         const settings = CONFIG[difficulty];
-        const pairScore = settings.basePoints;
-        score += pairScore;
+        score = Math.round(
+          (matchedPairs / settings.pairs) * settings.maxScore,
+        );
 
-        document.getElementById("score-display").textContent = score;
+        document.getElementById("score-display").textContent =
+          formatScore(score);
         document.getElementById("pairs-count").textContent = matchedPairs;
         popHud("pairs-count");
         updatePairProgress();
@@ -4175,8 +4272,8 @@
       function updateElapsedTimeDisplay() {
         const timerEl = document.getElementById("timer-display");
         if (!timerEl) return;
-        const minutes = Math.floor(elapsedSeconds / 60);
-        const seconds = String(elapsedSeconds % 60).padStart(2, "0");
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = String(remainingSeconds % 60).padStart(2, "0");
         timerEl.textContent = `${minutes}:${seconds}`;
       }
 
@@ -4191,60 +4288,83 @@
 
       function resetElapsedTimer() {
         elapsedSeconds = 0;
+        remainingSeconds = CONFIG[difficulty].time;
+        timerDeadline = null;
         updateElapsedTimeDisplay();
 
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
         timerStarted = false;
       }
 
       function startElapsedTimer() {
         if (timerStarted) return;
         timerStarted = true;
-        timerInterval = setInterval(() => {
+        timerDeadline = Date.now() + remainingSeconds * 1000;
+        const updateTimer = () => {
           if (!gameActive) return;
-          elapsedSeconds++;
+          remainingSeconds = Math.max(
+            0,
+            Math.ceil((timerDeadline - Date.now()) / 1000),
+          );
+          elapsedSeconds = CONFIG[difficulty].time - remainingSeconds;
           updateElapsedTimeDisplay();
-        }, 1000);
+          if (remainingSeconds <= 0) endGame(false);
+        };
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 250);
+        timerVisibilityHandler = updateTimer;
+        document.addEventListener("visibilitychange", timerVisibilityHandler);
       }
 
-      function playAnnouncer(text) {
-        const vol = getSfxVolume();
-        if (vol > 0 && "speechSynthesis" in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.volume = vol;
-          window.speechSynthesis.speak(u);
-        }
-      }
-
-      function endGame() {
+      function endGame(completed = true) {
+        if (!gameActive) return;
         gameActive = false;
+        window.MatiGameSessionLock.release();
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        document.getElementById("end-game-btn").hidden = true;
 
         const settings = CONFIG[difficulty];
-        const totalEarned = score;
+        const totalEarned = completed
+          ? settings.maxScore
+          : Number(score.toFixed(2));
+        score = completed ? settings.maxScore : score;
 
         const results = document.getElementById("results-screen");
         results.classList.remove("hidden");
         results.classList.add("panel-enter");
 
         const finalEl = document.getElementById("final-score");
-        finalEl.textContent = moves;
+        finalEl.textContent = formatScore(totalEarned);
         finalEl.classList.remove("final-score-pop");
         void finalEl.offsetWidth;
         finalEl.classList.add("final-score-pop");
 
-        document.getElementById("result-badge").textContent = "Game complete";
+        document.getElementById("result-badge").textContent = completed
+          ? "Game complete"
+          : "Round ended";
         document.getElementById("result-title").textContent =
-          "Every pair matched!";
+          completed ? "Every pair matched!" : "Game ended early";
         document.getElementById("result-msg").textContent =
-          "Great memory! You matched every pair from Mati's heritage.";
-        document.getElementById("result-detail").textContent =
+          completed
+            ? "Great memory! You matched every pair from Mati's heritage."
+            : `You matched ${matchedPairs} of ${settings.pairs} pairs. Your earned score has been saved.`;
+        const resultDetail =
           `${moves} moves · ${matchedPairs}/${settings.pairs} pairs matched`;
+        document.getElementById("result-detail").textContent = completed
+          ? resultDetail
+          : `${resultDetail} · ${formatScore(totalEarned)} score earned`;
 
         const bestKey = `memoryPairsBestMoves:${difficulty}`;
         const savedBest = Number(localStorage.getItem(bestKey));
-        if (!savedBest || moves < savedBest) {
+        if (completed && (!savedBest || moves < savedBest)) {
           localStorage.setItem(bestKey, String(moves));
         }
         updateBestDisplay();
@@ -4260,12 +4380,17 @@
         const pointsEl = document.getElementById("header-total-points");
         if (pointsEl) pointsEl.textContent = String(currentTotal + totalEarned);
 
-        playAnnouncer(`Well done. You earned ${totalEarned} heritage points.`);
       }
 
       function resetToIntro() {
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
         gameActive = false;
+        window.MatiGameSessionLock.release();
         matchedPairs = 0;
         score = 0;
         moves = 0;
@@ -4273,7 +4398,8 @@
         showIntroScreen();
       }
 
-      function startGame() {
+      async function startGame() {
+        if (!(await window.MatiGameSessionLock.acquire("Memory Pairs"))) return;
         matchedPairs = 0;
         score = 0;
         moves = 0;
@@ -4295,8 +4421,13 @@
         if (overlay) overlay.classList.remove("is-visible");
         syncBoardLayout();
         gameActive = true;
+        document.getElementById("end-game-btn").hidden = false;
         resetElapsedTimer();
       }
+
+      document.getElementById("end-game-btn").addEventListener("click", () => {
+        if (gameActive) endGame(false);
+      });
 
       document.getElementById("replay-btn").addEventListener("click", () => {
         void startGame();
@@ -4332,15 +4463,10 @@
           leaveGameModal.setAttribute("aria-hidden", "true");
           clearInterval(timerInterval);
           gameActive = false;
+          window.MatiGameSessionLock.release();
           showDifficultyScreen();
         });
       }
-
-      bindHoverSound([
-        document.getElementById("new-game-btn"),
-        document.getElementById("replay-btn"),
-        ...document.querySelectorAll(".memory-game-size, .btn-chronicle"),
-      ]);
 
       initMusic();
       void startGame();
@@ -4371,11 +4497,6 @@
           window.initGlobalSettings();
         }
 
-        bindHoverSound(
-          document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-          ),
-        );
       });
     </script>
   </body>

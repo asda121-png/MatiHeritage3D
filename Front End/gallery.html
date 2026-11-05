@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gallery | Mati Heritage 3D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,9 +32,9 @@
     </style>
   </head>
   <body
-    class="gal-page gal-page--fullscreen visitor-module antialiased overflow-x-hidden gallery-hero-disabled"
+    class="gal-page gal-page--fullscreen visitor-module gallery-hero-disabled"
   >
-    <div id="header-placeholder" class="relative z-50"></div>
+    <div id="header-placeholder"></div>
 
     <div class="gal-ambient" aria-hidden="true">
       <div class="gal-ambient-gradient"></div>
@@ -342,7 +341,7 @@
           document.querySelectorAll(".site-nav__link").forEach((link) => {
             const routes = {
               home: "index.html",
-              about: "about_us.html",
+              about: "about.html",
               games: "game.html",
               "3d": "3dexplore.html",
               gallery: "gallery.html",

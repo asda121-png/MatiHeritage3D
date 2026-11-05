@@ -7,127 +7,49 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Oswald:wght@500;600;700&family=Press+Start+2P&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/auth.css" />
     <link rel="icon" type="image/png" href="assets/logos/logo.png" />
-    <style>
-      html,
-      .auth-body {
-        height: 100%;
-      }
-      .auth-portal-page {
-        padding-top: 2rem;
-      }
-
-      @media (max-width: 768px) {
-        .auth-portal-page {
-          padding-top: 0.5rem;
-        }
-      }
-      /* Responsive styles for tablets and smaller devices */
-      @media (max-width: 1024px) {
-        .auth-portal-visual {
-          display: none; /* Hide the visual panel on smaller screens */
-        }
-        .auth-portal-card {
-          width: 100%;
-          max-width: 480px; /* Set a max-width for the form card */
-          margin: auto;
-        }
-        .auth-portal-form {
-          padding: 2rem;
-        }
-      }
-
-      /* Additional adjustments for mobile phones */
-      @media (max-width: 768px) {
-        .auth-portal-form {
-          padding: 1.5rem;
-        }
-        .auth-portal-header {
-          text-align: center;
-        }
-        .auth-portal-logo__line {
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-    </style>
   </head>
-  <body class="auth-body auth-body--portal">
+  <body class="auth-body auth-body--portal auth-body--editorial">
     <div class="auth-portal-page">
       <div class="auth-portal-card auth-portal-card--register">
-        <aside class="auth-portal-visual auth-portal-visual--games">
-          <div
-            class="auth-portal-visual__media auth-portal-games-stage"
-            aria-hidden="true"
-          >
-            <div class="auth-portal-games-stage__dots"></div>
-            <div class="auth-portal-games-stage__scanline"></div>
-
-            <div class="auth-portal-games-pixel-loader" aria-hidden="true">
-              <span></span><span></span><span></span> <span></span><span></span
-              ><span></span> <span></span><span></span><span></span>
-            </div>
-
-            <h2 class="auth-portal-games-title">
-              <span class="auth-portal-games-title__word">
-                <span class="auth-portal-games-title__char" style="--i: 0"
-                  >G</span
-                >
-                <span class="auth-portal-games-title__char" style="--i: 1"
-                  >A</span
-                >
-                <span class="auth-portal-games-title__char" style="--i: 2"
-                  >M</span
-                >
-                <span class="auth-portal-games-title__char" style="--i: 3"
-                  >E</span
-                >
-                <span class="auth-portal-games-title__char" style="--i: 4"
-                  >S</span
-                >
-              </span>
-            </h2>
-
-            <p class="auth-portal-games-tagline">PLAY · LEARN · EXPLORE</p>
-          </div>
-          <div class="auth-portal-visual__overlay"></div>
-          <div class="auth-portal-visual__grain" aria-hidden="true"></div>
-
-          <div class="auth-portal-visual__content">
-            <div class="auth-portal-visual__brand">
-              <img
-                class="auth-portal-visual__seal"
-                src="assets/logos/Flag_of_Mati,_Davao_Oriental.png"
-                alt="City of Mati seal"
-                width="68"
-                height="68"
-                style="background: none; border: none; box-shadow: none"
-              />
-              <div class="auth-portal-visual__brand-text">
-                <p class="auth-portal-visual__name">City of Mati</p>
-                <p class="auth-portal-visual__tagline">
-                  Tourism and Promotions Office
-                </p>
-              </div>
-              <img
-                class="auth-portal-visual__tourism"
-                src="assets/logos/City of Mati Tourism and Promotions Office.png"
-                alt="City Tourism and Promotions Office"
-                width="86"
-                height="48"
-              />
-            </div>
+        <aside class="auth-portal-visual auth-portal-visual--editorial">
+          <img
+            class="auth-editorial-photo"
+            src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
+            alt="A participant in the colorful Sambuokan Festival attire"
+            fetchpriority="high"
+          />
+          <div class="auth-editorial-overlay"></div>
+          <a class="auth-editorial-brand" href="/">
+            <img src="assets/logos/logo.png" alt="" width="46" height="46" />
+            <span>
+              <strong>Mati Heritage 3D</strong>
+              <small>Discover Mati's heritage</small>
+            </span>
+          </a>
+          <div class="auth-editorial-copy">
+            <h2>Explore the stories<br />that shape Mati.</h2>
+            <p class="auth-editorial-description">
+              A closer look at the places, traditions, and landscapes that make
+              our heritage unique.
+            </p>
+            <ul class="auth-editorial-highlights">
+              <li>Explore heritage places in 3D</li>
+              <li>Learn the stories behind each site</li>
+              <li>Discover Mati’s natural treasures</li>
+            </ul>
+            <p class="auth-editorial-caption">Sambuokan Festival · City of Mati</p>
           </div>
         </aside>
 
         <main class="auth-portal-form auth-portal-form--register">
           <a
-            href="index.html"
+            href="/"
             class="auth-portal-back"
             aria-label="Back to visitor portal"
           >
@@ -144,7 +66,7 @@
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            <span>Visitor portal</span>
+            <span>Back to site</span>
           </a>
 
           <div class="auth-portal-form__inner">
@@ -154,11 +76,21 @@
                   src="assets/logos/logo.png"
                   alt="Mati Heritage 3D"
                   class="auth-portal-logo__image"
-                  style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
                 />
               </div>
-              <p class="auth-portal-header__welcome">Create Your Account</p>
+              <h1 class="auth-portal-header__welcome">Join the journey</h1>
+              <p class="auth-portal-header__sub">
+                Create an account to save places, explore heritage in 3D, and
+                discover Mati’s history.
+              </p>
             </header>
+
+            <nav class="auth-portal-switch" aria-label="Account access">
+              <a href="login">Sign in</a>
+              <a class="is-active" href="userregistration" aria-current="page"
+                >Register account</a
+              >
+            </nav>
 
             <div
               id="register-alert"
@@ -399,11 +331,6 @@
                     aria-hidden="true"
                   ></span>
                 </button>
-                <a
-                  href="login.html"
-                  class="auth-portal-btn auth-portal-btn--outline"
-                  >Login</a
-                >
               </div>
             </form>
           </div>
@@ -442,7 +369,13 @@
         const submitBtn = document.getElementById("register-submit");
 
         const usernameInput = document.getElementById("register-username");
-        usernameInput?.focus();
+        if (
+          !window.matchMedia(
+            "(max-width: 768px), (pointer: coarse)",
+          ).matches
+        ) {
+          usernameInput?.focus();
+        }
         const emailInput = document.getElementById("register-email");
         const usernameHint = document.getElementById("register-username-hint");
         const emailHint = document.getElementById("register-email-hint");

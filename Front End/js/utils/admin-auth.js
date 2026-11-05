@@ -16,24 +16,29 @@ const MatiAdminAuth = (() => {
     const sb = MatiSupabase?.getClient?.();
     if (!sb) return null;
 
-    const { data, error } = await sb
-      .from("profiles")
-      .select("role")
-      .eq("email", String(session.email).trim().toLowerCase())
-      .maybeSingle();
+    const userId = await MatiSupabaseAuth?.getCurrentUserId?.();
+    const query = sb.from("profiles").select("role");
+    const { data, error } = userId
+      ? await query.eq("id", userId).maybeSingle()
+      : await query
+          .eq("email", String(session.email).trim().toLowerCase())
+          .maybeSingle();
 
     if (error) {
       console.warn("MatiAdminAuth: role lookup failed", error);
       return null;
     }
 
-    return data?.role || null;
+    return String(data?.role || "").trim().toLowerCase() || null;
   }
 
   async function isAdmin() {
     await restoreSession();
     if (!MatiAuth?.isLoggedIn?.()) return false;
-    return (await fetchRole()) === "admin";
+    const sessionRole = String(MatiAuth.getSession()?.role || "")
+      .trim()
+      .toLowerCase();
+    return sessionRole === "admin" || (await fetchRole()) === "admin";
   }
 
   async function requireAdmin() {

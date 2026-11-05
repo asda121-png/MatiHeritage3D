@@ -42,7 +42,22 @@
         </div>
       </section>
 
-      <section class="map-section" aria-label="Mati City heritage map">
+      <nav class="map-page-nav" aria-label="Map page sections">
+        <a href="#mati-map-section">
+          Explore Mati City
+          <span id="map-nav-site-count">19</span>
+        </a>
+        <a href="#sites-by-barangay">
+          Sites by barangay
+          <span id="map-nav-barangay-count">7</span>
+        </a>
+      </nav>
+
+      <section
+        class="map-section"
+        id="mati-map-section"
+        aria-label="Mati City heritage map"
+      >
         <aside class="map-explorer" aria-label="Explore Mati City locations">
           <header class="map-explorer__header">
             <span class="map-site-count" id="map-site-count"
@@ -79,7 +94,7 @@
             <h2 id="map-selection-title">Choose a location</h2>
             <a
               id="map-selection-link"
-              href="3dexplore.html"
+              href="3dexplore"
               aria-disabled="true"
               tabindex="-1"
             >
@@ -119,7 +134,7 @@
           <div class="map-barangays__intro">
             <h2 id="map-barangays-title">Sites by barangay</h2>
             <p>
-              Every mapped heritage site, grouped by the barangay it sits in.
+              Explore Mati's heritage sites, organized by barangay.
             </p>
           </div>
           <div class="map-barangay-list" id="map-barangay-list"></div>
@@ -138,6 +153,7 @@
     <script src="_backend/supabase-config.js"></script>
     <script src="_backend/supabase-client.js"></script>
     <script src="_backend/supabase-api.js"></script>
+    <script src="js/utils/heritage/heritage-realtime.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
@@ -145,6 +161,7 @@
     <script src="js/utils/auth-logout.js"></script>
     <script src="assets/data/mati-city-boundary.js"></script>
     <script src="js/utils/heritage/heritage-map-sites.js"></script>
+    <script src="js/utils/heritage/heritage-data.js"></script>
     <script src="js/pages/map-page.js"></script>
     <script>
       async function loadSharedComponent(url, selector, placeholderId, init) {

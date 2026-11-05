@@ -19,12 +19,12 @@ const ADMIN_HERITAGE_SCOPE = {
   },
   intangible: {
     label: "Intangible Cultural Heritage",
-    mediaTypes: ["photo", "video", "audio", "link"],
+    mediaTypes: ["photo", "video", "audio"],
     siteIds: ["pujada-festival", "sambuokan", "dioscoro"],
   },
   natural: {
     label: "Natural Heritage",
-    mediaTypes: ["photo", "video", "link"],
+    mediaTypes: ["photo", "video"],
     siteIds: [
       "mamacao",
       "taytay-daga",

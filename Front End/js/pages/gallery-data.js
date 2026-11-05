@@ -223,8 +223,8 @@ const GALLERY_FESTIVALS = {
   },
   pujada: {
     id: "pujada",
-    name: "Pujada Festival",
-    accent: "#0284c7",
+    name: "Pujada Bay Festival",
+    accent: "#f59e0b",
     culmination: "June 19",
     location: "City of Mati, Davao Oriental",
     theme:
@@ -380,7 +380,7 @@ const GALLERY_FESTIVALS = {
         text: "The festival expanded its reach with the Rajah Sports Fest and reinforced its position as a global leader in marine biodiversity education.",
         image:
           "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island-3.jpg",
-        imageAlt: "Pujada Festival celebrations",
+        imageAlt: "Pujada Bay Festival celebrations",
         imageCaption:
           "Figure: The 22nd anniversary reinforced Mati's role in marine biodiversity education.",
       },
@@ -403,7 +403,7 @@ const GALLERY_SITES = [
   },
   {
     id: "pujada-festival",
-    name: "Pujada Festival",
+    name: "Pujada Bay Festival",
     category: "intangible",
     categoryLabel: "Intangible Cultural Heritage",
     heritageCategory: "Festive Events/Festival",
@@ -430,6 +430,7 @@ const GALLERY_SITES = [
     name: "Mamacao Tree",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Tree",
     cover:
       "assets/data/Natural Heritage/Mamacao Tree/Photographs/J2048x1536-00472.jpg",
     description:
@@ -443,6 +444,7 @@ const GALLERY_SITES = [
     name: "Taytay Daga (Sleeping Dinosaur)",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Land formation",
     cover:
       "assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg",
     description:
@@ -456,6 +458,7 @@ const GALLERY_SITES = [
     name: "Guang-guang Mangrove Nature Reserve Park",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Bodies of Water",
     cover:
       "assets/data/Natural Heritage/Guang-guang Mangrove Nature Reserve Park/Photographs/d.jpg",
     description:
@@ -469,6 +472,7 @@ const GALLERY_SITES = [
     name: "Dahican Shoreline",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Land formation",
     cover: "",
     description:
       "The Dahican Shoreline is a seven-kilometer stretch of white sand and turquoise waters in Dahican. Known as a sanctuary for sea turtles and a hub for professional skimboarding and surfing, this coastal area offers a raw, tropical escape. Experience the natural beauty of the Pacific-facing shores, from watching local surfers master the waves to enjoying the scenic, palm-lined, white sand beach of Mati.",
@@ -481,6 +485,7 @@ const GALLERY_SITES = [
     name: "Oak Island",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Bodies of Water",
     cover: "assets/data/Natural Heritage/Oak Island/Photographs/Oak island1.JPG",
     description:
       "Oak Island, also known as Vanishing Island, is a stunning white-sand bar in Pujada Bay that emerges only during low tide. Famous for its crystal-clear turquoise waters, it is a premier destination for snorkeling and island hopping in the City of Mati. This protected natural wonder offers a unique, ever-changing landscape that showcases the pristine maritime beauty of Davao Oriental.",
@@ -493,6 +498,7 @@ const GALLERY_SITES = [
     name: "Pujada Island",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Bodies of Water",
     cover:
       "assets/data/Natural Heritage/Pujada Island/Photographs/pujada island 1.jpg",
     description:
@@ -506,6 +512,7 @@ const GALLERY_SITES = [
     name: "Pujada Bay",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Bodies of Water",
     cover: "assets/data/GALLERY/DJI_0812.jpg",
     description:
       "Pujada Bay is a majestic cove characterized by its turquoise waters, powdery white-sand beaches, and a dramatic backdrop of mountain ranges. It is located downstream of the Mount Hamiguitan Range Wildlife Sanctuary, a UNESCO World Heritage site, and serves as a vital ecological link between the highlands and the ocean (H2O). The bay features a complex network of fertile coral reefs (1,175.75 ha), expansive seagrass beds (610.44 ha), and lush mangrove forests (262.71 ha). The bay's geography is punctuated by alluring islands and islets, most notably Sleeping Dinosaur, Pujada, Waniban, Oak, and Ivy. It encompasses ten coastal communities—Macambol, Mamali, Dawan, Badas, Central, Matiao, Dahican, Bobon, Tamisan, and Lawigan—where residents interact with nature for both recreation and sustainable livelihoods.",
@@ -518,6 +525,7 @@ const GALLERY_SITES = [
     name: "Waniban Island",
     category: "natural",
     categoryLabel: "Natural Heritage",
+    heritageCategory: "Bodies of Water",
     cover: "assets/data/GALLERY/Waniban-island.jpg",
     description:
       'Waniban Island is a pristine four-hectare islet situated within the protected waters of Pujada Bay and is one of the three primary destinations forming the "Tri-Island" hopping circuit of the City of Mati. Located just a short boat ride from Barangay Tamisan, the island is characterized by a stunning contrast between its powdery white coral sand beaches and a lush, verdant interior. The surrounding marine environment is defined by exceptionally clear turquoise waters, offering high visibility for underwater exploration. The northern side of the island is particularly notable for its vibrant coral gardens and steep underwater drop-offs, establishing it as a premier location for snorkeling and scuba diving. Additionally, the island serves as a natural barrier within the bay, ensuring moderate to calm wave conditions that enhance its appeal as a peaceful recreational sanctuary.',
@@ -931,16 +939,16 @@ const GALLERY_MEDIA = [
   ...PUJADA_PHOTOS.map((file) =>
     galleryPhoto(
       "pujada-festival",
-      "Pujada Festival",
+      "Pujada Bay Festival",
       "intangible",
       `assets/data/Natural Heritage/Pujada Island/Photographs/${file}`,
-      `Pujada Festival — ${file.replace(/\.[^.]+$/, "")}`,
+      `Pujada Bay Festival — ${file.replace(/\.[^.]+$/, "")}`,
     ),
   ),
   ...GALLERY_FESTIVALS.pujada.externalVideos.map((v) =>
     galleryLink(
       "pujada-festival",
-      "Pujada Festival",
+      "Pujada Bay Festival",
       "intangible",
       v.url,
       v.label,

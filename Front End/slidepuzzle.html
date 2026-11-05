@@ -112,7 +112,7 @@
         align-items: center;
         justify-content: center;
         font-size: 0.9rem;
-        background: linear-gradient(135deg, var(--nat-leaf), var(--nat-moss));
+        background: transparent;
         color: #fff;
         transition: transform 0.15s ease;
       }
@@ -397,6 +397,25 @@
         aspect-ratio: 1;
         margin: 0 auto;
         box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.45);
+        transition: filter 180ms ease;
+      }
+
+      .game-console.is-preview .game-hud {
+        filter: blur(5px);
+        opacity: 0.55;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .game-console.is-preview #puzzle-board {
+        filter: blur(24px) brightness(0.25);
+        opacity: 0.25;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .game-console.is-preview #site-panel {
+        display: none;
       }
 
       .puzzle-tile {
@@ -879,7 +898,6 @@
 
       .puzzle-new {
         min-height: 3rem;
-        margin-left: auto;
         padding: 0.55rem 1.25rem;
         border: 1px solid #252a27;
         border-radius: 999px;
@@ -894,6 +912,33 @@
 
       .puzzle-new:hover {
         background: #126b4b;
+      }
+
+      .puzzle-end {
+        min-height: 3rem;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font: 700 1.15rem "Quicksand", sans-serif;
+        cursor: pointer;
+        transition: background-color 140ms ease;
+      }
+
+      .puzzle-end:hover {
+        background: #f0f7f2;
+      }
+
+      .puzzle-round-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+      }
+
+      .puzzle-round-actions [hidden] {
+        display: none;
       }
 
       .game-hud {
@@ -979,7 +1024,7 @@
         align-content: center;
         gap: 0.75rem;
         border-radius: 0.5rem;
-        background: rgba(13, 40, 24, 0.32);
+        background: rgba(13, 40, 24, 0.98);
       }
 
       .puzzle-image-error {
@@ -1190,10 +1235,13 @@
       }
 
       .now-playing {
-        padding: 0.3rem;
-        border: 1px solid #ded9ce;
-        background: #fffefa;
-        box-shadow: 0 4px 14px rgba(37, 42, 45, 0.1);
+        display: none !important;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
       }
 
       .now-playing__title {
@@ -1210,28 +1258,119 @@
           min-height: 0;
           padding: 0.75rem 0 2rem;
         }
+
+        .game-console {
+          width: calc(100% - 2rem);
+          max-width: none;
+          padding-top: 0.75rem;
+        }
+
+        .puzzle-heading {
+          margin-bottom: 1.1rem;
+        }
+
+        .puzzle-heading h1 {
+          font-size: clamp(2.15rem, 9vw, 2.8rem);
+          line-height: 1.08;
+        }
+
+        .puzzle-heading p {
+          margin-top: 0.55rem;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
+        .puzzle-controls {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.65rem;
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.9rem;
+        }
+
+        .puzzle-controls__label {
+          font-size: 1rem;
+        }
+
+        .puzzle-sizes {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          width: 100%;
+          border-radius: 0.85rem;
+        }
+
+        .puzzle-size {
+          min-width: 0;
+          min-height: 3.25rem;
+          padding: 0.45rem 0.25rem;
+          font-size: 0.9rem;
+          white-space: normal;
+        }
+
+        .puzzle-size span {
+          display: block;
+          margin-top: 0.1rem;
+          font-size: 0.76em;
+        }
+
+        .puzzle-round-actions {
+          width: 100%;
+          margin: 0;
+          gap: 0.5rem;
+        }
+
+        .puzzle-round-actions button {
+          flex: 1 1 0;
+          min-width: 0;
+          min-height: 2.85rem;
+          padding: 0.45rem 0.6rem;
+          font-size: 0.95rem;
+        }
+
+        .game-hud {
+          gap: 0.5rem;
+          padding: 0.65rem 0;
+        }
+
+        .puzzle-stat__label {
+          font-size: 0.76rem;
+        }
+
+        .puzzle-stat__value {
+          font-size: 1.55rem;
+        }
+
+        .game-main {
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
+        .puzzle-frame,
+        #puzzle-board {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .site-panel {
+          padding: 0.5rem 0;
+        }
+
+        .site-panel__name {
+          font-size: 1.25rem;
+        }
       }
 
       @media (max-width: 560px) {
         .puzzle-controls {
-          align-items: flex-start;
+          align-items: stretch;
         }
 
         .puzzle-controls__label {
-          flex-basis: 100%;
-        }
-
-        .puzzle-size {
-          padding-inline: 0.6rem;
-          font-size: 1rem;
-        }
-
-        .puzzle-new {
-          margin-left: 0;
+          flex-basis: auto;
         }
 
         .puzzle-heading h1 {
-          font-size: clamp(2.75rem, 10vw, 3rem);
+          font-size: clamp(2rem, 8.5vw, 2.6rem);
         }
       }
     </style>
@@ -1284,13 +1423,13 @@
       <span class="min-w-0 flex-1">
         <span
           class="now-playing__title block text-xs font-bold truncate text-white"
-          >Puzzle Trail</span
+          >Zambolino - Caribbean · FreeToUse.com</span
         >
       </span>
     </aside>
 
     <main class="puzzle-stage">
-      <section id="game-screen" class="game-console" aria-label="Slide Puzzle">
+      <section id="game-screen" class="game-console is-preview" aria-label="Slide Puzzle">
         <header class="puzzle-heading">
           <h1>Slide Puzzle</h1>
           <p>
@@ -1306,7 +1445,12 @@
             <button type="button" class="puzzle-size" data-level="medium" aria-pressed="false">Medium <span>(4 &times; 4)</span></button>
             <button type="button" class="puzzle-size" data-level="hard" aria-pressed="false">Hard <span>(6 &times; 6)</span></button>
           </div>
-          <button type="button" id="new-game-btn" class="puzzle-new">New game</button>
+          <div class="puzzle-round-actions">
+            <button type="button" id="new-game-btn" class="puzzle-new">New Puzzle</button>
+            <button type="button" id="end-game-btn" class="puzzle-end" hidden>
+              End Puzzle
+            </button>
+          </div>
         </div>
 
         <div class="game-hud">
@@ -1319,7 +1463,7 @@
             <span id="timer-display" class="puzzle-stat__value">05:00</span>
           </div>
           <div class="puzzle-stat">
-            <span class="puzzle-stat__label">Points</span>
+            <span class="puzzle-stat__label">Score</span>
             <span id="score-display" class="puzzle-stat__value puzzle-stat__value--score">0</span>
           </div>
           <span id="elapsed-display" class="hidden">00:00 elapsed</span>
@@ -1333,8 +1477,8 @@
           <div id="game-play-area">
             <div class="puzzle-frame">
               <div id="puzzle-board" aria-label="Sliding puzzle board"></div>
-              <div id="puzzle-start-overlay" class="puzzle-start-overlay hidden">
-                <button type="button" id="start-puzzle-btn" class="puzzle-new puzzle-start">
+              <div id="puzzle-start-overlay" class="puzzle-start-overlay">
+                <button type="button" id="start-puzzle-btn" class="puzzle-new puzzle-start hidden">
                   Start Puzzle
                 </button>
                 <p id="puzzle-image-error" class="puzzle-image-error hidden" role="status">
@@ -1367,7 +1511,7 @@
             <div class="heritage-reveal__stats">
               <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Time</span><span id="reveal-stat-time" class="heritage-reveal__stat-value">&mdash;</span></div>
               <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Moves</span><span id="reveal-stat-moves" class="heritage-reveal__stat-value">&mdash;</span></div>
-              <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Points</span><span id="reveal-stat-score" class="heritage-reveal__stat-value">&mdash;</span></div>
+              <div class="heritage-reveal__stat"><span class="heritage-reveal__stat-label">Score</span><span id="reveal-stat-score" class="heritage-reveal__stat-value">&mdash;</span></div>
             </div>
             <button type="button" id="reveal-continue-btn" class="puzzle-new heritage-reveal__continue">View Results</button>
           </div>
@@ -1437,7 +1581,7 @@
           >
             Play Again
           </button>
-          <a href="game.html" class="btn-ghost">Back to Games</a>
+          <a href="game" class="btn-ghost">Back to Games</a>
         </div>
       </section>
     </main>
@@ -1446,10 +1590,9 @@
 
     <audio
       id="bg-music"
-      src="assets/bgmusic/slidepuzzle.mp3"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
       loop
-      preload="auto"
-      autoplay
+      preload="none"
     ></audio>
 
     <script src="js/visitor-shell.js"></script>
@@ -1466,10 +1609,12 @@
     <script src="js/games/heritage-game-content.js"></script>
     <script src="_backend/supabase-auth.js"></script>
     <script src="js/utils/auth.js"></script>
+    <script src="js/utils/auth-logout.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
+    <script src="js/games/game-session-lock.js"></script>
     <script src="js/utils/heritage/heritage-points.js"></script>
     <script src="js/games/game-tv-transition.js"></script>
-    <script src="js/games/game-exit-guard.js"></script>
     <script>
       void MatiGameAuthGate.init({ returnTo: "slidepuzzle.html" });
       if (typeof window.initTvExpandReceive === "function") {
@@ -1485,16 +1630,13 @@
           .getElementById("music-volume")
           ?.addEventListener("input", (e) => {
             musicVol = parseFloat(e.target.value);
+            localStorage.setItem("bgMusicVol", e.target.value);
             if (bgMusic) bgMusic.volume = musicVol;
             syncBgmVolume();
+            if (musicVol <= 0) getActiveBgm()?.pause();
             updateMusicUI();
           });
 
-        bindHoverSound(
-          document.querySelectorAll(
-            ".site-nav__link, .site-mobile-nav__link, .header-dropdown a, #settings-link, .site-profile__trigger, .site-nav-toggle, #close-settings, #save-settings",
-          ),
-        );
       });
       let heritageSites = [
         {
@@ -1609,19 +1751,19 @@
       const config = {
         easy: {
           size: 3,
-          time: 300,
-          basePoints: 50,
+          time: 180,
+          basePoints: 100,
           label: "EASY",
         },
         medium: {
           size: 4,
-          time: 480,
-          basePoints: 120,
+          time: 300,
+          basePoints: 150,
           label: "MEDIUM",
         },
         hard: {
           size: 6,
-          time: 600,
+          time: 480,
           basePoints: 200,
           label: "HARD",
         },
@@ -1634,6 +1776,8 @@
       let totalTime = 0;
       let elapsedSeconds = 0;
       let timerInterval;
+      let timerDeadline = null;
+      let timerVisibilityHandler = null;
       let gameActive = false;
       let currentSite = null;
       let emptyPos = 0;
@@ -1650,7 +1794,6 @@
       let musicMuted = localStorage.getItem("slidePuzzleBgmMuted") === "true";
       let curatorAudioCtx = null;
       let musicMode = "intro";
-      let lastHoverAt = 0;
       let pendingWinScore = 0;
 
       function getCuratorAudioCtx() {
@@ -1738,6 +1881,7 @@
 
       /** Heritage gallery UI — wooden frame, parchment, kalimba; unique to Slide Puzzle */
       function playCuratorSound(variant = "click") {
+        if (variant === "click") return;
         const vol = getSfxVolume();
         if (vol <= 0) return;
         try {
@@ -1842,25 +1986,6 @@
         } catch (_) {}
       }
 
-      function bindHoverSound(elements) {
-        (elements instanceof NodeList ? [...elements] : elements).forEach(
-          (el) => {
-            if (!el || el.dataset.curatorHoverBound) return;
-            el.dataset.curatorHoverBound = "true";
-            el.addEventListener("mouseenter", () => {
-              const ts = Date.now();
-              if (ts - lastHoverAt < 100) return;
-              lastHoverAt = ts;
-              playCuratorSound("hover");
-            });
-            el.addEventListener("click", () => {
-              if (el.tagName !== "INPUT" && el.tagName !== "SELECT")
-                playCuratorSound("click");
-            });
-          },
-        );
-      }
-
       function getActiveBgm() {
         return document.getElementById("bg-music");
       }
@@ -1881,7 +2006,7 @@
         const titleEl = document.getElementById("now-playing-title");
         if (!titleEl) return;
         titleEl.textContent =
-          musicMode === "game" ? "Heritage Puzzle Rush" : "Mati Summer Trail";
+          "Zambolino - Caribbean · FreeToUse.com";
       }
 
       function setMusicMode(mode) {
@@ -1889,14 +2014,7 @@
         const bgMusic = getActiveBgm();
         if (!bgMusic) return;
 
-        const newSrc = "assets/data/audio/slidepuzzle.mp3";
-
         updateNowPlayingTitle();
-        const wasPlaying = musicStarted && !musicMuted && musicVol > 0;
-        if (bgMusic.src !== newSrc) {
-          bgMusic.src = newSrc;
-          if (wasPlaying) bgMusic.play().catch(() => {});
-        }
       }
 
       function updateMusicUI() {
@@ -1980,7 +2098,6 @@
       }
 
       function setDifficulty(level) {
-        playCuratorSound("click");
         difficulty = level;
         document.querySelectorAll(".puzzle-size").forEach((button) => {
           const isActive = button.dataset.level === level;
@@ -2151,7 +2268,6 @@
           moves++;
           document.getElementById("moves-display").textContent = moves;
           updateLiveScore();
-          playCuratorSound("slide");
           renderBoard();
           checkWin();
         }
@@ -2169,6 +2285,7 @@
       function showHeritageReveal() {
         gameActive = false;
         clearInterval(timerInterval);
+        document.getElementById("end-game-btn").hidden = true;
 
         pendingWinScore = config[difficulty].basePoints;
 
@@ -2204,14 +2321,22 @@
         totalTime = config[difficulty].time;
         timeLeft = totalTime;
         elapsedSeconds = 0;
+        timerDeadline = Date.now() + totalTime * 1000;
         updateTimerUI();
-        timerInterval = setInterval(() => {
-          timeLeft--;
-          elapsedSeconds++;
+        const updateTimer = () => {
+          timeLeft = Math.max(
+            0,
+            Math.ceil((timerDeadline - Date.now()) / 1000),
+          );
+          elapsedSeconds = totalTime - timeLeft;
           updateTimerUI();
           updateLiveScore();
           if (timeLeft <= 0) endGame(false);
-        }, 1000);
+        };
+        updateTimer();
+        timerVisibilityHandler = updateTimer;
+        timerInterval = setInterval(updateTimer, 250);
+        document.addEventListener("visibilitychange", timerVisibilityHandler);
       }
 
       function updateTimerUI() {
@@ -2236,9 +2361,16 @@
           .join("");
       }
 
-      function endGame(win) {
+      function endGame(win, endedEarly = false) {
         gameActive = false;
+        window.MatiGameSessionLock.release();
         clearInterval(timerInterval);
+        if (timerVisibilityHandler) {
+          document.removeEventListener("visibilitychange", timerVisibilityHandler);
+          timerVisibilityHandler = null;
+        }
+        timerDeadline = null;
+        document.getElementById("end-game-btn").hidden = true;
 
         setMusicMode("intro");
 
@@ -2264,7 +2396,7 @@
           renderScoreBreakdown([
             { label: "Heritage Site", value: siteName },
             { label: "Difficulty", value: cfg.label },
-            { label: "Points Earned", value: totalEarned.toLocaleString() },
+            { label: "Score Earned", value: totalEarned.toLocaleString() },
           ]);
 
           if (typeof MatiHeritagePoints !== "undefined") {
@@ -2282,46 +2414,39 @@
           }
 
           pendingWinScore = 0;
-          playAnnouncer(
-            `Heritage restored! You earned ${totalEarned.toLocaleString()} points for completing ${siteName}.`,
-          );
         } else {
-          document.getElementById("victory-title").textContent = "Time's Up";
+          document.getElementById("victory-title").textContent = endedEarly
+            ? "Puzzle ended"
+            : "Time's Up";
           document.getElementById("final-score").textContent = "0";
           document.getElementById("result-msg").textContent =
-            `Time ran out before ${siteName} could be restored. Try again!`;
+            endedEarly
+              ? `You ended the puzzle with ${moves} moves in ${formatTime(elapsedSeconds)}. No score was earned this round.`
+              : `Time ran out before ${siteName} could be restored. Try again!`;
           renderScoreBreakdown([
             { label: "Heritage Site", value: siteName },
             { label: "Difficulty", value: cfg.label },
             { label: "Moves Made", value: moves.toString() },
             { label: "Time Elapsed", value: formatTime(elapsedSeconds) },
-            { label: "Points Earned", value: "0" },
+            { label: "Score Earned", value: "0" },
           ]);
-          playAnnouncer(
-            "Time expired. Try again to restore this heritage photo.",
-          );
-        }
-      }
-
-      function playAnnouncer(text) {
-        const sVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
-        if (sVol > 0 && "speechSynthesis" in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.volume = sVol;
-          window.speechSynthesis.speak(u);
         }
       }
 
       document.getElementById("reveal-continue-btn").onclick = () => {
-        playCuratorSound("click");
         endGame(true);
       };
 
       async function startPuzzle() {
         clearInterval(timerInterval);
+        window.MatiGameSessionLock.release();
         gameActive = false;
-        document.getElementById("puzzle-start-overlay").classList.add("hidden");
+        document.getElementById("end-game-btn").hidden = true;
+        const startOverlay = document.getElementById("puzzle-start-overlay");
+        const startButton = document.getElementById("start-puzzle-btn");
+        document.getElementById("game-screen").classList.add("is-preview");
+        startOverlay.classList.remove("hidden");
+        startButton.classList.add("hidden");
 
         sfxVol = parseFloat(localStorage.getItem("sfxVol") || "0.8");
         applyMusicVolume();
@@ -2329,16 +2454,14 @@
         document.getElementById("results-screen").classList.add("hidden");
         document.querySelector(".puzzle-help").classList.remove("hidden");
         document.getElementById("puzzle-image-error").classList.add("hidden");
-        document.getElementById("start-puzzle-btn").classList.remove("hidden");
 
         try {
           await prepareSlideSites();
           await pickRandomSite();
         } catch (error) {
           console.error("Slide puzzle could not load a heritage photo:", error);
-          document.getElementById("start-puzzle-btn").classList.add("hidden");
+          startButton.classList.add("hidden");
           document.getElementById("puzzle-image-error").classList.remove("hidden");
-          document.getElementById("puzzle-start-overlay").classList.remove("hidden");
           return;
         }
         initBoard();
@@ -2347,23 +2470,26 @@
         timeLeft = totalTime;
         elapsedSeconds = 0;
         updateTimerUI();
-        document.getElementById("puzzle-start-overlay").classList.remove("hidden");
+        startButton.classList.remove("hidden");
         setMusicMode("intro");
       }
 
-      function beginPuzzle() {
+      async function beginPuzzle() {
         if (gameActive || !currentSite) return;
+        if (!(await window.MatiGameSessionLock.acquire("Slide Puzzle"))) return;
         document.getElementById("puzzle-start-overlay").classList.add("hidden");
-        playCuratorSound("start");
+        document.getElementById("game-screen").classList.remove("is-preview");
         getCuratorAudioCtx();
         startPuzzleMusic();
         setMusicMode("game");
         gameActive = true;
+        document.getElementById("end-game-btn").hidden = false;
         startTimer();
-        playAnnouncer(
-          `${config[difficulty].label} difficulty. Restore the ${currentSite.name} heritage photograph.`,
-        );
       }
+
+      document.getElementById("end-game-btn").addEventListener("click", () => {
+        if (gameActive) endGame(false, true);
+      });
 
       document.querySelectorAll(".puzzle-size").forEach((button) => {
         button.addEventListener("click", () => {
@@ -2382,27 +2508,11 @@
       if (musicToggleBtn) {
         musicToggleBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          playCuratorSound("click");
           getCuratorAudioCtx();
           toggleMusicMute();
         });
       }
 
-      bindHoverSound(
-        document.querySelectorAll(
-          ".puzzle-size, .puzzle-new, .results-actions .puzzle-new, .results-actions .btn-ghost, #reveal-continue-btn",
-        ),
-      );
-
-      if (typeof MatiGameExitGuard !== "undefined") {
-        MatiGameExitGuard.init({ isActive: () => gameActive, theme: "nature" });
-      }
-      document
-        .querySelector(".results-actions .puzzle-new")
-        ?.addEventListener("click", () => playCuratorSound("click"));
-      document
-        .querySelector(".results-actions .btn-ghost")
-        ?.addEventListener("click", () => playCuratorSound("click"));
       bindPuzzleMusicStart();
       applyMusicVolume();
       updateNowPlayingTitle();

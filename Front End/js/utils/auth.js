@@ -2,6 +2,7 @@ const MatiAuth = (() => {
   const USERS_KEY = "matiHeritageUsers";
   const SESSION_KEY = "matiHeritageSession";
   const SESSION_KEY_REMEMBER = "matiHeritageSessionRemember";
+  const LOGOUT_SIGNAL_KEY = "matiHeritageLogoutSignal";
 
   function readUsers() {
     try {
@@ -83,6 +84,20 @@ const MatiAuth = (() => {
     localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
   }
+
+  function broadcastLogout() {
+    try {
+      localStorage.setItem(LOGOUT_SIGNAL_KEY, `${Date.now()}-${Math.random()}`);
+    } catch (error) {
+      console.warn("Could not sync logout to other tabs.", error);
+    }
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== LOGOUT_SIGNAL_KEY) return;
+    clearSession();
+    window.dispatchEvent(new Event("mati-auth-logout"));
+  });
 
   function usesSupabaseAuth() {
     return Boolean(
@@ -307,6 +322,7 @@ const MatiAuth = (() => {
       await MatiSupabaseAuth.logout();
     }
     clearSession();
+    broadcastLogout();
   }
 
   function isLoggedIn() {

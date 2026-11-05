@@ -9,7 +9,6 @@ const MatiGameAuthGate = (() => {
     "game.html",
     "trivia.html",
     "memorypairs.html",
-    "spotthedifference.html",
     "slidepuzzle.html",
     "truefalsesprint.html",
   ]);
@@ -51,8 +50,8 @@ const MatiGameAuthGate = (() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.75);
+        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.58);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -66,11 +65,11 @@ const MatiGameAuthGate = (() => {
       .game-auth-gate__dialog {
         display: block;
         width: 100%;
-        max-width: 400px;
-        border-radius: 12px;
+        max-width: 560px;
+        border-radius: 4px;
         overflow: hidden;
         background: #fff;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 18px 55px rgba(15, 23, 42, 0.2);
         opacity: 0;
         transform: translateY(10px);
         transition: opacity 0.3s ease, transform 0.3s ease;
@@ -82,23 +81,23 @@ const MatiGameAuthGate = (() => {
       }
 
       .game-auth-gate__dialog .auth-portal-form {
-        padding: 2.5rem 2rem;
+        padding: 3.75rem clamp(2rem, 7vw, 4rem) 3.25rem;
         position: relative;
       }
 
       .game-auth-gate__dialog .auth-portal-back {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 1.25rem;
+        right: 1.5rem;
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
         padding: 0.4rem 0.75rem;
         border-radius: 6px;
         font-family: "Source Sans 3", system-ui, sans-serif;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: #64748b;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--portal-navy);
         text-decoration: none;
         background: transparent;
         border: none;
@@ -119,23 +118,13 @@ const MatiGameAuthGate = (() => {
         text-align: center;
       }
 
-      .game-auth-gate__dialog .auth-portal-logo {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1rem;
-      }
-
-      .game-auth-gate__dialog .auth-portal-logo__image {
-        height: 72px;
-      }
-
       .game-auth-gate__dialog .auth-portal-header__welcome {
-        margin: 0 0 0.5rem 0;
-        font-family: "Source Sans 3", system-ui, sans-serif;
-        font-size: 1.5rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        line-height: 1.4;
+        margin: 0 0 0.75rem;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2.5rem, 7vw, 3.25rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1;
         color: var(--portal-navy);
       }
 
@@ -151,8 +140,8 @@ const MatiGameAuthGate = (() => {
       .game-auth-gate__dialog .auth-portal-actions {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 2rem;
+        gap: 0.85rem;
+        margin-top: 2.25rem;
       }
 
       .game-auth-gate__dialog .auth-portal-btn {
@@ -160,12 +149,12 @@ const MatiGameAuthGate = (() => {
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 48px;
+        min-height: 3.25rem;
         padding: 0 1rem;
-        border-radius: 8px;
+        border-radius: 999px;
         font-family: "Source Sans 3", system-ui, sans-serif;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         letter-spacing: 0.01em;
         text-decoration: none;
         cursor: pointer;
@@ -173,32 +162,32 @@ const MatiGameAuthGate = (() => {
       }
 
       .game-auth-gate__dialog .auth-portal-btn--outline {
-        border: 1px solid var(--portal-navy);
-        color: var(--portal-navy);
+        border: 1px solid var(--portal-forest);
+        color: var(--portal-forest);
         background: #fff;
         font-weight: 600;
       }
 
       .game-auth-gate__dialog .auth-portal-btn--primary {
-        border: 1px solid var(--portal-navy);
+        border: 1px solid var(--portal-forest);
         color: #fff;
-        background: var(--portal-navy);
+        background: var(--portal-forest);
       }
 
       .game-auth-gate__dialog .auth-portal-btn--primary:hover:not(:disabled) {
-        background: #0a1e35;
-        border-color: #0a1e35;
+        background: #065f46;
+        border-color: #065f46;
       }
 
       .game-auth-gate__dialog .auth-portal-btn--outline {
-        border: 1px solid var(--portal-navy);
-        color: var(--portal-navy);
+        border: 1px solid var(--portal-forest);
+        color: var(--portal-forest);
         background: #fff;
       }
 
       .game-auth-gate__dialog .auth-portal-btn--outline:hover {
-        background: #f8fafc;
-        border-color: var(--portal-navy);
+        background: #ecfdf5;
+        border-color: var(--portal-forest);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -213,15 +202,11 @@ const MatiGameAuthGate = (() => {
 
       @media (max-width: 480px) {
         .game-auth-gate__dialog .auth-portal-form {
-          padding: 2rem 1.5rem;
-        }
-
-        .game-auth-gate__dialog .auth-portal-logo__image {
-          height: 64px;
+          padding: 3.5rem 1.5rem 2.5rem;
         }
 
         .game-auth-gate__dialog .auth-portal-header__welcome {
-          font-size: 1.1rem;
+          font-size: 2.5rem;
         }
       }
 
@@ -297,23 +282,18 @@ const MatiGameAuthGate = (() => {
 
           <div class="auth-portal-form__inner">
             <header class="auth-portal-header">
-              <div class="auth-portal-logo">
-                <img
-                  src="assets/logos/logo.png"
-                  alt="Mati Heritage 3D"
-                  class="auth-portal-logo__image"
-                />
-              </div>
-              <p class="auth-portal-header__welcome">Welcome</p>
-              <p class="auth-portal-header__subtitle">Choose how you'd like to continue.</p>
+              <p class="auth-portal-header__welcome">Continue to Games</p>
+              <p class="auth-portal-header__subtitle">
+                Sign in to explore heritage places and continue discovering Mati.
+              </p>
             </header>
 
             <div class="auth-portal-actions">
-              <a href="#" class="auth-portal-btn auth-portal-btn--primary" data-gate-register>
-                <span class="auth-portal-btn__label">Register an Account</span>
+              <a href="#" class="auth-portal-btn auth-portal-btn--primary" data-gate-login>
+                <span class="auth-portal-btn__label">Sign in</span>
               </a>
-              <a href="#" class="auth-portal-btn auth-portal-btn--outline" data-gate-login>
-                <span class="auth-portal-btn__label">Login</span>
+              <a href="#" class="auth-portal-btn auth-portal-btn--outline" data-gate-register>
+                <span class="auth-portal-btn__label">Register account</span>
               </a>
             </div>
           </div>

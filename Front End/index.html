@@ -7,8 +7,17 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>Heritage | Mati Heritage 3D</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+      defer
+    ></script>
+    <link
+      rel="preload"
+      as="image"
+      href="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping-hero.webp"
+      fetchpriority="high"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -40,8 +49,6 @@
         text-size-adjust: 100%;
         margin: 0;
         padding: 0;
-        scrollbar-color: #ffffff #ffffff;
-        scrollbar-width: thin;
       }
 
       body {
@@ -54,25 +61,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-      }
-
-      html::-webkit-scrollbar,
-      body::-webkit-scrollbar {
-        width: 10px;
-        background: #ffffff;
-      }
-
-      html::-webkit-scrollbar-track,
-      body::-webkit-scrollbar-track {
-        background: #ffffff;
-        box-shadow: none;
-      }
-
-      html::-webkit-scrollbar-thumb,
-      body::-webkit-scrollbar-thumb {
-        background: #ffffff;
-        border: 0;
-        box-shadow: none;
       }
 
       /* Reset for gallery section to ensure full height */
@@ -307,7 +295,6 @@
         filter: blur(80px);
         pointer-events: none;
         z-index: 1;
-        animation: hero-glow-drift 12s ease-in-out infinite;
       }
 
       .hero-cinematic-glow--1 {
@@ -316,18 +303,6 @@
         top: 10%;
         left: -5%;
         background: rgba(56, 189, 248, 0.15);
-      }
-
-      @keyframes hero-glow-drift {
-        0%,
-        100% {
-          opacity: 0.7;
-          transform: translate(0, 0) scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: translate(20px, -15px) scale(1.08);
-        }
       }
 
       .hero-path-svg {
@@ -366,10 +341,6 @@
           gap: 2rem;
           min-height: 420px;
         }
-      }
-
-      .hero-cinematic-copy {
-        animation: hero-fade-up 1s var(--ease-out-expo) both;
       }
 
       .hero-cinematic-copy .hero-tags {
@@ -413,7 +384,6 @@
         margin: 0 0 0.75rem;
         padding-left: 0;
         text-align: center;
-        animation: hero-fade-up 1s var(--ease-out-expo) 0.1s both;
       }
 
       .hero-welcome-city {
@@ -430,12 +400,10 @@
         text-shadow:
           0 2px 24px rgba(0, 0, 0, 0.45),
           0 0 60px rgba(255, 255, 255, 0.08);
-        animation: hero-fade-up 1s var(--ease-out-expo) 0.18s both;
       }
 
       .hero-discover-wrap {
         margin-bottom: 1.25rem;
-        animation: hero-fade-up 1s var(--ease-out-expo) 0.22s both;
       }
 
       .hero-discover-eyebrow {
@@ -483,12 +451,10 @@
         color: rgba(255, 255, 255, 0.72);
         margin: 0 0 1.75rem;
         max-width: 32rem;
-        animation: hero-fade-up 1s var(--ease-out-expo) 0.26s both;
       }
 
       .hero-cinematic-copy .hero-actions {
         margin-bottom: 0;
-        animation: hero-fade-up 1s var(--ease-out-expo) 0.34s both;
       }
 
       .hero-cinematic-copy .btn-primary {
@@ -1499,7 +1465,7 @@
       .heritage-media-section {
         position: relative;
         padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 2.5rem);
-        background: linear-gradient(180deg, var(--bg-site) 0%, #f0f4f8 100%);
+        background: linear-gradient(180deg, #f4f1e9 0%, #ebe8df 100%);
         overflow: hidden;
       }
 
@@ -2390,6 +2356,154 @@
         transform: translateX(120%) skewX(-12deg);
       }
 
+      /* Map promo section */
+      .map-promo-section {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: 600px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 1024px) {
+        .map-promo-section {
+          grid-template-columns: 1fr 1fr;
+          min-height: 700px;
+        }
+      }
+
+      .map-promo-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        overflow: hidden;
+      }
+
+      .map-promo-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .map-promo-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%);
+        color: white;
+        gap: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        .map-promo-content {
+          padding: 4rem 3rem;
+        }
+      }
+
+      .map-promo-compass {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        width: 48px;
+        height: 48px;
+        opacity: 0.6;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .map-promo-heading {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        line-height: 1.1;
+        max-width: 28rem;
+        margin: 0;
+      }
+
+      .map-promo-description {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 1.0625rem;
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.85);
+        max-width: 26rem;
+        margin: 0;
+      }
+
+      .map-promo-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: #f8f6f0;
+        color: #1e3d2d;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 9999px;
+        transition:
+          transform 0.3s var(--ease-out-expo),
+          background 0.3s ease;
+      }
+
+      .map-promo-btn:hover {
+        transform: translateY(-2px);
+        background: #efede5;
+      }
+
+      .map-promo-categories {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 26rem;
+      }
+
+      .map-promo-categories-label {
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+      }
+
+      .map-promo-category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .map-promo-category-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 9999px;
+        transition:
+          background 0.3s ease,
+          border-color 0.3s ease,
+          color 0.3s ease,
+          transform 0.3s var(--ease-out-expo);
+      }
+
       .heritage-card-built:hover {
         box-shadow:
           0 40px 80px rgba(0, 0, 0, 0.28),
@@ -2563,332 +2677,6 @@
         transform: translateX(4px);
       }
 
-      /* Map promo section */
-      .map-promo-section {
-        position: relative;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr;
-        min-height: 600px;
-        overflow: hidden;
-      }
-
-      @media (min-width: 1024px) {
-        .map-promo-section {
-          grid-template-columns: 1fr 1fr;
-          min-height: 700px;
-        }
-      }
-
-      .map-promo-image {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 400px;
-        overflow: hidden;
-      }
-
-      .map-promo-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-      }
-
-      .map-promo-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 3rem 2rem;
-        background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%);
-        color: white;
-        gap: 2rem;
-      }
-
-      @media (min-width: 768px) {
-        .map-promo-content {
-          padding: 4rem 3rem;
-        }
-      }
-
-      .map-promo-compass {
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-        width: 48px;
-        height: 48px;
-        opacity: 0.6;
-        color: rgba(255, 255, 255, 0.4);
-      }
-
-      .map-promo-heading {
-        font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: clamp(2rem, 4vw, 3rem);
-        font-weight: 700;
-        line-height: 1.1;
-        max-width: 28rem;
-        margin: 0;
-      }
-
-      .map-promo-description {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 1.0625rem;
-        line-height: 1.75;
-        color: rgba(255, 255, 255, 0.85);
-        max-width: 26rem;
-        margin: 0;
-      }
-
-      .map-promo-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 2rem;
-        background: #F8F6F0;
-        color: #1E3D2D;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        text-decoration: none;
-        border-radius: 9999px;
-        transition:
-          transform 0.3s var(--ease-out-expo),
-          background 0.3s ease;
-      }
-
-      .map-promo-btn:hover {
-        transform: translateY(-2px);
-        background: #EFEDE5;
-      }
-
-      .map-promo-categories {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-        max-width: 26rem;
-      }
-
-      .map-promo-categories-label {
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 0;
-      }
-
-      .map-promo-category-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-      }
-
-      .map-promo-category-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.625rem 1.25rem;
-        background: transparent;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        color: white;
-        font-family: "Source Sans 3", sans-serif;
-        font-size: 0.875rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        text-decoration: none;
-        border-radius: 9999px;
-        transition:
-          background 0.3s ease,
-          border-color 0.3s ease,
-          color 0.3s ease,
-          transform 0.3s var(--ease-out-expo);
-      }
-
-
-      .map-promo-category-btn svg {
-        width: 1rem;
-        height: 1rem;
-      }
-
-      /* Plan visit — cinematic split */
-      .plan-section {
-        position: relative;
-        padding: 5rem 1.5rem;
-      }
-
-      .plan-panel {
-        position: relative;
-        max-width: 80rem;
-        margin: 0 auto;
-        border-radius: 0;
-        overflow: hidden;
-        box-shadow:
-          0 40px 100px rgba(4, 120, 87, 0.2),
-          0 0 0 1px rgba(255, 255, 255, 0.5);
-        min-height: 420px;
-      }
-
-      .plan-bg {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        overflow: hidden;
-      }
-
-      .plan-bg-image {
-        position: absolute;
-        inset: -10%;
-        background: url("assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg")
-          center / cover no-repeat;
-        transform: scale(1.08);
-      }
-
-      .plan-bg-shimmer {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          115deg,
-          rgba(6, 95, 70, 0.55) 0%,
-          rgba(217, 119, 6, 0.25) 45%,
-          rgba(2, 132, 199, 0.35) 100%
-        );
-        mix-blend-mode: multiply;
-        opacity: 0.9;
-      }
-
-      .plan-bg-particles {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      .plan-particle {
-        display: none;
-      }
-
-      .plan-overlay {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background: linear-gradient(
-          105deg,
-          rgba(6, 78, 59, 0.98) 0%,
-          rgba(6, 78, 59, 0.88) 60%,
-          rgba(6, 78, 59, 0.65) 100%
-        );
-      }
-
-      .plan-overlay::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          ellipse 80% 60% at 70% 50%,
-          rgba(255, 255, 255, 0.08) 0%,
-          transparent 55%
-        );
-        opacity: 0.7;
-      }
-      .plan-section .section-label::before {
-        content: none;
-        display: none;
-      }
-
-      .plan-inner {
-        position: relative;
-        z-index: 2;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-      }
-
-      @media (max-width: 1024px) {
-        .plan-inner {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .plan-steps li {
-        display: grid;
-        grid-template-columns: 3.25rem 1fr;
-        align-items: start;
-        gap: 0 1rem;
-        padding: 1.25rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        transition:
-          transform 0.3s ease,
-          padding-left 0.3s ease;
-      }
-
-      .plan-steps li:hover {
-        transform: translateX(8px);
-        padding-left: 0.25rem;
-      }
-
-      .plan-step-num {
-        grid-row: span 2;
-        width: 2.75rem;
-        height: 2.75rem;
-        border-radius: 50%;
-        background: var(--amber);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        box-shadow:
-          0 4px 16px rgba(245, 158, 11, 0.25),
-          inset 0 1px 1px rgba(255, 255, 255, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Cormorant Garamond", serif;
-        color: #422006;
-        font-size: 1.5rem;
-        font-weight: 800;
-        flex-shrink: 0;
-        margin-top: 0.125rem;
-      }
-
-      .plan-cta-box {
-        position: relative;
-        background: rgba(10, 10, 9, 0.25);
-        border-left: 1px solid rgba(255, 255, 255, 0.12);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-      }
-
-      .plan-cta-box::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          ellipse 90% 70% at 90% 25%,
-          rgba(255, 255, 255, 0.12) 0%,
-          transparent 55%
-        );
-        opacity: 0.75;
-        pointer-events: none;
-      }
-
-      .plan-cta-box > * {
-        position: relative;
-        z-index: 1;
-      }
-
-      @media (max-width: 1024px) {
-        .plan-cta-box {
-          border-left: none;
-          border-top: 1px solid rgba(255, 255, 255, 0.12);
-        }
-      }
-
       /* Scroll reveal */
       .reveal {
         opacity: 0;
@@ -3000,11 +2788,6 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .plan-bg-image,
-        .plan-bg-shimmer,
-        .plan-overlay::after,
-        .plan-particle,
-        .plan-cta-box::before,
         .section-heritage::before,
         .section-heritage::after {
           animation: none !important;
@@ -4628,8 +4411,13 @@
           <img
             class="hero-cinematic-bg-img"
             id="hero-parallax-bg"
-            src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+            src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping-hero.webp"
             alt=""
+            width="1920"
+            height="1280"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
           />
           <div class="hero-cinematic-overlay"></div>
         </div>
@@ -4664,7 +4452,7 @@
 
               <div class="hero-actions">
                 <a
-                  href="map.html"
+                  href="map"
                   class="btn-primary inline-flex items-center gap-2 font-bold px-8 py-4 text-sm tracking-wide"
                 >
                   Start Exploring
@@ -4683,7 +4471,7 @@
                   </svg>
                 </a>
                 <a
-                  href="3dexplore.html"
+                  href="3dexplore"
                   class="btn-outline inline-flex items-center font-bold px-8 py-4 text-sm tracking-wide"
                 >
                   View Heritage Sites
@@ -4777,9 +4565,10 @@
               >
                 <article class="hero-float-card">
                   <img
-                    src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping.jpg"
+                    src="assets/data/Natural Heritage/Taytay Daga (Sleeping Dinosaur)/Photographs/Sleeping-hero.webp"
                     alt="Taytay Daga - Sleeping Dinosaur"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div class="hero-float-card-body">
                     <strong>Taytay Daga</strong>
@@ -4864,7 +4653,7 @@
                   Pylon Monument, Subangan Museum, Gabaldon buildings, and other
                   historical structures preserved in 3D and photographs.
                 </p>
-                <a href="3dexplore.html" class="heritage-link">
+                <a href="3dexplore" class="heritage-link">
                   Explore sites
                   <span aria-hidden="true">→</span>
                 </a>
@@ -4892,7 +4681,7 @@
                   Sambuokan Festival, Pujada Festival, and the works of Dioscoro
                   Vicentino — celebrating Mati's living cultural identity.
                 </p>
-                <a href="gallery.html" class="heritage-link">
+                <a href="gallery" class="heritage-link">
                   View gallery
                   <span aria-hidden="true">→</span>
                 </a>
@@ -4920,7 +4709,7 @@
                   Dahican Shoreline, Pujada Bay, Sleeping Dinosaur, Oak Island,
                   and Mati's protected natural treasures.
                 </p>
-                <a href="gallery.html" class="heritage-link">
+                <a href="gallery" class="heritage-link">
                   Discover nature
                   <span aria-hidden="true">→</span>
                 </a>
@@ -4941,13 +4730,12 @@
           <!-- Video Background -->
           <div class="gallery-video-background">
             <video
-              autoplay
               muted
               loop
               playsinline
               preload="none"
               class="gallery-video"
-              src="assets/data/Natural Heritage/Pujada Island/Videos/1.mp4"
+              data-src="assets/data/Natural Heritage/Pujada Island/Videos/1.mp4"
             ></video>
             <div class="gallery-video-overlay"></div>
           </div>
@@ -4993,42 +4781,6 @@
 
       <!-- Heritage Media Archive - Detailed Heritage Showcase -->
       <section class="heritage-media-section">
-        <!-- Ocean Current Background Pattern -->
-        <svg class="heritage-ocean-pattern" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs>
-            <linearGradient id="oceanGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#a7f3d0;stop-opacity:0.35" />
-              <stop offset="100%" style="stop-color:#67e8f9;stop-opacity:0.25" />
-            </linearGradient>
-            <linearGradient id="oceanGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#99f6e4;stop-opacity:0.32" />
-              <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:0.22" />
-            </linearGradient>
-            <linearGradient id="oceanGradient3" x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:0.3" />
-              <stop offset="100%" style="stop-color:#99f6e4;stop-opacity:0.2" />
-            </linearGradient>
-            <linearGradient id="oceanGradient4" x1="0%" y1="50%" x2="100%" y2="50%">
-              <stop offset="0%" style="stop-color:#a7f3d0;stop-opacity:0.28" />
-              <stop offset="100%" style="stop-color:#67e8f9;stop-opacity:0.18" />
-            </linearGradient>
-          </defs>
-          <!-- Curve 1: Top-left to center-right -->
-          <path d="M-50,100 C150,80 300,150 500,120 S800,60 1000,100 S1300,140 1490,80" 
-                fill="none" stroke="url(#oceanGradient1)" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- Curve 2: Top-right flowing down -->
-          <path d="M1490,50 C1300,120 1100,180 900,160 S600,200 400,240 S100,280 -50,260" 
-                fill="none" stroke="url(#oceanGradient2)" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- Curve 3: Left side flowing across -->
-          <path d="M-50,350 C100,320 300,380 500,360 S800,300 1000,340 S1300,400 1490,360" 
-                fill="none" stroke="url(#oceanGradient3)" stroke-width="1.4" stroke-linecap="round"/>
-          <!-- Curve 4: Bottom-left flowing up -->
-          <path d="M-50,650 C150,600 350,550 550,580 S850,650 1050,620 S1350,580 1490,620" 
-                fill="none" stroke="url(#oceanGradient4)" stroke-width="1.3" stroke-linecap="round"/>
-          <!-- Curve 5: Bottom-right gentle curve -->
-          <path d="M1490,750 C1300,720 1100,780 900,760 S600,700 400,740 S100,780 -50,750" 
-                fill="none" stroke="url(#oceanGradient1)" stroke-width="1.1" stroke-linecap="round"/>
-        </svg>
         <div class="max-w-7xl mx-auto">
           <div class="section-header reveal">
             <p class="section-subtitle">
@@ -5112,7 +4864,7 @@
                   crafted from recycled San Miguel Beer bottles and a steel halo
                   with a crowning luminaire.
                 </p>
-                <a href="3dexplore.html" class="heritage-media-link">
+                <a href="3dexplore" class="heritage-media-link">
                   Explore Built Heritage
                   <span aria-hidden="true">→</span>
                 </a>
@@ -5196,7 +4948,7 @@
                   cultural performances, and community activities that highlight
                   the unique identity and spirit of the Matinians.
                 </p>
-                <a href="gallery.html" class="heritage-media-link">
+                <a href="gallery" class="heritage-media-link">
                   View Cultural Heritage
                   <span aria-hidden="true">→</span>
                 </a>
@@ -5279,102 +5031,13 @@
                   Pujada Bay, holding profound historical and spiritual
                   significance as a protected heritage landscape.
                 </p>
-                <a href="3dexplore.html" class="heritage-media-link">
+                <a href="3dexplore" class="heritage-media-link">
                   View Natural Heritage
                   <span aria-hidden="true">→</span>
                 </a>
               </div>
             </article>
 
-          </div>
-        </div>
-      </section>
-
-      <!-- Plan Your Visit -->
-      <section id="plan" class="plan-section">
-        <div class="plan-panel">
-          <div class="plan-bg" aria-hidden="true">
-            <div class="plan-bg-image"></div>
-            <div class="plan-bg-shimmer"></div>
-            <div class="plan-bg-particles">
-              <span class="plan-particle"></span>
-              <span class="plan-particle"></span>
-              <span class="plan-particle"></span>
-              <span class="plan-particle"></span>
-              <span class="plan-particle"></span>
-            </div>
-          </div>
-          <div class="plan-overlay" aria-hidden="true"></div>
-          <div class="plan-inner">
-            <div class="p-10 lg:p-14 text-white">
-              <p class="section-label text-amber-300 !pl-0">Plan Your Visit</p>
-              <h2
-                class="display-font text-3xl md:text-4xl font-bold mb-4 text-white"
-              >
-                Experience Mati Heritage in Person
-              </h2>
-              <p class="text-stone-300 leading-relaxed mb-8 max-w-lg">
-                From digital exploration to an in-person adventure, follow these
-                steps to experience the full depth of Mati's cultural heritage.
-              </p>
-              <ul class="plan-steps space-y-0 text-stone-300">
-                <li>
-                  <span class="plan-step-num">1</span>
-                  <strong class="text-stone-100 font-semibold"
-                    >Discover Online</strong
-                  >
-                  <p class="text-sm text-stone-400 col-start-2">
-                    Browse heritage sites on this portal before your trip.
-                  </p>
-                </li>
-                <li>
-                  <span class="plan-step-num">2</span>
-                  <strong class="text-stone-100 font-semibold"
-                    >Visit the City Tourism Office</strong
-                  >
-                  <p class="text-sm text-stone-400 col-start-2">
-                    Visit the City Tourism Office for more information and
-                    personalized heritage site recommendations.
-                  </p>
-                </li>
-                <li>
-                  <span class="plan-step-num">3</span>
-                  <strong class="text-stone-100 font-semibold"
-                    >Explore Heritage Sites</strong
-                  >
-                  <p class="text-sm text-stone-400 col-start-2">
-                    Discover iconic sites including the Pylon Monument, Subangan
-                    Museum, and Dahican Beach.
-                  </p>
-                </li>
-                <li>
-                  <span class="plan-step-num">4</span>
-                  <strong class="text-stone-100 font-semibold"
-                    >Join the Community</strong
-                  >
-                  <p class="text-sm text-stone-400 col-start-2">
-                    Register to save progress and join the heritage leaderboard.
-                  </p>
-                </li>
-              </ul>
-            </div>
-            <div class="plan-cta-box p-10 lg:p-14 text-center lg:text-left">
-              <h3 class="display-font font-bold text-2xl text-amber-100 mb-3">
-                City Tourism Office
-              </h3>
-              <p class="text-stone-300 leading-relaxed mb-8">
-                For official inquiries about site visits, guided tours, and
-                local events, please contact the City Tourism Office.
-              </p>
-              <div class="flex flex-wrap justify-center md:justify-start gap-3">
-                <a
-                  href="about.html"
-                  class="inline-flex items-center text-sm font-bold px-7 py-3.5 rounded-full border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition"
-                >
-                  About Mati Heritage 3D
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -5408,8 +5071,8 @@
             Explore the locations of Mati City's cultural and natural heritage
             through our interactive location map.
           </p>
-          <a href="map.html" class="map-promo-btn">
-            Explore the Map
+          <a href="map" class="map-promo-btn">
+            Open Map
             <svg
               width="20"
               height="20"
@@ -5603,7 +5266,7 @@
 
           const navRoutes = {
             home: "index.html",
-            about: "about_us.html",
+            about: "about.html",
             map: "map.html",
             games: "game.html",
             "3d": "3dexplore.html",
@@ -5708,13 +5371,7 @@
           .join("");
       }
 
-      // Reveal all ready sections together when the page finishes loading.
       const revealEls = document.querySelectorAll(".reveal");
-      const revealAll = () => {
-        revealEls.forEach((el) => {
-          el.classList.add("visible");
-        });
-      };
 
       const revealObserver = new IntersectionObserver(
         (entries) => {
@@ -5728,13 +5385,6 @@
         { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
       );
 
-      if (document.readyState === "complete") {
-        revealAll();
-      } else {
-        window.addEventListener("load", revealAll, { once: true });
-      }
-
-      // Keep the observer for any newly added reveal elements.
       revealEls.forEach((el) => revealObserver.observe(el));
 
       // Animated stat counters
@@ -6020,7 +5670,6 @@
           const titleMap = {
             "Mati Heritage Trivia Challenge": "trivia",
             "Matching Pairs": "memory",
-            "Spot the Difference": "observation",
             "Slide Puzzle": "puzzle",
             "True or False Sprint": "sprint",
           };
@@ -6111,9 +5760,13 @@
 
                 // Handle video autoplay
                 const videoPlayer = entry.target.querySelector(
-                  ".gallery-video-cinematic-player",
+                  ".gallery-video-cinematic-player, .gallery-video",
                 );
                 if (videoPlayer) {
+                  if (!videoPlayer.src && videoPlayer.dataset.src) {
+                    videoPlayer.src = videoPlayer.dataset.src;
+                    videoPlayer.load();
+                  }
                   videoPlayer.play().catch(() => {
                     // Autoplay failed, video will play on click
                   });
@@ -6121,7 +5774,7 @@
               } else {
                 // Pause video when not in view
                 const videoPlayer = entry.target.querySelector(
-                  ".gallery-video-cinematic-player",
+                  ".gallery-video-cinematic-player, .gallery-video",
                 );
                 if (videoPlayer) {
                   videoPlayer.pause();

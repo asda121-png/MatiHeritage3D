@@ -13,124 +13,43 @@
     <link rel="stylesheet" href="css/heritage-palette.css" />
     <link rel="stylesheet" href="css/auth.css" />
     <link rel="icon" type="image/png" href="assets/logos/logo.png" />
-    <link rel="stylesheet" href="css/model-viewer-loading.css" />
-    <script
-      type="module"
-      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
-    ></script>
-    <style>
-      html,
-      .auth-body {
-        height: 100%;
-      }
-      /* Responsive styles for tablets and smaller devices */
-      @media (max-width: 1024px) {
-        .auth-portal-visual {
-          display: none; /* Hide the 3D model visual on smaller screens */
-        }
-        .auth-portal-card {
-          width: 100%;
-          max-width: 480px; /* Set a max-width for the form card */
-          margin: auto;
-        }
-        .auth-portal-form {
-          padding: 2rem;
-        }
-      }
-
-      /* Additional adjustments for mobile phones */
-      @media (max-width: 768px) {
-        .auth-portal-form {
-          padding: 1.5rem;
-        }
-        .auth-portal-header {
-          text-align: center;
-        }
-        .auth-portal-logo__line {
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-    </style>
   </head>
-  <body class="auth-body auth-body--portal">
+  <body class="auth-body auth-body--portal auth-body--editorial">
     <div class="auth-portal-page">
       <div class="auth-portal-card auth-portal-card--login">
-        <aside class="auth-portal-visual">
-          <div class="auth-portal-visual__media">
-            <div
-              id="login-model-loading"
-              class="model-viewer-loading model-viewer-loading--dark model-viewer-loading--compact"
-              aria-live="polite"
-              aria-busy="true"
-            >
-              <div
-                class="model-viewer-loading__spinner"
-                aria-hidden="true"
-              ></div>
-              <p class="model-viewer-loading__text">Loading 3D preview…</p>
-              <p
-                class="model-viewer-loading__percent"
-                id="login-model-percent"
-                aria-hidden="true"
-              >
-                0%
-              </p>
-            </div>
-            <model-viewer
-              id="login-pylon-model"
-              class="auth-portal-visual__model"
-              src="https://cicrbvjykbsyptivlvzi.supabase.co/storage/v1/object/public/heritage-models/pylon/Pylon.glb"
-              poster="assets/data/Built Heritage/Pylon Monument/Photographs/Old/Pylon.jpg"
-              alt="Pylon Monument 3D model"
-              auto-rotate
-              rotation-per-second="24deg"
-              camera-controls
-              field-of-view="28deg"
-              touch-action="pan-y"
-              camera-orbit="0deg 78deg 82%"
-              shadow-intensity="1"
-              exposure="1.05"
-              environment-image="neutral"
-              loading="eager"
-              reveal="auto"
-              interaction-prompt="none"
-              aria-label="Pylon Monument 3D model, City of Mati"
-            ></model-viewer>
-          </div>
-          <div class="auth-portal-visual__overlay"></div>
-          <div class="auth-portal-visual__grain" aria-hidden="true"></div>
-
-          <div class="auth-portal-visual__content">
-            <div class="auth-portal-visual__brand">
-              <img
-                class="auth-portal-visual__seal"
-                src="assets/logos/Flag_of_Mati,_Davao_Oriental.png"
-                alt="City of Mati seal"
-                width="68"
-                height="68"
-                style="background: none; border: none; box-shadow: none"
-              />
-              <div class="auth-portal-visual__brand-text">
-                <p class="auth-portal-visual__name">City of Mati</p>
-                <p class="auth-portal-visual__tagline">
-                  Tourism and Promotions Office
-                </p>
-              </div>
-              <img
-                class="auth-portal-visual__tourism"
-                src="assets/logos/City of Mati Tourism and Promotions Office.png"
-                alt="City Tourism and Promotions Office"
-                width="86"
-                height="48"
-              />
-            </div>
+        <aside class="auth-portal-visual auth-portal-visual--editorial">
+          <img
+            class="auth-editorial-photo"
+            src="assets/data/Intangible Cultural Heritage/Sambuokan Festival/Photographs/0M8A2784.jpg"
+            alt="A participant in the colorful Sambuokan Festival attire"
+            fetchpriority="high"
+          />
+          <div class="auth-editorial-overlay"></div>
+          <a class="auth-editorial-brand" href="/">
+            <img src="assets/logos/logo.png" alt="" width="46" height="46" />
+            <span>
+              <strong>Mati Heritage 3D</strong>
+              <small>Discover Mati's heritage</small>
+            </span>
+          </a>
+          <div class="auth-editorial-copy">
+            <h2>Explore the stories<br />that shape Mati.</h2>
+            <p class="auth-editorial-description">
+              A closer look at the places, traditions, and landscapes that make
+              our heritage unique.
+            </p>
+            <ul class="auth-editorial-highlights">
+              <li>Explore heritage places in 3D</li>
+              <li>Learn the stories behind each site</li>
+              <li>Discover Mati’s natural treasures</li>
+            </ul>
+            <p class="auth-editorial-caption">Sambuokan Festival · Mati City</p>
           </div>
         </aside>
 
         <main class="auth-portal-form">
           <a
-            href="index.html"
+            href="/"
             class="auth-portal-back"
             aria-label="Back to visitor portal"
           >
@@ -147,7 +66,7 @@
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            <span>Visitor portal</span>
+            <span>Back to site</span>
           </a>
 
           <div class="auth-portal-form__inner">
@@ -157,11 +76,21 @@
                   src="assets/logos/logo.png"
                   alt="Mati Heritage 3D"
                   class="auth-portal-logo__image"
-                  style="height: 96px; margin-top: 0.25rem; margin-bottom: 0rem"
                 />
               </div>
-              <p class="auth-portal-header__welcome">MADAYAW NA PAG-ABOT</p>
+              <h1 class="auth-portal-header__welcome">Welcome back</h1>
+              <p class="auth-portal-header__sub">
+                Sign in to explore heritage places and continue discovering
+                Mati.
+              </p>
             </header>
+
+            <nav class="auth-portal-switch" aria-label="Account access">
+              <a class="is-active" href="login" aria-current="page"
+                >Sign in</a
+              >
+              <a href="userregistration">Register account</a>
+            </nav>
 
             <div
               id="login-alert"
@@ -319,16 +248,11 @@
                     aria-hidden="true"
                   ></span>
                 </button>
-                <a
-                  href="userregistration.html"
-                  class="auth-portal-btn auth-portal-btn--outline"
-                  >Register</a
-                >
               </div>
             </form>
 
             <p class="auth-portal-foot">
-              <a href="forgot-password.html">Forgot Password?</a>
+              <a href="forgot-password">Forgot Password?</a>
             </p>
           </div>
         </main>
@@ -337,8 +261,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
-    <script src="js/utils/heritage/heritage-pylon-model.js"></script>
-    <script src="js/utils/model-viewer-loading.js"></script>
     <script src="_backend/supabase-client.js"></script>
     <script src="js/utils/auth-password-hash.js"></script>
     <script src="_backend/supabase-auth.js"></script>
@@ -376,7 +298,11 @@
           document.body.appendChild(loadingOverlay);
         }
 
-        identifierInput?.focus();
+        if (
+          !window.matchMedia("(max-width: 768px), (pointer: coarse)").matches
+        ) {
+          identifierInput?.focus();
+        }
 
         if (params.get("reset") === "success") {
           showAlert(
@@ -388,7 +314,7 @@
           showAlert("This account does not have admin access.");
         }
 
-        const redirectTarget = params.get("redirect") || "index.html";
+        const redirectTarget = params.get("redirect") || "game.html";
 
         void MatiAuthOAuth.handleRedirectIfNeeded(redirectTarget);
         MatiAuthOAuth.bindGoogleButton("google-signin-btn", redirectTarget);
@@ -455,9 +381,13 @@
             return;
           }
 
+          const sessionRole = String(MatiAuth.getSession()?.role || "")
+            .trim()
+            .toLowerCase();
           if (
-            typeof MatiAdminAuth !== "undefined" &&
-            (await MatiAdminAuth.isAdmin())
+            sessionRole === "admin" ||
+            (typeof MatiAdminAuth !== "undefined" &&
+              (await MatiAdminAuth.isAdmin()))
           ) {
             window.location.href = "admin.html";
             return;

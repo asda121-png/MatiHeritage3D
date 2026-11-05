@@ -1,56 +1,32 @@
-/** Pixel logout overlay for visitor / game pages */
+/** Shared logout feedback for visitor pages */
 (function () {
   "use strict";
 
   let logoutInProgress = false;
 
-  function ensureOverlay() {
-    let overlay = document.getElementById("pixel-logout-overlay");
-    if (overlay) return overlay;
-
-    const pixels = Array.from({ length: 9 }, () => "<span></span>").join("");
-
-    overlay = document.createElement("div");
-    overlay.id = "pixel-logout-overlay";
-    overlay.className = "pixel-logout-overlay";
-    overlay.hidden = true;
-    overlay.setAttribute("aria-live", "polite");
-    overlay.setAttribute("aria-busy", "true");
-    overlay.innerHTML = `
-      <div class="pixel-logout-overlay__bg" aria-hidden="true"></div>
-      <div class="pixel-logout-overlay__panel">
-        <div class="pixel-logout-overlay__loader" aria-hidden="true">${pixels}</div>
-        <p class="pixel-logout-overlay__text">Logging out..</p>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-    return overlay;
-  }
-
-  function startPixelLogout(redirect = "login.html") {
+  function startLogout(redirect = "login.html", link, originalText) {
     if (logoutInProgress) return;
     logoutInProgress = true;
 
-    const overlay = ensureOverlay();
-    const showMs = 2100;
-    const exitMs = 580;
-
-    overlay.hidden = false;
-    overlay.removeAttribute("hidden");
-    overlay.classList.remove("is-exiting");
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => overlay.classList.add("is-active"));
-    });
-
     window.setTimeout(() => {
-      overlay.classList.add("is-exiting");
-      window.setTimeout(async () => {
-        if (typeof MatiAuth !== "undefined") {
-          await MatiAuth.logout();
+      void (async () => {
+        try {
+          if (typeof MatiAuth !== "undefined") {
+            await MatiAuth.logout();
+          }
+          window.location.href = redirect;
+        } catch (error) {
+          console.error("Logout failed.", error);
+          logoutInProgress = false;
+          if (link) {
+            link.textContent = originalText;
+            link.style.pointerEvents = "";
+            link.style.opacity = "";
+            link.removeAttribute("aria-busy");
+          }
         }
-        window.location.href = redirect;
-      }, exitMs);
-    }, showMs);
+      })();
+    }, 500);
   }
 
   function bind(options = {}) {
@@ -58,22 +34,23 @@
     const redirect = options.redirect || "login.html";
 
     document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return;
       const link = event.target.closest(linkSelector);
       if (!link) return;
       event.preventDefault();
 
-      // Change link text to show loading state
       const originalText = link.textContent;
       link.textContent = "Logging out...";
       link.style.pointerEvents = "none";
       link.style.opacity = "0.6";
+      link.setAttribute("aria-busy", "true");
 
-      startPixelLogout(redirect);
+      startLogout(redirect, link, originalText);
     });
   }
 
   window.MatiAuthLogout = {
     bind,
-    start: startPixelLogout,
+    start: startLogout,
   };
 })();

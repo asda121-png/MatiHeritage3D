@@ -86,6 +86,40 @@ body {
   line-height: 1.55;
 }
 
+.map-page-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  min-height: 4.25rem;
+  padding-inline: max(
+    var(--map-content-gutter),
+    calc((100% - var(--map-content-width)) / 2)
+  );
+  border-bottom: 1px solid #ddd7cd;
+  background: #f7f4ed;
+}
+
+.map-page-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 4.25rem;
+  color: #4a3b32;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.map-page-nav a:hover,
+.map-page-nav a:focus-visible {
+  color: var(--forest);
+}
+
+.map-page-nav a span {
+  color: #66836e;
+  font-size: 0.85rem;
+}
+
 .map-section {
   display: flex;
   gap: 1rem;
@@ -130,10 +164,10 @@ body {
 .map-explorer__header h2 {
   margin: 0;
   color: var(--ink);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 2rem;
+  font-family: Georgia, serif;
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.1;
 }
 
 .map-explorer__header p {
@@ -385,7 +419,7 @@ body {
 
 .map-barangays {
   padding-block: clamp(3.5rem, 6vw, 5.5rem) clamp(4rem, 7vw, 6rem);
-  background: #f7f4ed;
+  background: #ebe8df;
 }
 
 .map-barangays__inner {
@@ -406,17 +440,20 @@ body {
 }
 
 .map-barangays__intro h2 {
+  max-width: 42rem;
   margin: 0;
-  color: #33251d;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(2.25rem, 4.3vw, 3.25rem);
-  line-height: 1.05;
+  color: #252a2d;
+  font-family: Georgia, serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.98;
 }
 
 .map-barangays__intro > p:last-child {
   margin: 0.7rem 0 0;
   color: #81786f;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
 }
 
 .map-barangay-list {
@@ -444,21 +481,22 @@ body {
 .map-barangay__header h3 {
   margin: 0;
   color: #3d3028;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.3rem, 2vw, 1.55rem);
-  line-height: 1.2;
+  font-family: Georgia, serif;
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .map-barangay__count {
   flex: 0 0 auto;
   display: grid;
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   place-items: center;
   border-radius: 50%;
   background: #e8eadf;
   color: #50745c;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -488,8 +526,8 @@ body {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.35rem 1rem;
-  min-height: 3.6rem;
-  padding: 0.8rem 0;
+  min-height: 4rem;
+  padding: 0.9rem 0;
   border-bottom: 1px solid #e5dfd5;
   color: inherit;
   text-decoration: none;
@@ -507,7 +545,7 @@ body {
 .map-barangay__site-name {
   min-width: 0;
   color: #4a3b32;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   transition: color 0.15s ease;
 }
@@ -516,14 +554,14 @@ body {
   grid-column: 1;
   margin-top: -0.15rem;
   color: #8b8177;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .map-barangay__site-arrow {
   grid-column: 2;
   grid-row: 1 / span 2;
   color: var(--forest);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 .map-barangay-empty {
@@ -543,6 +581,18 @@ body {
   .map-hero__content {
     width: calc(100% - 2rem);
     padding-block: 2.75rem;
+  }
+
+  .map-page-nav {
+    gap: 1.25rem;
+    min-height: 3.75rem;
+    padding-inline: 1rem;
+  }
+
+  .map-page-nav a {
+    min-height: 3.75rem;
+    gap: 0.4rem;
+    font-size: 0.85rem;
   }
 
   .map-section {

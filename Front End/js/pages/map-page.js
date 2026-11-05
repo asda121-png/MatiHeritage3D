@@ -9,7 +9,11 @@
   const titleElement = document.getElementById("map-selection-title");
   const detailsLink = document.getElementById("map-selection-link");
   const barangayListElement = document.getElementById("map-barangay-list");
-  const siteList = HERITAGE_MAP_SITES;
+  const navSiteCountElement = document.getElementById("map-nav-site-count");
+  const navBarangayCountElement = document.getElementById(
+    "map-nav-barangay-count",
+  );
+  let siteList = HERITAGE_MAP_SITES;
   let activeSiteId = null;
 
   if (
@@ -21,6 +25,8 @@
     !titleElement ||
     !detailsLink ||
     !barangayListElement ||
+    !navSiteCountElement ||
+    !navBarangayCountElement ||
     !window.L
   ) {
     console.error(
@@ -44,6 +50,10 @@
     });
 
     barangayListElement.replaceChildren();
+    const siteCount = siteList.length;
+    const barangayCount = barangays.size;
+    navSiteCountElement.textContent = String(siteCount);
+    navBarangayCountElement.textContent = String(barangayCount);
     barangayListElement.classList.toggle(
       "map-barangay-list--single",
       barangays.size === 1,
@@ -100,6 +110,28 @@
       empty.className = "map-barangay-empty";
       empty.textContent = "No heritage sites are available yet.";
       barangayListElement.append(empty);
+    }
+
+  }
+
+  async function refreshMapCatalog({ force = false } = {}) {
+    if (
+      typeof MatiHeritageData === "undefined" ||
+      typeof MatiHeritageData.getMapSites !== "function"
+    ) {
+      return;
+    }
+
+    try {
+      const sites = await MatiHeritageData.getMapSites({ force });
+      siteList = sites;
+      render();
+      renderSitesByBarangay();
+      if (siteList.length && !activeSiteId) {
+        selectSite(siteList[0], false);
+      }
+    } catch (error) {
+      console.error("Map page: unable to refresh heritage sites", error);
     }
   }
 
@@ -256,4 +288,11 @@
   render();
   renderSitesByBarangay();
   if (siteList.length) selectSite(siteList[0], false);
+  void refreshMapCatalog({ force: true });
+
+  if (typeof MatiHeritageData !== "undefined") {
+    MatiHeritageData.subscribeCatalog(() => {
+      void refreshMapCatalog();
+    });
+  }
 })();

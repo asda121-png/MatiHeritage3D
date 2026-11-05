@@ -116,13 +116,17 @@ const MatiHeritageData = (() => {
       id: site.id,
       name: site.name,
       category,
-      barangay: staticMatch?.barangay || barangayForSite(site.id),
+      barangay:
+        staticMatch?.barangay ||
+        site.barangay ||
+        site.location ||
+        barangayForSite(site.id),
       lat,
       lng,
       official: staticMatch?.official ?? officialForSite(site.id),
       desc:
+        site.description ||
         staticMatch?.desc ||
-        (site.description || "").split(".")[0]?.trim() ||
         site.name,
       image: site.cover || staticMatch?.image || "",
     };
@@ -277,10 +281,10 @@ const MatiHeritageData = (() => {
     return initPromise;
   }
 
-  async function getMapSites() {
+  async function getMapSites({ force = false } = {}) {
     const [built, natural] = await Promise.all([
-      loadSitesByCategory("built"),
-      loadSitesByCategory("natural"),
+      loadSitesByCategory("built", { force }),
+      loadSitesByCategory("natural", { force }),
     ]);
 
     const builtMarkers = built

@@ -1022,7 +1022,6 @@
       .scramble-start-btn,
       #submit-btn,
       #shuffle-btn,
-      #game-back-btn,
       #play-again-btn,
       #back-btn {
         min-height: 3rem;
@@ -1061,7 +1060,21 @@
         transition: background-color 140ms ease;
       }
 
+      .scramble-controls #game-back-btn {
+        min-height: 3rem;
+        margin-left: 0;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
       #intro-screen #start-btn:hover:not(:disabled),
+      .scramble-controls #game-back-btn:hover:not(:disabled),
       #submit-btn:hover:not(:disabled),
       #shuffle-btn:hover:not(:disabled),
       #play-again-btn:hover:not(:disabled) {
@@ -1250,6 +1263,28 @@
         color: #393d3b;
       }
 
+      .scramble-game #game-back-btn {
+        min-height: 3rem;
+        padding: 0.55rem 1.25rem;
+        border: 1px solid #d2cec4;
+        border-radius: 999px;
+        background: #fffefa;
+        color: #252a27;
+        font: 700 1.15rem "Quicksand", sans-serif;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .scramble-round-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .scramble-round-actions button:hover:not(:disabled) {
+        background: #f0f7f2;
+      }
+
       .scramble-game #game-back-btn:hover:not(:disabled),
       .scramble-game #shuffle-btn:hover:not(:disabled) {
         background: #f0f7f2;
@@ -1365,7 +1400,7 @@
 
       @media (max-width: 640px) {
         .scramble-stage {
-          width: calc(100% - 3rem);
+          width: calc(100% - 2rem);
           padding-top: 0.75rem;
         }
 
@@ -1373,39 +1408,119 @@
           padding-top: 1rem;
         }
 
+        .scramble-intro h1 {
+          font-size: clamp(2.15rem, 9vw, 2.8rem);
+          line-height: 1.08;
+        }
+
+        .scramble-intro__description {
+          margin-bottom: 1rem;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
         .scramble-controls {
-          align-items: flex-start;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.65rem;
+          align-items: stretch;
+          padding-bottom: 0.9rem;
+        }
+
+        .scramble-controls__label {
+          font-size: 1rem;
         }
 
         .scramble-difficulties {
           width: 100%;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          border-radius: 0.85rem;
         }
 
         .scramble-difficulties .diff-btn {
-          flex: 1 1 0;
           min-width: 0;
-          padding-inline: 0.25rem;
-          font-size: 1.15rem;
+          min-height: 3.25rem;
+          padding: 0.45rem 0.2rem;
+          font-size: 0.88rem;
           white-space: normal;
+        }
+
+        .scramble-difficulties .diff-btn span {
+          display: block;
+          margin: 0.1rem 0 0;
+          font-size: 0.76em;
         }
 
         .scramble-start-btn {
           margin-left: 0;
+          width: 100%;
+        }
+
+        #game-screen.scramble-game {
+          width: 100%;
+          max-width: none;
+          margin-top: 1rem;
+          padding: 0;
         }
 
         .scramble-game__stats {
           gap: 0.5rem;
+          padding: 0.65rem 0;
+        }
+
+        .scramble-game .hud-ribbon {
+          min-width: 0;
+          padding: 0.45rem 0.2rem;
         }
 
         .scramble-game .hud-ribbon span:nth-child(2),
         .scramble-game .hud-ribbon span:nth-child(2) span {
-          font-size: 1.6rem;
+          font-size: 1.35rem;
+        }
+
+        .scramble-game #scrambled-word {
+          gap: 0.3rem;
+          margin: 1rem 0;
         }
 
         .scramble-game .letter-card {
-          width: 2.25rem !important;
-          height: 2.5rem !important;
-          font-size: 1.15rem;
+          width: clamp(1.7rem, 8vw, 2.25rem) !important;
+          height: clamp(2rem, 9vw, 2.5rem) !important;
+          font-size: clamp(0.9rem, 4vw, 1.15rem);
+        }
+
+        .scramble-game .word-input {
+          min-width: 0;
+          padding: 0.75rem 0.85rem;
+          font-size: 1rem;
+        }
+
+        .scramble-game__actions {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.5rem;
+        }
+
+        .scramble-game__actions > button {
+          min-width: 0;
+          min-height: 2.8rem;
+          padding: 0.45rem 0.5rem;
+          font-size: 0.95rem;
+        }
+
+        .scramble-round-actions {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.5rem;
+        }
+
+        .scramble-round-actions button {
+          min-width: 0;
+          min-height: 2.8rem;
+          padding: 0.45rem 0.4rem;
+          font-size: 0.92rem;
         }
 
       }
@@ -1427,7 +1542,7 @@
         <h1>Word Scramble</h1>
         <p class="scramble-intro__description">
           Unscramble words inspired by Mati’s heritage before time runs out.
-          Solve as many as you can to earn points.
+          Solve as many as you can to earn a score.
         </p>
         <div class="scramble-controls" aria-label="Word Scramble options">
           <span class="scramble-controls__label">Difficulty</span>
@@ -1462,8 +1577,9 @@
             </button>
           </div>
           <button id="start-btn" class="scramble-start-btn" type="button">
-            Start game
+            Start Word
           </button>
+          <button id="game-back-btn" type="button" hidden>End Word</button>
         </div>
       </section>
 
@@ -1534,7 +1650,7 @@
           />
         </div>
 
-        <div class="flex justify-center gap-4">
+        <div class="scramble-game__actions">
           <button
             id="submit-btn"
             class="font-rajdhani font-bold uppercase tracking-wider"
@@ -1542,12 +1658,6 @@
             Submit
           </button>
           <button id="shuffle-btn" type="button">Shuffle</button>
-          <button
-            id="game-back-btn"
-            class="font-rajdhani font-bold uppercase tracking-wider"
-          >
-            End game
-          </button>
         </div>
       </div>
 
@@ -1614,8 +1724,7 @@
           <li>Choose a difficulty and start the game.</li>
           <li>Unscramble each Mati heritage word before the timer runs out.</li>
           <li>
-            Submit your answer to earn points. Faster correct answers earn a
-            time bonus.
+            Submit your answer to earn the fixed score for that difficulty.
           </li>
         </ol>
         <p>
@@ -1631,7 +1740,7 @@
                 <th scope="col">Words</th>
                 <th scope="col">Round time</th>
                 <th scope="col">Word type</th>
-                <th scope="col">Points per correct answer</th>
+                <th scope="col">Score per correct answer</th>
                 <th scope="col">Good for</th>
               </tr>
             </thead>
@@ -1641,23 +1750,23 @@
                 <td>10</td>
                 <td>90 seconds</td>
                 <td>Mostly one-word names</td>
-                <td>10 + time bonus</td>
+                <td>10</td>
                 <td>A short, relaxed game</td>
               </tr>
               <tr>
                 <th scope="row">Medium</th>
                 <td>5</td>
-                <td>75 seconds</td>
+                <td>1 minute</td>
                 <td>Two-word names</td>
-                <td>15 + time bonus</td>
+                <td>30</td>
                 <td>A balanced game</td>
               </tr>
               <tr>
                 <th scope="row">Hard</th>
                 <td>3</td>
-                <td>60 seconds</td>
+                <td>45 seconds</td>
                 <td>Longer names and phrases</td>
-                <td>20 + time bonus</td>
+                <td>66.67</td>
                 <td>For a bigger challenge</td>
               </tr>
             </tbody>
@@ -1668,6 +1777,13 @@
 
     <div id="footer-placeholder"></div>
 
+    <audio
+      id="bg-music"
+      src="assets/bgmusic/Zambolino - Caribbean (freetouse.com).mp3"
+      loop
+      preload="none"
+    ></audio>
+
     <script src="js/visitor-shell.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="_backend/supabase-config.js"></script>
@@ -1675,6 +1791,9 @@
     <script src="_backend/supabase-api.js"></script>
     <script src="js/utils/visitor-auth.js"></script>
     <script src="js/games/game-auth-gate.js"></script>
+    <script src="js/games/game-audio.js"></script>
+    <script src="js/games/game-session-lock.js"></script>
+
     <script src="js/utils/auth-logout.js"></script>
     <script src="js/utils/heritage/heritage-data.js"></script>
     <script src="js/pages/gallery-data.js"></script>
@@ -1691,6 +1810,7 @@
         // Game state
         let gameState = {
           difficulty: "easy",
+          lastRoundDifficulty: "easy",
           gameActive: false,
           score: 0,
           currentWordIndex: 0,
@@ -1699,7 +1819,9 @@
           scrambledWord: "",
           timeLeft: 60,
           maxTime: 60,
+          deadlineAt: null,
           timerInterval: null,
+          timerVisibilityHandler: null,
           wordsSolved: 0,
           heritageSession: null,
           selectedLetters: [], // Track selected letters in click order
@@ -1723,6 +1845,22 @@
         const currentWordEl = document.getElementById("current-word");
         const totalWordsEl = document.getElementById("total-words");
         const diffBtns = document.querySelectorAll(".diff-btn");
+        const bgMusic = document.getElementById("bg-music");
+        let lastValidAnswer = "";
+
+        function playBackgroundMusic() {
+          const storedVolume = Number.parseFloat(
+            localStorage.getItem("bgMusicVol") || "0.2",
+          );
+          const musicVol = Number.isFinite(storedVolume)
+            ? Math.min(Math.max(storedVolume, 0), 1)
+            : 0.2;
+          bgMusic.volume = musicVol;
+          if (bgMusic.volume <= 0) return;
+          bgMusic.play().catch((error) => {
+            console.warn("Background music could not be played.", error);
+          });
+        }
 
         // Shuffle array
         function shuffleArray(array) {
@@ -1752,9 +1890,13 @@
         function getRoundSettings() {
           return {
             easy: { wordCount: 10, time: 90 },
-            medium: { wordCount: 5, time: 75 },
-            hard: { wordCount: 3, time: 60 },
+            medium: { wordCount: 5, time: 60 },
+            hard: { wordCount: 3, time: 45 },
           }[gameState.difficulty];
+        }
+
+        function formatScore(value) {
+          return Number(value.toFixed(2)).toLocaleString();
         }
 
         function updatePreview() {
@@ -1767,13 +1909,22 @@
 
         function resetToPreview() {
           clearInterval(gameState.timerInterval);
+          if (gameState.timerVisibilityHandler) {
+            document.removeEventListener(
+              "visibilitychange",
+              gameState.timerVisibilityHandler,
+            );
+            gameState.timerVisibilityHandler = null;
+          }
           gameState.gameActive = false;
+          gameState.deadlineAt = null;
           gameScreen.classList.remove("hidden");
           gameScreen.classList.add("is-preview");
           gameScreen.setAttribute("aria-hidden", "true");
           gameScreen.setAttribute("inert", "");
           startBtn.disabled = false;
-          startBtn.textContent = "Start game";
+          startBtn.textContent = "Start Word";
+          gameBackBtn.hidden = true;
           diffBtns.forEach((button) => {
             button.disabled = false;
           });
@@ -1797,7 +1948,13 @@
         });
 
         // Start game
-        startBtn.addEventListener("click", startGame);
+        startBtn.addEventListener("click", () => {
+          if (gameState.gameActive) {
+            window.location.reload();
+            return;
+          }
+          startGame();
+        });
 
         // Allow the player to end the round early and see their current score.
         gameBackBtn.addEventListener("click", () => {
@@ -1805,7 +1962,14 @@
         });
 
         playAgainBtn.addEventListener("click", () => {
+          const difficulty = gameState.lastRoundDifficulty;
+          gameState.difficulty = difficulty;
           resultsScreen.classList.add("hidden");
+          diffBtns.forEach((button) => {
+            const isSelected = button.dataset.difficulty === difficulty;
+            button.classList.toggle("is-active", isSelected);
+            button.setAttribute("aria-pressed", String(isSelected));
+          });
           startGame();
         });
         backBtn.addEventListener("click", () => {
@@ -1955,6 +2119,9 @@
 
         async function startGame() {
           if (gameState.gameActive) return;
+          if (!(await window.MatiGameSessionLock.acquire("Word Scramble"))) return;
+          gameState.lastRoundDifficulty = gameState.difficulty;
+          playBackgroundMusic();
           startBtn.disabled = true;
           diffBtns.forEach((button) => {
             button.disabled = true;
@@ -1969,8 +2136,9 @@
           gameState.words = [];
           const words = await prepareWordDeck();
           if (!words.length) {
+            window.MatiGameSessionLock.release();
             startBtn.disabled = false;
-            startBtn.textContent = "Start game";
+            startBtn.textContent = "Start Word";
             diffBtns.forEach((button) => {
               button.disabled = false;
             });
@@ -1980,6 +2148,7 @@
           // Set time based on difficulty
           gameState.maxTime = getRoundSettings().time;
           gameState.timeLeft = gameState.maxTime;
+          gameState.deadlineAt = Date.now() + gameState.maxTime * 1000;
 
           // Update UI
           scoreEl.textContent = "0";
@@ -1995,7 +2164,9 @@
           gameScreen.removeAttribute("inert");
           gameScreen.setAttribute("aria-hidden", "false");
           resultsScreen.classList.add("hidden");
-          startBtn.textContent = "Playing";
+          startBtn.textContent = "New Word";
+          startBtn.disabled = false;
+          gameBackBtn.hidden = false;
 
           // Load first word
           loadWord();
@@ -2030,6 +2201,7 @@
           // Update UI
           currentWordEl.textContent = gameState.currentWordIndex + 1;
           wordInput.value = "";
+          lastValidAnswer = "";
           gameState.selectedLetters = []; // Clear selected letters tracking
           scrambledWordEl.classList.remove("has-selection"); // Clear dimming effect
 
@@ -2128,6 +2300,21 @@
             return card.textContent;
           });
           wordInput.value = selectedLetters.join("");
+          lastValidAnswer = wordInput.value;
+        }
+
+        function isAllowedAnswer(value) {
+          const available = new Map();
+          gameState.currentWord.toUpperCase().split("").forEach((character) => {
+            available.set(character, (available.get(character) || 0) + 1);
+          });
+
+          for (const character of value) {
+            const remaining = available.get(character) || 0;
+            if (remaining === 0) return false;
+            available.set(character, remaining - 1);
+          }
+          return true;
         }
 
         function syncSelectedCardsWithInput(inputValue) {
@@ -2185,12 +2372,15 @@
             clearInterval(gameState.timerInterval);
           }
 
-          gameState.timerInterval = setInterval(() => {
+          const updateTimer = () => {
             if (!gameState.gameActive) {
               clearInterval(gameState.timerInterval);
               return;
             }
-            gameState.timeLeft--;
+            gameState.timeLeft = Math.max(
+              0,
+              Math.ceil((gameState.deadlineAt - Date.now()) / 1000),
+            );
             timerEl.textContent = gameState.timeLeft;
 
             const percentage = (gameState.timeLeft / gameState.maxTime) * 100;
@@ -2208,18 +2398,26 @@
             if (gameState.timeLeft <= 0) {
               endGame();
             }
-          }, 1000);
+          };
+
+          updateTimer();
+          gameState.timerInterval = setInterval(updateTimer, 250);
+          gameState.timerVisibilityHandler = updateTimer;
+          document.addEventListener("visibilitychange", updateTimer);
         }
 
         // Shuffle button - reshuffle current word
         shuffleBtn.addEventListener("click", () => {
+          const answerValue = wordInput.value;
           gameState.scrambledWord = scrambleWord(gameState.currentWord);
           displayScrambledWord();
-          wordInput.value = "";
           gameState.selectedLetters = [];
           document.querySelectorAll(".letter-card").forEach((card) => {
             card.classList.remove("selected");
           });
+          wordInput.value = answerValue;
+          lastValidAnswer = answerValue;
+          syncSelectedCardsWithInput(answerValue);
           wordInput.focus();
         });
 
@@ -2233,10 +2431,13 @@
         wordInput.addEventListener("input", (e) => {
           const currentValue = e.target.value.toUpperCase();
 
-          // Just convert to uppercase and sync selected cards
-          e.target.value = currentValue;
+          if (!isAllowedAnswer(currentValue)) {
+            e.target.value = lastValidAnswer;
+            return;
+          }
 
-          // Sync selected cards with input (include spaces)
+          lastValidAnswer = currentValue;
+          e.target.value = currentValue;
           syncSelectedCardsWithInput(currentValue);
         });
 
@@ -2259,21 +2460,22 @@
             userAnswer === currentWordNoSpaces
           ) {
             // Correct answer
-            const basePoints =
+            const maxScore =
               gameState.difficulty === "easy"
-                ? 10
+                ? 100
                 : gameState.difficulty === "medium"
-                  ? 15
-                  : 20;
-            const timeBonus = Math.floor(gameState.timeLeft / 10);
-            const points = basePoints + timeBonus;
-
-            gameState.score += points;
+                  ? 150
+                  : 200;
+            const previousScore = gameState.score;
+            gameState.score =
+              ((gameState.wordsSolved + 1) / gameState.words.length) *
+              maxScore;
+            const points = gameState.score - previousScore;
             gameState.wordsSolved++;
-            scoreEl.textContent = gameState.score;
+            scoreEl.textContent = formatScore(gameState.score);
 
             // Show score popup
-            showScorePopup(`+${points}`);
+            showScorePopup(`+${formatScore(points)}`);
 
             // Show correct answer
             const correctAnswerDisplay = document.getElementById(
@@ -2296,6 +2498,7 @@
             submitBtn.disabled = true;
             shuffleBtn.disabled = true;
             wordInput.disabled = true;
+            gameBackBtn.hidden = true;
 
             // Move to next word
             setTimeout(() => {
@@ -2313,6 +2516,7 @@
             gameScreen.classList.add("animate-shake");
             setTimeout(() => gameScreen.classList.remove("animate-shake"), 400);
             wordInput.value = "";
+            lastValidAnswer = "";
             wordInput.focus();
           }
         }
@@ -2335,25 +2539,44 @@
         function endGame() {
           if (!gameState.gameActive) return;
           gameState.gameActive = false;
+          window.MatiGameSessionLock.release();
           clearInterval(gameState.timerInterval);
+          if (gameState.timerVisibilityHandler) {
+            document.removeEventListener(
+              "visibilitychange",
+              gameState.timerVisibilityHandler,
+            );
+            gameState.timerVisibilityHandler = null;
+          }
+          gameState.deadlineAt = null;
           submitBtn.disabled = true;
           shuffleBtn.disabled = true;
           wordInput.disabled = true;
 
           // Update results
-          document.getElementById("final-score").textContent = gameState.score;
+          const totalEarned =
+            gameState.wordsSolved === gameState.words.length
+              ? gameState.difficulty === "easy"
+                ? 100
+                : gameState.difficulty === "medium"
+                  ? 150
+                  : 200
+              : Number(gameState.score.toFixed(2));
+          gameState.score = totalEarned;
+          document.getElementById("final-score").textContent =
+            formatScore(totalEarned);
           document.getElementById("words-solved").textContent =
             gameState.wordsSolved;
 
           // Add heritage points
           if (typeof MatiHeritagePoints !== "undefined") {
-            void MatiHeritagePoints.add(gameState.score);
+            void MatiHeritagePoints.add(totalEarned);
           } else {
             let totalHeritagePoints = parseInt(
               localStorage.getItem("totalHeritagePoints") || "0",
               10,
             );
-            totalHeritagePoints += gameState.score;
+            totalHeritagePoints += totalEarned;
             localStorage.setItem(
               "totalHeritagePoints",
               String(totalHeritagePoints),
@@ -2369,7 +2592,7 @@
           gameScreen.setAttribute("inert", "");
           resultsScreen.classList.remove("hidden");
           startBtn.disabled = false;
-          startBtn.textContent = "Play again";
+          startBtn.textContent = "New Word";
           diffBtns.forEach((button) => {
             button.disabled = false;
           });
